@@ -159,8 +159,17 @@ export async function getActiveRulingsByOracleId(
   limit = 50,
 ): Promise<CardRuling[]> {
   const versionId = await getActiveRulingsVersionId(db);
-  if (!versionId) return [];
-  return getRulingsByOracleIdFromVersion(db, versionId, oracleId, limit);
+  if (versionId) {
+    return getRulingsByOracleIdFromVersion(db, versionId, oracleId, limit);
+  }
+
+  // Legacy fallback until first versioned import sets activeRulingsVersionId.
+  const snap = await db
+    .collection(COLLECTIONS.catalogRulings)
+    .where("oracleId", "==", oracleId.trim())
+    .limit(Math.min(limit, 100))
+    .get();
+  return snap.docs.map((d) => d.data() as CardRuling);
 }
 
 export async function listVersionRulingIds(
