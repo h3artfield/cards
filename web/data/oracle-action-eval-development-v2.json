@@ -1,0 +1,4233 @@
+{
+  "setClassification": "development_set_v2",
+  "evaluationVersion": "development-v2",
+  "contentHash": "51ae89777f0f67e6196671a90a7d3f3f79ea2d10a9847b692772399acbcc83ca",
+  "taxonomyVersion": "three-layer-v1",
+  "caseCount": 228,
+  "frozenAt": "2026-08-06T14:48:01.736Z",
+  "usagePolicy": "Parser tuning set — use for development evaluation after v2 gold adjudication.",
+  "priorClassification": "development_set_v1",
+  "priorContentHash": "8c72f8d1b98b0f940d049cc2d6df26e0483c8b6efbd9ab25ff0f5647770bf541",
+  "priorSetPath": "data/oracle-action-eval-development-v1.json",
+  "historicalV1Purpose": "Historical v6 baseline comparison — do not modify",
+  "adjudicatedMissingLabelProposals": 69,
+  "acceptedIntoGoldCount": 63,
+  "rejectedProposalCount": 6,
+  "optionalityConditionCasesAdded": 24,
+  "goldChangesApplied": [
+    "eval-0008: +draw \"Draw three cards\"",
+    "eval-0013: +lose_life \"loses 1 life\"",
+    "eval-0013: +gain_life \"gain 1 life\"",
+    "eval-0014: +lose_life \"loses 1 life\"",
+    "eval-0014: +gain_life \"gain 1 life\"",
+    "eval-0015: +deal_damage \"deals 2 damage to each opponent\"",
+    "eval-0025: +lose_life \"lose 3 life\"",
+    "eval-0026: +lose_life \"lose 3 life\"",
+    "eval-0029: +discard \"Discard a creature card\"",
+    "eval-0040: +deal_damage \"deals 2 damage to any target\"",
+    "eval-0048: +put_counter \"put a +1/+1 counter\"",
+    "eval-0050: +lose_life \"lose 1 life\"",
+    "eval-0051: +lose_life \"loses 1 life\"",
+    "eval-0051: +gain_life \"gain 1 life\"",
+    "eval-0059: +sacrifice \"Sacrifice this enchantment\"",
+    "eval-0067: +put_counter \"Put a +1/+1 counter\"",
+    "eval-0070: +add_mana \"Add {U}\"",
+    "eval-0071: +add_mana \"Add {G}\"",
+    "eval-0083: +return_to_battlefield \"Return up to two target creature cards f\"",
+    "eval-0085: +discard \"discards up to two cards\"",
+    "eval-0097: +put_counter \"put a +1/+1 counter\"",
+    "eval-0100: +destroy \"destroy target creature\"",
+    "eval-0101: +draw \"draw a card\"",
+    "eval-0103: +add_mana \"add {G}{G}\"",
+    "eval-0108: +play \"you may play that card\"",
+    "eval-0110: +add_mana \"Add {W}\"",
+    "eval-0110: +draw \"draw a card\"",
+    "eval-0111: +search_library \"search your library for\"",
+    "eval-0111: +put_counter \"Put a +1/+1 counter\"",
+    "eval-0112: +draw \"draw a card\"",
+    "eval-0114: +lose_life \"loses 1 life\"",
+    "eval-0115: +counter \"Counter target spell unless its controll\"",
+    "eval-0116: +deal_damage \"deals 1 damage to any target\"",
+    "eval-0117: +sacrifice \"Sacrifice this creature\"",
+    "eval-0117: +draw \"Draw two cards\"",
+    "eval-0118: +gain_life \"gain 1 life\"",
+    "eval-0119: +create_token \"create a Treasure token\"",
+    "eval-0120: +sacrifice \"sacrifice a Treasure\"",
+    "eval-0120: +play \"You may play that card\"",
+    "eval-0127: +put_counter \"put a +1/+1 counter\"",
+    "eval-0127: +deal_damage \"deals 1 damage to any target\"",
+    "eval-0137: +return_to_battlefield \"Return target creature from your graveya\"",
+    "eval-0141: +lose_life \"loses 3 life\"",
+    "eval-0145: +put_counter \"Put a +1/+1 counter\"",
+    "eval-0146: +scry \"Scry 2\"",
+    "eval-0147: +surveil \"Surveil 2\"",
+    "eval-0153: +lose_life \"loses 2 life\"",
+    "eval-0161: +add_mana \"Add one mana of any color\"",
+    "eval-0166: +draw \"draw a card\"",
+    "eval-0171: +destroy \"Destroy target artifact\"",
+    "eval-0172: +search_library \"Search your library for\"",
+    "eval-0173: +counter \"Counter target spell\"",
+    "eval-0177: +exile \"Exile the top X cards of your library\"",
+    "eval-0181: +search_library \"Search your library for\"",
+    "eval-0182: +draw \"Draw a card\"",
+    "eval-0183: +add_mana \"Add {G}\"",
+    "eval-0185: +add_mana \"Add {C}\"",
+    "eval-0194: +draw \"draw a card\"",
+    "eval-0196: +draw \"draw a card\"",
+    "eval-0196: +create_token \"create a Treasure token\"",
+    "eval-0197: +destroy \"Destroy target creature\"",
+    "eval-0198: +return_to_hand \"Return target creature to its owner's ha\"",
+    "eval-0198: +draw \"Draw two cards\"",
+    "eval-0043: modal destroy → separate target scopes (policy: multiple actions per modal bullet)",
+    "eval-0047: two draw triggers → repeated primitive from separate abilities"
+  ],
+  "duplicateClassificationPolicy": {
+    "modalChooseOneOrMore": "multiple actions with separate evidence and target scopes per bullet",
+    "separateAbilitiesSamePrimitive": "multiple actions — repeated primitive from another ability",
+    "overlappingPatternMatch": "true duplicate — semantic dedup removes"
+  },
+  "cases": [
+    {
+      "id": "eval-0001",
+      "category": "vanilla and keyword-only",
+      "oracleId": "eval-oracle-1",
+      "oracleText": "Grizzly Bears\n{1}{G}\nCreature — Bear\n2/2",
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0002",
+      "category": "vanilla and keyword-only",
+      "oracleId": "eval-oracle-2",
+      "oracleText": "Flying\nVigilance",
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0003",
+      "category": "vanilla and keyword-only",
+      "oracleId": "eval-oracle-3",
+      "oracleText": "Shock deals 2 damage to any target.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "damage"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "deal_damage"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0004",
+      "category": "vanilla and keyword-only",
+      "oracleId": "eval-oracle-4",
+      "oracleText": "Counter target spell.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0005",
+      "category": "vanilla and keyword-only",
+      "oracleId": "eval-oracle-5",
+      "oracleText": "Lightning Bolt deals 3 damage to any target.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "damage"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "deal_damage"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0006",
+      "category": "vanilla and keyword-only",
+      "oracleId": "eval-oracle-6",
+      "oracleText": "Target creature gets +3/+3 until end of turn.",
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0007",
+      "category": "vanilla and keyword-only",
+      "oracleId": "eval-oracle-7",
+      "oracleText": "Add {B}{B}{B}.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0008",
+      "category": "vanilla and keyword-only",
+      "oracleId": "eval-oracle-8",
+      "oracleText": "Draw three cards, then put two cards from your hand on top of your library in any order.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw three cards"
+        }
+      ]
+    },
+    {
+      "id": "eval-0009",
+      "category": "vanilla and keyword-only",
+      "oracleId": "eval-oracle-9",
+      "oracleText": "Exile target creature. Its controller may search their library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        },
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0010",
+      "category": "vanilla and keyword-only",
+      "oracleId": "eval-oracle-10",
+      "oracleText": "Exile target creature. Its controller gains life equal to its power.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0011",
+      "category": "triggered abilities",
+      "oracleId": "eval-oracle-11",
+      "oracleText": "{T}: Add {G}.\nWhen this creature enters, you may search your library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {G}",
+          "optional": true
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library for",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana"
+          ]
+        },
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0012",
+      "category": "triggered abilities",
+      "oracleId": "eval-oracle-12",
+      "oracleText": "When this creature enters, you may search your library for a basic land card, put it onto the battlefield tapped, then shuffle.\nWhen this creature dies, you may draw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library for",
+          "optional": true
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        },
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0013",
+      "category": "triggered abilities",
+      "oracleId": "eval-oracle-13",
+      "oracleText": "Whenever another creature you control dies, each opponent loses 1 life and you gain 1 life.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses 1 life"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 1 life"
+        }
+      ]
+    },
+    {
+      "id": "eval-0014",
+      "category": "triggered abilities",
+      "oracleId": "eval-oracle-14",
+      "oracleText": "Whenever this creature or another creature dies, target player loses 1 life and you gain 1 life.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses 1 life"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 1 life"
+        }
+      ]
+    },
+    {
+      "id": "eval-0015",
+      "category": "triggered abilities",
+      "oracleId": "eval-oracle-15",
+      "oracleText": "Whenever another creature you control enters, Purphoros deals 2 damage to each opponent.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 2 damage to each opponent"
+        }
+      ]
+    },
+    {
+      "id": "eval-0016",
+      "category": "triggered abilities",
+      "oracleId": "eval-oracle-16",
+      "oracleText": "Whenever an opponent casts a spell, you may draw a card unless that player pays {1}.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0017",
+      "category": "triggered abilities",
+      "oracleId": "eval-oracle-17",
+      "oracleText": "Whenever an opponent draws a card, that player may pay {2}. If they don't, you create a Treasure token.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Treasure token"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0018",
+      "category": "triggered abilities",
+      "oracleId": "eval-oracle-18",
+      "oracleText": "When this creature enters, create a Treasure token for each artifact and creature your opponents control.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Treasure token"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0019",
+      "category": "triggered abilities",
+      "oracleId": "eval-oracle-19",
+      "oracleText": "Whenever Etali attacks, exile the top card of each player's library, then you may cast any number of spells from among those cards without paying their mana costs.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile the top",
+          "optional": true
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast any number of spells",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "cast"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0020",
+      "category": "triggered abilities",
+      "oracleId": "eval-oracle-20",
+      "oracleText": "Whenever an opponent draws a card, you may draw two cards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw two cards",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0021",
+      "category": "activated abilities",
+      "oracleId": "eval-oracle-21",
+      "oracleText": "{T}: Add {C}{C}{C}.\n{3}: Untap this artifact.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {C}"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0022",
+      "category": "activated abilities",
+      "oracleId": "eval-oracle-22",
+      "oracleText": "{1}: Look at the top three cards of your library, then put them back in any order.\n{3}, {T}: Draw a card, then shuffle this artifact into its owner's library.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0023",
+      "category": "activated abilities",
+      "oracleId": "eval-oracle-23",
+      "oracleText": "Sacrifice a creature: Add {C}{C}.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice"
+        },
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        },
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0024",
+      "category": "activated abilities",
+      "oracleId": "eval-oracle-24",
+      "oracleText": "Equipped creature gets +1/-1.\nWhenever equipped creature dies, draw two cards.\nEquip {1}",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw two cards"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0025",
+      "category": "activated abilities",
+      "oracleId": "eval-oracle-25",
+      "oracleText": "Search your library for a card, put it into your hand, shuffle, then lose 3 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "lose 3 life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0026",
+      "category": "activated abilities",
+      "oracleId": "eval-oracle-26",
+      "oracleText": "Search your library for a card, shuffle, put that card on top of your library, then lose 3 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "lose 3 life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0027",
+      "category": "activated abilities",
+      "oracleId": "eval-oracle-27",
+      "oracleText": "Search your library for a card, put it into your hand, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0028",
+      "category": "activated abilities",
+      "oracleId": "eval-oracle-28",
+      "oracleText": "{G}, {T}, Discard a creature card: Search your library for a creature card, reveal it, put it into your hand, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "Discard"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0029",
+      "category": "activated abilities",
+      "oracleId": "eval-oracle-29",
+      "oracleText": "{G}, Discard a creature card: Search your library for a creature card with mana value X or less, put it into your hand, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "Discard a creature card"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0030",
+      "category": "activated abilities",
+      "oracleId": "eval-oracle-30",
+      "oracleText": "As an additional cost to cast this spell, sacrifice a land.\nSearch your library for a land card, put it onto the battlefield, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifice a land"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0031",
+      "category": "replacement effects",
+      "oracleId": "eval-oracle-31",
+      "oracleText": "If a card would be put into a graveyard from anywhere, exile it instead.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile it instead"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "draw"
+      ]
+    },
+    {
+      "id": "eval-0032",
+      "category": "replacement effects",
+      "oracleId": "eval-oracle-32",
+      "oracleText": "If an effect would create one or more tokens under your control, it creates twice that many of those tokens instead.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "tokens"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": []
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "draw"
+      ]
+    },
+    {
+      "id": "eval-0033",
+      "category": "replacement effects",
+      "oracleId": "eval-oracle-33",
+      "oracleText": "Your opponents can't cast spells or activate abilities during your turn.\nAll damage that would be dealt to you and permanents you control this turn is prevented.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "static"
+        ]
+      },
+      "expectedPrimitiveActions": [],
+      "expectedRoles": [
+        {
+          "role": "protection",
+          "fromPrimitiveActions": []
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "destroy"
+      ]
+    },
+    {
+      "id": "eval-0034",
+      "category": "replacement effects",
+      "oracleId": "eval-oracle-34",
+      "oracleText": "Creatures entering don't cause abilities to trigger.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy"
+      ]
+    },
+    {
+      "id": "eval-0035",
+      "category": "replacement effects",
+      "oracleId": "eval-oracle-35",
+      "oracleText": "You can't lose the game and your opponents can't win the game.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw"
+      ]
+    },
+    {
+      "id": "eval-0036",
+      "category": "replacement effects",
+      "oracleId": "eval-oracle-36",
+      "oracleText": "Whenever you cast a spell from your hand, untap all nonland permanents you control.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0037",
+      "category": "replacement effects",
+      "oracleId": "eval-oracle-37",
+      "oracleText": "If a red source you control would deal damage to an opponent or a permanent an opponent controls, it deals that much damage plus 2 instead.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw"
+      ]
+    },
+    {
+      "id": "eval-0038",
+      "category": "replacement effects",
+      "oracleId": "eval-oracle-38",
+      "oracleText": "If you would gain life, you gain twice that much life instead.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw"
+      ]
+    },
+    {
+      "id": "eval-0039",
+      "category": "modal spells",
+      "oracleId": "eval-oracle-39",
+      "oracleText": "{T}: Add one mana of any color in your commander's color identity.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add one mana"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0040",
+      "category": "modal spells",
+      "oracleId": "eval-oracle-40",
+      "oracleText": "Choose two —\n• Return target creature card from your graveyard to your hand.\n• Kolaghan's Command deals 2 damage to any target.\n• Destroy target artifact or enchantment.\n• Each player discards their hand, then draws that many cards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "graveyard to your hand"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discards"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "draws"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 2 damage to any target"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        },
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0041",
+      "category": "modal spells",
+      "oracleId": "eval-oracle-41",
+      "oracleText": "Destroy all creatures. They can't be regenerated.\nCycling {3}{B}{B}\nWhen you cycle this card, each player loses life equal to the number of nonland permanents they control.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy all creatures"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0042",
+      "category": "modal spells",
+      "oracleId": "eval-oracle-42",
+      "oracleText": "Choose one —\n• Counter target spell.\n• Gain control of target permanent.\n• Draw two cards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw two cards"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        },
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0043",
+      "category": "modal spells",
+      "oracleId": "eval-oracle-43",
+      "oracleText": "Choose one or more —\n• Destroy target artifact.\n• Destroy target creature.\n• Destroy target enchantment.\n• Destroy target land.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target artifact"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target creature"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target enchantment"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target land"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0044",
+      "category": "split/adventure",
+      "oracleId": "eval-oracle-44",
+      "oracleText": "Fire deals 2 damage divided as you choose among one or two targets.\n//\nTap target permanent.\nDraw a card.",
+      "cardFace": "back",
+      "expectedStructure": {
+        "requiresFace": "back"
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card",
+          "cardFace": "back"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0045",
+      "category": "split/adventure",
+      "oracleId": "eval-oracle-45",
+      "oracleText": "Destroy target artifact.\n//\nDestroy target enchantment.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target artifact"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0046",
+      "category": "split/adventure",
+      "oracleId": "eval-oracle-46",
+      "oracleText": "Flash\nFlying\nReturn target nonland permanent to its owner's hand.\n//\nFlying\nWhen this creature enters, return target nonland permanent to its owner's hand.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target"
+        }
+      ]
+    },
+    {
+      "id": "eval-0047",
+      "category": "split/adventure",
+      "oracleId": "eval-oracle-47",
+      "oracleText": "Enchant creature\nWhen this Aura enters, draw a card.\nEnchanted creature gets +1/+1 and has \"Whenever this creature deals combat damage to a player, draw a card.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "When this Aura enters, draw a card"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "Whenever this creature deals combat damage to a player, draw a card"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0048",
+      "category": "split/adventure",
+      "oracleId": "eval-oracle-48",
+      "oracleText": "Flying\nDelve\nThis spell costs {1} less to cast for each instant and sorcery card in your graveyard.\nWhenever this creature attacks, put a +1/+1 counter on it.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "put a +1/+1 counter"
+        }
+      ]
+    },
+    {
+      "id": "eval-0049",
+      "category": "sagas and rooms",
+      "oracleId": "eval-oracle-49",
+      "oracleText": "(As this Saga enters and after your draw step, add a lore counter.)\nI — Each opponent sacrifices a creature or planeswalker.\nII — Each opponent discards a card.\nIII — Put target creature or planeswalker card from a graveyard onto the battlefield under your control.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifices"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discards"
+        },
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "graveyard onto the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0050",
+      "category": "sagas and rooms",
+      "oracleId": "eval-oracle-50",
+      "oracleText": "At the beginning of your upkeep, you lose 1 life and draw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "lose 1 life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0051",
+      "category": "sagas and rooms",
+      "oracleId": "eval-oracle-51",
+      "oracleText": "When this enchantment enters, each creature gets -X/-X until end of turn.\nWhenever a creature you control dies, each opponent loses 1 life.\nWhenever a creature an opponent controls dies, you gain 1 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "each creature gets"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses 1 life"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 1 life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0052",
+      "category": "sagas and rooms",
+      "oracleId": "eval-oracle-52",
+      "oracleText": "Whenever you unlock a door of this Room, create a 1/1 black Rat creature token with \"This creature gets +1/+0 for each other Rat you control.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a 1/1"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0053",
+      "category": "planeswalkers",
+      "oracleId": "eval-oracle-53",
+      "oracleText": "+2: Look at the top card of target player's library. You may put that card on the bottom of that player's library.\n0: Draw a card.\n-1: Return target creature to its owner's hand.\n-12: Exile all cards from target player's library, then that player shuffles their hand into their library.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card",
+          "optional": true
+        },
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target creature to its owner's hand",
+          "optional": true
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile all cards"
+        },
+        {
+          "actionType": "shuffle_into_library",
+          "evidenceContains": "shuffles their hand into their library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0054",
+      "category": "planeswalkers",
+      "oracleId": "eval-oracle-54",
+      "oracleText": "+1: Each player discards a card.\n-2: Target player sacrifices a creature.\n-6: Separate all permanents target player controls into two piles. That player sacrifices all permanents in the pile of their choice.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "discard",
+          "evidenceContains": "discards"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifices"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0055",
+      "category": "planeswalkers",
+      "oracleId": "eval-oracle-55",
+      "oracleText": "+2: Target artifact or creature loses all abilities and becomes a green Elk creature with base power and toughness 3/3.\n-1: Return target nonland permanent to its owner's hand.\n-5: Gain control of target creature.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target"
+        }
+      ]
+    },
+    {
+      "id": "eval-0056",
+      "category": "suspend and foretell",
+      "oracleId": "eval-oracle-56",
+      "oracleText": "Suspend 3—{0}\nWhen the last time counter is removed from this card, add three mana of any one color.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "add three mana"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0057",
+      "category": "suspend and foretell",
+      "oracleId": "eval-oracle-57",
+      "oracleText": "Suspend 6—{1}{B}\nEach player shuffles their hand and graveyard into their library, then draws seven cards. Exile this card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draws seven cards"
+        },
+        {
+          "actionType": "mill",
+          "evidenceContains": "graveyard into their library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0058",
+      "category": "suspend and foretell",
+      "oracleId": "eval-oracle-58",
+      "oracleText": "Evoke—Exile a black card from your hand.\nWhen this creature enters or when it dies, target player discards two cards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "discard",
+          "evidenceContains": "discards two cards"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile a black card"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0059",
+      "category": "suspend and foretell",
+      "oracleId": "eval-oracle-59",
+      "oracleText": "When this Saga enters and whenever you attack, create a 2/2 red Goblin creature token.\n{2}, Sacrifice this enchantment: Draw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a 2/2"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this enchantment"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": []
+        },
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0060",
+      "category": "copy versus cast",
+      "oracleId": "eval-oracle-60",
+      "oracleText": "Copy target instant or sorcery spell. You may choose new targets for the copy.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "Copy target instant",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0061",
+      "category": "copy versus cast",
+      "oracleId": "eval-oracle-61",
+      "oracleText": "Flash\nWhen this creature enters, copy target instant or sorcery spell. You may choose new targets for the copy.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy target",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0062",
+      "category": "copy versus cast",
+      "oracleId": "eval-oracle-62",
+      "oracleText": "Until end of turn, you may play lands and cast spells from your graveyard.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast spells from your graveyard",
+          "optional": true
+        },
+        {
+          "actionType": "play",
+          "evidenceContains": "play lands and cast spells from your graveyard",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "cast",
+            "play"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0063",
+      "category": "copy versus cast",
+      "oracleId": "eval-oracle-63",
+      "oracleText": "Each nonland card in your graveyard has escape. The escape cost is equal to the card's mana cost plus exile three other cards from your graveyard.\nDuring each of your turns, you may play lands and cast spells from your graveyard.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "play",
+          "evidenceContains": "play lands and cast spells from your graveyard",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "play"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0064",
+      "category": "copy versus cast",
+      "oracleId": "eval-oracle-64",
+      "oracleText": "Flash\nWhen this creature enters, target instant or sorcery card in your graveyard gains flashback until end of turn. The flashback cost is equal to its mana cost.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "play",
+          "evidenceContains": "graveyard"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "play"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0065",
+      "category": "ward and protection",
+      "oracleId": "eval-oracle-65",
+      "oracleText": "Equipped creature has haste and shroud.\nEquip {0}",
+      "expectedStructure": {
+        "abilityTypes": [
+          "static"
+        ]
+      },
+      "expectedPrimitiveActions": [],
+      "expectedRoles": [
+        {
+          "role": "protection",
+          "fromPrimitiveActions": []
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "draw"
+      ]
+    },
+    {
+      "id": "eval-0066",
+      "category": "ward and protection",
+      "oracleId": "eval-oracle-66",
+      "oracleText": "Equipped creature has haste and hexproof.\nEquip {1}",
+      "expectedStructure": {
+        "abilityTypes": [
+          "static"
+        ]
+      },
+      "expectedPrimitiveActions": [],
+      "expectedRoles": [
+        {
+          "role": "protection",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0067",
+      "category": "ward and protection",
+      "oracleId": "eval-oracle-67",
+      "oracleText": "Put a +1/+1 counter on target creature. It phases out.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "static"
+        ]
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "Put a +1/+1 counter"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "protection",
+          "fromPrimitiveActions": []
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "destroy"
+      ]
+    },
+    {
+      "id": "eval-0068",
+      "category": "ward and protection",
+      "oracleId": "eval-oracle-68",
+      "oracleText": "Permanents you control gain hexproof and indestructible until end of turn.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "static"
+        ]
+      },
+      "expectedPrimitiveActions": [],
+      "expectedRoles": [
+        {
+          "role": "protection",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0069",
+      "category": "ward and protection",
+      "oracleId": "eval-oracle-69",
+      "oracleText": "You may cast this spell as though it had flash.\nYou and permanents you control gain hexproof and indestructible until end of turn.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "static"
+        ]
+      },
+      "expectedPrimitiveActions": [],
+      "expectedRoles": [
+        {
+          "role": "protection",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0070",
+      "category": "negative cases",
+      "oracleId": "eval-oracle-70",
+      "oracleText": "({T}: Add {U}.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {U}"
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy",
+        "search_library"
+      ]
+    },
+    {
+      "id": "eval-0071",
+      "category": "negative cases",
+      "oracleId": "eval-oracle-71",
+      "oracleText": "({T}: Add {G}.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {G}"
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "search_library",
+        "draw"
+      ]
+    },
+    {
+      "id": "eval-0072",
+      "category": "negative cases",
+      "oracleId": "eval-oracle-72",
+      "oracleText": "Creatures you control get +1/+1.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy",
+        "search_library",
+        "add_mana"
+      ]
+    },
+    {
+      "id": "eval-0073",
+      "category": "negative cases",
+      "oracleId": "eval-oracle-73",
+      "oracleText": "All creatures lose all abilities and have base power and toughness 1/1.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy"
+      ]
+    },
+    {
+      "id": "eval-0074",
+      "category": "negative cases",
+      "oracleId": "eval-oracle-74",
+      "oracleText": "Nonbasic lands are Mountains.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy",
+        "add_mana"
+      ]
+    },
+    {
+      "id": "eval-0075",
+      "category": "negative cases",
+      "oracleId": "eval-oracle-75",
+      "oracleText": "Activated abilities of artifacts can't be activated.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy"
+      ]
+    },
+    {
+      "id": "eval-0076",
+      "category": "negative cases",
+      "oracleId": "eval-oracle-76",
+      "oracleText": "Each player can't cast more than one spell each turn.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "counter",
+        "draw"
+      ]
+    },
+    {
+      "id": "eval-0077",
+      "category": "negative cases",
+      "oracleId": "eval-oracle-77",
+      "oracleText": "Creatures can attack you as though you weren't their controller.\nCreatures can't attack you unless their controller pays {2} for each creature they control that's attacking you.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw"
+      ]
+    },
+    {
+      "id": "eval-0078",
+      "category": "negative cases",
+      "oracleId": "eval-oracle-78",
+      "oracleText": "Creatures can't attack you unless their controller pays {2} for each creature they control that's attacking you.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy"
+      ]
+    },
+    {
+      "id": "eval-0079",
+      "category": "negative cases",
+      "oracleId": "eval-oracle-79",
+      "oracleText": "Extort\nArtifacts and creatures your opponents control enter tapped.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw"
+      ]
+    },
+    {
+      "id": "eval-0080",
+      "category": "up to targets",
+      "oracleId": "eval-oracle-80",
+      "oracleText": "Destroy up to one target artifact.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0081",
+      "category": "up to targets",
+      "oracleId": "eval-oracle-81",
+      "oracleText": "Destroy up to two target creatures.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0082",
+      "category": "up to targets",
+      "oracleId": "eval-oracle-82",
+      "oracleText": "Exile up to three target cards from graveyards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0083",
+      "category": "up to targets",
+      "oracleId": "eval-oracle-83",
+      "oracleText": "Return up to two target creature cards from your graveyard to your hand.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return",
+          "optional": true
+        },
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return up to two target creature cards from your graveyard to your hand",
+          "targetMaximum": 2,
+          "quantityMayBeZero": true
+        }
+      ]
+    },
+    {
+      "id": "eval-0084",
+      "category": "up to targets",
+      "oracleId": "eval-oracle-84",
+      "oracleText": "Counter up to one target spell.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0085",
+      "category": "up to targets",
+      "oracleId": "eval-oracle-85",
+      "oracleText": "Target player discards up to two cards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "discard",
+          "evidenceContains": "discards up to two cards"
+        }
+      ]
+    },
+    {
+      "id": "eval-0086",
+      "category": "up to targets",
+      "oracleId": "eval-oracle-86",
+      "oracleText": "Draw up to three cards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0087",
+      "category": "up to targets",
+      "oracleId": "eval-oracle-87",
+      "oracleText": "Mill up to four cards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "Mill",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0088",
+      "category": "up to targets",
+      "oracleId": "eval-oracle-88",
+      "oracleText": "Create up to two 1/1 tokens.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0089",
+      "category": "up to targets",
+      "oracleId": "eval-oracle-89",
+      "oracleText": "Put up to one +1/+1 counter on target creature.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "Put",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": "eval-0090",
+      "category": "optional may effects",
+      "oracleId": "eval-oracle-90",
+      "oracleText": "You may draw a card.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "You may",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0091",
+      "category": "optional may effects",
+      "oracleId": "eval-oracle-91",
+      "oracleText": "You may search your library for a basic land card.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "You may",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0092",
+      "category": "optional may effects",
+      "oracleId": "eval-oracle-92",
+      "oracleText": "You may sacrifice a creature.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "You may",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0093",
+      "category": "optional may effects",
+      "oracleId": "eval-oracle-93",
+      "oracleText": "You may exile target creature.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "You may",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0094",
+      "category": "optional may effects",
+      "oracleId": "eval-oracle-94",
+      "oracleText": "You may counter target spell.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "You may",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0095",
+      "category": "optional may effects",
+      "oracleId": "eval-oracle-95",
+      "oracleText": "You may destroy target artifact.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "You may",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0096",
+      "category": "optional may effects",
+      "oracleId": "eval-oracle-96",
+      "oracleText": "You may return target creature to its owner's hand.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "You may",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": "eval-0097",
+      "category": "optional may effects",
+      "oracleId": "eval-oracle-97",
+      "oracleText": "You may put a +1/+1 counter on target creature.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "put a +1/+1 counter"
+        }
+      ]
+    },
+    {
+      "id": "eval-0098",
+      "category": "optional may effects",
+      "oracleId": "eval-oracle-98",
+      "oracleText": "You may create a 1/1 token.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "You may",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0099",
+      "category": "optional may effects",
+      "oracleId": "eval-oracle-99",
+      "oracleText": "You may discard a card.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "discard",
+          "evidenceContains": "You may",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": "eval-0100",
+      "category": "delayed triggered abilities",
+      "oracleId": "eval-oracle-100",
+      "oracleText": "At the beginning of your next end step, destroy target creature.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "destroy target creature"
+        }
+      ]
+    },
+    {
+      "id": "eval-0101",
+      "category": "delayed triggered abilities",
+      "oracleId": "eval-oracle-101",
+      "oracleText": "At the beginning of your next upkeep, draw a card.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        }
+      ]
+    },
+    {
+      "id": "eval-0102",
+      "category": "delayed triggered abilities",
+      "oracleId": "eval-oracle-102",
+      "oracleText": "At the beginning of the next end step, return that card to the battlefield.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0103",
+      "category": "delayed triggered abilities",
+      "oracleId": "eval-oracle-103",
+      "oracleText": "At the beginning of your next main phase, add {G}{G}.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "add {G}{G}"
+        }
+      ]
+    },
+    {
+      "id": "eval-0104",
+      "category": "delayed triggered abilities",
+      "oracleId": "eval-oracle-104",
+      "oracleText": "At the beginning of your next combat, create a 3/3 token.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0105",
+      "category": "linked exile abilities",
+      "oracleId": "eval-oracle-105",
+      "oracleText": "Exile target creature until this enchantment leaves the battlefield.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0106",
+      "category": "linked exile abilities",
+      "oracleId": "eval-oracle-106",
+      "oracleText": "Exile target nonland permanent until your next turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0107",
+      "category": "linked exile abilities",
+      "oracleId": "eval-oracle-107",
+      "oracleText": "Exile target artifact. Return it to the battlefield under its owner's control at the beginning of the next end step.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0108",
+      "category": "linked exile abilities",
+      "oracleId": "eval-oracle-108",
+      "oracleText": "Exile the top card of your library. Until end of turn, you may play that card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile",
+          "optional": true
+        },
+        {
+          "actionType": "play",
+          "evidenceContains": "you may play that card",
+          "optionalEffect": true,
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0109",
+      "category": "linked exile abilities",
+      "oracleId": "eval-oracle-109",
+      "oracleText": "Exile target instant or sorcery card from your graveyard. Copy it. You may cast the copy.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0110",
+      "category": "multiple unrelated abilities",
+      "oracleId": "eval-oracle-110",
+      "oracleText": "Flying\nVigilance\n{T}: Add {W}.\nWhenever you gain life, draw a card.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 2
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {W}"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        }
+      ]
+    },
+    {
+      "id": "eval-0111",
+      "category": "multiple unrelated abilities",
+      "oracleId": "eval-oracle-111",
+      "oracleText": "Trample\nWhen this creature enters, search your library for a land card.\n{2}{G}: Put a +1/+1 counter on this creature.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 2
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library for"
+        },
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "Put a +1/+1 counter"
+        }
+      ]
+    },
+    {
+      "id": "eval-0112",
+      "category": "multiple unrelated abilities",
+      "oracleId": "eval-oracle-112",
+      "oracleText": "Flash\nWhen this creature enters, draw a card.\nWhen this creature dies, create a 1/1 token.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 2
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        }
+      ]
+    },
+    {
+      "id": "eval-0113",
+      "category": "multiple unrelated abilities",
+      "oracleId": "eval-oracle-113",
+      "oracleText": "First strike\nAt the beginning of combat on your turn, you may pay {1}. If you do, this creature gains double strike until end of turn.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 2
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0114",
+      "category": "multiple unrelated abilities",
+      "oracleId": "eval-oracle-114",
+      "oracleText": "Menace\nWhenever this creature attacks, each opponent loses 1 life.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 2
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses 1 life"
+        }
+      ]
+    },
+    {
+      "id": "eval-0115",
+      "category": "multiple unrelated abilities",
+      "oracleId": "eval-oracle-115",
+      "oracleText": "Reach\n{1}{U}: Counter target spell unless its controller pays {1}.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 2
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target spell unless its controller pays "
+        }
+      ]
+    },
+    {
+      "id": "eval-0116",
+      "category": "multiple unrelated abilities",
+      "oracleId": "eval-oracle-116",
+      "oracleText": "Haste\nWhen this creature enters, it deals 1 damage to any target.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 2
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 1 damage to any target"
+        }
+      ]
+    },
+    {
+      "id": "eval-0117",
+      "category": "multiple unrelated abilities",
+      "oracleId": "eval-oracle-117",
+      "oracleText": "Hexproof\nSacrifice this creature: Draw two cards.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 2
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this creature"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw two cards"
+        }
+      ]
+    },
+    {
+      "id": "eval-0118",
+      "category": "multiple unrelated abilities",
+      "oracleId": "eval-oracle-118",
+      "oracleText": "Deathtouch\nWhenever a creature an opponent controls dies, you gain 1 life.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 2
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 1 life"
+        }
+      ]
+    },
+    {
+      "id": "eval-0119",
+      "category": "multiple unrelated abilities",
+      "oracleId": "eval-oracle-119",
+      "oracleText": "Partner\nWhen this creature enters, create a Treasure token.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 2
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a Treasure token"
+        }
+      ]
+    },
+    {
+      "id": "eval-0120",
+      "category": "commander staples",
+      "oracleId": "eval-oracle-120",
+      "oracleText": "Deathtouch\nWhenever you exile a card, create a Treasure token.\nWhenever you sacrifice a Treasure, exile the top card of your library. You may play that card this turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Treasure token",
+          "optional": true
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile the top",
+          "optional": true
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "play that card",
+          "optional": true
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifice a Treasure"
+        },
+        {
+          "actionType": "play",
+          "evidenceContains": "You may play that card",
+          "optionalEffect": true,
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": []
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "cast"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0121",
+      "category": "commander staples",
+      "oracleId": "eval-oracle-121",
+      "oracleText": "Flying, vigilance, deathtouch, lifelink\nAt the beginning of your end step, proliferate.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0122",
+      "category": "commander staples",
+      "oracleId": "eval-oracle-122",
+      "oracleText": "Whenever a land you control enters, draw a card.\nWhenever a land an opponent controls enters, create a 1/1 green Snake creature token.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a 1/1"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0123",
+      "category": "commander staples",
+      "oracleId": "eval-oracle-123",
+      "oracleText": "Return target creature to its owner's hand.\nBasic landcycling {1}",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target creature to its owner's hand"
+        }
+      ]
+    },
+    {
+      "id": "eval-0124",
+      "category": "commander staples",
+      "oracleId": "eval-oracle-124",
+      "oracleText": "Take an extra turn after this one.",
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0125",
+      "category": "commander staples",
+      "oracleId": "eval-oracle-125",
+      "oracleText": "Enchant creature\nEnchanted creature gets +2/+2 and has flying and shroud.",
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0126",
+      "category": "commander staples",
+      "oracleId": "eval-oracle-126",
+      "oracleText": "{T}: Add {G}.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {G}"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0127",
+      "category": "commander staples",
+      "oracleId": "eval-oracle-127",
+      "oracleText": "Flying\nWhenever you cast a red spell, put a +1/+1 counter on this creature.\n{R}: This creature deals 1 damage to any target.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "put a +1/+1 counter"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 1 damage to any target"
+        }
+      ]
+    },
+    {
+      "id": "eval-0128",
+      "category": "commander staples",
+      "oracleId": "eval-oracle-128",
+      "oracleText": "{T}: Add {G} or {U}. This land enters tapped unless you have two or more opponents.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0129",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-129",
+      "oracleText": "Destroy target creature.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0130",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-130",
+      "oracleText": "Destroy target artifact.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0131",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-131",
+      "oracleText": "Destroy target enchantment.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0132",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-132",
+      "oracleText": "Destroy target planeswalker.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0133",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-133",
+      "oracleText": "Destroy target land.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0134",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-134",
+      "oracleText": "Exile target creature.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0135",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-135",
+      "oracleText": "Exile target instant or sorcery.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0136",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-136",
+      "oracleText": "Exile target card from a graveyard.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0137",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-137",
+      "oracleText": "Return target creature from your graveyard to your hand.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return"
+        },
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return target creature from your graveyard to your hand"
+        }
+      ]
+    },
+    {
+      "id": "eval-0138",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-138",
+      "oracleText": "Return target permanent to its owner's hand.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return"
+        }
+      ]
+    },
+    {
+      "id": "eval-0139",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-139",
+      "oracleText": "Counter target spell.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0140",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-140",
+      "oracleText": "Counter target activated ability.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0141",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-141",
+      "oracleText": "Target player loses 3 life.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses 3 life"
+        }
+      ]
+    },
+    {
+      "id": "eval-0142",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-142",
+      "oracleText": "Target opponent discards two cards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "discard",
+          "evidenceContains": "Target"
+        }
+      ]
+    },
+    {
+      "id": "eval-0143",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-143",
+      "oracleText": "Target creature gets -3/-3 until end of turn.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0144",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-144",
+      "oracleText": "Target creature gets +2/+2 until end of turn.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0145",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-145",
+      "oracleText": "Put a +1/+1 counter on target creature.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "Put a +1/+1 counter"
+        }
+      ]
+    },
+    {
+      "id": "eval-0146",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-146",
+      "oracleText": "Scry 2.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "scry",
+          "evidenceContains": "Scry 2"
+        }
+      ]
+    },
+    {
+      "id": "eval-0147",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-147",
+      "oracleText": "Surveil 2.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "surveil",
+          "evidenceContains": "Surveil 2"
+        }
+      ]
+    },
+    {
+      "id": "eval-0148",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-148",
+      "oracleText": "Look at the top three cards of your library.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0149",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-149",
+      "oracleText": "Shuffle your library.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0150",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-150",
+      "oracleText": "Reveal the top card of your library.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Reveal"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0151",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-151",
+      "oracleText": "Each opponent sacrifices a creature.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0152",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-152",
+      "oracleText": "Each player draws a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Each"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0153",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-153",
+      "oracleText": "Each opponent loses 2 life.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses 2 life"
+        }
+      ]
+    },
+    {
+      "id": "eval-0154",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-154",
+      "oracleText": "All creatures get -2/-2 until end of turn.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0155",
+      "category": "additional coverage",
+      "oracleId": "eval-oracle-155",
+      "oracleText": "All lands become 1/1 creatures until end of turn.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0156",
+      "category": "static effects",
+      "oracleId": "eval-oracle-156",
+      "oracleText": "Creatures you control get +1/+1.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy",
+        "search_library"
+      ]
+    },
+    {
+      "id": "eval-0157",
+      "category": "static effects",
+      "oracleId": "eval-oracle-157",
+      "oracleText": "Artifacts you control have hexproof.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy",
+        "search_library"
+      ]
+    },
+    {
+      "id": "eval-0158",
+      "category": "static effects",
+      "oracleId": "eval-oracle-158",
+      "oracleText": "Your opponents can't gain life.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy",
+        "search_library"
+      ]
+    },
+    {
+      "id": "eval-0159",
+      "category": "static effects",
+      "oracleId": "eval-oracle-159",
+      "oracleText": "Spells you cast cost {1} less to cast.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy",
+        "search_library"
+      ]
+    },
+    {
+      "id": "eval-0160",
+      "category": "static effects",
+      "oracleId": "eval-oracle-160",
+      "oracleText": "Nonartifact spells you cast cost {1} less to cast.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy",
+        "search_library"
+      ]
+    },
+    {
+      "id": "eval-0161",
+      "category": "static effects",
+      "oracleId": "eval-oracle-161",
+      "oracleText": "Lands you control have \"{T}: Add one mana of any color.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add one mana of any color"
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy",
+        "search_library"
+      ]
+    },
+    {
+      "id": "eval-0162",
+      "category": "static effects",
+      "oracleId": "eval-oracle-162",
+      "oracleText": "If a source would deal damage to you, prevent 1 of that damage.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy",
+        "search_library"
+      ]
+    },
+    {
+      "id": "eval-0163",
+      "category": "static effects",
+      "oracleId": "eval-oracle-163",
+      "oracleText": "You have no maximum hand size.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy",
+        "search_library"
+      ]
+    },
+    {
+      "id": "eval-0164",
+      "category": "static effects",
+      "oracleId": "eval-oracle-164",
+      "oracleText": "The maximum number of counters that may be put on artifacts is 1.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy",
+        "search_library"
+      ]
+    },
+    {
+      "id": "eval-0165",
+      "category": "static effects",
+      "oracleId": "eval-oracle-165",
+      "oracleText": "Each creature assigns combat damage equal to its toughness rather than its power.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy",
+        "search_library"
+      ]
+    },
+    {
+      "id": "eval-0166",
+      "category": "transforming cards",
+      "oracleId": "eval-oracle-166",
+      "oracleText": "Daybound\nWhen this creature transforms, draw a card.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        }
+      ]
+    },
+    {
+      "id": "eval-0167",
+      "category": "transforming cards",
+      "oracleId": "eval-oracle-167",
+      "oracleText": "Nightbound\nWhenever this creature attacks, create a 2/2 Wolf token.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0168",
+      "category": "transforming cards",
+      "oracleId": "eval-oracle-168",
+      "oracleText": "Transform this creature.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0169",
+      "category": "transforming cards",
+      "oracleId": "eval-oracle-169",
+      "oracleText": "To transform this creature, pay {2}.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0170",
+      "category": "transforming cards",
+      "oracleId": "eval-oracle-170",
+      "oracleText": "If this creature would transform, instead it becomes a copy of the exiled card.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0171",
+      "category": "modal double-faced",
+      "oracleId": "eval-oracle-171",
+      "oracleText": "Choose one —\n• Draw a card.\n• Destroy target artifact.\n//\nFlying\nWhen this creature enters, draw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target artifact"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0172",
+      "category": "modal double-faced",
+      "oracleId": "eval-oracle-172",
+      "oracleText": "Search your library for a basic land.\n//\n{T}: Add {G}.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0173",
+      "category": "modal double-faced",
+      "oracleId": "eval-oracle-173",
+      "oracleText": "Counter target spell.\n//\nFlash\nFlying",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw"
+        },
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target spell"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0174",
+      "category": "variable X values",
+      "oracleId": "eval-oracle-174",
+      "oracleText": "Destroy X target creatures.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0175",
+      "category": "variable X values",
+      "oracleId": "eval-oracle-175",
+      "oracleText": "Draw X cards.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0176",
+      "category": "variable X values",
+      "oracleId": "eval-oracle-176",
+      "oracleText": "Create X 1/1 tokens.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0177",
+      "category": "variable X values",
+      "oracleId": "eval-oracle-177",
+      "oracleText": "Exile the top X cards of your library.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile the top X cards of your library"
+        }
+      ]
+    },
+    {
+      "id": "eval-0178",
+      "category": "variable X values",
+      "oracleId": "eval-oracle-178",
+      "oracleText": "Each opponent loses X life.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0179",
+      "category": "variable X values",
+      "oracleId": "eval-oracle-179",
+      "oracleText": "Add X mana of any one color.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0180",
+      "category": "variable X values",
+      "oracleId": "eval-oracle-180",
+      "oracleText": "Return target creature with mana value X or less from your graveyard to the battlefield.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0181",
+      "category": "variable X values",
+      "oracleId": "eval-oracle-181",
+      "oracleText": "Search your library for up to X basic land cards.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for"
+        }
+      ]
+    },
+    {
+      "id": "eval-0182",
+      "category": "abilities granted to objects",
+      "oracleId": "eval-oracle-182",
+      "oracleText": "Enchanted creature has \"{T}: Draw a card.\"",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        }
+      ]
+    },
+    {
+      "id": "eval-0183",
+      "category": "abilities granted to objects",
+      "oracleId": "eval-oracle-183",
+      "oracleText": "All creatures have \"{T}: Add {G}.\"",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {G}"
+        }
+      ]
+    },
+    {
+      "id": "eval-0184",
+      "category": "abilities granted to objects",
+      "oracleId": "eval-oracle-184",
+      "oracleText": "Goblins you control have haste.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0185",
+      "category": "abilities granted to objects",
+      "oracleId": "eval-oracle-185",
+      "oracleText": "Each artifact creature you control has \"{T}: Add {C}.\"",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {C}"
+        }
+      ]
+    },
+    {
+      "id": "eval-0186",
+      "category": "abilities granted to objects",
+      "oracleId": "eval-oracle-186",
+      "oracleText": "Creatures you control have flying.",
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0187",
+      "category": "characteristic-defining abilities",
+      "oracleId": "eval-oracle-187",
+      "oracleText": "This creature's power is equal to the number of cards in your hand.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy"
+      ]
+    },
+    {
+      "id": "eval-0188",
+      "category": "characteristic-defining abilities",
+      "oracleId": "eval-oracle-188",
+      "oracleText": "This creature's power and toughness are each equal to the number of artifacts you control.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy"
+      ]
+    },
+    {
+      "id": "eval-0189",
+      "category": "characteristic-defining abilities",
+      "oracleId": "eval-oracle-189",
+      "oracleText": "*+1/+1 for each enchantment you control.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy"
+      ]
+    },
+    {
+      "id": "eval-0190",
+      "category": "characteristic-defining abilities",
+      "oracleId": "eval-oracle-190",
+      "oracleText": "This creature gets +1/+0 for each artifact you control.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy"
+      ]
+    },
+    {
+      "id": "eval-0191",
+      "category": "reflexive triggers",
+      "oracleId": "eval-oracle-191",
+      "oracleText": "When you cast this spell, copy it. You may choose new targets for the copy.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0192",
+      "category": "reflexive triggers",
+      "oracleId": "eval-oracle-192",
+      "oracleText": "When this spell resolves, its controller creates a 1/1 token.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0193",
+      "category": "reflexive triggers",
+      "oracleId": "eval-oracle-193",
+      "oracleText": "When you next cast a spell this turn, copy that spell.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        }
+      ]
+    },
+    {
+      "id": "eval-0194",
+      "category": "intervening-if clauses",
+      "oracleId": "eval-oracle-194",
+      "oracleText": "Whenever a creature attacks you, if that creature has power 4 or greater, draw a card.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        }
+      ]
+    },
+    {
+      "id": "eval-0195",
+      "category": "intervening-if clauses",
+      "oracleId": "eval-oracle-195",
+      "oracleText": "At the beginning of your upkeep, if you have 10 or more cards in hand, you win the game.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": []
+    },
+    {
+      "id": "eval-0196",
+      "category": "intervening-if clauses",
+      "oracleId": "eval-oracle-196",
+      "oracleText": "Whenever you draw a card, if it is the second card you drew this turn, create a Treasure token.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a Treasure token"
+        }
+      ]
+    },
+    {
+      "id": "eval-0197",
+      "category": "aftermath",
+      "oracleId": "eval-oracle-197",
+      "oracleText": "Destroy target creature.\nAftermath\nExile target card from a graveyard.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target creature"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0198",
+      "category": "aftermath",
+      "oracleId": "eval-oracle-198",
+      "oracleText": "Return target creature to its owner's hand.\nAftermath\nDraw two cards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile"
+        },
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target creature to its owner's hand"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw two cards"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0199",
+      "category": "prototype",
+      "oracleId": "eval-oracle-199",
+      "oracleText": "Prototype {2}{U} — 3/3\nFlying\nWhen this creature enters, draw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0200",
+      "category": "prototype",
+      "oracleId": "eval-oracle-200",
+      "oracleText": "Prototype {1}{B} — 2/2\nDeathtouch",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0201",
+      "category": "mutate",
+      "oracleId": "eval-oracle-201",
+      "oracleText": "Mutate {3}{G}\nWhenever this creature mutates, draw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0202",
+      "category": "mutate",
+      "oracleId": "eval-oracle-202",
+      "oracleText": "Mutate {2}{R}\nThis creature gets +2/+0 until end of turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0203",
+      "category": "classes",
+      "oracleId": "eval-oracle-203",
+      "oracleText": "Class 1 — {W}: Level 2\nClass 2 — {W}{W}: Level 3\nLevel 3 — Whenever you gain life, draw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eval-0204",
+      "category": "classes",
+      "oracleId": "eval-oracle-204",
+      "oracleText": "(Gain the next level as a sorcery to add its ability.)\nLevel 1: Creatures you control get +1/+0.\nLevel 2: Whenever you attack, draw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dev-opt-001",
+      "category": "optionality gold",
+      "oracleId": "dev-opt-oracle-1",
+      "oracleText": "You may draw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "You may draw a card",
+          "optionalEffect": true,
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": "dev-opt-002",
+      "category": "optionality gold",
+      "oracleId": "dev-opt-oracle-2",
+      "oracleText": "When this creature enters, you may search your library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library for a basic land",
+          "optionalEffect": true,
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": "dev-opt-003",
+      "category": "optionality gold",
+      "oracleId": "dev-opt-oracle-3",
+      "oracleText": "You may cast this spell from your graveyard.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast this spell from your graveyard",
+          "optionalEffect": true,
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": "dev-opt-004",
+      "category": "optionality gold",
+      "oracleId": "dev-opt-oracle-4",
+      "oracleText": "If you control a Swamp, you may pay {B} rather than pay this spell's mana cost.",
+      "expectedPrimitiveActions": [],
+      "expectedStructure": {
+        "optional": true
+      }
+    },
+    {
+      "id": "dev-opt-005",
+      "category": "optionality gold",
+      "oracleId": "dev-opt-oracle-5",
+      "oracleText": "Whenever an opponent casts a spell, you may draw a card unless that player pays {1}.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "you may draw a card",
+          "optionalEffect": true,
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": "dev-opt-006",
+      "category": "optionality gold",
+      "oracleId": "dev-opt-oracle-6",
+      "oracleText": "That player may pay {2}. If they don't, you create a Treasure token.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a Treasure token"
+        }
+      ],
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      }
+    },
+    {
+      "id": "dev-opt-007",
+      "category": "optionality gold",
+      "oracleId": "dev-opt-oracle-7",
+      "oracleText": "Draw a card, then you may put a land card from your hand onto the battlefield.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "put a land card from your hand onto the battlefield",
+          "optionalEffect": true,
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": "dev-opt-008",
+      "category": "optionality gold",
+      "oracleId": "dev-opt-oracle-8",
+      "oracleText": "Destroy up to one target creature.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy up to one target creature",
+          "targetMaximum": 1,
+          "quantityMayBeZero": true,
+          "optionalEffect": false
+        }
+      ]
+    },
+    {
+      "id": "dev-opt-009",
+      "category": "optionality gold",
+      "oracleId": "dev-opt-oracle-9",
+      "oracleText": "Exile up to two target creatures.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile up to two target creatures",
+          "targetMaximum": 2,
+          "quantityMayBeZero": true,
+          "optionalEffect": false
+        }
+      ]
+    },
+    {
+      "id": "dev-opt-010",
+      "category": "optionality gold",
+      "oracleId": "dev-opt-oracle-10",
+      "oracleText": "Any number of target players each discard a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "discard",
+          "evidenceContains": "discard a card",
+          "targetMinimum": 0,
+          "quantityMayBeZero": true,
+          "optionalEffect": false
+        }
+      ]
+    },
+    {
+      "id": "dev-opt-011",
+      "category": "optionality gold",
+      "oracleId": "dev-opt-oracle-11",
+      "oracleText": "As an additional cost to cast this spell, you may sacrifice a creature.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifice a creature",
+          "optionalCost": true,
+          "optionalEffect": false
+        }
+      ]
+    },
+    {
+      "id": "dev-opt-012",
+      "category": "optionality gold",
+      "oracleId": "dev-opt-oracle-12",
+      "oracleText": "You may draw two cards. If you do, discard a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "You may draw two cards",
+          "optionalEffect": true,
+          "optional": true
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discard a card"
+        }
+      ],
+      "expectedConditions": [
+        {
+          "textContains": "If you do",
+          "attachesToEvidence": "discard a card",
+          "type": "if_you_do"
+        }
+      ]
+    },
+    {
+      "id": "dev-cond-001",
+      "category": "condition gold",
+      "oracleId": "dev-cond-oracle-1",
+      "oracleText": "If you control a Plains, you gain 3 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 3 life"
+        }
+      ],
+      "expectedConditions": [
+        {
+          "textContains": "If you control a Plains",
+          "attachesToEvidence": "gain 3 life",
+          "type": "if"
+        }
+      ]
+    },
+    {
+      "id": "dev-cond-002",
+      "category": "condition gold",
+      "oracleId": "dev-cond-oracle-2",
+      "oracleText": "Destroy target creature if it is tapped.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target creature"
+        }
+      ],
+      "expectedConditions": [
+        {
+          "textContains": "if it is tapped",
+          "attachesToEvidence": "Destroy target creature",
+          "type": "if"
+        }
+      ]
+    },
+    {
+      "id": "dev-cond-003",
+      "category": "condition gold",
+      "oracleId": "dev-cond-oracle-3",
+      "oracleText": "Creatures can't attack you unless their controller pays {2}.",
+      "expectedPrimitiveActions": [],
+      "expectedConditions": [
+        {
+          "textContains": "unless their controller pays",
+          "type": "unless"
+        }
+      ]
+    },
+    {
+      "id": "dev-cond-004",
+      "category": "condition gold",
+      "oracleId": "dev-cond-oracle-4",
+      "oracleText": "You may cast this spell only if you control a commander.",
+      "expectedPrimitiveActions": [],
+      "expectedConditions": [
+        {
+          "textContains": "only if you control a commander",
+          "type": "only_if"
+        }
+      ]
+    },
+    {
+      "id": "dev-cond-005",
+      "category": "condition gold",
+      "oracleId": "dev-cond-oracle-5",
+      "oracleText": "As long as you control a Wizard, this spell costs {1} less to cast.",
+      "expectedPrimitiveActions": [],
+      "expectedConditions": [
+        {
+          "textContains": "As long as you control a Wizard",
+          "type": "as_long_as"
+        }
+      ]
+    },
+    {
+      "id": "dev-cond-006",
+      "category": "condition gold",
+      "oracleId": "dev-cond-oracle-6",
+      "oracleText": "When you do, draw a card.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        }
+      ],
+      "expectedConditions": [
+        {
+          "textContains": "When you do",
+          "attachesToEvidence": "draw a card",
+          "type": "when_you_do"
+        }
+      ]
+    },
+    {
+      "id": "dev-cond-007",
+      "category": "condition gold",
+      "oracleId": "dev-cond-oracle-7",
+      "oracleText": "Exile target creature. If you do, draw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target creature"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        }
+      ],
+      "expectedConditions": [
+        {
+          "textContains": "If you do",
+          "attachesToEvidence": "draw a card",
+          "type": "if_you_do"
+        }
+      ]
+    },
+    {
+      "id": "dev-cond-008",
+      "category": "condition gold",
+      "oracleId": "dev-cond-oracle-8",
+      "oracleText": "+1: Draw a card. At the beginning of the next end step, untap two lands.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        }
+      ],
+      "expectedConditions": [
+        {
+          "textContains": "At the beginning of the next end step",
+          "type": "delayed",
+          "attachesToEvidence": "untap two lands"
+        }
+      ]
+    },
+    {
+      "id": "dev-cond-009",
+      "category": "condition gold",
+      "oracleId": "dev-cond-oracle-9",
+      "oracleText": "When this creature enters, you may destroy target artifact. When you do, draw a card.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "destroy target artifact",
+          "optionalEffect": true,
+          "optional": true
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        }
+      ],
+      "expectedConditions": [
+        {
+          "textContains": "When you do",
+          "attachesToEvidence": "draw a card",
+          "type": "intervening_if"
+        }
+      ]
+    },
+    {
+      "id": "dev-cond-010",
+      "category": "condition gold",
+      "oracleId": "dev-cond-oracle-10",
+      "oracleText": "If a source would deal damage to you, prevent 3 of that damage.",
+      "expectedPrimitiveActions": [],
+      "expectedConditions": [
+        {
+          "textContains": "If a source would deal damage",
+          "type": "replacement"
+        }
+      ]
+    },
+    {
+      "id": "dev-cond-011",
+      "category": "condition gold",
+      "oracleId": "dev-cond-oracle-11",
+      "oracleText": "Destroy target creature. Then if you control a Swamp, draw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target creature"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        }
+      ],
+      "expectedConditions": [
+        {
+          "textContains": "if you control a Swamp",
+          "attachesToEvidence": "draw a card",
+          "type": "if"
+        }
+      ]
+    },
+    {
+      "id": "dev-cond-012",
+      "category": "condition gold",
+      "oracleId": "dev-cond-oracle-12",
+      "oracleText": "For as long as this enchantment is on the battlefield, you may play an additional land on each of your turns.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "play",
+          "evidenceContains": "play an additional land",
+          "optionalEffect": true,
+          "optional": true
+        }
+      ],
+      "expectedConditions": [
+        {
+          "textContains": "For as long as this enchantment is on the battlefield",
+          "type": "as_long_as"
+        }
+      ]
+    }
+  ]
+}

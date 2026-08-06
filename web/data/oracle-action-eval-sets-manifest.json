@@ -1,8 +1,18 @@
 {
   "developmentSet": {
-    "path": "data/oracle-action-eval-development-frozen.json",
-    "classification": "development",
-    "purpose": "Parser iteration and rule development"
+    "path": "data/oracle-action-eval-development-v2.json",
+    "classification": "development_set_v2",
+    "contentHash": "51ae89777f0f67e6196671a90a7d3f3f79ea2d10a9847b692772399acbcc83ca",
+    "caseCount": 228,
+    "purpose": "Parser tuning after missing-label adjudication and optionality/condition gold expansion",
+    "priorVersions": [
+      {
+        "path": "data/oracle-action-eval-development-frozen.json",
+        "classification": "development_set_v1",
+        "contentHash": "8c72f8d1b98b0f940d049cc2d6df26e0483c8b6efbd9ab25ff0f5647770bf541",
+        "supersededAt": "2026-08-06T14:48:01.736Z"
+      }
+    ]
   },
   "validationSet": {
     "path": "data/oracle-action-eval-validation-v2.json",
@@ -36,5 +46,12 @@
     "freeze release candidate",
     "run once against sealed final blind set",
     "begin 500-card pilot"
-  ]
+  ],
+  "developmentSetV1": {
+    "path": "data/oracle-action-eval-development-v1.json",
+    "classification": "development_set_v1",
+    "contentHash": "8c72f8d1b98b0f940d049cc2d6df26e0483c8b6efbd9ab25ff0f5647770bf541",
+    "caseCount": 204,
+    "purpose": "Historical v6 comparison — frozen, do not modify"
+  }
 }

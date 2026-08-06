@@ -49,6 +49,11 @@ export interface OracleActionV1 {
   conditions?: string[];
   quantityConstraint?: string;
   optional: boolean;
+  optionalEffect: boolean;
+  optionalCost?: boolean;
+  targetMinimum?: number;
+  targetMaximum?: number | "X";
+  quantityMayBeZero?: boolean;
   evidenceText: string;
   evidenceStart: number;
   evidenceEnd: number;
@@ -230,6 +235,51 @@ function extractQuantityConstraint(text: string): string | undefined {
   return upTo?.[0]?.trim();
 }
 
+function parseTargetConstraint(text: string): {
+  targetMinimum?: number;
+  targetMaximum?: number | "X";
+  quantityMayBeZero?: boolean;
+} {
+  const upTo = text.match(/\bup to (one|two|three|four|five|\w+) target/i);
+  if (upTo) {
+    const word = upTo[1].toLowerCase();
+    const map: Record<string, number> = { one: 1, two: 2, three: 3, four: 4, five: 5 };
+    return { targetMaximum: map[word] ?? "X", quantityMayBeZero: true };
+  }
+  if (/\bAny number of target/i.test(text)) {
+    return { targetMinimum: 0, quantityMayBeZero: true };
+  }
+  return {};
+}
+
+function isOptionalCost(paragraph: string): boolean {
+  return (
+    /\bAs an additional cost[^.]+\byou may\b/i.test(paragraph) ||
+    /\byou may pay[^.]+\brather than pay/i.test(paragraph)
+  );
+}
+
+function extractConditions(paragraph: string): string[] {
+  const found: string[] = [];
+  const patterns = [
+    /\bIf you do\b[^.]*/i,
+    /\bWhen you do\b[^.]*/i,
+    /\bonly if [^.]+/i,
+    /\bunless [^.]+/i,
+    /\b(?:As long as|For as long as) [^.]+/i,
+    /\bAt the beginning of the next [^.]+/i,
+    /\bif (?:you|they|it|that|there|a source) [^.]+/i,
+  ];
+  for (const pattern of patterns) {
+    const m = paragraph.match(pattern);
+    if (m) found.push(m[0].trim());
+  }
+  if (/\bwould\b.*\binstead\b/i.test(paragraph)) {
+    found.push("replacement: would instead");
+  }
+  return [...new Set(found)];
+}
+
 function isOptionalEffect(paragraph: string, evidenceText: string): boolean {
   const idx = paragraph.indexOf(evidenceText);
   const prefix = idx >= 0 ? paragraph.slice(0, idx + evidenceText.length) : paragraph;
@@ -285,15 +335,11 @@ function acceptAction(input: {
       : input.ability.abilityType;
   const abilityType = input.rule.abilityType ?? toV1AbilityType(classified);
   const zones = inferZones(input.ability.paragraphText);
-  const optional = input.rule.optional ?? isOptionalEffect(input.ability.paragraphText, evidenceText);
+  const optionalEffect = input.rule.optional ?? isOptionalEffect(input.ability.paragraphText, evidenceText);
+  const optionalCost = isOptionalCost(input.ability.paragraphText);
   const quantityConstraint = extractQuantityConstraint(evidenceText);
-
-  const conditions: string[] = [];
-  const intervening = input.ability.paragraphText.match(/\bif (?:it|that|you|they|there)[^.]+\./i);
-  if (intervening) conditions.push(intervening[0].trim());
-  if (/\bwould\b.*\binstead\b/i.test(input.ability.paragraphText)) {
-    conditions.push("replacement: would instead");
-  }
+  const targetConstraint = parseTargetConstraint(evidenceText);
+  const conditions = extractConditions(input.ability.paragraphText);
 
   let confidence = 0.9;
   if (abilityType === "replacement") confidence = 0.78;
@@ -331,7 +377,12 @@ function acceptAction(input: {
     affectedObjects: input.rule.affectedObjects,
     conditions: conditions.length ? conditions : undefined,
     quantityConstraint,
-    optional,
+    optional: optionalEffect,
+    optionalEffect,
+    optionalCost: optionalCost || undefined,
+    targetMinimum: targetConstraint.targetMinimum,
+    targetMaximum: targetConstraint.targetMaximum,
+    quantityMayBeZero: targetConstraint.quantityMayBeZero,
     evidenceText,
     evidenceStart,
     evidenceEnd,

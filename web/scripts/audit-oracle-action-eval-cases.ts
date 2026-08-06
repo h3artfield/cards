@@ -24,7 +24,19 @@ export interface ExpectedPrimitiveAction {
   evidenceContains: string;
   cardFace?: string;
   optional?: boolean;
+  optionalEffect?: boolean;
+  optionalCost?: boolean;
+  targetMinimum?: number;
+  targetMaximum?: number | "X";
+  quantityMayBeZero?: boolean;
   negative?: boolean;
+}
+
+export interface ExpectedCondition {
+  textContains: string;
+  type?: "if" | "unless" | "only_if" | "as_long_as" | "if_you_do" | "when_you_do" | "delayed" | "intervening_if" | "replacement";
+  attachesToEvidence?: string;
+  attachesToAbilityIndex?: number;
 }
 
 export interface ExpectedRole {
@@ -41,6 +53,7 @@ export interface OracleActionEvalCaseV2 {
   cardFace?: string;
   expectedStructure?: ExpectedStructure;
   expectedPrimitiveActions: ExpectedPrimitiveAction[];
+  expectedConditions?: ExpectedCondition[];
   expectedRoles?: ExpectedRole[];
   forbiddenPrimitiveActions?: PrimitiveActionType[];
 }

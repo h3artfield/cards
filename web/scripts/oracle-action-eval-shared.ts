@@ -42,8 +42,21 @@ export interface ExpectedPrimitiveAction {
   actionType: PrimitiveActionType;
   evidenceContains: string;
   cardFace?: string;
+  /** @deprecated use optionalEffect */
   optional?: boolean;
+  optionalEffect?: boolean;
+  optionalCost?: boolean;
+  targetMinimum?: number;
+  targetMaximum?: number | "X";
+  quantityMayBeZero?: boolean;
   negative?: boolean;
+}
+
+export interface ExpectedCondition {
+  textContains: string;
+  type?: "if" | "unless" | "only_if" | "as_long_as" | "if_you_do" | "when_you_do" | "delayed" | "intervening_if" | "replacement";
+  attachesToEvidence?: string;
+  attachesToAbilityIndex?: number;
 }
 
 export interface FrozenEvalManifest {

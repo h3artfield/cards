@@ -207,7 +207,11 @@ export function normalizeAbilityType(raw: string): AbilityStructureType | string
 /** Minimum gold-label support before a primitive may reach production_supported. */
 export const PRODUCTION_SUPPORTED_MIN_SUPPORT = 5;
 
-export type PrimitiveSupportTier = "experimental" | "validation_ready" | "production_supported";
+export type PrimitiveSupportTier =
+  | "experimental"
+  | "development_candidate"
+  | "validation_candidate"
+  | "production_supported";
 
 export interface PrimitiveSupportRequirements {
   minSupport: number;
@@ -223,23 +227,52 @@ export const PRODUCTION_SUPPORTED_REQUIREMENTS: PrimitiveSupportRequirements = {
   maxFalsePositiveRate: 0.02,
 };
 
+export const VALIDATION_CANDIDATE_REQUIREMENTS: PrimitiveSupportRequirements = {
+  minSupport: 5,
+  minPrecision: 0.9,
+  minRecall: 0.85,
+  maxFalsePositiveRate: 0.05,
+};
+
+export const DEVELOPMENT_CANDIDATE_REQUIREMENTS: PrimitiveSupportRequirements = {
+  minSupport: 3,
+  minPrecision: 0.75,
+  minRecall: 0.7,
+  maxFalsePositiveRate: 0.15,
+};
+
 export function classifyPrimitiveSupportTier(metrics: {
   support: number;
   precision: number;
   recall: number;
   falsePositiveRate: number;
 }): PrimitiveSupportTier {
-  const r = PRODUCTION_SUPPORTED_REQUIREMENTS;
+  const prod = PRODUCTION_SUPPORTED_REQUIREMENTS;
   if (
-    metrics.support >= r.minSupport &&
-    metrics.precision >= r.minPrecision &&
-    metrics.recall >= r.minRecall &&
-    metrics.falsePositiveRate <= r.maxFalsePositiveRate
+    metrics.support >= prod.minSupport &&
+    metrics.precision >= prod.minPrecision &&
+    metrics.recall >= prod.minRecall &&
+    metrics.falsePositiveRate <= prod.maxFalsePositiveRate
   ) {
     return "production_supported";
   }
-  if (metrics.support >= 3 && metrics.precision >= 0.9 && metrics.recall >= 0.85) {
-    return "validation_ready";
+  const val = VALIDATION_CANDIDATE_REQUIREMENTS;
+  if (
+    metrics.support >= val.minSupport &&
+    metrics.precision >= val.minPrecision &&
+    metrics.recall >= val.minRecall &&
+    metrics.falsePositiveRate <= val.maxFalsePositiveRate
+  ) {
+    return "validation_candidate";
+  }
+  const dev = DEVELOPMENT_CANDIDATE_REQUIREMENTS;
+  if (
+    metrics.support >= dev.minSupport &&
+    metrics.precision >= dev.minPrecision &&
+    metrics.recall >= dev.minRecall &&
+    metrics.falsePositiveRate <= dev.maxFalsePositiveRate
+  ) {
+    return "development_candidate";
   }
   return "experimental";
 }
