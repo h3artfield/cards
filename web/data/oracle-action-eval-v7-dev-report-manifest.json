@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-08-06T21:22:22.579Z",
+  "generatedAt": "2026-08-06T21:30:29.715Z",
   "evaluationVersion": "eval-v7-may-scope",
   "parserVersion": "oracle-action-v1.6-conditions-deps",
   "developmentSetClassification": "development_set_v4",
   "developmentSetContentHash": "d8acd3ed4752b90f9d7c0f966c221cce3d93cb8766fa2b238f59d080c292a684",
   "developmentSetCaseCount": 256,
   "reportPath": "reports/oracle-action-parser-dev-report-v7.json",
-  "validationRun": false,
+  "validationRun": true,
   "summaryMetrics": {
     "allEmission": {
       "truePositives": 226,

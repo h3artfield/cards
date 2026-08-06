@@ -1,0 +1,229 @@
+[
+  {
+    "parserVersion": "oracle-action-v1.6-conditions-deps",
+    "parserCommit": "9d81495269c602c92393dce05927121b399f9d38",
+    "developmentSet": "development_set_v4",
+    "developmentSetContentHash": "d8acd3ed4752b90f9d7c0f966c221cce3d93cb8766fa2b238f59d080c292a684",
+    "validationSet": "validation_set_v2",
+    "validationSetContentHash": "496a5dd7fcc5c6259f600e25aeecaeead6a036a6574b53cc58e9001321943734",
+    "reason": "optionality_condition_validation_milestone_v1.6",
+    "timestamp": "2026-08-06T21:30:29.700Z",
+    "metrics": {
+      "allEmission": {
+        "truePositives": 129,
+        "falsePositives": 14,
+        "falseNegatives": 37,
+        "precision": 0.9020979020979021,
+        "recall": 0.7771084337349398,
+        "falsePositiveRate": 0.0979020979020979
+      },
+      "acceptedOnly": {
+        "truePositives": 87,
+        "falsePositives": 7,
+        "falseNegatives": 80,
+        "precision": 0.925531914893617,
+        "recall": 0.5209580838323353,
+        "falsePositiveRate": 0.07446808510638298
+      },
+      "separatedOptionalityMetrics": {
+        "mayDetectionInOracleText": {
+          "truePositives": 22,
+          "falsePositives": 0,
+          "falseNegatives": 2,
+          "trueNegatives": 0,
+          "positiveGoldSupport": 24,
+          "precision": 1,
+          "recall": 0.9166666666666666,
+          "falsePositiveRate": 0,
+          "status": "computed",
+          "note": "Case-level: oracle contains may → parser emits any optionalEffect/optionalCost"
+        },
+        "mayClauseSegmentation": {
+          "truePositives": 22,
+          "falsePositives": 0,
+          "falseNegatives": 2,
+          "trueNegatives": 0,
+          "positiveGoldSupport": 24,
+          "precision": 1,
+          "recall": 0.9166666666666666,
+          "falsePositiveRate": 0,
+          "status": "computed",
+          "note": "Case-level: oracle contains may → findMayScopes finds ≥1 scope"
+        },
+        "primitiveExtractionWithinMayScope": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "trueNegatives": 0,
+          "positiveGoldSupport": 0,
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": null,
+          "status": "N/A — zero gold support",
+          "note": "Label-level: gold optionalEffect/Cost → underlying primitive extracted (independent of attachment)"
+        },
+        "mayToExistingActionAttachment": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "trueNegatives": 0,
+          "positiveGoldSupport": 0,
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": null,
+          "status": "N/A — zero gold support",
+          "note": "Label-level: only when primitive extracted — optionalEffect/Cost correctly attached"
+        },
+        "optionalityScopeAccuracy": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "trueNegatives": 0,
+          "positiveGoldSupport": 0,
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": null,
+          "status": "N/A — zero gold support",
+          "note": "Label-level: gold optionalityScopeId present on optional actions"
+        },
+        "optionalityControllerAccuracy": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "trueNegatives": 0,
+          "positiveGoldSupport": 0,
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": null,
+          "status": "N/A — zero gold support",
+          "note": "Label-level: gold optionalityController labels"
+        },
+        "optionalEffect": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "trueNegatives": 0,
+          "positiveGoldSupport": 0,
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": null,
+          "status": "N/A — zero gold support"
+        },
+        "optionalCost": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "trueNegatives": 0,
+          "positiveGoldSupport": 0,
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": null,
+          "status": "N/A — zero gold support"
+        },
+        "ifYouDoDependency": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "trueNegatives": 0,
+          "positiveGoldSupport": 0,
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": null,
+          "status": "N/A — zero gold support"
+        },
+        "whenYouDoDependency": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "trueNegatives": 0,
+          "positiveGoldSupport": 0,
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": null,
+          "status": "N/A — zero gold support"
+        },
+        "upToDetection": {
+          "truePositives": 1,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "trueNegatives": 0,
+          "positiveGoldSupport": 1,
+          "precision": 1,
+          "recall": 1,
+          "falsePositiveRate": 0,
+          "status": "computed",
+          "note": "Insufficient gold support (≤3 labels) — interpret with caution."
+        },
+        "upToMinMaxValues": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "trueNegatives": 0,
+          "positiveGoldSupport": 0,
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": null,
+          "status": "N/A — zero gold support"
+        },
+        "quantityMayBeZero": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "trueNegatives": 0,
+          "positiveGoldSupport": 0,
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": null,
+          "status": "N/A — zero gold support"
+        },
+        "generalConditionDetection": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "trueNegatives": 0,
+          "positiveGoldSupport": 0,
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": null,
+          "status": "N/A — zero gold support"
+        },
+        "conditionToActionAttachment": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "trueNegatives": 0,
+          "positiveGoldSupport": 0,
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": null,
+          "status": "N/A — zero gold support"
+        },
+        "priorV7AliasedMayMetric": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "falseNegatives": 0,
+          "trueNegatives": 0,
+          "positiveGoldSupport": 0,
+          "precision": null,
+          "recall": null,
+          "falsePositiveRate": null,
+          "status": "N/A — zero gold support",
+          "note": "DEPRECATED: prior v7 computed mayDetection and mayAttachment from the same matched?.optionalEffect check — explains identical P/R"
+        },
+        "metricIndependenceNote": "mayDetectionInOracleText is case-level (any optional emission per card). mayToExistingActionAttachment is label-level and conditioned on successful primitive extraction. They are independently calculated; prior identical 27.1% arose from an aliased implementation, not intentional design."
+      },
+      "genuinelyUnsupported": 10,
+      "emissionCounts": {
+        "totalExtractedActions": 154,
+        "acceptedActions": 102,
+        "needsReviewActions": 52,
+        "abstainedActions": 0,
+        "abstainedClauseCount": 35,
+        "structureAnnotationCount": 6,
+        "needsReviewRate": 0.33766233766233766,
+        "needsReviewRateDenominator": "needs_review_actions / total_extracted_actions",
+        "structureAnnotationsExcludedFromPrimitiveCounts": true
+      }
+    }
+  }
+]
