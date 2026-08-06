@@ -1,4 +1,4 @@
-import type { Firestore } from "firebase-admin/firestore";
+import type { Firestore, Query } from "firebase-admin/firestore";
 import { parseRulingFromBulk } from "./parse-ruling";
 import { streamJsonlFile, countJsonlLines } from "./stream-bulk-jsonl";
 import { countCollection } from "./firestore-batch-writer";
@@ -110,9 +110,7 @@ export async function runBalancedRulingsReconciliation(input: {
   const firestoreDocIds = new Set<string>();
   const firestoreOracleIds = new Set<string>();
 
-  async function collectFromQuery(
-    query: FirebaseFirestore.Query,
-  ): Promise<void> {
+  async function collectFromQuery(query: Query): Promise<void> {
     const snap = await query.select("oracleId").get();
     for (const doc of snap.docs) {
       firestoreDocIds.add(doc.id);
@@ -122,7 +120,7 @@ export async function runBalancedRulingsReconciliation(input: {
   }
 
   if (input.versionId) {
-    let query = input.db
+    let query: Query = input.db
       .collection(COLLECTIONS.catalogRulingsVersions)
       .doc(input.versionId)
       .collection("rulings");

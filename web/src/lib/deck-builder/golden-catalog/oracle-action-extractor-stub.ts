@@ -61,9 +61,11 @@ export function extractOracleActionsStub(input: {
       const evidenceText = match[0];
       const start = match.index ?? 0;
       actions.push({
-        actionId: actionId(input.oracleId, evidenceText, index++),
+        actionId: actionId(input.oracleId, evidenceText, index),
         oracleId: input.oracleId,
-        cardFace: input.cardFace,
+        cardFaceId: input.cardFace ?? "front",
+        abilityIndex: 0,
+        actionIndex: index++,
         abilityType: rule.abilityType,
         trigger:
           rule.abilityType === "triggered"
@@ -75,7 +77,6 @@ export function extractOracleActionsStub(input: {
               rule.actionType === "triggered" ? "triggered" : rule.actionType,
           },
         ],
-        roles: [],
         evidenceText,
         evidenceStart: start,
         evidenceEnd: start + evidenceText.length,
