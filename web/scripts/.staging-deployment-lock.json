@@ -1,11 +1,15 @@
 {
     "stagingUrl":  "https://buyback-web-staging-rrogeqxyea-uc.a.run.app",
-    "deployedAt":  "2026-08-06T01:47:32.0462915Z",
-    "imageDigest":  "sha256:91b843d1d481dd414682deedfc532550f2c5e297f66c3471e556aa7f46f02f02",
-    "gitCommitSha":  "a8b87a073b1c9adc172abbae016f9ed8d57083c1",
-    "imageTag":  "a8b87a073b1c9adc172abbae016f9ed8d57083c1",
-    "buildId":  "8f25ca89-914a-42a2-bbfd-24803618b60d",
-    "cloudRunRevision":  "buyback-web-staging-00347-jmc",
+    "buildId":  "7e8cf528-37db-4afc-b18a-826c1c2b8221",
+    "gitTreeState":  "clean",
+    "commanderEligibilityVersion":  "commander-eligibility-v2",
+    "buildContextHash":  "383199402aeffa1bc8e3432ef0faffed46ab78a7:37105fadaeb40bd65dc5df405ca8fa13efbb6583",
+    "goldenCatalogVersion":  "golden-catalog-v1",
+    "imageTag":  "383199402aeffa1bc8e3432ef0faffed46ab78a7",
+    "evaluationSuiteVersion":  "115-case-v2-structured-grading",
+    "imageDigest":  "sha256:9c4e143f8eb6d92c8e2eb00d54dae5a52d58f18030b43707d8a6d596d2aaf046",
     "simpleClerkVersion":  "2026-08-06-commander-eligibility-v2-golden-catalog",
-    "evaluationSuiteVersion":  "115-case-v2-structured-grading"
+    "deployedAt":  "2026-08-06T03:13:23.6211316Z",
+    "gitCommitSha":  "383199402aeffa1bc8e3432ef0faffed46ab78a7",
+    "cloudRunRevision":  "buyback-web-staging-00348-ld8"
 }
