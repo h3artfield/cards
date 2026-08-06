@@ -29,6 +29,9 @@ export interface ExpectedPrimitiveAction {
   targetMinimum?: number;
   targetMaximum?: number | "X";
   quantityMayBeZero?: boolean;
+  optionalityController?: "you" | "opponent" | "target_player" | "each_player" | "object_controller";
+  optionalityScopeId?: string;
+  dependsOnActionIds?: string[];
   negative?: boolean;
 }
 

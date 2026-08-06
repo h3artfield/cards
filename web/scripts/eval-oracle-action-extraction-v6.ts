@@ -71,12 +71,14 @@ interface ExtractedActionView {
   abilityIndex: number;
   reviewStatus: string;
   optional: boolean;
+  optionalEffect?: boolean;
+  optionalCost?: boolean;
   hasUpToConstraint: boolean;
   conditions: string[];
   quantityConstraint?: string;
 }
 
-function computeMetrics(tp: number, fp: number, fn: number): FieldMetrics {
+export function computeMetrics(tp: number, fp: number, fn: number): FieldMetrics {
   const precision = tp + fp > 0 ? tp / (tp + fp) : 1;
   const recall = tp + fn > 0 ? tp / (tp + fn) : tp > 0 ? 1 : 1;
   const falsePositiveRate = tp + fp > 0 ? fp / (tp + fp) : fp > 0 ? 1 : 0;
@@ -132,7 +134,11 @@ function primitiveMatchesExpected(
   if (!evidenceMatchesExtracted(action.evidenceText, exp.evidenceContains)) return false;
   if (exp.cardFace && action.cardFaceId !== exp.cardFace) return false;
   const expectedOptional = exp.optionalEffect ?? exp.optional;
-  if (expectedOptional !== undefined && isOptionalEvidence(action.evidenceText) !== expectedOptional) return false;
+  if (expectedOptional !== undefined) {
+    const gotOptional = action.optionalEffect ?? action.optional;
+    if (gotOptional !== expectedOptional) return false;
+  }
+  if (exp.optionalCost !== undefined && action.optionalCost !== exp.optionalCost) return false;
   return true;
 }
 
@@ -301,8 +307,10 @@ function evaluateTier(
       cardFaceId: a.cardFaceId,
       abilityIndex: a.abilityIndex,
       reviewStatus: a.reviewStatus,
-      optional: isOptionalEvidence(a.evidenceText),
-      hasUpToConstraint: hasUpToConstraint(a.evidenceText),
+      optional: a.optionalEffect ?? isOptionalEvidence(a.evidenceText),
+      optionalEffect: a.optionalEffect,
+      optionalCost: a.optionalCost,
+      hasUpToConstraint: hasUpToConstraint(a.evidenceText) || a.targetMaximum !== undefined,
       conditions: a.effects.flatMap((e) => e.conditions ?? []),
       quantityConstraint: a.effects[0]?.quantity,
     }));
@@ -351,7 +359,7 @@ function evaluateTier(
   return computeMetrics(tp, fp, fn);
 }
 
-function evaluateCaseSet(cases: OracleActionEvalCaseV2[], setName: string) {
+export function evaluateCaseSet(cases: OracleActionEvalCaseV2[], setName: string) {
   let goldTp = 0;
   let goldFp = 0;
   let goldFn = 0;
@@ -461,8 +469,10 @@ function evaluateCaseSet(cases: OracleActionEvalCaseV2[], setName: string) {
       cardFaceId: a.cardFaceId,
       abilityIndex: a.abilityIndex,
       reviewStatus: a.reviewStatus,
-      optional: isOptionalEvidence(a.evidenceText),
-      hasUpToConstraint: hasUpToConstraint(a.evidenceText),
+      optional: a.optionalEffect ?? isOptionalEvidence(a.evidenceText),
+      optionalEffect: a.optionalEffect,
+      optionalCost: a.optionalCost,
+      hasUpToConstraint: hasUpToConstraint(a.evidenceText) || a.targetMaximum !== undefined,
       conditions: a.effects.flatMap((e) => e.conditions ?? []),
       quantityConstraint: a.effects[0]?.quantity,
     }));
@@ -509,15 +519,19 @@ function evaluateCaseSet(cases: OracleActionEvalCaseV2[], setName: string) {
 
         if (exp.optionalEffect !== undefined || exp.optional !== undefined) {
           const expectedOptional = exp.optionalEffect ?? exp.optional;
-          if (action.optional === expectedOptional) mayTp += 1;
+          const gotOptional = action.optionalEffect ?? action.optional;
+          if (gotOptional === expectedOptional) mayTp += 1;
           else {
             mayFp += 1;
             mayFn += 1;
           }
         }
         if (exp.optionalCost !== undefined) {
-          // optional cost tracked separately when parser exposes it on legacy view
-          if (exp.optionalCost === false) mayTp += 1;
+          if (action.optionalCost === exp.optionalCost) mayTp += 1;
+          else {
+            mayFp += 1;
+            mayFn += 1;
+          }
         }
         if (exp.targetMaximum !== undefined || /\bup to\b/i.test(exp.evidenceContains)) {
           if (action.hasUpToConstraint) upToTp += 1;
@@ -821,16 +835,14 @@ function evaluateCaseSet(cases: OracleActionEvalCaseV2[], setName: string) {
 
 function main() {
   const allowValidation = process.argv.includes("--allow-validation");
-  const devV2Path = resolve(process.cwd(), "data", "oracle-action-eval-development-v2.json");
   const devV1Path = resolve(process.cwd(), "data", "oracle-action-eval-development-v1.json");
   const devAdjudicationPath = resolve(process.cwd(), "reports", "oracle-action-development-missing-label-adjudication.json");
   const validationAccessLogPath = resolve(process.cwd(), "data", "oracle-action-validation-access-log.json");
-
-  let devPath = devV2Path;
+  let devPath = resolve(process.cwd(), "data", "oracle-action-eval-development-v3.json");
   try {
-    readFileSync(devV2Path, "utf8");
+    readFileSync(devPath, "utf8");
   } catch {
-    devPath = resolve(process.cwd(), "data", "oracle-action-eval-development-frozen.json");
+    devPath = resolve(process.cwd(), "data", "oracle-action-eval-development-v2.json");
   }
 
   const dev = JSON.parse(readFileSync(devPath, "utf8")) as {
@@ -953,4 +965,6 @@ function main() {
   console.log(`Report: ${outPath}`);
 }
 
-main();
+if (process.argv[1]?.includes("eval-oracle-action-extraction-v6")) {
+  main();
+}

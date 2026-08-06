@@ -1,0 +1,795 @@
+{
+  "generatedAt": "2026-08-06T19:54:10.823Z",
+  "developmentSet": "development_set_v3",
+  "parentSet": "development_set_v2",
+  "parentContentHash": "51ae89777f0f67e6196671a90a7d3f3f79ea2d10a9847b692772399acbcc83ca",
+  "totalAdjudications": 50,
+  "byDecision": {
+    "incorrect_gold_label": 9,
+    "optional_effect": 31,
+    "up_to_constraint": 9,
+    "optional_cost": 1
+  },
+  "adjudications": [
+    {
+      "caseId": "eval-0011",
+      "oracleId": "eval-oracle-11",
+      "actionType": "add_mana",
+      "evidenceContains": "Add {G}",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "incorrect_gold_label",
+      "correctedLabel": {
+        "optionalEffect": false
+      },
+      "reason": "May in oracle does not govern this evidence span — separate non-optional action."
+    },
+    {
+      "caseId": "eval-0011",
+      "oracleId": "eval-oracle-11",
+      "actionType": "search_library",
+      "evidenceContains": "search your library for",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0012",
+      "oracleId": "eval-oracle-12",
+      "actionType": "search_library",
+      "evidenceContains": "search your library for",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0012",
+      "oracleId": "eval-oracle-12",
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0016",
+      "oracleId": "eval-oracle-16",
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0019",
+      "oracleId": "eval-oracle-19",
+      "actionType": "exile",
+      "evidenceContains": "exile the top",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "incorrect_gold_label",
+      "correctedLabel": {
+        "optionalEffect": false
+      },
+      "reason": "May in oracle does not govern this evidence span — separate non-optional action."
+    },
+    {
+      "caseId": "eval-0019",
+      "oracleId": "eval-oracle-19",
+      "actionType": "cast",
+      "evidenceContains": "cast any number of spells",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0020",
+      "oracleId": "eval-oracle-20",
+      "actionType": "draw",
+      "evidenceContains": "draw two cards",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0053",
+      "oracleId": "eval-oracle-53",
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0053",
+      "oracleId": "eval-oracle-53",
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return target creature to its owner's hand",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0060",
+      "oracleId": "eval-oracle-60",
+      "actionType": "copy",
+      "evidenceContains": "Copy target instant",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "incorrect_gold_label",
+      "correctedLabel": {
+        "optionalEffect": false
+      },
+      "reason": "May in oracle does not govern this evidence span — separate non-optional action."
+    },
+    {
+      "caseId": "eval-0061",
+      "oracleId": "eval-oracle-61",
+      "actionType": "copy",
+      "evidenceContains": "copy target",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "incorrect_gold_label",
+      "correctedLabel": {
+        "optionalEffect": false
+      },
+      "reason": "May in oracle does not govern this evidence span — separate non-optional action."
+    },
+    {
+      "caseId": "eval-0062",
+      "oracleId": "eval-oracle-62",
+      "actionType": "cast",
+      "evidenceContains": "cast spells from your graveyard",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0062",
+      "oracleId": "eval-oracle-62",
+      "actionType": "play",
+      "evidenceContains": "play lands and cast spells from your graveyard",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0063",
+      "oracleId": "eval-oracle-63",
+      "actionType": "play",
+      "evidenceContains": "play lands and cast spells from your graveyard",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0080",
+      "oracleId": "eval-oracle-80",
+      "actionType": "destroy",
+      "evidenceContains": "Destroy",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "up_to_constraint",
+      "correctedLabel": {
+        "optionalEffect": false,
+        "targetMaximum": 1,
+        "quantityMayBeZero": true
+      },
+      "reason": "Legacy optional:true conflated up-to quantity constraint with may optionality."
+    },
+    {
+      "caseId": "eval-0081",
+      "oracleId": "eval-oracle-81",
+      "actionType": "destroy",
+      "evidenceContains": "Destroy",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "up_to_constraint",
+      "correctedLabel": {
+        "optionalEffect": false,
+        "targetMaximum": 2,
+        "quantityMayBeZero": true
+      },
+      "reason": "Legacy optional:true conflated up-to quantity constraint with may optionality."
+    },
+    {
+      "caseId": "eval-0082",
+      "oracleId": "eval-oracle-82",
+      "actionType": "exile",
+      "evidenceContains": "Exile",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "up_to_constraint",
+      "correctedLabel": {
+        "optionalEffect": false,
+        "targetMaximum": 3,
+        "quantityMayBeZero": true
+      },
+      "reason": "Legacy optional:true conflated up-to quantity constraint with may optionality."
+    },
+    {
+      "caseId": "eval-0083",
+      "oracleId": "eval-oracle-83",
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "up_to_constraint",
+      "correctedLabel": {
+        "optionalEffect": false,
+        "targetMaximum": 2,
+        "quantityMayBeZero": true
+      },
+      "reason": "Legacy optional:true conflated up-to quantity constraint with may optionality."
+    },
+    {
+      "caseId": "eval-0084",
+      "oracleId": "eval-oracle-84",
+      "actionType": "counter",
+      "evidenceContains": "Counter",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "up_to_constraint",
+      "correctedLabel": {
+        "optionalEffect": false,
+        "targetMaximum": 1,
+        "quantityMayBeZero": true
+      },
+      "reason": "Legacy optional:true conflated up-to quantity constraint with may optionality."
+    },
+    {
+      "caseId": "eval-0086",
+      "oracleId": "eval-oracle-86",
+      "actionType": "draw",
+      "evidenceContains": "Draw",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "up_to_constraint",
+      "correctedLabel": {
+        "optionalEffect": false,
+        "targetMaximum": 3,
+        "quantityMayBeZero": true
+      },
+      "reason": "Legacy optional:true conflated up-to quantity constraint with may optionality."
+    },
+    {
+      "caseId": "eval-0087",
+      "oracleId": "eval-oracle-87",
+      "actionType": "mill",
+      "evidenceContains": "Mill",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "up_to_constraint",
+      "correctedLabel": {
+        "optionalEffect": false,
+        "targetMaximum": 4,
+        "quantityMayBeZero": true
+      },
+      "reason": "Legacy optional:true conflated up-to quantity constraint with may optionality."
+    },
+    {
+      "caseId": "eval-0088",
+      "oracleId": "eval-oracle-88",
+      "actionType": "create_token",
+      "evidenceContains": "Create",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "up_to_constraint",
+      "correctedLabel": {
+        "optionalEffect": false,
+        "targetMaximum": 2,
+        "quantityMayBeZero": true
+      },
+      "reason": "Legacy optional:true conflated up-to quantity constraint with may optionality."
+    },
+    {
+      "caseId": "eval-0089",
+      "oracleId": "eval-oracle-89",
+      "actionType": "put_counter",
+      "evidenceContains": "Put",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "up_to_constraint",
+      "correctedLabel": {
+        "optionalEffect": false,
+        "targetMaximum": 1,
+        "quantityMayBeZero": true
+      },
+      "reason": "Legacy optional:true conflated up-to quantity constraint with may optionality."
+    },
+    {
+      "caseId": "eval-0090",
+      "oracleId": "eval-oracle-90",
+      "actionType": "draw",
+      "evidenceContains": "You may",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0091",
+      "oracleId": "eval-oracle-91",
+      "actionType": "search_library",
+      "evidenceContains": "You may",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0092",
+      "oracleId": "eval-oracle-92",
+      "actionType": "sacrifice",
+      "evidenceContains": "You may",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0093",
+      "oracleId": "eval-oracle-93",
+      "actionType": "exile",
+      "evidenceContains": "You may",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0094",
+      "oracleId": "eval-oracle-94",
+      "actionType": "counter",
+      "evidenceContains": "You may",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0095",
+      "oracleId": "eval-oracle-95",
+      "actionType": "destroy",
+      "evidenceContains": "You may",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0096",
+      "oracleId": "eval-oracle-96",
+      "actionType": "return_to_hand",
+      "evidenceContains": "You may",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0098",
+      "oracleId": "eval-oracle-98",
+      "actionType": "create_token",
+      "evidenceContains": "You may",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0099",
+      "oracleId": "eval-oracle-99",
+      "actionType": "discard",
+      "evidenceContains": "You may",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0108",
+      "oracleId": "eval-oracle-108",
+      "actionType": "exile",
+      "evidenceContains": "Exile",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "incorrect_gold_label",
+      "correctedLabel": {
+        "optionalEffect": false
+      },
+      "reason": "May in oracle does not govern this evidence span — separate non-optional action."
+    },
+    {
+      "caseId": "eval-0108",
+      "oracleId": "eval-oracle-108",
+      "actionType": "play",
+      "evidenceContains": "you may play that card",
+      "originalLabel": {
+        "optional": true,
+        "optionalEffect": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0109",
+      "oracleId": "eval-oracle-109",
+      "actionType": "exile",
+      "evidenceContains": "Exile",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "incorrect_gold_label",
+      "correctedLabel": {
+        "optionalEffect": false
+      },
+      "reason": "May in oracle does not govern this evidence span — separate non-optional action."
+    },
+    {
+      "caseId": "eval-0120",
+      "oracleId": "eval-oracle-120",
+      "actionType": "create_token",
+      "evidenceContains": "Treasure token",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "incorrect_gold_label",
+      "correctedLabel": {
+        "optionalEffect": false
+      },
+      "reason": "May in oracle does not govern this evidence span — separate non-optional action."
+    },
+    {
+      "caseId": "eval-0120",
+      "oracleId": "eval-oracle-120",
+      "actionType": "exile",
+      "evidenceContains": "exile the top",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "incorrect_gold_label",
+      "correctedLabel": {
+        "optionalEffect": false
+      },
+      "reason": "May in oracle does not govern this evidence span — separate non-optional action."
+    },
+    {
+      "caseId": "eval-0120",
+      "oracleId": "eval-oracle-120",
+      "actionType": "cast",
+      "evidenceContains": "play that card",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0120",
+      "oracleId": "eval-oracle-120",
+      "actionType": "play",
+      "evidenceContains": "You may play that card",
+      "originalLabel": {
+        "optional": true,
+        "optionalEffect": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "eval-0191",
+      "oracleId": "eval-oracle-191",
+      "actionType": "copy",
+      "evidenceContains": "copy",
+      "originalLabel": {
+        "optional": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "incorrect_gold_label",
+      "correctedLabel": {
+        "optionalEffect": false
+      },
+      "reason": "May in oracle does not govern this evidence span — separate non-optional action."
+    },
+    {
+      "caseId": "dev-opt-001",
+      "oracleId": "dev-opt-oracle-1",
+      "actionType": "draw",
+      "evidenceContains": "You may draw a card",
+      "originalLabel": {
+        "optional": true,
+        "optionalEffect": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "dev-opt-002",
+      "oracleId": "dev-opt-oracle-2",
+      "actionType": "search_library",
+      "evidenceContains": "search your library for a basic land",
+      "originalLabel": {
+        "optional": true,
+        "optionalEffect": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "dev-opt-003",
+      "oracleId": "dev-opt-oracle-3",
+      "actionType": "cast",
+      "evidenceContains": "You may cast this spell from your graveyard",
+      "originalLabel": {
+        "optional": true,
+        "optionalEffect": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "dev-opt-005",
+      "oracleId": "dev-opt-oracle-5",
+      "actionType": "draw",
+      "evidenceContains": "you may draw a card",
+      "originalLabel": {
+        "optional": true,
+        "optionalEffect": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "dev-opt-007",
+      "oracleId": "dev-opt-oracle-7",
+      "actionType": "search_library",
+      "evidenceContains": "put a land card from your hand onto the battlefield",
+      "originalLabel": {
+        "optional": true,
+        "optionalEffect": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "dev-opt-011",
+      "oracleId": "dev-opt-oracle-11",
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrifice a creature",
+      "originalLabel": {
+        "optionalEffect": false,
+        "optionalCost": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_cost",
+      "correctedLabel": {
+        "optionalCost": true,
+        "optionalEffect": false
+      },
+      "reason": "May appears in an additional-cost clause — optional cost, not optional effect."
+    },
+    {
+      "caseId": "dev-opt-012",
+      "oracleId": "dev-opt-oracle-12",
+      "actionType": "draw",
+      "evidenceContains": "You may draw two cards",
+      "originalLabel": {
+        "optional": true,
+        "optionalEffect": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "dev-cond-009",
+      "oracleId": "dev-cond-oracle-9",
+      "actionType": "destroy",
+      "evidenceContains": "destroy target artifact",
+      "originalLabel": {
+        "optional": true,
+        "optionalEffect": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    },
+    {
+      "caseId": "dev-cond-012",
+      "oracleId": "dev-cond-oracle-12",
+      "actionType": "play",
+      "evidenceContains": "play an additional land",
+      "originalLabel": {
+        "optional": true,
+        "optionalEffect": true
+      },
+      "reviewer": "legacy-optional-label-adjudicator",
+      "decision": "optional_effect",
+      "correctedLabel": {
+        "optionalEffect": true
+      },
+      "reason": "May governs this action — normalize to optionalEffect."
+    }
+  ]
+}

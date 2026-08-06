@@ -18,6 +18,20 @@ export type OracleActionReviewStatus =
   | "abstained"
   | "overridden";
 
+export type OptionalityController =
+  | "you"
+  | "opponent"
+  | "target_player"
+  | "each_player"
+  | "object_controller";
+
+export type ConditionType =
+  | "if_you_do"
+  | "when_you_do"
+  | "unless"
+  | "intervening_if"
+  | "general";
+
 export type OracleActionExtractionMethod =
   | "deterministic"
   | "model_assisted"
@@ -79,6 +93,19 @@ export interface OracleAction {
   evidenceText: string;
   evidenceStart: number;
   evidenceEnd: number;
+  optionalEffect?: boolean;
+  optionalCost?: boolean;
+  optionalityEvidenceText?: string;
+  optionalityEvidenceStart?: number;
+  optionalityEvidenceEnd?: number;
+  optionalityScopeId?: string;
+  optionalityController?: OptionalityController;
+  conditionType?: ConditionType;
+  conditionText?: string;
+  dependsOnActionIds?: string[];
+  targetMinimum?: number;
+  targetMaximum?: number | "X";
+  quantityMayBeZero?: boolean;
   parserVersion: string;
   extractionMethod: OracleActionExtractionMethod;
   confidence: number;
@@ -124,7 +151,7 @@ export const ORACLE_ACTION_PRODUCTION_GATES = {
   falsePositiveRate: { target: 0.02, label: "≤2%" },
 } as const;
 
-export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.4-optionality-conditions";
+export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.5-may-scope";
 
 export const HIGH_VALUE_ACTION_TYPES = [
   "draw",

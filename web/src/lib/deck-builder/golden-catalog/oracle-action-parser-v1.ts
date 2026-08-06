@@ -17,6 +17,11 @@ import {
   validateEvidenceSpan,
 } from "./oracle-ability-segmentation";
 import {
+  attachOptionalityToAction,
+  type ConditionType,
+  type OptionalityController,
+} from "./oracle-action-optionality";
+import {
   inferDerivedRoles,
   normalizeAbilityType,
   PRIMITIVE_TO_DERIVED_ROLES,
@@ -51,6 +56,14 @@ export interface OracleActionV1 {
   optional: boolean;
   optionalEffect: boolean;
   optionalCost?: boolean;
+  optionalityEvidenceText?: string;
+  optionalityEvidenceStart?: number;
+  optionalityEvidenceEnd?: number;
+  optionalityScopeId?: string;
+  optionalityController?: OptionalityController;
+  conditionType?: ConditionType;
+  conditionText?: string;
+  dependsOnActionIds?: string[];
   targetMinimum?: number;
   targetMaximum?: number | "X";
   quantityMayBeZero?: boolean;
@@ -101,10 +114,20 @@ interface ActionPattern {
 const CAST_PERMISSION =
   /\b(?:you may )?cast (?:target |this |that |the exiled |any number of (?:spells|nonland)|spells from|it\b|a spell)/i;
 const PLAY_PERMISSION =
-  /\b(?:you may )?play (?:lands and (?:cast )?spells from|land cards from|that card|it\b|lands and spells from)/i;
+  /\b(?:you may )?play (?:lands and (?:cast )?spells from|land cards from|that card|it\b|lands and spells from|an additional land|lands and cast spells from)/i;
 
 const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bdraw (?:a |one |two |three |four |five |seven |up to \w+ )?cards?\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
+  { pattern: /\bYou may draw [\w ]+/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
+  { pattern: /\bYou may search [\w ]+/i, actionType: "search_library", sourceZones: ["library"] },
+  { pattern: /\bYou may sacrifice [\w ]+/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
+  { pattern: /\bYou may exile [\w ]+/i, actionType: "exile", destinationZones: ["exile"] },
+  { pattern: /\bYou may destroy [\w ]+/i, actionType: "destroy", sourceZones: ["battlefield"] },
+  { pattern: /\bYou may counter [\w ]+/i, actionType: "counter", sourceZones: ["stack"] },
+  { pattern: /\bYou may return [\w ]+/i, actionType: "return_to_hand", destinationZones: ["hand"] },
+  { pattern: /\bYou may discard [\w ]+/i, actionType: "discard", sourceZones: ["hand"], destinationZones: ["graveyard"] },
+  { pattern: /\bYou may put [\w ]+ onto the battlefield/i, actionType: "search_library", destinationZones: ["battlefield"] },
+  { pattern: /\bYou may play [\w ]+/i, actionType: "play", requiresPermissionVerb: true },
   { pattern: /\bDraw (?:a |one |two |three |four |five |seven |up to \w+ )?cards?\b/, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bAdd \{[^}]+\}(?:\{[^}]+\})*/i, actionType: "add_mana", abilityType: "activated", destinationZones: ["mana_pool"] },
   { pattern: /\bAdd (?:one mana of any color|three mana of any one color|\{C\}{1,2}|\{[WUBRG]\})/i, actionType: "add_mana", destinationZones: ["mana_pool"] },
@@ -120,7 +143,7 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+ (?:card )?from (?:your )?graveyard to (?:your hand|the battlefield)\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["hand", "battlefield"] },
   { pattern: /\bPut target [\w ]+ (?:card )?from a graveyard onto the battlefield\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
   { pattern: /\bSacrifice (?:a |an |target |up to one target )?[\w ]+/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
-  { pattern: /\b(?:create|creates) (?:a |an |one |up to \w+ )?(?:[\w-]+ )*tokens?\b/i, actionType: "create_token", destinationZones: ["battlefield"], affectedObjects: ["token"] },
+  { pattern: /\b(?:create|creates|You may create) (?:a |an |one |up to \w+ )?(?:[\w-]+ )*tokens?\b/i, actionType: "create_token", destinationZones: ["battlefield"], affectedObjects: ["token"] },
   { pattern: /\bCopy target (?:instant|sorcery|spell|triggered|[\w ]+)/i, actionType: "copy", sourceZones: ["stack", "battlefield"] },
   { pattern: /\bcopy target (?:instant|sorcery|spell|triggered|[\w ]+)/i, actionType: "copy", sourceZones: ["stack", "battlefield"] },
   { pattern: /\bcopy (?:that spell|the exiled card|it)\b/i, actionType: "copy", sourceZones: ["stack", "exile"] },
@@ -240,23 +263,116 @@ function parseTargetConstraint(text: string): {
   targetMaximum?: number | "X";
   quantityMayBeZero?: boolean;
 } {
-  const upTo = text.match(/\bup to (one|two|three|four|five|\w+) target/i);
-  if (upTo) {
-    const word = upTo[1].toLowerCase();
+  const upToTarget = text.match(/\bup to (one|two|three|four|five|\w+) target/i);
+  if (upToTarget) {
+    const word = upToTarget[1].toLowerCase();
+    const map: Record<string, number> = { one: 1, two: 2, three: 3, four: 4, five: 5 };
+    return { targetMaximum: map[word] ?? "X", quantityMayBeZero: true };
+  }
+  if (/\bup to that many\b/i.test(text)) {
+    return { targetMaximum: "X", quantityMayBeZero: true };
+  }
+  const upToQty = text.match(/\bup to (one|two|three|four|five|\d+|X) (?:\+?\/?\+?\d+\/?\+?\d+ )?counters?\b/i);
+  if (upToQty) {
+    const word = upToQty[1].toLowerCase();
     const map: Record<string, number> = { one: 1, two: 2, three: 3, four: 4, five: 5 };
     return { targetMaximum: map[word] ?? "X", quantityMayBeZero: true };
   }
   if (/\bAny number of target/i.test(text)) {
     return { targetMinimum: 0, quantityMayBeZero: true };
   }
+  const upToQuantity = text.match(
+    /\b(?:Draw|Mill|Discard|Create|Scry|Surveil) up to (one|two|three|four|five|\d+)\b/i,
+  );
+  if (upToQuantity) {
+    const word = upToQuantity[1].toLowerCase();
+    const map: Record<string, number> = { one: 1, two: 2, three: 3, four: 4, five: 5 };
+    const num = map[word] ?? Number.parseInt(word, 10);
+    return { targetMaximum: Number.isFinite(num) ? num : "X", quantityMayBeZero: true };
+  }
+  const upToLife = text.match(/\b(?:loses|lose|gains|gain) up to (\d+) life\b/i);
+  if (upToLife) {
+    return { targetMaximum: Number.parseInt(upToLife[1], 10), quantityMayBeZero: true };
+  }
   return {};
 }
 
-function isOptionalCost(paragraph: string): boolean {
-  return (
-    /\bAs an additional cost[^.]+\byou may\b/i.test(paragraph) ||
-    /\byou may pay[^.]+\brather than pay/i.test(paragraph)
-  );
+function applyOptionalityPostProcess(
+  actions: OracleActionV1[],
+  abilities: SegmentedAbility[],
+  oracleText: string,
+): OracleActionV1[] {
+  return actions.map((action) => {
+    const ability = abilities.find(
+      (a) => a.abilityIndex === action.abilityIndex && a.cardFaceId === action.faceId,
+    );
+    if (!ability) return action;
+
+    const siblingInputs = actions
+      .filter((s) => s.abilityIndex === action.abilityIndex && s.faceId === action.faceId)
+      .map((s) => ({
+        actionId: s.actionId,
+        evidenceStart: s.evidenceStart,
+        evidenceEnd: s.evidenceEnd,
+        evidenceText: s.evidenceText,
+        abilityIndex: s.abilityIndex,
+        abilityType: s.abilityType,
+      }));
+
+    const attach = attachOptionalityToAction({
+      action: {
+        actionId: action.actionId,
+        evidenceStart: action.evidenceStart,
+        evidenceEnd: action.evidenceEnd,
+        evidenceText: action.evidenceText,
+        abilityIndex: action.abilityIndex,
+        abilityType: action.abilityType,
+      },
+      ability,
+      oracleText,
+      siblingActions: siblingInputs,
+    });
+
+    let reviewStatus = action.reviewStatus;
+    const paragraphHasMay = /\b(?:You|An opponent|That player|Each player|Its controller) may\b/i.test(
+      ability.paragraphText,
+    );
+
+    if (paragraphHasMay && !attach.optionalityCertain && !attach.conditionType) {
+      reviewStatus = "needs_review";
+    }
+    if (
+      (attach.conditionType === "if_you_do" || attach.conditionType === "when_you_do") &&
+      !attach.dependsOnActionIds?.length
+    ) {
+      reviewStatus = "needs_review";
+    }
+    if ((attach.optionalEffect || attach.optionalCost) && !attach.optionalityCertain) {
+      reviewStatus = "needs_review";
+    }
+
+    const mergedConditions = action.conditions ?? [];
+    if (attach.conditionText && !mergedConditions.includes(attach.conditionText)) {
+      mergedConditions.push(attach.conditionText);
+    }
+
+    return {
+      ...action,
+      optional: attach.optionalEffect,
+      optionalEffect: attach.optionalEffect,
+      optionalCost: attach.optionalCost || undefined,
+      optionalityEvidenceText: attach.optionalityEvidenceText,
+      optionalityEvidenceStart: attach.optionalityEvidenceStart,
+      optionalityEvidenceEnd: attach.optionalityEvidenceEnd,
+      optionalityScopeId: attach.optionalityScopeId,
+      optionalityController: attach.optionalityController,
+      conditionType: attach.conditionType,
+      conditionText: attach.conditionText,
+      dependsOnActionIds: attach.dependsOnActionIds,
+      conditions: mergedConditions.length ? mergedConditions : undefined,
+      reviewStatus,
+    };
+  });
 }
 
 function extractConditions(paragraph: string): string[] {
@@ -278,12 +394,6 @@ function extractConditions(paragraph: string): string[] {
     found.push("replacement: would instead");
   }
   return [...new Set(found)];
-}
-
-function isOptionalEffect(paragraph: string, evidenceText: string): boolean {
-  const idx = paragraph.indexOf(evidenceText);
-  const prefix = idx >= 0 ? paragraph.slice(0, idx + evidenceText.length) : paragraph;
-  return /\b(?:You|they|that player|its controller) may\b/i.test(prefix);
 }
 
 function assignReviewStatus(input: {
@@ -335,8 +445,7 @@ function acceptAction(input: {
       : input.ability.abilityType;
   const abilityType = input.rule.abilityType ?? toV1AbilityType(classified);
   const zones = inferZones(input.ability.paragraphText);
-  const optionalEffect = input.rule.optional ?? isOptionalEffect(input.ability.paragraphText, evidenceText);
-  const optionalCost = isOptionalCost(input.ability.paragraphText);
+  const optionalEffect = false;
   const quantityConstraint = extractQuantityConstraint(evidenceText);
   const targetConstraint = parseTargetConstraint(evidenceText);
   const conditions = extractConditions(input.ability.paragraphText);
@@ -379,7 +488,6 @@ function acceptAction(input: {
     quantityConstraint,
     optional: optionalEffect,
     optionalEffect,
-    optionalCost: optionalCost || undefined,
     targetMinimum: targetConstraint.targetMinimum,
     targetMaximum: targetConstraint.targetMaximum,
     quantityMayBeZero: targetConstraint.quantityMayBeZero,
@@ -559,7 +667,8 @@ export function extractOracleActionsV1(input: {
 
   const preDedupCount = rawActions.length;
   const { actions, canonicalKeyDuplicatesRemoved, semanticDuplicatesRemoved } = dedupeActions(rawActions);
-  const indexedActions = actions.map((a, i) => ({ ...a, actionIndex: i }));
+  const withOptionality = applyOptionalityPostProcess(actions, abilities, input.oracleText);
+  const indexedActions = withOptionality.map((a, i) => ({ ...a, actionIndex: i }));
   const duplicateSuppressedCount = Math.max(0, preDedupCount - indexedActions.length);
 
   return {
@@ -606,6 +715,19 @@ export function toLegacyExtractionResult(result: OracleActionV1Result): OracleAc
       evidenceText: a.evidenceText,
       evidenceStart: a.evidenceStart,
       evidenceEnd: a.evidenceEnd,
+      optionalEffect: a.optionalEffect,
+      optionalCost: a.optionalCost,
+      optionalityEvidenceText: a.optionalityEvidenceText,
+      optionalityEvidenceStart: a.optionalityEvidenceStart,
+      optionalityEvidenceEnd: a.optionalityEvidenceEnd,
+      optionalityScopeId: a.optionalityScopeId,
+      optionalityController: a.optionalityController,
+      conditionType: a.conditionType,
+      conditionText: a.conditionText,
+      dependsOnActionIds: a.dependsOnActionIds,
+      targetMinimum: a.targetMinimum,
+      targetMaximum: a.targetMaximum,
+      quantityMayBeZero: a.quantityMayBeZero,
       parserVersion: a.parserVersion,
       extractionMethod: a.extractionMethod === "manual" ? "manual_override" : a.extractionMethod,
       confidence: a.confidence,

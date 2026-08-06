@@ -1,16 +1,25 @@
 {
   "developmentSet": {
-    "path": "data/oracle-action-eval-development-v2.json",
-    "classification": "development_set_v2",
-    "contentHash": "51ae89777f0f67e6196671a90a7d3f3f79ea2d10a9847b692772399acbcc83ca",
-    "caseCount": 228,
-    "purpose": "Parser tuning after missing-label adjudication and optionality/condition gold expansion",
+    "path": "data/oracle-action-eval-development-v3.json",
+    "classification": "development_set_v3",
+    "contentHash": "4a69de72c991c3a3173b4e5efe54ccf96f4c171e11c3f6edd1a0a256573d76d9",
+    "caseCount": 256,
+    "purpose": "Parser tuning — may scope / optionality attachment (v1.5+)",
+    "upToGoldCaseCount": 31,
+    "parentVersion": {
+      "classification": "development_set_v2",
+      "contentHash": "51ae89777f0f67e6196671a90a7d3f3f79ea2d10a9847b692772399acbcc83ca",
+      "caseCount": 228,
+      "path": "data/oracle-action-eval-development-v2.json"
+    },
     "priorVersions": [
       {
-        "path": "data/oracle-action-eval-development-frozen.json",
-        "classification": "development_set_v1",
-        "contentHash": "8c72f8d1b98b0f940d049cc2d6df26e0483c8b6efbd9ab25ff0f5647770bf541",
-        "supersededAt": "2026-08-06T14:48:01.736Z"
+        "path": "data/oracle-action-eval-development-v2.json",
+        "classification": "development_set_v2",
+        "contentHash": "51ae89777f0f67e6196671a90a7d3f3f79ea2d10a9847b692772399acbcc83ca",
+        "caseCount": 228,
+        "supersededAt": "2026-08-06T19:54:10.823Z",
+        "reason": "Expanded to v3 with up-to gold and legacy optional relabel"
       }
     ]
   },
@@ -53,5 +62,13 @@
     "contentHash": "8c72f8d1b98b0f940d049cc2d6df26e0483c8b6efbd9ab25ff0f5647770bf541",
     "caseCount": 204,
     "purpose": "Historical v6 comparison — frozen, do not modify"
+  },
+  "developmentSetV2": {
+    "path": "data/oracle-action-eval-development-v2.json",
+    "classification": "development_set_v2",
+    "contentHash": "51ae89777f0f67e6196671a90a7d3f3f79ea2d10a9847b692772399acbcc83ca",
+    "caseCount": 228,
+    "purpose": "Frozen at parser v1.4 — immutable, do not modify",
+    "frozenAt": "2026-08-06T14:48:01.736Z"
   }
 }

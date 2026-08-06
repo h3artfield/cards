@@ -1,0 +1,140 @@
+{
+  "generatedAt": "2026-08-06T19:54:13.243Z",
+  "baselineParser": "oracle-action-v1.4-optionality-conditions (prefix-heuristic may detection)",
+  "note": "Classification performed before v1.5 scope attachment; FN measured against v1.4 optionalEffect heuristic",
+  "developmentSet": "development_set_v3",
+  "totalMayGoldLabels": 40,
+  "truePositives": 33,
+  "falseNegatives": 7,
+  "recall": 0.825,
+  "categories": [
+    {
+      "category": "may_governing_one_primitive_action",
+      "count": 1,
+      "examples": [
+        {
+          "caseId": "dev-opt-033",
+          "oracleText": "An opponent may sacrifice a creature rather than pay this spell's mana cost.",
+          "evidenceContains": "sacrifice a creature",
+          "actionType": "sacrifice",
+          "category": "may_governing_one_primitive_action",
+          "note": "Extracted \"sacrifice a creature rather than pay this spell\" but v1.4 may not detected"
+        }
+      ]
+    },
+    {
+      "category": "may_governing_several_compound_actions",
+      "count": 1,
+      "examples": [
+        {
+          "caseId": "eval-0053",
+          "oracleText": "+2: Look at the top card of target player's library. You may put that card on the bottom of that player's library.\n0: Dr",
+          "evidenceContains": "Draw a card",
+          "actionType": "draw",
+          "category": "may_governing_several_compound_actions",
+          "note": "Extracted \"Draw a card\" but v1.4 may not detected"
+        }
+      ]
+    },
+    {
+      "category": "may_inside_triggered_ability",
+      "count": 0,
+      "examples": []
+    },
+    {
+      "category": "may_inside_activated_ability",
+      "count": 1,
+      "examples": [
+        {
+          "caseId": "eval-0053",
+          "oracleText": "+2: Look at the top card of target player's library. You may put that card on the bottom of that player's library.\n0: Dr",
+          "evidenceContains": "Return target creature to its owner's hand",
+          "actionType": "return_to_hand",
+          "category": "may_inside_activated_ability",
+          "note": "Extracted \"Return target creature to its owner's hand\" but v1.4 may not detected"
+        }
+      ]
+    },
+    {
+      "category": "may_applying_to_additional_cost",
+      "count": 0,
+      "examples": []
+    },
+    {
+      "category": "opponent_may",
+      "count": 0,
+      "examples": []
+    },
+    {
+      "category": "nested_may",
+      "count": 0,
+      "examples": []
+    },
+    {
+      "category": "may_followed_by_if_you_do",
+      "count": 0,
+      "examples": []
+    },
+    {
+      "category": "may_cast_or_play_permission",
+      "count": 1,
+      "examples": [
+        {
+          "caseId": "eval-0120",
+          "oracleText": "Deathtouch\nWhenever you exile a card, create a Treasure token.\nWhenever you sacrifice a Treasure, exile the top card of ",
+          "evidenceContains": "play that card",
+          "actionType": "cast",
+          "category": "may_cast_or_play_permission",
+          "note": "No matching extraction"
+        }
+      ]
+    },
+    {
+      "category": "may_choose_mode_or_target",
+      "count": 1,
+      "examples": [
+        {
+          "caseId": "dev-opt-038",
+          "oracleText": "Copy target instant or sorcery spell. You may choose new targets for the copy.",
+          "evidenceContains": "choose new targets for the copy",
+          "actionType": "copy",
+          "category": "may_choose_mode_or_target",
+          "note": "No matching extraction"
+        }
+      ]
+    },
+    {
+      "category": "segmentation_failure",
+      "count": 1,
+      "examples": [
+        {
+          "caseId": "eval-0098",
+          "oracleText": "You may create a 1/1 token.",
+          "evidenceContains": "You may",
+          "actionType": "create_token",
+          "category": "segmentation_failure",
+          "note": "No matching extraction"
+        }
+      ]
+    },
+    {
+      "category": "scope_attachment_failure",
+      "count": 0,
+      "examples": []
+    },
+    {
+      "category": "primitive_action_missing_entirely",
+      "count": 1,
+      "examples": [
+        {
+          "caseId": "dev-opt-035",
+          "oracleText": "You may draw a card. You may put a card from your hand on top of your library.",
+          "evidenceContains": "put a card from your hand on top of your library",
+          "actionType": "search_library",
+          "category": "primitive_action_missing_entirely",
+          "note": "No matching extraction"
+        }
+      ]
+    }
+  ]
+}
