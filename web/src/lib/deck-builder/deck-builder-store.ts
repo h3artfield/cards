@@ -8,6 +8,7 @@ import type {
   StoreDeck,
 } from "./types";
 import { COLLECTIONS } from "../firebase/collections";
+import { getActiveRulingsByOracleId } from "./golden-catalog/rulings-versions";
 import {
   isAdminConfigured,
   requireFirestore,
@@ -134,6 +135,19 @@ export const deckBuilderStore = {
       unique.map((id) => this.getCatalogOracleCard(id)),
     );
     return cards.filter(Boolean) as CatalogOracleCard[];
+  },
+
+  async getCatalogRulingsByOracleId(
+    oracleId: string,
+    limit = 50,
+  ): Promise<import("./golden-catalog/schemas").CardRuling[]> {
+    const trimmed = oracleId.trim();
+    if (!trimmed) return [];
+    const db = dbOrMemory();
+    if (db) {
+      return getActiveRulingsByOracleId(db, trimmed, limit);
+    }
+    return [];
   },
 
   async countCatalogOracleCards(): Promise<number> {

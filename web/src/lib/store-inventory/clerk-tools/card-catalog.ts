@@ -122,6 +122,36 @@ export async function cardCatalogLookupById(
   return mergeCatalogHitWithOracle(base);
 }
 
+/** Official card-specific rulings by oracle ID — indexed query, not a collection scan. */
+export async function cardRulingsLookupByOracleId(
+  oracleId: string,
+  limit = 20,
+): Promise<
+  Array<{
+    rulingId: string;
+    oracleId: string;
+    publishedAt: string;
+    rulingText: string;
+    source: string;
+    sourceVersion?: string;
+  }>
+> {
+  const trimmed = oracleId.trim();
+  if (!trimmed) return [];
+
+  const rulings = await deckBuilderStore.getCatalogRulingsByOracleId(trimmed, limit);
+  return rulings
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+    .map((r) => ({
+      rulingId: r.rulingId ?? r.id,
+      oracleId: r.oracleId,
+      publishedAt: r.publishedAt,
+      rulingText: r.rulingText,
+      source: r.source,
+      sourceVersion: r.sourceVersion,
+    }));
+}
+
 export async function cardCatalogTool(input: {
   cardNames: string[];
   scryfallIds?: string[];

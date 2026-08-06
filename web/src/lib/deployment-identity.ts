@@ -1,5 +1,6 @@
 import { COMMANDER_ELIGIBILITY_VERSION } from "./deck-builder/commander-classification";
 import { GOLDEN_CATALOG_VERSION } from "./deck-builder/golden-catalog/version";
+import { RULINGS_IMPORTER_VERSION } from "./deck-builder/golden-catalog/rulings-importer-version";
 
 /** Simple clerk pipeline release identifier — bump when pipeline semantics change. */
 export const SIMPLE_CLERK_VERSION = "2026-08-06-commander-eligibility-v2-golden-catalog";
@@ -20,6 +21,8 @@ export interface DeploymentIdentity {
   evaluationSuiteVersion: string;
   goldenCatalogVersion: string;
   commanderEligibilityVersion: string;
+  rulingsImporterVersion: string;
+  activeRulingsDatasetVersion: string;
 }
 
 export function getDeploymentIdentity(): DeploymentIdentity {
@@ -42,5 +45,9 @@ export function getDeploymentIdentity(): DeploymentIdentity {
     commanderEligibilityVersion:
       process.env.COMMANDER_ELIGIBILITY_VERSION?.trim() ||
       COMMANDER_ELIGIBILITY_VERSION,
+    rulingsImporterVersion:
+      process.env.RULINGS_IMPORTER_VERSION?.trim() || RULINGS_IMPORTER_VERSION,
+    activeRulingsDatasetVersion:
+      process.env.ACTIVE_RULINGS_DATASET_VERSION?.trim() || "unknown",
   };
 }

@@ -55,6 +55,7 @@ Use -AllowDirty only for explicit development-only builds.
   $EVALUATION_SUITE_VERSION = "115-case-v2-structured-grading"
   $GOLDEN_CATALOG_VERSION = "golden-catalog-v1"
   $COMMANDER_ELIGIBILITY_VERSION = "commander-eligibility-v2"
+  $RULINGS_IMPORTER_VERSION = "scryfall-rulings-bulk-v1"
   $DEPLOYED_AT = (Get-Date).ToUniversalTime().ToString("o")
   $IMAGE_TAG = $GIT_SHA
   $IMAGE_REF = "${REGISTRY}/buyback-web-staging:${IMAGE_TAG}"
@@ -75,6 +76,7 @@ Use -AllowDirty only for explicit development-only builds.
     "_EVALUATION_SUITE_VERSION=$EVALUATION_SUITE_VERSION"
     "_GOLDEN_CATALOG_VERSION=$GOLDEN_CATALOG_VERSION"
     "_COMMANDER_ELIGIBILITY_VERSION=$COMMANDER_ELIGIBILITY_VERSION"
+    "_RULINGS_IMPORTER_VERSION=$RULINGS_IMPORTER_VERSION"
     "_APP_URL=$APP_URL"
     "_FB_API_KEY=$(Get-EnvValue 'NEXT_PUBLIC_FIREBASE_API_KEY')"
     "_FB_AUTH_DOMAIN=$(Get-EnvValue 'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN')"
@@ -126,6 +128,7 @@ SIMPLE_CLERK_VERSION: "$SIMPLE_CLERK_VERSION"
 EVALUATION_SUITE_VERSION: "$EVALUATION_SUITE_VERSION"
 GOLDEN_CATALOG_VERSION: "$GOLDEN_CATALOG_VERSION"
 COMMANDER_ELIGIBILITY_VERSION: "$COMMANDER_ELIGIBILITY_VERSION"
+RULINGS_IMPORTER_VERSION: "$RULINGS_IMPORTER_VERSION"
 IMAGE_DIGEST: "$DIGEST"
 "@ | Set-Content -Path $envFile -Encoding utf8
 
@@ -180,6 +183,7 @@ IMAGE_DIGEST: "$DIGEST"
     evaluationSuiteVersion = $EVALUATION_SUITE_VERSION
     goldenCatalogVersion = $GOLDEN_CATALOG_VERSION
     commanderEligibilityVersion = $COMMANDER_ELIGIBILITY_VERSION
+    rulingsImporterVersion = $RULINGS_IMPORTER_VERSION
     stagingUrl = $APP_URL
   }
   $lockPath = Join-Path $PSScriptRoot "..\web\scripts\.staging-deployment-lock.json"

@@ -225,10 +225,14 @@ export interface CardRelationship {
 /** Official ruling linked to oracle ID. */
 export interface CardRuling {
   id: string;
+  rulingId: string;
   oracleId: string;
   publishedAt: string;
   rulingText: string;
   source: string;
+  sourceVersion: string;
+  importedAt: string;
+  contentHash: string;
 }
 
 export type BulkDatasetType =
@@ -274,9 +278,12 @@ export interface GoldenCatalogSyncState {
   oracleCardsBulkUpdatedAt?: string;
   defaultCardsBulkUpdatedAt?: string;
   oracleTagsBulkUpdatedAt?: string;
+  rulingsBulkUpdatedAt?: string;
   oracleCardsContentHash?: string;
   defaultCardsContentHash?: string;
   oracleTagsContentHash?: string;
+  rulingsContentHash?: string;
+  catalogRulingCount?: number;
   catalogOracleCardCount?: number;
   catalogPrintingCount?: number;
   lastFullImportAt?: string;

@@ -1,4 +1,5 @@
 import type { InventoryItem } from "../types";
+import type { InventoryLinkOutcome } from "./inventory-product-identity";
 import {
   isEnrichableMagicSingle,
   isInventoryCatalogSkipped,
@@ -64,6 +65,36 @@ function isFullyLinkedDeterministic(item: InventoryItem): boolean {
 export function classifyInventoryLinkStatus(
   item: InventoryItem,
 ): InventoryLinkClassification {
+  const outcome = item.catalogLinkOutcome as InventoryLinkOutcome | undefined;
+  if (outcome === "token_product" || outcome === "composite_product" || outcome === "non_card_product") {
+    return {
+      category: "excluded_non_card_product",
+      clerkEligible: false,
+      exclusionReason: "excluded_non_card",
+    };
+  }
+  if (outcome === "identity_conflict") {
+    return {
+      category: "conflict",
+      clerkEligible: false,
+      exclusionReason: "conflict",
+    };
+  }
+  if (outcome === "confirmed_oracle_only") {
+    return {
+      category: "oracle_only_linked",
+      clerkEligible: false,
+      exclusionReason: "oracle_only",
+    };
+  }
+  if (outcome === "unresolved") {
+    return {
+      category: "unresolved",
+      clerkEligible: false,
+      exclusionReason: "unresolved",
+    };
+  }
+
   if (!isMagicInventoryItem(item)) {
     return {
       category: "other",
@@ -97,6 +128,15 @@ export function classifyInventoryLinkStatus(
   }
 
   if (isFullyLinkedDeterministic(item)) {
+    return { category: "fully_linked", clerkEligible: true };
+  }
+
+  if (
+    outcome === "confirmed_printing" &&
+    hasOracleId(item) &&
+    hasPrintingId(item) &&
+    DETERMINISTIC_METHODS.has(item.catalogMatchMethod ?? "manual")
+  ) {
     return { category: "fully_linked", clerkEligible: true };
   }
 

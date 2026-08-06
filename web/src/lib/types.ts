@@ -367,6 +367,41 @@ export interface InventoryItem {
   catalogSetCode?: string;
   catalogSyncedAt?: string;
   catalogMatchMethod?: "tcgplayer_id" | "set_search" | "name_search" | "name_fuzzy" | "manual" | "skipped" | "unresolved";
+  /** Terminal identity outcome from review or enrichment. */
+  catalogLinkOutcome?:
+    | "confirmed_printing"
+    | "confirmed_oracle_only"
+    | "token_product"
+    | "composite_product"
+    | "non_card_product"
+    | "identity_conflict"
+    | "unresolved";
+  /** Composite / token product modeling when a single printing ID is insufficient. */
+  compositeInventoryIdentity?: {
+    listingId: string;
+    componentPrintingIds: string[];
+    componentOracleIds: string[];
+    productIdentityType: "double_sided_token" | "paired_card_product" | "composite";
+  };
+  /** Append-only audit trail for identity review decisions. */
+  catalogIdentityDecisions?: Array<{
+    previousOracleId?: string;
+    previousScryfallId?: string;
+    selectedOracleId?: string;
+    selectedScryfallId?: string;
+    outcome:
+      | "confirmed_printing"
+      | "confirmed_oracle_only"
+      | "token_product"
+      | "composite_product"
+      | "non_card_product"
+      | "identity_conflict"
+      | "unresolved";
+    decisionMethod: string;
+    reviewer: string;
+    decidedAt: string;
+    supportingEvidence: string[];
+  }>;
 }
 
 export interface ScannedCard {
