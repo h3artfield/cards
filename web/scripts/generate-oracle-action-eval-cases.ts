@@ -156,7 +156,7 @@ function buildCases(): OracleActionEvalCase[] {
   for (const c of KEYWORD_VANILLA) {
     const exp: OracleActionEvalCase["expectedActions"] = [];
     if (c.text.includes("draw")) exp.push({ actionType: "draw", evidenceContains: "draw" });
-    if (c.text.includes("damage")) exp.push({ actionType: "destroy", evidenceContains: "damage" });
+    if (c.text.includes("damage")) exp.push({ actionType: "deal damage", evidenceContains: "damage" });
     if (c.text.includes("Counter")) exp.push({ actionType: "counter", evidenceContains: "Counter" });
     if (c.text.includes("Exile")) exp.push({ actionType: "exile", evidenceContains: "Exile" });
     if (c.text.includes("Add {")) exp.push({ actionType: "ramp / add mana", evidenceContains: "Add" });

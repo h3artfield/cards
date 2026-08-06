@@ -56,6 +56,7 @@ Use -AllowDirty only for explicit development-only builds.
   $GOLDEN_CATALOG_VERSION = "golden-catalog-v1"
   $COMMANDER_ELIGIBILITY_VERSION = "commander-eligibility-v2"
   $RULINGS_IMPORTER_VERSION = "scryfall-rulings-bulk-v1"
+  $ACTIVE_RULINGS_DATASET_VERSION = "rulings-3a5a7c58c42a68f2"
   $DEPLOYED_AT = (Get-Date).ToUniversalTime().ToString("o")
   $IMAGE_TAG = $GIT_SHA
   $IMAGE_REF = "${REGISTRY}/buyback-web-staging:${IMAGE_TAG}"

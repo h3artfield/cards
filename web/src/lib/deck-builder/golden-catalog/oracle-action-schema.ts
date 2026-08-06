@@ -129,6 +129,13 @@ export const HIGH_VALUE_ACTION_TYPES = [
   "graveyard recursion",
   "protection",
   "board wipe",
+  "deal damage",
+  "gain life",
+  "lose life",
+  "scry",
+  "surveil",
+  "tap",
+  "put counter",
 ] as const;
 
 /** Rules-answer priority — catalogRulings is layer 3 only. */

@@ -23,7 +23,7 @@
       "oracleText": "Shock deals 2 damage to any target.",
       "expectedActions": [
         {
-          "actionType": "destroy",
+          "actionType": "deal damage",
           "evidenceContains": "damage"
         }
       ]
@@ -47,7 +47,7 @@
       "oracleText": "Lightning Bolt deals 3 damage to any target.",
       "expectedActions": [
         {
-          "actionType": "destroy",
+          "actionType": "deal damage",
           "evidenceContains": "damage"
         }
       ]
