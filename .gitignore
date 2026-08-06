@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+web/node_modules/
+functions/node_modules/
+
+# Environment
+.env
+.env.local
+.env.*.local
+web/.env.local
+
+# PriceCharting raw CSV archives (contain subscription URLs)
+data/pricecharting/raw/
+data/pricecharting/reports/
+data/scryfall/
+
+# Next.js
+web/.next/
+web/out/
+web/.data/
+
+# Firebase
+functions/lib/
+.firebase/
+firebase-debug.log
+*-firebase-adminsdk-*.json
+*service*account*.json
+**/serviceAccount*.json
+
+# IDE
+.idea/
+.vscode/
+
+# Generated audit outputs
+web/reports/
+

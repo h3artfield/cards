@@ -1,0 +1,5 @@
+FIREBASE_PROJECT_ID: trading-card-buyback-dev
+NEXT_PUBLIC_FIREBASE_PROJECT_ID: trading-card-buyback-dev
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: trading-card-buyback-dev.firebasestorage.app
+GRADING_SERVICE_URL: PLACEHOLDER_GRADING
+REQUIRE_FIRESTORE: "true"

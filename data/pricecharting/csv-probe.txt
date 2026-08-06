@@ -1,0 +1,22 @@
+api/csv -> 404 text/plain; charset=utf-8 404 page not found 
+api/download -> 404 text/plain; charset=utf-8 404 page not found 
+api/download-csv -> 404 text/plain; charset=utf-8 404 page not found 
+api/price-guide -> 404 text/plain; charset=utf-8 404 page not found 
+api/price-guide.csv -> 404 text/plain; charset=utf-8 404 page not found 
+api/products.csv -> 404 text/plain; charset=utf-8 404 page not found 
+price-guide/download -> 404 text/plain; charset=utf-8 404 page not found 
+download/price-guide -> 404 text/plain; charset=utf-8 404 page not found 
+download/csv -> 404 text/plain; charset=utf-8 404 page not found 
+api/category-csv?category=pokemon-cards -> 404 text/plain; charset=utf-8 404 page not found 
+api/category-csv?category=magic-cards -> 404 text/plain; charset=utf-8 404 page not found 
+api/category-csv?category=yugioh-cards -> 404 text/plain; charset=utf-8 404 page not found 
+api/category-csv?category=other-tcg-cards -> 404 text/plain; charset=utf-8 404 page not found 
+api/csv?category=pokemon-cards -> 404 text/plain; charset=utf-8 404 page not found 
+api/csv?category=magic-cards -> 404 text/plain; charset=utf-8 404 page not found 
+api/csv?category=video-games -> 404 text/plain; charset=utf-8 404 page not found 
+api/csv?category=other-cards -> 404 text/plain; charset=utf-8 404 page not found 
+api/csv?category=one-piece-cards -> 404 text/plain; charset=utf-8 404 page not found 
+api/csv?category=lorcana-cards -> 404 text/plain; charset=utf-8 404 page not found 
+sportscardspro/api/csv -> 404 404 page not found 
+sportscardspro/api/download -> 404 404 page not found 
+sportscardspro/price-guide/download -> 403 <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/htm

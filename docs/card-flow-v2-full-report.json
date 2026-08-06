@@ -1,0 +1,108 @@
+{
+  "title": "Card Flow V2 — Full System Report",
+  "version": "2026-07-03",
+  "staging": {
+    "url": "https://buyback-web-staging-rrogeqxyea-uc.a.run.app",
+    "revision": "buyback-web-staging-00090-mzm",
+    "cloudBuildId": "62fd2082-3c28-4cd9-8efa-31da58fbc0b3"
+  },
+  "mode": "shadow_staff_assist_only",
+  "offerInfluenceEnabled": false,
+  "featureFlags": {
+    "CARD_FLOW_V2_EVIDENCE_ENABLED": true,
+    "CARD_FLOW_V2_IDENTITY_ENABLED": true,
+    "CARD_FLOW_V2_MARKET_ENABLED": true,
+    "CARD_FLOW_V2_AUDIT_ENABLED": true,
+    "CARD_FLOW_V2_STAFF_CONFIRMATION_ENABLED": true,
+    "CARD_FLOW_V2_OFFER_PREVIEW_ENABLED": true,
+    "CARD_FLOW_V2_OFFER_INFLUENCE": "unset"
+  },
+  "pipelineSteps": [
+    "Customer uploads card images",
+    "Image Evidence Agent",
+    "Category Classifier",
+    "Category Knowledge Guide",
+    "Catalog Candidate Generator",
+    "Suspect Scoring",
+    "Optional Vision Suspect Matcher",
+    "Identity Lock Gate",
+    "Candidate Market Snapshots",
+    "Staff Confirmation",
+    "Staff-Confirmed Market Promotion",
+    "Source Health / Market Analysis",
+    "Offer Preview",
+    "Audit"
+  ],
+  "productionFieldsProtected": [
+    "marketPrice",
+    "cashOffer",
+    "tradeOffer",
+    "status"
+  ],
+  "v2NestedFields": [
+    "cardFlowV2Evidence",
+    "cardFlowV2Identity",
+    "cardFlowV2Market",
+    "cardFlowV2Audit",
+    "cardFlowV2OfferPreview"
+  ],
+  "categories": [
+    "pokemon",
+    "mtg",
+    "yugioh",
+    "sports",
+    "riftbound",
+    "onepiece",
+    "lorcana",
+    "unknown"
+  ],
+  "coverageTargets": {
+    "pokemonStaffConfirmed": 10,
+    "mtgStaffConfirmed": 10,
+    "sportsReviewedOrBlocked": 5,
+    "slabsReviewedOrBlocked": 5
+  },
+  "currentCoverageApprox": {
+    "pokemonStaffConfirmed": 1,
+    "mtgStaffConfirmed": 0,
+    "sportsStaffConfirmed": 1,
+    "gradedStaffConfirmed": 0
+  },
+  "knownLimitations": [
+    "eBay sold Marketplace Insights blocked by 403 authorization",
+    "Most cards require staff confirmation before offer preview",
+    "Staff-confirmed coverage still small vs validation targets",
+    "Sports pricing hard without sold comps",
+    "Slab exact grade pricing needs stronger source coverage",
+    "Riftbound catalog uses local fixtures until official/API integration",
+    "One Piece and Lorcana catalog adapters are placeholders"
+  ],
+  "adminPages": {
+    "staffConfirmationQueue": "/admin/v2/staff-confirmation",
+    "knowledgeBase": "/admin/v2/knowledge"
+  },
+  "commands": {
+    "testEvidence": "npm run test:card-flow-v2",
+    "testIdentity": "npm run test:card-flow-v2-identity",
+    "testMarket": "npm run test:card-flow-v2-market",
+    "testAudit": "npm run test:card-flow-v2-audit",
+    "testOfferPreview": "npm run test:card-flow-v2-offer-preview",
+    "testRiftbound": "npm run test:riftbound-knowledge",
+    "testShadowReprocess": "npm run test:shadow-v2-reprocess",
+    "testStaffPreservation": "npm run test:staff-confirmation-preservation",
+    "regression": "npm run card-flow-v2:regression",
+    "audit": "npm run card-flow-v2:audit -- --limit 50",
+    "shadowReprocess": "npm run card-flow-v2:reprocess-shadow-audit-set",
+    "fullReprocess": "npm run card-flow-v2:reprocess-audit-set",
+    "marketProbe": "npm run card-flow-v2:market-probe",
+    "seedRegression": "npm run card-flow-v2:seed-regression-cards"
+  },
+  "directive007Prerequisites": [
+    "Enough staff-confirmed coverage across categories",
+    "Preview values stable and explainable",
+    "Source disagreement properly blocked",
+    "Production mutation guard trusted in shadow reprocess",
+    "Staff confirmation survives reprocess",
+    "Offer preview agrees with accepted pricing signals"
+  ]
+}

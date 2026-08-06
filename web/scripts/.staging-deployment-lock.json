@@ -1,0 +1,11 @@
+{
+    "stagingUrl":  "https://buyback-web-staging-rrogeqxyea-uc.a.run.app",
+    "deployedAt":  "2026-08-06T01:47:32.0462915Z",
+    "imageDigest":  "sha256:91b843d1d481dd414682deedfc532550f2c5e297f66c3471e556aa7f46f02f02",
+    "gitCommitSha":  "a8b87a073b1c9adc172abbae016f9ed8d57083c1",
+    "imageTag":  "a8b87a073b1c9adc172abbae016f9ed8d57083c1",
+    "buildId":  "8f25ca89-914a-42a2-bbfd-24803618b60d",
+    "cloudRunRevision":  "buyback-web-staging-00347-jmc",
+    "simpleClerkVersion":  "2026-08-06-commander-eligibility-v2-golden-catalog",
+    "evaluationSuiteVersion":  "115-case-v2-structured-grading"
+}

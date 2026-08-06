@@ -1,0 +1,17 @@
+# Cloud Build for pricecharting-daily Cloud Run Job (no local Docker required)
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -f
+      - Dockerfile.pricecharting-job
+      - -t
+      - us-central1-docker.pkg.dev/trading-card-buyback-dev/buyback/pricecharting-daily:latest
+      - .
+    dir: web
+
+images:
+  - us-central1-docker.pkg.dev/trading-card-buyback-dev/buyback/pricecharting-daily:latest
+
+options:
+  logging: CLOUD_LOGGING_ONLY

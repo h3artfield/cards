@@ -1,0 +1,6 @@
+services:
+  grading-service:
+    build: ./services/grading-service
+    ports:
+      - "8001:8001"
+    restart: unless-stopped

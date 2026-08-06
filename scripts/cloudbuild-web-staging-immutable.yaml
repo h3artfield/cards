@@ -1,0 +1,47 @@
+# Immutable Cloud Build for buyback-web-staging — tags image with git commit SHA.
+# Usage: see scripts/deploy-web-staging-immutable.ps1
+
+steps:
+  - name: gcr.io/cloud-builders/gcloud
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -euo pipefail
+        if [ "${_GIT_TREE_STATE}" != "clean" ] && [ "${_ALLOW_DIRTY_BUILD}" != "true" ]; then
+          echo "Build rejected: git working tree must be clean."
+          echo "Commit all changes or pass _ALLOW_DIRTY_BUILD=true for development-only override."
+          exit 1
+        fi
+        echo "Git tree state: ${_GIT_TREE_STATE}"
+        echo "Build context hash: ${_BUILD_CONTEXT_HASH}"
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - "--build-arg=NEXT_PUBLIC_FIREBASE_API_KEY=${_FB_API_KEY}"
+      - "--build-arg=NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${_FB_AUTH_DOMAIN}"
+      - "--build-arg=NEXT_PUBLIC_FIREBASE_PROJECT_ID=${_FB_PROJECT_ID}"
+      - "--build-arg=NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${_FB_BUCKET}"
+      - "--build-arg=NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${_FB_SENDER}"
+      - "--build-arg=NEXT_PUBLIC_FIREBASE_APP_ID=${_FB_APP_ID}"
+      - "--build-arg=NEXT_PUBLIC_APP_URL=${_APP_URL}"
+      - "--build-arg=GIT_COMMIT_SHA=${_GIT_COMMIT_SHA}"
+      - "--build-arg=GIT_TREE_STATE=${_GIT_TREE_STATE}"
+      - "--build-arg=BUILD_CONTEXT_HASH=${_BUILD_CONTEXT_HASH}"
+      - "--build-arg=CLOUD_BUILD_ID=$BUILD_ID"
+      - "--build-arg=DEPLOYED_AT=${_DEPLOYED_AT}"
+      - "--build-arg=SIMPLE_CLERK_VERSION=${_SIMPLE_CLERK_VERSION}"
+      - "--build-arg=EVALUATION_SUITE_VERSION=${_EVALUATION_SUITE_VERSION}"
+      - "--build-arg=GOLDEN_CATALOG_VERSION=${_GOLDEN_CATALOG_VERSION}"
+      - "--build-arg=COMMANDER_ELIGIBILITY_VERSION=${_COMMANDER_ELIGIBILITY_VERSION}"
+      - "-t"
+      - "us-central1-docker.pkg.dev/trading-card-buyback-dev/buyback/buyback-web-staging:${_GIT_COMMIT_SHA}"
+      - "."
+    dir: web
+
+images:
+  - "us-central1-docker.pkg.dev/trading-card-buyback-dev/buyback/buyback-web-staging:${_GIT_COMMIT_SHA}"
+
+options:
+  logging: CLOUD_LOGGING_ONLY

@@ -1,0 +1,49 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "orders",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "customerId", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "cards",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "orderId", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "mtgKnowledgeChunks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "active", "order": "ASCENDING" },
+        { "fieldPath": "corpus", "order": "ASCENDING" },
+        {
+          "fieldPath": "embedding",
+          "vectorConfig": { "dimension": 1536, "flat": {} }
+        }
+      ]
+    },
+    {
+      "collectionGroup": "mtgKnowledgeChunks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "active", "order": "ASCENDING" },
+        { "fieldPath": "authorityTier", "order": "ASCENDING" },
+        {
+          "fieldPath": "embedding",
+          "vectorConfig": { "dimension": 1536, "flat": {} }
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": [
+    { "collectionGroup": "mtgKnowledgeChunks", "fieldPath": "text", "indexes": [] },
+    { "collectionGroup": "mtgKnowledgeChunks", "fieldPath": "retrievalText", "indexes": [] },
+    { "collectionGroup": "mtgKnowledgeChunks", "fieldPath": "embedding", "indexes": [] }
+  ]
+}

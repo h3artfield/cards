@@ -1,0 +1,181 @@
+@import "tailwindcss";
+
+body {
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+textarea,
+select,
+button {
+  touch-action: manipulation;
+}
+
+/* Store inventory — plain CSS so iPad Safari renders grid/cards if a JS CSS chunk fails */
+.inventory-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .inventory-card-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .inventory-card-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .inventory-card-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .inventory-card-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* Large browse grid — match clerk picks (2 → 2 → 3 cols, readable card art) */
+.inventory-card-grid-large {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .inventory-card-grid-large {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.inventory-card-grid-large .inventory-card-tile {
+  max-width: 320px;
+  margin-inline: auto;
+}
+
+.inventory-card-grid-large .inventory-card-image-wrap img {
+  object-fit: contain;
+}
+
+.inventory-card-grid-large .inventory-card-body {
+  padding: 0.75rem;
+}
+
+.inventory-card-grid-large .inventory-card-name {
+  font-size: 0.875rem;
+}
+
+.inventory-card-grid-large .inventory-card-price {
+  font-size: 0.875rem;
+}
+
+.inventory-card-grid-large .inventory-card-set {
+  font-size: 0.75rem;
+}
+
+.inventory-card-tile {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid #404040;
+  background: #171717;
+  color: #ffffff;
+  text-align: left;
+  cursor: default;
+  -webkit-appearance: none;
+  appearance: none;
+  font: inherit;
+}
+
+.inventory-card-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 7;
+  background: #0a0a0a;
+}
+
+.inventory-card-image-wrap img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.inventory-card-placeholder {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #a3a3a3;
+}
+
+.inventory-card-body {
+  padding: 0.5rem;
+}
+
+.inventory-card-name {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #ffffff;
+}
+
+.inventory-card-price {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #34d399;
+}
+
+.inventory-card-set {
+  margin: 0.25rem 0 0;
+  font-size: 0.625rem;
+  color: #a3a3a3;
+}
+
+.inventory-filter-chip {
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  -webkit-appearance: none;
+  appearance: none;
+  border: 1px solid #404040;
+  background: #171717;
+  color: #d4d4d4;
+}
+
+.inventory-filter-chip-active {
+  border-color: #4f46e5;
+  background: #4f46e5;
+  color: #ffffff;
+}
+
+.inventory-filter-input {
+  border-radius: 0.5rem;
+  border: 1px solid #404040;
+  background: #171717;
+  color: #ffffff;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}

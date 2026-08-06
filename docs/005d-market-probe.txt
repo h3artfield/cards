@@ -1,0 +1,352 @@
+﻿
+> web@0.1.0 card-flow-v2:market-probe
+> npx --yes tsx scripts/card-flow-v2-market-probe.ts
+
+=== eBay API diagnostic ===
+Configured: true
+EBAY_CLIENT_ID set: true
+EBAY_CLIENT_SECRET set: true
+Token mint OK: true
+Sold API path: https://api.ebay.com/buy/marketplace_insights/v1_beta/item_sales/search
+Active API path: https://api.ebay.com/buy/browse/v1/item_summary/search
+Browse API: OK (200)
+Marketplace Insights: fail (403)
+Token scopes granted: unknown
+Insights conclusion: E
+Insights 403 body: Access denied
+Note: Marketplace Insights returned 403 ΓÇö sold comps unavailable; use eBay active + TCGplayer/PriceCharting pricing signals
+Note: Conclusion E: Marketplace Insights returns 403 ΓÇö API likely restricted/unauthorized for this app (not missing data).
+
+=== Market source health probe ===
+
+--- Grusha 184/193 reverse holo ---
+Outcome: eBay sold: attempted, HTTP 403 authorization/scope failure; eBay active: 10 raw, 10 maybe, 0 rejected (active listings are not sold comps); TCGplayer: 2 pricing signal(s), not sold comps; PriceCharting: 2 pricing signal(s), excluded from sold comp count
+Sold comps: 0 ┬╖ Maybe: 10 ┬╖ Rejected: 0 ┬╖ Pricing signals: 2
+Shadow value: $0.12 ΓÇô $0.13 (medium)
+Source health:
+  ebay_sold:
+    attempted: true
+    apiPath: buy/marketplace_insights/v1_beta/item_sales/search
+    httpStatus: 403
+    query: "Grusha" "Paldea Evolved" "184" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -code
+    raw: 0 ┬╖ norm: 0 ┬╖ accepted: 0 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 0
+    fatalError: authorization_or_scope_failure
+    warning: Access denied
+    warning: Access denied
+    warning: Access denied
+  ebay_active:
+    attempted: true
+    apiPath: buy/browse/v1/item_summary/search
+    httpStatus: 200
+    query: "Grusha" "Paldea Evolved" "184" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -code
+    raw: 10 ┬╖ norm: 10 ┬╖ accepted: 0 ┬╖ maybe: 10 ┬╖ rejected: 0 ┬╖ signals: 0
+    warning: Active listings are sanity-check only ΓÇö not counted as sold comps
+  pricecharting:
+    attempted: true
+    apiPath: pricecharting product lookup
+    catalogId: 5287735
+    raw: 7 ┬╖ norm: 1 ┬╖ accepted: 1 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 2
+    warning: Selected tier: Ungraded
+    warning: Excluded Graded tier ΓÇö plan is raw/ungraded context
+    warning: Excluded Manual-only tier ΓÇö plan is raw/ungraded context
+  tcgplayer:
+    attempted: true
+    apiPath: catalog_tcgplayer via lookupCatalogPrice
+    raw: 1 ┬╖ norm: 1 ┬╖ accepted: 1 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 2
+    warning: TCGplayer prices are pricing signals, not sold comps
+TCGplayer:
+  productId: sv2-184
+  subtype: reverseHolofoil
+  marketPrice: $0.13
+PriceCharting:
+  productId: 5287735
+  query: "Grusha" "Paldea Evolved" "184" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -code
+  tierSelected: Ungraded
+  loosePrice: $0.12
+  tiersExcluded: Graded, Manual-only, PSA 10, BGS 10, CGC 10, SGC 10
+Query audits:
+  [ebay_sold] exact: ""Grusha" "Paldea Evolved" "184" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -code" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_sold] exact: "Grusha 184 Paldea Evolved Pokemon -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_sold] raw_exact: "Grusha Paldea Evolved 184 -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_sold] narrow: "Grusha 184 Paldea Evolved -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_active] active_sanity_check: ""Grusha" "Paldea Evolved" "184" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -code" raw=10 Γ£ô0 ?10 Γ£ù0
+
+Probe answers:
+  eBay sold reachable: no (403 auth)
+  eBay active reachable: yes
+  TCGplayer mapped: no
+  PriceCharting mapped: yes
+
+--- Grusha 184/193 normal ---
+Outcome: eBay sold: attempted, HTTP 403 authorization/scope failure; eBay active: 10 raw, 10 maybe, 0 rejected (active listings are not sold comps); TCGplayer: 2 pricing signal(s), not sold comps; PriceCharting: 2 pricing signal(s), excluded from sold comp count
+Sold comps: 0 ┬╖ Maybe: 10 ┬╖ Rejected: 0 ┬╖ Pricing signals: 2
+Shadow value: $0.10 ΓÇô $0.12 (medium)
+Source health:
+  ebay_sold:
+    attempted: true
+    apiPath: buy/marketplace_insights/v1_beta/item_sales/search
+    httpStatus: 403
+    query: "Grusha" "Paldea Evolved" "184" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -code
+    raw: 0 ┬╖ norm: 0 ┬╖ accepted: 0 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 0
+    fatalError: authorization_or_scope_failure
+    warning: Access denied
+    warning: Access denied
+    warning: Access denied
+  ebay_active:
+    attempted: true
+    apiPath: buy/browse/v1/item_summary/search
+    httpStatus: 200
+    query: "Grusha" "Paldea Evolved" "184" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -code
+    raw: 10 ┬╖ norm: 10 ┬╖ accepted: 0 ┬╖ maybe: 10 ┬╖ rejected: 0 ┬╖ signals: 0
+    warning: Active listings are sanity-check only ΓÇö not counted as sold comps
+  pricecharting:
+    attempted: true
+    apiPath: pricecharting product lookup
+    catalogId: 5287735
+    raw: 7 ┬╖ norm: 1 ┬╖ accepted: 1 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 2
+    warning: Selected tier: Ungraded
+    warning: Excluded Graded tier ΓÇö plan is raw/ungraded context
+    warning: Excluded Manual-only tier ΓÇö plan is raw/ungraded context
+  tcgplayer:
+    attempted: true
+    apiPath: catalog_tcgplayer via lookupCatalogPrice
+    raw: 1 ┬╖ norm: 1 ┬╖ accepted: 1 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 2
+    warning: TCGplayer prices are pricing signals, not sold comps
+TCGplayer:
+  productId: sv2-184
+  subtype: normal
+  marketPrice: $0.1
+PriceCharting:
+  productId: 5287735
+  query: "Grusha" "Paldea Evolved" "184" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -code
+  tierSelected: Ungraded
+  loosePrice: $0.12
+  tiersExcluded: Graded, Manual-only, PSA 10, BGS 10, CGC 10, SGC 10
+Query audits:
+  [ebay_sold] exact: ""Grusha" "Paldea Evolved" "184" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -code" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_sold] exact: "Grusha 184 Paldea Evolved Pokemon -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_sold] raw_exact: "Grusha Paldea Evolved 184 -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_sold] narrow: "Grusha 184 Paldea Evolved -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_active] active_sanity_check: ""Grusha" "Paldea Evolved" "184" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -code" raw=10 Γ£ô0 ?10 Γ£ù0
+
+Probe answers:
+  eBay sold reachable: no (403 auth)
+  eBay active reachable: yes
+  TCGplayer mapped: no
+  PriceCharting mapped: yes
+
+--- She-Hulk MSH #188 foil ---
+Outcome: eBay sold: attempted, HTTP 403 authorization/scope failure; eBay active: 8 raw, 8 maybe, 0 rejected (active listings are not sold comps); TCGplayer: catalog card found but no TCGplayer price variants in response; PriceCharting: 2 pricing signal(s), excluded from sold comp count
+Sold comps: 0 ┬╖ Maybe: 8 ┬╖ Rejected: 0 ┬╖ Pricing signals: 1
+Shadow value: $1.99 ΓÇô $1.99 (low)
+Source health:
+  ebay_sold:
+    attempted: true
+    apiPath: buy/marketplace_insights/v1_beta/item_sales/search
+    httpStatus: 403
+    query: "She-Hulk" "msh" "188" "foil" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital
+    raw: 0 ┬╖ norm: 0 ┬╖ accepted: 0 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 0
+    fatalError: authorization_or_scope_failure
+    warning: Access denied
+    warning: Access denied
+    warning: Access denied
+  ebay_active:
+    attempted: true
+    apiPath: buy/browse/v1/item_summary/search
+    httpStatus: 200
+    query: "She-Hulk" "msh" "188" "foil" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital
+    raw: 8 ┬╖ norm: 8 ┬╖ accepted: 0 ┬╖ maybe: 8 ┬╖ rejected: 0 ┬╖ signals: 0
+    warning: Active listings are sanity-check only ΓÇö not counted as sold comps
+  pricecharting:
+    attempted: true
+    apiPath: pricecharting product lookup
+    catalogId: 13523844
+    raw: 1 ┬╖ norm: 1 ┬╖ accepted: 1 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 2
+    warning: Selected tier: Ungraded
+  tcgplayer:
+    attempted: true
+    apiPath: catalog_tcgplayer via lookupCatalogPrice
+    raw: 0 ┬╖ norm: 0 ┬╖ accepted: 0 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 0
+    reasonIfSkipped: catalog card found but no TCGplayer price variants in response
+    warning: TCGplayer prices are pricing signals, not sold comps
+TCGplayer:
+  productId: 61237530-ad49-469c-a952-67c92315708e
+  subtype: ΓÇö
+  skipped: catalog card found but no TCGplayer price variants in response
+PriceCharting:
+  productId: 13523844
+  query: "She-Hulk" "msh" "188" "foil" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital
+  tierSelected: Ungraded
+  loosePrice: $1.99
+Query audits:
+  [ebay_sold] exact: ""She-Hulk" "msh" "188" "foil" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_sold] raw_exact: "She-Hulk Marvel Super Heroes 188 -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -gold" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_sold] narrow: "She-Hulk Marvel Super Heroes 188 foil -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_active] active_sanity_check: ""She-Hulk" "msh" "188" "foil" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital" raw=8 Γ£ô0 ?8 Γ£ù0
+
+Probe answers:
+  eBay sold reachable: no (403 auth)
+  eBay active reachable: yes
+  TCGplayer mapped: catalog card found but no TCGplayer price variants in response
+  PriceCharting mapped: yes
+
+--- She-Hulk MSH #188 nonfoil ---
+Outcome: eBay sold: attempted, HTTP 403 authorization/scope failure; eBay active: 10 raw, 10 maybe, 0 rejected (active listings are not sold comps); TCGplayer: catalog card found but no TCGplayer price variants in response; PriceCharting: 2 pricing signal(s), excluded from sold comp count
+Sold comps: 0 ┬╖ Maybe: 10 ┬╖ Rejected: 0 ┬╖ Pricing signals: 1
+Shadow value: $1.64 ΓÇô $1.64 (low)
+Source health:
+  ebay_sold:
+    attempted: true
+    apiPath: buy/marketplace_insights/v1_beta/item_sales/search
+    httpStatus: 403
+    query: "She-Hulk" "msh" "188" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital -gold
+    raw: 0 ┬╖ norm: 0 ┬╖ accepted: 0 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 0
+    fatalError: authorization_or_scope_failure
+    warning: Access denied
+    warning: Access denied
+  ebay_active:
+    attempted: true
+    apiPath: buy/browse/v1/item_summary/search
+    httpStatus: 200
+    query: "She-Hulk" "msh" "188" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital -gold
+    raw: 10 ┬╖ norm: 10 ┬╖ accepted: 0 ┬╖ maybe: 10 ┬╖ rejected: 0 ┬╖ signals: 0
+    warning: Active listings are sanity-check only ΓÇö not counted as sold comps
+  pricecharting:
+    attempted: true
+    apiPath: pricecharting product lookup
+    catalogId: 13523546
+    raw: 1 ┬╖ norm: 1 ┬╖ accepted: 1 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 2
+    warning: Selected tier: Ungraded
+  tcgplayer:
+    attempted: true
+    apiPath: catalog_tcgplayer via lookupCatalogPrice
+    raw: 0 ┬╖ norm: 0 ┬╖ accepted: 0 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 0
+    reasonIfSkipped: catalog card found but no TCGplayer price variants in response
+    warning: TCGplayer prices are pricing signals, not sold comps
+TCGplayer:
+  productId: 61237530-ad49-469c-a952-67c92315708e
+  subtype: ΓÇö
+  skipped: catalog card found but no TCGplayer price variants in response
+PriceCharting:
+  productId: 13523546
+  query: "She-Hulk" "msh" "188" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital -gold
+  tierSelected: Ungraded
+  loosePrice: $1.64
+Query audits:
+  [ebay_sold] exact: ""She-Hulk" "msh" "188" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital -gold" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_sold] raw_exact: "She-Hulk Marvel Super Heroes 188 -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -gold" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_active] active_sanity_check: ""She-Hulk" "msh" "188" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital -gold" raw=10 Γ£ô0 ?10 Γ£ù0
+
+Probe answers:
+  eBay sold reachable: no (403 auth)
+  eBay active reachable: yes
+  TCGplayer mapped: catalog card found but no TCGplayer price variants in response
+  PriceCharting mapped: yes
+
+--- Morgan Team Up 178/181 ---
+Outcome: eBay sold: attempted, HTTP 403 authorization/scope failure; eBay active: 0 raw, 0 maybe, 0 rejected (active listings are not sold comps); TCGplayer: 2 pricing signal(s), not sold comps; PriceCharting: 2 pricing signal(s), excluded from sold comp count
+Sold comps: 0 ┬╖ Maybe: 0 ┬╖ Rejected: 0 ┬╖ Pricing signals: 2
+Shadow value: $18.48 ΓÇô $49.93 (medium)
+Source health:
+  ebay_sold:
+    attempted: true
+    apiPath: buy/marketplace_insights/v1_beta/item_sales/search
+    httpStatus: 403
+    query: "Morgan" "151" "178" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital -booster
+    raw: 0 ┬╖ norm: 0 ┬╖ accepted: 0 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 0
+    fatalError: authorization_or_scope_failure
+    warning: Access denied
+    warning: Access denied
+    warning: Access denied
+  ebay_active:
+    attempted: true
+    apiPath: buy/browse/v1/item_summary/search
+    httpStatus: 200
+    query: "Morgan" "151" "178" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital -booster
+    raw: 0 ┬╖ norm: 0 ┬╖ accepted: 0 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 0
+    warning: Active listings are sanity-check only ΓÇö not counted as sold comps
+  pricecharting:
+    attempted: true
+    apiPath: pricecharting product lookup
+    catalogId: 7491530
+    raw: 2 ┬╖ norm: 1 ┬╖ accepted: 1 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 2
+    warning: Selected tier: Ungraded
+  tcgplayer:
+    attempted: true
+    apiPath: catalog_tcgplayer via lookupCatalogPrice
+    raw: 1 ┬╖ norm: 1 ┬╖ accepted: 1 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 2
+    warning: TCGplayer prices are pricing signals, not sold comps
+TCGplayer:
+  productId: sm9-178
+  subtype: holofoil
+  marketPrice: $49.93
+PriceCharting:
+  productId: 7491530
+  query: "Morgan" "151" "178" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital -booster
+  tierSelected: Ungraded
+  loosePrice: $18.48
+  tiersExcluded: Grade 8
+Query audits:
+  [ebay_sold] exact: ""Morgan" "151" "178" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital -booster" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_sold] exact: "Morgan 178 151 Pokemon -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital -code" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_sold] raw_exact: "Morgan 151 178 -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital -booster -code" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_sold] narrow: "Morgan 178 151 -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital -booster -code" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_active] active_sanity_check: ""Morgan" "151" "178" -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -digital -booster" raw=0 Γ£ô0 ?0 Γ£ù0
+
+Probe answers:
+  eBay sold reachable: no (403 auth)
+  eBay active reachable: yes
+  TCGplayer mapped: no
+  PriceCharting mapped: yes
+
+--- CJ Stroud Silver Prizm #339 ---
+Outcome: eBay sold: attempted, HTTP 403 authorization/scope failure; eBay active: 10 raw, 9 maybe, 0 rejected (active listings are not sold comps); TCGplayer: skipped (category sports not supported for TCGplayer catalog); PriceCharting: attempted, no tier selected
+Sold comps: 0 ┬╖ Maybe: 9 ┬╖ Rejected: 0 ┬╖ Pricing signals: 0
+Source health:
+  ebay_sold:
+    attempted: true
+    apiPath: buy/marketplace_insights/v1_beta/item_sales/search
+    httpStatus: 403
+    query: 2023 Panini Prizm CJ Stroud #339 prizm -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed
+    raw: 0 ┬╖ norm: 0 ┬╖ accepted: 0 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 0
+    fatalError: authorization_or_scope_failure
+    warning: Access denied
+    warning: Access denied
+    warning: Access denied
+  ebay_active:
+    attempted: true
+    apiPath: buy/browse/v1/item_summary/search
+    httpStatus: 200
+    query: 2023 Panini Prizm CJ Stroud #339 prizm -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed
+    raw: 10 ┬╖ norm: 9 ┬╖ accepted: 0 ┬╖ maybe: 9 ┬╖ rejected: 0 ┬╖ signals: 0
+    warning: Active listings are sanity-check only ΓÇö not counted as sold comps
+  pricecharting:
+    attempted: true
+    apiPath: pricecharting product lookup
+    raw: 0 ┬╖ norm: 0 ┬╖ accepted: 0 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 0
+    reasonIfSkipped: no product match
+  tcgplayer:
+    attempted: false
+    raw: 0 ┬╖ norm: 0 ┬╖ accepted: 0 ┬╖ maybe: 0 ┬╖ rejected: 0 ┬╖ signals: 0
+    reasonIfSkipped: category sports not supported for TCGplayer catalog
+TCGplayer:
+  productId: ΓÇö
+  subtype: ΓÇö
+  skipped: category sports not supported for TCGplayer catalog
+PriceCharting:
+  productId: ΓÇö
+  query: 2023 Panini Prizm CJ Stroud #339 prizm -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed
+  tierSelected: ΓÇö
+  skipped: no product match
+Query audits:
+  [ebay_sold] exact: "2023 Panini Prizm CJ Stroud #339 prizm -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_sold] exact: "2023 Panini Prizm CJ Stroud #339 -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_sold] raw_exact: "CJ Stroud 2023 Panini Prizm 339 -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -break" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_sold] narrow: "2023 Panini Prizm CJ Stroud 339 -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed -break" raw=0 Γ£ô0 ?0 Γ£ù0 err=authorization_or_scope_failure
+  [ebay_active] active_sanity_check: "2023 Panini Prizm CJ Stroud #339 prizm -PSA -CGC -BGS -SGC -slab -graded -lot -bundle -proxy -sealed" raw=10 Γ£ô0 ?9 Γ£ù0
+
+Probe answers:
+  eBay sold reachable: no (403 auth)
+  eBay active reachable: yes
+  TCGplayer mapped: category sports not supported for TCGplayer catalog
+  PriceCharting mapped: no product match
