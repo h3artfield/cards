@@ -1,25 +1,39 @@
 {
   "developmentSet": {
-    "path": "data/oracle-action-eval-development-v4.json",
-    "classification": "development_set_v4",
-    "contentHash": "4f77dff047ba898c00844ff4e1b702e0d84fc85b81e91b11646f266f2365d56a",
-    "caseCount": 272,
+    "path": "data/oracle-action-eval-development-v5.json",
+    "classification": "development_set_v5",
+    "contentHash": "319ef3f9fce2f2637da8582055d99ebbdf6e46f7e51763059493888e1742abbe",
+    "caseCount": 285,
     "taxonomyVersion": "three-layer-v1.1",
-    "purpose": "Parser tuning — multiface v1.7 (face segmentation, per-component parsing)",
+    "purpose": "Parser tuning — multiface v1.7+ (face segmentation, expanded gold)",
     "parentVersion": {
       "classification": "development_set_v4",
-      "contentHash": "e213cdd31ae9f0942255eab86d44af804faa7d8d61784078fdaa69ad26e397fb",
-      "caseCount": 270
+      "contentHash": "d8acd3ed4752b90f9d7c0f966c221cce3d93cb8766fa2b238f59d080c292a684",
+      "caseCount": 256,
+      "path": "data/oracle-action-eval-development-v4.json"
     },
-    "diffManifest": "data/oracle-action-eval-development-v4-diff.json",
+    "diffManifest": "data/oracle-action-eval-development-v5-diff.json",
     "multifaceGoldSupportByLayout": {
       "split": 6,
-      "mdfc": 6,
+      "mdfc": 8,
       "aftermath": 3,
       "adventure": 3,
       "room": 3,
-      "transform": 3
-    }
+      "transform": 5,
+      "disturb": 3,
+      "battle": 3,
+      "convert": 3
+    },
+    "priorVersions": [
+      {
+        "path": "data/oracle-action-eval-development-v4.json",
+        "classification": "development_set_v4",
+        "contentHash": "d8acd3ed4752b90f9d7c0f966c221cce3d93cb8766fa2b238f59d080c292a684",
+        "caseCount": 256,
+        "supersededAt": "2026-08-06T22:38:39.705Z",
+        "reason": "Multiface expansion moved to v5; v4 frozen immutable"
+      }
+    ]
   },
   "validationSet": {
     "path": "data/oracle-action-eval-validation-v2.json",
@@ -76,5 +90,13 @@
     "caseCount": 256,
     "purpose": "Frozen at parser v1.5 checkpoint — immutable, do not modify",
     "frozenAt": "2026-08-06T19:54:10.823Z"
+  },
+  "developmentSetV4": {
+    "path": "data/oracle-action-eval-development-v4.json",
+    "classification": "development_set_v4",
+    "contentHash": "d8acd3ed4752b90f9d7c0f966c221cce3d93cb8766fa2b238f59d080c292a684",
+    "caseCount": 256,
+    "purpose": "Frozen at parser v1.6 — optionality/condition milestone; immutable",
+    "frozenAt": "2026-08-06T21:18:25.466Z"
   }
 }

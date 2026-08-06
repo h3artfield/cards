@@ -81,6 +81,17 @@ function inferSplitFaceComponentType(
     return faceIndex === 0 ? "room_left" : "room_right";
   }
 
+  if (/\bBattle —/i.test(fullText) && faceCount === 2) {
+    return faceIndex === 0 ? "mdfc_front" : "mdfc_back";
+  }
+
+  if (/\bDisturb\b/i.test(faceText)) return "mdfc_back";
+  if (/\bDisturb\b/i.test(otherText) && faceIndex === 0) return "mdfc_front";
+
+  if (/\bConvert\b/i.test(fullText) && faceCount === 2) {
+    return faceIndex === 0 ? "transform_front" : "transform_back";
+  }
+
   if (/\b(Daybound|Nightbound)\b/i.test(fullText) && faceCount === 2) {
     return faceIndex === 0 ? "transform_front" : "transform_back";
   }
@@ -165,6 +176,7 @@ export function segmentCardFaces(oracleText: string): SegmentedCardFace[] {
       splitPattern,
       (i, count) => {
         if (/\bRoom\b/i.test(normalized) && count === 2) return i === 0 ? "left" : "right";
+        if (/\bBattle —/i.test(normalized) && count === 2) return i === 0 ? "front" : "back";
         return i === 0 ? "front" : i === 1 ? "back" : `face_${i}`;
       },
       (full, part, i, count) => inferSplitFaceComponentType(full, part, i, count),

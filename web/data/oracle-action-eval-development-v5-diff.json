@@ -1,0 +1,136 @@
+{
+  "generatedAt": "2026-08-06T22:38:39.705Z",
+  "parentDataset": "development_set_v4",
+  "parentContentHash": "d8acd3ed4752b90f9d7c0f966c221cce3d93cb8766fa2b238f59d080c292a684",
+  "parentCaseCount": 256,
+  "newDataset": "development_set_v5",
+  "newContentHash": "319ef3f9fce2f2637da8582055d99ebbdf6e46f7e51763059493888e1742abbe",
+  "newCaseCount": 285,
+  "changedCaseCount": 10,
+  "addedCaseIds": [
+    "eval-0257",
+    "eval-0258",
+    "eval-0259",
+    "eval-0260",
+    "eval-0261",
+    "eval-0262",
+    "eval-0263",
+    "eval-0264",
+    "eval-0265",
+    "eval-0266",
+    "eval-0267",
+    "eval-0268",
+    "eval-0269",
+    "eval-0270",
+    "eval-0271",
+    "eval-0272",
+    "eval-0273",
+    "eval-0274",
+    "eval-0275",
+    "eval-0276",
+    "eval-0277",
+    "eval-0278",
+    "eval-0279",
+    "eval-0280",
+    "eval-0281",
+    "eval-0282",
+    "eval-0283",
+    "eval-0284",
+    "eval-0285"
+  ],
+  "multifaceGoldSupportByLayout": {
+    "split": 6,
+    "mdfc": 8,
+    "aftermath": 3,
+    "adventure": 3,
+    "room": 3,
+    "transform": 5,
+    "disturb": 3,
+    "battle": 3,
+    "convert": 3
+  },
+  "reasonForChange": "Multiface gold expansion: expectedFaces, cardFace on all multiface actions, new layout coverage (disturb, battle, convert, back-face ability types).",
+  "caseDiffs": [
+    {
+      "caseId": "eval-0044",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedStructure",
+        "expectedFaces",
+        "layout",
+        "cardFace"
+      ]
+    },
+    {
+      "caseId": "eval-0045",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedFaces",
+        "layout"
+      ]
+    },
+    {
+      "caseId": "eval-0046",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedFaces",
+        "layout"
+      ]
+    },
+    {
+      "caseId": "eval-0047",
+      "changedFields": [
+        "category"
+      ]
+    },
+    {
+      "caseId": "eval-0048",
+      "changedFields": [
+        "category"
+      ]
+    },
+    {
+      "caseId": "eval-0171",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedFaces",
+        "layout"
+      ]
+    },
+    {
+      "caseId": "eval-0172",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedRoles",
+        "expectedFaces",
+        "layout"
+      ]
+    },
+    {
+      "caseId": "eval-0173",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedRoles",
+        "expectedFaces",
+        "layout"
+      ]
+    },
+    {
+      "caseId": "eval-0197",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedFaces",
+        "layout"
+      ]
+    },
+    {
+      "caseId": "eval-0198",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedRoles",
+        "expectedFaces",
+        "layout"
+      ]
+    }
+  ]
+}

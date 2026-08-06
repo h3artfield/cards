@@ -1,35 +1,242 @@
 {
-  "generatedAt": "2026-08-06T21:59:23.267Z",
-  "parentContentHash": "e213cdd31ae9f0942255eab86d44af804faa7d8d61784078fdaa69ad26e397fb",
-  "newContentHash": "4f77dff047ba898c00844ff4e1b702e0d84fc85b81e91b11646f266f2365d56a",
-  "priorCaseCount": 270,
-  "newCaseCount": 272,
-  "patchedExistingCases": 10,
-  "addedCases": [
-    "eval-0257",
-    "eval-0258",
-    "eval-0259",
-    "eval-0260",
-    "eval-0261",
-    "eval-0262",
-    "eval-0263",
-    "eval-0264",
-    "eval-0265",
-    "eval-0266",
-    "eval-0267",
-    "eval-0268",
-    "eval-0269",
-    "eval-0270",
-    "eval-0271",
-    "eval-0272"
-  ],
-  "multifaceGoldSupportByLayout": {
-    "split": 6,
-    "mdfc": 6,
-    "aftermath": 3,
-    "adventure": 3,
-    "room": 3,
-    "transform": 3
-  },
-  "reasonForChange": "Multiface slice v1.7: expectedFaces, per-action cardFace gold, 14 new reviewed cases."
+  "generatedAt": "2026-08-06T21:18:25.466Z",
+  "parentDataset": "development_set_v3",
+  "parentContentHash": "4a69de72c991c3a3173b4e5efe54ccf96f4c171e11c3f6edd1a0a256573d76d9",
+  "newDataset": "development_set_v4",
+  "newContentHash": "d8acd3ed4752b90f9d7c0f966c221cce3d93cb8766fa2b238f59d080c292a684",
+  "caseCount": 256,
+  "changedCaseCount": 6,
+  "reasonForChange": "Gold-label corrections after v1.5 checkpoint: paragraph-scoped optional adjudication and eval-0120 cast/play dedup. Case count unchanged (256). Oracle text unchanged.",
+  "caseDiffs": [
+    {
+      "caseId": "eval-0053",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "delta": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "Draw a card",
+              "optionalEffect": true
+            },
+            {
+              "actionType": "return_to_hand",
+              "evidenceContains": "Return target creature to its owner's hand",
+              "optionalEffect": true
+            },
+            {
+              "actionType": "exile",
+              "evidenceContains": "Exile all cards"
+            },
+            {
+              "actionType": "shuffle_into_library",
+              "evidenceContains": "shuffles their hand into their library"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "Draw a card",
+              "optionalEffect": false
+            },
+            {
+              "actionType": "return_to_hand",
+              "evidenceContains": "Return target creature to its owner's hand",
+              "optionalEffect": false
+            },
+            {
+              "actionType": "exile",
+              "evidenceContains": "Exile all cards"
+            },
+            {
+              "actionType": "shuffle_into_library",
+              "evidenceContains": "shuffles their hand into their library"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0120",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "delta": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "create_token",
+              "evidenceContains": "Treasure token",
+              "optionalEffect": false
+            },
+            {
+              "actionType": "exile",
+              "evidenceContains": "exile the top",
+              "optionalEffect": false
+            },
+            {
+              "actionType": "cast",
+              "evidenceContains": "play that card",
+              "optionalEffect": true
+            },
+            {
+              "actionType": "sacrifice",
+              "evidenceContains": "sacrifice a Treasure"
+            },
+            {
+              "actionType": "play",
+              "evidenceContains": "You may play that card",
+              "optionalEffect": true
+            }
+          ],
+          "after": [
+            {
+              "actionType": "create_token",
+              "evidenceContains": "Treasure token",
+              "optionalEffect": false
+            },
+            {
+              "actionType": "exile",
+              "evidenceContains": "exile the top",
+              "optionalEffect": false
+            },
+            {
+              "actionType": "sacrifice",
+              "evidenceContains": "sacrifice a Treasure"
+            },
+            {
+              "actionType": "play",
+              "evidenceContains": "You may play that card",
+              "optionalEffect": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "dev-opt-033",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "delta": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "sacrifice",
+              "evidenceContains": "sacrifice a creature",
+              "optionalCost": true,
+              "optionalEffect": false,
+              "optionalityController": "opponent"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "sacrifice",
+              "evidenceContains": "sacrifice a creature",
+              "optionalityController": "opponent",
+              "optionalEffect": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "dev-opt-035",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "delta": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "You may draw a card",
+              "optionalEffect": true,
+              "optionalityScopeId": "scope-a"
+            },
+            {
+              "actionType": "search_library",
+              "evidenceContains": "put a card from your hand on top of your library",
+              "optionalEffect": true,
+              "optionalityScopeId": "scope-b"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "You may draw a card",
+              "optionalityScopeId": "scope-a",
+              "optionalEffect": true
+            },
+            {
+              "actionType": "search_library",
+              "evidenceContains": "put a card from your hand on top of your library",
+              "optionalityScopeId": "scope-b",
+              "optionalEffect": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "dev-opt-036",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "delta": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "search_library",
+              "evidenceContains": "search your library for a basic land card and a basic Island card",
+              "optionalEffect": true,
+              "optionalityScopeId": "shared-may"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "search_library",
+              "evidenceContains": "search your library for a basic land card and a basic Island card",
+              "optionalityScopeId": "shared-may",
+              "optionalEffect": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "dev-opt-038",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "delta": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "copy",
+              "evidenceContains": "Copy target instant"
+            },
+            {
+              "actionType": "copy",
+              "evidenceContains": "choose new targets for the copy",
+              "optionalEffect": true
+            }
+          ],
+          "after": [
+            {
+              "actionType": "copy",
+              "evidenceContains": "Copy target instant"
+            },
+            {
+              "actionType": "copy",
+              "evidenceContains": "choose new targets for the copy",
+              "optionalEffect": false
+            }
+          ]
+        }
+      }
+    }
+  ]
 }

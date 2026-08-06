@@ -13,6 +13,8 @@ import type {
 import { ORACLE_ACTION_PARSER_VERSION } from "./oracle-action-schema";
 import {
   classifyAbilityType,
+  evidenceCrossesFaceBoundary,
+  faceForEvidenceSpan,
   segmentAbilities,
   segmentCardFaces,
   type SegmentedCardFace,
@@ -130,9 +132,8 @@ const PLAY_PERMISSION =
   /\b(?:you may )?play (?:lands and (?:cast )?spells from|land cards from|that card|it\b|lands and spells from|an additional land|lands and cast spells from)/i;
 
 const ACTION_PATTERNS: ActionPattern[] = [
-  { pattern: /\bdraw (?:a |one |two |three |four |five |seven |up to \w+ )?cards?\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
+  { pattern: /\bdraws? (?:a |one |two |three |four |five |seven |up to \w+ )?cards?\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bYou may draw [\w ]+/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
-  { pattern: /\bYou may search [\w ]+/i, actionType: "search_library", sourceZones: ["library"] },
   { pattern: /\bYou may sacrifice [\w ]+/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
   { pattern: /\bYou may exile [\w ]+/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bYou may destroy [\w ]+/i, actionType: "destroy", sourceZones: ["battlefield"] },
@@ -172,7 +173,7 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bmills? (?:half|fourteen|\d+|up to \w+) [\w ]*/i, actionType: "mill", sourceZones: ["library"], destinationZones: ["graveyard"] },
   { pattern: /\b(?:discard|discards) (?:a |one |two |three |their |up to \w+ )?[\w ]*cards?\b/i, actionType: "discard", sourceZones: ["hand"], destinationZones: ["graveyard"] },
   { pattern: /\bdeals? \d+ damage(?: to (?:any target|target [\w ]+|each [\w ]+))?/i, actionType: "deal_damage", affectedObjects: ["player", "permanent"] },
-  { pattern: /\bgain \d+ life\b/i, actionType: "gain_life", affectedObjects: ["player"] },
+  { pattern: /\bgains? \d+ life\b/i, actionType: "gain_life", affectedObjects: ["player"] },
   { pattern: /\bloses? \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\bScry \d+\b/i, actionType: "scry", sourceZones: ["library"] },
   { pattern: /\bSurveil \d+\b/i, actionType: "surveil", sourceZones: ["library"], destinationZones: ["graveyard"] },
@@ -182,7 +183,6 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bexile it instead\b/i, actionType: "exile", abilityType: "replacement", destinationZones: ["exile"] },
   { pattern: /\b(?:shuffle|shuffles) (?:your |their )?(?:hand and graveyard|graveyard and hand|hand) into (?:your |their )?library\b/i, actionType: "shuffle_into_library", sourceZones: ["hand", "graveyard"], destinationZones: ["library"] },
   { pattern: /\bExile all cards from target player'?s library\b/i, actionType: "exile", sourceZones: ["library"], destinationZones: ["exile"] },
-  { pattern: /\bthen shuffle\b/i, actionType: "search_library", sourceZones: ["library"], destinationZones: ["library"] },
 ];
 
 function actionId(parts: string[]): string {
@@ -443,6 +443,23 @@ function extractConditions(paragraph: string): string[] {
   return [...new Set(found)];
 }
 
+function evidenceContainedInFace(
+  face: SegmentedCardFace,
+  cardEvidenceStart: number,
+  cardEvidenceEnd: number,
+): boolean {
+  return cardEvidenceStart >= face.start && cardEvidenceEnd <= face.end;
+}
+
+function multifaceFaceUnambiguous(
+  faces: SegmentedCardFace[],
+  cardEvidenceStart: number,
+  cardEvidenceEnd: number,
+): boolean {
+  const overlapping = faces.filter((f) => cardEvidenceStart < f.end && cardEvidenceEnd > f.start);
+  return overlapping.length === 1;
+}
+
 function assignReviewStatus(input: {
   abilityType: OracleActionV1AbilityType;
   actionType: PrimitiveActionType;
@@ -450,13 +467,30 @@ function assignReviewStatus(input: {
   paragraph: string;
   evidenceText: string;
   componentType: CardFaceComponentType;
+  face?: SegmentedCardFace;
+  faces?: SegmentedCardFace[];
+  cardEvidenceStart?: number;
+  cardEvidenceEnd?: number;
 }): OracleActionV1ReviewStatus {
-  if (input.confidence < 0.82) return "needs_review";
   if (input.abilityType === "replacement") return "needs_review";
+
+  const isMultiface = input.faces && input.faces.length > 1 && input.face;
+  if (isMultiface) {
+    const start = input.cardEvidenceStart ?? 0;
+    const end = input.cardEvidenceEnd ?? 0;
+    if (!evidenceContainedInFace(input.face!, start, end)) return "needs_review";
+    if (evidenceCrossesFaceBoundary(input.faces!, start, end)) return "needs_review";
+    if (!multifaceFaceUnambiguous(input.faces!, start, end)) return "needs_review";
+    const containing = faceForEvidenceSpan(input.faces!, start, end);
+    if (!containing || containing.faceId !== input.face!.faceId) return "needs_review";
+    if (input.confidence < 0.88) return "needs_review";
+    return "accepted";
+  }
+
+  if (input.confidence < 0.82) return "needs_review";
   if (/\bthen\b|\band then\b/i.test(input.paragraph)) return "needs_review";
   if (input.actionType === "play" && /\bcast\b/i.test(input.evidenceText)) return "needs_review";
   if (input.actionType === "cast" && /\bplay land\b/i.test(input.evidenceText)) return "needs_review";
-  if (input.componentType !== "single_face" && input.confidence < 0.9) return "needs_review";
   return "accepted";
 }
 
@@ -464,6 +498,7 @@ function acceptAction(input: {
   oracleId: string;
   oracleText: string;
   face: SegmentedCardFace;
+  faces: SegmentedCardFace[];
   ability: SegmentedAbility;
   match: RegExpMatchArray;
   rule: ActionPattern;
@@ -475,6 +510,13 @@ function acceptAction(input: {
 
   if (input.rule.requiresPermissionVerb) {
     if (!CAST_PERMISSION.test(evidenceText) && !PLAY_PERMISSION.test(evidenceText)) {
+      return null;
+    }
+  }
+
+  if (/\bIf you would [^,]+, instead\b/i.test(input.ability.paragraphText)) {
+    const wouldClause = input.ability.paragraphText.match(/\bIf you would ([^,]+), instead/i)?.[1]?.trim();
+    if (wouldClause && evidenceText.trim().toLowerCase() === wouldClause.toLowerCase()) {
       return null;
     }
   }
@@ -499,8 +541,16 @@ function acceptAction(input: {
 
   let confidence = 0.9;
   if (abilityType === "replacement") confidence = 0.78;
-  if (/\bthen\b/i.test(input.ability.paragraphText)) confidence = 0.8;
-  if (input.face.componentType !== "single_face") confidence = Math.min(confidence, 0.85);
+  const tutorThenShuffle = /\bsearch (?:your )?library for\b[\s\S]*\bthen shuffle\b/i.test(
+    input.ability.paragraphText,
+  );
+  if (
+    /\bthen\b/i.test(input.ability.paragraphText) &&
+    !/\bthen draw\b/i.test(input.ability.paragraphText) &&
+    !tutorThenShuffle
+  ) {
+    confidence = 0.8;
+  }
 
   const reviewStatus = assignReviewStatus({
     abilityType,
@@ -509,6 +559,10 @@ function acceptAction(input: {
     paragraph: input.ability.paragraphText,
     evidenceText,
     componentType: input.face.componentType,
+    face: input.face,
+    faces: input.faces,
+    cardEvidenceStart,
+    cardEvidenceEnd,
   });
 
   return {
@@ -688,6 +742,7 @@ export function extractOracleActionsV1(input: {
         oracleId: input.oracleId,
         oracleText: input.oracleText,
         face,
+        faces,
         ability,
         match,
         rule,

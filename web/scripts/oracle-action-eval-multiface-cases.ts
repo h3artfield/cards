@@ -192,6 +192,155 @@ export const NEW_MULTIFACE_CASES: OracleActionEvalCaseV2[] = [
   },
 ];
 
+/** Additional v5 multiface cases: disturb, battle, convert, back-face ability types. */
+export const NEW_MULTIFACE_V5_CASES: OracleActionEvalCaseV2[] = [
+  {
+    id: "eval-0273",
+    category: "modal double-faced",
+    layout: "disturb",
+    oracleId: "eval-oracle-273",
+    oracleText:
+      "Flying\n//\nDisturb {4}\nFlying\nWhen this creature enters, draw a card.",
+    expectedPrimitiveActions: [
+      { actionType: "draw", evidenceContains: "draw a card", cardFace: "back" },
+    ],
+  },
+  {
+    id: "eval-0274",
+    category: "modal double-faced",
+    layout: "disturb",
+    oracleId: "eval-oracle-274",
+    oracleText: "Defender\n//\nDisturb {2}\nDestroy target artifact.",
+    expectedPrimitiveActions: [
+      { actionType: "destroy", evidenceContains: "Destroy target artifact", cardFace: "back" },
+    ],
+  },
+  {
+    id: "eval-0275",
+    category: "modal double-faced",
+    layout: "disturb",
+    oracleId: "eval-oracle-275",
+    oracleText: "Reach\n//\nDisturb {3}\nExile target creature.",
+    expectedPrimitiveActions: [
+      { actionType: "exile", evidenceContains: "Exile target creature", cardFace: "back" },
+    ],
+  },
+  {
+    id: "eval-0276",
+    category: "sagas and rooms",
+    layout: "battle",
+    oracleId: "eval-oracle-276",
+    oracleText:
+      "Battle — Siege\n(As a Siege enters, choose an opponent to protect it. You and that opponent each create a token that's a copy of this card, except it's not legendary and it's an artifact in addition to its other types.)\nWhen this Siege enters, it deals 2 damage to any target.\n//\nBattle — Siege\nCreatures you control get +1/+0.",
+    expectedPrimitiveActions: [
+      { actionType: "deal_damage", evidenceContains: "deals 2 damage", cardFace: "front" },
+    ],
+  },
+  {
+    id: "eval-0277",
+    category: "sagas and rooms",
+    layout: "battle",
+    oracleId: "eval-oracle-277",
+    oracleText:
+      "Battle — Siege\nWhen you attack with two or more creatures, draw a card.\n//\nBattle — Siege\nWhen this Siege enters, destroy target artifact.",
+    expectedPrimitiveActions: [
+      { actionType: "draw", evidenceContains: "draw a card", cardFace: "front" },
+      { actionType: "destroy", evidenceContains: "Destroy target artifact", cardFace: "back" },
+    ],
+  },
+  {
+    id: "eval-0278",
+    category: "sagas and rooms",
+    layout: "battle",
+    oracleId: "eval-oracle-278",
+    oracleText:
+      "Battle — Siege\nAt the beginning of your upkeep, you lose 1 life.\n//\nBattle — Siege\nWhen this Siege enters, create a 1/1 white Soldier creature token.",
+    expectedPrimitiveActions: [
+      { actionType: "lose_life", evidenceContains: "lose 1 life", cardFace: "front" },
+      { actionType: "create_token", evidenceContains: "create a 1/1 white Soldier", cardFace: "back" },
+    ],
+  },
+  {
+    id: "eval-0279",
+    category: "transforming cards",
+    layout: "convert",
+    oracleId: "eval-oracle-279",
+    oracleText:
+      "Daybound\nWhen this creature enters, draw a card.\n//\nTo convert this creature, pay {1}.\nNightbound\n{T}: Add {U}.",
+    expectedPrimitiveActions: [
+      { actionType: "draw", evidenceContains: "draw a card", cardFace: "front" },
+      { actionType: "add_mana", evidenceContains: "Add {U}", cardFace: "back" },
+    ],
+  },
+  {
+    id: "eval-0280",
+    category: "transforming cards",
+    layout: "convert",
+    oracleId: "eval-oracle-280",
+    oracleText:
+      "Daybound\nDraw a card.\n//\nTo convert this creature, pay {2}.\nNightbound\nWhenever this creature attacks, you gain 2 life.",
+    expectedPrimitiveActions: [
+      { actionType: "draw", evidenceContains: "Draw a card", cardFace: "front" },
+      { actionType: "gain_life", evidenceContains: "gain 2 life", cardFace: "back" },
+    ],
+  },
+  {
+    id: "eval-0281",
+    category: "transforming cards",
+    layout: "convert",
+    oracleId: "eval-oracle-281",
+    oracleText:
+      "Daybound\nWhen this creature enters, draw a card.\n//\nTo convert this creature, pay {1}.\nNightbound\nIf a source would deal damage to you, prevent 1 of that damage.",
+    expectedPrimitiveActions: [
+      { actionType: "draw", evidenceContains: "draw a card", cardFace: "front" },
+    ],
+  },
+  {
+    id: "eval-0282",
+    category: "modal double-faced",
+    layout: "mdfc",
+    oracleId: "eval-oracle-282",
+    oracleText: "Flash\n//\n{1}: Draw a card.",
+    expectedPrimitiveActions: [
+      { actionType: "draw", evidenceContains: "Draw a card", cardFace: "back" },
+    ],
+  },
+  {
+    id: "eval-0283",
+    category: "modal double-faced",
+    layout: "mdfc",
+    oracleId: "eval-oracle-283",
+    oracleText:
+      "Destroy target artifact.\n//\nWhenever this creature attacks, you gain 2 life.",
+    expectedPrimitiveActions: [
+      { actionType: "destroy", evidenceContains: "Destroy target artifact", cardFace: "front" },
+      { actionType: "gain_life", evidenceContains: "gain 2 life", cardFace: "back" },
+    ],
+  },
+  {
+    id: "eval-0284",
+    category: "transforming cards",
+    layout: "transform",
+    oracleId: "eval-oracle-284",
+    oracleText:
+      "Daybound\nDraw a card.\n//\nNightbound\nIf you would draw a card, instead draw two cards.",
+    expectedPrimitiveActions: [
+      { actionType: "draw", evidenceContains: "Draw a card", cardFace: "front" },
+    ],
+  },
+  {
+    id: "eval-0285",
+    category: "transforming cards",
+    layout: "transform",
+    oracleId: "eval-oracle-285",
+    oracleText:
+      "Daybound\nWhen this creature transforms into Daybound, draw a card.\n//\nNightbound\nActivated abilities of artifacts you control cost {1} less to activate.",
+    expectedPrimitiveActions: [
+      { actionType: "draw", evidenceContains: "draw a card", cardFace: "front" },
+    ],
+  },
+];
+
 /** In-place gold patches for existing multifaced cases. */
 export function applyMultifaceGoldPatches(cases: OracleActionEvalCaseV2[]): number {
   let patchCount = 0;
@@ -205,7 +354,13 @@ export function applyMultifaceGoldPatches(cases: OracleActionEvalCaseV2[]): numb
 
   patch("eval-0044", (c) => {
     c.layout = "split";
+    delete c.cardFace;
+    if (c.expectedStructure?.requiresFace) {
+      const { requiresFace: _, ...rest } = c.expectedStructure;
+      c.expectedStructure = Object.keys(rest).length ? rest : undefined;
+    }
     c.expectedPrimitiveActions = [
+      { actionType: "deal_damage", evidenceContains: "deals 2 damage", cardFace: "front" },
       { actionType: "tap", evidenceContains: "Tap target permanent", cardFace: "back" },
       { actionType: "draw", evidenceContains: "Draw a card", cardFace: "back" },
     ];

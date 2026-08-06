@@ -42,7 +42,7 @@ export type ExclusiveUnmatchedCategory =
   | "structure_or_attachment_error"
   | "evaluator_defect";
 
-const MULTIFACE_LAYOUTS = ["split", "aftermath", "adventure", "mdfc", "transform", "room"] as const;
+const MULTIFACE_LAYOUTS = ["split", "aftermath", "adventure", "mdfc", "transform", "room", "disturb", "battle", "convert"] as const;
 
 function isMultifaceCase(c: OracleActionEvalCaseV2): boolean {
   return Boolean(c.layout && MULTIFACE_LAYOUTS.includes(c.layout as (typeof MULTIFACE_LAYOUTS)[number]));
@@ -276,6 +276,7 @@ function metricsByLayout(cases: OracleActionEvalCaseV2[]) {
       caseCount: number;
       allEmission: { precision: number; recall: number };
       acceptedOnly: { precision: number; recall: number };
+      acceptedCount: number;
       needsReviewCount: number;
       abstentionCount: number;
     }
@@ -285,10 +286,12 @@ function metricsByLayout(cases: OracleActionEvalCaseV2[]) {
     const subset = cases.filter((c) => c.layout === layout);
     if (!subset.length) continue;
     const result = evaluateCaseSet(subset, `multiface_${layout}`);
+    let acceptedCount = 0;
     let needsReviewCount = 0;
     let abstentionCount = 0;
     for (const c of subset) {
       const raw = extractOracleActionsV1({ oracleId: c.oracleId, oracleText: c.oracleText });
+      acceptedCount += raw.actions.filter((a) => a.reviewStatus === "accepted").length;
       needsReviewCount += raw.actions.filter((a) => a.reviewStatus === "needs_review").length;
       abstentionCount += raw.abstainedClauses.length;
     }
@@ -302,6 +305,7 @@ function metricsByLayout(cases: OracleActionEvalCaseV2[]) {
         precision: result.metricsByEmissionTier.acceptedOnly.precision,
         recall: result.metricsByEmissionTier.acceptedOnly.recall,
       },
+      acceptedCount,
       needsReviewCount,
       abstentionCount,
     };
@@ -318,11 +322,12 @@ function goldSupportByLayout(cases: OracleActionEvalCaseV2[]): Record<string, nu
 }
 
 function main() {
-  const devPath = resolve(process.cwd(), "data", "oracle-action-eval-development-v4.json");
+  const devPath = resolve(process.cwd(), "data", "oracle-action-eval-development-v5.json");
   const dev = JSON.parse(readFileSync(devPath, "utf8")) as {
     cases: OracleActionEvalCaseV2[];
     contentHash: string;
     caseCount: number;
+    setClassification?: string;
   };
 
   const multifaceCases = dev.cases.filter(isMultifaceCase);
@@ -341,6 +346,15 @@ function main() {
     structure_or_attachment_error: 0,
     evaluator_defect: 0,
   };
+
+  const wrongFaceCases: Array<{
+    caseId: string;
+    primitive: string | null;
+    predictedFace: string;
+    expectedFace: string;
+    evidenceText: string;
+    resolution: string;
+  }> = [];
 
   for (const testCase of dev.cases) {
     const raw = extractOracleActionsV1({ oracleId: testCase.oracleId, oracleText: testCase.oracleText });
@@ -390,6 +404,47 @@ function main() {
         matchedExpectedIndices: matchedExpected,
       });
       exclusiveUnmatched[category] += 1;
+      if (category === "wrong_face") {
+        const goldOnOtherFace = testCase.expectedPrimitiveActions.find(
+          (e) =>
+            !e.negative &&
+            e.actionType === action.primitive &&
+            e.cardFace &&
+            e.cardFace !== action.cardFaceId &&
+            evidenceMatchesExtracted(action.evidenceText, e.evidenceContains),
+        );
+        wrongFaceCases.push({
+          caseId: testCase.id,
+          primitive: action.primitive,
+          predictedFace: action.cardFaceId,
+          expectedFace: goldOnOtherFace?.cardFace ?? testCase.cardFace ?? "unknown",
+          evidenceText: action.evidenceText.slice(0, 80),
+          resolution:
+            "Gold labels expected this primitive on a different component; parser face assignment did not match cardFace gold.",
+        });
+      }
+    }
+  }
+
+  const remainingMultifaceFailures: Array<{ caseId: string; layout?: string; kind: string; detail: string }> = [];
+
+  for (const testCase of multifaceCases) {
+    const raw = extractOracleActionsV1({ oracleId: testCase.oracleId, oracleText: testCase.oracleText });
+    for (const clause of raw.abstainedClauses) {
+      remainingMultifaceFailures.push({
+        caseId: testCase.id,
+        layout: testCase.layout,
+        kind: "abstention",
+        detail: clause.text.slice(0, 80),
+      });
+    }
+    for (const action of raw.actions.filter((a) => a.reviewStatus === "needs_review")) {
+      remainingMultifaceFailures.push({
+        caseId: testCase.id,
+        layout: testCase.layout,
+        kind: "needs_review",
+        detail: `${action.actionType}: ${action.evidenceText.slice(0, 60)}`,
+      });
     }
   }
 
@@ -403,7 +458,7 @@ function main() {
   const report = {
     generatedAt: new Date().toISOString(),
     parserVersion: ORACLE_ACTION_PARSER_VERSION,
-    developmentSet: "development_set_v4",
+    developmentSet: dev.setClassification ?? "development_set_v5",
     developmentDatasetHash: dev.contentHash,
     caseCount: dev.caseCount,
     multifaceCaseCount: multifaceCases.length,
@@ -420,6 +475,11 @@ function main() {
     developmentGates: gates,
     primitiveMetricsByLayout: primitiveByLayout,
     exclusiveUnmatchedCategories: exclusiveUnmatched,
+    wrongFaceCaseResolution: wrongFaceCases,
+    wrongFaceHistoricalNote:
+      wrongFaceCases.length === 0
+        ? "Prior wrong_face (v1.7 report): eval-0044 retained legacy case-level cardFace:\"back\", which scoped parsing to the back half only; gold expected deal_damage on front. Resolved by removing case-level cardFace and using per-action cardFace on all multiface gold."
+        : undefined,
     validationAccessed: false,
     finalBlindAccessed: false,
     note: "Development-only multiface slice. Validation and final blind not accessed.",

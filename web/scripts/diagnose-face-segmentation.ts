@@ -17,8 +17,8 @@ const MULTIFACE_CATEGORIES = [
 
 const MULTIFACE_LAYOUTS = ["split", "aftermath", "adventure", "mdfc", "transform", "room"] as const;
 
-const dev = JSON.parse(
-  readFileSync(resolve(process.cwd(), "data", "oracle-action-eval-development-v4.json"), "utf8"),
+  const dev = JSON.parse(
+  readFileSync(resolve(process.cwd(), "data", "oracle-action-eval-development-v5.json"), "utf8"),
 ) as {
   cases: Array<{ id: string; category: string; oracleText: string; oracleId: string; cardFace?: string }>;
 };
@@ -69,7 +69,7 @@ writeFileSync(
   JSON.stringify(
     {
       generatedAt: new Date().toISOString(),
-      developmentSet: "development_set_v4",
+      developmentSet: "development_set_v5",
       caseCount: results.length,
       layoutCounts,
       allSpanValid: results.every((r) => r.spanValid),
