@@ -1,0 +1,53 @@
+{
+  "baselineVersion": "eval-v6-corrected-baseline",
+  "frozenAt": "2026-08-06T13:54:57.829Z",
+  "approvedAt": "2026-08-06T14:27:00.000Z",
+  "parserVersion": "oracle-action-v1.2-dedup-play-faces",
+  "developmentSet": {
+    "path": "data/oracle-action-eval-development-frozen.json",
+    "contentHash": "8c72f8d1b98b0f940d049cc2d6df26e0483c8b6efbd9ab25ff0f5647770bf541",
+    "caseCount": 204
+  },
+  "validationSet": {
+    "path": "data/oracle-action-eval-validation-v2.json",
+    "classification": "validation_set_v2",
+    "contentHash": "496a5dd7fcc5c6259f600e25aeecaeead6a036a6574b53cc58e9001321943734",
+    "priorContentHash": "ca1f02f129149e08d77eaf14e0be3ac39dcf6f6b7cb68a5925983571e0ecf622",
+    "caseCount": 104
+  },
+  "finalBlindTest": {
+    "path": "data/oracle-action-eval-final-blind-v1.json",
+    "classification": "final_blind_test_v1",
+    "contentHash": "2d6f34f42cf5983f77a784bd5ccc3e07348d9f5da51ef5b11f809ebcd8a67b86",
+    "caseCount": 105,
+    "goldReviewManifest": "data/oracle-action-eval-final-blind-reviewed-manifest.json",
+    "parserAccessPolicy": "SEALED"
+  },
+  "adjudicationReport": "reports/oracle-action-validation-missing-label-adjudication.json",
+  "evaluatorScript": "scripts/eval-oracle-action-extraction-v6.ts",
+  "baselineReport": "reports/oracle-action-parser-dev-report-v6.json",
+  "developmentMetricsSnapshot": {
+    "allEmissionPrecision": 0.591,
+    "allEmissionRecall": 0.645,
+    "acceptedOnlyPrecision": 0.587,
+    "acceptedOnlyRecall": 0.503,
+    "needsReviewRate": 0.221,
+    "genuinelyUnsupported": 11,
+    "remainingDuplicateErrors": 34,
+    "rawEmissions": 234,
+    "canonicalKeyDuplicatesRemoved": 21
+  },
+  "validationMetricsSnapshot": {
+    "allEmissionPrecision": 0.812,
+    "allEmissionRecall": 0.667,
+    "acceptedOnlyPrecision": 0.845,
+    "acceptedOnlyRecall": 0.518
+  },
+  "policy": {
+    "parserCustomerFacing": false,
+    "tuneAgainst": "development_set_only",
+    "validationFrequency": "meaningful_milestones_only",
+    "finalBlindBlocked": true,
+    "pilotBlocked": true
+  }
+}
