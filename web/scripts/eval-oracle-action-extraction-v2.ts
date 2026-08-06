@@ -15,8 +15,7 @@ import {
 } from "../src/lib/deck-builder/golden-catalog/oracle-action-parser-v1";
 import {
   EVAL_PSEUDO_ACTION_TYPES,
-  normalizeActionType,
-  normalizeEvalExpectedActionType,
+  normalizeToPrimitive,
 } from "../src/lib/deck-builder/golden-catalog/oracle-action-taxonomy";
 import type { OracleActionEvalCase } from "./generate-oracle-action-eval-cases";
 

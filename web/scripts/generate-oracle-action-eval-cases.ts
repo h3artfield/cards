@@ -418,6 +418,8 @@ function main() {
   console.log(`Generated ${cases.length} eval cases → ${outPath}`);
 }
 
-main();
-
 export { buildCases };
+
+if (process.argv[1]?.includes("generate-oracle-action-eval-cases")) {
+  main();
+}

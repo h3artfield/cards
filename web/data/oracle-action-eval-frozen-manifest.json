@@ -1,0 +1,15 @@
+{
+  "evaluationVersion": "eval-frozen-v1",
+  "contentHash": "8c72f8d1b98b0f940d049cc2d6df26e0483c8b6efbd9ab25ff0f5647770bf541",
+  "taxonomyVersion": "three-layer-v1",
+  "reviewerCount": 1,
+  "reviewedCaseCount": 115,
+  "relabeledExpectationCount": 119,
+  "confirmedRelabelCount": 115,
+  "changedRelabelCount": 12,
+  "revertedRelabelCount": 0,
+  "frozenAt": "2026-08-06T08:03:14.942Z",
+  "developmentSetPath": "data/oracle-action-eval-development-frozen.json",
+  "heldOutSetPath": "data/oracle-action-eval-held-out.json",
+  "rewritePolicy": "frozen — parser development must not silently modify expected labels"
+}

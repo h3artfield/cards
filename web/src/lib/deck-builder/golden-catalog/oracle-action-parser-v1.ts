@@ -16,9 +16,10 @@ import {
   validateEvidenceSpan,
 } from "./oracle-ability-segmentation";
 import {
+  inferDerivedRoles,
   normalizeAbilityType,
-  normalizeActionType,
-  type CanonicalActionType,
+  PRIMITIVE_TO_DERIVED_ROLES,
+  type PrimitiveActionType,
 } from "./oracle-action-taxonomy";
 
 export type OracleActionV1AbilityType =
@@ -37,7 +38,7 @@ export interface OracleActionV1 {
   abilityIndex: number;
   actionIndex: number;
   abilityType: OracleActionV1AbilityType;
-  actionType: CanonicalActionType | string;
+  actionType: PrimitiveActionType;
   sourceZones?: string[];
   destinationZones?: string[];
   affectedObjects?: string[];
@@ -73,7 +74,7 @@ export interface OracleActionV1Result {
 
 interface ActionPattern {
   pattern: RegExp;
-  actionType: CanonicalActionType;
+  actionType: PrimitiveActionType;
   abilityType?: OracleActionV1AbilityType;
   optional?: boolean;
   sourceZones?: string[];
@@ -84,39 +85,38 @@ interface ActionPattern {
 const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bdraw (?:a |one |two |three |four |five |seven |up to \w+ )?cards?\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bDraw (?:a |one |two |three |four |five |seven |up to \w+ )?cards?\b/, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
-  { pattern: /\bAdd \{[^}]+\}(?:\{[^}]+\})*/i, actionType: "ramp / add mana", abilityType: "activated", destinationZones: ["mana_pool"] },
-  { pattern: /\bAdd (?:one mana of any color|three mana of any one color|\{C\}{1,2}|\{[WUBRG]\})/i, actionType: "ramp / add mana", destinationZones: ["mana_pool"] },
-  { pattern: /\bsearch (?:your )?library for\b/i, actionType: "tutor", sourceZones: ["library"], destinationZones: ["hand", "battlefield", "library"] },
-  { pattern: /\bDestroy all [\w ]+/i, actionType: "board wipe", sourceZones: ["battlefield"], affectedObjects: ["permanent"] },
-  { pattern: /\beach creature gets [-−]/i, actionType: "board wipe", sourceZones: ["battlefield"], affectedObjects: ["creature"] },
+  { pattern: /\bAdd \{[^}]+\}(?:\{[^}]+\})*/i, actionType: "add_mana", abilityType: "activated", destinationZones: ["mana_pool"] },
+  { pattern: /\bAdd (?:one mana of any color|three mana of any one color|\{C\}{1,2}|\{[WUBRG]\})/i, actionType: "add_mana", destinationZones: ["mana_pool"] },
+  { pattern: /\bsearch (?:your )?library for\b/i, actionType: "search_library", sourceZones: ["library"], destinationZones: ["hand", "battlefield", "library"] },
+  { pattern: /\bDestroy all [\w ]+/i, actionType: "destroy", sourceZones: ["battlefield"], affectedObjects: ["permanent"] },
+  { pattern: /\beach creature gets [-−]/i, actionType: "destroy", sourceZones: ["battlefield"], affectedObjects: ["creature"] },
   { pattern: /\bDestroy (?:target|up to (?:one|two|three) target) [\w ]+/i, actionType: "destroy", sourceZones: ["battlefield"], affectedObjects: ["permanent"] },
   { pattern: /\bExile (?:target|up to (?:one|two|three) target|all|the top) [\w ]+/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bexile (?:target|the top|a \w+ card from)/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bCounter (?:target|up to one target) [\w ]+/i, actionType: "counter", sourceZones: ["stack"], affectedObjects: ["spell", "ability"] },
-  { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+ to (?:its|their) owner'?s hand\b/i, actionType: "bounce", sourceZones: ["battlefield"], destinationZones: ["hand"] },
-  { pattern: /\bReturn target [\w ]+ from (?:your )?graveyard to your hand\b/i, actionType: "reanimate", sourceZones: ["graveyard"], destinationZones: ["hand"] },
+  { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+ to (?:its|their) owner'?s hand\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
+  { pattern: /\bReturn target [\w ]+ from (?:your )?graveyard to your hand\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["hand"] },
   { pattern: /\bSacrifice (?:a |an |target |up to one target )?[\w ]+/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
-  { pattern: /\bcreate (?:a |an |one |up to \w+ )?(?:[\w-]+ )*tokens?\b/i, actionType: "create tokens", destinationZones: ["battlefield"], affectedObjects: ["token"] },
+  { pattern: /\bcreate (?:a |an |one |up to \w+ )?(?:[\w-]+ )*tokens?\b/i, actionType: "create_token", destinationZones: ["battlefield"], affectedObjects: ["token"] },
   { pattern: /\bCopy target (?:instant|sorcery|spell|[\w ]+)/i, actionType: "copy", sourceZones: ["stack", "battlefield"] },
   { pattern: /\bcopy target (?:instant|sorcery|spell|[\w ]+)/i, actionType: "copy", sourceZones: ["stack", "battlefield"] },
-  { pattern: /\b(?:return|put) target [\w ]+ (?:card )?from (?:your )?graveyard (?:to your hand|onto the battlefield)/i, actionType: "reanimate", sourceZones: ["graveyard"], destinationZones: ["hand", "battlefield"] },
-  { pattern: /\bPut target [\w ]+ (?:card )?from a graveyard onto the battlefield/i, actionType: "reanimate", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
-  { pattern: /\b(?:play|cast) (?:lands and )?spells? from (?:your )?graveyard\b/i, actionType: "graveyard recursion", sourceZones: ["graveyard"], destinationZones: ["stack", "battlefield"] },
-  { pattern: /\b(?:play|cast) (?:it|that card|the exiled card|lands and spells) (?:from exile|this turn|without paying)/i, actionType: "cast/play from exile", sourceZones: ["exile"], optional: true },
+  { pattern: /\b(?:return|put) target [\w ]+ (?:card )?from (?:your )?graveyard (?:to your hand|onto the battlefield)/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["hand", "battlefield"] },
+  { pattern: /\bPut target [\w ]+ (?:card )?from a graveyard onto the battlefield/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
+  { pattern: /\b(?:play|cast) (?:lands and )?spells? from (?:your )?graveyard\b/i, actionType: "play", sourceZones: ["graveyard"], destinationZones: ["stack", "battlefield"] },
+  { pattern: /\b(?:play|cast) (?:it|that card|the exiled card|lands and spells|any number of spells) (?:from exile|this turn|without paying)/i, actionType: "cast", sourceZones: ["exile"], optional: true },
   { pattern: /\bMill (?:target )?(?:player|cards|\d+|up to \w+ cards)/i, actionType: "mill", sourceZones: ["library"], destinationZones: ["graveyard"] },
   { pattern: /\b(?:discard|discards) (?:a |one |two |three |up to \w+ )?cards?\b/i, actionType: "discard", sourceZones: ["hand"], destinationZones: ["graveyard"] },
-  { pattern: /\bdeals? \d+ damage(?: to (?:any target|target [\w ]+|each [\w ]+))?/i, actionType: "deal damage", affectedObjects: ["player", "permanent"] },
-  { pattern: /\bgain \d+ life\b/i, actionType: "gain life", affectedObjects: ["player"] },
-  { pattern: /\bloses? \d+ life\b/i, actionType: "lose life", affectedObjects: ["player"] },
+  { pattern: /\bdeals? \d+ damage(?: to (?:any target|target [\w ]+|each [\w ]+))?/i, actionType: "deal_damage", affectedObjects: ["player", "permanent"] },
+  { pattern: /\bgain \d+ life\b/i, actionType: "gain_life", affectedObjects: ["player"] },
+  { pattern: /\bloses? \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\bScry \d+\b/i, actionType: "scry", sourceZones: ["library"] },
   { pattern: /\bSurveil \d+\b/i, actionType: "surveil", sourceZones: ["library"], destinationZones: ["graveyard"] },
   { pattern: /\bTap target [\w ]+/i, actionType: "tap", sourceZones: ["battlefield"] },
-  { pattern: /\bPut (?:a |one |up to one )?\+?\/?\+?\d+\/?\+?\d+ counter/i, actionType: "put counter", destinationZones: ["battlefield"] },
-  { pattern: /\b(?:hexproof|shroud|indestructible|prevented|can't be (?:destroyed|targeted)|phases out)\b/i, actionType: "protection", abilityType: "static" },
+  { pattern: /\bPut (?:a |one |up to one )?\+?\/?\+?\d+\/?\+?\d+ counter/i, actionType: "put_counter", destinationZones: ["battlefield"] },
   { pattern: /\bexile it instead\b/i, actionType: "exile", abilityType: "replacement", destinationZones: ["exile"] },
-  { pattern: /\bshuffle (?:your )?(?:hand and graveyard|graveyard and hand) into (?:your )?library\b/i, actionType: "mill", sourceZones: ["hand", "graveyard"], destinationZones: ["library"] },
-  { pattern: /\bExile all cards from target player'?s library\b/i, actionType: "mill", sourceZones: ["library"], destinationZones: ["exile"] },
-  { pattern: /\bfrom (?:your )?graveyard\b/i, actionType: "graveyard recursion", sourceZones: ["graveyard"] },
+  { pattern: /\bshuffle (?:your |their )?(?:hand and graveyard|graveyard and hand|hand) into (?:your |their )?library\b/i, actionType: "shuffle_into_library", sourceZones: ["hand", "graveyard"], destinationZones: ["library"] },
+  { pattern: /\bExile all cards from target player'?s library\b/i, actionType: "exile", sourceZones: ["library"], destinationZones: ["exile"] },
+  { pattern: /\bfrom (?:your )?graveyard\b/i, actionType: "play", sourceZones: ["graveyard"] },
 ];
 
 function actionId(parts: string[]): string {
@@ -202,7 +202,7 @@ function acceptAction(input: {
     abilityIndex: input.ability.abilityIndex,
     actionIndex: input.actionIndex,
     abilityType,
-    actionType: normalizeActionType(input.rule.actionType),
+    actionType: input.rule.actionType,
     sourceZones: input.rule.sourceZones ?? zones.source,
     destinationZones: input.rule.destinationZones ?? zones.dest,
     affectedObjects: input.rule.affectedObjects,
@@ -223,37 +223,16 @@ function acceptAction(input: {
 }
 
 function deriveRolesFromActions(actions: OracleActionV1[]): DerivedCardRole[] {
-  const roleMap: Partial<Record<CanonicalActionType, string[]>> = {
-    "ramp / add mana": ["ramp", "mana_acceleration"],
-    draw: ["card_advantage"],
-    tutor: ["tutor"],
-    "board wipe": ["board_wipe"],
-    destroy: ["removal"],
-    exile: ["removal"],
-    counter: ["interaction"],
-    "create tokens": ["token_generator"],
-    reanimate: ["recursion"],
-    "cast/play from exile": ["exile_cast"],
-    "graveyard recursion": ["recursion"],
-    protection: ["protection"],
-    sacrifice: ["sacrifice_outlet"],
-    "deal damage": ["removal"],
-  };
-
-  const roles: DerivedCardRole[] = [];
-  for (const action of actions) {
-    const mapped = roleMap[action.actionType as CanonicalActionType];
-    if (!mapped) continue;
-    for (const role of mapped) {
-      roles.push({
-        role,
-        score: action.confidence * 0.75,
-        evidenceActionIds: [action.actionId],
-        derivationVersion: "role-derivation-v1",
-      });
-    }
-  }
-  return roles;
+  const primitives = actions.map((a) => a.actionType);
+  const roles = inferDerivedRoles(primitives);
+  return roles.map((role) => ({
+    role,
+    score: 0.75,
+    evidenceActionIds: actions
+      .filter((a) => (PRIMITIVE_TO_DERIVED_ROLES[a.actionType] ?? []).includes(role as never))
+      .map((a) => a.actionId),
+    derivationVersion: "role-derivation-v2",
+  })).filter((r) => r.evidenceActionIds.length > 0);
 }
 
 function isKeywordOnly(text: string): boolean {
@@ -343,7 +322,7 @@ export function toLegacyExtractionResult(result: OracleActionV1Result): OracleAc
       trigger: a.trigger ? { event: a.trigger } : undefined,
       costs: a.cost ? [{ type: a.cost }] : undefined,
       effects: [{
-        actionType: normalizeActionType(a.actionType),
+        actionType: a.actionType,
         sourceZone: a.sourceZones,
         destinationZone: a.destinationZones,
         objectTypes: a.affectedObjects,
