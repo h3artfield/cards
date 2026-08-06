@@ -32,7 +32,8 @@ function Get-EnvValue([string]$Name) {
 
 Push-Location (Join-Path $PSScriptRoot "..")
 try {
-  $porcelain = (git status --porcelain).Trim()
+  $porcelainRaw = git status --porcelain
+  $porcelain = if ($null -eq $porcelainRaw) { "" } else { "$porcelainRaw".Trim() }
   if ($porcelain -and -not $AllowDirty) {
     throw @"
 Working tree is dirty — commit all intended changes before deploy.
