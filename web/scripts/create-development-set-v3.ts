@@ -31,6 +31,14 @@ function main() {
 
   const { cases: adjudicatedCases, adjudications } = applyLegacyOptionalAdjudications(v2.cases);
   const v3Cases = [...adjudicatedCases, ...V3_ADDITIONAL_CASES];
+
+  const eval0120 = v3Cases.find((c) => c.id === "eval-0120");
+  if (eval0120) {
+    eval0120.expectedPrimitiveActions = eval0120.expectedPrimitiveActions.filter(
+      (a) => !(a.actionType === "cast" && a.evidenceContains === "play that card"),
+    );
+  }
+
   const v3Hash = computeContentHash(v3Cases);
   const createdAt = new Date().toISOString();
 

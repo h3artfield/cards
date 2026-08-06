@@ -13,7 +13,8 @@ import {
 import type { OracleActionEvalCaseV2 } from "./audit-oracle-action-eval-cases";
 import { buildCases } from "./generate-oracle-action-eval-cases";
 
-export const TAXONOMY_VERSION = "three-layer-v1";
+export const TAXONOMY_VERSION = "three-layer-v1.1";
+export const TAXONOMY_VERSION_PREVIOUS = "three-layer-v1";
 export const EVALUATION_VERSION = "eval-frozen-v1";
 export const REVIEWER_ID = "catalog-audit-agent";
 
@@ -86,6 +87,7 @@ export function computeContentHash(cases: OracleActionEvalCaseV2[]): string {
       cardFace: c.cardFace,
       expectedStructure: c.expectedStructure,
       expectedPrimitiveActions: c.expectedPrimitiveActions,
+      expectedConditions: c.expectedConditions,
       expectedRoles: c.expectedRoles,
       forbiddenPrimitiveActions: c.forbiddenPrimitiveActions,
     })),
@@ -143,6 +145,7 @@ export function inferSupportedPrimitiveFromEvidence(
       scry: /\bScry \d+\b/i,
       surveil: /\bSurveil \d+\b/i,
       tap: /\bTap target\b/i,
+      untap: /\bUntap\b/i,
       put_counter: /\bPut (?:a |one |up to one )?[\+\-]?\/?[\+\-]?\d+/i,
       shuffle_into_library: /\bshuffles?[\w ]*into[\w ]*library\b/i,
     };

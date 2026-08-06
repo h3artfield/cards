@@ -133,6 +133,7 @@ export function extractOracleActionsSegmented(input: {
     actions,
     derivedRoles,
     abstainedClauses,
+    structureAnnotations: [],
   };
 }
 

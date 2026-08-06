@@ -1,0 +1,55 @@
+{
+  "generatedAt": "2026-08-06T21:10:00.000Z",
+  "previousVersion": "three-layer-v1",
+  "currentVersion": "three-layer-v1.1",
+  "changes": [
+    {
+      "layer": 2,
+      "changeType": "primitive_added",
+      "primitive": "untap",
+      "reason": "Observable Oracle operation for untap effects (e.g. dev-cond-008 delayed untap). Distinct from tap.",
+      "parserVersion": "oracle-action-v1.6-conditions-deps"
+    }
+  ],
+  "parserEmittedPrimitiveAudit": {
+    "note": "All actionType values emitted by oracle-action-parser-v1 ACTION_PATTERNS are members of PRIMITIVE_ACTION_TYPES after v1.1.",
+    "canonicalPrimitives": [
+      "add_mana",
+      "draw",
+      "discard",
+      "search_library",
+      "deal_damage",
+      "destroy",
+      "exile",
+      "counter",
+      "return_to_hand",
+      "return_to_battlefield",
+      "create_token",
+      "cast",
+      "play",
+      "copy",
+      "sacrifice",
+      "mill",
+      "gain_life",
+      "lose_life",
+      "scry",
+      "surveil",
+      "tap",
+      "untap",
+      "put_counter",
+      "shuffle_into_library"
+    ],
+    "absentFromCanonical": []
+  },
+  "structureAnnotations": {
+    "note": "Layer 1 OracleAbilityStructureAnnotation records are NOT Layer 2 primitives.",
+    "kinds": [
+      "optional_cost",
+      "optional_effect",
+      "choice_or_target",
+      "static_restriction",
+      "replacement_condition",
+      "condition_only"
+    ]
+  }
+}

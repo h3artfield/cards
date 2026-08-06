@@ -1,50 +1,50 @@
 {
-  "generatedAt": "2026-08-06T19:55:49.932Z",
+  "generatedAt": "2026-08-06T21:22:22.579Z",
   "evaluationVersion": "eval-v7-may-scope",
-  "parserVersion": "oracle-action-v1.5-may-scope",
-  "developmentSetClassification": "development_set_v3",
-  "developmentSetContentHash": "4a69de72c991c3a3173b4e5efe54ccf96f4c171e11c3f6edd1a0a256573d76d9",
+  "parserVersion": "oracle-action-v1.6-conditions-deps",
+  "developmentSetClassification": "development_set_v4",
+  "developmentSetContentHash": "d8acd3ed4752b90f9d7c0f966c221cce3d93cb8766fa2b238f59d080c292a684",
   "developmentSetCaseCount": 256,
   "reportPath": "reports/oracle-action-parser-dev-report-v7.json",
   "validationRun": false,
   "summaryMetrics": {
     "allEmission": {
-      "truePositives": 218,
-      "falsePositives": 19,
-      "falseNegatives": 49,
-      "precision": 0.919831223628692,
-      "recall": 0.8164794007490637,
-      "falsePositiveRate": 0.08016877637130802
+      "truePositives": 226,
+      "falsePositives": 24,
+      "falseNegatives": 30,
+      "precision": 0.904,
+      "recall": 0.8828125,
+      "falsePositiveRate": 0.096
     },
     "acceptedOnly": {
-      "truePositives": 154,
-      "falsePositives": 11,
-      "falseNegatives": 108,
-      "precision": 0.9333333333333333,
-      "recall": 0.5877862595419847,
-      "falsePositiveRate": 0.06666666666666667
+      "truePositives": 173,
+      "falsePositives": 15,
+      "falseNegatives": 87,
+      "precision": 0.9202127659574468,
+      "recall": 0.6653846153846154,
+      "falsePositiveRate": 0.0797872340425532
     },
     "mayToExistingActionAttachment": {
-      "truePositives": 25,
+      "truePositives": 36,
       "falsePositives": 0,
-      "falseNegatives": 11,
+      "falseNegatives": 0,
       "trueNegatives": 0,
       "positiveGoldSupport": 36,
       "precision": 1,
-      "recall": 0.6944444444444444,
+      "recall": 1,
       "falsePositiveRate": 0,
       "status": "computed",
       "note": "Label-level: only when primitive extracted — optionalEffect/Cost correctly attached"
     },
     "conditionToActionAttachment": {
-      "truePositives": 0,
+      "truePositives": 10,
       "falsePositives": 0,
-      "falseNegatives": 10,
+      "falseNegatives": 0,
       "trueNegatives": 0,
       "positiveGoldSupport": 10,
-      "precision": null,
-      "recall": 0,
-      "falsePositiveRate": null,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
       "status": "computed"
     }
   }

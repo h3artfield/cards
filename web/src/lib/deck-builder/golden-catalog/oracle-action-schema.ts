@@ -102,6 +102,8 @@ export interface OracleAction {
   optionalityController?: OptionalityController;
   conditionType?: ConditionType;
   conditionText?: string;
+  conditionEvidenceStart?: number;
+  conditionEvidenceEnd?: number;
   dependsOnActionIds?: string[];
   targetMinimum?: number;
   targetMaximum?: number | "X";
@@ -134,8 +136,42 @@ export interface OracleActionExtractionResult {
   cardFaceId: string;
   abilities: SegmentedAbility[];
   actions: OracleAction[];
+  structureAnnotations: OracleAbilityStructureAnnotation[];
   derivedRoles: DerivedCardRole[];
   abstainedClauses: Array<{ text: string; start: number; end: number; reason: string }>;
+}
+
+/** Layer 1 structure markers — not primitive Oracle actions. */
+export type StructureAnnotationKind =
+  | "optional_cost"
+  | "optional_effect"
+  | "choice_or_target"
+  | "static_restriction"
+  | "replacement_condition"
+  | "condition_only";
+
+export interface OracleAbilityStructureAnnotation {
+  annotationId: string;
+  oracleId: string;
+  faceId: string;
+  abilityIndex: number;
+  kind: StructureAnnotationKind;
+  evidenceText: string;
+  evidenceStart: number;
+  evidenceEnd: number;
+  optionalEffect?: boolean;
+  optionalCost?: boolean;
+  optionalityEvidenceText?: string;
+  optionalityEvidenceStart?: number;
+  optionalityEvidenceEnd?: number;
+  optionalityScopeId?: string;
+  optionalityController?: OptionalityController;
+  conditionType?: ConditionType;
+  conditionText?: string;
+  conditionEvidenceStart?: number;
+  conditionEvidenceEnd?: number;
+  parserVersion: string;
+  reviewStatus: "needs_review";
 }
 
 /** Critical production gates — parser must meet all before full catalog extraction. */
@@ -151,7 +187,8 @@ export const ORACLE_ACTION_PRODUCTION_GATES = {
   falsePositiveRate: { target: 0.02, label: "≤2%" },
 } as const;
 
-export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.5-may-scope";
+export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.6-conditions-deps";
+export const ORACLE_ACTION_TAXONOMY_VERSION = "three-layer-v1.1";
 
 export const HIGH_VALUE_ACTION_TYPES = [
   "draw",

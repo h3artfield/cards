@@ -38,6 +38,16 @@ function parseUpToMaximum(oracle: string): number | "X" | undefined {
   return map[word] ?? Number.parseInt(word, 10);
 }
 
+function findParagraphContaining(oracle: string, evidence: string): string {
+  const parts = oracle.split(/\n|(?=[+\−-]\d+:)/);
+  for (const part of parts) {
+    if (part.toLowerCase().includes(evidence.toLowerCase().slice(0, Math.min(24, evidence.length)))) {
+      return part.trim();
+    }
+  }
+  return oracle;
+}
+
 export function adjudicateLegacyOptionalLabel(
   testCase: OracleActionEvalCaseV2,
   label: ExpectedPrimitiveAction,
@@ -47,7 +57,8 @@ export function adjudicateLegacyOptionalLabel(
 
   const oracle = testCase.oracleText;
   const evidence = label.evidenceContains;
-  const hasMayInOracle = /\bmay\b/i.test(oracle);
+  const paragraph = findParagraphContaining(oracle, evidence);
+  const hasMayInOracle = /\bmay\b/i.test(paragraph);
   const hasMayInEvidence = /\bmay\b/i.test(evidence);
 
   const base = {
@@ -77,7 +88,7 @@ export function adjudicateLegacyOptionalLabel(
   }
 
   if (!hasMayInOracle && !hasMayInEvidence) {
-    if (/\bup to\b/i.test(oracle)) {
+    if (/\bup to\b/i.test(paragraph)) {
       const max = parseUpToMaximum(oracle);
       return {
         ...base,
@@ -91,7 +102,7 @@ export function adjudicateLegacyOptionalLabel(
         reason: "Legacy optional:true conflated up-to quantity constraint with may optionality.",
       };
     }
-    if (/\bAny number of target/i.test(oracle)) {
+    if (/\bAny number of target/i.test(paragraph)) {
       return {
         ...base,
         decision: "target_or_quantity_may_be_zero",
@@ -104,7 +115,7 @@ export function adjudicateLegacyOptionalLabel(
         reason: "Any-number targeting permits zero — not may optionality.",
       };
     }
-    if (/\bChoose one\b|\bChoose two\b|\bChoose three\b/i.test(oracle)) {
+    if (/\bChoose one\b|\bChoose two\b|\bChoose three\b/i.test(paragraph)) {
       return {
         ...base,
         decision: "modal_choice",
@@ -123,9 +134,11 @@ export function adjudicateLegacyOptionalLabel(
     };
   }
 
-  const evidenceIdx = oracle.toLowerCase().indexOf(evidence.toLowerCase().slice(0, Math.min(20, evidence.length)));
-  const mayMatches = [...oracle.matchAll(/\bmay\b/gi)];
-  const governingMay = mayMatches.find((m) => evidenceIdx >= 0 && m.index !== undefined && m.index < evidenceIdx + evidence.length);
+  const evidenceIdx = paragraph.toLowerCase().indexOf(evidence.toLowerCase().slice(0, Math.min(20, evidence.length)));
+  const mayMatches = [...paragraph.matchAll(/\bmay\b/gi)];
+  const governingMay = mayMatches.find(
+    (m) => evidenceIdx >= 0 && m.index !== undefined && m.index < evidenceIdx + evidence.length,
+  );
 
   if (hasMayInOracle && !governingMay && !hasMayInEvidence) {
     if (/\bup to\b/i.test(evidence)) {
@@ -150,7 +163,7 @@ export function adjudicateLegacyOptionalLabel(
     };
   }
 
-  if (/\bchoose new targets\b/i.test(oracle) && label.actionType === "copy" && !hasMayInEvidence) {
+  if (/\bchoose new targets\b/i.test(paragraph) && label.actionType === "copy" && !hasMayInEvidence) {
     return {
       ...base,
       decision: "incorrect_gold_label",

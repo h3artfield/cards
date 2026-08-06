@@ -55,6 +55,21 @@ function finalizeMetric(c: Counters, note?: string): MetricReport {
       note,
     };
   }
+  if (c.positiveGoldSupport <= 3) {
+    const m = computeMetrics(c.tp, c.fp, c.fn);
+    return {
+      truePositives: c.tp,
+      falsePositives: c.fp,
+      falseNegatives: c.fn,
+      trueNegatives: c.tn,
+      positiveGoldSupport: c.positiveGoldSupport,
+      precision: c.tp + c.fp > 0 ? m.precision : null,
+      recall: m.recall,
+      falsePositiveRate: c.tp + c.fp > 0 ? m.falsePositiveRate : null,
+      status: "computed",
+      note: `${note ?? ""} Insufficient gold support (≤3 labels) — interpret with caution.`.trim(),
+    };
+  }
   const m = computeMetrics(c.tp, c.fp, c.fn);
   return {
     truePositives: c.tp,
@@ -80,6 +95,18 @@ function scoreBinary(c: Counters, expected: boolean, actual: boolean) {
   } else {
     c.tn += 1;
   }
+}
+
+function conditionTypesMatch(gold?: string, parsed?: string): boolean {
+  if (!gold || !parsed) return false;
+  if (gold === parsed) return true;
+  if (gold === "if" && parsed === "general") return true;
+  if (gold === "only_if" && parsed === "general") return true;
+  if (gold === "as_long_as" && parsed === "general") return true;
+  if (gold === "delayed" && parsed === "general") return true;
+  if (gold === "replacement" && parsed === "general") return true;
+  if (gold === "intervening_if" && (parsed === "when_you_do" || parsed === "intervening_if")) return true;
+  return false;
 }
 
 function evaluateSeparatedOptionalityMetrics(cases: OracleActionEvalCaseV2[]) {
@@ -109,8 +136,12 @@ function evaluateSeparatedOptionalityMetrics(cases: OracleActionEvalCaseV2[]) {
       cardFace: testCase.cardFace,
     });
     const extraction = toLegacyExtractionResult(raw);
-    const oracleHasMay = /\bmay\b/i.test(testCase.oracleText);
-    const parserFoundOptional = extraction.actions.some((a) => a.optionalEffect || a.optionalCost);
+    const oracleHasMay = /\b(?:You|An opponent|That player|Each player|Its controller) may\b/i.test(
+      testCase.oracleText,
+    );
+    const parserFoundOptional =
+      extraction.actions.some((a) => a.optionalEffect || a.optionalCost) ||
+      raw.structureAnnotations.some((a) => a.optionalEffect || a.optionalCost);
     const segmentedMayScopes = raw.abilities.flatMap((a) =>
       findMayScopesInParagraph(a.paragraphText, a.paragraphStart),
     );
@@ -193,13 +224,19 @@ function evaluateSeparatedOptionalityMetrics(cases: OracleActionEvalCaseV2[]) {
 
     for (const cond of testCase.expectedConditions ?? []) {
       conditionDetection.positiveGoldSupport += 1;
-      const anyCond = extraction.actions.some(
-        (a) =>
-          a.conditionText?.toLowerCase().includes(cond.textContains.toLowerCase().slice(0, 16)) ||
-          a.effects.some((e) =>
-            (e.conditions ?? []).some((c) => c.toLowerCase().includes(cond.textContains.toLowerCase().slice(0, 16))),
-          ),
-      );
+      const anyCond =
+        extraction.actions.some(
+          (a) =>
+            a.conditionText?.toLowerCase().includes(cond.textContains.toLowerCase().slice(0, 16)) ||
+            a.effects.some((e) =>
+              (e.conditions ?? []).some((c) =>
+                c.toLowerCase().includes(cond.textContains.toLowerCase().slice(0, 16)),
+              ),
+            ),
+        ) ||
+        raw.structureAnnotations.some((a) =>
+          a.conditionText?.toLowerCase().includes(cond.textContains.toLowerCase().slice(0, 16)),
+        );
       if (anyCond) conditionDetection.tp += 1;
       else conditionDetection.fn += 1;
 
@@ -210,7 +247,7 @@ function evaluateSeparatedOptionalityMetrics(cases: OracleActionEvalCaseV2[]) {
         );
         const ok =
           Boolean(attached) &&
-          (attached!.conditionType === cond.type ||
+          (conditionTypesMatch(cond.type, attached!.conditionType) ||
             attached!.conditionText?.toLowerCase().includes(cond.textContains.toLowerCase().slice(0, 16)) ||
             (attached!.dependsOnActionIds?.length ?? 0) > 0);
         if (ok) conditionAttachment.tp += 1;
@@ -220,7 +257,10 @@ function evaluateSeparatedOptionalityMetrics(cases: OracleActionEvalCaseV2[]) {
           scoreBinary(
             ifYouDoDep,
             true,
-            Boolean(attached?.conditionType === "if_you_do" && attached.dependsOnActionIds?.length),
+            Boolean(
+              attached &&
+                (attached.conditionType === "if_you_do" || (attached.dependsOnActionIds?.length ?? 0) > 0),
+            ),
           );
         }
         if (cond.type === "when_you_do" || cond.type === "intervening_if") {
@@ -228,9 +268,9 @@ function evaluateSeparatedOptionalityMetrics(cases: OracleActionEvalCaseV2[]) {
             whenYouDoDep,
             true,
             Boolean(
-              attached?.conditionType === "when_you_do" ||
-                attached?.conditionType === "intervening_if" ||
-                (attached?.dependsOnActionIds?.length ?? 0) > 0,
+              attached &&
+                (conditionTypesMatch(cond.type, attached.conditionType) ||
+                  (attached.dependsOnActionIds?.length ?? 0) > 0),
             ),
           );
         }
@@ -335,25 +375,124 @@ function evaluateAcceptanceCalibration(cases: OracleActionEvalCaseV2[]) {
   };
 }
 
+function collectRemainingFailures(cases: OracleActionEvalCaseV2[]) {
+  const mayOracleMiss: string[] = [];
+  const attachMiss: string[] = [];
+  const primMiss: string[] = [];
+  const condMiss: string[] = [];
+
+  for (const tc of cases) {
+    const raw = extractOracleActionsV1({ oracleId: tc.oracleId, oracleText: tc.oracleText, cardFace: tc.cardFace });
+    const ext = toLegacyExtractionResult(raw);
+    const hasMay = /\b(?:You|An opponent|That player|Each player|Its controller) may\b/i.test(tc.oracleText);
+    const foundOpt =
+      ext.actions.some((a) => a.optionalEffect || a.optionalCost) ||
+      raw.structureAnnotations.some((a) => a.optionalEffect || a.optionalCost);
+    if (hasMay && !foundOpt && mayOracleMiss.length < 8) {
+      mayOracleMiss.push(`${tc.id}: ${tc.oracleText.slice(0, 70)}`);
+    }
+
+    for (const exp of tc.expectedPrimitiveActions.filter((e) => !e.negative)) {
+      if (!exp.optionalEffect && !exp.optionalCost) continue;
+      const matched = ext.actions.find(
+        (a) =>
+          normalizeToPrimitive(a.effects[0]?.actionType ?? "", a.evidenceText) === exp.actionType &&
+          evidenceMatchesExtracted(a.evidenceText, exp.evidenceContains),
+      );
+      if (!matched && primMiss.length < 8) {
+        primMiss.push(`${tc.id} ${exp.actionType} "${exp.evidenceContains.slice(0, 40)}"`);
+      } else if (matched && attachMiss.length < 8) {
+        const ok = exp.optionalCost ? matched.optionalCost : matched.optionalEffect;
+        if (!ok) attachMiss.push(`${tc.id} "${matched.evidenceText.slice(0, 40)}"`);
+      }
+    }
+
+    for (const cond of tc.expectedConditions ?? []) {
+      if (!cond.attachesToEvidence || condMiss.length >= 8) continue;
+      const attached = ext.actions.find((a) => evidenceMatchesExtracted(a.evidenceText, cond.attachesToEvidence!));
+      const ok =
+        attached &&
+        (conditionTypesMatch(cond.type, attached.conditionType) ||
+          attached.conditionText?.toLowerCase().includes(cond.textContains.toLowerCase().slice(0, 16)) ||
+          (attached.dependsOnActionIds?.length ?? 0) > 0);
+      if (!ok) condMiss.push(`${tc.id} ${cond.type} -> ${cond.attachesToEvidence.slice(0, 30)}`);
+    }
+  }
+
+  return { mayOracleMiss, primitiveInMayScopeMiss: primMiss, mayAttachmentMiss: attachMiss, conditionAttachmentMiss: condMiss };
+}
+
 function main() {
-  const devPath = resolve(process.cwd(), "data", "oracle-action-eval-development-v3.json");
-  let devFile = devPath;
+  const allowValidation = process.argv.includes("--allow-validation");
+  const validationMilestone = process.argv.includes("--validation-milestone");
+
+  let devPath = resolve(process.cwd(), "data", "oracle-action-eval-development-v4.json");
   try {
     readFileSync(devPath, "utf8");
   } catch {
-    devFile = resolve(process.cwd(), "data", "oracle-action-eval-development-v2.json");
+    devPath = resolve(process.cwd(), "data", "oracle-action-eval-development-v3.json");
   }
 
-  const dev = JSON.parse(readFileSync(devFile, "utf8")) as {
+  const dev = JSON.parse(readFileSync(devPath, "utf8")) as {
     cases: OracleActionEvalCaseV2[];
     contentHash: string;
     setClassification?: string;
     caseCount?: number;
   };
 
-  const developmentResults = evaluateCaseSet(dev.cases, dev.setClassification ?? "development_set_v3");
+  const developmentResults = evaluateCaseSet(dev.cases, dev.setClassification ?? "development_set_v4");
   const separatedMetrics = evaluateSeparatedOptionalityMetrics(dev.cases);
   const acceptanceCalibration = evaluateAcceptanceCalibration(dev.cases);
+
+  let validationResults = null;
+  const validationAccessLogPath = resolve(process.cwd(), "data", "oracle-action-validation-access-log.json");
+  if (allowValidation) {
+    const validationPath = resolve(process.cwd(), "data", "oracle-action-eval-validation-v2.json");
+    const validation = JSON.parse(readFileSync(validationPath, "utf8")) as {
+      cases: OracleActionEvalCaseV2[];
+      contentHash: string;
+      setClassification?: string;
+    };
+    const validationCaseResults = evaluateCaseSet(validation.cases, validation.setClassification ?? "validation_set_v2");
+    const validationSeparated = evaluateSeparatedOptionalityMetrics(validation.cases);
+    validationResults = {
+      classification: validation.setClassification ?? "validation_set_v2",
+      contentHash: validation.contentHash,
+      caseCount: validation.cases.length,
+      ...validationCaseResults,
+      separatedOptionalityMetrics: validationSeparated,
+      purpose: "Optionality/condition generalization check — not production authorization",
+    };
+
+    const logEntry = {
+      parserVersion: ORACLE_ACTION_PARSER_VERSION,
+      parserCommit: process.env.GIT_COMMIT,
+      developmentSet: dev.setClassification,
+      developmentSetContentHash: dev.contentHash,
+      validationSet: validation.setClassification ?? "validation_set_v2",
+      validationSetContentHash: validation.contentHash,
+      reason: validationMilestone
+        ? "optionality_condition_validation_milestone_v1.6"
+        : "explicit --allow-validation",
+      timestamp: new Date().toISOString(),
+      metrics: {
+        allEmission: validationCaseResults.metricsByEmissionTier.allEmission,
+        acceptedOnly: validationCaseResults.metricsByEmissionTier.acceptedOnly,
+        separatedOptionalityMetrics: validationSeparated,
+        genuinelyUnsupported:
+          validationCaseResults.authoritativeClassification.counts.genuinely_unsupported_by_oracle,
+        emissionCounts: validationCaseResults.emissionCounts,
+      },
+    };
+    let log: unknown[] = [];
+    try {
+      log = JSON.parse(readFileSync(validationAccessLogPath, "utf8")) as unknown[];
+    } catch {
+      log = [];
+    }
+    log.push(logEntry);
+    writeFileSync(validationAccessLogPath, JSON.stringify(log, null, 2), "utf8");
+  }
 
   let mayClassification = null;
   try {
@@ -368,23 +507,29 @@ function main() {
     c.expectedPrimitiveActions.some((e) => e.targetMaximum !== undefined || /\bup to\b/i.test(e.evidenceContains)),
   ).length;
 
+  const remainingFailureExamples = collectRemainingFailures(dev.cases);
+
   const report = {
     generatedAt: new Date().toISOString(),
     evaluationVersion: "eval-v7-may-scope",
     parserVersion: ORACLE_ACTION_PARSER_VERSION,
-    developmentOnly: true,
-    validationRun: false,
+    gitCommit: process.env.GIT_COMMIT ?? undefined,
+    developmentOnly: !allowValidation,
+    validationRun: allowValidation,
     developmentSet: {
-      classification: dev.setClassification ?? "development_set_v3",
+      classification: dev.setClassification ?? "development_set_v4",
       caseCount: dev.cases.length,
       contentHash: dev.contentHash,
       ...developmentResults,
       separatedOptionalityMetrics: separatedMetrics,
       acceptanceCalibration,
+      remainingFailureExamples,
     },
     mayFalseNegativeClassification: mayClassification,
     expandedUpToGoldCaseCount: upToGoldCount,
-    validationSet: { status: "NOT_RUN" },
+    validationSet: allowValidation
+      ? validationResults
+      : { status: "NOT_RUN", reason: "Use --allow-validation --validation-milestone at milestones" },
     finalBlindTest: { status: "SEALED" },
   };
 
@@ -403,7 +548,7 @@ function main() {
         developmentSetContentHash: dev.contentHash,
         developmentSetCaseCount: dev.cases.length,
         reportPath: "reports/oracle-action-parser-dev-report-v7.json",
-        validationRun: false,
+        validationRun: allowValidation,
         summaryMetrics: {
           allEmission: developmentResults.metricsByEmissionTier.allEmission,
           acceptedOnly: developmentResults.metricsByEmissionTier.acceptedOnly,
@@ -432,8 +577,20 @@ function main() {
   console.log(`  may-to-existing-action P/R: ${fmt(s.mayToExistingActionAttachment)}`);
   console.log(`  optionality scope P/R: ${fmt(s.optionalityScopeAccuracy)}`);
   console.log(`  optionality controller P/R: ${fmt(s.optionalityControllerAccuracy)}`);
-  console.log(`  condition attachment P/R: ${fmt(s.conditionToActionAttachment)}`);
-  console.log(`  validation run: no`);
+  console.log(`  if-you-do dependency P/R: ${fmt(s.ifYouDoDependency)}`);
+  console.log(`  when-you-do dependency P/R: ${fmt(s.whenYouDoDependency)}`);
+  console.log(`  general condition detection P/R: ${fmt(s.generalConditionDetection)}`);
+  console.log(`  structure annotations (Layer 1, excluded from primitive counts): ${developmentResults.emissionCounts.structureAnnotationCount ?? 0}`);
+  console.log(`  abstained clauses: ${developmentResults.emissionCounts.abstainedClauseCount}`);
+  console.log(`  genuinely unsupported: ${developmentResults.authoritativeClassification.counts.genuinely_unsupported_by_oracle}`);
+  if (allowValidation && validationResults) {
+    const v = validationResults.metricsByEmissionTier;
+    const vs = validationResults.separatedOptionalityMetrics;
+    console.log(`Validation set (${validationResults.classification}):`);
+    console.log(`  all-emission P/R: ${(v.allEmission.precision * 100).toFixed(1)}% / ${(v.allEmission.recall * 100).toFixed(1)}%`);
+    console.log(`  may in oracle text P/R: ${fmt(vs.mayDetectionInOracleText)}`);
+    console.log(`  condition-to-action P/R: ${fmt(vs.conditionToActionAttachment)}`);
+  }
   console.log(`Report: ${outPath}`);
 }
 

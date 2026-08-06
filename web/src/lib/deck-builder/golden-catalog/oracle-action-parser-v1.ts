@@ -7,6 +7,7 @@ import type {
   DerivedCardRole,
   OracleAbilityType,
   OracleActionExtractionResult,
+  OracleAbilityStructureAnnotation,
   SegmentedAbility,
 } from "./oracle-action-schema";
 import { ORACLE_ACTION_PARSER_VERSION } from "./oracle-action-schema";
@@ -18,6 +19,9 @@ import {
 } from "./oracle-ability-segmentation";
 import {
   attachOptionalityToAction,
+  attachPlayerMayPayScopes,
+  emitStructureAnnotations,
+  wireConditionsToActions,
   type ConditionType,
   type OptionalityController,
 } from "./oracle-action-optionality";
@@ -63,6 +67,8 @@ export interface OracleActionV1 {
   optionalityController?: OptionalityController;
   conditionType?: ConditionType;
   conditionText?: string;
+  conditionEvidenceStart?: number;
+  conditionEvidenceEnd?: number;
   dependsOnActionIds?: string[];
   targetMinimum?: number;
   targetMaximum?: number | "X";
@@ -77,6 +83,7 @@ export interface OracleActionV1 {
   actionId: string;
   trigger?: string;
   cost?: string;
+  optionalityCertain?: boolean;
 }
 
 export interface OracleActionV1Result {
@@ -84,6 +91,7 @@ export interface OracleActionV1Result {
   faceName?: string;
   abilities: SegmentedAbility[];
   actions: OracleActionV1[];
+  structureAnnotations: OracleAbilityStructureAnnotation[];
   derivedRoles: DerivedCardRole[];
   abstainedClauses: Array<{ text: string; start: number; end: number; reason: string }>;
   duplicateSuppressedCount: number;
@@ -112,7 +120,7 @@ interface ActionPattern {
 }
 
 const CAST_PERMISSION =
-  /\b(?:you may )?cast (?:target |this |that |the exiled |any number of (?:spells|nonland)|spells from|it\b|a spell)/i;
+  /\b(?:you may )?cast (?:target |this |that |the copy|the exiled |any number of (?:spells|nonland)|spells from|it\b|a spell)/i;
 const PLAY_PERMISSION =
   /\b(?:you may )?play (?:lands and (?:cast )?spells from|land cards from|that card|it\b|lands and spells from|an additional land|lands and cast spells from)/i;
 
@@ -127,6 +135,12 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bYou may return [\w ]+/i, actionType: "return_to_hand", destinationZones: ["hand"] },
   { pattern: /\bYou may discard [\w ]+/i, actionType: "discard", sourceZones: ["hand"], destinationZones: ["graveyard"] },
   { pattern: /\bYou may put [\w ]+ onto the battlefield/i, actionType: "search_library", destinationZones: ["battlefield"] },
+  { pattern: /\bYou may cast this spell from your graveyard\b/i, actionType: "cast", sourceZones: ["graveyard"], requiresPermissionVerb: true },
+  { pattern: /\bYou may cast the copy\b/i, actionType: "cast", sourceZones: ["exile", "stack"], requiresPermissionVerb: true },
+  { pattern: /\bYou may choose new targets for the copy\b/i, actionType: "copy", sourceZones: ["stack"] },
+  { pattern: /\byou may play that card\b/i, actionType: "play", sourceZones: ["exile"], requiresPermissionVerb: true },
+  { pattern: /\bplay an additional land\b/i, actionType: "play", sourceZones: ["hand"], requiresPermissionVerb: true },
+  { pattern: /\bput (?:a |one )?card from your hand on top of your library\b/i, actionType: "search_library", sourceZones: ["hand"], destinationZones: ["library"] },
   { pattern: /\bYou may play [\w ]+/i, actionType: "play", requiresPermissionVerb: true },
   { pattern: /\bDraw (?:a |one |two |three |four |five |seven |up to \w+ )?cards?\b/, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bAdd \{[^}]+\}(?:\{[^}]+\})*/i, actionType: "add_mana", abilityType: "activated", destinationZones: ["mana_pool"] },
@@ -143,7 +157,7 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+ (?:card )?from (?:your )?graveyard to (?:your hand|the battlefield)\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["hand", "battlefield"] },
   { pattern: /\bPut target [\w ]+ (?:card )?from a graveyard onto the battlefield\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
   { pattern: /\bSacrifice (?:a |an |target |up to one target )?[\w ]+/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
-  { pattern: /\b(?:create|creates|You may create) (?:a |an |one |up to \w+ )?(?:[\w-]+ )*tokens?\b/i, actionType: "create_token", destinationZones: ["battlefield"], affectedObjects: ["token"] },
+  { pattern: /\b(?:create|creates|You may create) (?:a |an |one |up to \w+ )?(?:[\w-/]+ )*tokens?\b/i, actionType: "create_token", destinationZones: ["battlefield"], affectedObjects: ["token"] },
   { pattern: /\bCopy target (?:instant|sorcery|spell|triggered|[\w ]+)/i, actionType: "copy", sourceZones: ["stack", "battlefield"] },
   { pattern: /\bcopy target (?:instant|sorcery|spell|triggered|[\w ]+)/i, actionType: "copy", sourceZones: ["stack", "battlefield"] },
   { pattern: /\bcopy (?:that spell|the exiled card|it)\b/i, actionType: "copy", sourceZones: ["stack", "exile"] },
@@ -158,6 +172,7 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bScry \d+\b/i, actionType: "scry", sourceZones: ["library"] },
   { pattern: /\bSurveil \d+\b/i, actionType: "surveil", sourceZones: ["library"], destinationZones: ["graveyard"] },
   { pattern: /\bTap target [\w ]+/i, actionType: "tap", sourceZones: ["battlefield"] },
+  { pattern: /\bUntap (?:target |two |three |four |five |\d+ )?[\w ]+/i, actionType: "untap", sourceZones: ["battlefield"] },
   { pattern: /\bPut (?:a |one |up to one )?\+?\/?\+?\d+\/?\+?\d+ counter/i, actionType: "put_counter", destinationZones: ["battlefield"] },
   { pattern: /\bexile it instead\b/i, actionType: "exile", abilityType: "replacement", destinationZones: ["exile"] },
   { pattern: /\b(?:shuffle|shuffles) (?:your |their )?(?:hand and graveyard|graveyard and hand|hand) into (?:your |their )?library\b/i, actionType: "shuffle_into_library", sourceZones: ["hand", "graveyard"], destinationZones: ["library"] },
@@ -302,15 +317,34 @@ function applyOptionalityPostProcess(
   abilities: SegmentedAbility[],
   oracleText: string,
 ): OracleActionV1[] {
-  return actions.map((action) => {
-    const ability = abilities.find(
-      (a) => a.abilityIndex === action.abilityIndex && a.cardFaceId === action.faceId,
-    );
-    if (!ability) return action;
+  type Enriched = OracleActionV1 & {
+    optionalityCertain?: boolean;
+    conditionEvidenceStart?: number;
+    conditionEvidenceEnd?: number;
+  };
 
-    const siblingInputs = actions
-      .filter((s) => s.abilityIndex === action.abilityIndex && s.faceId === action.faceId)
-      .map((s) => ({
+  const byAbility = new Map<string, Enriched[]>();
+  for (const action of actions) {
+    const key = `${action.faceId}:${action.abilityIndex}`;
+    const list = byAbility.get(key) ?? [];
+    list.push({ ...action });
+    byAbility.set(key, list);
+  }
+
+  const result: Enriched[] = [];
+
+  for (const [key, group] of byAbility) {
+    const [faceId, abilityIndexStr] = key.split(":");
+    const ability = abilities.find(
+      (a) => a.cardFaceId === faceId && a.abilityIndex === Number.parseInt(abilityIndexStr, 10),
+    );
+    if (!ability) {
+      result.push(...group);
+      continue;
+    }
+
+    let enriched: Enriched[] = group.map((action) => {
+      const siblings = group.map((s) => ({
         actionId: s.actionId,
         evidenceStart: s.evidenceStart,
         evidenceEnd: s.evidenceEnd,
@@ -318,61 +352,83 @@ function applyOptionalityPostProcess(
         abilityIndex: s.abilityIndex,
         abilityType: s.abilityType,
       }));
-
-    const attach = attachOptionalityToAction({
-      action: {
-        actionId: action.actionId,
-        evidenceStart: action.evidenceStart,
-        evidenceEnd: action.evidenceEnd,
-        evidenceText: action.evidenceText,
-        abilityIndex: action.abilityIndex,
-        abilityType: action.abilityType,
-      },
-      ability,
-      oracleText,
-      siblingActions: siblingInputs,
+      const attach = attachOptionalityToAction({
+        action: {
+          actionId: action.actionId,
+          evidenceStart: action.evidenceStart,
+          evidenceEnd: action.evidenceEnd,
+          evidenceText: action.evidenceText,
+          abilityIndex: action.abilityIndex,
+          abilityType: action.abilityType,
+        },
+        ability,
+        oracleText,
+        siblingActions: siblings,
+      });
+      const mergedConditions = action.conditions ?? [];
+      if (attach.conditionText && !mergedConditions.includes(attach.conditionText)) {
+        mergedConditions.push(attach.conditionText);
+      }
+      return {
+        ...action,
+        optional: attach.optionalEffect,
+        optionalEffect: attach.optionalEffect,
+        optionalCost: attach.optionalCost || undefined,
+        optionalityEvidenceText: attach.optionalityEvidenceText,
+        optionalityEvidenceStart: attach.optionalityEvidenceStart,
+        optionalityEvidenceEnd: attach.optionalityEvidenceEnd,
+        optionalityScopeId: attach.optionalityScopeId,
+        optionalityController: attach.optionalityController,
+        optionalityCertain: attach.optionalityCertain,
+        conditions: mergedConditions.length ? mergedConditions : undefined,
+      };
     });
 
-    let reviewStatus = action.reviewStatus;
-    const paragraphHasMay = /\b(?:You|An opponent|That player|Each player|Its controller) may\b/i.test(
-      ability.paragraphText,
-    );
+    enriched = wireConditionsToActions({ actions: enriched, ability });
+    enriched = attachPlayerMayPayScopes({ actions: enriched, ability });
 
-    if (paragraphHasMay && !attach.optionalityCertain && !attach.conditionType) {
-      reviewStatus = "needs_review";
-    }
-    if (
-      (attach.conditionType === "if_you_do" || attach.conditionType === "when_you_do") &&
-      !attach.dependsOnActionIds?.length
-    ) {
-      reviewStatus = "needs_review";
-    }
-    if ((attach.optionalEffect || attach.optionalCost) && !attach.optionalityCertain) {
-      reviewStatus = "needs_review";
-    }
+    for (const action of enriched) {
+      let reviewStatus = action.reviewStatus;
+      const paragraphHasMay = /\b(?:You|An opponent|That player|Each player|Its controller) may\b/i.test(
+        ability.paragraphText,
+      );
 
-    const mergedConditions = action.conditions ?? [];
-    if (attach.conditionText && !mergedConditions.includes(attach.conditionText)) {
-      mergedConditions.push(attach.conditionText);
-    }
+      if (paragraphHasMay && !action.optionalityCertain && !action.conditionType) {
+        const governed = enriched.some(
+          (o) =>
+            o.actionId !== action.actionId &&
+            (o.optionalEffect || o.optionalCost) &&
+            o.evidenceStart <= action.evidenceStart,
+        );
+        if (!governed) reviewStatus = "needs_review";
+      }
+      if (
+        (action.conditionType === "if_you_do" || action.conditionType === "when_you_do") &&
+        !action.dependsOnActionIds?.length
+      ) {
+        reviewStatus = "needs_review";
+      }
+      if ((action.optionalEffect || action.optionalCost) && !action.optionalityCertain) {
+        reviewStatus = "needs_review";
+      }
+      if (action.conditionType && !action.conditionText) {
+        reviewStatus = "needs_review";
+      }
 
-    return {
-      ...action,
-      optional: attach.optionalEffect,
-      optionalEffect: attach.optionalEffect,
-      optionalCost: attach.optionalCost || undefined,
-      optionalityEvidenceText: attach.optionalityEvidenceText,
-      optionalityEvidenceStart: attach.optionalityEvidenceStart,
-      optionalityEvidenceEnd: attach.optionalityEvidenceEnd,
-      optionalityScopeId: attach.optionalityScopeId,
-      optionalityController: attach.optionalityController,
-      conditionType: attach.conditionType,
-      conditionText: attach.conditionText,
-      dependsOnActionIds: attach.dependsOnActionIds,
-      conditions: mergedConditions.length ? mergedConditions : undefined,
-      reviewStatus,
-    };
-  });
+      const mergedConditions = action.conditions ?? [];
+      if (action.conditionText && !mergedConditions.includes(action.conditionText)) {
+        mergedConditions.push(action.conditionText);
+      }
+
+      result.push({
+        ...action,
+        conditions: mergedConditions.length ? mergedConditions : undefined,
+        reviewStatus,
+      });
+    }
+  }
+
+  return result.sort((a, b) => a.evidenceStart - b.evidenceStart || a.actionIndex - b.actionIndex);
 }
 
 function extractConditions(paragraph: string): string[] {
@@ -608,7 +664,10 @@ export function extractOracleActionsV1(input: {
   cardFace?: string;
 }): OracleActionV1Result {
   const faces = segmentCardFaces(input.oracleText);
-  const componentType = inferComponentType(input.oracleText, faces.length);
+  const componentType =
+    faces.length === 1
+      ? faces[0].componentType
+      : inferComponentType(input.oracleText, faces.length);
   const targetFaces = input.cardFace
     ? faces.filter((f) => f.faceId === input.cardFace)
     : faces;
@@ -668,6 +727,24 @@ export function extractOracleActionsV1(input: {
   const preDedupCount = rawActions.length;
   const { actions, canonicalKeyDuplicatesRemoved, semanticDuplicatesRemoved } = dedupeActions(rawActions);
   const withOptionality = applyOptionalityPostProcess(actions, abilities, input.oracleText);
+
+  const structureAnnotations: OracleAbilityStructureAnnotation[] = [];
+  for (const ability of abilities) {
+    const inAbility = withOptionality.filter(
+      (a) => a.faceId === ability.cardFaceId && a.abilityIndex === ability.abilityIndex,
+    );
+    structureAnnotations.push(
+      ...emitStructureAnnotations({
+        oracleId: input.oracleId,
+        faceId: ability.cardFaceId,
+        ability,
+        existingInAbility: inAbility,
+        parserVersion: ORACLE_ACTION_PARSER_VERSION,
+        annotationId: actionId,
+      }),
+    );
+  }
+
   const indexedActions = withOptionality.map((a, i) => ({ ...a, actionIndex: i }));
   const duplicateSuppressedCount = Math.max(0, preDedupCount - indexedActions.length);
 
@@ -676,6 +753,7 @@ export function extractOracleActionsV1(input: {
     faceName: targetFaces[0]?.faceId,
     abilities,
     actions: indexedActions,
+    structureAnnotations,
     derivedRoles: deriveRolesFromActions(indexedActions),
     abstainedClauses,
     duplicateSuppressedCount,
@@ -724,6 +802,8 @@ export function toLegacyExtractionResult(result: OracleActionV1Result): OracleAc
       optionalityController: a.optionalityController,
       conditionType: a.conditionType,
       conditionText: a.conditionText,
+      conditionEvidenceStart: a.conditionEvidenceStart,
+      conditionEvidenceEnd: a.conditionEvidenceEnd,
       dependsOnActionIds: a.dependsOnActionIds,
       targetMinimum: a.targetMinimum,
       targetMaximum: a.targetMaximum,
@@ -733,6 +813,7 @@ export function toLegacyExtractionResult(result: OracleActionV1Result): OracleAc
       confidence: a.confidence,
       reviewStatus: a.reviewStatus === "overridden" ? "overridden" : a.reviewStatus,
     })),
+    structureAnnotations: result.structureAnnotations,
     derivedRoles: result.derivedRoles,
     abstainedClauses: result.abstainedClauses,
   };

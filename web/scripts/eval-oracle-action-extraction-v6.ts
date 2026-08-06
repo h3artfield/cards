@@ -378,6 +378,7 @@ export function evaluateCaseSet(cases: OracleActionEvalCaseV2[], setName: string
   let needsReviewCount = 0;
   let abstainedActionCount = 0;
   let abstainedClauseCount = 0;
+  let structureAnnotationCount = 0;
   let evidenceValid = 0;
   let evidenceTotal = 0;
 
@@ -458,6 +459,7 @@ export function evaluateCaseSet(cases: OracleActionEvalCaseV2[], setName: string
     semanticDuplicatesRemoved += raw.semanticDuplicatesRemoved;
     uniqueActionsEnteringEvaluation += raw.actions.length;
     abstainedClauseCount += raw.abstainedClauses.length;
+    structureAnnotationCount += raw.structureAnnotations.length;
 
     const extraction = toLegacyExtractionResult(raw);
     const actionViews: ExtractedActionView[] = extraction.actions.map((a, index) => ({
@@ -779,8 +781,10 @@ export function evaluateCaseSet(cases: OracleActionEvalCaseV2[], setName: string
       needsReviewActions: needsReviewCount,
       abstainedActions: abstainedActionCount,
       abstainedClauseCount,
+      structureAnnotationCount,
       needsReviewRate,
       needsReviewRateDenominator: "needs_review_actions / total_extracted_actions",
+      structureAnnotationsExcludedFromPrimitiveCounts: true,
     },
     metricsByEmissionTier: {
       allEmission,
@@ -838,11 +842,11 @@ function main() {
   const devV1Path = resolve(process.cwd(), "data", "oracle-action-eval-development-v1.json");
   const devAdjudicationPath = resolve(process.cwd(), "reports", "oracle-action-development-missing-label-adjudication.json");
   const validationAccessLogPath = resolve(process.cwd(), "data", "oracle-action-validation-access-log.json");
-  let devPath = resolve(process.cwd(), "data", "oracle-action-eval-development-v3.json");
+  let devPath = resolve(process.cwd(), "data", "oracle-action-eval-development-v4.json");
   try {
     readFileSync(devPath, "utf8");
   } catch {
-    devPath = resolve(process.cwd(), "data", "oracle-action-eval-development-v2.json");
+    devPath = resolve(process.cwd(), "data", "oracle-action-eval-development-v3.json");
   }
 
   const dev = JSON.parse(readFileSync(devPath, "utf8")) as {

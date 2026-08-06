@@ -1,25 +1,34 @@
 {
   "developmentSet": {
-    "path": "data/oracle-action-eval-development-v3.json",
-    "classification": "development_set_v3",
-    "contentHash": "4a69de72c991c3a3173b4e5efe54ccf96f4c171e11c3f6edd1a0a256573d76d9",
+    "path": "data/oracle-action-eval-development-v4.json",
+    "classification": "development_set_v4",
+    "contentHash": "d8acd3ed4752b90f9d7c0f966c221cce3d93cb8766fa2b238f59d080c292a684",
     "caseCount": 256,
-    "purpose": "Parser tuning — may scope / optionality attachment (v1.5+)",
-    "upToGoldCaseCount": 31,
+    "taxonomyVersion": "three-layer-v1.1",
+    "purpose": "Parser tuning — optionality/condition v1.6 (structure annotations)",
     "parentVersion": {
-      "classification": "development_set_v2",
-      "contentHash": "51ae89777f0f67e6196671a90a7d3f3f79ea2d10a9847b692772399acbcc83ca",
-      "caseCount": 228,
-      "path": "data/oracle-action-eval-development-v2.json"
+      "classification": "development_set_v3",
+      "contentHash": "4a69de72c991c3a3173b4e5efe54ccf96f4c171e11c3f6edd1a0a256573d76d9",
+      "caseCount": 256,
+      "path": "data/oracle-action-eval-development-v3.json"
     },
+    "diffManifest": "data/oracle-action-eval-development-v4-diff.json",
     "priorVersions": [
       {
         "path": "data/oracle-action-eval-development-v2.json",
         "classification": "development_set_v2",
         "contentHash": "51ae89777f0f67e6196671a90a7d3f3f79ea2d10a9847b692772399acbcc83ca",
         "caseCount": 228,
-        "supersededAt": "2026-08-06T19:54:10.823Z",
+        "supersededAt": "2026-08-06T20:39:13.164Z",
         "reason": "Expanded to v3 with up-to gold and legacy optional relabel"
+      },
+      {
+        "path": "data/oracle-action-eval-development-v3.json",
+        "classification": "development_set_v3",
+        "contentHash": "4a69de72c991c3a3173b4e5efe54ccf96f4c171e11c3f6edd1a0a256573d76d9",
+        "caseCount": 256,
+        "supersededAt": "2026-08-06T21:18:25.466Z",
+        "reason": "Gold-label corrections moved to v4; v3 frozen immutable"
       }
     ]
   },
@@ -70,5 +79,13 @@
     "caseCount": 228,
     "purpose": "Frozen at parser v1.4 — immutable, do not modify",
     "frozenAt": "2026-08-06T14:48:01.736Z"
+  },
+  "developmentSetV3": {
+    "path": "data/oracle-action-eval-development-v3.json",
+    "classification": "development_set_v3",
+    "contentHash": "4a69de72c991c3a3173b4e5efe54ccf96f4c171e11c3f6edd1a0a256573d76d9",
+    "caseCount": 256,
+    "purpose": "Frozen at parser v1.5 checkpoint — immutable, do not modify",
+    "frozenAt": "2026-08-06T19:54:10.823Z"
   }
 }
