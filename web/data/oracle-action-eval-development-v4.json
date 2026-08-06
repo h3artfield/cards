@@ -1,17 +1,22 @@
 {
   "setClassification": "development_set_v4",
-  "evaluationVersion": "development-v4",
-  "contentHash": "d8acd3ed4752b90f9d7c0f966c221cce3d93cb8766fa2b238f59d080c292a684",
+  "evaluationVersion": "development-v4-multiface",
+  "contentHash": "4f77dff047ba898c00844ff4e1b702e0d84fc85b81e91b11646f266f2365d56a",
   "taxonomyVersion": "three-layer-v1.1",
-  "caseCount": 256,
-  "frozenAt": "2026-08-06T21:18:25.466Z",
-  "usagePolicy": "Parser tuning set — optionality/condition v1.6+ (structure annotations, taxonomy v1.1).",
-  "parentClassification": "development_set_v3",
-  "parentContentHash": "4a69de72c991c3a3173b4e5efe54ccf96f4c171e11c3f6edd1a0a256573d76d9",
-  "parentSetPath": "data/oracle-action-eval-development-v3.json",
-  "parentCaseCount": 256,
-  "creationReason": "Paragraph-scoped legacy optional relabel (eval-0053 draw/return false optional) and eval-0120 duplicate cast/play dedup. v3 identity preserved.",
-  "legacyOptionalAdjudications": 40,
+  "caseCount": 272,
+  "frozenAt": "2026-08-06T21:59:23.267Z",
+  "usagePolicy": "Parser tuning set — multiface v1.7 (face segmentation, per-component parsing).",
+  "parentClassification": "development_set_v4",
+  "parentContentHash": "e213cdd31ae9f0942255eab86d44af804faa7d8d61784078fdaa69ad26e397fb",
+  "parentCaseCount": 270,
+  "multifaceGoldSupport": {
+    "split": 6,
+    "mdfc": 6,
+    "aftermath": 3,
+    "adventure": 3,
+    "room": 3,
+    "transform": 3
+  },
   "cases": [
     {
       "id": "eval-0001",
@@ -924,6 +929,11 @@
       },
       "expectedPrimitiveActions": [
         {
+          "actionType": "tap",
+          "evidenceContains": "Tap target permanent",
+          "cardFace": "back"
+        },
+        {
           "actionType": "draw",
           "evidenceContains": "Draw a card",
           "cardFace": "back"
@@ -936,6 +946,25 @@
             "draw"
           ]
         }
+      ],
+      "layout": "split",
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "Fire deals 2 damage divided as you choose among one or two targets.",
+          "faceIndex": 0,
+          "componentType": "split_half",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 67
+        },
+        {
+          "faceId": "back",
+          "faceName": "Tap target permanent.",
+          "faceIndex": 1,
+          "componentType": "split_half",
+          "cardEvidenceStart": 71,
+          "cardEvidenceEnd": 105
+        }
       ]
     },
     {
@@ -946,7 +975,13 @@
       "expectedPrimitiveActions": [
         {
           "actionType": "destroy",
-          "evidenceContains": "Destroy target artifact"
+          "evidenceContains": "Destroy target artifact",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target enchantment",
+          "cardFace": "back"
         }
       ],
       "expectedRoles": [
@@ -955,6 +990,25 @@
           "fromPrimitiveActions": [
             "destroy"
           ]
+        }
+      ],
+      "layout": "split",
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "Destroy target artifact.",
+          "faceIndex": 0,
+          "componentType": "split_half",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 24
+        },
+        {
+          "faceId": "back",
+          "faceName": "Destroy target enchantment.",
+          "faceIndex": 1,
+          "componentType": "split_half",
+          "cardEvidenceStart": 28,
+          "cardEvidenceEnd": 55
         }
       ]
     },
@@ -966,13 +1020,38 @@
       "expectedPrimitiveActions": [
         {
           "actionType": "return_to_hand",
-          "evidenceContains": "Return target"
+          "evidenceContains": "Return target nonland permanent",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "return target nonland permanent",
+          "cardFace": "back"
+        }
+      ],
+      "layout": "mdfc",
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "Return target nonland permanent to its owner's hand.",
+          "faceIndex": 0,
+          "componentType": "split_half",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 65
+        },
+        {
+          "faceId": "back",
+          "faceName": "Flying",
+          "faceIndex": 1,
+          "componentType": "split_half",
+          "cardEvidenceStart": 69,
+          "cardEvidenceEnd": 155
         }
       ]
     },
     {
       "id": "eval-0047",
-      "category": "split/adventure",
+      "category": "auras",
       "oracleId": "eval-oracle-47",
       "oracleText": "Enchant creature\nWhen this Aura enters, draw a card.\nEnchanted creature gets +1/+1 and has \"Whenever this creature deals combat damage to a player, draw a card.\"",
       "expectedPrimitiveActions": [
@@ -996,7 +1075,7 @@
     },
     {
       "id": "eval-0048",
-      "category": "split/adventure",
+      "category": "creatures",
       "oracleId": "eval-oracle-48",
       "oracleText": "Flying\nDelve\nThis spell costs {1} less to cast for each instant and sorcery card in your graveyard.\nWhenever this creature attacks, put a +1/+1 counter on it.",
       "expectedStructure": {
@@ -3192,11 +3271,18 @@
       "expectedPrimitiveActions": [
         {
           "actionType": "draw",
-          "evidenceContains": "Draw"
+          "evidenceContains": "Draw a card",
+          "cardFace": "front"
         },
         {
           "actionType": "destroy",
-          "evidenceContains": "Destroy target artifact"
+          "evidenceContains": "Destroy target artifact",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "cardFace": "back"
         }
       ],
       "expectedRoles": [
@@ -3205,6 +3291,25 @@
           "fromPrimitiveActions": [
             "draw"
           ]
+        }
+      ],
+      "layout": "mdfc",
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "• Draw a card.",
+          "faceIndex": 0,
+          "componentType": "split_half",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 54
+        },
+        {
+          "faceId": "back",
+          "faceName": "Flying",
+          "faceIndex": 1,
+          "componentType": "split_half",
+          "cardEvidenceStart": 58,
+          "cardEvidenceEnd": 104
         }
       ]
     },
@@ -3215,20 +3320,41 @@
       "oracleText": "Search your library for a basic land.\n//\n{T}: Add {G}.",
       "expectedPrimitiveActions": [
         {
-          "actionType": "draw",
-          "evidenceContains": "Draw"
+          "actionType": "search_library",
+          "evidenceContains": "Search your library",
+          "cardFace": "front"
         },
         {
-          "actionType": "search_library",
-          "evidenceContains": "Search your library for"
+          "actionType": "add_mana",
+          "evidenceContains": "Add {G}",
+          "cardFace": "back"
         }
       ],
       "expectedRoles": [
         {
-          "role": "card_advantage",
+          "role": "ramp",
           "fromPrimitiveActions": [
-            "draw"
+            "add_mana"
           ]
+        }
+      ],
+      "layout": "mdfc",
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "Search your library for a basic land.",
+          "faceIndex": 0,
+          "componentType": "split_half",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 37
+        },
+        {
+          "faceId": "back",
+          "faceName": "{T}: Add {G}.",
+          "faceIndex": 1,
+          "componentType": "split_half",
+          "cardEvidenceStart": 41,
+          "cardEvidenceEnd": 54
         }
       ]
     },
@@ -3239,20 +3365,29 @@
       "oracleText": "Counter target spell.\n//\nFlash\nFlying",
       "expectedPrimitiveActions": [
         {
-          "actionType": "draw",
-          "evidenceContains": "Draw"
-        },
-        {
           "actionType": "counter",
-          "evidenceContains": "Counter target spell"
+          "evidenceContains": "Counter target spell",
+          "cardFace": "front"
         }
       ],
-      "expectedRoles": [
+      "expectedRoles": [],
+      "layout": "mdfc",
+      "expectedFaces": [
         {
-          "role": "card_advantage",
-          "fromPrimitiveActions": [
-            "draw"
-          ]
+          "faceId": "front",
+          "faceName": "Counter target spell.",
+          "faceIndex": 0,
+          "componentType": "split_half",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 21
+        },
+        {
+          "faceId": "back",
+          "faceName": "Flash",
+          "faceIndex": 1,
+          "componentType": "split_half",
+          "cardEvidenceStart": 25,
+          "cardEvidenceEnd": 37
         }
       ]
     },
@@ -3587,12 +3722,14 @@
       "oracleText": "Destroy target creature.\nAftermath\nExile target card from a graveyard.",
       "expectedPrimitiveActions": [
         {
-          "actionType": "exile",
-          "evidenceContains": "Exile"
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target creature",
+          "cardFace": "front"
         },
         {
-          "actionType": "destroy",
-          "evidenceContains": "Destroy target creature"
+          "actionType": "exile",
+          "evidenceContains": "Exile target card",
+          "cardFace": "aftermath"
         }
       ],
       "expectedRoles": [
@@ -3601,6 +3738,25 @@
           "fromPrimitiveActions": [
             "exile"
           ]
+        }
+      ],
+      "layout": "aftermath",
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "Destroy target creature.",
+          "faceIndex": 0,
+          "componentType": "single_face",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 24
+        },
+        {
+          "faceId": "aftermath",
+          "faceName": "Exile target card from a graveyard.",
+          "faceIndex": 1,
+          "componentType": "aftermath_half",
+          "cardEvidenceStart": 35,
+          "cardEvidenceEnd": 70
         }
       ]
     },
@@ -3611,24 +3767,47 @@
       "oracleText": "Return target creature to its owner's hand.\nAftermath\nDraw two cards.",
       "expectedPrimitiveActions": [
         {
-          "actionType": "exile",
-          "evidenceContains": "Exile"
-        },
-        {
           "actionType": "return_to_hand",
-          "evidenceContains": "Return target creature to its owner's hand"
+          "evidenceContains": "Return target creature",
+          "cardFace": "front"
         },
         {
           "actionType": "draw",
-          "evidenceContains": "Draw two cards"
+          "evidenceContains": "Draw two cards",
+          "cardFace": "aftermath"
         }
       ],
       "expectedRoles": [
         {
           "role": "removal",
           "fromPrimitiveActions": [
-            "exile"
+            "return_to_hand"
           ]
+        },
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "layout": "aftermath",
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "Return target creature to its owner's hand.",
+          "faceIndex": 0,
+          "componentType": "single_face",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 43
+        },
+        {
+          "faceId": "aftermath",
+          "faceName": "Draw two cards.",
+          "faceIndex": 1,
+          "componentType": "aftermath_half",
+          "cardEvidenceStart": 54,
+          "cardEvidenceEnd": 69
         }
       ]
     },
@@ -4595,6 +4774,588 @@
           "actionType": "play",
           "evidenceContains": "play lands and cast spells from your graveyard",
           "optionalEffect": true
+        }
+      ]
+    },
+    {
+      "id": "eval-0257",
+      "category": "split/adventure",
+      "layout": "split",
+      "oracleId": "eval-oracle-257",
+      "oracleText": "Destroy target creature.\n//\nTarget player gains 3 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target creature",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gains 3 life",
+          "cardFace": "back"
+        }
+      ],
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "Destroy target creature.",
+          "faceIndex": 0,
+          "componentType": "split_half",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 24
+        },
+        {
+          "faceId": "back",
+          "faceName": "Target player gains 3 life.",
+          "faceIndex": 1,
+          "componentType": "split_half",
+          "cardEvidenceStart": 28,
+          "cardEvidenceEnd": 55
+        }
+      ]
+    },
+    {
+      "id": "eval-0258",
+      "category": "split/adventure",
+      "layout": "split",
+      "oracleId": "eval-oracle-258",
+      "oracleText": "Flying\n(This creature can't be blocked except by creatures with flying.)\n//\nDraw two cards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw two cards",
+          "cardFace": "back"
+        }
+      ],
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "(This creature can't be blocked except by creatures with flying.)",
+          "faceIndex": 0,
+          "componentType": "split_half",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 72
+        },
+        {
+          "faceId": "back",
+          "faceName": "Draw two cards.",
+          "faceIndex": 1,
+          "componentType": "split_half",
+          "cardEvidenceStart": 76,
+          "cardEvidenceEnd": 91
+        }
+      ]
+    },
+    {
+      "id": "eval-0259",
+      "category": "split/adventure",
+      "layout": "split",
+      "oracleId": "eval-oracle-259",
+      "oracleText": "Surveil 2, then draw a card.\n//\nReturn target nonland permanent to its owner's hand.\nDestroy target artifact.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "surveil",
+          "evidenceContains": "Surveil 2",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target nonland permanent",
+          "cardFace": "back"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target artifact",
+          "cardFace": "back"
+        }
+      ],
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "Surveil 2, then draw a card.",
+          "faceIndex": 0,
+          "componentType": "split_half",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 28
+        },
+        {
+          "faceId": "back",
+          "faceName": "Return target nonland permanent to its owner's hand.",
+          "faceIndex": 1,
+          "componentType": "split_half",
+          "cardEvidenceStart": 32,
+          "cardEvidenceEnd": 109
+        }
+      ]
+    },
+    {
+      "id": "eval-0260",
+      "category": "split/adventure",
+      "layout": "adventure",
+      "oracleId": "eval-oracle-260",
+      "oracleText": "Creature — Elf Warrior\n3/2\n//\nInstant — Adventure\nDeal 3 damage to any target.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "Deal 3 damage",
+          "cardFace": "back"
+        }
+      ],
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "3/2",
+          "faceIndex": 0,
+          "componentType": "adventure_creature",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 26
+        },
+        {
+          "faceId": "back",
+          "faceName": "Deal 3 damage to any target.",
+          "faceIndex": 1,
+          "componentType": "adventure",
+          "cardEvidenceStart": 30,
+          "cardEvidenceEnd": 78
+        }
+      ]
+    },
+    {
+      "id": "eval-0261",
+      "category": "split/adventure",
+      "layout": "adventure",
+      "oracleId": "eval-oracle-261",
+      "oracleText": "Whenever this creature attacks, draw a card.\n//\nInstant — Adventure\nSearch your library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library",
+          "cardFace": "back"
+        }
+      ],
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "Whenever this creature attacks, draw a card.",
+          "faceIndex": 0,
+          "componentType": "split_half",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 44
+        },
+        {
+          "faceId": "back",
+          "faceName": "Search your library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+          "faceIndex": 1,
+          "componentType": "adventure",
+          "cardEvidenceStart": 48,
+          "cardEvidenceEnd": 160
+        }
+      ]
+    },
+    {
+      "id": "eval-0262",
+      "category": "split/adventure",
+      "layout": "adventure",
+      "oracleId": "eval-oracle-262",
+      "oracleText": "Defender\n//\nSorcery — Adventure\nExile target creature.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target creature",
+          "cardFace": "back"
+        }
+      ],
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "Defender",
+          "faceIndex": 0,
+          "componentType": "split_half",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 8
+        },
+        {
+          "faceId": "back",
+          "faceName": "Exile target creature.",
+          "faceIndex": 1,
+          "componentType": "adventure",
+          "cardEvidenceStart": 12,
+          "cardEvidenceEnd": 54
+        }
+      ]
+    },
+    {
+      "id": "eval-0263",
+      "category": "sagas and rooms",
+      "layout": "room",
+      "oracleId": "eval-oracle-263",
+      "oracleText": "Room — Dungeon\nWhen you unlock this door, draw a card.\n//\nRoom — Lair\nWhen you unlock this door, create a 1/1 black Rat creature token.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "cardFace": "left"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a 1/1 black Rat",
+          "cardFace": "right"
+        }
+      ],
+      "expectedFaces": [
+        {
+          "faceId": "left",
+          "faceName": "Room — Dungeon",
+          "faceIndex": 0,
+          "componentType": "room_left",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 54
+        },
+        {
+          "faceId": "right",
+          "faceName": "Room — Lair",
+          "faceIndex": 1,
+          "componentType": "room_right",
+          "cardEvidenceStart": 58,
+          "cardEvidenceEnd": 135
+        }
+      ]
+    },
+    {
+      "id": "eval-0264",
+      "category": "sagas and rooms",
+      "layout": "room",
+      "oracleId": "eval-oracle-264",
+      "oracleText": "Room — Mirror\nWhen you unlock this door, destroy target artifact.\n//\nRoom — Vault\nWhen you unlock this door, draw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "destroy target artifact",
+          "cardFace": "left"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "cardFace": "right"
+        }
+      ],
+      "expectedFaces": [
+        {
+          "faceId": "left",
+          "faceName": "Room — Mirror",
+          "faceIndex": 0,
+          "componentType": "room_left",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 65
+        },
+        {
+          "faceId": "right",
+          "faceName": "Room — Vault",
+          "faceIndex": 1,
+          "componentType": "room_right",
+          "cardEvidenceStart": 69,
+          "cardEvidenceEnd": 121
+        }
+      ]
+    },
+    {
+      "id": "eval-0265",
+      "category": "transforming cards",
+      "layout": "transform",
+      "oracleId": "eval-oracle-265",
+      "oracleText": "Daybound\nWhen this creature transforms into Daybound, draw a card.\n//\nNightbound\nWhenever this creature attacks, create a 2/2 Wolf creature token.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a 2/2 Wolf",
+          "cardFace": "back"
+        }
+      ],
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "Daybound",
+          "faceIndex": 0,
+          "componentType": "transform_front",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 66
+        },
+        {
+          "faceId": "back",
+          "faceName": "Nightbound",
+          "faceIndex": 1,
+          "componentType": "transform_back",
+          "cardEvidenceStart": 70,
+          "cardEvidenceEnd": 146
+        }
+      ]
+    },
+    {
+      "id": "eval-0266",
+      "category": "transforming cards",
+      "layout": "transform",
+      "oracleId": "eval-oracle-266",
+      "oracleText": "Daybound\nWhen this creature enters, draw a card.\n//\nNightbound\nThis creature gets +2/+2 as long as it's night.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "cardFace": "front"
+        }
+      ],
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "Daybound",
+          "faceIndex": 0,
+          "componentType": "transform_front",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 48
+        },
+        {
+          "faceId": "back",
+          "faceName": "This creature gets +2/+2 as long as it's night.",
+          "faceIndex": 1,
+          "componentType": "transform_back",
+          "cardEvidenceStart": 52,
+          "cardEvidenceEnd": 110
+        }
+      ]
+    },
+    {
+      "id": "eval-0267",
+      "category": "modal double-faced",
+      "layout": "mdfc",
+      "oracleId": "eval-oracle-267",
+      "oracleText": "Choose one —\n• Counter target spell.\n• Destroy target artifact.\n//\nFlash\nWhen this creature enters, draw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target spell",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target artifact",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "cardFace": "back"
+        }
+      ],
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "• Counter target spell.",
+          "faceIndex": 0,
+          "componentType": "split_half",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 63
+        },
+        {
+          "faceId": "back",
+          "faceName": "Flash",
+          "faceIndex": 1,
+          "componentType": "split_half",
+          "cardEvidenceStart": 67,
+          "cardEvidenceEnd": 112
+        }
+      ]
+    },
+    {
+      "id": "eval-0268",
+      "category": "aftermath",
+      "layout": "aftermath",
+      "oracleId": "eval-oracle-268",
+      "oracleText": "Destroy target artifact.\nAftermath\nDraw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target artifact",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card",
+          "cardFace": "aftermath"
+        }
+      ],
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "Destroy target artifact.",
+          "faceIndex": 0,
+          "componentType": "single_face",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 24
+        },
+        {
+          "faceId": "aftermath",
+          "faceName": "Draw a card.",
+          "faceIndex": 1,
+          "componentType": "aftermath_half",
+          "cardEvidenceStart": 35,
+          "cardEvidenceEnd": 47
+        }
+      ]
+    },
+    {
+      "id": "eval-0269",
+      "category": "split/adventure",
+      "layout": "split",
+      "oracleId": "eval-oracle-269",
+      "oracleText": "Draw a card.\n//\nDraw two cards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw two cards",
+          "cardFace": "back"
+        }
+      ],
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "Draw a card.",
+          "faceIndex": 0,
+          "componentType": "split_half",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 12
+        },
+        {
+          "faceId": "back",
+          "faceName": "Draw two cards.",
+          "faceIndex": 1,
+          "componentType": "split_half",
+          "cardEvidenceStart": 16,
+          "cardEvidenceEnd": 31
+        }
+      ]
+    },
+    {
+      "id": "eval-0270",
+      "category": "modal double-faced",
+      "layout": "mdfc",
+      "oracleId": "eval-oracle-270",
+      "oracleText": "Flash\nFlying\n//\nWhen this creature dies, draw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "cardFace": "back"
+        }
+      ],
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "Flash",
+          "faceIndex": 0,
+          "componentType": "split_half",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 12
+        },
+        {
+          "faceId": "back",
+          "faceName": "When this creature dies, draw a card.",
+          "faceIndex": 1,
+          "componentType": "split_half",
+          "cardEvidenceStart": 16,
+          "cardEvidenceEnd": 53
+        }
+      ]
+    },
+    {
+      "id": "eval-0271",
+      "category": "sagas and rooms",
+      "layout": "room",
+      "oracleId": "eval-oracle-271",
+      "oracleText": "Room — Study\nWhen you unlock this door, each player draws a card.\n//\nRoom — Sanctuary\nWhen you unlock this door, destroy target creature.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draws a card",
+          "cardFace": "left"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "destroy target creature",
+          "cardFace": "right"
+        }
+      ],
+      "expectedFaces": [
+        {
+          "faceId": "left",
+          "faceName": "Room — Study",
+          "faceIndex": 0,
+          "componentType": "room_left",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 65
+        },
+        {
+          "faceId": "right",
+          "faceName": "Room — Sanctuary",
+          "faceIndex": 1,
+          "componentType": "room_right",
+          "cardEvidenceStart": 69,
+          "cardEvidenceEnd": 137
+        }
+      ]
+    },
+    {
+      "id": "eval-0272",
+      "category": "transforming cards",
+      "layout": "transform",
+      "oracleId": "eval-oracle-272",
+      "oracleText": "Daybound\nWhen this creature dies, draw a card.\n//\nNightbound\nWhenever this creature attacks, you gain 1 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 1 life",
+          "cardFace": "back"
+        }
+      ],
+      "expectedFaces": [
+        {
+          "faceId": "front",
+          "faceName": "Daybound",
+          "faceIndex": 0,
+          "componentType": "transform_front",
+          "cardEvidenceStart": 0,
+          "cardEvidenceEnd": 46
+        },
+        {
+          "faceId": "back",
+          "faceName": "Nightbound",
+          "faceIndex": 1,
+          "componentType": "transform_back",
+          "cardEvidenceStart": 50,
+          "cardEvidenceEnd": 109
         }
       ]
     }

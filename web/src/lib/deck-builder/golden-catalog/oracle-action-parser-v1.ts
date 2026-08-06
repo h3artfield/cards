@@ -15,6 +15,7 @@ import {
   classifyAbilityType,
   segmentAbilities,
   segmentCardFaces,
+  type SegmentedCardFace,
   validateEvidenceSpan,
 } from "./oracle-ability-segmentation";
 import {
@@ -76,6 +77,10 @@ export interface OracleActionV1 {
   evidenceText: string;
   evidenceStart: number;
   evidenceEnd: number;
+  cardEvidenceStart: number;
+  cardEvidenceEnd: number;
+  faceEvidenceStart: number;
+  faceEvidenceEnd: number;
   extractionMethod: OracleActionV1ExtractionMethod;
   confidence: number;
   parserVersion: string;
@@ -214,22 +219,8 @@ function canonicalDedupKey(input: {
   ].join("|");
 }
 
-function inferComponentType(oracleText: string, faceCount: number): CardFaceComponentType {
-  if (faceCount > 1) {
-    if (/\bAftermath\b/i.test(oracleText)) return "adventure";
-    if (/\bRoom\b/i.test(oracleText)) return "room";
-    return "split";
-  }
-  if (/\bSaga\b/i.test(oracleText) || /\b(I|II|III|IV|V) —/m.test(oracleText)) return "saga";
-  if (/\bClass \d+/i.test(oracleText)) return "class";
-  if (/\b(Daybound|Nightbound)\b/i.test(oracleText)) return "transform";
-  if (/\b\/\/\n/.test(oracleText)) return "mdfc";
-  return "single";
-}
-
-function faceDisplayName(faceId: string, faceIndex: number): string | undefined {
-  if (faceId === "front" && faceIndex === 0) return undefined;
-  return faceId;
+function faceDisplayName(face: SegmentedCardFace): string {
+  return face.faceName;
 }
 
 function toV1AbilityType(type: OracleAbilityType | "unknown"): OracleActionV1AbilityType {
@@ -465,16 +456,14 @@ function assignReviewStatus(input: {
   if (/\bthen\b|\band then\b/i.test(input.paragraph)) return "needs_review";
   if (input.actionType === "play" && /\bcast\b/i.test(input.evidenceText)) return "needs_review";
   if (input.actionType === "cast" && /\bplay land\b/i.test(input.evidenceText)) return "needs_review";
-  if (input.componentType !== "single" && input.confidence < 0.9) return "needs_review";
+  if (input.componentType !== "single_face" && input.confidence < 0.9) return "needs_review";
   return "accepted";
 }
 
 function acceptAction(input: {
   oracleId: string;
   oracleText: string;
-  faceId: string;
-  faceIndex: number;
-  componentType: CardFaceComponentType;
+  face: SegmentedCardFace;
   ability: SegmentedAbility;
   match: RegExpMatchArray;
   rule: ActionPattern;
@@ -490,9 +479,11 @@ function acceptAction(input: {
     }
   }
 
-  const evidenceStart = input.ability.paragraphStart + localStart;
-  const evidenceEnd = evidenceStart + evidenceText.length;
-  const span = validateEvidenceSpan(input.oracleText, evidenceText, evidenceStart, evidenceEnd);
+  const cardEvidenceStart = input.ability.paragraphStart + localStart;
+  const cardEvidenceEnd = cardEvidenceStart + evidenceText.length;
+  const faceEvidenceStart = cardEvidenceStart - input.face.start;
+  const faceEvidenceEnd = cardEvidenceEnd - input.face.start;
+  const span = validateEvidenceSpan(input.oracleText, evidenceText, cardEvidenceStart, cardEvidenceEnd);
   if (!span.valid) return null;
 
   const classified =
@@ -509,7 +500,7 @@ function acceptAction(input: {
   let confidence = 0.9;
   if (abilityType === "replacement") confidence = 0.78;
   if (/\bthen\b/i.test(input.ability.paragraphText)) confidence = 0.8;
-  if (input.componentType !== "single") confidence = Math.min(confidence, 0.85);
+  if (input.face.componentType !== "single_face") confidence = Math.min(confidence, 0.85);
 
   const reviewStatus = assignReviewStatus({
     abilityType,
@@ -517,22 +508,22 @@ function acceptAction(input: {
     confidence,
     paragraph: input.ability.paragraphText,
     evidenceText,
-    componentType: input.componentType,
+    componentType: input.face.componentType,
   });
 
   return {
     actionId: actionId([
       input.oracleId,
-      input.faceId,
+      input.face.faceId,
       String(input.ability.abilityIndex),
       String(input.actionIndex),
       evidenceText,
     ]),
     oracleId: input.oracleId,
-    faceId: input.faceId,
-    faceName: faceDisplayName(input.faceId, input.faceIndex),
-    faceIndex: input.faceIndex,
-    componentType: input.componentType,
+    faceId: input.face.faceId,
+    faceName: faceDisplayName(input.face),
+    faceIndex: input.face.faceIndex,
+    componentType: input.face.componentType,
     abilityIndex: input.ability.abilityIndex,
     actionIndex: input.actionIndex,
     abilityType,
@@ -548,8 +539,12 @@ function acceptAction(input: {
     targetMaximum: targetConstraint.targetMaximum,
     quantityMayBeZero: targetConstraint.quantityMayBeZero,
     evidenceText,
-    evidenceStart,
-    evidenceEnd,
+    evidenceStart: cardEvidenceStart,
+    evidenceEnd: cardEvidenceEnd,
+    cardEvidenceStart,
+    cardEvidenceEnd,
+    faceEvidenceStart,
+    faceEvidenceEnd,
     extractionMethod: "deterministic",
     confidence,
     parserVersion: ORACLE_ACTION_PARSER_VERSION,
@@ -664,10 +659,6 @@ export function extractOracleActionsV1(input: {
   cardFace?: string;
 }): OracleActionV1Result {
   const faces = segmentCardFaces(input.oracleText);
-  const componentType =
-    faces.length === 1
-      ? faces[0].componentType
-      : inferComponentType(input.oracleText, faces.length);
   const targetFaces = input.cardFace
     ? faces.filter((f) => f.faceId === input.cardFace)
     : faces;
@@ -684,8 +675,8 @@ export function extractOracleActionsV1(input: {
   let actionIndex = 0;
 
   for (const ability of abilities) {
-    const face = targetFaces.find((f) => f.faceId === ability.cardFaceId) ?? targetFaces[0];
-    const faceIndex = faces.findIndex((f) => f.faceId === ability.cardFaceId);
+    const face = faces.find((f) => f.faceId === ability.cardFaceId);
+    if (!face) continue;
     let matched = false;
     const abilityMatches: OracleActionV1[] = [];
 
@@ -696,9 +687,7 @@ export function extractOracleActionsV1(input: {
       const action = acceptAction({
         oracleId: input.oracleId,
         oracleText: input.oracleText,
-        faceId: ability.cardFaceId,
-        faceIndex: faceIndex >= 0 ? faceIndex : 0,
-        componentType,
+        face,
         ability,
         match,
         rule,
@@ -730,13 +719,14 @@ export function extractOracleActionsV1(input: {
 
   const structureAnnotations: OracleAbilityStructureAnnotation[] = [];
   for (const ability of abilities) {
+    const face = faces.find((f) => f.faceId === ability.cardFaceId);
     const inAbility = withOptionality.filter(
       (a) => a.faceId === ability.cardFaceId && a.abilityIndex === ability.abilityIndex,
     );
     structureAnnotations.push(
       ...emitStructureAnnotations({
         oracleId: input.oracleId,
-        faceId: ability.cardFaceId,
+        face,
         ability,
         existingInAbility: inAbility,
         parserVersion: ORACLE_ACTION_PARSER_VERSION,
@@ -793,6 +783,10 @@ export function toLegacyExtractionResult(result: OracleActionV1Result): OracleAc
       evidenceText: a.evidenceText,
       evidenceStart: a.evidenceStart,
       evidenceEnd: a.evidenceEnd,
+      cardEvidenceStart: a.cardEvidenceStart,
+      cardEvidenceEnd: a.cardEvidenceEnd,
+      faceEvidenceStart: a.faceEvidenceStart,
+      faceEvidenceEnd: a.faceEvidenceEnd,
       optionalEffect: a.optionalEffect,
       optionalCost: a.optionalCost,
       optionalityEvidenceText: a.optionalityEvidenceText,

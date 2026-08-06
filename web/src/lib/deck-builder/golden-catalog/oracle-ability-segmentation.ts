@@ -2,80 +2,178 @@ import type { CardFaceComponentType, OracleAbilityType, SegmentedAbility } from 
 
 export interface SegmentedCardFace {
   faceId: string;
-  faceName?: string;
+  faceName: string;
+  faceIndex: number;
   text: string;
+  /** Card-relative span start (inclusive). */
   start: number;
+  /** Card-relative span end (exclusive). */
   end: number;
+  /** Face-relative span is always [0, text.length). */
+  faceEvidenceStart: number;
+  faceEvidenceEnd: number;
+  cardEvidenceStart: number;
+  cardEvidenceEnd: number;
   componentType: CardFaceComponentType;
 }
 
-/** Split oracle text into card faces (split, adventure, MDFC, room). */
-export function segmentCardFaces(oracleText: string): SegmentedCardFace[] {
-  const normalized = oracleText.replace(/\r\n/g, "\n");
-  const splitPattern = /\n\/\/\n|\n\/\/\s*\n|(?:^|\n)\s*\/\/\s*\n/;
-  const parts = normalized.split(splitPattern);
-  if (parts.length === 1) {
-    return [
-      {
-        faceId: "front",
-        text: normalized,
-        start: 0,
-        end: normalized.length,
-        componentType: inferSingleFaceComponentType(normalized),
-      },
-    ];
+const TYPE_LINE =
+  /\b(?:Instant|Sorcery|Creature|Land|Artifact|Enchantment|Planeswalker|Battle|Kindred|Room|Artifact Creature|Enchantment Creature|Land Creature) —/i;
+
+function normalizeOracle(oracleText: string): string {
+  return oracleText.replace(/\r\n/g, "\n");
+}
+
+function extractFaceName(faceText: string): string {
+  for (const line of faceText.split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    if (/^\{[^}]+\}/.test(trimmed)) continue;
+    if (TYPE_LINE.test(trimmed)) continue;
+    if (/^(When|Whenever|At the beginning|Choose one|Flash|Flying|Daybound|Nightbound|Aftermath)\b/i.test(trimmed)) {
+      continue;
+    }
+    if (/^[A-Z][a-z]+(?:, [a-z]+)*\.?$/.test(trimmed) && trimmed.length < 40) continue;
+    return trimmed;
   }
+  const first = faceText.split("\n").map((l) => l.trim()).find(Boolean);
+  return first ?? "Unknown";
+}
 
-  let offset = 0;
-  const faces: SegmentedCardFace[] = [];
-  const delimiter = normalized.match(splitPattern)?.[0] ?? "\n//\n";
+function hasTypeLine(text: string): boolean {
+  return TYPE_LINE.test(text);
+}
 
-  for (let i = 0; i < parts.length; i++) {
-    const text = parts[i];
-    const start = offset;
-    const end = start + text.length;
-    offset = end + (i < parts.length - 1 ? delimiter.length : 0);
+function isAdventureSpell(text: string): boolean {
+  return /\b(?:Instant|Sorcery) — Adventure\b/i.test(text) || /\b— Adventure\b/i.test(text);
+}
 
-    const faceName = text.split("\n").map((l) => l.trim()).find((l) => l.length > 0 && !/^\{[^}]+\}/.test(l));
-    faces.push({
-      faceId: i === 0 ? "front" : i === 1 ? "back" : `face_${i}`,
-      faceName,
-      text,
-      start,
-      end,
-      componentType: inferMultiFaceComponentType(normalized, text, i, parts.length),
-    });
-  }
-  return faces;
+function isCreaturePermanentFace(text: string): boolean {
+  return /\b(?:Creature|Artifact Creature|Enchantment Creature|Land Creature|Planeswalker|Battle|Kindred) —/i.test(text);
 }
 
 function inferSingleFaceComponentType(text: string): CardFaceComponentType {
-  if (/\bSaga\b/i.test(text) || /\b(I|II|III|IV|V) —/m.test(text)) return "saga";
-  if (/\bClass \d+/i.test(text)) return "class";
-  if (/\b(Daybound|Nightbound)\b/i.test(text)) return "transform";
-  if (/\bRoom\b/i.test(text)) return "room";
-  return "single";
+  if (/\bSaga\b/i.test(text) || /\b(I|II|III|IV|V) —/m.test(text)) return "single_face";
+  if (/\bClass \d+/i.test(text)) return "single_face";
+  if (/\b(Daybound|Nightbound)\b/i.test(text)) return "transform_front";
+  if (/\bRoom\b/i.test(text) && !text.includes("\n//\n")) return "room_left";
+  return "single_face";
 }
 
-function inferMultiFaceComponentType(
+function inferSplitFaceComponentType(
   fullText: string,
   faceText: string,
   faceIndex: number,
   faceCount: number,
 ): CardFaceComponentType {
-  if (/\bAftermath\b/i.test(faceText)) return "adventure";
-  if (/\bAdventure\b|\bInstant — Adventure\b|\bSorcery — Adventure\b/i.test(faceText)) {
-    return faceIndex === 0 ? "adventure" : "adventure";
+  const otherIndex = faceIndex === 0 ? 1 : 0;
+  const parts = fullText.split(/\n\/\/\n|\n\/\/\s*\n|\nAftermath\n/i);
+  const otherText = parts[otherIndex] ?? "";
+
+  if (/\nAftermath\n/i.test(fullText)) {
+    return faceIndex === 0 ? "single_face" : "aftermath_half";
   }
-  if (/\bRoom\b/i.test(faceText)) return "room";
-  if (/\b(Daybound|Nightbound)\b/i.test(fullText)) return "transform";
-  if (faceCount === 2) {
-    if (/\bInstant —|\bSorcery —|\bCreature —|\bLand —|\bArtifact —|\bEnchantment —|\bPlaneswalker —|\bBattle —|\bKindred —|\bArtifact Creature —|\bEnchantment Creature —|\bLand Creature —|\bLegendary /i.test(faceText)) {
-      return "mdfc";
-    }
-    return "split";
+
+  if (isAdventureSpell(faceText)) return "adventure";
+  if (isCreaturePermanentFace(faceText) && isAdventureSpell(otherText)) return "adventure_creature";
+
+  if (/\bRoom —/i.test(faceText) || (/\bRoom\b/i.test(fullText) && faceCount === 2)) {
+    return faceIndex === 0 ? "room_left" : "room_right";
   }
-  return "split";
+
+  if (/\b(Daybound|Nightbound)\b/i.test(fullText) && faceCount === 2) {
+    return faceIndex === 0 ? "transform_front" : "transform_back";
+  }
+
+  if (faceCount === 2 && hasTypeLine(faceText) && hasTypeLine(otherText) && !isAdventureSpell(faceText) && !isAdventureSpell(otherText)) {
+    return faceIndex === 0 ? "mdfc_front" : "mdfc_back";
+  }
+
+  return "split_half";
+}
+
+function buildFace(
+  text: string,
+  start: number,
+  faceIndex: number,
+  faceId: string,
+  componentType: CardFaceComponentType,
+): SegmentedCardFace {
+  const faceName = extractFaceName(text);
+  const end = start + text.length;
+  return {
+    faceId,
+    faceName,
+    faceIndex,
+    text,
+    start,
+    end,
+    faceEvidenceStart: 0,
+    faceEvidenceEnd: text.length,
+    cardEvidenceStart: start,
+    cardEvidenceEnd: end,
+    componentType,
+  };
+}
+
+function segmentByDelimiter(
+  normalized: string,
+  delimiter: RegExp,
+  faceIdForIndex: (index: number, count: number) => string,
+  componentForPart: (fullText: string, partText: string, index: number, count: number) => CardFaceComponentType,
+): SegmentedCardFace[] {
+  const parts = normalized.split(delimiter);
+  const delimMatch = normalized.match(delimiter);
+  const delimLen = delimMatch?.[0]?.length ?? 0;
+  let offset = 0;
+  const faces: SegmentedCardFace[] = [];
+
+  for (let i = 0; i < parts.length; i++) {
+    const text = parts[i];
+    const start = offset;
+    faces.push(
+      buildFace(
+        text,
+        start,
+        i,
+        faceIdForIndex(i, parts.length),
+        componentForPart(normalized, text, i, parts.length),
+      ),
+    );
+    offset = start + text.length + (i < parts.length - 1 ? delimLen : 0);
+  }
+  return faces;
+}
+
+/** Split oracle text into card faces (split, MDFC, adventure, room, aftermath). */
+export function segmentCardFaces(oracleText: string): SegmentedCardFace[] {
+  const normalized = normalizeOracle(oracleText);
+
+  if (/\nAftermath\n/i.test(normalized) && !/\n\/\/\n/.test(normalized)) {
+    return segmentByDelimiter(
+      normalized,
+      /\nAftermath\n/i,
+      (i) => (i === 0 ? "front" : "aftermath"),
+      (full, part, i, count) => inferSplitFaceComponentType(full, part, i, count),
+    );
+  }
+
+  const splitPattern = /\n\/\/\n|\n\/\/\s*\n/;
+  if (splitPattern.test(normalized)) {
+    return segmentByDelimiter(
+      normalized,
+      splitPattern,
+      (i, count) => {
+        if (/\bRoom\b/i.test(normalized) && count === 2) return i === 0 ? "left" : "right";
+        return i === 0 ? "front" : i === 1 ? "back" : `face_${i}`;
+      },
+      (full, part, i, count) => inferSplitFaceComponentType(full, part, i, count),
+    );
+  }
+
+  return [
+    buildFace(normalized, 0, 0, "front", inferSingleFaceComponentType(normalized)),
+  ];
 }
 
 function expandCompositeParagraphs(faceText: string): string[] {
@@ -195,6 +293,24 @@ export function validateEvidenceSpan(
     return { valid: false, reason: "evidence_not_in_oracle" };
   }
   return { valid: true };
+}
+
+/** True when card-relative evidence span crosses a face boundary. */
+export function evidenceCrossesFaceBoundary(
+  faces: SegmentedCardFace[],
+  evidenceStart: number,
+  evidenceEnd: number,
+): boolean {
+  const overlapping = faces.filter((f) => evidenceStart < f.end && evidenceEnd > f.start);
+  return overlapping.length > 1;
+}
+
+export function faceForEvidenceSpan(
+  faces: SegmentedCardFace[],
+  evidenceStart: number,
+  evidenceEnd: number,
+): SegmentedCardFace | undefined {
+  return faces.find((f) => evidenceStart >= f.start && evidenceEnd <= f.end);
 }
 
 export function segmentOracleCard(input: {

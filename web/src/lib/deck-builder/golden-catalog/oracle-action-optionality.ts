@@ -3,6 +3,7 @@
  */
 import { createHash } from "node:crypto";
 import type { SegmentedAbility, OracleAbilityStructureAnnotation, StructureAnnotationKind } from "./oracle-action-schema";
+import type { SegmentedCardFace } from "./oracle-ability-segmentation";
 
 export type OptionalityController =
   | "you"
@@ -349,7 +350,7 @@ function inferStructureKind(input: {
 /** Layer 1 structure annotations when may/conditions exist without a separate primitive action. */
 export function emitStructureAnnotations(input: {
   oracleId: string;
-  faceId: string;
+  face?: SegmentedCardFace;
   ability: SegmentedAbility;
   existingInAbility: Array<{
     optionalEffect?: boolean;
@@ -359,7 +360,14 @@ export function emitStructureAnnotations(input: {
   parserVersion: string;
   annotationId: (parts: string[]) => string;
 }): OracleAbilityStructureAnnotation[] {
-  const { ability, existingInAbility } = input;
+  const { ability, existingInAbility, face } = input;
+  const faceId = face?.faceId ?? ability.cardFaceId;
+  const faceEvidence = (cardStart: number, cardEnd: number) => ({
+    cardEvidenceStart: cardStart,
+    cardEvidenceEnd: cardEnd,
+    faceEvidenceStart: face ? cardStart - face.start : undefined,
+    faceEvidenceEnd: face ? cardEnd - face.start : undefined,
+  });
   const annotations: OracleAbilityStructureAnnotation[] = [];
   const hasOptional = existingInAbility.some((a) => a.optionalEffect || a.optionalCost);
   const scopes = findMayScopesInParagraph(ability.paragraphText, ability.paragraphStart);
@@ -376,13 +384,16 @@ export function emitStructureAnnotations(input: {
       annotations.push({
         annotationId: input.annotationId([
           input.oracleId,
-          input.faceId,
+          faceId,
           String(ability.abilityIndex),
           "may-structure",
           evidenceText,
         ]),
         oracleId: input.oracleId,
-        faceId: input.faceId,
+        faceId,
+        faceName: face?.faceName,
+        faceIndex: face?.faceIndex,
+        componentType: face?.componentType,
         abilityIndex: ability.abilityIndex,
         kind: inferStructureKind({
           optionalCost: scope.optionalCost,
@@ -392,6 +403,7 @@ export function emitStructureAnnotations(input: {
         evidenceText,
         evidenceStart,
         evidenceEnd,
+        ...faceEvidence(evidenceStart, evidenceEnd),
         optionalEffect: scope.optionalEffect,
         optionalCost: scope.optionalCost || undefined,
         optionalityEvidenceText: scope.mayText,
@@ -421,18 +433,22 @@ export function emitStructureAnnotations(input: {
       annotations.push({
         annotationId: input.annotationId([
           input.oracleId,
-          input.faceId,
+          faceId,
           String(ability.abilityIndex),
           "cond-structure",
           cond.conditionText,
         ]),
         oracleId: input.oracleId,
-        faceId: input.faceId,
+        faceId,
+        faceName: face?.faceName,
+        faceIndex: face?.faceIndex,
+        componentType: face?.componentType,
         abilityIndex: ability.abilityIndex,
         kind: inferStructureKind({ conditionType: cond.conditionType, paragraph: ability.paragraphText }),
         evidenceText: cond.conditionText,
         evidenceStart: cond.conditionStart,
         evidenceEnd: cond.conditionEnd,
+        ...faceEvidence(cond.conditionStart, cond.conditionEnd),
         conditionType: cond.conditionType,
         conditionText: cond.conditionText,
         conditionEvidenceStart: cond.conditionStart,

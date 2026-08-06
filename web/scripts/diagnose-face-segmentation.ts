@@ -15,6 +15,8 @@ const MULTIFACE_CATEGORIES = [
   "modal double-faced",
 ];
 
+const MULTIFACE_LAYOUTS = ["split", "aftermath", "adventure", "mdfc", "transform", "room"] as const;
+
 const dev = JSON.parse(
   readFileSync(resolve(process.cwd(), "data", "oracle-action-eval-development-v4.json"), "utf8"),
 ) as {
@@ -24,10 +26,17 @@ const dev = JSON.parse(
 const cases = dev.cases.filter(
   (c) =>
     MULTIFACE_CATEGORIES.includes(c.category) ||
+    Boolean(c.layout) ||
     c.oracleText.includes("\n//\n") ||
     c.oracleText.includes("Aftermath") ||
-    /\bRoom\b/i.test(c.oracleText),
+    (/\bRoom\b/i.test(c.oracleText) && c.oracleText.includes("\n//\n")),
 );
+
+const layoutCounts: Record<string, number> = {};
+for (const c of cases) {
+  const key = c.layout ?? c.category;
+  layoutCounts[key] = (layoutCounts[key] ?? 0) + 1;
+}
 
 const results = cases.map((c) => {
   const faces = segmentCardFaces(c.oracleText);
@@ -62,6 +71,7 @@ writeFileSync(
       generatedAt: new Date().toISOString(),
       developmentSet: "development_set_v4",
       caseCount: results.length,
+      layoutCounts,
       allSpanValid: results.every((r) => r.spanValid),
       results,
     },
@@ -72,5 +82,6 @@ writeFileSync(
 );
 
 console.log(`Face segmentation diagnostic: ${results.length} multifaced cases`);
+console.log(`  layout counts:`, layoutCounts);
 console.log(`  all evidence spans valid: ${results.every((r) => r.spanValid)}`);
 console.log(`  → ${outPath}`);

@@ -37,16 +37,19 @@ export type OracleActionExtractionMethod =
   | "model_assisted"
   | "manual_override";
 
-/** Card-face component kinds for split / MDFC / adventure isolation. */
+/** Card-face component kinds — per-face granularity for split / MDFC / adventure / room. */
 export type CardFaceComponentType =
-  | "single"
-  | "split"
+  | "single_face"
+  | "split_half"
+  | "aftermath_half"
   | "adventure"
-  | "mdfc"
-  | "room"
-  | "transform"
-  | "saga"
-  | "class";
+  | "adventure_creature"
+  | "mdfc_front"
+  | "mdfc_back"
+  | "transform_front"
+  | "transform_back"
+  | "room_left"
+  | "room_right";
 
 export interface OracleActionCost {
   type: string;
@@ -93,6 +96,10 @@ export interface OracleAction {
   evidenceText: string;
   evidenceStart: number;
   evidenceEnd: number;
+  cardEvidenceStart?: number;
+  cardEvidenceEnd?: number;
+  faceEvidenceStart?: number;
+  faceEvidenceEnd?: number;
   optionalEffect?: boolean;
   optionalCost?: boolean;
   optionalityEvidenceText?: string;
@@ -154,11 +161,18 @@ export interface OracleAbilityStructureAnnotation {
   annotationId: string;
   oracleId: string;
   faceId: string;
+  faceName?: string;
+  faceIndex?: number;
+  componentType?: CardFaceComponentType;
   abilityIndex: number;
   kind: StructureAnnotationKind;
   evidenceText: string;
   evidenceStart: number;
   evidenceEnd: number;
+  cardEvidenceStart?: number;
+  cardEvidenceEnd?: number;
+  faceEvidenceStart?: number;
+  faceEvidenceEnd?: number;
   optionalEffect?: boolean;
   optionalCost?: boolean;
   optionalityEvidenceText?: string;
@@ -187,7 +201,7 @@ export const ORACLE_ACTION_PRODUCTION_GATES = {
   falsePositiveRate: { target: 0.02, label: "≤2%" },
 } as const;
 
-export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.6-conditions-deps";
+export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.7-multiface";
 export const ORACLE_ACTION_TAXONOMY_VERSION = "three-layer-v1.1";
 
 export const HIGH_VALUE_ACTION_TYPES = [

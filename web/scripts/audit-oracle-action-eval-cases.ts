@@ -47,6 +47,15 @@ export interface ExpectedRole {
   fromPrimitiveActions?: PrimitiveActionType[];
 }
 
+export interface ExpectedFace {
+  faceId: string;
+  faceName: string;
+  faceIndex: number;
+  componentType: string;
+  cardEvidenceStart: number;
+  cardEvidenceEnd: number;
+}
+
 export interface OracleActionEvalCaseV2 {
   id: string;
   category: string;
@@ -54,6 +63,7 @@ export interface OracleActionEvalCaseV2 {
   oracleId: string;
   oracleText: string;
   cardFace?: string;
+  expectedFaces?: ExpectedFace[];
   expectedStructure?: ExpectedStructure;
   expectedPrimitiveActions: ExpectedPrimitiveAction[];
   expectedConditions?: ExpectedCondition[];
