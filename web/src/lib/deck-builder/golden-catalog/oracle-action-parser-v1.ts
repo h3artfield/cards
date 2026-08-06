@@ -69,6 +69,8 @@ export interface OracleActionV1Result {
   derivedRoles: DerivedCardRole[];
   abstainedClauses: Array<{ text: string; start: number; end: number; reason: string }>;
   duplicateSuppressedCount: number;
+  canonicalKeyDuplicatesRemoved: number;
+  semanticDuplicatesRemoved: number;
   rawEmissionCount: number;
   modelAssistedLog: Array<{
     modelName: string;
@@ -344,7 +346,48 @@ function acceptAction(input: {
   };
 }
 
-function dedupeActions(actions: OracleActionV1[]): OracleActionV1[] {
+function spanContains(
+  outer: { evidenceStart: number; evidenceEnd: number },
+  inner: { evidenceStart: number; evidenceEnd: number },
+): boolean {
+  return outer.evidenceStart <= inner.evidenceStart && inner.evidenceEnd <= outer.evidenceEnd;
+}
+
+function sameAbilityAction(a: OracleActionV1, b: OracleActionV1): boolean {
+  return (
+    a.oracleId === b.oracleId &&
+    a.faceId === b.faceId &&
+    a.abilityIndex === b.abilityIndex &&
+    a.actionType === b.actionType
+  );
+}
+
+/** True when candidate is a shorter/overlapping re-match of keeper within one ability. */
+function isSemanticDuplicate(keeper: OracleActionV1, candidate: OracleActionV1): boolean {
+  if (!sameAbilityAction(keeper, candidate)) return false;
+  if (spanContains(keeper, candidate)) return true;
+  const keeperNorm = normalizeEvidenceSpan(keeper.evidenceText);
+  const candidateNorm = normalizeEvidenceSpan(candidate.evidenceText);
+  return keeperNorm.includes(candidateNorm) && keeper.evidenceStart <= candidate.evidenceStart;
+}
+
+/** Remove shorter overlapping matches, preserving separate clauses/abilities. */
+function filterDominatedActions(actions: OracleActionV1[]): OracleActionV1[] {
+  const sorted = [...actions].sort(
+    (a, b) =>
+      b.evidenceText.length - a.evidenceText.length ||
+      a.evidenceStart - b.evidenceStart ||
+      a.actionIndex - b.actionIndex,
+  );
+  const kept: OracleActionV1[] = [];
+  for (const action of sorted) {
+    if (kept.some((k) => isSemanticDuplicate(k, action))) continue;
+    kept.push(action);
+  }
+  return kept.sort((a, b) => a.evidenceStart - b.evidenceStart || a.actionIndex - b.actionIndex);
+}
+
+function canonicalDedupePass(actions: OracleActionV1[]): OracleActionV1[] {
   const best = new Map<string, OracleActionV1>();
   for (const action of actions) {
     const key = canonicalDedupKey({
@@ -363,6 +406,22 @@ function dedupeActions(actions: OracleActionV1[]): OracleActionV1[] {
     }
   }
   return [...best.values()].sort((a, b) => a.evidenceStart - b.evidenceStart || a.actionIndex - b.actionIndex);
+}
+
+function dedupeActions(rawActions: OracleActionV1[]): {
+  actions: OracleActionV1[];
+  canonicalKeyDuplicatesRemoved: number;
+  semanticDuplicatesRemoved: number;
+} {
+  const afterCanonical = canonicalDedupePass(rawActions);
+  const canonicalKeyDuplicatesRemoved = Math.max(0, rawActions.length - afterCanonical.length);
+  const afterSemantic = filterDominatedActions(afterCanonical);
+  const semanticDuplicatesRemoved = Math.max(0, afterCanonical.length - afterSemantic.length);
+  return {
+    actions: afterSemantic,
+    canonicalKeyDuplicatesRemoved,
+    semanticDuplicatesRemoved,
+  };
 }
 
 function deriveRolesFromActions(actions: OracleActionV1[]): DerivedCardRole[] {
@@ -447,18 +506,22 @@ export function extractOracleActionsV1(input: {
     void face;
   }
 
-  const actions = dedupeActions(rawActions).map((a, i) => ({ ...a, actionIndex: i }));
-  const duplicateSuppressedCount = Math.max(0, rawActions.length - actions.length);
+  const preDedupCount = rawActions.length;
+  const { actions, canonicalKeyDuplicatesRemoved, semanticDuplicatesRemoved } = dedupeActions(rawActions);
+  const indexedActions = actions.map((a, i) => ({ ...a, actionIndex: i }));
+  const duplicateSuppressedCount = Math.max(0, preDedupCount - indexedActions.length);
 
   return {
     oracleId: input.oracleId,
     faceName: targetFaces[0]?.faceId,
     abilities,
-    actions,
-    derivedRoles: deriveRolesFromActions(actions),
+    actions: indexedActions,
+    derivedRoles: deriveRolesFromActions(indexedActions),
     abstainedClauses,
     duplicateSuppressedCount,
-    rawEmissionCount: rawActions.length,
+    canonicalKeyDuplicatesRemoved,
+    semanticDuplicatesRemoved,
+    rawEmissionCount: preDedupCount,
     modelAssistedLog: [],
   };
 }

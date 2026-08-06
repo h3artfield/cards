@@ -124,7 +124,7 @@ export const ORACLE_ACTION_PRODUCTION_GATES = {
   falsePositiveRate: { target: 0.02, label: "≤2%" },
 } as const;
 
-export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.2-dedup-play-faces";
+export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.3-semantic-dedup";
 
 export const HIGH_VALUE_ACTION_TYPES = [
   "draw",

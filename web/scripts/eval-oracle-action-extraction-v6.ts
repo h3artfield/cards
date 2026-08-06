@@ -315,6 +315,7 @@ function evaluateCaseSet(cases: OracleActionEvalCaseV2[], setName: string) {
 
   let rawParserEmissions = 0;
   let duplicatesRemovedByCanonicalKey = 0;
+  let semanticDuplicatesRemoved = 0;
   let uniqueActionsEnteringEvaluation = 0;
   let uniqueActionsMatchedToGold = 0;
   let legitimateRepeatedActions = 0;
@@ -399,7 +400,8 @@ function evaluateCaseSet(cases: OracleActionEvalCaseV2[], setName: string) {
       cardFace: testCase.cardFace,
     });
     rawParserEmissions += raw.rawEmissionCount;
-    duplicatesRemovedByCanonicalKey += raw.duplicateSuppressedCount;
+    duplicatesRemovedByCanonicalKey += raw.canonicalKeyDuplicatesRemoved;
+    semanticDuplicatesRemoved += raw.semanticDuplicatesRemoved;
     uniqueActionsEnteringEvaluation += raw.actions.length;
     abstainedClauseCount += raw.abstainedClauses.length;
 
@@ -669,6 +671,8 @@ function evaluateCaseSet(cases: OracleActionEvalCaseV2[], setName: string) {
         rawParserEmissions: "All actions emitted by parser rules before canonical-key dedup",
         duplicatesRemovedByCanonicalKey:
           "Actions collapsed by oracleId+face+abilityIndex+primitive+normalizedEvidence+zones dedup",
+        semanticDuplicatesRemoved:
+          "Overlapping shorter evidence spans within the same ability and primitive removed after canonical dedup",
         uniqueActionsEnteringEvaluation: "Post-dedup action count evaluated against gold",
         uniqueActionsMatchedToGold: "Post-dedup extractions with strict gold label match",
         remainingDuplicateParserErrors:
@@ -678,6 +682,8 @@ function evaluateCaseSet(cases: OracleActionEvalCaseV2[], setName: string) {
       },
       rawParserEmissions,
       duplicatesRemovedByCanonicalKey,
+      semanticDuplicatesRemoved,
+      totalDuplicatesRemoved: duplicatesRemovedByCanonicalKey + semanticDuplicatesRemoved,
       uniqueActionsEnteringEvaluation,
       uniqueActionsMatchedToGold,
       remainingDuplicateParserErrors: fpByCategory.duplicate_action_extraction,
@@ -792,8 +798,9 @@ function main() {
     generatedAt: new Date().toISOString(),
     evaluationVersion: "eval-v6-corrected-baseline",
     parserVersion: ORACLE_ACTION_PARSER_VERSION,
-    parserGrammarChangesBlocked: true,
-    blockerReason: "Resume parser grammar only after this baseline is internally consistent",
+    parserGrammarChangesBlocked: false,
+    developmentOnly: true,
+    note: "Parser v1.3+ — tune against frozen development set only; no customer-facing use",
     validationGoldAdjudication: adjudicationSummary,
     finalBlindGoldReview: blindGoldReview,
     developmentSet: {
@@ -834,7 +841,7 @@ function main() {
     `  accepted-only P/R: ${(d.acceptedOnly.precision * 100).toFixed(1)}% / ${(d.acceptedOnly.recall * 100).toFixed(1)}%`,
   );
   console.log(`  needs-review rate: ${(developmentResults.emissionCounts.needsReviewRate * 100).toFixed(1)}% (${developmentResults.emissionCounts.needsReviewActions}/${developmentResults.emissionCounts.totalExtractedActions})`);
-  console.log(`  duplicate pipeline: raw=${developmentResults.duplicatePipeline.rawParserEmissions} deduped=${developmentResults.duplicatePipeline.duplicatesRemovedByCanonicalKey} remaining-dup-errors=${developmentResults.duplicatePipeline.remainingDuplicateParserErrors}`);
+  console.log(`  duplicate pipeline: raw=${developmentResults.duplicatePipeline.rawParserEmissions} canonical=${developmentResults.duplicatePipeline.duplicatesRemovedByCanonicalKey} semantic=${developmentResults.duplicatePipeline.semanticDuplicatesRemoved} remaining-dup-errors=${developmentResults.duplicatePipeline.remainingDuplicateParserErrors}`);
   console.log(`  genuinely unsupported: ${developmentResults.authoritativeClassification.unsupportedEffectGate.count}`);
   console.log("");
   console.log("Validation:");
