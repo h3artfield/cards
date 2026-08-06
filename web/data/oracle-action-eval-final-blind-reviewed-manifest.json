@@ -1,0 +1,25 @@
+{
+  "setClassification": "final_blind_test_v1",
+  "contentHash": "2d6f34f42cf5983f77a784bd5ccc3e07348d9f5da51ef5b11f809ebcd8a67b86",
+  "reviewedContentHash": "2d6f34f42cf5983f77a784bd5ccc3e07348d9f5da51ef5b11f809ebcd8a67b86",
+  "taxonomyVersion": "three-layer-v1",
+  "caseCount": 105,
+  "path": "data/oracle-action-eval-final-blind-v1.json",
+  "goldReviewCompletedAt": "2026-08-06T13:54:21.137Z",
+  "goldReviewReport": "reports/oracle-action-final-blind-gold-review.json",
+  "reviewerPrimary": "final-blind-gold-reviewer-primary",
+  "reviewerSecondary": "final-blind-gold-reviewer-secondary",
+  "agreementCount": 105,
+  "disputedCount": 0,
+  "parserAccessPolicy": "BLOCKED until --allow-final-blind on release candidate eval",
+  "reviewChecks": [
+    "oracle/card-face identity",
+    "ability segmentation",
+    "primitive actions",
+    "evidence spans",
+    "zones",
+    "costs",
+    "conditions",
+    "optionality"
+  ]
+}

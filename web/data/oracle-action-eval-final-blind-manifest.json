@@ -1,0 +1,9 @@
+{
+  "setClassification": "final_blind_test_v1",
+  "contentHash": "2d6f34f42cf5983f77a784bd5ccc3e07348d9f5da51ef5b11f809ebcd8a67b86",
+  "caseCount": 105,
+  "taxonomyVersion": "three-layer-v1",
+  "frozenAt": "2026-08-06T12:24:56.648Z",
+  "path": "data/oracle-action-eval-final-blind-v1.json",
+  "parserAccessPolicy": "BLOCKED until --allow-final-blind on release candidate eval"
+}

@@ -1,6 +1,7 @@
 /**
- * Oracle-action evaluation v4 — extraction correctness vs gold-set matching.
- * Run: npx tsx scripts/eval-oracle-action-extraction-v4.ts
+ * Oracle-action evaluation v5 — dev + validation split, accepted-only metrics, support tiers.
+ * Run: npx tsx scripts/eval-oracle-action-extraction-v5.ts
+ * Final blind: npx tsx scripts/eval-oracle-action-extraction-v5.ts --allow-final-blind
  */
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -16,7 +17,9 @@ import {
 import {
   PRIMITIVE_ACTION_TYPES,
   normalizeToPrimitive,
+  classifyPrimitiveSupportTier,
   type PrimitiveActionType,
+  type PrimitiveSupportTier,
 } from "../src/lib/deck-builder/golden-catalog/oracle-action-taxonomy";
 import type { OracleActionEvalCaseV2 } from "./audit-oracle-action-eval-cases";
 import {
@@ -203,7 +206,9 @@ function classifyFalsePositive(input: {
 function evaluateCaseSet(
   cases: OracleActionEvalCaseV2[],
   setName: string,
+  opts?: { acceptedOnly?: boolean },
 ) {
+  const acceptedOnly = opts?.acceptedOnly ?? false;
   let goldTp = 0;
   let goldFp = 0;
   let goldFn = 0;
@@ -260,6 +265,11 @@ function evaluateCaseSet(
     { goldTp: number; goldFp: number; goldFn: number; extractionTp: number; extractionFp: number; extractionFn: number; abstentions: number }
   >;
 
+  let duplicateSuppressedTotal = 0;
+  let missingGoldLabelCount = 0;
+  let trueUnsupportedCount = 0;
+  const metricsByLayout: Record<string, { tp: number; fp: number; fn: number }> = {};
+  const metricsByAbilityType: Record<string, { tp: number; fp: number; fn: number }> = {};
   const classifiedMismatches: ClassifiedMismatch[] = [];
   const evaluatorDefects: string[] = [];
   const failedCases: Array<{ id: string; category: string; missing: string[]; extra: string[] }> = [];
@@ -270,10 +280,11 @@ function evaluateCaseSet(
       oracleText: testCase.oracleText,
       cardFace: testCase.cardFace,
     });
+    duplicateSuppressedTotal += raw.duplicateSuppressedCount;
     const extraction = toLegacyExtractionResult(raw);
     abstentions += extraction.abstainedClauses.length;
 
-    const actionViews: ExtractedActionView[] = extraction.actions.map((a, index) => ({
+    let actionViews: ExtractedActionView[] = extraction.actions.map((a, index) => ({
       index,
       primitive: extractedPrimitive(a),
       evidenceText: a.evidenceText,
@@ -284,6 +295,10 @@ function evaluateCaseSet(
       reviewStatus: a.reviewStatus,
       optional: isOptionalEvidence(a.evidenceText),
     }));
+
+    if (acceptedOnly) {
+      actionViews = actionViews.filter((a) => a.reviewStatus === "accepted");
+    }
 
     for (const action of actionViews) {
       evidenceTotal += 1;
@@ -310,6 +325,12 @@ function evaluateCaseSet(
         matchedActions.add(idx);
         const action = actionViews[idx];
         primitiveStats[exp.actionType].goldTp += 1;
+        const layoutKey = testCase.layout ?? testCase.category;
+        metricsByLayout[layoutKey] ??= { tp: 0, fp: 0, fn: 0 };
+        metricsByLayout[layoutKey].tp += 1;
+        const abType = extraction.actions[idx]?.abilityType ?? "unknown";
+        metricsByAbilityType[abType] ??= { tp: 0, fp: 0, fn: 0 };
+        metricsByAbilityType[abType].tp += 1;
 
         const supported = inferSupportedPrimitiveFromEvidence(testCase.oracleText, action.evidenceText);
         if (supported === exp.actionType && spanValid(testCase.oracleText, action.evidenceText, action.evidenceStart, action.evidenceEnd)) {
@@ -325,6 +346,9 @@ function evaluateCaseSet(
       } else {
         goldFn += 1;
         primitiveStats[exp.actionType].goldFn += 1;
+        const layoutKey = testCase.layout ?? testCase.category;
+        metricsByLayout[layoutKey] ??= { tp: 0, fp: 0, fn: 0 };
+        metricsByLayout[layoutKey].fn += 1;
 
         const anySupport = actionViews.some(
           (a) =>
@@ -360,6 +384,8 @@ function evaluateCaseSet(
         allActions: actionViews,
       });
       fpByCategory[fpCategory] += 1;
+      if (fpCategory === "correct_action_missing_from_gold_labels") missingGoldLabelCount += 1;
+      if (fpCategory === "genuinely_unsupported_extraction") trueUnsupportedCount += 1;
 
       const isParserError =
         fpCategory !== "correct_action_missing_from_gold_labels" &&
@@ -424,6 +450,23 @@ function evaluateCaseSet(
       }
     }
 
+    for (const exp of expected) {
+      if (exp.optional === undefined) continue;
+      const matching = actionViews.filter(
+        (a) => a.primitive === exp.actionType && evidenceMatchesExtracted(a.evidenceText, exp.evidenceContains),
+      );
+      if (matching.length === 0) {
+        optionalityFn += 1;
+        continue;
+      }
+      const anyMatch = matching.some((a) => a.optional === exp.optional);
+      if (anyMatch) optionalityTp += 1;
+      else {
+        optionalityFp += 1;
+        optionalityFn += 1;
+      }
+    }
+
     if (struct?.requiresFace || testCase.cardFace) {
       const requiredFace = struct?.requiresFace ?? testCase.cardFace!;
       const faceOk =
@@ -452,7 +495,7 @@ function evaluateCaseSet(
   const goldMetrics = computeMetrics(goldTp, goldFp, goldFn);
   const extractionMetrics = computeMetrics(extractionTp, extractionFp, extractionFn);
 
-  const perPrimitive: Record<string, FieldMetrics & { support: number; abstentionRate: number; productionSupported: boolean }> = {};
+  const perPrimitive: Record<string, FieldMetrics & { support: number; abstentionRate: number; supportTier: PrimitiveSupportTier }> = {};
   for (const p of PRIMITIVE_ACTION_TYPES) {
     const s = primitiveStats[p];
     const support = s.goldTp + s.goldFn;
@@ -461,7 +504,12 @@ function evaluateCaseSet(
       ...m,
       support,
       abstentionRate: cases.length > 0 ? s.abstentions / cases.length : 0,
-      productionSupported: support >= 5 && m.precision >= 0.98,
+      supportTier: classifyPrimitiveSupportTier({
+        support,
+        precision: m.precision,
+        recall: m.recall,
+        falsePositiveRate: m.falsePositiveRate,
+      }),
     };
   }
 
@@ -544,6 +592,24 @@ function evaluateCaseSet(
     },
     confusionMatrix,
     perPrimitive,
+    metricsByLayout: Object.fromEntries(
+      Object.entries(metricsByLayout).map(([k, v]) => [k, computeMetrics(v.tp, v.fp, v.fn)]),
+    ),
+    metricsByAbilityType: Object.fromEntries(
+      Object.entries(metricsByAbilityType).map(([k, v]) => [k, computeMetrics(v.tp, v.fp, v.fn)]),
+    ),
+    parserDefectAccounting: {
+      duplicateSuppressedCount: duplicateSuppressedTotal,
+      missingGoldLabelCount,
+      trueUnsupportedExtractionCount: trueUnsupportedCount,
+      parserErrorCount:
+        fpByCategory.wrong_primitive_action_type +
+        fpByCategory.duplicate_action_extraction +
+        fpByCategory.wrong_card_face +
+        fpByCategory.wrong_ability_association +
+        fpByCategory.incorrect_evidence_to_action_mapping +
+        fpByCategory.genuinely_unsupported_extraction,
+    },
     abstentionAndReview: {
       abstentionClauseCount: abstentions,
       abstentionRate: cases.length > 0 ? abstentions / cases.length : 0,
@@ -561,91 +627,94 @@ function evaluateCaseSet(
 }
 
 async function main() {
-  const manifestPath = resolve(process.cwd(), "data", "oracle-action-eval-frozen-manifest.json");
+  const allowFinalBlind = process.argv.includes("--allow-final-blind");
   const devPath = resolve(process.cwd(), "data", "oracle-action-eval-development-frozen.json");
-  const heldPath = resolve(process.cwd(), "data", "oracle-action-eval-held-out.json");
+  const validationPath = resolve(process.cwd(), "data", "oracle-action-eval-validation-v1.json");
+  const blindPath = resolve(process.cwd(), "data", "oracle-action-eval-final-blind-v1.json");
+  const blindManifestPath = resolve(process.cwd(), "data", "oracle-action-eval-final-blind-manifest.json");
 
-  const manifest = JSON.parse(readFileSync(manifestPath, "utf8")) as {
+  const dev = JSON.parse(readFileSync(devPath, "utf8")) as {
+    cases: OracleActionEvalCaseV2[];
     contentHash: string;
-    evaluationVersion: string;
     taxonomyVersion: string;
-    reviewedCaseCount: number;
-    confirmedRelabelCount: number;
-    changedRelabelCount: number;
   };
 
-  const dev = JSON.parse(readFileSync(devPath, "utf8")) as { cases: OracleActionEvalCaseV2[] };
-  const held = JSON.parse(readFileSync(heldPath, "utf8")) as { cases: OracleActionEvalCaseV2[]; caseCount: number };
+  let validation: { cases: OracleActionEvalCaseV2[]; caseCount: number; contentHash: string };
+  try {
+    validation = JSON.parse(readFileSync(validationPath, "utf8"));
+  } catch {
+    const legacy = JSON.parse(readFileSync(resolve(process.cwd(), "data", "oracle-action-eval-held-out.json"), "utf8"));
+    validation = { ...legacy, contentHash: legacy.contentHash ?? "legacy" };
+  }
 
   const developmentResults = evaluateCaseSet(dev.cases, "development");
-  const heldOutResults = evaluateCaseSet(held.cases, "held-out");
+  const developmentAccepted = evaluateCaseSet(dev.cases, "development", { acceptedOnly: true });
+  const validationResults = evaluateCaseSet(validation.cases, "validation_set_v1");
+  const validationAccepted = evaluateCaseSet(validation.cases, "validation_set_v1", { acceptedOnly: true });
+
+  let finalBlindResults = null;
+  if (allowFinalBlind) {
+    const blind = JSON.parse(readFileSync(blindPath, "utf8")) as { cases: OracleActionEvalCaseV2[] };
+    finalBlindResults = evaluateCaseSet(blind.cases, "final_blind_test_v1");
+  }
 
   const report = {
     generatedAt: new Date().toISOString(),
     parserVersion: ORACLE_ACTION_PARSER_VERSION,
-    frozenEvalManifest: manifest,
-    manuallyValidatedEvaluationSetHash: manifest.contentHash,
-    relabelReviewSummary: {
-      confirmed: manifest.confirmedRelabelCount,
-      changed: manifest.changedRelabelCount,
-      reviewedCases: manifest.reviewedCaseCount,
-    },
-    developmentSet: developmentResults,
-    heldOutSet: {
-      caseCount: held.caseCount,
-      design: "≥100 card-face cases across split/MDFC, compound effects, cast-from-exile, replacement, modal, saga, planeswalker, optionality, triggers — never used for parser rule tuning",
-      ...heldOutResults,
-    },
-    productionGateAuthority: "held-out test set (development set is for iteration only)",
-    pilotStatus: {
-      ready: heldOutResults.allProductionGatesPass,
-      reason: heldOutResults.allProductionGatesPass
-        ? "Production gates met on held-out set"
-        : "500-card pilot blocked — gates not met on held-out set",
-    },
-    reconciliation: {
-      priorFalsePositiveRate: developmentResults.goldSetMatching.falsePositiveRate,
-      parserErrorRate:
-        developmentResults.extractionCorrectness.falsePositiveRate,
-      explanation:
-        "Prior 49% FP rate counted oracle-supported extractions as parser errors when gold labels were incomplete or evaluator matching was too strict. Extraction-correctness metrics separate true parser defects from gold/evaluator issues.",
-    },
-    nextParserPriorities: [
-      "Split cards and MDFC face scoping",
-      "Multiple abilities on one card",
-      "Compound effects (Path to Exile)",
-      "Cast/play-from-exile permissions (Etali)",
-      "Replacement effects (Rest in Peace)",
-      "Modal bullets",
-      "Saga chapters",
-      "Planeswalker loyalty abilities",
-      "Optionality and up to",
-      "Trigger recall",
+    gateSequence: [
+      "improve parser on development set",
+      "pass development gates",
+      "evaluate on manually reviewed validation set",
+      "freeze release candidate",
+      "run once against sealed final blind set",
+      "begin 500-card pilot",
     ],
+    developmentSet: {
+      caseCount: dev.cases.length,
+      contentHash: dev.contentHash,
+      ...developmentResults,
+      acceptedOnlyMetrics: developmentAccepted.extractionCorrectness,
+    },
+    validationSet: {
+      classification: "validation_set_v1",
+      caseCount: validation.cases.length,
+      contentHash: validation.contentHash,
+      ...validationResults,
+      acceptedOnlyMetrics: validationAccepted.extractionCorrectness,
+    },
+    finalBlindTest: allowFinalBlind
+      ? finalBlindResults
+      : {
+          status: "SEALED",
+          path: blindPath,
+          manifestPath: blindManifestPath,
+          note: "Pass --allow-final-blind only when release candidate clears dev + validation gates",
+        },
+    pilotStatus: {
+      ready: false,
+      reason: "500-card pilot blocked until release candidate passes final blind test",
+    },
   };
 
-  const outPath = resolve(process.cwd(), "reports", "oracle-action-gold-audit-final.json");
+  const outPath = resolve(process.cwd(), "reports", "oracle-action-parser-dev-report-v5.json");
   mkdirSync(resolve(outPath, ".."), { recursive: true });
   writeFileSync(outPath, JSON.stringify(report, null, 2), "utf8");
 
-  console.log("Oracle Action Gold Audit — Final Report");
-  console.log(`  validated hash: ${manifest.contentHash}`);
-  console.log(`  relabels: ${manifest.confirmedRelabelCount} confirmed, ${manifest.changedRelabelCount} changed`);
+  const d = developmentResults.extractionCorrectness;
+  const v = validationResults.extractionCorrectness;
+  console.log(`Parser dev report v5 (${ORACLE_ACTION_PARSER_VERSION})`);
   console.log("");
-  console.log("Development set (204 cases):");
-  console.log(`  gold matching precision: ${(developmentResults.goldSetMatching.precision * 100).toFixed(1)}%`);
-  console.log(`  extraction precision:    ${(developmentResults.extractionCorrectness.precision * 100).toFixed(1)}%`);
-  console.log(`  gold FP rate:            ${(developmentResults.goldSetMatching.falsePositiveRate * 100).toFixed(1)}%`);
-  console.log(`  extraction FP rate:      ${(developmentResults.extractionCorrectness.falsePositiveRate * 100).toFixed(1)}%`);
+  console.log("Development (204):");
+  console.log(`  extraction P/R: ${(d.precision * 100).toFixed(1)}% / ${(d.recall * 100).toFixed(1)}%`);
+  console.log(`  duplicates suppressed: ${developmentResults.parserDefectAccounting.duplicateSuppressedCount}`);
+  console.log(`  needs_review: ${developmentResults.abstentionAndReview.needsReviewActions}`);
+  console.log(`  optionality P/R: ${(developmentResults.structureMetrics.optionality.precision * 100).toFixed(1)}% / ${(developmentResults.structureMetrics.optionality.recall * 100).toFixed(1)}%`);
   console.log("");
-  const heldPrecision = heldOutResults.extractionCorrectness.precision;
-  const heldRecall = heldOutResults.extractionCorrectness.recall;
-  const heldFpRate = heldOutResults.extractionCorrectness.falsePositiveRate;
-  console.log(`Held-out set (${held.caseCount} cases) - production authority:`);
-  console.log(`  extraction precision:    ${(heldPrecision * 100).toFixed(1)}%`);
-  console.log(`  extraction recall:       ${(heldRecall * 100).toFixed(1)}%`);
-  console.log(`  extraction FP rate:      ${(heldFpRate * 100).toFixed(1)}%`);
-  console.log(`  gates pass:              ${heldOutResults.allProductionGatesPass}`);
+  console.log(`Validation (${validation.cases.length}):`);
+  console.log(`  extraction P/R: ${(v.precision * 100).toFixed(1)}% / ${(v.recall * 100).toFixed(1)}%`);
+  console.log(`  duplicates suppressed: ${validationResults.parserDefectAccounting.duplicateSuppressedCount}`);
+  console.log(`  parser errors: ${validationResults.parserDefectAccounting.parserErrorCount}`);
+  console.log(`  missing gold labels: ${validationResults.parserDefectAccounting.missingGoldLabelCount}`);
   console.log(`Report: ${outPath}`);
 }
 

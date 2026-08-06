@@ -1,0 +1,2524 @@
+{
+  "setClassification": "final_blind_test_v1",
+  "evaluationVersion": "final-blind-v1",
+  "contentHash": "2d6f34f42cf5983f77a784bd5ccc3e07348d9f5da51ef5b11f809ebcd8a67b86",
+  "taxonomyVersion": "three-layer-v1",
+  "caseCount": 105,
+  "frozenAt": "2026-08-06T12:24:56.648Z",
+  "sealed": true,
+  "usagePolicy": "Do not run parser against this set until a release candidate passes development and validation gates. Single evaluation run only.",
+  "categoryCounts": {
+    "blind removal": 7,
+    "blind tutor": 12,
+    "blind ramp": 8,
+    "blind draw": 5,
+    "blind replacement": 5,
+    "blind cast-from-exile": 4,
+    "blind exile": 1,
+    "blind saga": 3,
+    "blind planeswalker": 4,
+    "blind split": 4,
+    "blind modal": 3,
+    "blind recursion": 5,
+    "blind token": 3,
+    "blind counter": 3,
+    "blind destroy": 3,
+    "blind mill": 3,
+    "blind static": 3,
+    "blind protection": 3,
+    "blind combo": 3,
+    "blind copy": 3,
+    "blind compound": 2,
+    "blind wipe": 3,
+    "blind extra": 5,
+    "blind extra-2": 2,
+    "blind extra split": 1,
+    "blind mdfc": 5,
+    "blind flashback": 2
+  },
+  "cases": [
+    {
+      "id": "blind-0001",
+      "category": "blind removal",
+      "oracleId": "blind-oracle-1",
+      "oracleText": "Exile target creature. Its controller gains life equal to its power.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target creature"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gains life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "gain_life"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0002",
+      "category": "blind removal",
+      "oracleId": "blind-oracle-2",
+      "oracleText": "Destroy target permanent. Its controller creates a 3/3 green Beast creature token.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target permanent"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "creates a 3/3"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy",
+            "create_token"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "destroy",
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "destroy",
+            "create_token"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0003",
+      "category": "blind removal",
+      "oracleId": "blind-oracle-3",
+      "oracleText": "The owner of target permanent shuffles it into their library, then reveals the top card of their library. If it's a permanent card, they put it onto the battlefield.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "shuffle_into_library",
+          "evidenceContains": "shuffles it into their library"
+        }
+      ]
+    },
+    {
+      "id": "blind-0004",
+      "category": "blind removal",
+      "oracleId": "blind-oracle-4",
+      "oracleText": "Return target nonland permanent you don't control to its owner's hand.\nOverload {6}{U}",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target nonland permanent"
+        }
+      ]
+    },
+    {
+      "id": "blind-0005",
+      "category": "blind removal",
+      "oracleId": "blind-oracle-5",
+      "oracleText": "Destroy target permanent.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target permanent"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0006",
+      "category": "blind tutor",
+      "oracleId": "blind-oracle-6",
+      "oracleText": "Search your library for a card, put it into your hand, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0007",
+      "category": "blind tutor",
+      "oracleId": "blind-oracle-7",
+      "oracleText": "As an additional cost to cast this spell, sacrifice a creature.\nSearch your library for a card, put that card into your hand, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifice a creature"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "sacrifice",
+            "search_library"
+          ]
+        },
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "sacrifice",
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0008",
+      "category": "blind tutor",
+      "oracleId": "blind-oracle-8",
+      "oracleText": "Search your library for a card, then shuffle and put that card on top.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0009",
+      "category": "blind tutor",
+      "oracleId": "blind-oracle-9",
+      "oracleText": "Search your library for a card, put it into your hand, shuffle, then discard a card at random.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discard a card"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "discard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0010",
+      "category": "blind tutor",
+      "oracleId": "blind-oracle-10",
+      "oracleText": "{1}, {T}, Sacrifice this artifact: Search your library for a card, put it into your hand, shuffle, then put a +1/+1 counter on a creature you control.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "put a +1/+1 counter"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "put_counter"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0011",
+      "category": "blind ramp",
+      "oracleId": "blind-oracle-11",
+      "oracleText": "{T}: Add {C}{C}.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {C}"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0012",
+      "category": "blind ramp",
+      "oracleId": "blind-oracle-12",
+      "oracleText": "At the beginning of your upkeep, flip a coin. If you lose the flip, this artifact deals 3 damage to you.\n{T}: Add {C}{C}.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {C}"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 3 damage"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "deal_damage"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "deal_damage"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0013",
+      "category": "blind ramp",
+      "oracleId": "blind-oracle-13",
+      "oracleText": "Search your library for a Forest card, put it onto the battlefield, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0014",
+      "category": "blind ramp",
+      "oracleId": "blind-oracle-14",
+      "oracleText": "Search your library for a Forest, Island, Mountain, or Plains card, put it onto the battlefield, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0015",
+      "category": "blind ramp",
+      "oracleId": "blind-oracle-15",
+      "oracleText": "Search your library for a Plains, Island, Swamp, or Mountain card, put it onto the battlefield tapped, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0016",
+      "category": "blind draw",
+      "oracleId": "blind-oracle-16",
+      "oracleText": "Whenever an opponent casts a spell, you may draw a card unless that player pays {1}.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0017",
+      "category": "blind draw",
+      "oracleId": "blind-oracle-17",
+      "oracleText": "Whenever an opponent casts a noncreature spell, you may draw a card unless that player pays {4}.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0018",
+      "category": "blind draw",
+      "oracleId": "blind-oracle-18",
+      "oracleText": "At the beginning of your upkeep, you draw a card and you lose 1 life.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "lose 1 life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "lose_life"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0019",
+      "category": "blind draw",
+      "oracleId": "blind-oracle-19",
+      "oracleText": "Skip your draw step.\nWhenever you discard a card, exile that card from your graveyard.\nPay 1 life: Exile the top card of your library. Put that card into your hand at the beginning of your next end step.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile the top card"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "into your hand"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "draw"
+          ]
+        },
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "exile",
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0020",
+      "category": "blind draw",
+      "oracleId": "blind-oracle-20",
+      "oracleText": "At the beginning of your draw step, you may draw two additional cards. If you do, choose two cards in your hand drawn this turn. For each of those cards, pay 4 life or put the card on top of your library.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw two additional cards",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0021",
+      "category": "blind replacement",
+      "oracleId": "blind-oracle-21",
+      "oracleText": "If a card would be put into a graveyard from anywhere, exile it instead.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile it instead"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0022",
+      "category": "blind replacement",
+      "oracleId": "blind-oracle-22",
+      "oracleText": "Creatures entering don't cause abilities to trigger.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy"
+      ]
+    },
+    {
+      "id": "blind-0023",
+      "category": "blind replacement",
+      "oracleId": "blind-oracle-23",
+      "oracleText": "Flash\nFlying\nWhen this creature enters, put a stun counter on target creature.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "stun counter"
+        }
+      ]
+    },
+    {
+      "id": "blind-0024",
+      "category": "blind replacement",
+      "oracleId": "blind-oracle-24",
+      "oracleText": "If a Forest entered under your control this turn, this creature has haste.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw"
+      ]
+    },
+    {
+      "id": "blind-0025",
+      "category": "blind replacement",
+      "oracleId": "blind-oracle-25",
+      "oracleText": "Your opponents can't cast spells or activate abilities during your turn.\nAll damage that would be dealt to you and permanents you control this turn is prevented.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "destroy"
+      ]
+    },
+    {
+      "id": "blind-0026",
+      "category": "blind cast-from-exile",
+      "oracleId": "blind-oracle-26",
+      "oracleText": "Whenever Etali attacks, exile the top card of each player's library, then you may cast any number of spells from among those cards without paying their mana costs.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile the top card"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast any number of spells"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "cast"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "exile",
+            "cast"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0027",
+      "category": "blind cast-from-exile",
+      "oracleId": "blind-oracle-27",
+      "oracleText": "You may cast spells from your hand without paying their mana costs.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast spells from your hand"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "cast"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0028",
+      "category": "blind cast-from-exile",
+      "oracleId": "blind-oracle-28",
+      "oracleText": "Flashback {3}{R}\nEach instant and sorcery card in your graveyard gains flashback until end of turn. The flashback cost is equal to its mana cost.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "gains flashback"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "cast"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0029",
+      "category": "blind cast-from-exile",
+      "oracleId": "blind-oracle-29",
+      "oracleText": "Exile all cards from your graveyard. You may cast instant and sorcery spells from among them this turn without paying their mana costs.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile all cards from your graveyard"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast instant and sorcery spells"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "cast"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "exile",
+            "cast"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0030",
+      "category": "blind exile",
+      "oracleId": "blind-oracle-30",
+      "oracleText": "Flash\nConvoke\nWhen this enchantment enters, exile target nonland permanent an opponent controls until this enchantment leaves the battlefield.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile target nonland permanent"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0031",
+      "category": "blind saga",
+      "layout": "saga",
+      "oracleId": "blind-oracle-31",
+      "oracleText": "I — Destroy each artifact with mana value 2 or less.\nII — Destroy each creature with mana value 2 or less.\nIII — Destroy each enchantment with mana value 2 or less.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy each artifact"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy each creature"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy each enchantment"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy",
+            "destroy",
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0032",
+      "category": "blind saga",
+      "layout": "saga",
+      "oracleId": "blind-oracle-32",
+      "oracleText": "When this land enters, you gain 1 life.\n{T}: Add {G}.\n{G}{G}{G}{G}{G}: Search your library for up to five creature cards, put them onto the battlefield, then shuffle.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 1 life"
+        },
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {G}"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "gain_life",
+            "add_mana",
+            "search_library"
+          ]
+        },
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "gain_life",
+            "add_mana",
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0033",
+      "category": "blind saga",
+      "layout": "saga",
+      "oracleId": "blind-oracle-33",
+      "oracleText": "I — Put a +1/+1 counter on each creature you control.\nII — Return target creature card from your graveyard to your hand.\nIII — Return all permanent cards from your graveyard to the battlefield.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "Put a +1/+1 counter"
+        },
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to your hand"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "put_counter",
+            "return_to_battlefield"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0034",
+      "category": "blind planeswalker",
+      "oracleId": "blind-oracle-34",
+      "oracleText": "+1: Until your next turn, you may cast sorcery spells as though they had flash.\n−3: Return target artifact, creature, or enchantment to its owner's hand.\n−8: You get an emblem with \"You may cast spells from your hand without paying their mana costs.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target artifact"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast spells from your hand"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_hand",
+            "cast"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0035",
+      "category": "blind planeswalker",
+      "oracleId": "blind-oracle-35",
+      "oracleText": "+2: Scry 2.\n−3: Exile target permanent.\n−10: Each opponent loses life equal to the number of permanents they control.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "scry",
+          "evidenceContains": "Scry 2"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target permanent"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "scry",
+            "exile",
+            "lose_life"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0036",
+      "category": "blind planeswalker",
+      "oracleId": "blind-oracle-36",
+      "oracleText": "+1: Destroy another target creature.\n−3: Target player loses 3 life and you gain 3 life.\n−8: Create a 6/6 green Wurm creature token for each land you control.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy another target creature"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses 3 life"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 3 life"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 6/6"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy",
+            "lose_life",
+            "gain_life",
+            "create_token"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "destroy",
+            "lose_life",
+            "gain_life",
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "destroy",
+            "lose_life",
+            "gain_life",
+            "create_token"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0037",
+      "category": "blind split",
+      "layout": "split",
+      "oracleId": "blind-oracle-37",
+      "oracleText": "Fire deals 2 damage divided as you choose among one or two targets.\n//\nTap target permanent.\nDraw a card.",
+      "cardFace": "back",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card",
+          "cardFace": "back"
+        },
+        {
+          "actionType": "tap",
+          "evidenceContains": "Tap target permanent",
+          "cardFace": "back"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "tap"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0038",
+      "category": "blind split",
+      "layout": "split",
+      "oracleId": "blind-oracle-38",
+      "oracleText": "Destroy target land.\n//\nDestroy target land and target artifact.",
+      "cardFace": "back",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target land",
+          "cardFace": "back"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0039",
+      "category": "blind split",
+      "layout": "split",
+      "oracleId": "blind-oracle-39",
+      "oracleText": "All creatures get +2/+2 until end of turn.\n//\nTarget player gains 2 life.",
+      "cardFace": "back",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gains 2 life",
+          "cardFace": "back"
+        }
+      ]
+    },
+    {
+      "id": "blind-0040",
+      "category": "blind modal",
+      "oracleId": "blind-oracle-40",
+      "oracleText": "Choose one —\n• Counter target spell.\n• Gain control of target permanent.\n• Draw two cards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target spell"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw two cards"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter",
+            "draw"
+          ]
+        },
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "counter",
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0041",
+      "category": "blind modal",
+      "oracleId": "blind-oracle-41",
+      "oracleText": "Choose one —\n• Draw three cards.\n• Each player mills three cards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw three cards"
+        },
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills three cards"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "mill"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "draw",
+            "mill"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0042",
+      "category": "blind modal",
+      "oracleId": "blind-oracle-42",
+      "oracleText": "This spell can't be countered.\nDestroy target nonland permanent.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target nonland permanent"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0043",
+      "category": "blind recursion",
+      "oracleId": "blind-oracle-43",
+      "oracleText": "During each of your turns, you may play lands and cast spells from your graveyard.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "play",
+          "evidenceContains": "play lands and cast spells from your graveyard"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "play"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0044",
+      "category": "blind recursion",
+      "oracleId": "blind-oracle-44",
+      "oracleText": "During each of your turns, you may play lands and cast permanents from your graveyard.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "play",
+          "evidenceContains": "play lands and cast permanents from your graveyard"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "play"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0045",
+      "category": "blind recursion",
+      "oracleId": "blind-oracle-45",
+      "oracleText": "Whenever another creature you control dies, return target creature card with lesser mana value from your graveyard to the battlefield.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0046",
+      "category": "blind token",
+      "oracleId": "blind-oracle-46",
+      "oracleText": "When this creature enters, create a Treasure token for each artifact and creature your opponents control.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Treasure token"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0047",
+      "category": "blind token",
+      "oracleId": "blind-oracle-47",
+      "oracleText": "Landfall — Whenever a land you control enters, create a Food token or a Treasure token.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a Food token"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0048",
+      "category": "blind token",
+      "oracleId": "blind-oracle-48",
+      "oracleText": "+1: Create a 1/1 colorless Servo artifact creature token.\n−2: Target artifact you control becomes a copy of another target artifact or creature you control until end of turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 1/1"
+        },
+        {
+          "actionType": "copy",
+          "evidenceContains": "becomes a copy"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token",
+            "copy"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token",
+            "copy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0049",
+      "category": "blind counter",
+      "oracleId": "blind-oracle-49",
+      "oracleText": "Counter target spell.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target spell"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0050",
+      "category": "blind counter",
+      "oracleId": "blind-oracle-50",
+      "oracleText": "Counter target spell. At the beginning of your next main phase, add {C}{C}.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target spell"
+        },
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {C}"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter",
+            "add_mana"
+          ]
+        },
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "counter",
+            "add_mana"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0051",
+      "category": "blind counter",
+      "oracleId": "blind-oracle-51",
+      "oracleText": "Counter target enchantment, instant, or sorcery spell. Its controller creates a 2/2 blue Bird creature token with flying.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "creates a 2/2"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter",
+            "create_token"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "counter",
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "counter",
+            "create_token"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0052",
+      "category": "blind destroy",
+      "oracleId": "blind-oracle-52",
+      "oracleText": "Destroy target nonland permanent with mana value 3 or less.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target nonland permanent"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0053",
+      "category": "blind destroy",
+      "oracleId": "blind-oracle-53",
+      "oracleText": "Destroy target permanent an opponent controls. Its controller searches their library for a basic land card, puts it onto the battlefield, then shuffles.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target permanent"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "searches their library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy",
+            "search_library"
+          ]
+        },
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "destroy",
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0054",
+      "category": "blind destroy",
+      "oracleId": "blind-oracle-54",
+      "oracleText": "Choose one or more —\n• Exile all artifacts.\n• Exile all creatures.\n• Exile all enchantments.\n• Exile all graveyards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile all artifacts"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile all creatures"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0055",
+      "category": "blind mill",
+      "oracleId": "blind-oracle-55",
+      "oracleText": "Target player mills three cards.\nStorm",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills three cards"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "mill"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0056",
+      "category": "blind mill",
+      "oracleId": "blind-oracle-56",
+      "oracleText": "Target player mills half their library, rounded down.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills half"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "mill"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0057",
+      "category": "blind mill",
+      "oracleId": "blind-oracle-57",
+      "oracleText": "Whenever you draw a card, each opponent mills that many cards.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills that many cards"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "mill"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0058",
+      "category": "blind removal",
+      "oracleId": "blind-oracle-58",
+      "oracleText": "Destroy target creature or planeswalker.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target creature"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0059",
+      "category": "blind removal",
+      "oracleId": "blind-oracle-59",
+      "oracleText": "Exile target nonland permanent. You lose 3 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target nonland permanent"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "lose 3 life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "lose_life"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0060",
+      "category": "blind split",
+      "layout": "split",
+      "oracleId": "blind-oracle-60",
+      "oracleText": "Target player mills X cards, where X is the number of cards in your hand.\n//\nDestroy all artifacts and enchantments.",
+      "cardFace": "back",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills X cards",
+          "cardFace": "back"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy all artifacts",
+          "cardFace": "back"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "mill",
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0061",
+      "category": "blind ramp",
+      "oracleId": "blind-oracle-61",
+      "oracleText": "Exile this card from your hand: Add {G}.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile this card from your hand"
+        },
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {G}"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "add_mana"
+          ]
+        },
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "exile",
+            "add_mana"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0062",
+      "category": "blind ramp",
+      "oracleId": "blind-oracle-62",
+      "oracleText": "Exile this card from your hand: Add {R}.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile this card from your hand"
+        },
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {R}"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "add_mana"
+          ]
+        },
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "exile",
+            "add_mana"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0063",
+      "category": "blind ramp",
+      "oracleId": "blind-oracle-63",
+      "oracleText": "{T}, Sacrifice this artifact: Add one mana of any color.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this artifact"
+        },
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add one mana"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "sacrifice",
+            "add_mana"
+          ]
+        },
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "sacrifice",
+            "add_mana"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0064",
+      "category": "blind static",
+      "oracleId": "blind-oracle-64",
+      "oracleText": "Your opponents can't cast spells during your turn.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "counter"
+      ]
+    },
+    {
+      "id": "blind-0065",
+      "category": "blind static",
+      "oracleId": "blind-oracle-65",
+      "oracleText": "During your turn, your opponents can't cast spells or activate abilities of artifacts, creatures, or enchantments.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw"
+      ]
+    },
+    {
+      "id": "blind-0066",
+      "category": "blind static",
+      "oracleId": "blind-oracle-66",
+      "oracleText": "Your opponents can't cast spells from anywhere other than their hand.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "counter"
+      ]
+    },
+    {
+      "id": "blind-0067",
+      "category": "blind protection",
+      "oracleId": "blind-oracle-67",
+      "oracleText": "Draw a card.\nYour opponents can't cast blue or black spells this turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "destroy"
+      ]
+    },
+    {
+      "id": "blind-0068",
+      "category": "blind protection",
+      "oracleId": "blind-oracle-68",
+      "oracleText": "Your opponents can't cast blue or black spells this turn.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw"
+      ]
+    },
+    {
+      "id": "blind-0069",
+      "category": "blind protection",
+      "oracleId": "blind-oracle-69",
+      "oracleText": "Permanents you control gain hexproof and indestructible until end of turn.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "destroy"
+      ]
+    },
+    {
+      "id": "blind-0070",
+      "category": "blind combo",
+      "oracleId": "blind-oracle-70",
+      "oracleText": "When this creature enters, scry 1.\nWhen you cast this spell, look at the top X cards of your library, where X is the amount of mana spent to cast it. Put one of those cards into your hand and the rest on the bottom of your library in a random order.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 2
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "scry",
+          "evidenceContains": "scry 1"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "into your hand"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "scry",
+            "draw"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0071",
+      "category": "blind combo",
+      "oracleId": "blind-oracle-71",
+      "oracleText": "If you would draw a card while your library has no cards in it, you win the game instead.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw"
+      ]
+    },
+    {
+      "id": "blind-0072",
+      "category": "blind combo",
+      "oracleId": "blind-oracle-72",
+      "oracleText": "If you would draw a card while your library has no cards in it, you win the game instead.\n+1: Target player puts the top two cards of their library into their graveyard.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "into their graveyard"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "mill"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0073",
+      "category": "blind copy",
+      "oracleId": "blind-oracle-73",
+      "oracleText": "Copy target instant or sorcery spell, then return it to its owner's hand.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "Copy target instant"
+        },
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "return it to its owner's hand"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "copy",
+            "return_to_hand"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0074",
+      "category": "blind copy",
+      "oracleId": "blind-oracle-74",
+      "oracleText": "Whenever you cast an instant or sorcery spell, copy that spell. You may choose new targets for the copy.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy that spell"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "copy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0075",
+      "category": "blind copy",
+      "oracleId": "blind-oracle-75",
+      "oracleText": "Flash\nWhen this creature enters, copy target instant or sorcery spell. You may choose new targets for the copy.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy target instant"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "copy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0076",
+      "category": "blind compound",
+      "oracleId": "blind-oracle-76",
+      "oracleText": "Exile target creature. Its controller may search their library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target creature"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search their library",
+          "optional": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "search_library"
+          ]
+        },
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "exile",
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0077",
+      "category": "blind compound",
+      "oracleId": "blind-oracle-77",
+      "oracleText": "Converge — Exile target nonland permanent if its mana value is less than or equal to the number of colors of mana spent to cast this spell.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target nonland permanent"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0078",
+      "category": "blind planeswalker",
+      "oracleId": "blind-oracle-78",
+      "oracleText": "+1: Draw a card. At the beginning of the next end step, untap two lands.\n−3: Put target nonland permanent into its owner's library third from the top.\n−8: You get an emblem with \"Whenever you draw a card, exile target permanent an opponent controls.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile target permanent"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "exile"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "draw",
+            "exile"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0079",
+      "category": "blind tutor",
+      "oracleId": "blind-oracle-79",
+      "oracleText": "As an additional cost to cast this spell, sacrifice a land.\nSearch your library for a land card, put it onto the battlefield, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifice a land"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "sacrifice",
+            "search_library"
+          ]
+        },
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "sacrifice",
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0080",
+      "category": "blind tutor",
+      "oracleId": "blind-oracle-80",
+      "oracleText": "Search your library for an artifact or enchantment card, reveal it, put it into your hand, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0081",
+      "category": "blind tutor",
+      "oracleId": "blind-oracle-81",
+      "oracleText": "Search your library for an instant or sorcery card, reveal it, put it into your hand, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0082",
+      "category": "blind tutor",
+      "oracleId": "blind-oracle-82",
+      "oracleText": "Search your library for a creature card, reveal it, put it into your hand, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0083",
+      "category": "blind tutor",
+      "oracleId": "blind-oracle-83",
+      "oracleText": "Search your library for a card, shuffle, put that card on top of your library, then lose 3 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "lose 3 life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "lose_life"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0084",
+      "category": "blind wipe",
+      "oracleId": "blind-oracle-84",
+      "oracleText": "Destroy all creatures. They can't be regenerated.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy all creatures"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0085",
+      "category": "blind wipe",
+      "oracleId": "blind-oracle-85",
+      "oracleText": "Destroy all creatures. They can't be regenerated.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy all creatures"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0086",
+      "category": "blind wipe",
+      "oracleId": "blind-oracle-86",
+      "oracleText": "As an additional cost to cast this spell, pay X life.\nAll creatures get -X/-X until end of turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "pay X life"
+        }
+      ]
+    },
+    {
+      "id": "blind-0087",
+      "category": "blind extra",
+      "oracleId": "blind-oracle-87",
+      "oracleText": "Counter target noncreature spell.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target noncreature"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0088",
+      "category": "blind extra",
+      "oracleId": "blind-oracle-88",
+      "oracleText": "Counter target instant spell.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target instant"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0089",
+      "category": "blind extra",
+      "oracleId": "blind-oracle-89",
+      "oracleText": "Counter target instant or sorcery spell unless its controller pays {1}.\nStorm",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target instant"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0090",
+      "category": "blind extra",
+      "oracleId": "blind-oracle-90",
+      "oracleText": "Choose one —\n• Counter target spell if it's blue.\n• Destroy target blue permanent.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target spell"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target blue permanent"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter",
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0091",
+      "category": "blind extra",
+      "oracleId": "blind-oracle-91",
+      "oracleText": "Choose one —\n• Counter target spell if it's red.\n• Destroy target red permanent.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target spell"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target red permanent"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter",
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0092",
+      "category": "blind extra-2",
+      "oracleId": "blind-oracle-92",
+      "oracleText": "Destroy target artifact or enchantment. Its controller gains 4 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target artifact"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gains 4 life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy",
+            "gain_life"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0093",
+      "category": "blind extra-2",
+      "oracleId": "blind-oracle-93",
+      "oracleText": "Choose one —\n• Destroy target artifact.\n• Destroy target enchantment.\n• Counter target artifact or enchantment spell.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target artifact"
+        },
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target artifact"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy",
+            "counter"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0094",
+      "category": "blind extra split",
+      "layout": "split",
+      "oracleId": "blind-oracle-94",
+      "oracleText": "Destroy target artifact.\n//\nDestroy target enchantment.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target artifact"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target enchantment"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy",
+            "destroy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0095",
+      "category": "blind mdfc",
+      "layout": "modal_dfc",
+      "oracleId": "blind-oracle-95",
+      "oracleText": "Return target card from your graveyard to your hand.\n//\nThis land enters tapped.",
+      "cardFace": "front",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to your hand",
+          "cardFace": "front"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0096",
+      "category": "blind mdfc",
+      "layout": "modal_dfc",
+      "oracleId": "blind-oracle-96",
+      "oracleText": "Shatterskull Smashing deals X damage divided as you choose among one or two targets.\n//\nThis land enters tapped.",
+      "cardFace": "front",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals X damage",
+          "cardFace": "front"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "deal_damage"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0097",
+      "category": "blind mdfc",
+      "layout": "modal_dfc",
+      "oracleId": "blind-oracle-97",
+      "oracleText": "Look at the top ten cards of your library. You may put a creature card with mana value 3 or less from among them onto the battlefield. Put the rest on the bottom of your library in a random order.",
+      "cardFace": "front",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "onto the battlefield",
+          "cardFace": "front"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0098",
+      "category": "blind mdfc",
+      "layout": "modal_dfc",
+      "oracleId": "blind-oracle-98",
+      "oracleText": "Create two 1/1 white Spirit creature tokens with flying.\n//\nThis land enters tapped.",
+      "cardFace": "front",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create two 1/1",
+          "cardFace": "front"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0099",
+      "category": "blind flashback",
+      "oracleId": "blind-oracle-99",
+      "oracleText": "Return target permanent card with mana value 3 or less from your graveyard to the battlefield.\nFlashback {4}{W}",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0100",
+      "category": "blind flashback",
+      "oracleId": "blind-oracle-100",
+      "oracleText": "Return target creature card with mana value 3 or less from your graveyard to the battlefield.\nCycling {2}",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0101",
+      "category": "blind recursion",
+      "oracleId": "blind-oracle-101",
+      "oracleText": "Return target nonlegendary permanent card from your graveyard to the battlefield with a -1/-1 counter on it.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0102",
+      "category": "blind recursion",
+      "oracleId": "blind-oracle-102",
+      "oracleText": "Return target creature card from your graveyard to the battlefield. It gains haste until your next turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0103",
+      "category": "blind mdfc",
+      "layout": "modal_dfc",
+      "oracleId": "blind-oracle-103",
+      "oracleText": "Return from your graveyard to the battlefield any number of creature cards that have different mana values.",
+      "cardFace": "front",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to the battlefield",
+          "cardFace": "front"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0104",
+      "category": "blind tutor",
+      "oracleId": "blind-oracle-104",
+      "oracleText": "Search your library for a green creature card with mana value X or less, put it onto the battlefield, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blind-0105",
+      "category": "blind tutor",
+      "oracleId": "blind-oracle-105",
+      "oracleText": "Search your library and/or graveyard for a creature card with mana value X or less and put it onto the battlefield.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "put it onto the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "return_to_battlefield"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "search_library",
+            "return_to_battlefield"
+          ]
+        }
+      ]
+    }
+  ]
+}

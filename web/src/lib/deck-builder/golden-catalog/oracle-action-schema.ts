@@ -23,6 +23,17 @@ export type OracleActionExtractionMethod =
   | "model_assisted"
   | "manual_override";
 
+/** Card-face component kinds for split / MDFC / adventure isolation. */
+export type CardFaceComponentType =
+  | "single"
+  | "split"
+  | "adventure"
+  | "mdfc"
+  | "room"
+  | "transform"
+  | "saga"
+  | "class";
+
 export interface OracleActionCost {
   type: string;
   amount?: number;
@@ -52,6 +63,10 @@ export interface OracleAction {
   actionId: string;
   oracleId: string;
   cardFaceId: string;
+  faceId?: string;
+  faceName?: string;
+  faceIndex?: number;
+  componentType?: CardFaceComponentType;
   abilityIndex: number;
   actionIndex: number;
 
@@ -109,7 +124,7 @@ export const ORACLE_ACTION_PRODUCTION_GATES = {
   falsePositiveRate: { target: 0.02, label: "≤2%" },
 } as const;
 
-export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1-primitives";
+export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.2-dedup-play-faces";
 
 export const HIGH_VALUE_ACTION_TYPES = [
   "draw",

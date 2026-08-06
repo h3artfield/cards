@@ -1,0 +1,40 @@
+{
+  "developmentSet": {
+    "path": "data/oracle-action-eval-development-frozen.json",
+    "classification": "development",
+    "purpose": "Parser iteration and rule development"
+  },
+  "validationSet": {
+    "path": "data/oracle-action-eval-validation-v2.json",
+    "classification": "validation_set_v2",
+    "contentHash": "496a5dd7fcc5c6259f600e25aeecaeead6a036a6574b53cc58e9001321943734",
+    "caseCount": 104,
+    "purpose": "Occasional generalization measurement — no case-specific rule tuning",
+    "priorVersions": [
+      {
+        "path": "data/oracle-action-eval-validation-v1.json",
+        "classification": "validation_set_v1",
+        "contentHash": "ca1f02f129149e08d77eaf14e0be3ac39dcf6f6b7cb68a5925983571e0ecf622",
+        "supersededAt": "2026-08-06T13:54:18.648Z",
+        "reason": "17 missing-label proposals adjudicated from blind review"
+      }
+    ]
+  },
+  "finalBlindTest": {
+    "path": "data/oracle-action-eval-final-blind-v1.json",
+    "classification": "final_blind_test_v1",
+    "purpose": "Sealed until release candidate passes dev + validation gates",
+    "goldReviewCompletedAt": "2026-08-06T13:54:21.137Z",
+    "goldReviewManifest": "data/oracle-action-eval-final-blind-reviewed-manifest.json",
+    "contentHash": "2d6f34f42cf5983f77a784bd5ccc3e07348d9f5da51ef5b11f809ebcd8a67b86",
+    "caseCount": 105
+  },
+  "gateSequence": [
+    "improve parser on development set",
+    "pass development gates",
+    "evaluate on manually reviewed validation set",
+    "freeze release candidate",
+    "run once against sealed final blind set",
+    "begin 500-card pilot"
+  ]
+}

@@ -203,3 +203,43 @@ export function normalizeAbilityType(raw: string): AbilityStructureType | string
   if (raw === "unknown") return "spell_effect";
   return raw;
 }
+
+/** Minimum gold-label support before a primitive may reach production_supported. */
+export const PRODUCTION_SUPPORTED_MIN_SUPPORT = 5;
+
+export type PrimitiveSupportTier = "experimental" | "validation_ready" | "production_supported";
+
+export interface PrimitiveSupportRequirements {
+  minSupport: number;
+  minPrecision: number;
+  minRecall: number;
+  maxFalsePositiveRate: number;
+}
+
+export const PRODUCTION_SUPPORTED_REQUIREMENTS: PrimitiveSupportRequirements = {
+  minSupport: PRODUCTION_SUPPORTED_MIN_SUPPORT,
+  minPrecision: 0.98,
+  minRecall: 0.95,
+  maxFalsePositiveRate: 0.02,
+};
+
+export function classifyPrimitiveSupportTier(metrics: {
+  support: number;
+  precision: number;
+  recall: number;
+  falsePositiveRate: number;
+}): PrimitiveSupportTier {
+  const r = PRODUCTION_SUPPORTED_REQUIREMENTS;
+  if (
+    metrics.support >= r.minSupport &&
+    metrics.precision >= r.minPrecision &&
+    metrics.recall >= r.minRecall &&
+    metrics.falsePositiveRate <= r.maxFalsePositiveRate
+  ) {
+    return "production_supported";
+  }
+  if (metrics.support >= 3 && metrics.precision >= 0.9 && metrics.recall >= 0.85) {
+    return "validation_ready";
+  }
+  return "experimental";
+}
