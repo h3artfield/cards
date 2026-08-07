@@ -2344,7 +2344,14 @@
       "dev-exp-v1-044",
       "dev-exp-v1-048",
       "dev-exp-v1-052"
-    ]
+    ],
+    "checkHoldout": {
+      "holdoutStatus": "spent_for_development",
+      "spentReason": "failure-family diagnosis after milestone #2",
+      "parserExecutionCount": 2,
+      "spentAt": "2026-08-07T21:30:00.000Z",
+      "doNotRunExecution": 3
+    }
   },
   "goldCertification": {
     "certifierId": "development-generalization-expansion-v1-builder",
@@ -2355,5 +2362,12 @@
     "goldCompletenessStatus": "complete",
     "parserExecutionCount": 0,
     "policyNote": "Genuine parser families only — excludes disproven v10 policy families."
+  },
+  "expansionCheckHoldout": {
+    "holdoutStatus": "spent_for_development",
+    "spentReason": "failure-family diagnosis after milestone #2",
+    "parserExecutionCount": 2,
+    "spentAt": "2026-08-07T21:30:00.000Z",
+    "doNotRunExecution": 3
   }
 }

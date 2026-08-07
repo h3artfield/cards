@@ -1,0 +1,47 @@
+{
+  "frozenAt": "2026-08-07T21:30:00.000Z",
+  "checkpointType": "development",
+  "rc2Authorized": false,
+  "parserVersion": "oracle-action-v1.24-recall-recovery-dev",
+  "parserSHA": "9bddbf750d3f202a9e55689d3b181f8444dc08a6",
+  "expansionCheckExecutionCount": 2,
+  "expansionCheckResult": "failed",
+  "expansionCheckV1": {
+    "holdoutStatus": "spent_for_development",
+    "spentReason": "failure-family diagnosis after milestone #2",
+    "parserExecutionCount": 2,
+    "metrics": {
+      "precision": 0.813,
+      "recall": 0.722,
+      "unsupported": 0
+    },
+    "gate": {
+      "precisionTarget": 0.95,
+      "recallTarget": 0.85,
+      "passed": false
+    }
+  },
+  "combinedDevelopmentGate": {
+    "precision": 1,
+    "recall": 0.933,
+    "unsupported": 0,
+    "passed": true
+  },
+  "expansionTraining": {
+    "precision": 1,
+    "recall": 1,
+    "unsupported": 0
+  },
+  "originalDevelopmentV26": {
+    "precision": 1,
+    "recall": 0.922,
+    "unsupported": 0
+  },
+  "failureFamilyCounts": {
+    "wrong_primitive": 1,
+    "gold_oracle_mismatch": 2,
+    "missing_grammar": 2,
+    "ability_attachment": 3
+  },
+  "note": "Development checkpoint only — not RC2. expansion-check-v1 spent; do not run execution #3."
+}

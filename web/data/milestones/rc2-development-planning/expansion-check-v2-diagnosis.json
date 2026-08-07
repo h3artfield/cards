@@ -1,0 +1,490 @@
+{
+  "generatedAt": "2026-08-07T21:26:13.780Z",
+  "parserVersion": "oracle-action-v1.24-recall-recovery-dev",
+  "expansionCheckExecutionCount": 2,
+  "holdoutStatus": "spent_for_development",
+  "spentReason": "failure-family diagnosis after milestone #2",
+  "diagnoses": [
+    {
+      "caseId": "dev-exp-v1-008",
+      "oracleId": "01cebebb-050c-4b69-8a13-c569183a3cc3",
+      "expansionFamily": "pronoun_coreference",
+      "abstractConstruction": "activated_cost → create_token_copy_of_target → delayed_exile_referent",
+      "metrics": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1
+      },
+      "goldAnalysis": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy of target artifact",
+          "evidenceInOracle": true,
+          "primaryFailureFamily": "wrong_primitive"
+        }
+      ],
+      "emitted": [
+        {
+          "actionType": "create_token",
+          "reviewStatus": "accepted",
+          "evidenceText": "Create a token that's a copy of target artifact",
+          "abilityIndex": 0,
+          "textRole": "effect",
+          "destinationZones": [
+            "battlefield"
+          ],
+          "optionalEffect": false,
+          "delayedEffect": true,
+          "timingCondition": "at the beginning of the next end step",
+          "tokenCopyOf": "target artifact"
+        }
+      ],
+      "unmatchedGold": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy of target artifact"
+        }
+      ],
+      "unmatchedActions": [
+        {
+          "index": 0,
+          "primitive": "create_token",
+          "evidenceText": "Create a token that's a copy of target artifact",
+          "evidenceStart": 5,
+          "evidenceEnd": 52,
+          "cardFaceId": "front",
+          "abilityIndex": 0,
+          "reviewStatus": "accepted",
+          "optionalEffect": false,
+          "optional": false
+        }
+      ]
+    },
+    {
+      "caseId": "dev-exp-v1-012",
+      "oracleId": "223db021-979f-4312-8cb5-169ae4bf17bc",
+      "expansionFamily": "unusual_imperative_verb",
+      "abstractConstruction": "spell_effect → exile_target_creature ∥ each_player_gain_life",
+      "metrics": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2
+      },
+      "goldAnalysis": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target creature with flying",
+          "evidenceInOracle": false,
+          "primaryFailureFamily": "gold_oracle_mismatch"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gains 4 life",
+          "evidenceInOracle": false,
+          "primaryFailureFamily": "gold_oracle_mismatch"
+        }
+      ],
+      "emitted": [
+        {
+          "actionType": "exile",
+          "reviewStatus": "accepted",
+          "evidenceText": "Exile target creature",
+          "abilityIndex": 0,
+          "textRole": "effect",
+          "destinationZones": [
+            "exile"
+          ],
+          "optionalEffect": false
+        },
+        {
+          "actionType": "gain_life",
+          "reviewStatus": "accepted",
+          "evidenceText": "gains 3 life",
+          "abilityIndex": 0,
+          "textRole": "effect",
+          "destinationZones": [
+            "exile"
+          ],
+          "optionalEffect": false,
+          "quantityType": "literal",
+          "quantityExpression": "3"
+        }
+      ],
+      "unmatchedGold": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target creature with flying"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gains 4 life"
+        }
+      ],
+      "unmatchedActions": [
+        {
+          "index": 0,
+          "primitive": "exile",
+          "evidenceText": "Exile target creature",
+          "evidenceStart": 0,
+          "evidenceEnd": 21,
+          "cardFaceId": "front",
+          "abilityIndex": 0,
+          "reviewStatus": "accepted",
+          "optionalEffect": false,
+          "optional": false
+        },
+        {
+          "index": 1,
+          "primitive": "gain_life",
+          "evidenceText": "gains 3 life",
+          "evidenceStart": 35,
+          "evidenceEnd": 47,
+          "cardFaceId": "front",
+          "abilityIndex": 0,
+          "reviewStatus": "accepted",
+          "optionalEffect": false,
+          "optional": false
+        }
+      ]
+    },
+    {
+      "caseId": "dev-exp-v1-028",
+      "oracleId": "020c26ba-ed46-47c3-925c-b9f32500f503",
+      "expansionFamily": "search_tutor_resolution",
+      "abstractConstruction": "spell_effect → lose_life ∥ optional_search_library_or_graveyard_for_named_card → hand",
+      "metrics": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2
+      },
+      "goldAnalysis": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses 4 life",
+          "evidenceInOracle": true,
+          "primaryFailureFamily": "missing_grammar"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library and/or graveyard",
+          "evidenceInOracle": true,
+          "primaryFailureFamily": "missing_grammar"
+        }
+      ],
+      "emitted": [
+        {
+          "actionType": "lose_life",
+          "reviewStatus": "needs_review",
+          "evidenceText": "loses 4 life",
+          "abilityIndex": 0,
+          "textRole": "effect",
+          "sourceZones": [
+            "library"
+          ],
+          "destinationZones": [
+            "hand"
+          ],
+          "optionalEffect": false,
+          "quantityType": "literal",
+          "quantityExpression": "4"
+        }
+      ],
+      "unmatchedGold": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses 4 life"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library and/or graveyard"
+        }
+      ],
+      "unmatchedActions": []
+    },
+    {
+      "caseId": "dev-exp-v1-040",
+      "oracleId": "0a01dd05-e289-489f-b3ad-88e15e157bd0",
+      "expansionFamily": "wrong_ability_attachment",
+      "abstractConstruction": "loyalty_+1 → reveal_put_hand ∥ opponents_lose_life_equal_to_revealed_mv",
+      "metrics": {
+        "tp": 2,
+        "fp": 1,
+        "fn": 0
+      },
+      "goldAnalysis": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "put that card into your hand",
+          "evidenceInOracle": true,
+          "primaryFailureFamily": "ability_attachment"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses life equal to its mana value",
+          "evidenceInOracle": true,
+          "primaryFailureFamily": "ability_attachment"
+        }
+      ],
+      "emitted": [
+        {
+          "actionType": "draw",
+          "reviewStatus": "accepted",
+          "evidenceText": "Reveal the top card of your library and put that card into your hand",
+          "abilityIndex": 0,
+          "loyaltyCost": "+1",
+          "textRole": "effect",
+          "destinationZones": [
+            "hand"
+          ],
+          "optionalEffect": false,
+          "referentObject": "that card"
+        },
+        {
+          "actionType": "lose_life",
+          "reviewStatus": "accepted",
+          "evidenceText": "Each opponent loses life equal to its mana value",
+          "abilityIndex": 0,
+          "loyaltyCost": "+1",
+          "textRole": "effect",
+          "destinationZones": [
+            "hand"
+          ],
+          "optionalEffect": false,
+          "quantityType": "variable",
+          "quantityExpression": "its mana value"
+        },
+        {
+          "actionType": "deal_damage",
+          "reviewStatus": "accepted",
+          "evidenceText": "deals X damage to target creature or planeswalker and you gain X life",
+          "abilityIndex": 0,
+          "loyaltyCost": "+1",
+          "textRole": "effect",
+          "destinationZones": [
+            "hand"
+          ],
+          "optionalEffect": false,
+          "quantityType": "variable",
+          "quantityExpression": "X"
+        },
+        {
+          "actionType": "gain_life",
+          "reviewStatus": "accepted",
+          "evidenceText": "you gain X life",
+          "abilityIndex": 0,
+          "loyaltyCost": "+1",
+          "textRole": "effect",
+          "destinationZones": [
+            "hand"
+          ],
+          "optionalEffect": false,
+          "quantityType": "variable",
+          "quantityExpression": "X"
+        },
+        {
+          "actionType": "create_token",
+          "reviewStatus": "accepted",
+          "evidenceText": "Create a number of 1/1 black Vampire Knight creature tokens",
+          "abilityIndex": 1,
+          "loyaltyCost": "−9",
+          "textRole": "effect",
+          "destinationZones": [
+            "battlefield"
+          ],
+          "optionalEffect": false
+        }
+      ],
+      "unmatchedGold": [],
+      "unmatchedActions": [
+        {
+          "index": 2,
+          "primitive": "deal_damage",
+          "evidenceText": "deals X damage to target creature or planeswalker and you gain X life",
+          "evidenceStart": 134,
+          "evidenceEnd": 203,
+          "cardFaceId": "front",
+          "abilityIndex": 0,
+          "reviewStatus": "accepted",
+          "loyaltyCost": "+1",
+          "optionalEffect": false,
+          "optional": false
+        },
+        {
+          "index": 3,
+          "primitive": "gain_life",
+          "evidenceText": "you gain X life",
+          "evidenceStart": 188,
+          "evidenceEnd": 203,
+          "cardFaceId": "front",
+          "abilityIndex": 0,
+          "reviewStatus": "accepted",
+          "loyaltyCost": "+1",
+          "optionalEffect": false,
+          "optional": false
+        },
+        {
+          "index": 4,
+          "primitive": "create_token",
+          "evidenceText": "Create a number of 1/1 black Vampire Knight creature tokens",
+          "evidenceStart": 209,
+          "evidenceEnd": 268,
+          "cardFaceId": "front",
+          "abilityIndex": 1,
+          "reviewStatus": "accepted",
+          "loyaltyCost": "−9",
+          "optionalEffect": false,
+          "optional": false
+        }
+      ]
+    },
+    {
+      "caseId": "dev-exp-v1-048",
+      "oracleId": "0a01dd05-e289-489f-b3ad-88e15e157bd0",
+      "expansionFamily": "variable_lose_life_regression",
+      "abstractConstruction": "loyalty_+1 → reveal_put_hand ∥ opponents_lose_life_equal_to_revealed_mv",
+      "metrics": {
+        "tp": 1,
+        "fp": 2,
+        "fn": 0
+      },
+      "goldAnalysis": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses life equal to its mana value",
+          "evidenceInOracle": true,
+          "primaryFailureFamily": "ability_attachment"
+        }
+      ],
+      "emitted": [
+        {
+          "actionType": "draw",
+          "reviewStatus": "accepted",
+          "evidenceText": "Reveal the top card of your library and put that card into your hand",
+          "abilityIndex": 0,
+          "loyaltyCost": "+1",
+          "textRole": "effect",
+          "destinationZones": [
+            "hand"
+          ],
+          "optionalEffect": false,
+          "referentObject": "that card"
+        },
+        {
+          "actionType": "lose_life",
+          "reviewStatus": "accepted",
+          "evidenceText": "Each opponent loses life equal to its mana value",
+          "abilityIndex": 0,
+          "loyaltyCost": "+1",
+          "textRole": "effect",
+          "destinationZones": [
+            "hand"
+          ],
+          "optionalEffect": false,
+          "quantityType": "variable",
+          "quantityExpression": "its mana value"
+        },
+        {
+          "actionType": "deal_damage",
+          "reviewStatus": "accepted",
+          "evidenceText": "deals X damage to target creature or planeswalker and you gain X life",
+          "abilityIndex": 0,
+          "loyaltyCost": "+1",
+          "textRole": "effect",
+          "destinationZones": [
+            "hand"
+          ],
+          "optionalEffect": false,
+          "quantityType": "variable",
+          "quantityExpression": "X"
+        },
+        {
+          "actionType": "gain_life",
+          "reviewStatus": "accepted",
+          "evidenceText": "you gain X life",
+          "abilityIndex": 0,
+          "loyaltyCost": "+1",
+          "textRole": "effect",
+          "destinationZones": [
+            "hand"
+          ],
+          "optionalEffect": false,
+          "quantityType": "variable",
+          "quantityExpression": "X"
+        },
+        {
+          "actionType": "create_token",
+          "reviewStatus": "accepted",
+          "evidenceText": "Create a number of 1/1 black Vampire Knight creature tokens",
+          "abilityIndex": 1,
+          "loyaltyCost": "−9",
+          "textRole": "effect",
+          "destinationZones": [
+            "battlefield"
+          ],
+          "optionalEffect": false
+        }
+      ],
+      "unmatchedGold": [],
+      "unmatchedActions": [
+        {
+          "index": 0,
+          "primitive": "draw",
+          "evidenceText": "Reveal the top card of your library and put that card into your hand",
+          "evidenceStart": 4,
+          "evidenceEnd": 72,
+          "cardFaceId": "front",
+          "abilityIndex": 0,
+          "reviewStatus": "accepted",
+          "loyaltyCost": "+1",
+          "optionalEffect": false,
+          "optional": false
+        },
+        {
+          "index": 2,
+          "primitive": "deal_damage",
+          "evidenceText": "deals X damage to target creature or planeswalker and you gain X life",
+          "evidenceStart": 134,
+          "evidenceEnd": 203,
+          "cardFaceId": "front",
+          "abilityIndex": 0,
+          "reviewStatus": "accepted",
+          "loyaltyCost": "+1",
+          "optionalEffect": false,
+          "optional": false
+        },
+        {
+          "index": 3,
+          "primitive": "gain_life",
+          "evidenceText": "you gain X life",
+          "evidenceStart": 188,
+          "evidenceEnd": 203,
+          "cardFaceId": "front",
+          "abilityIndex": 0,
+          "reviewStatus": "accepted",
+          "loyaltyCost": "+1",
+          "optionalEffect": false,
+          "optional": false
+        },
+        {
+          "index": 4,
+          "primitive": "create_token",
+          "evidenceText": "Create a number of 1/1 black Vampire Knight creature tokens",
+          "evidenceStart": 209,
+          "evidenceEnd": 268,
+          "cardFaceId": "front",
+          "abilityIndex": 1,
+          "reviewStatus": "accepted",
+          "loyaltyCost": "−9",
+          "optionalEffect": false,
+          "optional": false
+        }
+      ]
+    }
+  ],
+  "failureFamilyCounts": {
+    "wrong_primitive": 1,
+    "gold_oracle_mismatch": 2,
+    "missing_grammar": 2,
+    "ability_attachment": 3
+  }
+}

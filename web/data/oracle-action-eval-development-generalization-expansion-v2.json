@@ -2445,7 +2445,14 @@
       "dev-exp-v1-044",
       "dev-exp-v1-048",
       "dev-exp-v1-052"
-    ]
+    ],
+    "checkHoldout": {
+      "holdoutStatus": "spent_for_development",
+      "spentReason": "failure-family diagnosis after milestone #2",
+      "parserExecutionCount": 2,
+      "spentAt": "2026-08-07T21:30:00.000Z",
+      "doNotRunExecution": 3
+    }
   },
   "goldCertification": {
     "certifierId": "development-generalization-expansion-v1-builder",
@@ -2461,5 +2468,12 @@
   "parentClassification": "development_generalization_expansion_v1",
   "parentSetPath": "data/oracle-action-eval-development-generalization-expansion-v1.json",
   "generatedAt": "2026-08-07T20:03:15.411Z",
-  "goldPatchNote": "v2 expansion gold completeness: tutor chains, modal options, token-copy semantics."
+  "goldPatchNote": "v2 expansion gold completeness: tutor chains, modal options, token-copy semantics.",
+  "expansionCheckHoldout": {
+    "holdoutStatus": "spent_for_development",
+    "spentReason": "failure-family diagnosis after milestone #2",
+    "parserExecutionCount": 2,
+    "spentAt": "2026-08-07T21:30:00.000Z",
+    "doNotRunExecution": 3
+  }
 }
