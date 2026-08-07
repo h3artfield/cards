@@ -38,7 +38,7 @@ export interface StaticPermissionRecord {
 
 /** Lead tokens marking mechanic/reminder parentheticals — preserve text, block Layer 2 emission. */
 const MECHANIC_REMINDER_LEADS =
-  /^(?:Flash(?:back)?|Cycling|Suspend|Aftermath|Disturb|Prototype|Mutate|Fuse|Warp|Evoke|Plot|Adventure|Casualty|Multikicker|Delve|Splice|Spectacle|Foretell|Boast|Channel|Reconfigure|Blitz|Encore|Jump-start|Embalm|Eternalize|Madam(e)?|Daybound|Nightbound|Craft|Collect evidence|Investigate|Learn|Training|Milestone|Level \d|Gain the next level|Rather than cast|Cumulative upkeep|You may cast this card from your graveyard|You may cast the creature later from exile|You may pay|As you cast|Spells without mana costs|It's an artifact with|^It\u2019s an artifact with|They enter|Treasure tokens are|Blood tokens are|Clue tokens are|Food tokens are|Create a Clue token|Create a Treasure token|Look at the top|To surveil|To scry|\(As this enters|\(When you cast|\(If you cast|\(If you pay|\(At the beginning of your upkeep, remove|\(At the beginning of your upkeep, you may cast|Read ahead|Doctor's companion|If you cast this spell for its mutate cost|You may cast this spell with different mana cost|You may cast this card from your hand for its|You may cast that card from your graveyard for its flashback cost|At the beginning of your upkeep, put an age counter|While they(?:'re| are) phased out|Whenever you cast a spell, you may pay \{[^}]+\}\. If you do, each opponent loses|Choose a chapter and start with that many lore counters)/i;
+  /^(?:Flash(?:back)?|Cycling|Suspend|Aftermath|Disturb|Prototype|Mutate|Fuse|Warp|Evoke|Plot|Adventure|Casualty|Multikicker|Delve|Splice|Spectacle|Foretell|Boast|Channel|Reconfigure|Blitz|Encore|Jump-start|Embalm|Eternalize|Persist|Madam(e)?|Daybound|Nightbound|Craft|Collect evidence|Investigate|Learn|Training|Milestone|Level \d|Gain the next level|Rather than cast|Cumulative upkeep|You may cast this card from your graveyard|You may cast the creature later from exile|You may pay|As you cast|Spells without mana costs|It's an artifact with|^It\u2019s an artifact with|They enter|Treasure tokens are|Blood tokens are|Clue tokens are|Food tokens are|Create a Treasure token|Look at the top|To surveil|To scry|\(As this enters|\(When you cast|\(If you cast|\(If you pay|\(At the beginning of your upkeep, remove|\(At the beginning of your upkeep, you may cast|Read ahead|Doctor's companion|If you cast this spell for its mutate cost|You may cast this spell with different mana cost|You may cast this card from your hand for its|You may cast that card from your graveyard for its flashback cost|At the beginning of your upkeep, put an age counter|While they(?:'re| are) phased out|Whenever you cast a spell, you may pay \{[^}]+\}\. If you do, each opponent loses|Choose a chapter and start with that many lore counters)/i;
 
 /** Reminder-only parenthetical intros — parentheses alone are insufficient. */
 const REMINDER_TEXT_LEADS =
@@ -51,9 +51,9 @@ const STATIC_PERMISSION_PATTERNS: Array<{
   persistentOnly?: boolean;
 }> = [
   {
-    pattern: /\b(?:You may )?cast spells from (?:your )?(?:graveyard|exile|hand)\b/gi,
+    pattern: /\b(?:You may )?cast spells from (?:your )?(?:graveyard|exile)\b/gi,
     permissionType: "cast",
-    zoneFrom: /\bfrom (?:your )?(graveyard|exile|hand)\b/i,
+    zoneFrom: /\bfrom (?:your )?(graveyard|exile)\b/i,
     persistentOnly: true,
   },
   {
@@ -140,6 +140,20 @@ function findMatchingQuote(text: string, openIdx: number): number {
   return text.length;
 }
 
+function isGrantedAbilityQuote(paragraph: string, quoteStart: number): boolean {
+  const before = paragraph.slice(Math.max(0, quoteStart - 80), quoteStart).trimEnd();
+  if (/\b(?:have|has|gain|gains|get|gets)\s*$/i.test(before)) return true;
+  if (/\b(?:Lands|Creatures|Artifacts|Enchantments|Slivers|Permanents) (?:you control )?have\s*$/i.test(before)) return true;
+  if (/\bAll \w+(?:s)? have\s*$/i.test(before)) return true;
+  if (/\bEnchanted (?:creature|land|artifact|permanent|(?:\w+ )) has\s*$/i.test(before)) return true;
+  return false;
+}
+
+function investigateTokenDefinitionStart(inner: string): number | null {
+  const m = inner.match(/\bIt(?:'|\u2019)s an artifact with\b/i);
+  return m?.index ?? null;
+}
+
 function isManaAbilityParenthetical(inner: string): boolean {
   const t = inner.trim();
   return /^\{T\}:\s*Add(?:\s+\{[WUBRGC]\}|\s+one mana)/i.test(t);
@@ -166,6 +180,26 @@ export function findReminderSpans(paragraph: string): TextSpanRole[] {
     const lead = inner.trimStart();
 
     if (isManaAbilityParenthetical(inner)) continue;
+    if (/^Create a (?:Clue|Treasure|Blood|Food) token\.\s*/i.test(lead)) {
+      const defOffset = investigateTokenDefinitionStart(inner);
+      if (defOffset !== null && defOffset > 0) {
+        spans.push({
+          role: "mechanic_reminder",
+          localStart: i + 1 + defOffset,
+          localEnd: close,
+          text: paragraph.slice(i + 1 + defOffset, close),
+        });
+      } else {
+        spans.push({
+          role: "mechanic_reminder",
+          localStart: i,
+          localEnd: close,
+          text: paragraph.slice(i, close),
+        });
+      }
+      i = close - 1;
+      continue;
+    }
     if (isCardSpecificRulesParenthetical(inner)) {
       spans.push({
         role: "mechanic_reminder",
@@ -201,8 +235,9 @@ export function findQuotedAbilitySpans(paragraph: string): TextSpanRole[] {
   for (let i = 0; i < paragraph.length; i++) {
     if (paragraph[i] !== '"') continue;
     const close = findMatchingQuote(paragraph, i);
+    const role: TextRole = isGrantedAbilityQuote(paragraph, i) ? "effect" : "reminder_text";
     spans.push({
-      role: "reminder_text",
+      role,
       localStart: i,
       localEnd: close,
       text: paragraph.slice(i, close),
@@ -265,7 +300,23 @@ function activatedColonSplit(paragraph: string): { costEnd: number; effectStart:
     return null;
   }
 
-  const colonIdx = trimmed.indexOf(":");
+  let colonIdx = -1;
+  let depth = 0;
+  let inQuote = false;
+  for (let i = 0; i < trimmed.length; i++) {
+    const ch = trimmed[i];
+    if (ch === '"') {
+      inQuote = !inQuote;
+      continue;
+    }
+    if (inQuote) continue;
+    if (ch === "(") depth++;
+    else if (ch === ")") depth = Math.max(0, depth - 1);
+    else if (ch === ":" && depth === 0) {
+      colonIdx = i;
+      break;
+    }
+  }
   if (colonIdx < 0 || colonIdx > 120) return null;
 
   const before = trimmed.slice(0, colonIdx).trim();
@@ -446,31 +497,13 @@ export function classifyTextRoleAt(input: {
   return "effect";
 }
 
-/** Whether cost-region primitives (discard/sacrifice in costs) may emit as Layer 2. */
+/** Cost-region sacrifice/discard/exile/tap are Layer 1 structure only — never Layer 2 primitives. */
 export function costPrimitiveMayEmit(
-  paragraph: string,
-  localStart: number,
-  localEnd: number,
-  actionType: PrimitiveActionType,
+  _paragraph: string,
+  _localStart: number,
+  _localEnd: number,
+  _actionType: PrimitiveActionType,
 ): boolean {
-  if (!COST_REGION_PRIMITIVES.has(actionType)) return false;
-
-  const addCost = additionalCostBounds(paragraph);
-  if (addCost && localStart >= addCost.start && localEnd <= addCost.end) return true;
-
-  const evokeCost = evokeCostBounds(paragraph, localStart);
-  if (evokeCost && localStart >= evokeCost.start && localEnd <= evokeCost.end) return true;
-
-  const colon = activatedColonSplit(paragraph);
-  if (colon && localStart < colon.effectStart) {
-    if (actionType === "discard" || actionType === "exile") {
-      return /\bAs an additional cost\b/i.test(paragraph);
-    }
-    if (actionType === "sacrifice") {
-      return false;
-    }
-  }
-
   return false;
 }
 
@@ -484,17 +517,6 @@ export function primitiveAllowedAtRole(
   if (role === "replacement_effect") return true;
   if (role === "cost") {
     if (ACTIVATED_EFFECT_PRIMITIVES.has(actionType)) return false;
-    if (COST_REGION_PRIMITIVES.has(actionType)) {
-      if (context?.paragraph && context.localStart !== undefined) {
-        return costPrimitiveMayEmit(
-          context.paragraph,
-          context.localStart,
-          context.localEnd ?? context.localStart + 1,
-          actionType,
-        );
-      }
-      return false;
-    }
     return false;
   }
   if (role === "trigger_event" && EFFECT_ONLY_PRIMITIVES.has(actionType)) return false;
@@ -543,13 +565,44 @@ export function compoundClauseSpansWithRoles(
 ): Array<{ localStart: number; text: string; role: TextRole }> {
   const bounds = clauseBoundaries(paragraph);
   const spans: Array<{ localStart: number; text: string; role: TextRole }> = [];
+
+  const emitClauseSpan = (start: number, end: number) => {
+    const slice = paragraph.slice(start, end);
+    const colon = activatedColonSplit(slice);
+    if (colon && colon.costEnd > 0) {
+      const costText = slice.slice(0, colon.costEnd).trim();
+      if (costText.length >= 2) {
+        spans.push({ localStart: start, text: costText, role: "cost" });
+      }
+      const effectSlice = slice.slice(colon.effectStart);
+      const effectAbsStart = start + colon.effectStart;
+      const effectBounds = clauseBoundaries(effectSlice);
+      for (let j = 0; j < effectBounds.length; j++) {
+        const relStart = effectBounds[j];
+        const relEnd = effectBounds[j + 1] ?? effectSlice.length;
+        const text = effectSlice.slice(relStart, relEnd).trim();
+        if (text.length < 2) continue;
+        const absStart = effectAbsStart + relStart;
+        spans.push({
+          localStart: absStart,
+          text,
+          role: classifyTextRoleAt({ paragraph, localStart: absStart, localEnd: absStart + text.length }),
+        });
+      }
+      return;
+    }
+
+    const text = slice.trim();
+    if (text.length < 2) return;
+    spans.push({
+      localStart: start,
+      text,
+      role: classifyTextRoleAt({ paragraph, localStart: start, localEnd: start + text.length }),
+    });
+  };
+
   for (let i = 0; i < bounds.length; i++) {
-    const start = bounds[i];
-    const end = bounds[i + 1] ?? paragraph.length;
-    const text = paragraph.slice(start, end).trim();
-    if (text.length < 2) continue;
-    const role = classifyTextRoleAt({ paragraph, localStart: start, localEnd: start + text.length });
-    spans.push({ localStart: start, text, role });
+    emitClauseSpan(bounds[i], bounds[i + 1] ?? paragraph.length);
   }
   if (spans.length === 0) {
     spans.push({
@@ -565,7 +618,7 @@ export function roleBlocksPrimitiveEmission(role: TextRole, actionType: Primitiv
   return !primitiveAllowedAtRole(role, actionType);
 }
 
-/** True when position is inside quoted text that is not this card's static grant. */
+/** True when position is inside quoted reminder text (not a granted ability quote). */
 export function isInsideQuotedGrantedAbility(
   paragraph: string,
   localStart: number,
@@ -575,20 +628,10 @@ export function isInsideQuotedGrantedAbility(
     (s) => localStart >= s.localStart && localStart < s.localEnd,
   );
   if (!span) return false;
-  const before = paragraph.slice(Math.max(0, span.localStart - 40), span.localStart).trimEnd();
-  if (/\b(?:have|has|gain|gains|get|gets)\s*$/i.test(before)) {
+  if (span.role === "effect") {
     if (actionType === "cast" || actionType === "play") return true;
     return false;
   }
-  if (/\bCreatures you control have\s*$/i.test(before)) {
-    if (actionType === "cast" || actionType === "play") return true;
-    return false;
-  }
-  if (/\bAll \w+(?:s)? have\s*$/i.test(before)) {
-    if (actionType === "cast" || actionType === "play") return true;
-    return false;
-  }
-  if (/\bwith\s*$/i.test(before)) return true;
   return true;
 }
 

@@ -13,13 +13,21 @@ import {
   type TextRole,
 } from "../src/lib/deck-builder/golden-catalog/oracle-span-role-classifier";
 import type { OracleActionEvalCaseV2 } from "./audit-oracle-action-eval-cases";
-import { matchGoldToActions, primitiveMatchesExpected } from "./oracle-action-unified-matcher";
+import {
+  faceIdsEquivalent,
+  matchGoldToActions,
+  primitiveMatchesExpected,
+} from "./oracle-action-unified-matcher";
 import { evidenceMatchesExtracted, evidenceMatchesOracle } from "./oracle-action-eval-shared";
 import { evaluateCaseSet } from "./eval-oracle-action-extraction-v6";
 import { isAdjudicatedReject } from "./adjudicate-gold-omission-v18";
 import { isAdjudicatedRejectV14 } from "./adjudicate-gold-omission-v14";
+import { isGoldV21Forbidden } from "./adjudicate-gold-policy-v21";
 
 function datasetLabel(path: string): string {
+  if (path.includes("v23")) return "development_set_v23";
+  if (path.includes("v22")) return "development_set_v22";
+  if (path.includes("v21")) return "development_set_v21";
   if (path.includes("v20")) return "development_set_v20";
   if (path.includes("v19")) return "development_set_v19";
   if (path.includes("v18")) return "development_set_v18";
@@ -27,6 +35,9 @@ function datasetLabel(path: string): string {
 }
 
 function reportName(path: string): string {
+  if (path.includes("v23")) return "v13-error-audit-v23.json";
+  if (path.includes("v22")) return "v13-error-audit-v22.json";
+  if (path.includes("v21")) return "v13-error-audit-v21.json";
   if (path.includes("v20")) return "v13-error-audit-v20.json";
   if (path.includes("v19")) return "v13-error-audit-v19.json";
   if (path.includes("v18")) return "v13-error-audit-v18.json";
@@ -35,7 +46,7 @@ function reportName(path: string): string {
 
 const DEV_PATH =
   process.argv.find((a) => a.startsWith("--dataset="))?.slice("--dataset=".length) ??
-  "data/oracle-action-eval-development-v20.json";
+  "data/oracle-action-eval-development-v23.json";
 const DATASET_LABEL = datasetLabel(DEV_PATH);
 const REPORT_NAME = reportName(DEV_PATH);
 
@@ -87,13 +98,45 @@ function classifyFn(input: {
   testCase: OracleActionEvalCaseV2;
   exp: OracleActionEvalCaseV2["expectedPrimitiveActions"][number];
   spanRole: TextRole;
-  allTierActions: Array<{ actionType: string; evidenceText: string; reviewStatus: string; textRole?: TextRole }>;
+  allTierActions: Array<{
+    actionType: string;
+    evidenceText: string;
+    reviewStatus: string;
+    textRole?: TextRole;
+    cardFaceId?: string;
+  }>;
 }): { category: FnCategory; reason: string; proposedFix: string } {
   const { testCase, exp, spanRole, allTierActions } = input;
   const ot = testCase.oracleText;
+  const acceptedMatch = allTierActions.find(
+    (a) =>
+      a.actionType === exp.actionType &&
+      evidenceMatchesExtracted(a.evidenceText, exp.evidenceContains) &&
+      faceIdsEquivalent(a.cardFaceId ?? "front", exp.cardFace) &&
+      a.reviewStatus === "accepted",
+  );
   const needsReviewMatch = allTierActions.find(
     (a) => a.actionType === exp.actionType && evidenceMatchesExtracted(a.evidenceText, exp.evidenceContains),
   );
+
+  if (acceptedMatch) {
+    const expectedOptional = exp.optionalEffect ?? exp.optional;
+    if (expectedOptional !== undefined) {
+      const gotOptional = acceptedMatch.optionalEffect ?? acceptedMatch.optional ?? false;
+      if (gotOptional !== expectedOptional) {
+        return {
+          category: "evaluator_gold_defect",
+          reason: "Parser extracted primitive but optionalEffect flag mismatches gold",
+          proposedFix: "Align gold optionalEffect with parser or fix optionality emission",
+        };
+      }
+    }
+    return {
+      category: "evaluator_gold_defect",
+      reason: "Parser extracted matching gold at accepted tier — duplicate gold entry or matcher lag",
+      proposedFix: "Deduplicate gold expectations or align face-id matching",
+    };
+  }
 
   if (needsReviewMatch && needsReviewMatch.reviewStatus === "needs_review") {
     return {
@@ -153,11 +196,19 @@ function classifyFn(input: {
     };
   }
   if (/"/.test(ot) && ot.includes('"') && /(?:has|have) "/i.test(ot)) {
-    return {
-      category: "quoted_granted_ability_boundary_failure",
-      reason: "Granted ability in quotes not parsed as separate scope",
-      proposedFix: "Quoted-grant ability sub-parse with independent roles",
-    };
+    const quotedGrantExtracted = allTierActions.some(
+      (a) =>
+        a.actionType === exp.actionType &&
+        evidenceMatchesExtracted(a.evidenceText, exp.evidenceContains) &&
+        a.reviewStatus === "accepted",
+    );
+    if (!quotedGrantExtracted) {
+      return {
+        category: "quoted_granted_ability_boundary_failure",
+        reason: "Granted ability in quotes not parsed as separate scope",
+        proposedFix: "Quoted-grant ability sub-parse with independent roles",
+      };
+    }
   }
   if (/\bthen\b/i.test(ot) || /\.\s+Then\b/.test(ot)) {
     return {
@@ -167,11 +218,20 @@ function classifyFn(input: {
     };
   }
   if (ot.includes("\n//\n") && exp.cardFace) {
-    return {
-      category: "multiface_component_boundary_failure",
-      reason: "Multiface/component attachment issue",
-      proposedFix: "Face-scoped evidence matching",
-    };
+    const faceScopedMatch = allTierActions.some(
+      (a) =>
+        a.actionType === exp.actionType &&
+        evidenceMatchesExtracted(a.evidenceText, exp.evidenceContains) &&
+        faceIdsEquivalent(a.cardFaceId ?? "front", exp.cardFace) &&
+        a.reviewStatus === "accepted",
+    );
+    if (!faceScopedMatch) {
+      return {
+        category: "multiface_component_boundary_failure",
+        reason: "Multiface/component attachment issue",
+        proposedFix: "Face-scoped evidence matching",
+      };
+    }
   }
   if (spanRole === "effect" || spanRole === "replacement_effect") {
     if (!primitiveAllowedAtRole(spanRole, exp.actionType as never)) {
@@ -214,6 +274,18 @@ function classifyFp(input: {
 
   if (role !== "effect" && role !== "replacement_effect" && role !== "unknown") {
     return { category: "wrong_span_role", reason: `Emitted from ${role} span — should be structure only` };
+  }
+
+  const v21Forbidden = isGoldV21Forbidden({
+    caseId: testCase.id,
+    parserPrimitive: action.actionType,
+    parserEvidence: action.evidenceText,
+  });
+  if (v21Forbidden.forbidden) {
+    return {
+      category: "parser_defect",
+      reason: `Adjudicated reject: ${v21Forbidden.reason}`,
+    };
   }
 
   const adjudicatedReject =
@@ -324,6 +396,7 @@ async function main() {
           evidenceText: a.evidenceText,
           reviewStatus: a.reviewStatus,
           textRole: a.textRole,
+          cardFaceId: a.cardFaceId,
         })),
       });
 

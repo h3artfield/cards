@@ -30,6 +30,7 @@ import {
 } from "./oracle-action-eval-shared";
 import {
   evaluateCaseUnified,
+  faceIdsEquivalent,
   sumUnifiedMetrics,
   verifyTierInvariants,
 } from "./oracle-action-unified-matcher";
@@ -137,7 +138,7 @@ function primitiveMatchesExpected(
 ): boolean {
   if (!action.primitive || action.primitive !== exp.actionType) return false;
   if (!evidenceMatchesExtracted(action.evidenceText, exp.evidenceContains)) return false;
-  if (exp.cardFace && action.cardFaceId !== exp.cardFace) return false;
+  if (exp.cardFace && !faceIdsEquivalent(action.cardFaceId, exp.cardFace)) return false;
   const expectedOptional = exp.optionalEffect ?? exp.optional;
   if (expectedOptional !== undefined) {
     const gotOptional = action.optionalEffect ?? action.optional;
@@ -198,15 +199,13 @@ function classifyFalsePositive(input: {
   }
 
   if (testCase.forbiddenPrimitiveActions?.includes(primitive!)) {
-    const supported = inferSupportedPrimitiveFromEvidence(oracleText, action.evidenceText);
-    if (!supported || supported === primitive) return "genuinely_unsupported_extraction";
     return "wrong_primitive_action_type";
   }
 
   const supported = inferSupportedPrimitiveFromEvidence(oracleText, action.evidenceText);
   if (!supported) return "genuinely_unsupported_extraction";
   if (primitive !== supported) return "wrong_primitive_action_type";
-  if (testCase.cardFace && action.cardFaceId !== testCase.cardFace) return "wrong_card_face";
+  if (testCase.cardFace && !faceIdsEquivalent(action.cardFaceId, testCase.cardFace)) return "wrong_card_face";
 
   const duplicate = allActions.some(
     (other, oi) =>
@@ -400,7 +399,20 @@ function computeUnifiedEmissionMetrics(cases: OracleActionEvalCaseV2[]) {
   };
 }
 
-export function evaluateCaseSet(cases: OracleActionEvalCaseV2[], setName: string) {
+export function evaluateCaseSet(
+  cases: OracleActionEvalCaseV2[],
+  setName: string,
+  options?: { enforceProvenance?: boolean; catalog?: import("./lib/load-golden-catalog-index").GoldenCatalogIndex; contentHash?: string },
+) {
+  if (options?.enforceProvenance && options.catalog) {
+    const { guardEvaluationDataset } = require("./lib/eval-provenance-guard") as typeof import("./lib/eval-provenance-guard");
+    guardEvaluationDataset({
+      envelope: { cases, setClassification: setName, contentHash: options.contentHash },
+      catalog: options.catalog,
+      manifestContentHash: options.contentHash,
+    });
+  }
+
   let goldTp = 0;
   let goldFp = 0;
   let goldFn = 0;

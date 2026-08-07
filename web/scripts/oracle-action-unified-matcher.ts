@@ -26,13 +26,27 @@ export interface GoldMatchResult {
   matched: boolean;
 }
 
+const FACE_ALIAS_GROUPS = [
+  ["front", "left", "room_left"],
+  ["back", "right", "room_right"],
+] as const;
+
+/** Room/split layouts may use left/right in segmentation while gold uses front/back. */
+export function faceIdsEquivalent(actionFaceId: string, expectedFace?: string): boolean {
+  if (!expectedFace) return true;
+  if (actionFaceId === expectedFace) return true;
+  return FACE_ALIAS_GROUPS.some(
+    (group) => group.includes(actionFaceId as never) && group.includes(expectedFace as never),
+  );
+}
+
 export function primitiveMatchesExpected(
   action: ExtractedActionForMatch,
   exp: ExpectedPrimitiveAction,
 ): boolean {
   if (!action.primitive || action.primitive !== exp.actionType) return false;
   if (!evidenceMatchesExtracted(action.evidenceText, exp.evidenceContains)) return false;
-  if (exp.cardFace && action.cardFaceId !== exp.cardFace) return false;
+  if (exp.cardFace && !faceIdsEquivalent(action.cardFaceId, exp.cardFace)) return false;
 
   const expectedOptional = exp.optionalEffect ?? exp.optional;
   if (expectedOptional !== undefined) {
@@ -239,7 +253,7 @@ export function findOptionalityMismatches(
       (a) =>
         a.primitive === exp.actionType &&
         evidenceMatchesExtracted(a.evidenceText, exp.evidenceContains) &&
-        (!exp.cardFace || a.cardFaceId === exp.cardFace),
+        faceIdsEquivalent(a.cardFaceId, exp.cardFace),
     );
     if (!loose) return;
     const gotOptional = loose.optionalEffect ?? loose.optional ?? false;

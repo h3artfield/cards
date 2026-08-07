@@ -23,6 +23,9 @@ import { loadEnvLocal } from "./lib/script-env";
 loadEnvLocal();
 
 function datasetLabel(path: string): string {
+  if (path.includes("v23")) return "development_set_v23";
+  if (path.includes("v22")) return "development_set_v22";
+  if (path.includes("v21")) return "development_set_v21";
   if (path.includes("v20")) return "development_set_v20";
   if (path.includes("v19")) return "development_set_v19";
   if (path.includes("v18")) return "development_set_v18";
@@ -30,6 +33,9 @@ function datasetLabel(path: string): string {
 }
 
 function reportName(path: string): string {
+  if (path.includes("v23")) return "catalog-baseline-v13-dev-v23.json";
+  if (path.includes("v22")) return "catalog-baseline-v13-dev-v22.json";
+  if (path.includes("v21")) return "catalog-baseline-v13-dev-v21.json";
   if (path.includes("v20")) return "catalog-baseline-v13-dev-v20.json";
   if (path.includes("v19")) return "catalog-baseline-v13-dev-v19.json";
   if (path.includes("v18")) return "catalog-baseline-v13-dev-v18.json";
@@ -38,7 +44,7 @@ function reportName(path: string): string {
 
 const DEV_PATH =
   process.argv.find((a) => a.startsWith("--dataset="))?.slice("--dataset=".length) ??
-  "data/oracle-action-eval-development-v20.json";
+  "data/oracle-action-eval-development-v23.json";
 const DATASET_LABEL = datasetLabel(DEV_PATH);
 const REPORT_NAME = reportName(DEV_PATH);
 const V16_BASELINE_PATH = "reports/catalog-baseline-v12-official.json";

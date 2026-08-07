@@ -1,5 +1,5 @@
 /**
- * Regression tests — parser v1.14 span-boundary layer + activatedColonSplit performance.
+ * Regression tests — parser v1.15 span-boundary layer + activatedColonSplit performance.
  * Run: npx tsx scripts/test-oracle-span-role-v13.ts
  */
 import assert from "node:assert/strict";
@@ -86,6 +86,77 @@ const REGRESSION_HANG_CASES = [
   },
 ];
 
+const COST_BOUNDARY_CASES = [
+  {
+    name: "activated_sacrifice_cost",
+    oracleText: "Sacrifice a Goblin: Destroy target artifact.",
+    expectActions: [{ type: "destroy", evidence: "Destroy target artifact" }],
+    forbidActions: ["sacrifice"],
+    expectCostAnnotation: true,
+  },
+  {
+    name: "activated_discard_cost",
+    oracleText: "{G}, {T}, Discard a creature card: Search your library for a creature card.",
+    expectActions: [{ type: "search_library", evidence: "Search your library" }],
+    forbidActions: ["discard"],
+    expectCostAnnotation: true,
+  },
+  {
+    name: "activated_exile_cost",
+    oracleText: "{1}, Exile a card from your hand: Draw a card.",
+    expectActions: [{ type: "draw", evidence: "Draw a card" }],
+    forbidActions: ["exile"],
+    expectCostAnnotation: true,
+  },
+  {
+    name: "additional_sacrifice_cost",
+    oracleText:
+      "As an additional cost to cast this spell, sacrifice a land.\nSearch your library for up to two basic land cards, put them onto the battlefield, then shuffle.",
+    expectActions: [{ type: "search_library", evidence: "Search your library" }],
+    forbidActions: ["sacrifice"],
+  },
+  {
+    name: "additional_discard_cost",
+    oracleText: "As an additional cost to cast this spell, discard a card.\nDraw two cards.",
+    expectActions: [{ type: "draw", evidence: "Draw two cards" }],
+    forbidActions: ["discard"],
+  },
+  {
+    name: "optional_sacrifice_effect",
+    oracleText: "You may sacrifice a creature. If you do, draw two cards.",
+    expectActions: [
+      { type: "sacrifice", evidence: "sacrifice a creature" },
+      { type: "draw", evidence: "draw two cards" },
+    ],
+    sacrificeRoleAt: "effect",
+  },
+  {
+    name: "optional_discard_effect",
+    oracleText: "When this creature enters, you may discard a card. If you do, draw a card.",
+    expectActions: [
+      { type: "discard", evidence: "discard a card" },
+      { type: "draw", evidence: "draw a card" },
+    ],
+    discardRoleAt: "effect",
+  },
+  {
+    name: "evoke_alternative_cost",
+    oracleText: "Evoke—Exile a blue card from your hand. (You may cast this spell for its evoke cost.)\nWhen this creature enters, draw a card.",
+    expectActions: [{ type: "draw", evidence: "draw a card" }],
+    forbidActions: ["exile"],
+  },
+  {
+    name: "cost_then_multiple_effects",
+    oracleText: "Sacrifice a creature: Destroy target creature and draw a card.",
+    expectActions: [
+      { type: "destroy", evidence: "Destroy target creature" },
+      { type: "draw", evidence: "draw a card" },
+    ],
+    forbidActions: ["sacrifice"],
+    expectCostAnnotation: true,
+  },
+];
+
 function timed<T>(fn: () => T): { result: T; ms: number } {
   const start = Date.now();
   const result = fn();
@@ -93,7 +164,7 @@ function timed<T>(fn: () => T): { result: T; ms: number } {
 }
 
 function testRegressionCases() {
-  for (const c of REGRESSION_HANG_CASES) {
+  for (const c of [...REGRESSION_HANG_CASES, ...COST_BOUNDARY_CASES]) {
     const { result, ms } = timed(() =>
       extractOracleActionsV1({ oracleId: `regression-${c.name}`, oracleText: c.oracleText }),
     );
@@ -132,6 +203,16 @@ function testRegressionCases() {
       assert.ok(idx >= 0, `${c.name}: discard span missing`);
       const role = classifyTextRoleAt({ paragraph: c.oracleText, localStart: idx, localEnd: idx + 7 });
       assert.equal(role, c.discardRoleAt, `${c.name}: discard role should be ${c.discardRoleAt}, got ${role}`);
+    }
+    if ((c as { sacrificeRoleAt?: string }).sacrificeRoleAt) {
+      const idx = c.oracleText.toLowerCase().indexOf("sacrifice");
+      assert.ok(idx >= 0, `${c.name}: sacrifice span missing`);
+      const role = classifyTextRoleAt({ paragraph: c.oracleText, localStart: idx, localEnd: idx + 9 });
+      assert.equal(
+        role,
+        (c as { sacrificeRoleAt?: string }).sacrificeRoleAt,
+        `${c.name}: sacrifice role should be ${(c as { sacrificeRoleAt?: string }).sacrificeRoleAt}, got ${role}`,
+      );
     }
     if (c.drawRoleAt) {
       const idx = c.oracleText.toLowerCase().indexOf("draw a card");
@@ -179,7 +260,7 @@ function testFullDevelopmentRuntime() {
 }
 
 function main() {
-  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.14-span-boundaries/);
+  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.16-cost-effect-boundary/);
   testRegressionCases();
   testCompoundClauseNoHang();
   testReminderSpanDetection();
@@ -189,7 +270,7 @@ function main() {
       {
         pass: true,
         parserVersion: ORACLE_ACTION_PARSER_VERSION,
-        regressionCases: REGRESSION_HANG_CASES.length,
+        regressionCases: REGRESSION_HANG_CASES.length + COST_BOUNDARY_CASES.length,
         fullDevelopmentRuntimeMs: devMs,
         perfBudgetMs: PERF_BUDGET_MS,
         devBudgetMs: DEV_CASE_BUDGET_MS,
