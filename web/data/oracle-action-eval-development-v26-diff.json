@@ -1,0 +1,39 @@
+{
+  "parentDataset": "development_set_v25",
+  "parentContentHash": "b382c8ba18b3a83d1a2524a1cc265a33552d9766d300e6fee8ea45662c1204a9",
+  "newDataset": "development_set_v26",
+  "newContentHash": "68101b45d07f5380f709f7d691a8fd7b14d93153b807189e776b9a3bf56510e7",
+  "reviewer": "context-x-if-you-do-gold-v26",
+  "changedCaseIds": [
+    "eval-0052",
+    "eval-0127",
+    "eval-0202"
+  ],
+  "changedCases": [
+    {
+      "caseId": "eval-0052",
+      "reason": "Explicit X lose/gain on back face; consequents are if-you-do dependent (optionalEffect false), not optional themselves.",
+      "primitives": [
+        "add_mana:Add {C}",
+        "exile:exile a creature card from your graveyar",
+        "untap:untap it",
+        "lose_life:each opponent loses X life",
+        "gain_life:you gain X life"
+      ]
+    },
+    {
+      "caseId": "eval-0127",
+      "reason": "Structure-only gold omitted explicit context-defined X damage trigger.",
+      "primitives": [
+        "deal_damage:deals X damage to any target"
+      ]
+    },
+    {
+      "caseId": "eval-0202",
+      "reason": "Structure-only gold omitted explicit activated context-defined X damage.",
+      "primitives": [
+        "deal_damage:deals X damage to any target"
+      ]
+    }
+  ]
+}

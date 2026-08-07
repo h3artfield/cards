@@ -1,0 +1,56 @@
+{
+  "parentDataset": "development_generalization_expansion_v1",
+  "parentContentHash": "3a03ca436dd2dca6a97498a3da2de106a3e1916a8483e9dbc6555f8fac4d66e4",
+  "newDataset": "development_generalization_expansion_v2",
+  "newContentHash": "bd73bee1b24bde6d8f630898b95c9426a975e09b69732fc5477faf6dfea5fc4b",
+  "reviewer": "expansion-gold-completeness-v2",
+  "changedCaseIds": [
+    "dev-exp-v1-001",
+    "dev-exp-v1-010",
+    "dev-exp-v1-013",
+    "dev-exp-v1-017",
+    "dev-exp-v1-018",
+    "dev-exp-v1-021",
+    "dev-exp-v1-025",
+    "dev-exp-v1-026",
+    "dev-exp-v1-027"
+  ],
+  "changedCases": [
+    {
+      "caseId": "dev-exp-v1-001",
+      "reason": "Full Oracle evidence span for destroy on creature face."
+    },
+    {
+      "caseId": "dev-exp-v1-010",
+      "reason": "Token-copy is create_token semantics, not imperative copy primitive."
+    },
+    {
+      "caseId": "dev-exp-v1-013",
+      "reason": "Modal gold must include all option capabilities, not only two sampled options."
+    },
+    {
+      "caseId": "dev-exp-v1-017",
+      "reason": "Search tutor resolution includes shuffle step in Oracle text."
+    },
+    {
+      "caseId": "dev-exp-v1-018",
+      "reason": "Land tutor resolution includes shuffle step in Oracle text."
+    },
+    {
+      "caseId": "dev-exp-v1-021",
+      "reason": "Optional Ninja tutor includes shuffle step."
+    },
+    {
+      "caseId": "dev-exp-v1-025",
+      "reason": "Duplicate Higure tutor case — shuffle step missing from gold."
+    },
+    {
+      "caseId": "dev-exp-v1-026",
+      "reason": "Search-only gold incomplete for put+shuffle tutor chain."
+    },
+    {
+      "caseId": "dev-exp-v1-027",
+      "reason": "Search-only gold incomplete for land tutor chain."
+    }
+  ]
+}

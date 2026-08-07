@@ -1,0 +1,132 @@
+{
+  "generatedAt": "2026-08-07T20:03:17.666Z",
+  "searchPutShuffleEightCaseAdjudication": [
+    {
+      "caseId": "dev-exp-v1-017",
+      "cardName": "Nature's Rhythm",
+      "emitted": "shuffle_library / then shuffle",
+      "adjudication": "missing_gold",
+      "reason": "Oracle search→put→shuffle chain; shuffle_library is legitimate Layer-2."
+    },
+    {
+      "caseId": "dev-exp-v1-018",
+      "cardName": "Thunderherd Migration",
+      "emitted": "shuffle_library / then shuffle",
+      "adjudication": "missing_gold",
+      "reason": "Gold had search+put; shuffle step missing from gold."
+    },
+    {
+      "caseId": "dev-exp-v1-021",
+      "cardName": "Higure, the Still Wind",
+      "emitted": "shuffle_library / then shuffle",
+      "adjudication": "missing_gold",
+      "reason": "Optional search tutor ends with shuffle; legitimate emission."
+    },
+    {
+      "caseId": "dev-exp-v1-025",
+      "cardName": "Higure, the Still Wind",
+      "emitted": "shuffle_library / then shuffle",
+      "adjudication": "missing_gold",
+      "reason": "Duplicate tutor-family case; shuffle missing from gold."
+    },
+    {
+      "caseId": "dev-exp-v1-026",
+      "cardName": "Nature's Rhythm",
+      "emitted": "put_onto_battlefield + shuffle_library",
+      "adjudication": "missing_gold",
+      "reason": "Search-only gold incomplete; put and shuffle are legitimate tutor resolution steps."
+    },
+    {
+      "caseId": "dev-exp-v1-027",
+      "cardName": "Thunderherd Migration",
+      "emitted": "put_onto_battlefield + shuffle_library",
+      "adjudication": "missing_gold",
+      "reason": "Search-only gold incomplete for land tutor chain."
+    },
+    {
+      "caseId": "dev-exp-v1-026",
+      "cardName": "Nature's Rhythm",
+      "emitted": "put_onto_battlefield (orphan label)",
+      "adjudication": "legitimate_put_action",
+      "reason": "Not orphan — referent to searched card in same sentence; gold defect not parser suppression."
+    },
+    {
+      "caseId": "dev-exp-v1-017",
+      "cardName": "Nature's Rhythm",
+      "emitted": "put_onto_battlefield",
+      "adjudication": "legitimate_put_action",
+      "reason": "Already in gold; paired with search — not a parser defect."
+    }
+  ],
+  "searchPutShuffleSummary": {
+    "missing_gold": 6,
+    "legitimate_put_action": 2,
+    "parser_defect": 0,
+    "duplicate_parser_emission": 0,
+    "wrong_referent": 0
+  },
+  "modalFiveCaseAdjudication": [
+    {
+      "caseId": "dev-exp-v1-013",
+      "cardName": "Lorehold Command",
+      "emitted": "gain_life / sacrifice / draw (options 3–4)",
+      "adjudication": "incomplete_modal_gold",
+      "reason": "Parser correctly surfaces all modal capabilities; gold only sampled create_token+deal_damage."
+    },
+    {
+      "caseId": "dev-exp-v1-013",
+      "cardName": "Lorehold Command",
+      "emitted": "gain_life",
+      "adjudication": "missing_gold",
+      "reason": "Option 3: Target player gains 3 life."
+    },
+    {
+      "caseId": "dev-exp-v1-013",
+      "cardName": "Lorehold Command",
+      "emitted": "sacrifice + draw",
+      "adjudication": "missing_gold",
+      "reason": "Option 4: Sacrifice a permanent, then draw two cards."
+    },
+    {
+      "caseId": "dev-exp-v1-010",
+      "cardName": "Saheeli's Artistry",
+      "emitted": "create_token (×2 modal bullets)",
+      "adjudication": "gold_defect_wrong_primitive",
+      "reason": "Gold used copy primitive; should be create_token + tokenCopyOf referent."
+    },
+    {
+      "caseId": "dev-exp-v1-010",
+      "cardName": "Saheeli's Artistry",
+      "emitted": "create_token duplicate count",
+      "adjudication": "duplicate_emission_or_modal_structure",
+      "reason": "Two modal bullets both create_token — evaluator may count extra until modal optionId wired; not suppress."
+    }
+  ],
+  "modalSummary": {
+    "incomplete_modal_gold": 1,
+    "missing_gold": 2,
+    "gold_defect_wrong_primitive": 1,
+    "parser_defect": 0,
+    "modal_structure_pending": 1
+  },
+  "eval0052OptionalityDependency": {
+    "caseId": "eval-0052",
+    "cardName": "Hostile Hostel // Creeping Inn",
+    "priorGoldDefect": "lose_life/gain_life marked optionalEffect:true on consequents",
+    "correctedModel": {
+      "exile": {
+        "optionalEffect": true
+      },
+      "lose_life": {
+        "optionalEffect": false,
+        "dependency": "if_you_do(exile)"
+      },
+      "gain_life": {
+        "optionalEffect": false,
+        "dependency": "if_you_do(exile)"
+      }
+    },
+    "parserBehavior": "wireConditionsToActions sets dependsOnActionIds; consequents remain optionalEffect:false",
+    "verdict": "gold_modeling_defect_fixed_in_v26"
+  }
+}
