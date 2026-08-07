@@ -16,6 +16,13 @@ import type { OracleActionEvalCaseV2 } from "./audit-oracle-action-eval-cases";
 import { matchGoldToActions, primitiveMatchesExpected } from "./oracle-action-unified-matcher";
 import { evidenceMatchesExtracted, evidenceMatchesOracle } from "./oracle-action-eval-shared";
 import { evaluateCaseSet } from "./eval-oracle-action-extraction-v6";
+import { isAdjudicatedReject } from "./adjudicate-gold-omission-v18";
+
+const DEV_PATH =
+  process.argv.find((a) => a.startsWith("--dataset="))?.slice("--dataset=".length) ??
+  "data/oracle-action-eval-development-v18.json";
+const DATASET_LABEL = DEV_PATH.includes("v18") ? "development_set_v18" : "development_set_v17";
+const REPORT_NAME = DEV_PATH.includes("v18") ? "v13-error-audit-v18.json" : "v13-error-audit-v17.json";
 
 type FnCategory =
   | "effect_wrongly_classified_as_trigger_event"
@@ -194,6 +201,25 @@ function classifyFp(input: {
     return { category: "wrong_span_role", reason: `Emitted from ${role} span — should be structure only` };
   }
 
+  const adjudicatedReject = isAdjudicatedReject({
+    caseId: testCase.id,
+    parserPrimitive: action.actionType,
+    parserEvidence: action.evidenceText,
+  });
+  if (adjudicatedReject) {
+    return {
+      category: "parser_defect",
+      reason: `Adjudicated reject (v18): ${adjudicatedReject.reason}`,
+    };
+  }
+
+  if (testCase.forbiddenPrimitiveActions?.includes(action.actionType as never)) {
+    return {
+      category: "parser_defect",
+      reason: `Gold forbids ${action.actionType} — parser emission is defect pending boundary fix`,
+    };
+  }
+
   if (expected.length === 0 && testCase.expectedStructure && Object.keys(testCase.expectedStructure).length > 0) {
     return { category: "gold_omission", reason: "Layer-1-only gold — parser may be correct, gold incomplete" };
   }
@@ -213,11 +239,12 @@ function classifyFp(input: {
 }
 
 async function main() {
-  const dev = JSON.parse(
-    readFileSync(resolve(process.cwd(), "data/oracle-action-eval-development-v17.json"), "utf8"),
-  ) as { cases: OracleActionEvalCaseV2[]; contentHash: string };
+  const dev = JSON.parse(readFileSync(resolve(process.cwd(), DEV_PATH), "utf8")) as {
+    cases: OracleActionEvalCaseV2[];
+    contentHash: string;
+  };
 
-  const metrics = evaluateCaseSet(dev.cases, "development_set_v17");
+  const metrics = evaluateCaseSet(dev.cases, DATASET_LABEL);
   const accepted = metrics.metricsByEmissionTier.acceptedOnly;
   const allEmission = metrics.metricsByEmissionTier.allEmission;
 
@@ -356,7 +383,7 @@ async function main() {
   const report = {
     generatedAt: new Date().toISOString(),
     parserVersion: ORACLE_ACTION_PARSER_VERSION,
-    dataset: "development_set_v17",
+    dataset: DATASET_LABEL,
     contentHash: dev.contentHash,
     accepted: {
       tp: accepted.truePositives,
@@ -393,7 +420,7 @@ async function main() {
       .slice(0, 20),
   };
 
-  const outPath = resolve(process.cwd(), "reports/v13-error-audit-v17.json");
+  const outPath = resolve(process.cwd(), `reports/${REPORT_NAME}`);
   mkdirSync(resolve(outPath, ".."), { recursive: true });
   writeFileSync(outPath, JSON.stringify(report, null, 2), "utf8");
 

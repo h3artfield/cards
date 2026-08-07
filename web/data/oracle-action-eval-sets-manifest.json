@@ -1,13 +1,13 @@
 {
   "developmentSet": {
-    "path": "data/oracle-action-eval-development-v17.json",
-    "classification": "development_set_v17",
-    "contentHash": "321900c524c19b8b3fe9adc2e108900d57cf7a34af3f83bf3a09884c993a45f9",
+    "path": "data/oracle-action-eval-development-v18.json",
+    "classification": "development_set_v18",
+    "contentHash": "dacabb51eec6033179baac2269713bd750983aa21590915ee4d4873f3d3fd4dd",
     "caseCount": 284,
     "taxonomyVersion": "three-layer-v1.2",
-    "purpose": "Canonical development set — none/Layer1 gold audit Layer 2 corrections",
-    "parentClassification": "development_set_v16",
-    "parentContentHash": "8bc4a1c25dc84afa257cc3bb17db7c4347b70e38a2f6a14f0361fb96dd904716",
+    "purpose": "Canonical development set — v18 gold_omission audit corrections",
+    "parentClassification": "development_set_v17",
+    "parentContentHash": "321900c524c19b8b3fe9adc2e108900d57cf7a34af3f83bf3a09884c993a45f9",
     "benchmarkStatus": "catalog_clean",
     "usableForParserEvaluation": true
   },
@@ -224,5 +224,14 @@
     "parserExecutionCount": 0,
     "goldReviewStatus": "reviewed",
     "identityStatus": "catalog_exact"
+  },
+  "developmentSetV17": {
+    "path": "data/oracle-action-eval-development-v17.json",
+    "classification": "development_set_v17",
+    "contentHash": "321900c524c19b8b3fe9adc2e108900d57cf7a34af3f83bf3a09884c993a45f9",
+    "caseCount": 284,
+    "purpose": "Immutable parent — none/Layer1 gold audit Layer 2 corrections",
+    "benchmarkStatus": "catalog_clean",
+    "usableForParserEvaluation": true
   }
 }

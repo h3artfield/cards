@@ -22,7 +22,11 @@ import { loadEnvLocal } from "./lib/script-env";
 
 loadEnvLocal();
 
-const DEV_PATH = "data/oracle-action-eval-development-v17.json";
+const DEV_PATH =
+  process.argv.find((a) => a.startsWith("--dataset="))?.slice("--dataset=".length) ??
+  "data/oracle-action-eval-development-v18.json";
+const DATASET_LABEL = DEV_PATH.includes("v18") ? "development_set_v18" : "development_set_v17";
+const REPORT_NAME = DEV_PATH.includes("v18") ? "catalog-baseline-v13-dev-v18.json" : "catalog-baseline-v13-dev.json";
 const V16_BASELINE_PATH = "reports/catalog-baseline-v12-official.json";
 
 const TRACKED_PAIRS = [
@@ -101,7 +105,7 @@ async function main() {
     }
   }
 
-  const results = evaluateCaseSet(dev.cases, "development_set_v17");
+  const results = evaluateCaseSet(dev.cases, DATASET_LABEL);
   const accepted = results.metricsByEmissionTier.acceptedOnly;
   const needsReview = results.metricsByEmissionTier.needsReviewOnly;
   const allEmission = results.metricsByEmissionTier.allEmission;
@@ -194,7 +198,7 @@ async function main() {
     generatedAt: new Date().toISOString(),
     parserVersion: ORACLE_ACTION_PARSER_VERSION,
     parserCommit,
-    dataset: "development_set_v17",
+    dataset: DATASET_LABEL,
     contentHash: dev.contentHash,
     caseCount: dev.cases.length,
     provenanceGuardPass: provenancePass,
@@ -232,7 +236,7 @@ async function main() {
     structureAnnotationCount: dev.cases.length,
   };
 
-  const outPath = resolve(process.cwd(), "reports/catalog-baseline-v13-dev.json");
+  const outPath = resolve(process.cwd(), `reports/${REPORT_NAME}`);
   mkdirSync(resolve(outPath, ".."), { recursive: true });
   writeFileSync(outPath, JSON.stringify(report, null, 2), "utf8");
 
