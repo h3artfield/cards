@@ -238,5 +238,50 @@
       "falsePositives": 24,
       "falseNegatives": 43
     }
+  },
+  {
+    "timestamp": "2026-08-07T01:23:58.749Z",
+    "reason": "validation-milestone-v12",
+    "commitSha": "39a1e6108b97f084565e9151f5f3eef953762885",
+    "parserVersion": "oracle-action-v1.12-unified-matcher",
+    "metrics": {
+      "precision": 0.8321678321678322,
+      "recall": 0.7345679012345679,
+      "truePositives": 119,
+      "falsePositives": 24,
+      "falseNegatives": 43
+    }
+  },
+  {
+    "timestamp": "2026-08-07T15:37:59.853Z",
+    "reason": "validation-milestone-rc1",
+    "rcName": "oracle-action-rc1",
+    "commitSha": "e38ce568e3cb98f85a1d559f4efb8869afe2aa7f",
+    "parserVersion": "oracle-action-v1.19-precision-pass",
+    "validationSet": "validation_set_v9",
+    "validationSetContentHash": "81676cb6270ea004d80aac23d2e945ce19fdf98bfbb3b46a4c96c397c0624433",
+    "developmentSetV25Hash": "b382c8ba18b3a83d1a2524a1cc265a33552d9766d300e6fee8ea45662c1204a9",
+    "metrics": {
+      "accepted": {
+        "tp": 104,
+        "fp": 56,
+        "fn": 52,
+        "precision": 0.65,
+        "recall": 0.6666666666666666
+      },
+      "needsReview": {
+        "tp": 11,
+        "fp": 2
+      },
+      "allEmission": {
+        "tp": 115,
+        "fp": 58,
+        "fn": 41,
+        "precision": 0.6647398843930635,
+        "recall": 0.7371794871794872
+      }
+    },
+    "acceptedUnsupported": 0,
+    "validationPass": false
   }
 ]

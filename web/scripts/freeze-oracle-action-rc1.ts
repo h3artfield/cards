@@ -2,8 +2,9 @@
  * Record oracle-action-rc1 freeze metadata from current HEAD.
  * Run after commit: npx tsx scripts/freeze-oracle-action-rc1.ts
  */
-import { readFileSync, writeFileSync, execSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { execSync } from "node:child_process";
 import { ORACLE_ACTION_PARSER_VERSION } from "../src/lib/deck-builder/golden-catalog/oracle-action-schema";
 import { migrationPolicyHash } from "./lib/taxonomy-v13-shuffle-migration";
 

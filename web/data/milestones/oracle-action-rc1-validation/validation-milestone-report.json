@@ -1,0 +1,83 @@
+{
+  "generatedAt": "2026-08-07T15:37:59.853Z",
+  "rcName": "oracle-action-rc1",
+  "commitSha": "e38ce568e3cb98f85a1d559f4efb8869afe2aa7f",
+  "parserVersion": "oracle-action-v1.19-precision-pass",
+  "taxonomyVersion": "three-layer-v1.3",
+  "validationSet": "validation_set_v9",
+  "validationSetHash": "81676cb6270ea004d80aac23d2e945ce19fdf98bfbb3b46a4c96c397c0624433",
+  "validationSetV8ParentHash": "a1dc97477b2674ff0ca089e57233bf7d49f5226c49aa2cb6b9fd935e72d3852c",
+  "taxonomyMigrationHash": "7e548d1bdbdc97fd16a6f070c57a4009949ef187d65395a0971eb7c5b7efdab1",
+  "developmentSetV25Hash": "b382c8ba18b3a83d1a2524a1cc265a33552d9766d300e6fee8ea45662c1204a9",
+  "runtimeMs": 107,
+  "metrics": {
+    "accepted": {
+      "tp": 104,
+      "fp": 56,
+      "fn": 52,
+      "precision": 0.65,
+      "recall": 0.6666666666666666
+    },
+    "needsReview": {
+      "tp": 11,
+      "fp": 2
+    },
+    "allEmission": {
+      "tp": 115,
+      "fp": 58,
+      "fn": 41,
+      "precision": 0.6647398843930635,
+      "recall": 0.7371794871794872
+    }
+  },
+  "acceptedUnsupported": 0,
+  "provenanceInvariants": {
+    "tpSumHolds": true,
+    "fpSumHolds": true,
+    "goldPositiveHolds": true,
+    "details": {
+      "acceptedTp": 104,
+      "needsReviewTp": 11,
+      "allEmissionTp": 115,
+      "tpSum": 115,
+      "tpDelta": 0,
+      "acceptedFp": 56,
+      "needsReviewFp": 2,
+      "allEmissionFp": 58,
+      "fpSum": 58,
+      "fpDelta": 0,
+      "allEmissionFn": 41,
+      "goldPositiveCount": 156
+    }
+  },
+  "errorFamilies": {
+    "wrong_primitive": 11,
+    "parser_defect": 34,
+    "wrong_span_role": 0,
+    "reminder_leakage": 0,
+    "cost_leakage": 0,
+    "quoted_granted_failure": 0,
+    "compound_clause_failure": 15,
+    "face_component_failure": 4,
+    "shuffle_taxonomy_failure": 0,
+    "missing_grammar": 72,
+    "needs_review_only_tp": 0,
+    "evaluator_defect": 13,
+    "gold_omission": 43
+  },
+  "confusionMatrix": [
+    {
+      "expected": "return_to_battlefield",
+      "emitted": "return_to_hand",
+      "count": 4
+    }
+  ],
+  "validationPass": false,
+  "gates": {
+    "acceptedPrecisionMin": 0.98,
+    "acceptedRecallMin": 0.9,
+    "acceptedUnsupportedMax": 0
+  },
+  "auditMismatchCount": 99,
+  "note": "Single validation execution for oracle-action-rc1. No parser changes during run."
+}
