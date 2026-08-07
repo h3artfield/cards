@@ -1,0 +1,331 @@
+{
+  "generatedAt": "2026-08-07T17:29:03.292Z",
+  "validationSet": "validation_set_v10",
+  "validationV10Hash": "2af9eafaf0b021fd3c73193e1629b6b8fe06a402a7baea30c8e5999852041a81",
+  "purpose": "Policy-consistency probe — three-layer semantics vs v10 gold",
+  "parserOutputConsulted": false,
+  "totalViolations": 23,
+  "affectedCaseCount": 17,
+  "byFamily": {
+    "gy_to_hand_primitive": {
+      "violationCount": 3,
+      "affectedCases": [
+        "held-0028",
+        "held-0063"
+      ],
+      "items": [
+        {
+          "caseId": "held-0028",
+          "cardName": "The Mirari Conjecture",
+          "oracleSnippet": "Return target instant card from your graveyard to your hand",
+          "currentGold": {
+            "actionType": "return_to_battlefield",
+            "evidenceContains": "Return target instant card from your graveyard to your hand"
+          },
+          "correctPolicy": "return_to_hand (graveyard → hand)",
+          "verdict": "gold_bug"
+        },
+        {
+          "caseId": "held-0028",
+          "cardName": "The Mirari Conjecture",
+          "oracleSnippet": "Return target sorcery card from your graveyard to your hand",
+          "currentGold": {
+            "actionType": "return_to_battlefield",
+            "evidenceContains": "Return target sorcery card from your graveyard to your hand"
+          },
+          "correctPolicy": "return_to_hand (graveyard → hand)",
+          "verdict": "gold_bug"
+        },
+        {
+          "caseId": "held-0063",
+          "cardName": "Regrowth",
+          "oracleSnippet": "Return target card from your graveyard to your hand",
+          "currentGold": {
+            "actionType": "return_to_battlefield",
+            "evidenceContains": "Return target card from your graveyard to your hand"
+          },
+          "correctPolicy": "return_to_hand (graveyard → hand)",
+          "verdict": "gold_bug"
+        }
+      ]
+    },
+    "activated_cost_sacrifice": {
+      "violationCount": 5,
+      "affectedCases": [
+        "held-0092",
+        "held-0097",
+        "held-0098",
+        "held-0099",
+        "held-0100"
+      ],
+      "items": [
+        {
+          "caseId": "held-0092",
+          "cardName": "Hidden Nursery",
+          "oracleSnippet": "Sacrifice this land: Discover 4",
+          "currentGold": {
+            "actionType": "sacrifice",
+            "evidenceContains": "Sacrifice this land: Discover 4"
+          },
+          "correctPolicy": "Layer 1 cost only — no Layer-2 sacrifice",
+          "verdict": "gold_bug"
+        },
+        {
+          "caseId": "held-0097",
+          "cardName": "Ghost Quarter",
+          "oracleSnippet": "Sacrifice this land: Destroy target land",
+          "currentGold": {
+            "actionType": "sacrifice",
+            "evidenceContains": "Sacrifice this land: Destroy target land"
+          },
+          "correctPolicy": "Layer 1 cost only — no Layer-2 sacrifice",
+          "verdict": "gold_bug"
+        },
+        {
+          "caseId": "held-0098",
+          "cardName": "Strip Mine",
+          "oracleSnippet": "Sacrifice this land: Destroy target land",
+          "currentGold": {
+            "actionType": "sacrifice",
+            "evidenceContains": "Sacrifice this land: Destroy target land"
+          },
+          "correctPolicy": "Layer 1 cost only — no Layer-2 sacrifice",
+          "verdict": "gold_bug"
+        },
+        {
+          "caseId": "held-0099",
+          "cardName": "Wasteland",
+          "oracleSnippet": "Sacrifice this land: Destroy target nonbasic land",
+          "currentGold": {
+            "actionType": "sacrifice",
+            "evidenceContains": "Sacrifice this land: Destroy target nonbasic land"
+          },
+          "correctPolicy": "Layer 1 cost only — no Layer-2 sacrifice",
+          "verdict": "gold_bug"
+        },
+        {
+          "caseId": "held-0100",
+          "cardName": "Field of Ruin",
+          "oracleSnippet": "Sacrifice this land",
+          "currentGold": {
+            "actionType": "sacrifice",
+            "evidenceContains": "Sacrifice this land"
+          },
+          "correctPolicy": "Layer 1 cost only — no Layer-2 sacrifice",
+          "verdict": "gold_bug"
+        }
+      ]
+    },
+    "trigger_event_sacrifice": {
+      "violationCount": 1,
+      "affectedCases": [
+        "held-0044"
+      ],
+      "items": [
+        {
+          "caseId": "held-0044",
+          "cardName": "Tireless Tracker",
+          "oracleSnippet": "sacrifice a Clue, put a +1/+1 counter on this creature",
+          "currentGold": {
+            "actionType": "sacrifice",
+            "evidenceContains": "sacrifice a Clue, put a +1/+1 counter on this creature"
+          },
+          "correctPolicy": "Layer 1 trigger_event — no Layer-2 sacrifice",
+          "verdict": "gold_bug"
+        }
+      ]
+    },
+    "mechanic_reminder_primitive": {
+      "violationCount": 4,
+      "affectedCases": [
+        "held-0029",
+        "held-0044",
+        "held-0074"
+      ],
+      "items": [
+        {
+          "caseId": "held-0029",
+          "cardName": "The First Iroan Games",
+          "oracleSnippet": "Sacrifice this token: Add one mana of any color",
+          "currentGold": {
+            "actionType": "sacrifice",
+            "evidenceContains": "Sacrifice this token: Add one mana of any color"
+          },
+          "correctPolicy": "Mechanic/reminder structure — no card-specific Layer-2 action",
+          "verdict": "gold_bug"
+        },
+        {
+          "caseId": "held-0044",
+          "cardName": "Tireless Tracker",
+          "oracleSnippet": "Draw a card",
+          "currentGold": {
+            "actionType": "draw",
+            "evidenceContains": "Draw a card"
+          },
+          "correctPolicy": "Mechanic/reminder structure — no card-specific Layer-2 action",
+          "verdict": "gold_bug"
+        },
+        {
+          "caseId": "held-0044",
+          "cardName": "Tireless Tracker",
+          "oracleSnippet": "Sacrifice this token: Draw a card",
+          "currentGold": {
+            "actionType": "sacrifice",
+            "evidenceContains": "Sacrifice this token: Draw a card"
+          },
+          "correctPolicy": "Mechanic/reminder structure — no card-specific Layer-2 action",
+          "verdict": "gold_bug"
+        },
+        {
+          "caseId": "held-0074",
+          "cardName": "Smothering Tithe",
+          "oracleSnippet": "Sacrifice this token: Add one mana of any color",
+          "currentGold": {
+            "actionType": "sacrifice",
+            "evidenceContains": "Sacrifice this token: Add one mana of any color"
+          },
+          "correctPolicy": "Mechanic/reminder structure — no card-specific Layer-2 action",
+          "verdict": "gold_bug"
+        }
+      ]
+    },
+    "static_restriction_draw": {
+      "violationCount": 1,
+      "affectedCases": [
+        "held-0033"
+      ],
+      "items": [
+        {
+          "caseId": "held-0033",
+          "cardName": "Narset, Parter of Veils",
+          "oracleSnippet": "draw more than one card each turn",
+          "currentGold": {
+            "actionType": "draw",
+            "evidenceContains": "draw more than one card each turn"
+          },
+          "correctPolicy": "static_restriction — no Layer-2 draw",
+          "verdict": "gold_bug"
+        }
+      ]
+    },
+    "static_restriction_cast_sacrifice": {
+      "violationCount": 2,
+      "affectedCases": [
+        "held-0018"
+      ],
+      "items": [
+        {
+          "caseId": "held-0018",
+          "cardName": "Yasharn, Implacable Earth",
+          "oracleSnippet": "cast spells or activate abilities",
+          "currentGold": {
+            "actionType": "cast",
+            "evidenceContains": "cast spells or activate abilities"
+          },
+          "correctPolicy": "static_restriction — no Layer-2 cast/sacrifice",
+          "verdict": "gold_bug"
+        },
+        {
+          "caseId": "held-0018",
+          "cardName": "Yasharn, Implacable Earth",
+          "oracleSnippet": "sacrifice nonland permanents to cast spells or activate abilities",
+          "currentGold": {
+            "actionType": "sacrifice",
+            "evidenceContains": "sacrifice nonland permanents to cast spells or activate abilities"
+          },
+          "correctPolicy": "static_restriction — no Layer-2 cast/sacrifice",
+          "verdict": "gold_bug"
+        }
+      ]
+    },
+    "trigger_event_draw": {
+      "violationCount": 2,
+      "affectedCases": [
+        "held-0074",
+        "held-0093"
+      ],
+      "items": [
+        {
+          "caseId": "held-0074",
+          "cardName": "Smothering Tithe",
+          "oracleSnippet": "draw",
+          "currentGold": {
+            "actionType": "draw",
+            "evidenceContains": "draw"
+          },
+          "correctPolicy": "Layer 1 trigger_event — no Layer-2 draw",
+          "verdict": "gold_bug"
+        },
+        {
+          "caseId": "held-0093",
+          "cardName": "Wizard Class",
+          "oracleSnippet": "draw a card, put a +1/+1 counter on target cr",
+          "currentGold": {
+            "actionType": "draw",
+            "evidenceContains": "draw a card, put a +1/+1 counter on target cr"
+          },
+          "correctPolicy": "Layer 1 trigger_event — no Layer-2 draw",
+          "verdict": "gold_bug"
+        }
+      ]
+    },
+    "missing_gy_to_hand": {
+      "violationCount": 3,
+      "affectedCases": [
+        "held-0005",
+        "held-0060"
+      ],
+      "items": [
+        {
+          "caseId": "held-0005",
+          "cardName": "Find // Finality",
+          "oracleSnippet": "Return up to two target creature cards from your graveyard to your hand",
+          "currentGold": null,
+          "correctPolicy": "return_to_hand",
+          "verdict": "gold_bug"
+        },
+        {
+          "caseId": "held-0060",
+          "cardName": "Life from the Loam",
+          "oracleSnippet": "Return up to three target land cards from your graveyard to your hand",
+          "currentGold": null,
+          "correctPolicy": "return_to_hand",
+          "verdict": "gold_bug"
+        },
+        {
+          "caseId": "held-0060",
+          "cardName": "Life from the Loam",
+          "oracleSnippet": "return this card from your graveyard to your hand",
+          "currentGold": null,
+          "correctPolicy": "return_to_hand",
+          "verdict": "gold_bug"
+        }
+      ]
+    },
+    "missing_variable_lose_life": {
+      "violationCount": 2,
+      "affectedCases": [
+        "held-0064",
+        "held-0104"
+      ],
+      "items": [
+        {
+          "caseId": "held-0064",
+          "cardName": "Reanimate",
+          "oracleSnippet": "You lose life equal to that card's mana value",
+          "currentGold": null,
+          "correctPolicy": "lose_life (variable quantity)",
+          "verdict": "gold_bug"
+        },
+        {
+          "caseId": "held-0104",
+          "cardName": "Ad Nauseam",
+          "oracleSnippet": "You lose life equal to its mana value",
+          "currentGold": null,
+          "correctPolicy": "lose_life (variable quantity)",
+          "verdict": "gold_bug"
+        }
+      ]
+    }
+  }
+}

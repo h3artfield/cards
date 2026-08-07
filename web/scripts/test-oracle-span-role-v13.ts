@@ -286,6 +286,58 @@ const COST_BOUNDARY_CASES = [
   },
 ];
 
+const VARIABLE_LOSE_LIFE_CASES = [
+  {
+    name: "lose_life_equal_mana_value",
+    oracleText:
+      "Put target creature card from a graveyard onto the battlefield under your control. You lose life equal to that card's mana value.",
+    expectActions: [
+      {
+        type: "lose_life",
+        evidence: "You lose life equal to that card's mana value",
+        quantityType: "variable",
+        quantityExpression: "that card's mana value",
+      },
+    ],
+  },
+  {
+    name: "lose_life_equal_power",
+    oracleText: "Target creature gets -X/-X until end of turn. You lose life equal to that creature's power.",
+    expectActions: [
+      {
+        type: "lose_life",
+        evidence: "You lose life equal to that creature's power",
+        quantityType: "variable",
+        quantityExpression: "that creature's power",
+      },
+    ],
+  },
+  {
+    name: "lose_x_life_imperative",
+    oracleText: "Target player loses X life and you gain X life.",
+    expectActions: [
+      {
+        type: "lose_life",
+        evidence: "loses X life",
+        quantityType: "variable",
+        quantityExpression: "X",
+      },
+    ],
+  },
+  {
+    name: "lose_life_equal_permanents_count",
+    oracleText: "Each opponent loses life equal to the number of permanents they control.",
+    expectActions: [
+      {
+        type: "lose_life",
+        evidence: "loses life equal to the number of permanents they control",
+        quantityType: "variable",
+        quantityExpression: "the number of permanents they control",
+      },
+    ],
+  },
+];
+
 function timed<T>(fn: () => T): { result: T; ms: number } {
   const start = Date.now();
   const result = fn();
@@ -299,6 +351,7 @@ function testRegressionCases() {
     ...COMPOUND_CLAUSE_CASES,
     ...SHUFFLE_TAXONOMY_CASES,
     ...GRANTED_ABILITY_CASES,
+    ...VARIABLE_LOSE_LIFE_CASES,
   ]) {
     const { result, ms } = timed(() =>
       extractOracleActionsV1({ oracleId: `regression-${c.name}`, oracleText: c.oracleText }),
@@ -306,10 +359,24 @@ function testRegressionCases() {
     assert.ok(ms < PERF_BUDGET_MS, `${c.name}: parser took ${ms}ms (budget ${PERF_BUDGET_MS}ms)`);
 
     for (const exp of c.expectActions ?? []) {
-      const hit = result.actions.some(
+      const hit = result.actions.find(
         (a) => a.actionType === exp.type && a.evidenceText.toLowerCase().includes(exp.evidence.toLowerCase()),
       );
       assert.ok(hit, `${c.name}: expected ${exp.type} matching "${exp.evidence}"`);
+      if ((exp as { quantityType?: string }).quantityType) {
+        assert.equal(
+          hit!.quantityType,
+          (exp as { quantityType?: string }).quantityType,
+          `${c.name}: quantityType`,
+        );
+      }
+      if ((exp as { quantityExpression?: string }).quantityExpression) {
+        assert.equal(
+          hit!.quantityExpression,
+          (exp as { quantityExpression?: string }).quantityExpression,
+          `${c.name}: quantityExpression`,
+        );
+      }
     }
     for (const forbid of c.forbidActions ?? []) {
       const bad = result.actions.filter((a) => a.actionType === forbid);
@@ -401,7 +468,7 @@ function testFullDevelopmentRuntime() {
 }
 
 function main() {
-  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.19-precision-pass/);
+  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.20-variable-lose-life-dev/);
   testRegressionCases();
   testCompoundClauseNoHang();
   testReminderSpanDetection();
@@ -416,7 +483,8 @@ function main() {
           COST_BOUNDARY_CASES.length +
           COMPOUND_CLAUSE_CASES.length +
           SHUFFLE_TAXONOMY_CASES.length +
-          GRANTED_ABILITY_CASES.length,
+          GRANTED_ABILITY_CASES.length +
+          VARIABLE_LOSE_LIFE_CASES.length,
         fullDevelopmentRuntimeMs: devMs,
         perfBudgetMs: PERF_BUDGET_MS,
         devBudgetMs: DEV_CASE_BUDGET_MS,

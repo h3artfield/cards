@@ -136,8 +136,10 @@ export function inferSupportedPrimitiveFromEvidence(
       destroy: /\bDestroy\b/i,
       exile: /\b[Ee]xiles?\b/,
       counter: /\bCounter target\b/i,
-      return_to_hand: /\bReturn target[\w ]+ to (?:its|their) owner'?s hand\b/i,
-      return_to_battlefield: /\b(?:from (?:your |a )?graveyard (?:to your hand|to the battlefield|onto the battlefield)|Put target[\w ]+ from a graveyard onto the battlefield|Return target[\w ]+ from (?:your )?graveyard to the battlefield|return it to the battlefield)\b/i,
+      return_to_hand:
+        /\bReturn target[\w ]+ to (?:its|their) owner'?s hand\b|\bfrom (?:your |a )?graveyard to (?:your )?hand\b|\bReturn (?:up to )?[\w ]+ from (?:your |a )?graveyard to (?:your )?hand\b/i,
+      return_to_battlefield:
+        /\b(?:from (?:your |a )?graveyard (?:to the battlefield|onto the battlefield)|Put target[\w ]+ from a graveyard onto the battlefield|Return target[\w ]+ from (?:your )?graveyard to the battlefield|return it to the battlefield)\b/i,
       create_token: /\bcreate[\w ]*tokens?\b/i,
       cast: /\bcast (?:any number of |spells? from|it|that card|the exiled|target)\b/i,
       play: /\bplay (?:an additional land|land cards from (?:your )?graveyard|lands and )?spells? from (?:your )?graveyard\b/i,
@@ -145,8 +147,8 @@ export function inferSupportedPrimitiveFromEvidence(
       copy: /\b[Cc]opy (?:target|it|that spell|the exiled)\b/i,
       sacrifice: /\b[Ss]acrifices?\b/i,
       mill: /\bmills? (?:half|fourteen|one|two|three|four|five|six|seven|eight|nine|ten|\d+|up to \w+)/i,
-      gain_life: /\bgain \d+ life\b/i,
-      lose_life: /\bloses? \d+ life\b/i,
+      gain_life: /\bgain(?:s)? \d+ life\b/i,
+      lose_life: /\bloses? (?:\d+|up to \d+|X) life\b|\bloses? life equal to\b/i,
       scry: /\bScry \d+\b/i,
       surveil: /\bSurveil \d+\b/i,
       tap: /\bTap target\b/i,

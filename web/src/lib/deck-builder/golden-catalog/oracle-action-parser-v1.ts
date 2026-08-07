@@ -98,6 +98,8 @@ export interface OracleActionV1 {
   targetMinimum?: number;
   targetMaximum?: number | "X";
   quantityMayBeZero?: boolean;
+  quantityType?: "literal" | "variable";
+  quantityExpression?: string;
   evidenceText: string;
   evidenceStart: number;
   evidenceEnd: number;
@@ -230,7 +232,8 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bgains? \d+ life\b/i, actionType: "gain_life", affectedObjects: ["player"] },
   { pattern: /\bloses? \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\bloses? up to \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
-  { pattern: /\b(?:You )?lose life(?: equal to|\b)/i, actionType: "lose_life", affectedObjects: ["player"] },
+  { pattern: /\b(?:You |Target player |Each player |That player )?loses? X life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
+  { pattern: /\b(?:You |Target player |Each player |That player )?loses? life equal to[^.]+/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\bScry \d+\b/i, actionType: "scry", sourceZones: ["library"] },
   { pattern: /\bScry up to \d+\b/i, actionType: "scry", sourceZones: ["library"] },
   { pattern: /\bSurveil \d+\b/i, actionType: "surveil", sourceZones: ["library"], destinationZones: ["graveyard"] },
@@ -326,6 +329,24 @@ function extractTrigger(paragraph: string): string | undefined {
 function extractQuantityConstraint(text: string): string | undefined {
   const upTo = text.match(/\bup to (?:one|two|three|four|five|\w+) [\w ]+/i);
   return upTo?.[0]?.trim();
+}
+
+function parseLoseLifeQuantity(
+  evidenceText: string,
+): { quantityType?: "literal" | "variable"; quantityExpression?: string } {
+  const variable = evidenceText.match(/\b(?:You |Target player |Each player |That player )?lose(?:s)? life equal to (.+)$/i);
+  if (variable?.[1]) {
+    return { quantityType: "variable", quantityExpression: variable[1].trim() };
+  }
+  const xLife = evidenceText.match(/\b(?:You |Target player |Each player |That player )?lose(?:s)? X life\b/i);
+  if (xLife) {
+    return { quantityType: "variable", quantityExpression: "X" };
+  }
+  const literal = evidenceText.match(/\b(?:You |Target player |Each player |That player )?lose(?:s)? (\d+|up to \d+) life\b/i);
+  if (literal?.[1]) {
+    return { quantityType: "literal", quantityExpression: literal[1] };
+  }
+  return {};
 }
 
 function parseTargetConstraint(text: string): {
@@ -720,13 +741,24 @@ function acceptAction(input: {
   clause?: CompoundClauseSegment;
   grantedContext?: GrantedQuoteContext;
 }): OracleActionV1 | null {
-  const evidenceText = input.match[0];
+  let evidenceText = input.match[0];
   const baseLocalStart =
     input.evidenceOffsetInParagraph ?? input.ability.paragraphText.indexOf(evidenceText);
   const localStart = baseLocalStart;
   if (localStart < 0) return null;
 
+  if (input.rule.actionType === "lose_life") {
+    const extended = input.ability.paragraphText
+      .slice(localStart)
+      .match(/^((?:You |Target player |Each player |That player )?loses? (?:X|\d+|up to \d+) life|(?:You |Target player |Each player |That player )?loses? life equal to[^.]+)/i);
+    if (extended?.[1]) {
+      evidenceText = extended[1].trim();
+    }
+  }
+
   const localEnd = localStart + evidenceText.length;
+  const loseLifeQuantity =
+    input.rule.actionType === "lose_life" ? parseLoseLifeQuantity(evidenceText) : {};
   const roleParagraph = input.grantedContext?.innerText ?? input.ability.paragraphText;
   const roleLocalStart = input.grantedContext
     ? localStart - input.grantedContext.innerLocalStart
@@ -957,6 +989,8 @@ function acceptAction(input: {
     targetMinimum: targetConstraint.targetMinimum,
     targetMaximum: targetConstraint.targetMaximum,
     quantityMayBeZero: targetConstraint.quantityMayBeZero,
+    quantityType: loseLifeQuantity.quantityType,
+    quantityExpression: loseLifeQuantity.quantityExpression,
     evidenceText,
     evidenceStart: cardEvidenceStart,
     evidenceEnd: cardEvidenceEnd,

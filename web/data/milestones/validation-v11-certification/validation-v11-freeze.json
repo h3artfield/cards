@@ -1,0 +1,27 @@
+{
+  "validationSet": "validation_set_v11",
+  "validationV11Hash": "f1c7f84371bb5a02ec62722d49bdbe71a2904f58c404af3366c1b3b2a5e70bc7",
+  "parentV10Hash": "2af9eafaf0b021fd3c73193e1629b6b8fe06a402a7baea30c8e5999852041a81",
+  "frozenAt": "2026-08-07T17:29:05.385Z",
+  "casesChanged": 17,
+  "changedCaseIds": [
+    "held-0005",
+    "held-0018",
+    "held-0028",
+    "held-0029",
+    "held-0033",
+    "held-0044",
+    "held-0060",
+    "held-0063",
+    "held-0064",
+    "held-0074",
+    "held-0092",
+    "held-0093",
+    "held-0097",
+    "held-0098",
+    "held-0099",
+    "held-0100",
+    "held-0104"
+  ],
+  "policyViolationsCorrected": 23
+}

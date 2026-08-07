@@ -1,0 +1,627 @@
+{
+  "generatedAt": "2026-08-07T16:57:52.980Z",
+  "validationSet": "validation_set_v10",
+  "validationV10Hash": "2af9eafaf0b021fd3c73193e1629b6b8fe06a402a7baea30c8e5999852041a81",
+  "rc1ParserVersion": "oracle-action-v1.19-precision-pass",
+  "purpose": "RC2 development planning — abstract failure families only",
+  "metrics": {
+    "truePositives": 146,
+    "falsePositives": 14,
+    "falseNegatives": 52,
+    "precision": 0.9125,
+    "recall": 0.7373737373737373,
+    "falsePositiveRate": 0.0875
+  },
+  "acceptedUnsupported": 2,
+  "primaryRootCauseTotals": {
+    "missing_grammar": 27,
+    "wrong_primitive": 12,
+    "other_parser_defect": 14,
+    "span_role": 2
+  },
+  "primaryRootCauseTotalsCorrected": {
+    "note": "After v10 policy probe (2026-08-07): all 12 wrong_primitive records were misclassified — 10 gold/evaluator defects + 2 variable lose_life (parser fixed v1.20-dev)",
+    "wrong_primitive": 0,
+    "gold_defect_reclassified_from_wrong_primitive": 10,
+    "evaluator_defect_reclassified_from_wrong_primitive": 5,
+    "parser_fix_variable_lose_life": 2
+  },
+  "wrongPrimitiveArithmetic": {
+    "reportedTotal": 12,
+    "listedFamilySum": 10,
+    "missingFromList": 2,
+    "missingExplanation": "variable_lose_life_routing cluster (count 2) was listed separately in wrongPrimitiveClusters, not in the prose family list",
+    "correctedGenuineWrongPrimitive": 0
+  },
+  "unsupportedAcceptedDiagnosis": [
+    {
+      "caseId": "held-0005",
+      "cardName": "Find // Finality",
+      "oracleId": "212af747-2ac1-4d33-9456-8b3cc8988f5d",
+      "actionType": "return_to_hand",
+      "emittedActionType": "return_to_hand",
+      "evidence": "Return up to two target creature cards from your graveyard to your hand",
+      "evidenceStart": 0,
+      "evidenceEnd": 71,
+      "textRole": "effect",
+      "spanValid": true,
+      "inferSupportedPrimitive": "return_to_battlefield",
+      "confidence": 0.9,
+      "whyUnsupported": "inferred return_to_battlefield !== emitted return_to_hand",
+      "generalGrammar": "Return up to two target creature cards from your graveyard to your hand",
+      "generalFix": "Improve zone/verb routing: evidence maps to return_to_battlefield not return_to_hand",
+      "regressionExamples": "Select unrelated catalog cards with same evidence-class pattern (see selection rule in expansion plan)"
+    },
+    {
+      "caseId": "held-0028",
+      "cardName": "The Mirari Conjecture",
+      "oracleId": "56528234-46c0-4fba-972a-0c8011996f8d",
+      "actionType": "return_to_hand",
+      "emittedActionType": "return_to_hand",
+      "evidence": "Return target instant card from your graveyard to your hand",
+      "evidenceStart": 93,
+      "evidenceEnd": 152,
+      "textRole": "effect",
+      "spanValid": true,
+      "inferSupportedPrimitive": "return_to_battlefield",
+      "confidence": 0.9,
+      "whyUnsupported": "inferred return_to_battlefield !== emitted return_to_hand",
+      "generalGrammar": "Return target instant card from your graveyard to your hand",
+      "generalFix": "Improve zone/verb routing: evidence maps to return_to_battlefield not return_to_hand",
+      "regressionExamples": "Select unrelated catalog cards with same evidence-class pattern (see selection rule in expansion plan)"
+    },
+    {
+      "caseId": "held-0028",
+      "cardName": "The Mirari Conjecture",
+      "oracleId": "56528234-46c0-4fba-972a-0c8011996f8d",
+      "actionType": "return_to_hand",
+      "emittedActionType": "return_to_hand",
+      "evidence": "Return target sorcery card from your graveyard to your hand",
+      "evidenceStart": 159,
+      "evidenceEnd": 218,
+      "textRole": "effect",
+      "spanValid": true,
+      "inferSupportedPrimitive": "return_to_battlefield",
+      "confidence": 0.9,
+      "whyUnsupported": "inferred return_to_battlefield !== emitted return_to_hand",
+      "generalGrammar": "Return target sorcery card from your graveyard to your hand",
+      "generalFix": "Improve zone/verb routing: evidence maps to return_to_battlefield not return_to_hand",
+      "regressionExamples": "Select unrelated catalog cards with same evidence-class pattern (see selection rule in expansion plan)"
+    },
+    {
+      "caseId": "held-0054",
+      "cardName": "Nature's Claim",
+      "oracleId": "6d4e558e-9109-4918-a082-fdcbaffd516b",
+      "actionType": "gain_life",
+      "emittedActionType": "gain_life",
+      "evidence": "gains 4 life",
+      "evidenceStart": 55,
+      "evidenceEnd": 67,
+      "textRole": "effect",
+      "spanValid": true,
+      "inferSupportedPrimitive": null,
+      "confidence": 0.9,
+      "whyUnsupported": "no supported primitive inferred from evidence",
+      "generalGrammar": "gains 4 life",
+      "generalFix": "Add span-role guard or abstain pattern for this evidence class; do not card-specific block",
+      "regressionExamples": "Select unrelated catalog cards with same evidence-class pattern (see selection rule in expansion plan)"
+    },
+    {
+      "caseId": "held-0063",
+      "cardName": "Regrowth",
+      "oracleId": "e6e4a8bd-5c40-4654-8de1-0da9afed90fd",
+      "actionType": "return_to_hand",
+      "emittedActionType": "return_to_hand",
+      "evidence": "Return target card from your graveyard to your hand",
+      "evidenceStart": 0,
+      "evidenceEnd": 51,
+      "textRole": "effect",
+      "spanValid": true,
+      "inferSupportedPrimitive": "return_to_battlefield",
+      "confidence": 0.9,
+      "whyUnsupported": "inferred return_to_battlefield !== emitted return_to_hand",
+      "generalGrammar": "Return target card from your graveyard to your hand",
+      "generalFix": "Improve zone/verb routing: evidence maps to return_to_battlefield not return_to_hand",
+      "regressionExamples": "Select unrelated catalog cards with same evidence-class pattern (see selection rule in expansion plan)"
+    },
+    {
+      "caseId": "held-0064",
+      "cardName": "Reanimate",
+      "oracleId": "a044474a-cd72-4e9d-bd8d-a08f2de9cdc0",
+      "actionType": "lose_life",
+      "emittedActionType": "lose_life",
+      "evidence": "You lose life equal to",
+      "evidenceStart": 83,
+      "evidenceEnd": 105,
+      "textRole": "effect",
+      "spanValid": true,
+      "inferSupportedPrimitive": null,
+      "confidence": 0.9,
+      "whyUnsupported": "no supported primitive inferred from evidence",
+      "generalGrammar": "You lose life equal to",
+      "generalFix": "Add span-role guard or abstain pattern for this evidence class; do not card-specific block",
+      "regressionExamples": "Select unrelated catalog cards with same evidence-class pattern (see selection rule in expansion plan)"
+    }
+  ],
+  "missingGrammarClusters": {
+    "unusual_imperative_verb": {
+      "count": 10,
+      "catalogSelectionRule": "catalog: low-frequency verbs (distribute, manifest, connive, etc.) on unrelated cards",
+      "items": [
+        {
+          "caseId": "held-0006",
+          "cardName": "Ponder",
+          "expected": "shuffle_library",
+          "evidence": "You may shuffle"
+        },
+        {
+          "caseId": "held-0013",
+          "cardName": "Mind's Desire",
+          "expected": "shuffle_library",
+          "evidence": "Shuffle your library"
+        },
+        {
+          "caseId": "held-0029",
+          "cardName": "The First Iroan Games",
+          "expected": "sacrifice",
+          "evidence": "Sacrifice this token: Add one mana of any color"
+        },
+        {
+          "caseId": "held-0033",
+          "cardName": "Narset, Parter of Veils",
+          "expected": "draw",
+          "evidence": "draw more than one card each turn"
+        },
+        {
+          "caseId": "held-0044",
+          "cardName": "Tireless Tracker",
+          "expected": "draw",
+          "evidence": "Draw a card"
+        },
+        {
+          "caseId": "held-0069",
+          "cardName": "Terminus",
+          "expected": "draw",
+          "evidence": "draw it if it's the first card you drew this"
+        },
+        {
+          "caseId": "held-0074",
+          "cardName": "Smothering Tithe",
+          "expected": "draw",
+          "evidence": "draw"
+        },
+        {
+          "caseId": "held-0074",
+          "cardName": "Smothering Tithe",
+          "expected": "sacrifice",
+          "evidence": "Sacrifice this token: Add one mana of any color"
+        },
+        {
+          "caseId": "held-0089",
+          "cardName": "Kiki-Jiki, Mirror Breaker",
+          "expected": "copy",
+          "evidence": "copy of target"
+        },
+        {
+          "caseId": "held-0094",
+          "cardName": "Yorion, Sky Nomad",
+          "expected": "exile",
+          "evidence": "exile any number of other nonland permanents you own and control"
+        }
+      ]
+    },
+    "pronoun_coreference": {
+      "count": 7,
+      "catalogSelectionRule": "catalog: cards exhibiting 'pronoun_coreference' oracle structure; exclude validation oracleIds",
+      "items": [
+        {
+          "caseId": "held-0003",
+          "cardName": "Valki, God of Lies // Tibalt, Cosmic Impostor",
+          "expected": "cast",
+          "evidence": "cast those spells"
+        },
+        {
+          "caseId": "held-0042",
+          "cardName": "Mulldrifter",
+          "expected": "sacrifice",
+          "evidence": "sacrificed when it enters"
+        },
+        {
+          "caseId": "held-0044",
+          "cardName": "Tireless Tracker",
+          "expected": "sacrifice",
+          "evidence": "Sacrifice this token: Draw a card"
+        },
+        {
+          "caseId": "held-0056",
+          "cardName": "Toxic Deluge",
+          "expected": "cast",
+          "evidence": "cast this spell, pay X life"
+        },
+        {
+          "caseId": "held-0065",
+          "cardName": "Animate Dead",
+          "expected": "sacrifice",
+          "evidence": "sacrifices it"
+        },
+        {
+          "caseId": "held-0100",
+          "cardName": "Field of Ruin",
+          "expected": "sacrifice",
+          "evidence": "Sacrifice this land"
+        },
+        {
+          "caseId": "held-0100",
+          "cardName": "Field of Ruin",
+          "expected": "put_onto_battlefield",
+          "evidence": "puts it onto the battlefield"
+        }
+      ]
+    },
+    "multiface_structure": {
+      "count": 3,
+      "catalogSelectionRule": "catalog: split/DFC/adventure with distinct face-scoped primitives",
+      "items": [
+        {
+          "caseId": "held-0002",
+          "cardName": "Expansion // Explosion",
+          "expected": "draw",
+          "evidence": "draw"
+        },
+        {
+          "caseId": "held-0002",
+          "cardName": "Expansion // Explosion",
+          "expected": "deal_damage",
+          "evidence": "deals X damage to any target"
+        },
+        {
+          "caseId": "held-0012",
+          "cardName": "Fable of the Mirror-Breaker // Reflection of Kiki-Jiki",
+          "expected": "copy",
+          "evidence": "copy of another target"
+        }
+      ]
+    },
+    "modal_wording": {
+      "count": 2,
+      "catalogSelectionRule": "catalog: 'Choose one/two/three' bullets with distinct imperative verbs; gold uses modal stem where policy allows",
+      "items": [
+        {
+          "caseId": "held-0021",
+          "cardName": "Abzan Charm",
+          "expected": "put_counter",
+          "evidence": "Distribute"
+        },
+        {
+          "caseId": "held-0085",
+          "cardName": "Cryptic Command",
+          "expected": "tap",
+          "evidence": "Tap"
+        }
+      ]
+    },
+    "quantified_action": {
+      "count": 2,
+      "catalogSelectionRule": "catalog: 'up to N' target selection on unrelated removal/ramp/tutor cards",
+      "items": [
+        {
+          "caseId": "held-0030",
+          "cardName": "Storm the Festival",
+          "expected": "put_onto_battlefield",
+          "evidence": "put up to two permanent cards with mana value 5 or less from among them onto the battlefield"
+        },
+        {
+          "caseId": "held-0070",
+          "cardName": "Ashiok, Nightmare Muse",
+          "expected": "cast",
+          "evidence": "You may cast up to three spells from among face-up cards your opponents own from exile without paying their mana costs"
+        }
+      ]
+    },
+    "zone_transition_wording": {
+      "count": 1,
+      "catalogSelectionRule": "catalog: oracle contains explicit zone pair (graveyard/hand/library/exile → battlefield/hand/library) with Return/Put/Mill/Shuffle verbs; exclude validation oracleId set",
+      "items": [
+        {
+          "caseId": "held-0057",
+          "cardName": "Cyclonic Rift",
+          "expected": "return_to_hand",
+          "evidence": "Return target nonland permanent you don't control to its owner's hand"
+        }
+      ]
+    },
+    "search_tutor_resolution": {
+      "count": 1,
+      "catalogSelectionRule": "catalog: Search library + optional reveal + zone destination + shuffle on unrelated tutors",
+      "items": [
+        {
+          "caseId": "held-0100",
+          "cardName": "Field of Ruin",
+          "expected": "search_library",
+          "evidence": "searches their library"
+        }
+      ]
+    },
+    "delayed_later_action": {
+      "count": 1,
+      "catalogSelectionRule": "catalog: 'At the beginning of…', 'Until end of turn…', 'If you do… then…' delayed effects",
+      "items": [
+        {
+          "caseId": "held-0100",
+          "cardName": "Field of Ruin",
+          "expected": "shuffle_library",
+          "evidence": "then shuffles"
+        }
+      ]
+    }
+  },
+  "wrongPrimitiveClusters": {
+    "gy_to_hand_vs_recursion_taxonomy": {
+      "count": 5,
+      "description": "RECLASSIFIED: gold/evaluator defect — parser return_to_hand was correct; v10 gold wrongly used return_to_battlefield for gy→hand",
+      "verdict": "gold_bug_and_diagnosis_bug",
+      "catalogSelectionRule": "Do NOT teach gy→hand as return_to_battlefield in expansion",
+      "confusionPairs": [
+        { "expected": "return_to_battlefield", "emitted": "return_to_hand", "validationExposureCount": 5 }
+      ],
+      "abstractPattern": "zone-pair disambiguation: destination hand vs battlefield from graveyard source"
+    },
+    "land_sacrifice_cost_not_segmented": {
+      "count": 3,
+      "description": "RECLASSIFIED: gold defect — activated sacrifice is Layer 1 cost; parser abstention was correct",
+      "verdict": "gold_bug",
+      "catalogSelectionRule": "catalog: lands/artifacts with 'Sacrifice this [permanent]: [effect]' activated pattern; unrelated to Ghost Quarter/Strip Mine/Wasteland oracleIds",
+      "abstractPattern": "colon-activated ability cost vs effect segmentation"
+    },
+    "static_restriction_as_cast": {
+      "count": 1,
+      "description": "RECLASSIFIED: gold defect — static restriction must not emit cast primitive",
+      "verdict": "gold_bug",
+      "catalogSelectionRule": "catalog: static 'can't cast/activate' restrictions without imperative cast",
+      "abstractPattern": "negated permission vs one-shot cast"
+    },
+    "conditional_sacrifice_trigger": {
+      "count": 1,
+      "description": "RECLASSIFIED: gold defect — sacrifice in trigger header is Layer 1 trigger_event, not Layer 2",
+      "verdict": "gold_bug",
+      "catalogSelectionRule": "catalog: 'Whenever you sacrifice [object]…' triggered abilities on unrelated cards",
+      "abstractPattern": "sacrifice as trigger condition vs imperative sacrifice"
+    },
+    "variable_lose_life_routing": {
+      "count": 2,
+      "description": "FIXED in oracle-action-v1.20-variable-lose-life-dev — variable lose_life with full evidence span and quantityType/quantityExpression",
+      "verdict": "parser_fix_complete",
+      "catalogSelectionRule": "catalog: 'lose life equal to [variable/mana value/X]' on unrelated cards; overlaps accepted_unsupported fix",
+      "abstractPattern": "variable-quantity life loss without numeric literal in evidence span"
+    }
+  },
+  "otherParserDefectClusters": {
+    "optionality_attachment": {
+      "count": 6,
+      "catalogSelectionRule": "catalog: 'you may' scoped to specific clause vs ability-level optional",
+      "items": [
+        {
+          "caseId": "held-0012",
+          "cardName": "Fable of the Mirror-Breaker // Reflection of Kiki-Jiki",
+          "kind": "false_positive",
+          "auditClassification": "wrong_condition_or_optionality",
+          "evidence": "You may discard up to two cards"
+        },
+        {
+          "caseId": "held-0012",
+          "cardName": "Fable of the Mirror-Breaker // Reflection of Kiki-Jiki",
+          "kind": "false_negative",
+          "auditClassification": "wrong_condition_or_optionality",
+          "evidence": "discard up to two cards"
+        },
+        {
+          "caseId": "held-0060",
+          "cardName": "Life from the Loam",
+          "kind": "false_positive",
+          "auditClassification": "wrong_condition_or_optionality",
+          "evidence": "draw a card"
+        },
+        {
+          "caseId": "held-0060",
+          "cardName": "Life from the Loam",
+          "kind": "false_negative",
+          "auditClassification": "wrong_condition_or_optionality",
+          "evidence": "draw a card, you may mill three cards instead"
+        },
+        {
+          "caseId": "held-0086",
+          "cardName": "Isochron Scepter",
+          "kind": "false_positive",
+          "auditClassification": "wrong_condition_or_optionality",
+          "evidence": "you may cast the copy"
+        },
+        {
+          "caseId": "held-0086",
+          "cardName": "Isochron Scepter",
+          "kind": "false_negative",
+          "auditClassification": "wrong_condition_or_optionality",
+          "evidence": "you may cast the copy without paying its mana cost"
+        }
+      ]
+    },
+    "static_cast_permission_leak": {
+      "count": 4,
+      "catalogSelectionRule": "catalog: commander/flashback/cycling reminder lines — regression must stay abstained",
+      "items": [
+        {
+          "caseId": "held-0019",
+          "cardName": "Flawless Maneuver",
+          "kind": "false_positive",
+          "auditClassification": "missing_gold_label",
+          "evidence": "you may cast this "
+        },
+        {
+          "caseId": "held-0101",
+          "cardName": "Fierce Guardianship",
+          "kind": "false_positive",
+          "auditClassification": "missing_gold_label",
+          "evidence": "you may cast this "
+        },
+        {
+          "caseId": "held-0102",
+          "cardName": "Deflecting Swat",
+          "kind": "false_positive",
+          "auditClassification": "missing_gold_label",
+          "evidence": "you may cast this "
+        },
+        {
+          "caseId": "held-0103",
+          "cardName": "Deadly Rollick",
+          "kind": "false_positive",
+          "auditClassification": "missing_gold_label",
+          "evidence": "you may cast this "
+        }
+      ]
+    },
+    "wrong_ability_attachment": {
+      "count": 2,
+      "catalogSelectionRule": "catalog: cards exhibiting 'wrong_ability_attachment' oracle structure; exclude validation oracleIds",
+      "items": [
+        {
+          "caseId": "held-0012",
+          "cardName": "Fable of the Mirror-Breaker // Reflection of Kiki-Jiki",
+          "kind": "false_negative",
+          "auditClassification": "wrong_ability_attachment",
+          "evidence": "create a Treasure token"
+        },
+        {
+          "caseId": "held-0093",
+          "cardName": "Wizard Class",
+          "kind": "false_negative",
+          "auditClassification": "wrong_ability_attachment",
+          "evidence": "draw a card, put a +1/+1 counter on target cr"
+        }
+      ]
+    },
+    "unsupported_extraction_accepted": {
+      "count": 2,
+      "catalogSelectionRule": "catalog: cards exhibiting 'unsupported_extraction_accepted' oracle structure; exclude validation oracleIds",
+      "items": [
+        {
+          "caseId": "held-0064",
+          "cardName": "Reanimate",
+          "kind": "false_positive",
+          "auditClassification": "unsupported_parser_extraction",
+          "evidence": "You lose life equal to"
+        },
+        {
+          "caseId": "held-0104",
+          "cardName": "Ad Nauseam",
+          "kind": "false_positive",
+          "auditClassification": "unsupported_parser_extraction",
+          "evidence": "You lose life equal to"
+        }
+      ]
+    }
+  },
+  "spanRoleItems": [
+    {
+      "caseId": "held-0013",
+      "cardName": "Mind's Desire",
+      "evidence": "cast this "
+    },
+    {
+      "caseId": "held-0013",
+      "cardName": "Mind's Desire",
+      "evidence": "copy it"
+    }
+  ],
+  "proposedDevelopmentExpansion": {
+    "name": "development_generalization_expansion_v1",
+    "selectionPrinciple": "Mine golden catalog for unrelated cards sharing abstract linguistic structures; never copy validation oracleIds/text",
+    "families": [
+      {
+        "family": "multiface_structure",
+        "catalogSelectionRule": "catalog: split/DFC/adventure with distinct face-scoped primitives",
+        "targetCases": 4
+      },
+      {
+        "family": "pronoun_coreference",
+        "catalogSelectionRule": "catalog: cards exhibiting 'pronoun_coreference' oracle structure; exclude validation oracleIds",
+        "targetCases": 4
+      },
+      {
+        "family": "unusual_imperative_verb",
+        "catalogSelectionRule": "catalog: low-frequency verbs (distribute, manifest, connive, etc.) on unrelated cards",
+        "targetCases": 4
+      },
+      {
+        "family": "modal_wording",
+        "catalogSelectionRule": "catalog: 'Choose one/two/three' bullets with distinct imperative verbs; gold uses modal stem where policy allows",
+        "targetCases": 4
+      },
+      {
+        "family": "quantified_action",
+        "catalogSelectionRule": "catalog: 'up to N' target selection on unrelated removal/ramp/tutor cards",
+        "targetCases": 4
+      },
+      {
+        "family": "zone_transition_wording",
+        "catalogSelectionRule": "catalog: oracle contains explicit zone pair (graveyard/hand/library/exile → battlefield/hand/library) with Return/Put/Mill/Shuffle verbs; exclude validation oracleId set",
+        "targetCases": 4
+      },
+      {
+        "family": "search_tutor_resolution",
+        "catalogSelectionRule": "catalog: Search library + optional reveal + zone destination + shuffle on unrelated tutors",
+        "targetCases": 4
+      },
+      {
+        "family": "delayed_later_action",
+        "catalogSelectionRule": "catalog: 'At the beginning of…', 'Until end of turn…', 'If you do… then…' delayed effects",
+        "targetCases": 4
+      },
+      {
+        "family": "optionality_attachment",
+        "catalogSelectionRule": "catalog: 'you may' scoped to specific clause vs ability-level optional",
+        "targetCases": 4
+      },
+      {
+        "family": "wrong_ability_attachment",
+        "catalogSelectionRule": "catalog: cards exhibiting 'wrong_ability_attachment' oracle structure; exclude validation oracleIds",
+        "targetCases": 4
+      },
+      {
+        "family": "static_cast_permission_leak",
+        "catalogSelectionRule": "catalog: commander/flashback/cycling reminder lines — regression must stay abstained",
+        "targetCases": 4
+      },
+      {
+        "family": "unsupported_extraction_accepted",
+        "catalogSelectionRule": "catalog: cards exhibiting 'unsupported_extraction_accepted' oracle structure; exclude validation oracleIds",
+        "targetCases": 4
+      },
+      {
+        "family": "accepted_unsupported_emission",
+        "catalogSelectionRule": "catalog: cards exhibiting 'accepted_unsupported_emission' oracle structure; exclude validation oracleIds",
+        "targetCases": 4
+      }
+    ],
+    "estimatedTotalCases": 52,
+    "expansionTrainingSize": 39,
+    "expansionCheckSize": 13,
+    "splitRatio": "75% training / 25% check",
+    "checkSubsetFrozenBefore": "any parser tuning"
+  },
+  "developmentTrackingViews": [
+    "original_development_corpus (v25+)",
+    "expansion-training",
+    "expansion-check"
+  ],
+  "rc2DevelopmentGates": {
+    "combinedDevelopment": {
+      "acceptedPrecisionMin": 0.98,
+      "acceptedRecallMin": 0.9,
+      "acceptedUnsupportedMax": 0
+    },
+    "expansionCheck": {
+      "acceptedPrecisionMin": 0.95,
+      "acceptedRecallMin": 0.85,
+      "acceptedUnsupportedMax": 0
+    }
+  }
+}

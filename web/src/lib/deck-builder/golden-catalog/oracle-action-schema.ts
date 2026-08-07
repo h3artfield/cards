@@ -226,7 +226,7 @@ export const ORACLE_ACTION_PRODUCTION_GATES = {
   falsePositiveRate: { target: 0.02, label: "≤2%" },
 } as const;
 
-export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.19-precision-pass";
+export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.20-variable-lose-life-dev";
 export const ORACLE_ACTION_TAXONOMY_VERSION = "three-layer-v1.3";
 
 export const HIGH_VALUE_ACTION_TYPES = [
