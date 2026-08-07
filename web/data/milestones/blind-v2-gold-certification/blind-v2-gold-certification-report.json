@@ -1,0 +1,41 @@
+{
+  "blindSet": "final_blind_test_v2",
+  "priorHash": "a8af409f9d6622bac200be18b1f6d9704b761b40eea3db7119c0d4b20510b8f9",
+  "certifiedHash": "2f5c30a26ba9bf6c31fb8cdd30d486469002dcec8f1a2f8ca7e10f458bceea1a",
+  "certifiedAt": "2026-08-07T18:48:28.076Z",
+  "incompleteCaseCount": 0,
+  "parserExecutionCount": 0,
+  "maintenanceLog": [
+    {
+      "caseId": "blind-0028",
+      "cardName": "Past in Flames",
+      "classification": "recoverable_gold",
+      "rationale": "Static flashback grant is Layer 1; card reminder cast is forbidden. No Layer-2 primitive for granting flashback."
+    },
+    {
+      "caseId": "blind-0031",
+      "cardName": "Karn's Sylex",
+      "classification": "recoverable_gold",
+      "rationale": "Activated destroy effect is Layer 2; static life-payment restriction and activated cost exile are Layer 1."
+    },
+    {
+      "caseId": "blind-0044",
+      "cardName": "Muldrotha, the Gravetide",
+      "classification": "recoverable_gold",
+      "rationale": "Static graveyard cast/play permission is Layer 1 optional structure; no card-specific Layer-2 primitive."
+    },
+    {
+      "caseId": "blind-0060",
+      "cardName": "Grind // Dust",
+      "classification": "recoverable_gold",
+      "rationale": "Aftermath back-face exile is Layer 2; reminder cast from graveyard is forbidden."
+    },
+    {
+      "caseId": "blind-0063",
+      "cardName": "Lotus Petal",
+      "classification": "recoverable_gold",
+      "rationale": "Sacrifice in activated cost is Layer 1 only; add_mana is the Layer-2 effect primitive."
+    }
+  ],
+  "casesReviewed": 105
+}

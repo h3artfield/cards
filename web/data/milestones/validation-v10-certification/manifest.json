@@ -1,0 +1,3060 @@
+{
+  "validationSet": "validation_set_v10",
+  "validationV10Hash": "2af9eafaf0b021fd3c73193e1629b6b8fe06a402a7baea30c8e5999852041a81",
+  "parentV9Hash": "81676cb6270ea004d80aac23d2e945ce19fdf98bfbb3b46a4c96c397c0624433",
+  "casesReviewed": "104/104",
+  "casesChanged": 77,
+  "changedCaseIds": [
+    "held-0001",
+    "held-0002",
+    "held-0003",
+    "held-0004",
+    "held-0005",
+    "held-0006",
+    "held-0008",
+    "held-0009",
+    "held-0010",
+    "held-0011",
+    "held-0012",
+    "held-0013",
+    "held-0014",
+    "held-0015",
+    "held-0018",
+    "held-0020",
+    "held-0021",
+    "held-0022",
+    "held-0023",
+    "held-0027",
+    "held-0028",
+    "held-0029",
+    "held-0030",
+    "held-0031",
+    "held-0032",
+    "held-0033",
+    "held-0034",
+    "held-0035",
+    "held-0036",
+    "held-0037",
+    "held-0038",
+    "held-0039",
+    "held-0042",
+    "held-0044",
+    "held-0047",
+    "held-0050",
+    "held-0051",
+    "held-0054",
+    "held-0055",
+    "held-0056",
+    "held-0057",
+    "held-0058",
+    "held-0059",
+    "held-0060",
+    "held-0061",
+    "held-0062",
+    "held-0063",
+    "held-0064",
+    "held-0065",
+    "held-0069",
+    "held-0070",
+    "held-0073",
+    "held-0074",
+    "held-0076",
+    "held-0077",
+    "held-0078",
+    "held-0080",
+    "held-0082",
+    "held-0084",
+    "held-0085",
+    "held-0086",
+    "held-0088",
+    "held-0089",
+    "held-0090",
+    "held-0091",
+    "held-0092",
+    "held-0093",
+    "held-0094",
+    "held-0095",
+    "held-0096",
+    "held-0097",
+    "held-0098",
+    "held-0099",
+    "held-0100",
+    "held-0101",
+    "held-0102",
+    "held-0104"
+  ],
+  "primitivesAdded": 132,
+  "primitivesRemoved": 89,
+  "evidenceCorrections": 71,
+  "faceCorrections": 0,
+  "goldReviewStatus": "reviewed",
+  "goldCompletenessStatus": "complete",
+  "incompleteCaseCount": 0,
+  "taxonomy": "three-layer-v1.3",
+  "certifiedAt": "2026-08-07T16:51:04.122Z",
+  "certificationRecords": [
+    {
+      "caseId": "held-0001",
+      "oracleId": "56fd8895-3be2-4591-86fa-87567d9cdc14",
+      "cardName": "Commit // Memory",
+      "faceComponent": "back",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw",
+          "cardFace": "back"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "their library, then draws seven cards.",
+          "cardFace": "back"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "their library, then draws seven cards.",
+          "after": "draw",
+          "actionType": "draw"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0002",
+      "oracleId": "af6f771f-5154-4fb3-8ed4-768d71eea568",
+      "cardName": "Expansion // Explosion",
+      "faceComponent": "back",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw",
+          "cardFace": "back"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals X damage to any target",
+          "cardFace": "back"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals X damage",
+          "cardFace": "back"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "draws X cards",
+          "cardFace": "back"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "draws X cards",
+          "after": "draw",
+          "actionType": "draw"
+        },
+        {
+          "before": "deals X damage",
+          "after": "deals X damage to any target",
+          "actionType": "deal_damage"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0003",
+      "oracleId": "907ae517-22d5-4ac7-bc3a-3f4d5eaeeb57",
+      "cardName": "Valki, God of Lies // Tibalt, Cosmic Impostor",
+      "faceComponent": "back",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 5,
+      "primitivesAdded": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {R}",
+          "cardFace": "back"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile the top card of each player's library",
+          "cardFace": "back"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target artifact or creature",
+          "cardFace": "back"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile all graveyards",
+          "cardFace": "back"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast those spells",
+          "cardFace": "back"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile the top card",
+          "cardFace": "back"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Exile the top card",
+          "after": "Exile the top card of each player's library",
+          "actionType": "exile"
+        },
+        {
+          "before": "Exile the top card",
+          "after": "Exile target artifact or creature",
+          "actionType": "exile"
+        },
+        {
+          "before": "Exile the top card",
+          "after": "Exile all graveyards",
+          "actionType": "exile"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0004",
+      "oracleId": "4a8d41fe-e04d-484b-a7d1-19be311e6ca7",
+      "cardName": "Sea Gate Restoration // Sea Gate, Reborn",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw cards equal to the number of cards in yo",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {U}",
+          "cardFace": "back"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw cards"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0005",
+      "oracleId": "212af747-2ac1-4d33-9456-8b3cc8988f5d",
+      "cardName": "Find // Finality",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 0,
+      "primitivesAdded": [],
+      "primitivesRemoved": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to your hand"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0006",
+      "oracleId": "02090581-61aa-4348-ad57-451be8ee91c2",
+      "cardName": "Ponder",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "scry",
+          "evidenceContains": "Look at the top three cards"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0007",
+      "oracleId": "ac641490-ca14-48d7-8cc4-b69ce984befa",
+      "cardName": "Preordain",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0008",
+      "oracleId": "437b2dab-15e0-4b9a-a204-58622d37a3b3",
+      "cardName": "Fact or Fiction",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 0,
+      "primitivesAdded": [],
+      "primitivesRemoved": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "into your hand"
+        },
+        {
+          "actionType": "mill",
+          "evidenceContains": "into your graveyard"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0009",
+      "oracleId": "58aec411-167d-4709-8560-793eaaed62c5",
+      "cardName": "Gifts Ungiven",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for up to four cards with different names and reveal them",
+          "quantityMayBeZero": true,
+          "optionalEffect": false
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Search your library",
+          "after": "Search your library for up to four cards with different names and reveal them",
+          "actionType": "search_library"
+        },
+        {
+          "before": "then shuffle",
+          "after": "Then shuffle",
+          "actionType": "shuffle_library"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0010",
+      "oracleId": "08becc07-28bc-4a2f-a6b0-28a2998d2f50",
+      "cardName": "Windfall",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discards their hand, then draws cards equal to the greatest number of cards a player discarded this way"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "discard",
+          "evidenceContains": "discards their hand"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "draws cards"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "draws cards",
+          "after": "draw",
+          "actionType": "draw"
+        },
+        {
+          "before": "discards their hand",
+          "after": "discards their hand, then draws cards equal to the greatest number of cards a player discarded this way",
+          "actionType": "discard"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0011",
+      "oracleId": "481fb71a-11b9-462e-a4da-ca35ffd1bd22",
+      "cardName": "Squee, the Immortal",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 0,
+      "primitivesAdded": [],
+      "primitivesRemoved": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast this card from"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0012",
+      "oracleId": "c0957e5e-c71b-439c-931c-9f55d2f76ace",
+      "cardName": "Fable of the Mirror-Breaker // Reflection of Kiki-Jiki",
+      "v9PrimitiveCount": 3,
+      "v10PrimitiveCount": 9,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw that many cards",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 2/2 red Goblin Shaman creature token",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a Treasure token",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a token",
+          "cardFace": "back"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice it at the beginning of the next end step",
+          "cardFace": "back"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discard up to two cards",
+          "cardFace": "front",
+          "quantityMayBeZero": true,
+          "optionalEffect": false,
+          "targetMaximum": 2
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile this Saga",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "return it to the battlefield transformed",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy of another target",
+          "cardFace": "back"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 2/2"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "ters and after your draw step, add a lore counter.)"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "xcept it has haste. Sacrifice it at the beginning of the next end"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0013",
+      "oracleId": "b3739b5a-5731-4c64-a244-815a363b0d5c",
+      "cardName": "Mind's Desire",
+      "v9PrimitiveCount": 3,
+      "v10PrimitiveCount": 3,
+      "primitivesAdded": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile the top card of your library"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "Shuffle your library"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile the top card"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "play that card"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "exile the top card",
+          "after": "exile the top card of your library",
+          "actionType": "exile"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0014",
+      "oracleId": "bab0ab8d-74d2-49a3-b258-b93d19925d99",
+      "cardName": "Goblin Dark-Dwellers",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile it instead"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "you may cast target instant or sorcery card with mana value 3 or less from your graveyard without paying its mana cost",
+          "optional": true,
+          "optionalEffect": true
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast target instant"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "cast target instant",
+          "after": "you may cast target instant or sorcery card with mana value 3 or less from your graveyard without paying its mana cost",
+          "actionType": "cast"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0015",
+      "oracleId": "6b08f344-1ff5-4d04-a435-d3a1c5e4211b",
+      "cardName": "Hollowborn Barghest",
+      "v9PrimitiveCount": 0,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses 2 life"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "lose 2 life"
+        }
+      ],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0016",
+      "oracleId": "f4e32fc1-1b8d-441e-8e76-71f19f98e925",
+      "cardName": "Leyline of the Void",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0017",
+      "oracleId": "753cb2b2-24ce-484f-a2d0-be6fd2c67ebd",
+      "cardName": "Grafdigger's Cage",
+      "v9PrimitiveCount": 0,
+      "v10PrimitiveCount": 0,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0018",
+      "oracleId": "6dc23410-4d8f-4c8a-92b4-a8b3fae1af4e",
+      "cardName": "Yasharn, Implacable Earth",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 4,
+      "primitivesAdded": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library for a basic Forest card and a basic Plains card, reveal those cards, put them into your hand, then shuffle"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast spells or activate abilities"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifice nonland permanents to cast spells or activate abilities"
+        }
+      ],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0019",
+      "oracleId": "4e183439-17d2-47ff-9d99-5e22821d91e3",
+      "cardName": "Flawless Maneuver",
+      "v9PrimitiveCount": 0,
+      "v10PrimitiveCount": 0,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0020",
+      "oracleId": "c1cbbda0-e02b-4b9c-8669-ea87ca629520",
+      "cardName": "Dress Down",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifice this enchantment"
+        }
+      ],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0021",
+      "oracleId": "4137a22c-f793-4e27-a9b2-72740a6e2121",
+      "cardName": "Abzan Charm",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 4,
+      "primitivesAdded": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "lose 2 life"
+        },
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "Distribute"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target creature"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Exile target creature",
+          "after": "Exile",
+          "actionType": "exile"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0022",
+      "oracleId": "7052fbd6-94df-41a9-a382-641701086804",
+      "cardName": "Silumgar's Command",
+      "v9PrimitiveCount": 3,
+      "v10PrimitiveCount": 3,
+      "primitivesAdded": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter"
+        },
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target"
+        },
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target permanent"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target planeswalker"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Counter target",
+          "after": "Counter",
+          "actionType": "counter"
+        },
+        {
+          "before": "Return target permanent",
+          "after": "Return",
+          "actionType": "return_to_hand"
+        },
+        {
+          "before": "Destroy target planeswalker",
+          "after": "Destroy",
+          "actionType": "destroy"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0023",
+      "oracleId": "4a83c2fa-f2d2-4b86-8407-4269f127936d",
+      "cardName": "Depopulate",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw"
+        }
+      ],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0024",
+      "oracleId": "b1385b03-cb4b-4812-857f-7421f1df39af",
+      "cardName": "Revitalize",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0025",
+      "oracleId": "34bcc217-dd91-45a0-90d7-a94d02f1f317",
+      "cardName": "Growth Spiral",
+      "v9PrimitiveCount": 3,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0026",
+      "oracleId": "8c0b9596-c44f-44fb-89c9-056da0db33d3",
+      "cardName": "The Akroan War",
+      "v9PrimitiveCount": 0,
+      "v10PrimitiveCount": 0,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0027",
+      "oracleId": "4050e5b3-07c2-461c-9852-a2c081c0198d",
+      "cardName": "Binding the Old Gods",
+      "v9PrimitiveCount": 3,
+      "v10PrimitiveCount": 4,
+      "primitivesAdded": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for a Forest card, put it onto the battlefield tapped, then shuffle"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target nonland permanent an opponent controls"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put it onto the battlefield"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target nonland"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Search your library",
+          "after": "Search your library for a Forest card, put it onto the battlefield tapped, then shuffle",
+          "actionType": "search_library"
+        },
+        {
+          "before": "Destroy target nonland",
+          "after": "Destroy target nonland permanent an opponent controls",
+          "actionType": "destroy"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0028",
+      "oracleId": "56528234-46c0-4fba-972a-0c8011996f8d",
+      "cardName": "The Mirari Conjecture",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 3,
+      "primitivesAdded": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return target instant card from your graveyard to your hand"
+        },
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return target sorcery card from your graveyard to your hand"
+        },
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy it"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to your hand"
+        },
+        {
+          "actionType": "copy",
+          "evidenceContains": "t or sorcery spell, copy it. You may choose new targets"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "from your graveyard to your hand",
+          "after": "Return target instant card from your graveyard to your hand",
+          "actionType": "return_to_battlefield"
+        },
+        {
+          "before": "from your graveyard to your hand",
+          "after": "Return target sorcery card from your graveyard to your hand",
+          "actionType": "return_to_battlefield"
+        },
+        {
+          "before": "t or sorcery spell, copy it. You may choose new targets",
+          "after": "copy it",
+          "actionType": "copy"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0029",
+      "oracleId": "58934f6d-1aa2-414c-85c6-955a1e26d675",
+      "cardName": "The First Iroan Games",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 4,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw two cards"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 1/1 white Human Soldier creature token"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a Gold token"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this token: Add one mana of any color"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "ters and after your draw step, add a lore counter."
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 1/1"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "ters and after your draw step, add a lore counter.",
+          "after": "draw two cards",
+          "actionType": "draw"
+        },
+        {
+          "before": "Create a 1/1",
+          "after": "Create a 1/1 white Human Soldier creature token",
+          "actionType": "create_token"
+        },
+        {
+          "before": "Create a 1/1",
+          "after": "Create a Gold token",
+          "actionType": "create_token"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0030",
+      "oracleId": "5d03188b-fbc4-4e16-9fe6-db98dbdb7f68",
+      "cardName": "Storm the Festival",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put up to two permanent cards with mana value 5 or less from among them onto the battlefield",
+          "quantityMayBeZero": true,
+          "optionalEffect": false,
+          "targetMaximum": 2
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "onto the battlefield"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "onto the battlefield",
+          "after": "put up to two permanent cards with mana value 5 or less from among them onto the battlefield",
+          "actionType": "put_onto_battlefield"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0031",
+      "oracleId": "f2f165b6-ef0a-42ad-9352-ba68be8248b0",
+      "cardName": "Teferi, Hero of Dominaria",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "untap",
+          "evidenceContains": "untap up to two lands",
+          "quantityMayBeZero": true,
+          "optionalEffect": false,
+          "targetMaximum": 2
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile target permanent an opponent controls"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0032",
+      "oracleId": "12cc800c-c7be-4811-8207-fd01a99cc892",
+      "cardName": "Chandra, Torch of Defiance",
+      "v9PrimitiveCount": 4,
+      "v10PrimitiveCount": 5,
+      "primitivesAdded": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile the top card of your library"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast that card",
+          "optional": true,
+          "optionalEffect": true
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 2 damage to each opponent"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 4 damage to target creature"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile the top card"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast that card"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 4 damage"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Exile the top card",
+          "after": "Exile the top card of your library",
+          "actionType": "exile"
+        },
+        {
+          "before": "cast that card",
+          "after": "You may cast that card",
+          "actionType": "cast"
+        },
+        {
+          "before": "deals 4 damage",
+          "after": "deals 2 damage to each opponent",
+          "actionType": "deal_damage"
+        },
+        {
+          "before": "deals 4 damage",
+          "after": "deals 4 damage to target creature",
+          "actionType": "deal_damage"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0033",
+      "oracleId": "ab26fbe2-e808-48b9-8d0d-3fbb6c3d554f",
+      "cardName": "Narset, Parter of Veils",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw more than one card each turn"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw more than one card each turn.\n−2: Look at the"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "draw more than one card each turn.\n−2: Look at the",
+          "after": "draw more than one card each turn",
+          "actionType": "draw"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0034",
+      "oracleId": "7dd4a1a1-d5f4-4ac7-a9f6-34af411f070b",
+      "cardName": "Kaya, Orzhov Usurper",
+      "v9PrimitiveCount": 3,
+      "v10PrimitiveCount": 3,
+      "primitivesAdded": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile up to two target cards from a single graveyard",
+          "quantityMayBeZero": true,
+          "optionalEffect": false,
+          "targetMaximum": 2
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target nonland permanent with mana value 1 or less"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 2 life"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target nonland"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "+1: Exile up to two target cards from a single"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "ngle graveyard. You gain 2 life if at least one cre"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Exile target nonland",
+          "after": "Exile up to two target cards from a single graveyard",
+          "actionType": "exile"
+        },
+        {
+          "before": "Exile target nonland",
+          "after": "Exile target nonland permanent with mana value 1 or less",
+          "actionType": "exile"
+        },
+        {
+          "before": "ngle graveyard. You gain 2 life if at least one cre",
+          "after": "gain 2 life",
+          "actionType": "gain_life"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0035",
+      "oracleId": "131096a3-2d53-4ec2-96d3-fcb58e698a13",
+      "cardName": "Vraska, Golgari Queen",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 4,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target nonland permanent with mana value 3 or less"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifice another permanent"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 1 life"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "a card.\n−3: Destroy target nonland permanent with mana value 3"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "a card.\n−3: Destroy target nonland permanent with mana value 3",
+          "after": "Destroy target nonland permanent with mana value 3 or less",
+          "actionType": "destroy"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0036",
+      "oracleId": "05849bd6-8f38-4031-be2b-e2aa03beb8cc",
+      "cardName": "Pongify",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "creates a 3/3 green Ape creature token"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "creates a 3/3"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "creates a 3/3",
+          "after": "creates a 3/3 green Ape creature token",
+          "actionType": "create_token"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0037",
+      "oracleId": "fae37e28-e137-4177-b973-fa8b4dd8f409",
+      "cardName": "Generous Gift",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "creates a 3/3 green Elephant creature token"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "creates a 3/3"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "creates a 3/3",
+          "after": "creates a 3/3 green Elephant creature token",
+          "actionType": "create_token"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0038",
+      "oracleId": "06e2ce8e-7341-4448-8625-cb1574eb179d",
+      "cardName": "Void Snare",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target nonland permanent to its owner's hand"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target nonland permanent"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Return target nonland permanent",
+          "after": "Return target nonland permanent to its owner's hand",
+          "actionType": "return_to_hand"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0039",
+      "oracleId": "36cd2364-d113-47d1-b2c4-b088d9eb88dd",
+      "cardName": "Brainstorm",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw three cards, then put two cards from you"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw three cards"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Draw three cards",
+          "after": "Draw three cards, then put two cards from you",
+          "actionType": "draw"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0040",
+      "oracleId": "713332c1-5bd8-400f-bfff-c1ca0697a043",
+      "cardName": "Opt",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0041",
+      "oracleId": "1de1b591-a73f-4974-b507-8c63e07a0868",
+      "cardName": "Thassa's Oracle",
+      "v9PrimitiveCount": 0,
+      "v10PrimitiveCount": 0,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0042",
+      "oracleId": "24d0f5e7-0d9e-4b76-900e-a7274e80312d",
+      "cardName": "Mulldrifter",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 3,
+      "primitivesAdded": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast this spell for its evoke cost",
+          "optional": true,
+          "optionalEffect": true
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrificed when it enters"
+        }
+      ],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0043",
+      "oracleId": "5470dcfa-4eff-43da-abf7-19922841f719",
+      "cardName": "Kitchen Finks",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0044",
+      "oracleId": "e6555cca-e608-4c87-b835-9cd47fd1f543",
+      "cardName": "Tireless Tracker",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 5,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a Clue token"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this token: Draw a card"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifice a Clue, put a +1/+1 counter on this creature"
+        },
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "put a +1/+1 counter on this creature"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "put a +1/+1 counter"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "put a +1/+1 counter",
+          "after": "put a +1/+1 counter on this creature",
+          "actionType": "put_counter"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0045",
+      "oracleId": "4f9e07ae-6341-4b46-9f77-f17ab659d266",
+      "cardName": "Guardian Project",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0046",
+      "oracleId": "76678885-3674-443d-b9a2-2a460cf6aac0",
+      "cardName": "Panharmonicon",
+      "v9PrimitiveCount": 0,
+      "v10PrimitiveCount": 0,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0047",
+      "oracleId": "cf751552-156f-4f81-ac94-9814dce099f9",
+      "cardName": "Strionic Resonator",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "Copy target"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "Copy target triggered"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Copy target triggered",
+          "after": "Copy target",
+          "actionType": "copy"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0048",
+      "oracleId": "644eeefd-e684-4ca8-8aef-a892ca130c07",
+      "cardName": "Teysa Karlov",
+      "v9PrimitiveCount": 0,
+      "v10PrimitiveCount": 0,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0049",
+      "oracleId": "7fff5224-c002-4a32-86fe-9a4b18d78b50",
+      "cardName": "Hissing Quagmire",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0050",
+      "oracleId": "04b7362d-0490-4cb0-b5d7-2a7732f659ce",
+      "cardName": "Bojuka Bog",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {B}"
+        }
+      ],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0051",
+      "oracleId": "edd8d1e8-be43-4c38-bb3a-83081fbaf0b5",
+      "cardName": "Thoughtseize",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "lose 2 life"
+        }
+      ],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0052",
+      "oracleId": "395611fa-aec2-4c9e-92c3-70cf95cc00f4",
+      "cardName": "Inquisition of Kozilek",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0053",
+      "oracleId": "74d3277a-38e5-4732-afed-084a56148f20",
+      "cardName": "Mana Drain",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0054",
+      "oracleId": "6d4e558e-9109-4918-a082-fdcbaffd516b",
+      "cardName": "Nature's Claim",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target artifact or enchantment"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target artifact"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Destroy target artifact",
+          "after": "Destroy target artifact or enchantment",
+          "actionType": "destroy"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0055",
+      "oracleId": "c6207f6a-a624-4754-88f5-dbe700c841ff",
+      "cardName": "Sign in Blood",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draws two cards"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "draws two cards",
+          "after": "draw",
+          "actionType": "draw"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0056",
+      "oracleId": "afaef788-34d1-460b-b884-9d7ae6ddeb18",
+      "cardName": "Toxic Deluge",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast this spell, pay X life"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "pay X life"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0057",
+      "oracleId": "d75b9c82-1b49-4c3e-a1b5-aeef57d6644b",
+      "cardName": "Cyclonic Rift",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target nonland permanent you don't control to its owner's hand"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast this spell for its overload cost",
+          "optional": true,
+          "optionalEffect": true
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target nonland permanent"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Return target nonland permanent",
+          "after": "Return target nonland permanent you don't control to its owner's hand",
+          "actionType": "return_to_hand"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0058",
+      "oracleId": "fc148e1e-dff0-448e-9f16-625341754356",
+      "cardName": "Aether Vial",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put a creature card with mana value equal to the number of charge counters on this artifact from your hand onto the battlefield",
+          "sourceZone": "hand",
+          "destinationZone": "battlefield"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "from your hand onto the battlefield",
+          "sourceZone": "hand",
+          "destinationZone": "battlefield",
+          "affectedObject": "creature_card",
+          "optionalEffect": true,
+          "condition": "manaValueCondition: charge counter count"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "from your hand onto the battlefield",
+          "sourceZone": "hand",
+          "destinationZone": "battlefield",
+          "affectedObject": "creature_card",
+          "optionalEffect": true,
+          "condition": "manaValueCondition: charge counter count"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "from your hand onto the battlefield",
+          "after": "put a creature card with mana value equal to the number of charge counters on this artifact from your hand onto the battlefield",
+          "actionType": "put_onto_battlefield"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0059",
+      "oracleId": "33c722cf-b4bf-431f-aefd-ee96241a7fbf",
+      "cardName": "Crucible of Worlds",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [
+        {
+          "actionType": "play",
+          "evidenceContains": "You may play lands",
+          "optional": true,
+          "optionalEffect": true
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "play",
+          "evidenceContains": "You may play lands from your graveyard."
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "You may play lands from your graveyard.",
+          "after": "You may play lands",
+          "actionType": "play"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0060",
+      "oracleId": "ac8fba34-512c-4f24-999a-ab72f1ce4acb",
+      "cardName": "Life from the Loam",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card, you may mill three cards instead",
+          "optional": true,
+          "optionalEffect": true
+        },
+        {
+          "actionType": "mill",
+          "evidenceContains": "mill three cards instead"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to your hand"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0061",
+      "oracleId": "299fc083-0834-4064-8344-f895aff68867",
+      "cardName": "Entomb",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for a card, put that card into your graveyard, then shuffle"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Search your library",
+          "after": "Search your library for a card, put that card into your graveyard, then shuffle",
+          "actionType": "search_library"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0062",
+      "oracleId": "8203c621-a1a0-4865-8c9a-0d4064c86107",
+      "cardName": "Buried Alive",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for up to three creature cards, put them into your graveyard, then shuffle",
+          "quantityMayBeZero": true,
+          "optionalEffect": false,
+          "targetMaximum": 3
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Search your library",
+          "after": "Search your library for up to three creature cards, put them into your graveyard, then shuffle",
+          "actionType": "search_library"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0063",
+      "oracleId": "e6e4a8bd-5c40-4654-8de1-0da9afed90fd",
+      "cardName": "Regrowth",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return target card from your graveyard to your hand"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to your hand"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "from your graveyard to your hand",
+          "after": "Return target card from your graveyard to your hand",
+          "actionType": "return_to_battlefield"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0064",
+      "oracleId": "a044474a-cd72-4e9d-bd8d-a08f2de9cdc0",
+      "cardName": "Reanimate",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Put target creature card from a graveyard onto the battlefield"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from a graveyard onto the battlefield"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "lose life"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "from a graveyard onto the battlefield",
+          "after": "Put target creature card from a graveyard onto the battlefield",
+          "actionType": "return_to_battlefield"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0065",
+      "oracleId": "c0d8fef4-65f4-4769-982d-b397d2b7e977",
+      "cardName": "Animate Dead",
+      "v9PrimitiveCount": 0,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifices it"
+        }
+      ],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0066",
+      "oracleId": "34515b16-c9a4-4f98-8c77-416a7a523407",
+      "cardName": "Wrath of God",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0067",
+      "oracleId": "d57a8f0b-7989-4db5-8756-6f2690097252",
+      "cardName": "Damnation",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0068",
+      "oracleId": "0230de18-8d15-4cfa-9d42-7ccddd9f9570",
+      "cardName": "Supreme Verdict",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0069",
+      "oracleId": "3dd196b6-a85a-4e3e-bb57-ec34241f8117",
+      "cardName": "Terminus",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw it if it's the first card you drew this"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast this card for its miracle cost when you draw it if it's the first card you drew this turn",
+          "optional": true,
+          "optionalEffect": true
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "shuffle_into_library",
+          "evidenceContains": "bottom of their owners' libraries"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0070",
+      "oracleId": "ebc9ff52-c914-4c48-9d35-0e4cd07741cb",
+      "cardName": "Ashiok, Nightmare Muse",
+      "v9PrimitiveCount": 3,
+      "v10PrimitiveCount": 3,
+      "primitivesAdded": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target nonland permanent to its owner's hand"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 2/3 blue and black Nightmare creature token"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast up to three spells from among face-up cards your opponents own from exile without paying their mana costs",
+          "optional": true,
+          "optionalEffect": false,
+          "quantityMayBeZero": true,
+          "targetMaximum": 3
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "their library.\"\n−3: Return target nonland permanent to its owner's hand,"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "exiles the top two cards of their library"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 2/3 blue and black Nightmare creature token with \"Whenever this token"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "their library.\"\n−3: Return target nonland permanent to its owner's hand,",
+          "after": "Return target nonland permanent to its owner's hand",
+          "actionType": "return_to_hand"
+        },
+        {
+          "before": "Create a 2/3 blue and black Nightmare creature token with \"Whenever this token",
+          "after": "Create a 2/3 blue and black Nightmare creature token",
+          "actionType": "create_token"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0071",
+      "oracleId": "bc71ebf6-2056-41f7-be35-b2e5c34afa99",
+      "cardName": "Plains",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0072",
+      "oracleId": "6ad8011d-3471-4369-9d68-b264cc027487",
+      "cardName": "Sol Ring",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0073",
+      "oracleId": "53236dd7-845a-444c-96d5-f41ed7325d8f",
+      "cardName": "Rhystic Study",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "you may draw a card",
+          "optionalEffect": true
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "optional": true,
+          "optionalEffect": true
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "draw a card",
+          "after": "you may draw a card",
+          "actionType": "draw"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0074",
+      "oracleId": "153376c9-dffd-458c-8ce3-a4c8269bc4e9",
+      "cardName": "Smothering Tithe",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 3,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a Treasure token"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this token: Add one mana of any color"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Treasure token"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Treasure token",
+          "after": "create a Treasure token",
+          "actionType": "create_token"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0075",
+      "oracleId": "aadd10d0-6dd0-4bdc-8d93-ff08e29a5863",
+      "cardName": "Drannith Magistrate",
+      "v9PrimitiveCount": 0,
+      "v10PrimitiveCount": 0,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0076",
+      "oracleId": "16da9e4b-c6ee-4e70-8653-31ca147f3b01",
+      "cardName": "Claim // Fame",
+      "faceComponent": "back",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 0,
+      "primitivesAdded": [],
+      "primitivesRemoved": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "Cast this spell only from your graveyard",
+          "cardFace": "back"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0077",
+      "oracleId": "8fe7436b-2467-486e-8a2d-7cbf21a65da9",
+      "cardName": "Consign // Oblivion",
+      "v9PrimitiveCount": 3,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [],
+      "primitivesRemoved": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "Cast this spell only from your graveyard",
+          "cardFace": "back"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0078",
+      "oracleId": "bf276236-18a6-4a48-b47d-5227832d26e6",
+      "cardName": "Never // Return",
+      "faceComponent": "back",
+      "v9PrimitiveCount": 3,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [],
+      "primitivesRemoved": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "Cast this spell only from your graveyard",
+          "cardFace": "back"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0079",
+      "oracleId": "814f06aa-b48e-4c7f-b4cd-595d89176d0e",
+      "cardName": "Rise // Fall",
+      "faceComponent": "back",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0080",
+      "oracleId": "b8bb97a8-5f5d-48e9-a4c1-b4c20efe7739",
+      "cardName": "Bedeck // Bedazzle",
+      "faceComponent": "back",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target nonbasic land",
+          "cardFace": "back"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 2 damage to target opponent or planeswalker",
+          "cardFace": "back"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target nonbasic land. Bedazzle deals 2",
+          "cardFace": "back"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Destroy target nonbasic land. Bedazzle deals 2",
+          "after": "Destroy target nonbasic land",
+          "actionType": "destroy"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0081",
+      "oracleId": "8f1c1bd6-8420-4de2-81f4-5faa419da301",
+      "cardName": "Discovery // Dispersal",
+      "faceComponent": "back",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0082",
+      "oracleId": "4c9bcba6-87b5-4fb3-97ee-6fe5b739337d",
+      "cardName": "Consider",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "surveil",
+          "evidenceContains": "Surveil 1"
+        }
+      ],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0083",
+      "oracleId": "552f0163-a19d-4671-888f-044fc0354875",
+      "cardName": "Glimpse the Unthinkable",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0084",
+      "oracleId": "cf32524e-0df9-4af8-9371-84feeb0a86c6",
+      "cardName": "Fractured Sanity",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills fourteen cards"
+        },
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills four cards"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills fourteen"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "mills fourteen",
+          "after": "mills fourteen cards",
+          "actionType": "mill"
+        },
+        {
+          "before": "mills fourteen",
+          "after": "mills four cards",
+          "actionType": "mill"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0085",
+      "oracleId": "a3e51a35-09df-4189-b131-08a21e6a557d",
+      "cardName": "Cryptic Command",
+      "v9PrimitiveCount": 4,
+      "v10PrimitiveCount": 4,
+      "primitivesAdded": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter"
+        },
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw"
+        },
+        {
+          "actionType": "tap",
+          "evidenceContains": "Tap"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target spell"
+        },
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target permanent"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        },
+        {
+          "actionType": "tap",
+          "evidenceContains": "Tap all creatures"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Counter target spell",
+          "after": "Counter",
+          "actionType": "counter"
+        },
+        {
+          "before": "Return target permanent",
+          "after": "Return",
+          "actionType": "return_to_hand"
+        },
+        {
+          "before": "Draw a card",
+          "after": "Draw",
+          "actionType": "draw"
+        },
+        {
+          "before": "Tap all creatures",
+          "after": "Tap",
+          "actionType": "tap"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0086",
+      "oracleId": "ddd649f4-dbaf-48ec-8ff7-95581257772d",
+      "cardName": "Isochron Scepter",
+      "v9PrimitiveCount": 3,
+      "v10PrimitiveCount": 3,
+      "primitivesAdded": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "you may cast the copy without paying its mana cost",
+          "optional": true,
+          "optionalEffect": true
+        },
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy the exiled"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile an instant card with mana value 2 or less from your hand",
+          "optionalEffect": true
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "act enters, you may exile an instant card with mana value 2"
+        },
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy the exiled card"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast the copy"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "cast the copy",
+          "after": "you may cast the copy without paying its mana cost",
+          "actionType": "cast"
+        },
+        {
+          "before": "copy the exiled card",
+          "after": "copy the exiled",
+          "actionType": "copy"
+        },
+        {
+          "before": "act enters, you may exile an instant card with mana value 2",
+          "after": "exile an instant card with mana value 2 or less from your hand",
+          "actionType": "exile"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0087",
+      "oracleId": "79a71fe5-38ce-4bb5-aea0-c9b9a856d397",
+      "cardName": "Mirrormade",
+      "v9PrimitiveCount": 0,
+      "v10PrimitiveCount": 0,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0088",
+      "oracleId": "98026d30-a29f-4590-968f-b1b36926a275",
+      "cardName": "Ovinomancer",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 3,
+      "primitivesAdded": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "creates a 0/1 green Sheep creature token"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifice it unless you return three basic lands you control to their owner's hand"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "is creature enters, sacrifice it unless you return three basic"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "is creature enters, sacrifice it unless you return three basic",
+          "after": "sacrifice it unless you return three basic lands you control to their owner's hand",
+          "actionType": "sacrifice"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0089",
+      "oracleId": "a34b7416-cfe3-4a1e-a8c1-a3056b747519",
+      "cardName": "Kiki-Jiki, Mirror Breaker",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 3,
+      "primitivesAdded": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice it at the beginning of the next end step"
+        }
+      ],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0090",
+      "oracleId": "83b43aba-bf9c-4da2-967d-9daa632e97d2",
+      "cardName": "Helm of the Host",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [],
+      "primitivesRemoved": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy of equipped creature"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0091",
+      "oracleId": "08d80efc-9542-4ba2-824c-c8615d8d07f2",
+      "cardName": "Undercity Sewers",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "surveil",
+          "evidenceContains": "surveil 1"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "surveil",
+          "evidenceContains": "n this land enters, surveil 1. (Look at the top c"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "n this land enters, surveil 1. (Look at the top c",
+          "after": "surveil 1",
+          "actionType": "surveil"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0092",
+      "oracleId": "1a26e2d6-6bfc-4cdc-9bd6-8b37a9be2961",
+      "cardName": "Hidden Nursery",
+      "v9PrimitiveCount": 0,
+      "v10PrimitiveCount": 3,
+      "primitivesAdded": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {G}"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "Cast it without paying its mana cost or put it into your hand"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this land: Discover 4"
+        }
+      ],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0093",
+      "oracleId": "36f68aa3-9955-46f1-bc87-497f16ef5222",
+      "cardName": "Wizard Class",
+      "v9PrimitiveCount": 0,
+      "v10PrimitiveCount": 3,
+      "primitivesAdded": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw two cards"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card, put a +1/+1 counter on target cr"
+        },
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "put a +1/+1 counter on target creature you control"
+        }
+      ],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0094",
+      "oracleId": "e15504a7-2b67-4185-b916-172145f10b19",
+      "cardName": "Yorion, Sky Nomad",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile any number of other nonland permanents you own and control"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile any number"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "exile any number",
+          "after": "exile any number of other nonland permanents you own and control",
+          "actionType": "exile"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0095",
+      "oracleId": "ac914d98-221e-426c-8a50-342896b15f9e",
+      "cardName": "Snap",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 2,
+      "primitivesAdded": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target creature to its owner's hand"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target creature"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Return target creature",
+          "after": "Return target creature to its owner's hand",
+          "actionType": "return_to_hand"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0096",
+      "oracleId": "ef100544-3e6d-4661-a1d1-8b02e58c059c",
+      "cardName": "Echoing Truth",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 0,
+      "primitivesAdded": [],
+      "primitivesRemoved": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target nonland permanent"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0097",
+      "oracleId": "2ec4288e-34c6-4831-a2c0-ba1ca1d9d1dc",
+      "cardName": "Ghost Quarter",
+      "v9PrimitiveCount": 4,
+      "v10PrimitiveCount": 6,
+      "primitivesAdded": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search their library for a basic land card, put it onto the battlefield, then shuffle"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put it onto the battlefield"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this land: Destroy target land"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this land"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Sacrifice this land",
+          "after": "Sacrifice this land: Destroy target land",
+          "actionType": "sacrifice"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0098",
+      "oracleId": "d21a89eb-7c5b-459a-acc7-12b20b13bf79",
+      "cardName": "Strip Mine",
+      "v9PrimitiveCount": 3,
+      "v10PrimitiveCount": 3,
+      "primitivesAdded": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this land: Destroy target land"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this land"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Sacrifice this land",
+          "after": "Sacrifice this land: Destroy target land",
+          "actionType": "sacrifice"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0099",
+      "oracleId": "09a70ae8-3859-4a09-901d-dce063fa3b5f",
+      "cardName": "Wasteland",
+      "v9PrimitiveCount": 3,
+      "v10PrimitiveCount": 3,
+      "primitivesAdded": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this land: Destroy target nonbasic land"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this land"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Sacrifice this land",
+          "after": "Sacrifice this land: Destroy target nonbasic land",
+          "actionType": "sacrifice"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0100",
+      "oracleId": "f825c98f-a327-440b-8c0d-ebe02e23bfb7",
+      "cardName": "Field of Ruin",
+      "v9PrimitiveCount": 5,
+      "v10PrimitiveCount": 6,
+      "primitivesAdded": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "puts it onto the battlefield"
+        }
+      ],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0101",
+      "oracleId": "d09c9cba-fdd2-479b-ad5d-d05181c3e3f9",
+      "cardName": "Fierce Guardianship",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target noncreature spell"
+        }
+      ],
+      "primitivesRemoved": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target noncreature"
+        }
+      ],
+      "evidenceCorrections": [
+        {
+          "before": "Counter target noncreature",
+          "after": "Counter target noncreature spell",
+          "actionType": "counter"
+        }
+      ],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0102",
+      "oracleId": "ae120613-97d6-4393-b39d-c3e6c076f5d6",
+      "cardName": "Deflecting Swat",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 0,
+      "primitivesAdded": [],
+      "primitivesRemoved": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "target spell"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0103",
+      "oracleId": "0456ec64-2c81-4763-a352-8ff64a4c3d6b",
+      "cardName": "Deadly Rollick",
+      "v9PrimitiveCount": 1,
+      "v10PrimitiveCount": 1,
+      "primitivesAdded": [],
+      "primitivesRemoved": [],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": false,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    },
+    {
+      "caseId": "held-0104",
+      "oracleId": "981b0e21-e5e6-4a1e-bfde-679d56623f7f",
+      "cardName": "Ad Nauseam",
+      "v9PrimitiveCount": 2,
+      "v10PrimitiveCount": 0,
+      "primitivesAdded": [],
+      "primitivesRemoved": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "into your hand"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "lose life"
+        }
+      ],
+      "evidenceCorrections": [],
+      "faceCorrections": [],
+      "changed": true,
+      "goldCompletenessStatus": "complete",
+      "incompleteReasons": []
+    }
+  ]
+}

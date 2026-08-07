@@ -1,0 +1,42 @@
+{
+  "frozenAt": "2026-08-07T16:51:06.900Z",
+  "validationSet": "validation_set_v10",
+  "validationV10Hash": "2af9eafaf0b021fd3c73193e1629b6b8fe06a402a7baea30c8e5999852041a81",
+  "parentV9Hash": "81676cb6270ea004d80aac23d2e945ce19fdf98bfbb3b46a4c96c397c0624433",
+  "taxonomyVersion": "three-layer-v1.3",
+  "goldReviewStatus": "reviewed",
+  "goldCompletenessStatus": "complete",
+  "rc1MeasurementAccepted": true,
+  "rc1VsV10Result": {
+    "acceptedPrecision": 0.9125,
+    "acceptedRecall": 0.7373737373737373,
+    "acceptedUnsupported": 2,
+    "evaluatorDefects": 0,
+    "unresolvedGoldDefects": 0,
+    "generalizationConclusion": "genuine_parser_generalization_failure"
+  },
+  "immutable": true,
+  "holdoutStatus": "spent_for_development",
+  "spentReason": "v1.20-dev parser execution during RC2 development",
+  "spentAt": "2026-08-07T18:00:00.000Z",
+  "authorizedUses": [
+    "failure-family analysis",
+    "regression design",
+    "evaluator regression",
+    "taxonomy policy checks",
+    "diagnostic development evidence"
+  ],
+  "prohibitedUses": [
+    "RC2 pass/fail generalization benchmark",
+    "RC2 freeze gate scoring"
+  ],
+  "freshHoldoutRequired": "validation_set_v12_fresh",
+  "parserExecutionPolicy": {
+    "parserExecutionCount": 1,
+    "executionLabel": "rc1-validation-v10-run-1",
+    "nextAuthorizedExecution": "after-rc2-frozen",
+    "note": "Do not change gold, evaluator interpretation, or taxonomy. Do not rerun validation during RC2 development."
+  },
+  "datasetPath": "data/oracle-action-eval-validation-v10.json",
+  "milestoneReportPath": "data/milestones/oracle-action-rc1-validation-v10/validation-milestone-report.json"
+}

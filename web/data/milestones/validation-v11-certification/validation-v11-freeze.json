@@ -3,6 +3,11 @@
   "validationV11Hash": "f1c7f84371bb5a02ec62722d49bdbe71a2904f58c404af3366c1b3b2a5e70bc7",
   "parentV10Hash": "2af9eafaf0b021fd3c73193e1629b6b8fe06a402a7baea30c8e5999852041a81",
   "frozenAt": "2026-08-07T17:29:05.385Z",
+  "policyCertified": true,
+  "policyCertifierId": "validation-gold-policy-v11-three-layer-semantics",
+  "holdoutStatus": "spent_for_development",
+  "spentReason": "v1.20-dev parser execution during RC2 development",
+  "spentAt": "2026-08-07T18:00:00.000Z",
   "casesChanged": 17,
   "changedCaseIds": [
     "held-0005",
@@ -23,5 +28,19 @@
     "held-0100",
     "held-0104"
   ],
-  "policyViolationsCorrected": 23
+  "policyViolationsCorrected": 23,
+  "authorizedUses": [
+    "failure-family analysis",
+    "regression design",
+    "evaluator regression",
+    "taxonomy policy checks"
+  ],
+  "prohibitedUses": [
+    "RC2 pass/fail generalization benchmark",
+    "RC2 freeze gate scoring"
+  ],
+  "parserExecutionPolicy": {
+    "parserExecutionCount": 0,
+    "note": "No parser milestone runs authorized on v11; diagnostic use only after spend declaration."
+  }
 }

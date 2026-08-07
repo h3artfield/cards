@@ -1,0 +1,105 @@
+{
+  "recordedAt": "2026-08-07T18:52:00.000Z",
+  "benchmarkCheckpointCommit": "pending",
+  "parserVersion": "oracle-action-v1.20-variable-lose-life-dev",
+  "parserCommitSha": "bbef615db0c1aa562e87f9da858684458f35535b",
+  "variableLoseLifeRegressionCount": 4,
+  "catalogProbe": {
+    "script": "scripts/probe-catalog-patterns.ts",
+    "directInvocationExitCode": 0,
+    "catalogLoaded": true,
+    "matchesReturned": true,
+    "note": "Use --limit=N instead of piping to Select-Object -First"
+  },
+  "holdoutStatus": {
+    "validation_v10": {
+      "status": "spent_for_development",
+      "spentReason": "v1.20-dev parser execution during RC2 development",
+      "hash": "2af9eafaf0b021fd3c73193e1629b6b8fe06a402a7baea30c8e5999852041a81"
+    },
+    "validation_v11": {
+      "status": "spent_for_development",
+      "spentReason": "v1.20-dev parser execution during RC2 development",
+      "hash": "f1c7f84371bb5a02ec62722d49bdbe71a2904f58c404af3366c1b3b2a5e70bc7",
+      "policyCertified": true
+    },
+    "validation_v12_fresh": {
+      "status": "active",
+      "hash": "e4ca33f217044a86ba50cba88455aa0320a14c63a8515b6d8c67c51cefb25523",
+      "caseCount": 151,
+      "sealed": true,
+      "parserExecutionCount": 0,
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityExact": "151/151",
+      "oracleTextHashVerified": "151/151",
+      "evaluatorCompatibleEvidence": "151/151",
+      "layer2GoldPrimitiveCount": 246,
+      "forbiddenPrimitiveActionCases": 2,
+      "multifaceCases": 12,
+      "reminderHeavyCases": 51,
+      "costCases": 31,
+      "staticPermissionRestrictionCases": 22
+    }
+  },
+  "developmentGeneralizationExpansionV1": {
+    "setClassification": "development_generalization_expansion_v1",
+    "hash": "3a03ca436dd2dca6a97498a3da2de106a3e1916a8483e9dbc6555f8fac4d66e4",
+    "caseCount": 52,
+    "trainingCount": 39,
+    "checkCount": 13,
+    "trainingUsagePolicy": "freely_usable_during_development",
+    "checkUsagePolicy": "milestone_only",
+    "checkSplitExecution": {
+      "parserExecutionCount": 1,
+      "firstExecutionPurpose": "pre_tuning_baseline",
+      "parserVersion": "oracle-action-v1.20-variable-lose-life-dev",
+      "parserSHA": "bbef615db0c1aa562e87f9da858684458f35535b",
+      "executionTimestamp": "2026-08-07T18:18:23.485Z",
+      "accepted": { "precision": 0.5217, "recall": 0.6667, "unsupported": 2 }
+    }
+  },
+  "blindGoldCertification": {
+    "blindSet": "final_blind_test_v2",
+    "priorHash": "a8af409f9d6622bac200be18b1f6d9704b761b40eea3db7119c0d4b20510b8f9",
+    "certifiedHash": "2f5c30a26ba9bf6c31fb8cdd30d486469002dcec8f1a2f8ca7e10f458bceea1a",
+    "caseCount": 105,
+    "goldReviewStatus": "reviewed",
+    "goldCompletenessStatus": "complete",
+    "incompleteCaseCount": 0,
+    "parserExecutionCount": 0,
+    "maintenanceCasesResolved": 5,
+    "outputPath": "data/oracle-action-eval-final-blind-v2-certified.json"
+  },
+  "v120Metrics": {
+    "developmentOriginalV25": {
+      "accepted": { "precision": 0.9943, "recall": 0.9164, "unsupported": 0 },
+      "gateStatus": { "precisionMin98": true, "recallMin90": true, "unsupportedZero": true }
+    },
+    "expansionTraining": {
+      "accepted": { "precision": 0.5493, "recall": 0.8298, "unsupported": 2 },
+      "gateStatus": { "precisionMin98": false, "recallMin90": false, "unsupportedZero": false }
+    },
+    "expansionCheck": {
+      "baselineExecution": 1,
+      "accepted": { "precision": 0.5217, "recall": 0.6667, "unsupported": 2 },
+      "gateStatus": { "precisionMin95": false, "recallMin85": false, "unsupportedZero": false }
+    }
+  },
+  "prohibitedBenchmarks": ["validation_set_v10", "validation_set_v11"],
+  "authorizedFreshHoldout": "validation_set_v12_fresh",
+  "rc2ReleaseCandidate": false,
+  "blindParserExecution": false,
+  "pilotCustomer": false,
+  "authorization": {
+    "v120VariableLoseLife": "ACCEPTED",
+    "expansionCreation": "AUTHORIZED",
+    "rc2ParserDevelopment": "AUTHORIZED",
+    "freshRc2ValidationCreationSealing": "AUTHORIZED",
+    "validationV10V11HoldoutUse": "NOT_AUTHORIZED",
+    "rc2ReleaseCandidate": "NOT_YET",
+    "blindParserExecution": "NOT_AUTHORIZED",
+    "pilotCustomer": "BLOCKED"
+  }
+}

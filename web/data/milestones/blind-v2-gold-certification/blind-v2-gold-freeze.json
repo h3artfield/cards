@@ -1,0 +1,13 @@
+{
+  "blindSet": "final_blind_test_v2",
+  "certifiedHash": "2f5c30a26ba9bf6c31fb8cdd30d486469002dcec8f1a2f8ca7e10f458bceea1a",
+  "caseCount": 105,
+  "sealed": true,
+  "goldReviewStatus": "reviewed",
+  "goldCompletenessStatus": "complete",
+  "incompleteCaseCount": 0,
+  "parserExecutionCount": 0,
+  "taxonomyVersion": "three-layer-v1.3",
+  "frozenAt": "2026-08-07T18:48:28.076Z",
+  "outputPath": "data/oracle-action-eval-final-blind-v2-certified.json"
+}

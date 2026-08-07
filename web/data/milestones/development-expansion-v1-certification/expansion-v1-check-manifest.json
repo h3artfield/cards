@@ -1,0 +1,49 @@
+{
+  "split": "expansion-check",
+  "contentHash": "3a03ca436dd2dca6a97498a3da2de106a3e1916a8483e9dbc6555f8fac4d66e4",
+  "caseCount": 13,
+  "usagePolicy": "milestone_only",
+  "checkFrozenAt": "2026-08-07T18:04:37.600Z",
+  "checkFrozenBeforeParserTuning": true,
+  "parserExecutionCount": 1,
+  "firstExecutionPurpose": "pre_tuning_baseline",
+  "parserVersion": "oracle-action-v1.20-variable-lose-life-dev",
+  "parserSHA": "bbef615db0c1aa562e87f9da858684458f35535b",
+  "executionTimestamp": "2026-08-07T18:18:23.485Z",
+  "accepted": {
+    "precision": 0.5217391304347826,
+    "recall": 0.6666666666666666,
+    "unsupported": 2
+  },
+  "caseIds": [
+    "dev-exp-v1-004",
+    "dev-exp-v1-008",
+    "dev-exp-v1-012",
+    "dev-exp-v1-016",
+    "dev-exp-v1-020",
+    "dev-exp-v1-024",
+    "dev-exp-v1-028",
+    "dev-exp-v1-032",
+    "dev-exp-v1-036",
+    "dev-exp-v1-040",
+    "dev-exp-v1-044",
+    "dev-exp-v1-048",
+    "dev-exp-v1-052"
+  ],
+  "families": [
+    "multiface_structure",
+    "pronoun_coreference",
+    "unusual_imperative_verb",
+    "modal_wording",
+    "quantified_action",
+    "zone_transition_wording",
+    "search_tutor_resolution",
+    "delayed_later_action",
+    "optionality_attachment",
+    "wrong_ability_attachment",
+    "static_cast_permission_leak",
+    "variable_lose_life_regression",
+    "span_role_reminder_abstain"
+  ],
+  "note": "Prefer aggregate check metrics at milestones; do not inspect individual check cases during tuning."
+}

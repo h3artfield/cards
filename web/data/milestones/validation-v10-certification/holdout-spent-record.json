@@ -1,0 +1,23 @@
+{
+  "recordedAt": "2026-08-07T18:00:00.000Z",
+  "validationSet": "validation_set_v10",
+  "validationV10Hash": "2af9eafaf0b021fd3c73193e1629b6b8fe06a402a7baea30c8e5999852041a81",
+  "holdoutStatus": "spent_for_development",
+  "spentReason": "v1.20-dev parser execution during RC2 development",
+  "spentAt": "2026-08-07T18:00:00.000Z",
+  "parserVersionsExecuted": ["oracle-action-v1.20-variable-lose-life-dev"],
+  "authorizedUses": [
+    "failure-family analysis",
+    "regression design",
+    "evaluator regression",
+    "taxonomy policy checks",
+    "diagnostic development evidence"
+  ],
+  "prohibitedUses": [
+    "RC2 pass/fail generalization benchmark",
+    "RC2 freeze gate scoring",
+    "parser tuning feedback loop"
+  ],
+  "freshHoldoutRequired": "validation_set_v12_fresh",
+  "note": "RC1 run (v1.19) plus v1.20-dev probe both inspected v10 emissions. Holdout integrity requires validation_set_v12_fresh for RC2 scoring."
+}

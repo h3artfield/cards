@@ -1,0 +1,9 @@
+{
+  "recordedAt": "2026-08-07T18:51:05.297Z",
+  "probeScript": "scripts/probe-catalog-patterns.ts",
+  "directInvocation": true,
+  "exitCode": 0,
+  "catalogLoaded": true,
+  "matchesReturned": true,
+  "pipeTruncationNote": "Select-Object -First 5 causes exit 4294967295; use --limit=N on script instead"
+}

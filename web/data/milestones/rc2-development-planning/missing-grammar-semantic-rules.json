@@ -1,0 +1,296 @@
+{
+  "generatedAt": "2026-08-07T18:00:00.000Z",
+  "purpose": "Semantic grammar rules for RC1/v10 missing_grammar families — one level deeper than surface categories",
+  "sourceDiagnosis": "rc1-v10-failure-family-diagnosis.json",
+  "genuineMissingGrammarCount": 27,
+  "excludedFromGrammarWork": {
+    "note": "Cases in unusual_imperative_verb that were policy-disproven (reminder sacrifice, static draw, trigger draw) are excluded from parser grammar targets",
+    "excludedCaseIds": ["held-0029", "held-0033", "held-0044", "held-0074"]
+  },
+  "families": [
+    {
+      "surfaceCategory": "unusual_imperative_verb",
+      "genuineCaseCount": 6,
+      "semanticRules": [
+        {
+          "ruleId": "shuffle_implicit_object",
+          "action": "shuffle_library",
+          "grammaticalConstruction": "imperative shuffle with pronoun object (shuffle [them/it/two of them]) without explicit 'library'",
+          "sourceZones": ["library"],
+          "destinationZones": ["library"],
+          "optionality": "optional when preceded by 'you may'",
+          "dependency": "often follows draw/scry in compound clause",
+          "referentResolutionRequired": true,
+          "multifaceContextRequired": false,
+          "exampleEvidence": "shuffle two of them",
+          "validationExposure": ["held-0006"]
+        },
+        {
+          "ruleId": "shuffle_standalone_library",
+          "action": "shuffle_library",
+          "grammaticalConstruction": "imperative 'Shuffle your library' as distinct terminal clause",
+          "sourceZones": ["library"],
+          "destinationZones": ["library"],
+          "optionality": false,
+          "dependency": "may follow search in tutor chain",
+          "referentResolutionRequired": false,
+          "multifaceContextRequired": false,
+          "exampleEvidence": "Shuffle your library",
+          "validationExposure": ["held-0013"]
+        },
+        {
+          "ruleId": "copy_of_target_creature",
+          "action": "copy",
+          "grammaticalConstruction": "Create a token that's a copy of target [object]",
+          "sourceZones": ["battlefield"],
+          "destinationZones": ["battlefield"],
+          "optionality": false,
+          "dependency": null,
+          "referentResolutionRequired": true,
+          "multifaceContextRequired": false,
+          "exampleEvidence": "copy of target nonlegendary creature",
+          "validationExposure": ["held-0089"]
+        },
+        {
+          "ruleId": "exile_all_mass",
+          "action": "exile",
+          "grammaticalConstruction": "Exile all [type/zone]",
+          "sourceZones": ["graveyard", "battlefield", "library"],
+          "destinationZones": ["exile"],
+          "optionality": false,
+          "dependency": null,
+          "referentResolutionRequired": false,
+          "multifaceContextRequired": false,
+          "exampleEvidence": "exile any number of other nonland permanents",
+          "validationExposure": ["held-0094"]
+        },
+        {
+          "ruleId": "third_person_gain_life",
+          "action": "gain_life",
+          "grammaticalConstruction": "[Subject] gains N life (third person, not 'you gain')",
+          "sourceZones": [],
+          "destinationZones": [],
+          "optionality": false,
+          "dependency": "often paired with destroy/exile on same card",
+          "referentResolutionRequired": false,
+          "multifaceContextRequired": false,
+          "exampleEvidence": "gains 4 life",
+          "validationExposure": ["held-0054"]
+        },
+        {
+          "ruleId": "miracle_conditional_draw",
+          "action": "draw",
+          "grammaticalConstruction": "conditional draw in miracle/reveal clause",
+          "sourceZones": ["library"],
+          "destinationZones": ["hand"],
+          "optionality": "conditional on reveal/timing",
+          "dependency": "triggered by draw step event",
+          "referentResolutionRequired": true,
+          "multifaceContextRequired": false,
+          "exampleEvidence": "draw it if it's the first card you drew this turn",
+          "validationExposure": ["held-0069"]
+        }
+      ]
+    },
+    {
+      "surfaceCategory": "pronoun_coreference",
+      "genuineCaseCount": 4,
+      "semanticRules": [
+        {
+          "ruleId": "cast_those_spells",
+          "action": "cast",
+          "grammaticalConstruction": "imperative cast + demonstrative pronoun referent from prior clause",
+          "sourceZones": ["exile", "graveyard", "hand"],
+          "destinationZones": ["stack"],
+          "optionality": "may be optional cast permission",
+          "dependency": "antecedent clause establishes exiled/revealed cards",
+          "referentResolutionRequired": true,
+          "multifaceContextRequired": true,
+          "exampleEvidence": "cast those spells",
+          "validationExposure": ["held-0003"]
+        },
+        {
+          "ruleId": "put_it_onto_battlefield",
+          "action": "put_onto_battlefield",
+          "grammaticalConstruction": "put it/them onto the battlefield — pronoun refers to searched/revealed card",
+          "sourceZones": ["library", "hand", "graveyard", "exile"],
+          "destinationZones": ["battlefield"],
+          "optionality": false,
+          "dependency": "search_library or reveal in prior clause establishes antecedent",
+          "referentResolutionRequired": true,
+          "multifaceContextRequired": false,
+          "primitiveRouting": "return_to_battlefield when sourceZone=graveyard; put_onto_battlefield otherwise",
+          "exampleEvidence": "puts it onto the battlefield",
+          "validationExposure": ["held-0100"]
+        },
+        {
+          "ruleId": "sacrifice_it_delayed",
+          "action": "sacrifice",
+          "grammaticalConstruction": "When [object] leaves, sacrifice it — delayed trigger effect not cost",
+          "sourceZones": ["battlefield"],
+          "destinationZones": ["graveyard"],
+          "optionality": false,
+          "dependency": "trigger on leaves-the-battlefield",
+          "referentResolutionRequired": true,
+          "multifaceContextRequired": false,
+          "exampleEvidence": "sacrifices it",
+          "validationExposure": ["held-0065"]
+        },
+        {
+          "ruleId": "additional_cost_pay_x_life",
+          "action": "lose_life",
+          "grammaticalConstruction": "As an additional cost to cast this spell, pay X life",
+          "sourceZones": [],
+          "destinationZones": [],
+          "optionality": false,
+          "dependency": "Layer 1 additional cost — not cast primitive",
+          "referentResolutionRequired": false,
+          "multifaceContextRequired": false,
+          "exampleEvidence": "pay X life",
+          "validationExposure": ["held-0056"],
+          "note": "cast primitive in gold was incorrect — cost region only"
+        }
+      ]
+    },
+    {
+      "surfaceCategory": "multiface_structure",
+      "genuineCaseCount": 3,
+      "semanticRules": [
+        {
+          "ruleId": "split_face_scoped_primitive",
+          "action": "draw|deal_damage|copy",
+          "grammaticalConstruction": "primitive evidence must attach to correct split/MDFC face component",
+          "sourceZones": [],
+          "destinationZones": [],
+          "optionality": false,
+          "dependency": "face boundary // separator",
+          "referentResolutionRequired": false,
+          "multifaceContextRequired": true,
+          "exampleEvidence": "draw / deals X damage",
+          "validationExposure": ["held-0002", "held-0012"]
+        }
+      ]
+    },
+    {
+      "surfaceCategory": "modal_wording",
+      "genuineCaseCount": 2,
+      "semanticRules": [
+        {
+          "ruleId": "distribute_counters",
+          "action": "put_counter",
+          "grammaticalConstruction": "Distribute N +1/+1 counters among [targets]",
+          "sourceZones": [],
+          "destinationZones": ["battlefield"],
+          "optionality": false,
+          "dependency": "modal choose-one bullet",
+          "referentResolutionRequired": false,
+          "multifaceContextRequired": false,
+          "exampleEvidence": "Distribute",
+          "validationExposure": ["held-0021"]
+        },
+        {
+          "ruleId": "modal_tap_bullet",
+          "action": "tap",
+          "grammaticalConstruction": "Tap target [type] in choose-one modal",
+          "sourceZones": ["battlefield"],
+          "destinationZones": [],
+          "optionality": false,
+          "dependency": "modal bullet isolation",
+          "referentResolutionRequired": false,
+          "multifaceContextRequired": false,
+          "exampleEvidence": "Tap target creature",
+          "validationExposure": ["held-0085"]
+        }
+      ]
+    },
+    {
+      "surfaceCategory": "quantified_action",
+      "genuineCaseCount": 2,
+      "semanticRules": [
+        {
+          "ruleId": "put_up_to_n_from_zone",
+          "action": "put_onto_battlefield",
+          "grammaticalConstruction": "put up to N [cards] from [zone] onto the battlefield",
+          "sourceZones": ["graveyard", "library", "exile"],
+          "destinationZones": ["battlefield"],
+          "optionality": "up-to implies quantityMayBeZero",
+          "dependency": "may follow surveil/reveal",
+          "referentResolutionRequired": true,
+          "multifaceContextRequired": false,
+          "exampleEvidence": "put up to two permanent cards",
+          "validationExposure": ["held-0030"]
+        },
+        {
+          "ruleId": "cast_up_to_n_from_exile",
+          "action": "cast",
+          "grammaticalConstruction": "You may cast up to N spells from [zone] without paying",
+          "sourceZones": ["exile"],
+          "destinationZones": ["stack"],
+          "optionality": true,
+          "dependency": "face-up exile zone context",
+          "referentResolutionRequired": true,
+          "multifaceContextRequired": false,
+          "exampleEvidence": "cast up to three spells",
+          "validationExposure": ["held-0070"]
+        }
+      ]
+    },
+    {
+      "surfaceCategory": "zone_transition_wording",
+      "genuineCaseCount": 1,
+      "semanticRules": [
+        {
+          "ruleId": "return_other_player_permanent",
+          "action": "return_to_hand",
+          "grammaticalConstruction": "Return target [permanent] you don't control to its owner's hand",
+          "sourceZones": ["battlefield"],
+          "destinationZones": ["hand"],
+          "optionality": false,
+          "dependency": null,
+          "referentResolutionRequired": false,
+          "multifaceContextRequired": false,
+          "exampleEvidence": "Return target nonland permanent you don't control",
+          "validationExposure": ["held-0057"]
+        }
+      ]
+    },
+    {
+      "surfaceCategory": "search_tutor_resolution",
+      "genuineCaseCount": 1,
+      "semanticRules": [
+        {
+          "ruleId": "third_person_search_library",
+          "action": "search_library",
+          "grammaticalConstruction": "Each player searches their library — third-person controller",
+          "sourceZones": ["library"],
+          "destinationZones": ["library", "battlefield", "hand"],
+          "optionality": false,
+          "dependency": "often chained with put + shuffle in opponent-controlled effect",
+          "referentResolutionRequired": true,
+          "multifaceContextRequired": false,
+          "exampleEvidence": "searches their library",
+          "validationExposure": ["held-0100"]
+        }
+      ]
+    },
+    {
+      "surfaceCategory": "delayed_later_action",
+      "genuineCaseCount": 1,
+      "semanticRules": [
+        {
+          "ruleId": "third_person_then_shuffles",
+          "action": "shuffle_library",
+          "grammaticalConstruction": "then shuffles (third person, pronoun subject from prior clause)",
+          "sourceZones": ["library"],
+          "destinationZones": ["library"],
+          "optionality": false,
+          "dependency": "follows search/put in compound effect",
+          "referentResolutionRequired": true,
+          "multifaceContextRequired": false,
+          "exampleEvidence": "then shuffles",
+          "validationExposure": ["held-0100"]
+        }
+      ]
+    }
+  ]
+}
