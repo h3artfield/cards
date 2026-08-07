@@ -286,6 +286,25 @@ const COST_BOUNDARY_CASES = [
   },
 ];
 
+const STORM_REMINDER_CASES = [
+  {
+    name: "storm_reminder_no_cast",
+    oracleText:
+      "Create two 1/1 red Goblin creature tokens.\nStorm (When you cast this spell, copy it for each spell cast before it this turn.)",
+    expectActions: [{ type: "create_token", evidence: "Create two 1/1 red Goblin creature tokens" }],
+    forbidActions: ["cast", "copy"],
+  },
+];
+
+const CONTEXT_X_LOSE_LIFE_CASES = [
+  {
+    name: "where_x_defined_lose_life_needs_review",
+    oracleText:
+      "Whenever this creature attacks, each opponent loses X life and you gain X life, where X is the number of other Squirrels you control.",
+    expectReview: [{ type: "lose_life", evidence: "each opponent loses X life", status: "needs_review" as const }],
+  },
+];
+
 const VARIABLE_LOSE_LIFE_CASES = [
   {
     name: "lose_life_equal_mana_value",
@@ -351,12 +370,24 @@ function testRegressionCases() {
     ...COMPOUND_CLAUSE_CASES,
     ...SHUFFLE_TAXONOMY_CASES,
     ...GRANTED_ABILITY_CASES,
+    ...STORM_REMINDER_CASES,
+    ...CONTEXT_X_LOSE_LIFE_CASES,
     ...VARIABLE_LOSE_LIFE_CASES,
   ]) {
     const { result, ms } = timed(() =>
       extractOracleActionsV1({ oracleId: `regression-${c.name}`, oracleText: c.oracleText }),
     );
     assert.ok(ms < PERF_BUDGET_MS, `${c.name}: parser took ${ms}ms (budget ${PERF_BUDGET_MS}ms)`);
+
+    for (const exp of (c as { expectReview?: Array<{ type: string; evidence: string; status: string }> }).expectReview ?? []) {
+      const hit = result.actions.find(
+        (a) =>
+          a.actionType === exp.type &&
+          a.evidenceText.toLowerCase().includes(exp.evidence.toLowerCase()) &&
+          a.reviewStatus === exp.status,
+      );
+      assert.ok(hit, `${c.name}: expected ${exp.status} ${exp.type} matching "${exp.evidence}"`);
+    }
 
     for (const exp of c.expectActions ?? []) {
       const hit = result.actions.find(
@@ -468,7 +499,7 @@ function testFullDevelopmentRuntime() {
 }
 
 function main() {
-  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.20-variable-lose-life-dev/);
+  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.21-unsupported-lose-life-role-cleanup-dev/);
   testRegressionCases();
   testCompoundClauseNoHang();
   testReminderSpanDetection();
@@ -484,7 +515,9 @@ function main() {
           COMPOUND_CLAUSE_CASES.length +
           SHUFFLE_TAXONOMY_CASES.length +
           GRANTED_ABILITY_CASES.length +
-          VARIABLE_LOSE_LIFE_CASES.length,
+          VARIABLE_LOSE_LIFE_CASES.length +
+          STORM_REMINDER_CASES.length +
+          CONTEXT_X_LOSE_LIFE_CASES.length,
         fullDevelopmentRuntimeMs: devMs,
         perfBudgetMs: PERF_BUDGET_MS,
         devBudgetMs: DEV_CASE_BUDGET_MS,

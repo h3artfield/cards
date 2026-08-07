@@ -230,10 +230,10 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bdeals? \d+ damage(?: to (?:any target|target [\w ]+|each [\w ]+))?/i, actionType: "deal_damage", affectedObjects: ["player", "permanent"] },
   { pattern: /\bDeal up to \d+ damage(?: to (?:any target|target [\w ]+))?/i, actionType: "deal_damage", affectedObjects: ["player", "permanent"] },
   { pattern: /\bgains? \d+ life\b/i, actionType: "gain_life", affectedObjects: ["player"] },
-  { pattern: /\bloses? \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
-  { pattern: /\bloses? up to \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
-  { pattern: /\b(?:You |Target player |Each player |That player )?loses? X life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
-  { pattern: /\b(?:You |Target player |Each player |That player )?loses? life equal to[^.]+/i, actionType: "lose_life", affectedObjects: ["player"] },
+  { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?loses? \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
+  { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?loses? up to \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
+  { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?loses? X life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
+  { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?loses? life equal to[^.]+/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\bScry \d+\b/i, actionType: "scry", sourceZones: ["library"] },
   { pattern: /\bScry up to \d+\b/i, actionType: "scry", sourceZones: ["library"] },
   { pattern: /\bSurveil \d+\b/i, actionType: "surveil", sourceZones: ["library"], destinationZones: ["graveyard"] },
@@ -333,20 +333,37 @@ function extractQuantityConstraint(text: string): string | undefined {
 
 function parseLoseLifeQuantity(
   evidenceText: string,
+  paragraph?: string,
 ): { quantityType?: "literal" | "variable"; quantityExpression?: string } {
-  const variable = evidenceText.match(/\b(?:You |Target player |Each player |That player )?lose(?:s)? life equal to (.+)$/i);
+  const variable = evidenceText.match(
+    /\b(?:Each opponent |Each player |You |Target player |That player )?lose(?:s)? life equal to (.+)$/i,
+  );
   if (variable?.[1]) {
     return { quantityType: "variable", quantityExpression: variable[1].trim() };
   }
-  const xLife = evidenceText.match(/\b(?:You |Target player |Each player |That player )?lose(?:s)? X life\b/i);
+  const xLife = evidenceText.match(
+    /\b(?:Each opponent |Each player |You |Target player |That player )?lose(?:s)? X life\b/i,
+  );
   if (xLife) {
+    const whereMatch = paragraph?.match(/\bwhere X is ([^.]+)/i);
+    if (whereMatch?.[1]) {
+      return { quantityType: "variable", quantityExpression: whereMatch[1].trim() };
+    }
     return { quantityType: "variable", quantityExpression: "X" };
   }
-  const literal = evidenceText.match(/\b(?:You |Target player |Each player |That player )?lose(?:s)? (\d+|up to \d+) life\b/i);
+  const literal = evidenceText.match(
+    /\b(?:Each opponent |Each player |You |Target player |That player )?lose(?:s)? (\d+|up to \d+) life\b/i,
+  );
   if (literal?.[1]) {
     return { quantityType: "literal", quantityExpression: literal[1] };
   }
   return {};
+}
+
+/** X life tied to a local `where X is …` definition — defer to needs_review (not bare spell X). */
+function isContextDefinedVariableLoseLife(paragraph: string, evidenceText: string): boolean {
+  if (!/\bloses? X life\b/i.test(evidenceText)) return false;
+  return /\bwhere X is\b/i.test(paragraph);
 }
 
 function parseTargetConstraint(text: string): {
@@ -680,6 +697,12 @@ function assignReviewStatus(input: {
   featurePromotion?: boolean;
 }): OracleActionV1ReviewStatus {
   if (input.abilityType === "replacement" && !input.replacementInsteadEffect) return "needs_review";
+  if (
+    input.actionType === "lose_life" &&
+    isContextDefinedVariableLoseLife(input.paragraph, input.evidenceText)
+  ) {
+    return "needs_review";
+  }
 
   const isMultiface = input.faces && input.faces.length > 1 && input.face;
   if (isMultiface) {
@@ -750,7 +773,9 @@ function acceptAction(input: {
   if (input.rule.actionType === "lose_life") {
     const extended = input.ability.paragraphText
       .slice(localStart)
-      .match(/^((?:You |Target player |Each player |That player )?loses? (?:X|\d+|up to \d+) life|(?:You |Target player |Each player |That player )?loses? life equal to[^.]+)/i);
+      .match(
+        /^((?:Each opponent |Each player |You |Target player |That player )?loses? (?:X|\d+|up to \d+) life|(?:Each opponent |Each player |You |Target player |That player )?loses? life equal to[^.]+)/i,
+      );
     if (extended?.[1]) {
       evidenceText = extended[1].trim();
     }
@@ -758,7 +783,9 @@ function acceptAction(input: {
 
   const localEnd = localStart + evidenceText.length;
   const loseLifeQuantity =
-    input.rule.actionType === "lose_life" ? parseLoseLifeQuantity(evidenceText) : {};
+    input.rule.actionType === "lose_life"
+      ? parseLoseLifeQuantity(evidenceText, input.ability.paragraphText)
+      : {};
   const roleParagraph = input.grantedContext?.innerText ?? input.ability.paragraphText;
   const roleLocalStart = input.grantedContext
     ? localStart - input.grantedContext.innerLocalStart
@@ -1106,6 +1133,10 @@ function matchIsSpuriousCastPermission(paragraph: string, localStart: number, ev
   if (/\b've cast this\b/i.test(context) || /\bve cast this\b/i.test(context)) return true;
   if (/\bWhenever you cast an instant or sorcery spell\b/i.test(paragraph) && /\bcast this\b/i.test(evidenceText)) {
     return true;
+  }
+  if (/\bStorm\s*\(/i.test(paragraph)) {
+    const stormIdx = paragraph.indexOf("Storm");
+    if (stormIdx >= 0 && localStart >= stormIdx) return true;
   }
   return false;
 }

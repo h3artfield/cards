@@ -185,6 +185,33 @@ export function findReminderSpans(paragraph: string): TextSpanRole[] {
     const lead = inner.trimStart();
 
     if (isManaAbilityParenthetical(inner)) continue;
+
+    const prefix = paragraph.slice(Math.max(0, i - 24), i);
+    if (
+      /\b(?:Storm|Forecast|Cascade|Annihilator|Landfall|Morbid|Heroic|Constellation|Ninjutsu|Equip|Reconfigure|Bestow|Fortify|Crew|Embalm|Eternalize|Mutate|Flashback|Spectacle|Harmonize|Disturb|Warp|Blitz)\s*[\{(]?[^()]*$/i.test(
+        prefix,
+      )
+    ) {
+      spans.push({
+        role: "mechanic_reminder",
+        localStart: i,
+        localEnd: close,
+        text: paragraph.slice(i, close),
+      });
+      i = close - 1;
+      continue;
+    }
+
+    if (/^When you cast this spell/i.test(lead)) {
+      spans.push({
+        role: "mechanic_reminder",
+        localStart: i,
+        localEnd: close,
+        text: paragraph.slice(i, close),
+      });
+      i = close - 1;
+      continue;
+    }
     if (/^Create a (?:Clue|Treasure|Blood|Food) token\.\s*/i.test(lead)) {
       const defOffset = investigateTokenDefinitionStart(inner);
       if (defOffset !== null && defOffset > 0) {
