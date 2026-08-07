@@ -28,6 +28,11 @@ import {
   inferSupportedPrimitiveFromEvidence,
   spanValid,
 } from "./oracle-action-eval-shared";
+import {
+  evaluateCaseUnified,
+  sumUnifiedMetrics,
+  verifyTierInvariants,
+} from "./oracle-action-unified-matcher";
 
 type FalsePositiveCategory =
   | "wrong_primitive_action_type"
@@ -350,6 +355,49 @@ function evaluateTier(
   }
 
   return computeMetrics(tp, fp, fn);
+}
+
+function computeUnifiedEmissionMetrics(cases: OracleActionEvalCaseV2[]) {
+  const caseMetrics = cases.map((testCase) => {
+    const raw = extractOracleActionsV1({
+      oracleId: testCase.oracleId,
+      oracleText: testCase.oracleText,
+      cardFace: testCase.cardFace,
+    });
+    return evaluateCaseUnified(
+      testCase,
+      raw.actions.map((a) => ({
+        actionType: a.actionType,
+        evidenceText: a.evidenceText,
+        faceId: a.faceId,
+        abilityIndex: a.abilityIndex,
+        reviewStatus: a.reviewStatus,
+        optionalEffect: a.optionalEffect,
+        optional: a.optional,
+        optionalCost: a.optionalCost,
+      })),
+    );
+  });
+  const totals = sumUnifiedMetrics(caseMetrics);
+  return {
+    allEmission: computeMetrics(
+      totals.allEmission.truePositives,
+      totals.allEmission.falsePositives,
+      totals.allEmission.falseNegatives,
+    ),
+    acceptedOnly: computeMetrics(
+      totals.accepted.truePositives,
+      totals.accepted.falsePositives,
+      totals.accepted.falseNegatives,
+    ),
+    needsReviewOnly: computeMetrics(
+      totals.needsReview.truePositives,
+      totals.needsReview.falsePositives,
+      totals.needsReview.falseNegatives,
+    ),
+    tierInvariants: verifyTierInvariants(totals),
+    unifiedTotals: totals,
+  };
 }
 
 export function evaluateCaseSet(cases: OracleActionEvalCaseV2[], setName: string) {
@@ -684,9 +732,10 @@ export function evaluateCaseSet(cases: OracleActionEvalCaseV2[], setName: string
     legitimateRepeatExamples,
   };
 
-  const allEmission = evaluateTier(cases, "all_emission", shared);
-  const acceptedOnly = evaluateTier(cases, "accepted_only", shared);
-  const needsReviewOnly = evaluateTier(cases, "needs_review_only", shared);
+  const unifiedEmission = computeUnifiedEmissionMetrics(cases);
+  const allEmission = unifiedEmission.allEmission;
+  const acceptedOnly = unifiedEmission.acceptedOnly;
+  const needsReviewOnly = unifiedEmission.needsReviewOnly;
 
   const extractionMetrics = computeMetrics(extractionTp, extractionFp, extractionFn);
   const genuinelyUnsupported = authoritative.genuinely_unsupported_by_oracle;
@@ -783,6 +832,8 @@ export function evaluateCaseSet(cases: OracleActionEvalCaseV2[], setName: string
       allEmission,
       acceptedOnly,
       needsReviewOnly,
+      matcher: "oracle-action-unified-matcher",
+      tierInvariants: unifiedEmission.tierInvariants,
     },
     authoritativeClassification: {
       taxonomy: [

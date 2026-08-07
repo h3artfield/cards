@@ -225,5 +225,18 @@
         "structureAnnotationsExcludedFromPrimitiveCounts": true
       }
     }
+  },
+  {
+    "timestamp": "2026-08-07T01:21:11.971Z",
+    "reason": "validation-milestone-v12",
+    "commitSha": "4dc9233fbde92df40777e74b957a9da9c3f30691",
+    "parserVersion": "oracle-action-v1.12-unified-matcher",
+    "metrics": {
+      "precision": 0.8321678321678322,
+      "recall": 0.7345679012345679,
+      "truePositives": 119,
+      "falsePositives": 24,
+      "falseNegatives": 43
+    }
   }
 ]

@@ -137,7 +137,7 @@ export function inferSupportedPrimitiveFromEvidence(
       create_token: /\bcreate[\w ]*tokens?\b/i,
       cast: /\bcast (?:any number of |spells? from|it|that card|the exiled)\b/i,
       play: /\bplay (?:lands and )?spells? from (?:your )?graveyard\b|\bfrom (?:your )?graveyard\b/i,
-      copy: /\b[Cc]opy target\b/i,
+      copy: /\b[Cc]opy (?:target|it|that spell|the exiled)\b/i,
       sacrifice: /\b[Ss]acrifice\b/i,
       mill: /\b[Mm]ill\b|\bgraveyard into their library\b/i,
       gain_life: /\bgain \d+ life\b/i,

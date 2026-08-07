@@ -1,0 +1,530 @@
+{
+  "generatedAt": "2026-08-07T01:14:25.564Z",
+  "reviewer": "catalog-audit-agent",
+  "reviewTimestamp": "2026-08-07T01:14:25.564Z",
+  "parentDataset": "development_set_v6",
+  "parentContentHash": "24d24887732e5ae6412ee3597b1654753ccccf8cd4d044c095b07822e530bb9d",
+  "parentCaseCount": 285,
+  "newDataset": "development_set_v7",
+  "newContentHash": "6274107dfae50b3c8938099079004e36bdf3ce18e3bb3b8407e9af1cf409a147",
+  "newCaseCount": 285,
+  "patchCount": 14,
+  "changedCaseCount": 14,
+  "reasonForChange": "Manual FN adjudication: remove gold defects, structural-only labels, duplicate return primitives, flashback grant scope.",
+  "labelChanges": [
+    {
+      "caseId": "eval-0040",
+      "reason": "Graveyard-to-hand modal bullet is return_to_hand, not return_to_battlefield (carried from v6 adjudication).",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedRoles"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "return_to_battlefield",
+              "evidenceContains": "graveyard to your hand"
+            },
+            {
+              "actionType": "destroy",
+              "evidenceContains": "Destroy target"
+            },
+            {
+              "actionType": "discard",
+              "evidenceContains": "discards"
+            },
+            {
+              "actionType": "draw",
+              "evidenceContains": "draws"
+            },
+            {
+              "actionType": "deal_damage",
+              "evidenceContains": "deals 2 damage to any target"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "return_to_hand",
+              "evidenceContains": "from your graveyard to your hand"
+            },
+            {
+              "actionType": "destroy",
+              "evidenceContains": "Destroy target"
+            },
+            {
+              "actionType": "discard",
+              "evidenceContains": "discards"
+            },
+            {
+              "actionType": "draw",
+              "evidenceContains": "draws"
+            },
+            {
+              "actionType": "deal_damage",
+              "evidenceContains": "deals 2 damage to any target"
+            }
+          ]
+        },
+        "expectedRoles": {
+          "before": [
+            {
+              "role": "recursion",
+              "fromPrimitiveActions": [
+                "return_to_battlefield"
+              ]
+            },
+            {
+              "role": "removal",
+              "fromPrimitiveActions": [
+                "destroy"
+              ]
+            },
+            {
+              "role": "card_advantage",
+              "fromPrimitiveActions": [
+                "draw"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "role": "recursion",
+              "fromPrimitiveActions": [
+                "return_to_hand"
+              ]
+            },
+            {
+              "role": "removal",
+              "fromPrimitiveActions": [
+                "destroy"
+              ]
+            },
+            {
+              "role": "card_advantage",
+              "fromPrimitiveActions": [
+                "draw"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0057",
+      "reason": "Shuffle hand and graveyard into library is shuffle_into_library, not mill (carried from v6 adjudication).",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "draws seven cards"
+            },
+            {
+              "actionType": "mill",
+              "evidenceContains": "graveyard into their library"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "draws seven cards"
+            },
+            {
+              "actionType": "shuffle_into_library",
+              "evidenceContains": "shuffles their hand and graveyard into their library"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0054",
+      "reason": "Two distinct sacrifice effects on -2 and -6 loyalty abilities require separate gold labels.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "discard",
+              "evidenceContains": "discards"
+            },
+            {
+              "actionType": "sacrifice",
+              "evidenceContains": "sacrifices"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "discard",
+              "evidenceContains": "discards"
+            },
+            {
+              "actionType": "sacrifice",
+              "evidenceContains": "Target player sacrifices"
+            },
+            {
+              "actionType": "sacrifice",
+              "evidenceContains": "That player sacrifices"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0151",
+      "reason": "Each opponent sacrifices is a Layer-2 sacrifice primitive, not structure-only.",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedStructure"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [],
+          "after": [
+            {
+              "actionType": "sacrifice",
+              "evidenceContains": "Each opponent sacrifices"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0064",
+      "reason": "Flashback grant is structural permission; remove erroneous play primitive.",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedStructure",
+        "expectedRoles"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "play",
+              "evidenceContains": "graveyard"
+            }
+          ],
+          "after": []
+        },
+        "expectedStructure": {
+          "after": {
+            "abilityTypes": [
+              "triggered"
+            ]
+          }
+        },
+        "expectedRoles": {
+          "before": [
+            {
+              "role": "recursion",
+              "fromPrimitiveActions": [
+                "play"
+              ]
+            }
+          ],
+          "after": []
+        }
+      }
+    },
+    {
+      "caseId": "eval-0083",
+      "reason": "Graveyard-to-hand is return_to_hand only; remove duplicate return_to_battlefield label.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "return_to_hand",
+              "evidenceContains": "Return",
+              "optionalEffect": false,
+              "targetMaximum": 2,
+              "quantityMayBeZero": true
+            },
+            {
+              "actionType": "return_to_battlefield",
+              "evidenceContains": "Return up to two target creature cards from your graveyard to your hand",
+              "targetMaximum": 2,
+              "quantityMayBeZero": true
+            }
+          ],
+          "after": [
+            {
+              "actionType": "return_to_hand",
+              "evidenceContains": "from your graveyard to your hand",
+              "optionalEffect": false,
+              "targetMaximum": 2,
+              "quantityMayBeZero": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0137",
+      "reason": "Graveyard-to-hand is return_to_hand only; remove duplicate return_to_battlefield label.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "return_to_hand",
+              "evidenceContains": "Return"
+            },
+            {
+              "actionType": "return_to_battlefield",
+              "evidenceContains": "Return target creature from your graveyard to your hand"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "return_to_hand",
+              "evidenceContains": "from your graveyard to your hand"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0150",
+      "reason": "Reveal top card is not search_library; structural library reveal only.",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedStructure",
+        "expectedRoles"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "search_library",
+              "evidenceContains": "Reveal"
+            }
+          ],
+          "after": []
+        },
+        "expectedStructure": {
+          "after": {
+            "abilityTypes": [
+              "spell_effect"
+            ]
+          }
+        },
+        "expectedRoles": {
+          "before": [
+            {
+              "role": "tutor",
+              "fromPrimitiveActions": [
+                "search_library"
+              ]
+            }
+          ],
+          "after": []
+        }
+      }
+    },
+    {
+      "caseId": "eval-0196",
+      "reason": "Draw in Whenever condition is not the triggered effect; keep create_token only.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "draw a card"
+            },
+            {
+              "actionType": "create_token",
+              "evidenceContains": "create a Treasure token"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "create_token",
+              "evidenceContains": "create a Treasure token"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0200",
+      "reason": "Prototype reminder line contains no draw action; remove erroneous draw gold.",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedRoles"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "draw"
+            }
+          ],
+          "after": []
+        },
+        "expectedRoles": {
+          "before": [
+            {
+              "role": "card_advantage",
+              "fromPrimitiveActions": [
+                "draw"
+              ]
+            }
+          ],
+          "after": []
+        }
+      }
+    },
+    {
+      "caseId": "eval-0202",
+      "reason": "Mutate keyword line contains no draw action; remove erroneous draw gold.",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedRoles"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "draw"
+            }
+          ],
+          "after": []
+        },
+        "expectedRoles": {
+          "before": [
+            {
+              "role": "card_advantage",
+              "fromPrimitiveActions": [
+                "draw"
+              ]
+            }
+          ],
+          "after": []
+        }
+      }
+    },
+    {
+      "caseId": "eval-0120",
+      "reason": "Sacrifice in Whenever clause is trigger event, not Layer 2 effect; remove sacrifice gold.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "create_token",
+              "evidenceContains": "Treasure token",
+              "optionalEffect": false
+            },
+            {
+              "actionType": "exile",
+              "evidenceContains": "exile the top",
+              "optionalEffect": false
+            },
+            {
+              "actionType": "sacrifice",
+              "evidenceContains": "sacrifice a Treasure"
+            },
+            {
+              "actionType": "play",
+              "evidenceContains": "You may play that card",
+              "optionalEffect": true
+            }
+          ],
+          "after": [
+            {
+              "actionType": "create_token",
+              "evidenceContains": "Treasure token",
+              "optionalEffect": false
+            },
+            {
+              "actionType": "exile",
+              "evidenceContains": "exile the top",
+              "optionalEffect": false
+            },
+            {
+              "actionType": "play",
+              "evidenceContains": "You may play that card",
+              "optionalEffect": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "dev-opt-016",
+      "reason": "Choose-from-graveyard without battlefield destination is structural; not return_to_battlefield.",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedStructure"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "return_to_battlefield",
+              "evidenceContains": "Choose up to one card of each card type",
+              "targetMaximum": 1,
+              "quantityMayBeZero": true,
+              "optionalEffect": false
+            }
+          ],
+          "after": []
+        },
+        "expectedStructure": {
+          "after": {
+            "abilityTypes": [
+              "spell_effect"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "caseId": "dev-opt-038",
+      "reason": "Target retargeting on copy is structural; single copy primitive only.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "copy",
+              "evidenceContains": "Copy target instant"
+            },
+            {
+              "actionType": "copy",
+              "evidenceContains": "choose new targets for the copy",
+              "optionalEffect": false
+            }
+          ],
+          "after": [
+            {
+              "actionType": "copy",
+              "evidenceContains": "Copy target instant"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

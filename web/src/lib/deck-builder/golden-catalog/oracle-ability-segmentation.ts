@@ -191,7 +191,7 @@ export function segmentCardFaces(oracleText: string): SegmentedCardFace[] {
 function expandCompositeParagraphs(faceText: string): string[] {
   const chunks: string[] = [];
 
-  for (const raw of faceText.split(/\n(?=[A-Z{("]|When |Whenever |At the beginning|Choose one|Choose two|Choose three|Suspend|Craft|Mutate|Chapter|Landfall|Cycling|Flashback|Foretell|Adventure|Aftermath|Read a chapter|[+\−-]\d+:|I —|II —|III —|IV —|V —|•)/)) {
+  for (const raw of faceText.split(/\n(?=[A-Z{("]|When |Whenever |At the beginning|Choose one|Choose two|Choose three|Suspend|Craft|Mutate|Chapter|Landfall|Cycling|Flashback|Foretell|Adventure|Aftermath|Read a chapter|[+\−-]?\d+:|I —|II —|III —|IV —|V —|•)/)) {
     const trimmed = raw.trim();
     if (!trimmed) continue;
 
@@ -213,8 +213,8 @@ function expandCompositeParagraphs(faceText: string): string[] {
       continue;
     }
 
-    if (/^[+\−-]\d+:/m.test(trimmed)) {
-      for (const line of trimmed.split(/\n(?=[+\−-]\d+:)/)) {
+    if (/^[+\−-]\d+:/m.test(trimmed) || /^\d+:/m.test(trimmed)) {
+      for (const line of trimmed.split(/\n(?=[+\−-]?\d+:)/)) {
         const l = line.trim();
         if (l) chunks.push(l);
       }

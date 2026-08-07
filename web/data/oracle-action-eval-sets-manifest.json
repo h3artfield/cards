@@ -1,20 +1,20 @@
 {
   "developmentSet": {
-    "path": "data/oracle-action-eval-development-v6.json",
-    "classification": "development_set_v6",
-    "contentHash": "cc9bc3ad43851a6e33e64c1fd50c4a6a1051444f53d469fdda24cf1b39660fd1",
+    "path": "data/oracle-action-eval-development-v7.json",
+    "classification": "development_set_v7",
+    "contentHash": "6274107dfae50b3c8938099079004e36bdf3ce18e3bb3b8407e9af1cf409a147",
     "caseCount": 285,
     "taxonomyVersion": "three-layer-v1.1",
-    "purpose": "Parser tuning — v6 gold corrections (replacement, cast/play, incomplete labels)",
+    "purpose": "Parser tuning — v7 FN gold adjudication + unified matcher integrity",
     "parentVersion": {
-      "classification": "development_set_v5",
-      "contentHash": "319ef3f9fce2f2637da8582055d99ebbdf6e46f7e51763059493888e1742abbe",
+      "classification": "development_set_v6",
+      "contentHash": "24d24887732e5ae6412ee3597b1654753ccccf8cd4d044c095b07822e530bb9d",
       "caseCount": 285,
-      "path": "data/oracle-action-eval-development-v5.json"
+      "path": "data/oracle-action-eval-development-v6.json"
     },
-    "diffManifest": "data/oracle-action-eval-development-v6-diff.json",
+    "diffManifest": "data/oracle-action-eval-development-v7-diff.json",
     "reviewer": "catalog-audit-agent",
-    "reviewTimestamp": "2026-08-07T00:43:07.241Z",
+    "reviewTimestamp": "2026-08-07T01:14:25.564Z",
     "multifaceGoldSupportByLayout": {
       "split": 6,
       "mdfc": 8,
@@ -58,6 +58,22 @@
         "caseCount": 285,
         "supersededAt": "2026-08-07T00:43:07.241Z",
         "reason": "Gold-label corrections moved to v6; v5 frozen immutable"
+      },
+      {
+        "path": "data/oracle-action-eval-development-v6.json",
+        "classification": "development_set_v6",
+        "contentHash": "24d24887732e5ae6412ee3597b1654753ccccf8cd4d044c095b07822e530bb9d",
+        "caseCount": 285,
+        "supersededAt": "2026-08-07T01:10:47.899Z",
+        "reason": "FN adjudication moved to v7; v6 frozen immutable"
+      },
+      {
+        "path": "data/oracle-action-eval-development-v6.json",
+        "classification": "development_set_v6",
+        "contentHash": "24d24887732e5ae6412ee3597b1654753ccccf8cd4d044c095b07822e530bb9d",
+        "caseCount": 285,
+        "supersededAt": "2026-08-07T01:14:25.564Z",
+        "reason": "FN adjudication moved to v7; v6 frozen immutable"
       }
     ]
   },
@@ -132,5 +148,13 @@
     "caseCount": 285,
     "purpose": "Frozen multiface gold expansion — immutable after 3612cc2",
     "frozenAt": "2026-08-06T22:38:39.705Z"
+  },
+  "developmentSetV6": {
+    "path": "data/oracle-action-eval-development-v6.json",
+    "classification": "development_set_v6",
+    "contentHash": "24d24887732e5ae6412ee3597b1654753ccccf8cd4d044c095b07822e530bb9d",
+    "caseCount": 285,
+    "purpose": "Frozen at parser v1.10 — immutable after f7bf9b9",
+    "frozenAt": "2026-08-07T00:16:55.274Z"
   }
 }

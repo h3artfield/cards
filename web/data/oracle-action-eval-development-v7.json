@@ -1,14 +1,14 @@
 {
-  "setClassification": "development_set_v6",
-  "evaluationVersion": "development-v6-gold-corrections",
-  "contentHash": "24d24887732e5ae6412ee3597b1654753ccccf8cd4d044c095b07822e530bb9d",
+  "setClassification": "development_set_v7",
+  "evaluationVersion": "development-v7-fn-adjudication",
+  "contentHash": "6274107dfae50b3c8938099079004e36bdf3ce18e3bb3b8407e9af1cf409a147",
   "taxonomyVersion": "three-layer-v1.1",
   "caseCount": 285,
-  "frozenAt": "2026-08-07T00:16:55.274Z",
-  "usagePolicy": "Parser tuning set — gold corrections on v5 multiface corpus (replacement labels, cast/play split, incomplete gold).",
-  "parentClassification": "development_set_v5",
-  "parentContentHash": "319ef3f9fce2f2637da8582055d99ebbdf6e46f7e51763059493888e1742abbe",
-  "parentSetPath": "data/oracle-action-eval-development-v5.json",
+  "frozenAt": "2026-08-07T01:14:25.564Z",
+  "usagePolicy": "Parser tuning set — v7 FN gold adjudication (structural-only, taxonomy corrections, duplicate label removal).",
+  "parentClassification": "development_set_v6",
+  "parentContentHash": "24d24887732e5ae6412ee3597b1654753ccccf8cd4d044c095b07822e530bb9d",
+  "parentSetPath": "data/oracle-action-eval-development-v6.json",
   "parentCaseCount": 285,
   "multifaceGoldSupportByLayout": {
     "split": 6,
@@ -22,7 +22,7 @@
     "convert": 3
   },
   "reviewer": "catalog-audit-agent",
-  "reviewTimestamp": "2026-08-07T00:16:55.274Z",
+  "reviewTimestamp": "2026-08-07T01:14:25.564Z",
   "cases": [
     {
       "id": "eval-0001",
@@ -810,8 +810,8 @@
       "oracleText": "Choose two —\n• Return target creature card from your graveyard to your hand.\n• Kolaghan's Command deals 2 damage to any target.\n• Destroy target artifact or enchantment.\n• Each player discards their hand, then draws that many cards.",
       "expectedPrimitiveActions": [
         {
-          "actionType": "return_to_battlefield",
-          "evidenceContains": "graveyard to your hand"
+          "actionType": "return_to_hand",
+          "evidenceContains": "from your graveyard to your hand"
         },
         {
           "actionType": "destroy",
@@ -834,7 +834,7 @@
         {
           "role": "recursion",
           "fromPrimitiveActions": [
-            "return_to_battlefield"
+            "return_to_hand"
           ]
         },
         {
@@ -1262,7 +1262,11 @@
         },
         {
           "actionType": "sacrifice",
-          "evidenceContains": "sacrifices"
+          "evidenceContains": "Target player sacrifices"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "That player sacrifices"
         }
       ],
       "expectedRoles": [
@@ -1315,8 +1319,8 @@
           "evidenceContains": "draws seven cards"
         },
         {
-          "actionType": "mill",
-          "evidenceContains": "graveyard into their library"
+          "actionType": "shuffle_into_library",
+          "evidenceContains": "shuffles their hand and graveyard into their library"
         }
       ],
       "expectedRoles": [
@@ -1489,20 +1493,13 @@
       "category": "copy versus cast",
       "oracleId": "eval-oracle-64",
       "oracleText": "Flash\nWhen this creature enters, target instant or sorcery card in your graveyard gains flashback until end of turn. The flashback cost is equal to its mana cost.",
-      "expectedPrimitiveActions": [
-        {
-          "actionType": "play",
-          "evidenceContains": "graveyard"
-        }
-      ],
-      "expectedRoles": [
-        {
-          "role": "recursion",
-          "fromPrimitiveActions": [
-            "play"
-          ]
-        }
-      ]
+      "expectedPrimitiveActions": [],
+      "expectedRoles": [],
+      "expectedStructure": {
+        "abilityTypes": [
+          "triggered"
+        ]
+      }
     },
     {
       "id": "eval-0065",
@@ -1804,14 +1801,8 @@
       "expectedPrimitiveActions": [
         {
           "actionType": "return_to_hand",
-          "evidenceContains": "Return",
+          "evidenceContains": "from your graveyard to your hand",
           "optionalEffect": false,
-          "targetMaximum": 2,
-          "quantityMayBeZero": true
-        },
-        {
-          "actionType": "return_to_battlefield",
-          "evidenceContains": "Return up to two target creature cards from your graveyard to your hand",
           "targetMaximum": 2,
           "quantityMayBeZero": true
         }
@@ -2511,10 +2502,6 @@
           "optionalEffect": false
         },
         {
-          "actionType": "sacrifice",
-          "evidenceContains": "sacrifice a Treasure"
-        },
-        {
           "actionType": "play",
           "evidenceContains": "You may play that card",
           "optionalEffect": true
@@ -2838,11 +2825,7 @@
       "expectedPrimitiveActions": [
         {
           "actionType": "return_to_hand",
-          "evidenceContains": "Return"
-        },
-        {
-          "actionType": "return_to_battlefield",
-          "evidenceContains": "Return target creature from your graveyard to your hand"
+          "evidenceContains": "from your graveyard to your hand"
         }
       ]
     },
@@ -3031,20 +3014,13 @@
       "category": "additional coverage",
       "oracleId": "eval-oracle-150",
       "oracleText": "Reveal the top card of your library.",
-      "expectedPrimitiveActions": [
-        {
-          "actionType": "search_library",
-          "evidenceContains": "Reveal"
-        }
-      ],
-      "expectedRoles": [
-        {
-          "role": "tutor",
-          "fromPrimitiveActions": [
-            "search_library"
-          ]
-        }
-      ]
+      "expectedPrimitiveActions": [],
+      "expectedRoles": [],
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      }
     },
     {
       "id": "eval-0151",
@@ -3056,7 +3032,12 @@
           "spell_effect"
         ]
       },
-      "expectedPrimitiveActions": []
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Each opponent sacrifices"
+        }
+      ]
     },
     {
       "id": "eval-0152",
@@ -3757,10 +3738,6 @@
       },
       "expectedPrimitiveActions": [
         {
-          "actionType": "draw",
-          "evidenceContains": "draw a card"
-        },
-        {
           "actionType": "create_token",
           "evidenceContains": "create a Treasure token"
         }
@@ -3887,20 +3864,8 @@
       "category": "prototype",
       "oracleId": "eval-oracle-200",
       "oracleText": "Prototype {1}{B} — 2/2\nDeathtouch",
-      "expectedPrimitiveActions": [
-        {
-          "actionType": "draw",
-          "evidenceContains": "draw"
-        }
-      ],
-      "expectedRoles": [
-        {
-          "role": "card_advantage",
-          "fromPrimitiveActions": [
-            "draw"
-          ]
-        }
-      ]
+      "expectedPrimitiveActions": [],
+      "expectedRoles": []
     },
     {
       "id": "eval-0201",
@@ -3927,20 +3892,8 @@
       "category": "mutate",
       "oracleId": "eval-oracle-202",
       "oracleText": "Mutate {2}{R}\nThis creature gets +2/+0 until end of turn.",
-      "expectedPrimitiveActions": [
-        {
-          "actionType": "draw",
-          "evidenceContains": "draw"
-        }
-      ],
-      "expectedRoles": [
-        {
-          "role": "card_advantage",
-          "fromPrimitiveActions": [
-            "draw"
-          ]
-        }
-      ]
+      "expectedPrimitiveActions": [],
+      "expectedRoles": []
     },
     {
       "id": "eval-0203",
@@ -4442,15 +4395,12 @@
       "category": "optionality gold",
       "oracleId": "dev-opt-oracle-16",
       "oracleText": "Choose up to one card of each card type from your graveyard.",
-      "expectedPrimitiveActions": [
-        {
-          "actionType": "return_to_battlefield",
-          "evidenceContains": "Choose up to one card of each card type",
-          "targetMaximum": 1,
-          "quantityMayBeZero": true,
-          "optionalEffect": false
-        }
-      ]
+      "expectedPrimitiveActions": [],
+      "expectedStructure": {
+        "abilityTypes": [
+          "spell_effect"
+        ]
+      }
     },
     {
       "id": "dev-opt-017",
@@ -4798,11 +4748,6 @@
         {
           "actionType": "copy",
           "evidenceContains": "Copy target instant"
-        },
-        {
-          "actionType": "copy",
-          "evidenceContains": "choose new targets for the copy",
-          "optionalEffect": false
         }
       ]
     },

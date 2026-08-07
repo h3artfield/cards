@@ -1,6 +1,6 @@
 /**
- * Reconcile development_set_v6 metric accounting — transition table, FN inventory, invariant checks.
- * Run: npx tsx scripts/reconcile-metrics-v6.ts
+ * Reconcile development_set metrics — unified matcher, transition table, FN inventory, invariant checks.
+ * Run: npx tsx scripts/reconcile-metrics-v6.ts [--v7]
  */
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -8,10 +8,15 @@ import { extractOracleActionsV1 } from "../src/lib/deck-builder/golden-catalog/o
 import { ORACLE_ACTION_PARSER_VERSION } from "../src/lib/deck-builder/golden-catalog/oracle-action-schema";
 import { normalizeToPrimitive } from "../src/lib/deck-builder/golden-catalog/oracle-action-taxonomy";
 import type { OracleActionEvalCaseV2 } from "./audit-oracle-action-eval-cases";
-import { evaluateCaseSet } from "./eval-oracle-action-extraction-v6";
+import {
+  evaluateCaseUnified,
+  sumUnifiedMetrics,
+  verifyTierInvariants,
+  findOptionalityMismatches,
+  type ExtractedActionForMatch,
+} from "./oracle-action-unified-matcher";
 import {
   evidenceMatchesExtracted,
-  evidenceMatchesOracle,
 } from "./oracle-action-eval-shared";
 import type {
   EmissionFnClassification,
@@ -46,68 +51,29 @@ function buildViews(testCase: OracleActionEvalCaseV2, featurePromotion: boolean)
   }));
 }
 
-function computeTierMetrics(cases: OracleActionEvalCaseV2[], featurePromotion: boolean) {
-  let acceptedTp = 0;
-  let acceptedFp = 0;
-  let acceptedFn = 0;
-  let needsReviewTp = 0;
-  let needsReviewFp = 0;
-
-  for (const testCase of cases) {
-    const views = buildViews(testCase, featurePromotion);
-    const expected = testCase.expectedPrimitiveActions.filter((e) => !e.negative);
-    const accepted = views.filter((a) => a.reviewStatus === "accepted");
-    const needsReview = views.filter((a) => a.reviewStatus === "needs_review");
-    const matchedAccepted = new Set<number>();
-    const matchedNeedsReview = new Set<number>();
-
-    for (const exp of expected) {
-      const aIdx = accepted.findIndex(
-        (a, i) =>
-          !matchedAccepted.has(i) &&
-          a.primitive === exp.actionType &&
-          evidenceMatchesExtracted(a.evidenceText, exp.evidenceContains) &&
-          (!exp.cardFace || a.cardFaceId === exp.cardFace) &&
-          (exp.optionalEffect === undefined || a.optionalEffect === exp.optionalEffect),
-      );
-      if (aIdx >= 0) {
-        acceptedTp += 1;
-        matchedAccepted.add(aIdx);
-        continue;
-      }
-
-      const nrIdx = needsReview.findIndex(
-        (a, i) =>
-          !matchedNeedsReview.has(i) &&
-          a.primitive === exp.actionType &&
-          evidenceMatchesExtracted(a.evidenceText, exp.evidenceContains) &&
-          (!exp.cardFace || a.cardFaceId === exp.cardFace) &&
-          (exp.optionalEffect === undefined || a.optionalEffect === exp.optionalEffect),
-      );
-      if (nrIdx >= 0) {
-        needsReviewTp += 1;
-        matchedNeedsReview.add(nrIdx);
-        acceptedFn += 1;
-        continue;
-      }
-
-      acceptedFn += 1;
-    }
-
-    for (let i = 0; i < accepted.length; i++) {
-      if (matchedAccepted.has(i) || !accepted[i].primitive) continue;
-      acceptedFp += 1;
-    }
-    for (let i = 0; i < needsReview.length; i++) {
-      if (matchedNeedsReview.has(i) || !needsReview[i].primitive) continue;
-      needsReviewFp += 1;
-    }
-  }
-
-  return {
-    accepted: { truePositives: acceptedTp, falsePositives: acceptedFp, falseNegatives: acceptedFn },
-    needsReview: { truePositives: needsReviewTp, falsePositives: needsReviewFp, falseNegatives: 0 },
-  };
+function computeUnifiedTierMetrics(cases: OracleActionEvalCaseV2[], featurePromotion: boolean) {
+  const caseMetrics = cases.map((testCase) => {
+    const raw = extractOracleActionsV1({
+      oracleId: testCase.oracleId,
+      oracleText: testCase.oracleText,
+      cardFace: testCase.cardFace,
+      featurePromotion,
+    });
+    return evaluateCaseUnified(
+      testCase,
+      raw.actions.map((a) => ({
+        actionType: a.actionType,
+        evidenceText: a.evidenceText,
+        faceId: a.faceId,
+        abilityIndex: a.abilityIndex,
+        reviewStatus: a.reviewStatus,
+        optionalEffect: a.optionalEffect,
+        optional: a.optional,
+        optionalCost: a.optionalCost,
+      })),
+    );
+  });
+  return { totals: sumUnifiedMetrics(caseMetrics), caseMetrics };
 }
 
 function classifyNeedsReviewAction(input: {
@@ -144,9 +110,9 @@ function classifyNeedsReviewAction(input: {
   if (goldMatch.optionalEffect !== undefined && goldMatch.optionalEffect !== action.optionalEffect) {
     return "correct_primitive_with_uncertain_condition_or_optionality";
   }
-  if (/\bthen\b/i.test(testCase.oracleText)) return "correct_but_structurally_uncertain";
-  if (action.confidence >= 0.88) return "correct_and_safely_promotable";
-  return "correct_but_structurally_uncertain";
+  if (/\bthen\b/i.test(testCase.oracleText)) return "structurally_uncertain";
+  if (action.confidence >= 0.88) return "promotion_candidate_not_yet_proven";
+  return "intentionally_held_for_review";
 }
 
 function classifyFn(input: {
@@ -181,10 +147,31 @@ function classifyFn(input: {
   return "missing_grammar";
 }
 
-export function runMetricsReconciliation(cases: OracleActionEvalCaseV2[]) {
-  const before = computeTierMetrics(cases, false);
-  const after = computeTierMetrics(cases, true);
-  const fullEval = evaluateCaseSet(cases, "development_set_v6");
+export function runMetricsReconciliation(cases: OracleActionEvalCaseV2[], setLabel = "development_set_v6") {
+  const before = computeUnifiedTierMetrics(cases, false);
+  const after = computeUnifiedTierMetrics(cases, true);
+  const invariants = verifyTierInvariants(after.totals);
+
+  const optionalityMismatches: ReturnType<typeof findOptionalityMismatches>[] = [];
+  for (const testCase of cases) {
+    const raw = extractOracleActionsV1({
+      oracleId: testCase.oracleId,
+      oracleText: testCase.oracleText,
+      cardFace: testCase.cardFace,
+    });
+    const actions: ExtractedActionForMatch[] = raw.actions.map((a, index) => ({
+      index,
+      primitive: normalizeToPrimitive(a.actionType, a.evidenceText),
+      evidenceText: a.evidenceText,
+      cardFaceId: a.faceId,
+      abilityIndex: a.abilityIndex,
+      reviewStatus: a.reviewStatus as "accepted" | "needs_review",
+      optionalEffect: a.optionalEffect,
+      optional: a.optional,
+      optionalCost: a.optionalCost,
+    }));
+    optionalityMismatches.push(...findOptionalityMismatches(testCase, actions));
+  }
 
   const promotionMoves: Array<{
     caseId: string;
@@ -199,13 +186,6 @@ export function runMetricsReconciliation(cases: OracleActionEvalCaseV2[]) {
     const expected = testCase.expectedPrimitiveActions.filter((e) => !e.negative);
 
     for (const exp of expected) {
-      const beforeAccepted = viewsBefore.some(
-        (a) =>
-          a.reviewStatus === "accepted" &&
-          a.primitive === exp.actionType &&
-          evidenceMatchesExtracted(a.evidenceText, exp.evidenceContains) &&
-          (!exp.cardFace || a.cardFaceId === exp.cardFace),
-      );
       const beforeNr = viewsBefore.some(
         (a) =>
           a.reviewStatus === "needs_review" &&
@@ -221,7 +201,7 @@ export function runMetricsReconciliation(cases: OracleActionEvalCaseV2[]) {
           (!exp.cardFace || a.cardFaceId === exp.cardFace),
       );
 
-      if (!beforeAccepted && beforeNr && afterAccepted) {
+      if (beforeNr && afterAccepted) {
         const action = viewsAfter.find(
           (a) =>
             a.reviewStatus === "accepted" &&
@@ -332,26 +312,24 @@ export function runMetricsReconciliation(cases: OracleActionEvalCaseV2[]) {
     }
   }
 
-  const afterAcceptedPrec =
-    after.accepted.truePositives + after.accepted.falsePositives > 0
-      ? after.accepted.truePositives / (after.accepted.truePositives + after.accepted.falsePositives)
-      : 1;
-  const afterAcceptedRec =
-    after.accepted.truePositives + after.accepted.falseNegatives > 0
-      ? after.accepted.truePositives / (after.accepted.truePositives + after.accepted.falseNegatives)
-      : 1;
+  const afterAccepted = after.totals.accepted;
+  const afterNeedsReview = after.totals.needsReview;
+  const afterAll = after.totals.allEmission;
 
   return {
     parserVersion: ORACLE_ACTION_PARSER_VERSION,
+    dataset: setLabel,
+    matcher: "oracle-action-unified-matcher (one-to-one greedy)",
+    optionalityMismatches,
     transitionAccounting: {
       beforeCalibration: {
         accepted: {
-          truePositives: before.accepted.truePositives,
-          falsePositives: before.accepted.falsePositives,
+          truePositives: before.totals.accepted.truePositives,
+          falsePositives: before.totals.accepted.falsePositives,
         },
         needsReview: {
-          truePositives: before.needsReview.truePositives,
-          falsePositives: before.needsReview.falsePositives,
+          truePositives: before.totals.needsReview.truePositives,
+          falsePositives: before.totals.needsReview.falsePositives,
         },
       },
       promotions: {
@@ -360,20 +338,27 @@ export function runMetricsReconciliation(cases: OracleActionEvalCaseV2[]) {
         moves: promotionMoves,
       },
       afterCalibration: {
-        accepted: after.accepted,
-        needsReview: after.needsReview,
+        accepted: {
+          truePositives: afterAccepted.truePositives,
+          falsePositives: afterAccepted.falsePositives,
+          falseNegatives: afterAccepted.falseNegatives,
+        },
+        needsReview: {
+          truePositives: afterNeedsReview.truePositives,
+          falsePositives: afterNeedsReview.falsePositives,
+          falseNegatives: afterNeedsReview.falseNegatives,
+        },
       },
       tierInvariant: {
-        acceptedTpPlusNeedsReviewTp: after.accepted.truePositives + after.needsReview.truePositives,
-        allEmissionTp: fullEval.metricsByEmissionTier.allEmission.truePositives,
-        delta:
-          fullEval.metricsByEmissionTier.allEmission.truePositives -
-          (after.accepted.truePositives + after.needsReview.truePositives),
-        holds:
-          fullEval.metricsByEmissionTier.allEmission.truePositives ===
-          after.accepted.truePositives + after.needsReview.truePositives,
+        ...invariants.details,
+        tpSumHolds: invariants.tpSumHolds,
+        fpSumHolds: invariants.fpSumHolds,
+        goldPositiveHolds:
+          afterAll.truePositives + afterAll.falseNegatives ===
+          afterAccepted.truePositives +
+            afterAccepted.falseNegatives,
         explanation:
-          "Under strict matching, all-emission TP equals accepted TP + needs-review TP. Structure annotations and duplicate-suppressed emissions are excluded. v6 evaluator no longer applies anyLoose bonus TP.",
+          "Unified one-to-one matcher: all-emission TP = accepted TP + needs-review TP; all-emission FP = accepted FP + needs-review FP.",
       },
     },
     needsReviewClassification: {
@@ -401,13 +386,9 @@ export function runMetricsReconciliation(cases: OracleActionEvalCaseV2[]) {
       },
     },
     correctedMetrics: {
-      accepted: {
-        ...after.accepted,
-        precision: afterAcceptedPrec,
-        recall: afterAcceptedRec,
-      },
-      needsReview: after.needsReview,
-      allEmission: fullEval.metricsByEmissionTier.allEmission,
+      accepted: afterAccepted,
+      needsReview: afterNeedsReview,
+      allEmission: afterAll,
     },
     emissionFalseNegatives: emissionFns,
     emissionFnClusterCounts: emissionFns.reduce(
@@ -421,20 +402,34 @@ export function runMetricsReconciliation(cases: OracleActionEvalCaseV2[]) {
 }
 
 function main() {
-  const dev = JSON.parse(
-    readFileSync(resolve(process.cwd(), "data", "oracle-action-eval-development-v6.json"), "utf8"),
-  ) as { cases: OracleActionEvalCaseV2[]; contentHash: string };
+  const useV7 = process.argv.includes("--v7");
+  const dataPath = useV7
+    ? resolve(process.cwd(), "data", "oracle-action-eval-development-v7.json")
+    : resolve(process.cwd(), "data", "oracle-action-eval-development-v6.json");
 
-  const report = runMetricsReconciliation(dev.cases);
-  const outPath = resolve(process.cwd(), "reports", "oracle-action-metrics-reconciliation-v6.json");
+  const dev = JSON.parse(readFileSync(dataPath, "utf8")) as {
+    cases: OracleActionEvalCaseV2[];
+    contentHash: string;
+    setClassification?: string;
+  };
+
+  const report = runMetricsReconciliation(
+    dev.cases,
+    dev.setClassification ?? (useV7 ? "development_set_v7" : "development_set_v6"),
+  );
+  const suffix = useV7 ? "v7" : "v6";
+  const outPath = resolve(process.cwd(), "reports", `oracle-action-metrics-reconciliation-${suffix}.json`);
   mkdirSync(resolve(process.cwd(), "reports"), { recursive: true });
   writeFileSync(outPath, JSON.stringify(report, null, 2), "utf8");
 
-  console.log("Transition:", JSON.stringify(report.transitionAccounting, null, 2));
+  console.log("Tier invariant:", report.transitionAccounting.tierInvariant);
   console.log("Accepted:", report.correctedMetrics.accepted);
   console.log("All-emission:", report.correctedMetrics.allEmission);
   console.log("FN count:", report.emissionFalseNegatives.length);
+  console.log("Optionality mismatches:", report.optionalityMismatches.length);
   console.log("→", outPath);
 }
 
-main();
+if (process.argv[1]?.replace(/\\/g, "/").endsWith("reconcile-metrics-v6.ts")) {
+  main();
+}

@@ -2,7 +2,7 @@
  * Needs-review tier audit + calibration report for development_set_v6.
  * Run: npx tsx scripts/calibrate-needs-review-v6.ts
  */
-import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
+import { readFileSync, mkdirSync, writeFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { extractOracleActionsV1 } from "../src/lib/deck-builder/golden-catalog/oracle-action-parser-v1";
 import { ORACLE_ACTION_PARSER_VERSION } from "../src/lib/deck-builder/golden-catalog/oracle-action-schema";
@@ -16,7 +16,9 @@ import {
 } from "./oracle-action-eval-shared";
 
 export type NeedsReviewClassification =
-  | "correct_and_safely_promotable"
+  | "promotion_candidate_not_yet_proven"
+  | "structurally_uncertain"
+  | "intentionally_held_for_review"
   | "correct_but_structurally_uncertain"
   | "correct_primitive_with_uncertain_condition_or_optionality"
   | "correct_primitive_with_uncertain_zone"
@@ -89,14 +91,14 @@ function classifyNeedsReviewAction(input: {
   }
 
   if (/\bthen\b|\band then\b/i.test(testCase.oracleText) && !/\bthen shuffle\b/i.test(testCase.oracleText)) {
-    return "correct_but_structurally_uncertain";
+    return "structurally_uncertain";
   }
 
-  if (input.reviewStatus === "accepted") return "correct_and_safely_promotable";
+  if (input.reviewStatus === "accepted") return "promotion_candidate_not_yet_proven";
 
-  if (input.confidence >= 0.88) return "correct_and_safely_promotable";
+  if (input.confidence >= 0.88) return "promotion_candidate_not_yet_proven";
 
-  return "correct_but_structurally_uncertain";
+  return "structurally_uncertain";
 }
 
 function classifyEmissionFn(input: {
@@ -241,7 +243,7 @@ export function runNeedsReviewCalibration(cases: OracleActionEvalCaseV2[]) {
   const fullEval = evaluateCaseSet(cases, "development_set_v6");
 
   const safelyPromotedTp = classifications.filter(
-    (c) => c.classification === "correct_and_safely_promotable",
+    (c) => c.classification === "promotion_candidate_not_yet_proven",
   ).length;
 
   const emissionFns: Array<{
@@ -317,16 +319,24 @@ export function runNeedsReviewCalibration(cases: OracleActionEvalCaseV2[]) {
 }
 
 function main() {
-  const dev = JSON.parse(
-    readFileSync(resolve(process.cwd(), "data", "oracle-action-eval-development-v6.json"), "utf8"),
-  ) as { cases: OracleActionEvalCaseV2[]; contentHash: string };
+  const useV7 = process.argv.includes("--v7") || existsSync(resolve(process.cwd(), "data", "oracle-action-eval-development-v7.json"));
+  const dataPath = useV7
+    ? resolve(process.cwd(), "data", "oracle-action-eval-development-v7.json")
+    : resolve(process.cwd(), "data", "oracle-action-eval-development-v6.json");
+
+  const dev = JSON.parse(readFileSync(dataPath, "utf8")) as {
+    cases: OracleActionEvalCaseV2[];
+    contentHash: string;
+    setClassification?: string;
+  };
 
   const report = runNeedsReviewCalibration(dev.cases);
-  const outPath = resolve(process.cwd(), "reports", "oracle-action-calibration-v6.json");
+  const suffix = useV7 ? "v7" : "v6";
+  const outPath = resolve(process.cwd(), "reports", `oracle-action-calibration-${suffix}.json`);
   mkdirSync(resolve(process.cwd(), "reports"), { recursive: true });
   writeFileSync(outPath, JSON.stringify(report, null, 2), "utf8");
 
-  console.log("Needs-review calibration (development_set_v6)");
+  console.log(`Needs-review calibration (${dev.setClassification ?? (useV7 ? "development_set_v7" : "development_set_v6")})`);
   console.log("  before promotion NR TP/FP:", report.needsReviewBeforePromotion);
   console.log("  safely promoted TP/FP:", report.safelyPromoted);
   console.log("  after promotion NR TP/FP/FN:", report.needsReviewAfterPromotion);
@@ -351,4 +361,6 @@ function main() {
   console.log("→", outPath);
 }
 
-main();
+if (process.argv[1]?.replace(/\\/g, "/").endsWith("calibrate-needs-review-v6.ts")) {
+  main();
+}

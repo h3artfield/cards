@@ -1,0 +1,180 @@
+{
+  "generatedAt": "2026-08-07T01:14:25.586Z",
+  "reviewer": "catalog-audit-agent",
+  "dataset": "development_set_v7",
+  "recordCount": 14,
+  "records": [
+    {
+      "caseId": "eval-0040",
+      "oracleText": "Choose two —\n• Return target creature card from your graveyard to your hand.\n• Kolaghan's Command deals 2 damage to any target.\n• Destroy target artifact or enchantment.\n• Each player discards their hand, then draws that many cards.",
+      "expectedPrimitive": "discard",
+      "evidenceSpan": "discards",
+      "parserOutput": [
+        "return_to_hand:Return target creature card from your graveyard to your hand (accepted)",
+        "deal_damage:deals 2 damage to any target (accepted)",
+        "destroy:Destroy target artifact or enchantment (accepted)",
+        "discard:discards their hand (accepted)",
+        "draw:draws that many cards (accepted)"
+      ],
+      "verdict": "parser_defect",
+      "resolution": "Extend discard pattern for 'discards their hand' in modal bullet.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "eval-0040",
+      "oracleText": "Choose two —\n• Return target creature card from your graveyard to your hand.\n• Kolaghan's Command deals 2 damage to any target.\n• Destroy target artifact or enchantment.\n• Each player discards their hand, then draws that many cards.",
+      "expectedPrimitive": "draw",
+      "evidenceSpan": "draws",
+      "parserOutput": [
+        "return_to_hand:Return target creature card from your graveyard to your hand (accepted)",
+        "deal_damage:deals 2 damage to any target (accepted)",
+        "destroy:Destroy target artifact or enchantment (accepted)",
+        "discard:discards their hand (accepted)",
+        "draw:draws that many cards (accepted)"
+      ],
+      "verdict": "parser_defect",
+      "resolution": "Extend draw pattern for 'draws that many cards' after compound-then split.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "eval-0049",
+      "oracleText": "(As this Saga enters and after your draw step, add a lore counter.)\nI — Each opponent sacrifices a creature or planeswalker.\nII — Each opponent discards a card.\nIII — Put target creature or planeswalker card from a graveyard onto the battlefield under your control.",
+      "expectedPrimitive": "sacrifice",
+      "evidenceSpan": "sacrifices",
+      "parserOutput": [
+        "sacrifice:Each opponent sacrifices a creature or planeswalker (accepted)",
+        "discard:discards a card (accepted)",
+        "return_to_battlefield:Put target creature or planeswalker card from a graveyard onto the battlefield (accepted)"
+      ],
+      "verdict": "parser_defect",
+      "resolution": "Add third-person sacrifice pattern (Each opponent sacrifices).",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "eval-0054",
+      "oracleText": "+1: Each player discards a card.\n-2: Target player sacrifices a creature.\n-6: Separate all permanents target player controls into two piles. That player sacrifices all permanents in the pile of their choice.",
+      "expectedPrimitive": "sacrifice",
+      "evidenceSpan": "sacrifices",
+      "parserOutput": [
+        "discard:discards a card (accepted)",
+        "sacrifice:Target player sacrifices a creature (accepted)",
+        "sacrifice:That player sacrifices all permanents in the pile of their choice (accepted)"
+      ],
+      "verdict": "parser_defect",
+      "resolution": "Add third-person sacrifice pattern (Target/That player sacrifices).",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "eval-0064",
+      "oracleText": "Flash\nWhen this creature enters, target instant or sorcery card in your graveyard gains flashback until end of turn. The flashback cost is equal to its mana cost.",
+      "expectedPrimitive": "play",
+      "evidenceSpan": "graveyard",
+      "parserOutput": [],
+      "verdict": "structural_only_text",
+      "resolution": "Remove play gold — Flashback is structural permission, not standalone play action.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "eval-0083",
+      "oracleText": "Return up to two target creature cards from your graveyard to your hand.",
+      "expectedPrimitive": "return_to_battlefield",
+      "evidenceSpan": "from your graveyard to your hand",
+      "parserOutput": [
+        "return_to_hand:Return up to two target creature cards from your graveyard to your hand (accepted)"
+      ],
+      "verdict": "gold_defect",
+      "resolution": "Remove duplicate return_to_battlefield; destination is hand (return_to_hand only).",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "eval-0120",
+      "oracleText": "Deathtouch\nWhenever you exile a card, create a Treasure token.\nWhenever you sacrifice a Treasure, exile the top card of your library. You may play that card this turn.",
+      "expectedPrimitive": "sacrifice",
+      "evidenceSpan": "sacrifice a Treasure",
+      "parserOutput": [
+        "create_token:create a Treasure token (accepted)",
+        "exile:exile the top card of your library (needs_review)",
+        "play:You may play that card this turn (accepted)"
+      ],
+      "verdict": "structural_only_text",
+      "resolution": "Remove sacrifice gold — appears in Whenever trigger condition, not Layer-2 effect.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "eval-0137",
+      "oracleText": "Return target creature from your graveyard to your hand.",
+      "expectedPrimitive": "return_to_battlefield",
+      "evidenceSpan": "from your graveyard to your hand",
+      "parserOutput": [
+        "return_to_hand:Return target creature from your graveyard to your hand (accepted)"
+      ],
+      "verdict": "gold_defect",
+      "resolution": "Remove duplicate return_to_battlefield; keep return_to_hand only.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "eval-0150",
+      "oracleText": "Reveal the top card of your library.",
+      "expectedPrimitive": "search_library",
+      "evidenceSpan": "Reveal",
+      "parserOutput": [],
+      "verdict": "structural_only_text",
+      "resolution": "Remove search_library gold — reveal top card is not search_library.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "eval-0196",
+      "oracleText": "Whenever you draw a card, if it is the second card you drew this turn, create a Treasure token.",
+      "expectedPrimitive": "draw",
+      "evidenceSpan": "draw a card",
+      "parserOutput": [
+        "create_token:create a Treasure token (accepted)"
+      ],
+      "verdict": "structural_only_text",
+      "resolution": "Remove draw from Whenever condition clause; keep triggered create_token effect only.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "eval-0200",
+      "oracleText": "Prototype {1}{B} — 2/2\nDeathtouch",
+      "expectedPrimitive": "draw",
+      "evidenceSpan": "draw",
+      "parserOutput": [],
+      "verdict": "gold_defect",
+      "resolution": "Remove erroneous draw gold from prototype reminder line.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "eval-0202",
+      "oracleText": "Mutate {2}{R}\nThis creature gets +2/+0 until end of turn.",
+      "expectedPrimitive": "draw",
+      "evidenceSpan": "draw",
+      "parserOutput": [],
+      "verdict": "gold_defect",
+      "resolution": "Remove erroneous draw gold from Mutate keyword line.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "dev-opt-016",
+      "oracleText": "Choose up to one card of each card type from your graveyard.",
+      "expectedPrimitive": "return_to_battlefield",
+      "evidenceSpan": "Choose up to one card of each card type",
+      "parserOutput": [],
+      "verdict": "structural_only_text",
+      "resolution": "Remove return_to_battlefield gold — choose-from-graveyard without battlefield destination.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "dev-opt-038",
+      "oracleText": "Copy target instant or sorcery spell. You may choose new targets for the copy.",
+      "expectedPrimitive": "copy",
+      "evidenceSpan": "choose new targets for the copy",
+      "parserOutput": [
+        "copy:Copy target instant (needs_review)"
+      ],
+      "verdict": "structural_only_text",
+      "resolution": "Remove second copy gold for target retargeting; single copy primitive only.",
+      "reviewer": "catalog-audit-agent"
+    }
+  ]
+}
