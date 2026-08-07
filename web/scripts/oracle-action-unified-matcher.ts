@@ -3,7 +3,7 @@
  */
 import { normalizeToPrimitive } from "../src/lib/deck-builder/golden-catalog/oracle-action-taxonomy";
 import type { OracleActionEvalCaseV2 } from "./audit-oracle-action-eval-cases";
-import { evidenceMatchesExtracted, type ExpectedPrimitiveAction } from "./oracle-action-eval-shared";
+import { classifyUnmatchedAction, evidenceMatchesExtracted, type ExpectedPrimitiveAction } from "./oracle-action-eval-shared";
 
 export type EmissionTier = "accepted" | "needs_review" | "all";
 
@@ -11,8 +11,13 @@ export interface ExtractedActionForMatch {
   index: number;
   primitive: string | null;
   evidenceText: string;
+  evidenceStart: number;
+  evidenceEnd: number;
   cardFaceId: string;
   abilityIndex: number;
+  loyaltyCost?: string;
+  sagaChapterId?: string;
+  modalOptionId?: string;
   reviewStatus: "accepted" | "needs_review";
   optionalEffect?: boolean;
   optional?: boolean;
@@ -47,6 +52,9 @@ export function primitiveMatchesExpected(
   if (!action.primitive || action.primitive !== exp.actionType) return false;
   if (!evidenceMatchesExtracted(action.evidenceText, exp.evidenceContains)) return false;
   if (exp.cardFace && !faceIdsEquivalent(action.cardFaceId, exp.cardFace)) return false;
+  if (exp.loyaltyCost && action.loyaltyCost && exp.loyaltyCost !== action.loyaltyCost) return false;
+  if (exp.sagaChapterId && action.sagaChapterId && exp.sagaChapterId !== action.sagaChapterId) return false;
+  if (exp.optionId && action.modalOptionId && exp.optionId !== action.modalOptionId) return false;
 
   const expectedOptional = exp.optionalEffect ?? exp.optional;
   if (expectedOptional !== undefined) {
@@ -150,13 +158,43 @@ export interface UnifiedCaseMetrics {
   allEmission: { tp: number; fp: number; fn: number };
 }
 
+export function countParserFalsePositives(
+  testCase: OracleActionEvalCaseV2,
+  unmatchedActionIndices: number[],
+  actions: ExtractedActionForMatch[],
+): number {
+  let fp = 0;
+  for (const idx of unmatchedActionIndices) {
+    const action = actions[idx];
+    const category = classifyUnmatchedAction({
+      testCase,
+      primitive: action.primitive,
+      evidenceText: action.evidenceText,
+      evidenceStart: action.evidenceStart,
+      evidenceEnd: action.evidenceEnd,
+      cardFaceId: action.cardFaceId,
+      abilityIndex: action.abilityIndex,
+      optionalEffect: action.optionalEffect,
+      optional: action.optional,
+      optionalCost: action.optionalCost,
+    });
+    if (category === "parser_false_positive") fp += 1;
+  }
+  return fp;
+}
+
 export function evaluateCaseUnified(
   testCase: OracleActionEvalCaseV2,
   rawActions: Array<{
     actionType: string;
     evidenceText: string;
+    evidenceStart: number;
+    evidenceEnd: number;
     faceId: string;
     abilityIndex: number;
+    loyaltyCost?: string;
+    sagaChapterId?: string;
+    modalOptionId?: string;
     reviewStatus: string;
     optionalEffect?: boolean;
     optional?: boolean;
@@ -168,8 +206,13 @@ export function evaluateCaseUnified(
     index,
     primitive: normalizeToPrimitive(a.actionType, a.evidenceText),
     evidenceText: a.evidenceText,
+    evidenceStart: a.evidenceStart,
+    evidenceEnd: a.evidenceEnd,
     cardFaceId: a.faceId,
     abilityIndex: a.abilityIndex,
+    loyaltyCost: a.loyaltyCost,
+    sagaChapterId: a.sagaChapterId,
+    modalOptionId: a.modalOptionId,
     reviewStatus: a.reviewStatus as "accepted" | "needs_review",
     optionalEffect: a.optionalEffect,
     optional: a.optional,
@@ -191,17 +234,17 @@ export function evaluateCaseUnified(
     caseId: testCase.id,
     accepted: {
       tp: acceptedOnly.matches.filter((m) => m.matched).length,
-      fp: acceptedOnly.unmatchedActionIndices.length,
+      fp: countParserFalsePositives(testCase, acceptedOnly.unmatchedActionIndices, actions),
       fn: expected.length - acceptedMatchedGold.size,
     },
     needsReview: {
       tp: needsReviewOnly.matches.filter((m) => m.matched).length,
-      fp: needsReviewOnly.unmatchedActionIndices.length,
+      fp: countParserFalsePositives(testCase, needsReviewOnly.unmatchedActionIndices, actions),
       fn: 0,
     },
     allEmission: {
       tp: allTier.matches.filter((m) => m.matched).length,
-      fp: allTier.unmatchedActionIndices.length,
+      fp: countParserFalsePositives(testCase, allTier.unmatchedActionIndices, actions),
       fn: expected.length - allTier.matches.filter((m) => m.matched).length,
     },
   };

@@ -1,0 +1,73 @@
+{
+  "generatedAt": "2026-08-07T20:50:37.915Z",
+  "parserVersion": "oracle-action-v1.23-ability-modal-quantity-dev",
+  "parserCommit": "45d6c45ac2437867c83b5a775da05882fe5f192a",
+  "perFamilyAcceptedFp": {
+    "planeswalker": {
+      "before": 4,
+      "after": 0
+    },
+    "saga": {
+      "before": 4,
+      "after": 0
+    },
+    "clauseBoundary": {
+      "before": 2,
+      "after": 0
+    },
+    "modal": {
+      "before": 0,
+      "after": 0
+    },
+    "evaluatorMatcher": {
+      "before": 0,
+      "after": 0
+    }
+  },
+  "metrics": {
+    "originalDevelopmentV26": {
+      "caseCount": 284,
+      "accepted": {
+        "tp": 348,
+        "fp": 0,
+        "fn": 39,
+        "precision": 1,
+        "recall": 0.8992248062015504,
+        "unsupported": 0
+      }
+    },
+    "expansionTraining": {
+      "caseCount": 39,
+      "accepted": {
+        "tp": 51,
+        "fp": 0,
+        "fn": 8,
+        "precision": 1,
+        "recall": 0.864406779661017,
+        "unsupported": 0
+      }
+    },
+    "combinedDevelopment": {
+      "caseCount": 323,
+      "accepted": {
+        "tp": 399,
+        "fp": 0,
+        "fn": 47,
+        "precision": 1,
+        "recall": 0.8946188340807175,
+        "unsupported": 0
+      }
+    }
+  },
+  "trueParserFpRemaining": 0,
+  "fnRemainingByFamily": {},
+  "regressionInvariants": {
+    "unsupported": true,
+    "evaluatorDefects": true
+  },
+  "gates": {
+    "combinedPrecisionTarget": true,
+    "combinedRecallTarget": false,
+    "expansionPrecisionPreferred": true
+  }
+}

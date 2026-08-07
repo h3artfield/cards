@@ -26,6 +26,7 @@ import {
   evidenceMatchesExtracted,
   evidenceMatchesOracle,
   inferSupportedPrimitiveFromEvidence,
+  actionInGoldCoveredAbilityScope,
   spanValid,
 } from "./oracle-action-eval-shared";
 import {
@@ -241,6 +242,9 @@ function classifyFalsePositive(input: {
   }
 
   if (testCase.expectedPrimitiveActions.find((e) => !e.negative && e.actionType === primitive)) {
+    if (!actionInGoldCoveredAbilityScope(testCase, action.cardFaceId, action.abilityIndex)) {
+      return "correct_action_missing_from_gold_labels";
+    }
     return "granularity_mismatch";
   }
 
@@ -254,6 +258,10 @@ function classifyFalsePositive(input: {
   if (wrongTypeInGold) return "incorrect_evidence_to_action_mapping";
 
   if (supported === primitive && evidenceMatchesOracle(oracleText, action.evidenceText)) {
+    return "correct_action_missing_from_gold_labels";
+  }
+
+  if (!actionInGoldCoveredAbilityScope(testCase, action.cardFaceId, action.abilityIndex)) {
     return "correct_action_missing_from_gold_labels";
   }
 
@@ -368,8 +376,13 @@ function computeUnifiedEmissionMetrics(cases: OracleActionEvalCaseV2[]) {
       raw.actions.map((a) => ({
         actionType: a.actionType,
         evidenceText: a.evidenceText,
+        evidenceStart: a.evidenceStart,
+        evidenceEnd: a.evidenceEnd,
         faceId: a.faceId,
         abilityIndex: a.abilityIndex,
+        loyaltyCost: a.loyaltyCost,
+        sagaChapterId: a.sagaChapterId,
+        modalOptionId: a.modalOptionId,
         reviewStatus: a.reviewStatus,
         optionalEffect: a.optionalEffect,
         optional: a.optional,

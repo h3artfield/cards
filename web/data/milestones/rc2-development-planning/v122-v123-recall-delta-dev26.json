@@ -1,0 +1,60 @@
+{
+  "v122AcceptedTp": 309,
+  "v123AcceptedTp": 305,
+  "tpDelta": -4,
+  "v122Fn": 78,
+  "v123Fn": 82,
+  "v122Recall": 0.7984496124031008,
+  "v123Recall": 0.7881136950904393,
+  "lostTp": [
+    {
+      "caseId": "dev-cond-008",
+      "primitive": "exile",
+      "goldEvidence": "exile target creature",
+      "v122Status": "accepted",
+      "v123Status": "needs_review",
+      "v122Evidence": "you may exile target creature if it attacked or blocked this turn",
+      "v123Evidence": "you may exile target creature if it attacked or blocked this turn",
+      "abilityIndex": 1,
+      "cause": "accepted → needs_review"
+    },
+    {
+      "caseId": "dev-opt-022",
+      "primitive": "discard",
+      "goldEvidence": "discards that card",
+      "v122Status": "accepted",
+      "v123Status": "needs_review",
+      "v122Evidence": "discards that card",
+      "v123Evidence": "discards that card",
+      "abilityIndex": 0,
+      "cause": "accepted → needs_review"
+    },
+    {
+      "caseId": "eval-0058",
+      "primitive": "discard",
+      "goldEvidence": "discards that card",
+      "v122Status": "accepted",
+      "v123Status": "needs_review",
+      "v122Evidence": "discards that card",
+      "v123Evidence": "discards that card",
+      "abilityIndex": 1,
+      "cause": "accepted → needs_review"
+    },
+    {
+      "caseId": "eval-0153",
+      "primitive": "untap",
+      "goldEvidence": "Untap it",
+      "v122Status": "accepted",
+      "v123Status": "needs_review",
+      "v122Evidence": "Untap it",
+      "v123Evidence": "Untap it",
+      "abilityIndex": 0,
+      "cause": "accepted → needs_review"
+    }
+  ],
+  "fnBreakdown": {
+    "matcher/evidence_failure": 44,
+    "needs_review_only": 25,
+    "parser_missing_grammar": 13
+  }
+}

@@ -4,7 +4,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { validateEvidenceSpan } from "../src/lib/deck-builder/golden-catalog/oracle-ability-segmentation";
+import { validateEvidenceSpan, segmentOracleCard } from "../src/lib/deck-builder/golden-catalog/oracle-ability-segmentation";
 import {
   normalizeToPrimitive,
   PRIMITIVE_ACTION_TYPES,
@@ -55,6 +55,9 @@ export interface ExpectedPrimitiveAction {
   targetMaximum?: number | "X";
   quantityMayBeZero?: boolean;
   negative?: boolean;
+  loyaltyCost?: string;
+  sagaChapterId?: string;
+  optionId?: string;
 }
 
 export interface ExpectedCondition {
@@ -111,6 +114,75 @@ export function cardNameForCase(testCase: OracleActionEvalCaseV2, lookup: Map<st
   return lookup.get(testCase.id) ?? testCase.oracleText.split("\n")[0]?.trim() ?? testCase.id;
 }
 
+export function abilityScopeKey(faceId: string, abilityIndex: number): string {
+  return `${faceId}:${abilityIndex}`;
+}
+
+/** Ability paragraphs whose evidence appears in gold expectations for this case. */
+export function goldCoveredAbilityScopeKeys(testCase: OracleActionEvalCaseV2): Set<string> {
+  const abilities = segmentOracleCard({ oracleId: testCase.oracleId, oracleText: testCase.oracleText });
+  const keys = new Set<string>();
+  for (const exp of testCase.expectedPrimitiveActions.filter((e) => !e.negative)) {
+    const needle = exp.evidenceContains.toLowerCase();
+    for (const ab of abilities) {
+      if (exp.cardFace && exp.cardFace !== ab.cardFaceId) continue;
+      if (ab.paragraphText.toLowerCase().includes(needle)) {
+        keys.add(abilityScopeKey(ab.cardFaceId, ab.abilityIndex));
+      }
+    }
+  }
+  return keys;
+}
+
+export function actionInGoldCoveredAbilityScope(
+  testCase: OracleActionEvalCaseV2,
+  faceId: string,
+  abilityIndex: number,
+): boolean {
+  const covered = goldCoveredAbilityScopeKeys(testCase);
+  if (covered.size === 0) return true;
+  return covered.has(abilityScopeKey(faceId, abilityIndex));
+}
+
+export type UnmatchedActionCategory =
+  | "parser_false_positive"
+  | "missing_gold_label"
+  | "evaluator_matching_defect";
+
+export function classifyUnmatchedAction(input: {
+  testCase: OracleActionEvalCaseV2;
+  primitive: string | null;
+  evidenceText: string;
+  evidenceStart: number;
+  evidenceEnd: number;
+  cardFaceId: string;
+  abilityIndex: number;
+  optionalEffect?: boolean;
+  optional?: boolean;
+  optionalCost?: boolean;
+}): UnmatchedActionCategory {
+  const { testCase, primitive, evidenceText, evidenceStart, evidenceEnd, cardFaceId, abilityIndex } = input;
+  if (!primitive) return "parser_false_positive";
+  if (!spanValid(testCase.oracleText, evidenceText, evidenceStart, evidenceEnd)) {
+    return "parser_false_positive";
+  }
+  const supported = inferSupportedPrimitiveFromEvidence(testCase.oracleText, evidenceText);
+  if (!supported || supported !== primitive) return "parser_false_positive";
+  if (testCase.cardFace && testCase.cardFace !== cardFaceId) {
+    if (evidenceMatchesOracle(testCase.oracleText, evidenceText)) return "missing_gold_label";
+    return "parser_false_positive";
+  }
+  if (!actionInGoldCoveredAbilityScope(testCase, cardFaceId, abilityIndex)) {
+    return "missing_gold_label";
+  }
+  const goldSameType = testCase.expectedPrimitiveActions.some((e) => !e.negative && e.actionType === primitive);
+  if (goldSameType && evidenceMatchesOracle(testCase.oracleText, evidenceText)) {
+    return "evaluator_matching_defect";
+  }
+  if (evidenceMatchesOracle(testCase.oracleText, evidenceText)) return "missing_gold_label";
+  return "parser_false_positive";
+}
+
 export function evidenceMatchesOracle(oracleText: string, evidenceContains: string): boolean {
   return oracleText.toLowerCase().includes(evidenceContains.toLowerCase());
 }
@@ -129,7 +201,7 @@ export function inferSupportedPrimitiveFromEvidence(
   for (const primitive of PRIMITIVE_ACTION_TYPES) {
     const patterns: Record<PrimitiveActionType, RegExp> = {
       add_mana: /\bAdd \{|\badd (?:one mana|three mana|\{)/i,
-      draw: /\b(?:draw|draws) (?:a |one |two |three |four |five |seven |X |up to \w+ )?cards?\b/i,
+      draw: /\b(?:draw|draws) (?:cards? equal to half|(?:a |one |two |three |four |five |seven |X |up to \w+ )?cards?)\b/i,
       discard: /\b(?:discard|discards)\b/i,
       search_library: /\bsearch(?:es)? (?:your |their )?library\b/i,
       deal_damage: /\bdeals? (?:\d+|X) damage\b/i,
@@ -148,7 +220,7 @@ export function inferSupportedPrimitiveFromEvidence(
       sacrifice: /\b[Ss]acrifices?\b/i,
       mill: /\bmills? (?:half|fourteen|one|two|three|four|five|six|seven|eight|nine|ten|X|\d+|up to \w+)/i,
       gain_life: /\bgain(?:s)? (?:\d+|X) life\b|\bgain(?:s)? life equal to\b/i,
-      lose_life: /\bloses? (?:\d+|up to \d+|X) life\b|\bloses? life equal to\b/i,
+      lose_life: /\bloses? (?:half (?:their |your )?life|\d+|up to \d+|X) life\b|\bloses? life equal to\b/i,
       scry: /\bScry \d+\b/i,
       surveil: /\bSurveil \d+\b/i,
       tap: /\bTap target\b/i,
