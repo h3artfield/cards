@@ -1,0 +1,241 @@
+{
+  "generatedAt": "2026-08-07T01:45:27.589Z",
+  "reviewer": "catalog-audit-agent",
+  "parentDataset": "development_set_v7",
+  "parentContentHash": "6274107dfae50b3c8938099079004e36bdf3ce18e3bb3b8407e9af1cf409a147",
+  "newDataset": "development_set_v8",
+  "newContentHash": "4ba04ffa00af737900f971b40955bd8b04298199e9607d6081b5e89dd7d8c43d",
+  "addedCaseCount": 31,
+  "reasonForChange": "Generalization expansion from validation failure families using different catalog cards.",
+  "addedCases": [
+    {
+      "caseId": "dev-exp-001",
+      "cardName": "Harrow",
+      "family": "hand_to_battlefield_put_not_search",
+      "category": "dev-exp put-from-hand",
+      "primitiveCount": 2
+    },
+    {
+      "caseId": "dev-exp-002",
+      "cardName": "Mox Diamond",
+      "family": "hand_to_battlefield_put_not_search",
+      "category": "dev-exp put-from-hand",
+      "primitiveCount": 1
+    },
+    {
+      "caseId": "dev-exp-003",
+      "cardName": "Arbor Elf",
+      "family": "hand_to_battlefield_put_not_search",
+      "category": "dev-exp put-from-hand",
+      "primitiveCount": 2
+    },
+    {
+      "caseId": "dev-exp-004",
+      "cardName": "Burgeoning",
+      "family": "hand_to_battlefield_put_not_search",
+      "category": "dev-exp put-from-hand",
+      "primitiveCount": 1
+    },
+    {
+      "caseId": "dev-exp-005",
+      "cardName": "Rule of Law",
+      "family": "static_cast_restriction_not_cast",
+      "category": "dev-exp static restriction",
+      "primitiveCount": 0
+    },
+    {
+      "caseId": "dev-exp-006",
+      "cardName": "Eidolon of Rhetoric",
+      "family": "static_cast_restriction_not_cast",
+      "category": "dev-exp static restriction",
+      "primitiveCount": 0
+    },
+    {
+      "caseId": "dev-exp-007",
+      "cardName": "Chalice of the Void",
+      "family": "static_cast_restriction_not_cast",
+      "category": "dev-exp static restriction",
+      "primitiveCount": 0
+    },
+    {
+      "caseId": "dev-exp-008",
+      "cardName": "Force of Will",
+      "family": "alternative_cost_not_cast_primitive",
+      "category": "dev-exp alt cost",
+      "primitiveCount": 1
+    },
+    {
+      "caseId": "dev-exp-009",
+      "cardName": "Pyrokinesis",
+      "family": "alternative_cost_not_cast_primitive",
+      "category": "dev-exp alt cost",
+      "primitiveCount": 1
+    },
+    {
+      "caseId": "dev-exp-010",
+      "cardName": "Solitude",
+      "family": "alternative_cost_not_cast_primitive",
+      "category": "dev-exp alt cost",
+      "primitiveCount": 1
+    },
+    {
+      "caseId": "dev-exp-011",
+      "cardName": "Regrowth",
+      "family": "return_zone_disambiguation",
+      "category": "dev-exp return zones",
+      "primitiveCount": 1
+    },
+    {
+      "caseId": "dev-exp-012",
+      "cardName": "Reanimate",
+      "family": "return_zone_disambiguation",
+      "category": "dev-exp return zones",
+      "primitiveCount": 2
+    },
+    {
+      "caseId": "dev-exp-013",
+      "cardName": "Call of the Herd",
+      "family": "return_zone_disambiguation",
+      "category": "dev-exp return zones",
+      "primitiveCount": 1
+    },
+    {
+      "caseId": "dev-exp-014",
+      "cardName": "Unearth",
+      "family": "return_zone_disambiguation",
+      "category": "dev-exp return zones",
+      "primitiveCount": 1
+    },
+    {
+      "caseId": "dev-exp-015",
+      "cardName": "Howling Mine",
+      "family": "third_person_draw_discard_sacrifice",
+      "category": "dev-exp third person",
+      "primitiveCount": 1
+    },
+    {
+      "caseId": "dev-exp-016",
+      "cardName": "Cathartic Reunion",
+      "family": "third_person_draw_discard_sacrifice",
+      "category": "dev-exp third person",
+      "primitiveCount": 2
+    },
+    {
+      "caseId": "dev-exp-017",
+      "cardName": "Smallpox",
+      "family": "third_person_draw_discard_sacrifice",
+      "category": "dev-exp third person",
+      "primitiveCount": 4
+    },
+    {
+      "caseId": "dev-exp-018",
+      "cardName": "Soul Warden",
+      "family": "trigger_condition_action_words",
+      "category": "dev-exp trigger condition",
+      "primitiveCount": 1
+    },
+    {
+      "caseId": "dev-exp-019",
+      "cardName": "Zulaport Cutthroat",
+      "family": "trigger_condition_action_words",
+      "category": "dev-exp trigger condition",
+      "primitiveCount": 2
+    },
+    {
+      "caseId": "dev-exp-020",
+      "cardName": "Harmonic Sliver",
+      "family": "trigger_condition_action_words",
+      "category": "dev-exp trigger condition",
+      "primitiveCount": 1
+    },
+    {
+      "caseId": "dev-exp-021",
+      "cardName": "Garruk's Uprising",
+      "family": "trigger_condition_action_words",
+      "category": "dev-exp trigger condition",
+      "primitiveCount": 1
+    },
+    {
+      "caseId": "dev-exp-022",
+      "cardName": "Faithless Looting",
+      "family": "compound_then_clauses",
+      "category": "dev-exp compound",
+      "primitiveCount": 2
+    },
+    {
+      "caseId": "dev-exp-023",
+      "cardName": "Night's Whisper",
+      "family": "compound_then_clauses",
+      "category": "dev-exp compound",
+      "primitiveCount": 2
+    },
+    {
+      "caseId": "dev-exp-024",
+      "cardName": "Read the Bones",
+      "family": "compound_then_clauses",
+      "category": "dev-exp compound",
+      "primitiveCount": 3
+    },
+    {
+      "caseId": "dev-exp-025",
+      "cardName": "Crucible of Worlds",
+      "family": "cast_vs_play_permission",
+      "category": "dev-exp cast vs play",
+      "primitiveCount": 1
+    },
+    {
+      "caseId": "dev-exp-026",
+      "cardName": "Underworld Breach",
+      "family": "cast_vs_play_permission",
+      "category": "dev-exp cast vs play",
+      "primitiveCount": 2
+    },
+    {
+      "caseId": "dev-exp-027",
+      "cardName": "Voldaren Epicure",
+      "family": "cast_vs_play_permission",
+      "category": "dev-exp cast vs play",
+      "primitiveCount": 2
+    },
+    {
+      "caseId": "dev-exp-028",
+      "cardName": "Rest in Peace",
+      "family": "replacement_effect_clauses",
+      "category": "dev-exp replacement",
+      "primitiveCount": 1
+    },
+    {
+      "caseId": "dev-exp-029",
+      "cardName": "Platinum Angel",
+      "family": "replacement_effect_clauses",
+      "category": "dev-exp replacement",
+      "primitiveCount": 0
+    },
+    {
+      "caseId": "dev-exp-030",
+      "cardName": "Ice-Fang Coatl",
+      "family": "unsupported_wording_must_abstain",
+      "category": "dev-exp abstain",
+      "primitiveCount": 1
+    },
+    {
+      "caseId": "dev-exp-031",
+      "cardName": "Trinket Mage",
+      "family": "unsupported_wording_must_abstain",
+      "category": "dev-exp abstain",
+      "primitiveCount": 1
+    }
+  ],
+  "familyCounts": {
+    "hand_to_battlefield_put_not_search": 4,
+    "static_cast_restriction_not_cast": 3,
+    "alternative_cost_not_cast_primitive": 3,
+    "return_zone_disambiguation": 4,
+    "third_person_draw_discard_sacrifice": 3,
+    "trigger_condition_action_words": 4,
+    "compound_then_clauses": 3,
+    "cast_vs_play_permission": 3,
+    "replacement_effect_clauses": 2,
+    "unsupported_wording_must_abstain": 2
+  }
+}

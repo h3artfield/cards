@@ -1,0 +1,15 @@
+{
+  "frozenAt": "2026-08-07T01:45:29.766Z",
+  "parserVersion": "oracle-action-v1.12-unified-matcher",
+  "commitSha": "39a1e6108b97f084565e9151f5f3eef953762885",
+  "developmentSet": {
+    "classification": "development_set_v7",
+    "contentHash": "6274107dfae50b3c8938099079004e36bdf3ce18e3bb3b8407e9af1cf409a147"
+  },
+  "validationSet": {
+    "classification": "validation_set_v2",
+    "contentHash": "496a5dd7fcc5c6259f600e25aeecaeead6a036a6574b53cc58e9001321943734"
+  },
+  "preAdjudicationReport": "data/milestones/validation-v12-pre-adjudication/oracle-action-eval-validation-v12-milestone.json",
+  "note": "Immutable pre-adjudication baseline — do not overwrite."
+}

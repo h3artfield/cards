@@ -1,0 +1,464 @@
+{
+  "generatedAt": "2026-08-07T01:23:58.749Z",
+  "evaluationVersion": "eval-v12-validation-milestone",
+  "commitSha": "39a1e6108b97f084565e9151f5f3eef953762885",
+  "parserVersion": "oracle-action-v1.12-unified-matcher",
+  "validationSetHash": "496a5dd7fcc5c6259f600e25aeecaeead6a036a6574b53cc58e9001321943734",
+  "accepted": {
+    "precision": 0.8321678321678322,
+    "recall": 0.7345679012345679,
+    "truePositives": 119,
+    "falsePositives": 24,
+    "falseNegatives": 43
+  },
+  "allEmission": {
+    "precision": 0.84,
+    "recall": 0.7777777777777778,
+    "truePositives": 126,
+    "falsePositives": 24,
+    "falseNegatives": 36
+  },
+  "acceptedUnsupportedCount": 3,
+  "falsePositivesByCategory": {
+    "wrong_primitive_action_type": 7,
+    "correct_action_missing_from_gold_labels": 8,
+    "duplicate_action_extraction": 0,
+    "wrong_card_face": 0,
+    "wrong_ability_association": 0,
+    "incorrect_evidence_to_action_mapping": 0,
+    "granularity_mismatch": 1,
+    "condition_or_optionality_mismatch": 0,
+    "genuinely_unsupported_extraction": 3,
+    "evaluator_matching_defect": 5
+  },
+  "falseNegativesByCategory": 36,
+  "emissionTotals": {
+    "totalExtractedActions": 150,
+    "acceptedActions": 143,
+    "needsReviewActions": 7,
+    "abstainedActions": 0,
+    "abstainedClauseCount": 34,
+    "structureAnnotationCount": 9,
+    "needsReviewRate": 0.04666666666666667,
+    "needsReviewRateDenominator": "needs_review_actions / total_extracted_actions",
+    "structureAnnotationsExcludedFromPrimitiveCounts": true
+  },
+  "needsReviewTotals": {
+    "needsReviewActions": 7,
+    "needsReviewTruePositives": 7,
+    "needsReviewFalsePositives": 0
+  },
+  "multifaceSafetyNote": "Run eval-oracle-action-extraction-v8.ts for multiface gate metrics.",
+  "metricsByPrimitive": {
+    "add_mana": {
+      "truePositives": 9,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "production_supported"
+    },
+    "draw": {
+      "truePositives": 18,
+      "falsePositives": 1,
+      "falseNegatives": 0,
+      "precision": 0.9473684210526315,
+      "recall": 1,
+      "falsePositiveRate": 0.05263157894736842,
+      "supportTier": "development_candidate"
+    },
+    "discard": {
+      "truePositives": 4,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "development_candidate"
+    },
+    "search_library": {
+      "truePositives": 4,
+      "falsePositives": 2,
+      "falseNegatives": 0,
+      "precision": 0.6666666666666666,
+      "recall": 1,
+      "falsePositiveRate": 0.3333333333333333,
+      "supportTier": "experimental"
+    },
+    "deal_damage": {
+      "truePositives": 2,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "experimental"
+    },
+    "destroy": {
+      "truePositives": 16,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "production_supported"
+    },
+    "exile": {
+      "truePositives": 12,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "production_supported"
+    },
+    "counter": {
+      "truePositives": 5,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "production_supported"
+    },
+    "return_to_hand": {
+      "truePositives": 7,
+      "falsePositives": 5,
+      "falseNegatives": 0,
+      "precision": 0.5833333333333334,
+      "recall": 1,
+      "falsePositiveRate": 0.4166666666666667,
+      "supportTier": "experimental"
+    },
+    "return_to_battlefield": {
+      "truePositives": 1,
+      "falsePositives": 2,
+      "falseNegatives": 0,
+      "precision": 0.3333333333333333,
+      "recall": 1,
+      "falsePositiveRate": 0.6666666666666666,
+      "supportTier": "experimental"
+    },
+    "create_token": {
+      "truePositives": 10,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "production_supported"
+    },
+    "cast": {
+      "truePositives": 11,
+      "falsePositives": 1,
+      "falseNegatives": 0,
+      "precision": 0.9166666666666666,
+      "recall": 1,
+      "falsePositiveRate": 0.08333333333333333,
+      "supportTier": "development_candidate"
+    },
+    "play": {
+      "truePositives": 2,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "experimental"
+    },
+    "copy": {
+      "truePositives": 4,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "development_candidate"
+    },
+    "sacrifice": {
+      "truePositives": 6,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "production_supported"
+    },
+    "mill": {
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "experimental"
+    },
+    "gain_life": {
+      "truePositives": 5,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "production_supported"
+    },
+    "lose_life": {
+      "truePositives": 2,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "experimental"
+    },
+    "scry": {
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "development_candidate"
+    },
+    "surveil": {
+      "truePositives": 1,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "experimental"
+    },
+    "tap": {
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "experimental"
+    },
+    "untap": {
+      "truePositives": 2,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "experimental"
+    },
+    "put_counter": {
+      "truePositives": 4,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "development_candidate"
+    },
+    "shuffle_into_library": {
+      "truePositives": 0,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0,
+      "supportTier": "experimental"
+    }
+  },
+  "metricsByLayout": {
+    "split": {
+      "truePositives": 9,
+      "falsePositives": 0,
+      "falseNegatives": 10,
+      "precision": 1,
+      "recall": 0.47368421052631576,
+      "falsePositiveRate": 0
+    },
+    "modal_dfc": {
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0
+    },
+    "held-out compound": {
+      "truePositives": 5,
+      "falsePositives": 0,
+      "falseNegatives": 3,
+      "precision": 1,
+      "recall": 0.625,
+      "falsePositiveRate": 0
+    },
+    "held-out cast-from-exile": {
+      "truePositives": 2,
+      "falsePositives": 0,
+      "falseNegatives": 3,
+      "precision": 1,
+      "recall": 0.4,
+      "falsePositiveRate": 0
+    },
+    "saga": {
+      "truePositives": 11,
+      "falsePositives": 0,
+      "falseNegatives": 1,
+      "precision": 1,
+      "recall": 0.9166666666666666,
+      "falsePositiveRate": 0
+    },
+    "held-out replacement": {
+      "truePositives": 2,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0
+    },
+    "held-out modal": {
+      "truePositives": 13,
+      "falsePositives": 0,
+      "falseNegatives": 1,
+      "precision": 1,
+      "recall": 0.9285714285714286,
+      "falsePositiveRate": 0
+    },
+    "held-out planeswalker": {
+      "truePositives": 12,
+      "falsePositives": 0,
+      "falseNegatives": 2,
+      "precision": 1,
+      "recall": 0.8571428571428571,
+      "falsePositiveRate": 0
+    },
+    "held-out optionality": {
+      "truePositives": 8,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0
+    },
+    "held-out multi-ability": {
+      "truePositives": 5,
+      "falsePositives": 0,
+      "falseNegatives": 1,
+      "precision": 1,
+      "recall": 0.8333333333333334,
+      "falsePositiveRate": 0
+    },
+    "held-out triggers": {
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0
+    },
+    "held-out primitives": {
+      "truePositives": 22,
+      "falsePositives": 0,
+      "falseNegatives": 7,
+      "precision": 1,
+      "recall": 0.7586206896551724,
+      "falsePositiveRate": 0
+    },
+    "held-out negative": {
+      "truePositives": 4,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0
+    },
+    "held-out copy/cast": {
+      "truePositives": 7,
+      "falsePositives": 0,
+      "falseNegatives": 2,
+      "precision": 1,
+      "recall": 0.7777777777777778,
+      "falsePositiveRate": 0
+    },
+    "held-out room": {
+      "truePositives": 3,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0
+    },
+    "held-out class": {
+      "truePositives": 1,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0
+    },
+    "held-out companion": {
+      "truePositives": 1,
+      "falsePositives": 0,
+      "falseNegatives": 1,
+      "precision": 1,
+      "recall": 0.5,
+      "falsePositiveRate": 0
+    },
+    "held-out extra": {
+      "truePositives": 15,
+      "falsePositives": 0,
+      "falseNegatives": 5,
+      "precision": 1,
+      "recall": 0.75,
+      "falsePositiveRate": 0
+    }
+  },
+  "tierInvariants": {
+    "tpSumHolds": true,
+    "fpSumHolds": true,
+    "goldPositiveHolds": true,
+    "details": {
+      "acceptedTp": 119,
+      "needsReviewTp": 7,
+      "allEmissionTp": 126,
+      "tpSum": 126,
+      "tpDelta": 0,
+      "acceptedFp": 24,
+      "needsReviewFp": 0,
+      "allEmissionFp": 24,
+      "fpSum": 24,
+      "fpDelta": 0,
+      "allEmissionFn": 36,
+      "goldPositiveCount": 162
+    }
+  },
+  "productionGates": {
+    "evidenceSpanValidity": {
+      "value": 1,
+      "target": 1,
+      "pass": true
+    },
+    "actionTypePrecision": {
+      "value": 0.9230769230769231,
+      "target": 0.98,
+      "pass": false
+    },
+    "actionTypeRecall": {
+      "value": 0.8048780487804879,
+      "target": 0.95,
+      "pass": false
+    },
+    "falsePositiveRate": {
+      "value": 0.07692307692307693,
+      "target": 0.02,
+      "pass": false
+    },
+    "unsupportedInventedEffects": {
+      "value": 3,
+      "target": 0,
+      "pass": false,
+      "definition": "Counts genuinely_unsupported_by_oracle extractions only — NOT forbidden-on-negative-case or missing-gold-label items"
+    }
+  },
+  "allProductionGatesPass": false
+}

@@ -205,6 +205,8 @@ function buildHeldOutCases(): OracleActionEvalCaseV2[] {
   });
 }
 
+export { HELD_OUT_SEEDS, buildHeldOutCases };
+
 function main() {
   const cases = buildHeldOutCases();
   const contentHash = computeContentHash(cases);
@@ -234,4 +236,6 @@ function main() {
   console.log(`  contentHash: ${contentHash}`);
 }
 
-main();
+if (process.argv[1]?.replace(/\\/g, "/").endsWith("generate-oracle-action-held-out-set.ts")) {
+  main();
+}

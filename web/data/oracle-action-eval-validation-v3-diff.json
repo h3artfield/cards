@@ -1,0 +1,170 @@
+{
+  "generatedAt": "2026-08-07T01:45:20.726Z",
+  "reviewer": "catalog-audit-agent",
+  "reviewTimestamp": "2026-08-07T01:45:20.726Z",
+  "parentDataset": "validation_set_v2",
+  "parentContentHash": "496a5dd7fcc5c6259f600e25aeecaeead6a036a6574b53cc58e9001321943734",
+  "newDataset": "validation_set_v3",
+  "newContentHash": "4cbb7dfeb4646b1c965687b528f6e3d33784951e8adb72069b0325fa35875cda",
+  "changedCaseCount": 2,
+  "reasonForChange": "v12 missing-gold-label adjudication — accept supported untap primitives only.",
+  "labelChanges": [
+    {
+      "caseId": "held-0031",
+      "reason": "Delayed trigger on +1 ability is a distinct untap primitive effect.",
+      "adjudication": {
+        "caseId": "held-0031",
+        "cardName": "Teferi, Hero of Dominaria",
+        "proposedPrimitive": "untap",
+        "evidenceSpan": "untap two lands",
+        "decision": "accept_into_gold",
+        "reason": "Delayed trigger on +1 ability is a distinct untap primitive effect.",
+        "reviewer": "catalog-audit-agent"
+      },
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "Draw a card"
+            },
+            {
+              "actionType": "exile",
+              "evidenceContains": "exile target permanent an opponent controls"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "Draw a card"
+            },
+            {
+              "actionType": "exile",
+              "evidenceContains": "exile target permanent an opponent controls"
+            },
+            {
+              "actionType": "untap",
+              "evidenceContains": "untap two lands"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "held-0095",
+      "reason": "Oracle contains a separate untap instruction distinct from return_to_hand.",
+      "adjudication": {
+        "caseId": "held-0095",
+        "cardName": "Snap",
+        "proposedPrimitive": "untap",
+        "evidenceSpan": "Untap up to two lands",
+        "decision": "accept_into_gold",
+        "reason": "Oracle contains a separate untap instruction distinct from return_to_hand.",
+        "reviewer": "catalog-audit-agent"
+      },
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "return_to_hand",
+              "evidenceContains": "Return target creature"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "return_to_hand",
+              "evidenceContains": "Return target creature"
+            },
+            {
+              "actionType": "untap",
+              "evidenceContains": "Untap up to two lands"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "fullAdjudicationLog": [
+    {
+      "caseId": "held-0017",
+      "cardName": "Grafdigger's Cage",
+      "proposedPrimitive": "cast",
+      "evidenceSpan": "cast spells from",
+      "decision": "reject_layer1_structure_only",
+      "reason": "Static restriction on opponent casting from libraries/graveyards — not a player-initiated cast primitive.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "held-0019",
+      "cardName": "Flawless Maneuver",
+      "proposedPrimitive": "cast",
+      "evidenceSpan": "you may cast this spell without paying its mana cost",
+      "decision": "reject_unsupported",
+      "reason": "Commander alternative-cost modifier — not cast-from-zone permission; empty cast gold is correct.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "held-0031",
+      "cardName": "Teferi, Hero of Dominaria",
+      "proposedPrimitive": "untap",
+      "evidenceSpan": "untap two lands",
+      "decision": "accept_into_gold",
+      "reason": "Delayed trigger on +1 ability is a distinct untap primitive effect.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "held-0041",
+      "cardName": "Thassa's Oracle",
+      "proposedPrimitive": "cast",
+      "evidenceSpan": "When you cast this spell",
+      "decision": "reject_layer1_structure_only",
+      "reason": "Cast appears in triggered ability header — trigger event, not Layer-2 cast action.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "held-0075",
+      "cardName": "Drannith Magistrate",
+      "proposedPrimitive": "cast",
+      "evidenceSpan": "cast spells from",
+      "decision": "reject_layer1_structure_only",
+      "reason": "Static cast restriction — not an executable cast primitive.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "held-0095",
+      "cardName": "Snap",
+      "proposedPrimitive": "untap",
+      "evidenceSpan": "Untap up to two lands",
+      "decision": "accept_into_gold",
+      "reason": "Oracle contains a separate untap instruction distinct from return_to_hand.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "held-0101",
+      "cardName": "Fierce Guardianship",
+      "proposedPrimitive": "cast",
+      "evidenceSpan": "you may cast this spell without paying its mana cost",
+      "decision": "reject_unsupported",
+      "reason": "Alternative cost clause; counter spell is the only Layer-2 primitive on this card.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "held-0102",
+      "cardName": "Deflecting Swat",
+      "proposedPrimitive": "cast",
+      "evidenceSpan": "you may cast this spell without paying its mana cost",
+      "decision": "reject_unsupported",
+      "reason": "Alternative cost clause; retargeting permission is structural, not cast-from-zone.",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "held-0103",
+      "cardName": "Deadly Rollick",
+      "proposedPrimitive": "cast",
+      "evidenceSpan": "you may cast this spell without paying its mana cost",
+      "decision": "reject_unsupported",
+      "reason": "Alternative cost clause; exile is the spell effect primitive.",
+      "reviewer": "catalog-audit-agent"
+    }
+  ]
+}
