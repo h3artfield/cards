@@ -1,0 +1,162 @@
+{
+  "setClassification": "development_generalization_expansion_v3",
+  "contentHash": "80e1479b616b64c5bcd200b04df3b00c3d8eac01522c6c9ea0fc3af3923cd865",
+  "caseCount": 24,
+  "oracleIds": [
+    "021b4745-4a15-462c-a6b0-2dee1dc9d196",
+    "03dafab4-841f-41cb-8f2e-8188f5177837",
+    "0c2a9131-f3d7-4f71-8bcc-3c169574b2e3",
+    "3ec889bc-f4d7-492a-91c3-d3691eb90eac",
+    "060209fa-4b7d-4e08-bf8b-8759bba5641b",
+    "05e6b243-48a6-4a42-bc5f-413441de9c33",
+    "07d0b06b-80cb-4518-92c9-84ea87a7e08a",
+    "06d2a96c-4f4d-4a4a-ac48-6f0fbc9d0afd",
+    "0c107664-a9fc-4684-8a1b-fa750401a6dd",
+    "2359db1c-6029-4748-9f09-d57bb0ae92e9",
+    "2705a288-3b9d-4452-a320-28b86331aa09",
+    "1a9bfe76-6c74-4393-b04e-461422a29ddb",
+    "017f4471-db5a-4ad0-97b3-b1f12b52578a",
+    "22a78443-db21-4656-b38a-e3e3186fd94b",
+    "2ba16e4d-2de7-4906-801a-4ba2b90b5050",
+    "19ea37cc-e715-4a3c-87f3-5ed9d44f42d9",
+    "0124977f-06e6-430a-a874-f7d05883a97c",
+    "112f2b3f-32e7-40b1-b80e-0b99184a840c",
+    "0e084342-31ff-47a5-9fd8-5b385add7a1a",
+    "1c6f95fd-f8d0-4d22-aa21-29e5c70b2f85",
+    "53987a39-c18c-4c13-b1ea-fd1b2a369f9e",
+    "7e4cbfd1-2393-4643-bc05-022d06b30210",
+    "f87bf51e-6218-4418-ae3e-98055e9601e4",
+    "2cdbaa4e-8907-49dc-9fa9-0df70db3bf23"
+  ],
+  "familyCounts": {
+    "wrong_ability_attachment": 7,
+    "search_tutor_resolution": 5,
+    "variable_lose_life_regression": 4,
+    "token_copy_delayed": 4,
+    "delayed_exile_referent": 4
+  },
+  "selectionRules": [
+    {
+      "family": "wrong_ability_attachment",
+      "name": "Tamiyo, Compleated Sage",
+      "selectionRule": "PW +1 tap vs −X exile-copy-from-graveyard vs −7 artifact"
+    },
+    {
+      "family": "wrong_ability_attachment",
+      "name": "Jace, the Perfected Mind",
+      "selectionRule": "PW +1 debuff vs −2 mill/draw vs −X mill"
+    },
+    {
+      "family": "wrong_ability_attachment",
+      "name": "Chandra, Flamecaller",
+      "selectionRule": "PW +1 delayed exile tokens vs 0 draw vs −X damage"
+    },
+    {
+      "family": "wrong_ability_attachment",
+      "name": "Huatli, Warrior Poet",
+      "selectionRule": "PW +2 gain life vs 0 token vs −X divided damage"
+    },
+    {
+      "family": "wrong_ability_attachment",
+      "name": "Karn, Scion of Urza",
+      "selectionRule": "PW +1 reveal split vs −1 silver counter return vs −2 construct"
+    },
+    {
+      "family": "wrong_ability_attachment",
+      "name": "Elspeth, Sun's Champion",
+      "selectionRule": "PW +1 tokens vs −3 destroy vs −7 emblem"
+    },
+    {
+      "family": "wrong_ability_attachment",
+      "name": "Teferi, Temporal Archmage",
+      "selectionRule": "PW +1 scry vs −1 untap vs −10 emblem"
+    },
+    {
+      "family": "search_tutor_resolution",
+      "name": "Ashiok's Forerunner",
+      "selectionRule": "ETB optional search library and/or graveyard for named PW"
+    },
+    {
+      "family": "search_tutor_resolution",
+      "name": "Niambi, Faithful Healer",
+      "selectionRule": "ETB optional search library and/or graveyard for named PW"
+    },
+    {
+      "family": "search_tutor_resolution",
+      "name": "Liliana's Scorn",
+      "selectionRule": "Destroy then optional lib/gy tutor for named card"
+    },
+    {
+      "family": "search_tutor_resolution",
+      "name": "Runeforge Champion",
+      "selectionRule": "ETB optional lib/gy search for Rune"
+    },
+    {
+      "family": "search_tutor_resolution",
+      "name": "Fang-Druid Summoner",
+      "selectionRule": "ETB optional lib/gy search for creature with no abilities"
+    },
+    {
+      "family": "variable_lose_life_regression",
+      "name": "Zulaport Chainmage",
+      "selectionRule": "Cohort activated target opponent loses life"
+    },
+    {
+      "family": "variable_lose_life_regression",
+      "name": "Collective Brutality",
+      "selectionRule": "Modal escalate target opponent loses life"
+    },
+    {
+      "family": "variable_lose_life_regression",
+      "name": "Ghost Council of Orzhova",
+      "selectionRule": "ETB target opponent loses life parallel gain"
+    },
+    {
+      "family": "variable_lose_life_regression",
+      "name": "Essence Depleter",
+      "selectionRule": "Activated target opponent loses life"
+    },
+    {
+      "family": "token_copy_delayed",
+      "name": "Minion Reflector",
+      "selectionRule": "Optional pay create copy with delayed sacrifice"
+    },
+    {
+      "family": "token_copy_delayed",
+      "name": "Electroduplicate",
+      "selectionRule": "Create copy token with end-step sacrifice"
+    },
+    {
+      "family": "token_copy_delayed",
+      "name": "Saheeli, the Gifted",
+      "selectionRule": "PW −7 copy each artifact token with delayed exile"
+    },
+    {
+      "family": "token_copy_delayed",
+      "name": "Nemesis Trap",
+      "selectionRule": "Exile attacker create copy exile end step"
+    },
+    {
+      "family": "delayed_exile_referent",
+      "name": "Whip of Erebos",
+      "selectionRule": "Reanimate from graveyard exile at next end step"
+    },
+    {
+      "family": "delayed_exile_referent",
+      "name": "Kheru Lich Lord",
+      "selectionRule": "Upkeep optional reanimate random exile next end step"
+    },
+    {
+      "family": "delayed_exile_referent",
+      "name": "Gruesome Encore",
+      "selectionRule": "Reanimate opponent creature exile end step"
+    },
+    {
+      "family": "delayed_exile_referent",
+      "name": "Coalstoke Gearhulk",
+      "selectionRule": "ETB reanimate from graveyard exile next end step"
+    }
+  ],
+  "frozenAt": "2026-08-07T22:23:56.175Z",
+  "parserExecutionCount": 0
+}

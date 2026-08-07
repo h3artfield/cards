@@ -1,0 +1,20 @@
+{
+  "generatedAt": "2026-08-07T22:31:44.336Z",
+  "parserVersion": "oracle-action-v1.25-family-grammar-dev",
+  "executionNumber": 1,
+  "caseCount": 22,
+  "contentHash": "2d865ba3a7deccb7a800b6b5a1459aca091152f5be388a5ae5c030f5cb02614a",
+  "metrics": {
+    "precision": 1,
+    "recall": 0.8064516129032258,
+    "tp": 25,
+    "fp": 0,
+    "fn": 6,
+    "unsupported": 0
+  },
+  "gate": {
+    "precisionTarget": 0.95,
+    "recallTarget": 0.85,
+    "passed": false
+  }
+}

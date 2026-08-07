@@ -6,18 +6,23 @@ import { resolve } from "node:path";
 
 const DATASET_PATHS = [
   "data/oracle-action-eval-development-v25.json",
+  "data/oracle-action-eval-development-v26.json",
   "data/oracle-action-eval-validation-v8.json",
   "data/oracle-action-eval-validation-v9.json",
   "data/oracle-action-eval-validation-v10.json",
   "data/oracle-action-eval-validation-v11.json",
   "data/oracle-action-eval-final-blind-v2.json",
   "data/oracle-action-eval-development-generalization-expansion-v1.json",
+  "data/oracle-action-eval-development-generalization-expansion-v2.json",
+  "data/oracle-action-eval-development-generalization-expansion-v3.json",
+  "data/oracle-action-eval-development-generalization-expansion-check-v2.json",
   "data/oracle-action-eval-validation-v12-fresh.json",
 ];
 
-export function loadExcludedOracleIds(cwd = process.cwd()): Set<string> {
+export function loadExcludedOracleIds(cwd = process.cwd(), skipPaths: string[] = []): Set<string> {
   const ids = new Set<string>();
   for (const rel of DATASET_PATHS) {
+    if (skipPaths.includes(rel)) continue;
     const path = resolve(cwd, rel);
     if (!existsSync(path)) continue;
     const envelope = JSON.parse(readFileSync(path, "utf8")) as { cases?: Array<{ oracleId: string }> };

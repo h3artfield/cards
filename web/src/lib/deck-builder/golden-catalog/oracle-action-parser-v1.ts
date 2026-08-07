@@ -195,6 +195,8 @@ const PLAY_PERMISSION =
 const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bdraws? cards? equal to half\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\breveal [\w ]+ and put that card into your hand\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
+  { pattern: /\bPut that card into your hand\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
+  { pattern: /\bPut one of them into your hand\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bPut one of those cards into your hand\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bPut (?:two|three|four|five) of those cards into your hand\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bdraws? (?:a |one |two |three |four |five |seven |that many |up to \w+ )?cards?\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
@@ -212,7 +214,7 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bput [\w ]+ from (?:your |a |their )?(?:hand|graveyard|exile)[\w ]* onto the battlefield/i, actionType: "put_onto_battlefield", destinationZones: ["battlefield"] },
   { pattern: /\bputs? all [\w ]+ exiled this way onto the battlefield/i, actionType: "put_onto_battlefield", sourceZones: ["exile"], destinationZones: ["battlefield"] },
   { pattern: /\breturn it to the battlefield transformed\b/i, actionType: "return_to_battlefield", destinationZones: ["battlefield"] },
-  { pattern: /\bExile this [\w ]+/i, actionType: "exile", destinationZones: ["exile"] },
+  { pattern: /\bexile the other with a silver counter on it\b/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bexiles? all [\w ]+ cards from (?:their |your )?graveyard/i, actionType: "exile", sourceZones: ["graveyard"], destinationZones: ["exile"] },
   { pattern: /\b(?:Target player|Each player|that player) mills? (?:one|two|three|four|five|six|seven|eight|nine|ten|half|fourteen|\d+|up to \w+) [\w ]*/i, actionType: "mill", sourceZones: ["library"], destinationZones: ["graveyard"] },
   { pattern: /\bsacrifices? (?:a |an |all )?[\w ]+ of their choice\b/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
@@ -228,6 +230,7 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bDraw (?:a |one |two |three |four |five |seven |that many |up to \w+ )?cards?\b/, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bAdd \{[^}]+\}(?:\{[^}]+\})*/i, actionType: "add_mana", abilityType: "activated", destinationZones: ["mana_pool"] },
   { pattern: /\bAdd (?:one mana of any color|three mana of any one color|\{C\}{1,2}|\{[WUBRG]\})/i, actionType: "add_mana", destinationZones: ["mana_pool"] },
+  { pattern: /\bsearch (?:your )?library and\/or graveyard for\b/i, actionType: "search_library", sourceZones: ["library", "graveyard"], destinationZones: ["hand"] },
   { pattern: /\bsearch (?:your |their )?library for\b/i, actionType: "search_library", sourceZones: ["library"], destinationZones: ["hand", "battlefield", "library"] },
   { pattern: /\bDestroy all [\w ]+/i, actionType: "destroy", sourceZones: ["battlefield"], affectedObjects: ["permanent"] },
   { pattern: /\beach creature gets [-−]/i, actionType: "destroy", sourceZones: ["battlefield"], affectedObjects: ["creature"] },
@@ -245,9 +248,12 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bPut target [\w ]+ (?:card )?from (?:your |a )?graveyard onto the battlefield\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
   { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+ (?:card )?from (?:your )?graveyard to the battlefield\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
   { pattern: /\bPut target [\w ]+ (?:card )?from a graveyard onto the battlefield\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
+  { pattern: /\bPut target creature card from an opponent's graveyard onto the battlefield\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
+  { pattern: /\breturn a creature card at random from your graveyard to the battlefield\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
   { pattern: /\bSacrifice (?:a |an |target |up to one target )?[\w ]+/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
   { pattern: /\b(?:Each (?:opponent|player)|Target player|That player|Each opponent) sacrifices (?:a |an |all )?[\w ]+/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
   { pattern: /\b(?:create|creates|You may create) (?:a |an |one |up to \w+ )?(?:[\w-/]+ )*tokens?\b/i, actionType: "create_token", destinationZones: ["battlefield"], affectedObjects: ["token"] },
+  { pattern: /\bIf you do, create a token that's a copy of [^.]+/i, actionType: "create_token", destinationZones: ["battlefield"], affectedObjects: ["token"] },
   { pattern: /\bCopy target (?:instant|sorcery|spell|triggered|[\w ]+)/i, actionType: "copy", sourceZones: ["stack", "battlefield"] },
   { pattern: /\bcopy target (?:instant|sorcery|spell|triggered|[\w ]+)/i, actionType: "copy", sourceZones: ["stack", "battlefield"] },
   { pattern: /\bbecomes a copy of target [\w ]+/i, actionType: "copy", sourceZones: ["battlefield"] },
@@ -264,13 +270,14 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bDraw X cards?\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bCreate X [\w ]*tokens?\b/i, actionType: "create_token", destinationZones: ["battlefield"] },
   { pattern: /\bmills? X cards?\b/i, actionType: "mill", sourceZones: ["library"], destinationZones: ["graveyard"] },
+  { pattern: /\bYou gain life equal to/i, actionType: "gain_life", affectedObjects: ["player"] },
   { pattern: /\bgains? \d+ life\b/i, actionType: "gain_life", affectedObjects: ["player"] },
   { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?gains? X life\b/i, actionType: "gain_life", affectedObjects: ["player"] },
-  { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?loses? half (?:their |your )?life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
-  { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?loses? \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
-  { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?loses? up to \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
-  { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?loses? X life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
-  { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?loses? life equal to[^.]+/i, actionType: "lose_life", affectedObjects: ["player"] },
+  { pattern: /\b(?:Each opponent |Each player |You |Target player |Target opponent |That player )?loses? half (?:their |your )?life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
+  { pattern: /\b(?:Each opponent |Each player |You |Target player |Target opponent |That player )?loses? \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
+  { pattern: /\b(?:Each opponent |Each player |You |Target player |Target opponent |That player )?loses? up to \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
+  { pattern: /\b(?:Each opponent |Each player |You |Target player |Target opponent |That player )?loses? X life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
+  { pattern: /\b(?:Each opponent |Each player |You |Target player |Target opponent |That player )?loses? life equal to[^.]+/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\bScry \d+\b/i, actionType: "scry", sourceZones: ["library"] },
   { pattern: /\bScry up to \d+\b/i, actionType: "scry", sourceZones: ["library"] },
   { pattern: /\bSurveil \d+\b/i, actionType: "surveil", sourceZones: ["library"], destinationZones: ["graveyard"] },
@@ -351,7 +358,7 @@ function inferZones(text: string): { source?: string[]; dest?: string[] } {
 }
 
 function extractCost(paragraph: string): string | undefined {
-  const loyalty = paragraph.match(/^[+\−-]\d+:/);
+  const loyalty = paragraph.match(/^[+\u2212-](?:\d+|X):/);
   if (loyalty) return loyalty[0].slice(0, -1);
   const activated = paragraph.match(/^\{[^}]+\}(?:\{[^}]+\})*:?\s*/);
   if (activated) return activated[0].trim();
@@ -491,19 +498,28 @@ function applyOptionalityPostProcess(
       );
 
       if (paragraphHasMay && !action.optionalityCertain && !action.conditionType) {
-        const governed = enriched.some(
-          (o) =>
-            o.actionId !== action.actionId &&
-            (o.optionalEffect || o.optionalCost) &&
-            o.evidenceStart <= action.evidenceStart,
-        );
-        if (!governed) reviewStatus = "needs_review";
+        const mayIdx = ability.paragraphText.search(/\bYou may\b/i);
+        const actionLocalStart = action.evidenceStart - ability.paragraphStart;
+        const imperativeBeforeOptionalMay = mayIdx >= 0 && actionLocalStart >= 0 && actionLocalStart < mayIdx;
+        if (!imperativeBeforeOptionalMay) {
+          const governed = enriched.some(
+            (o) =>
+              o.actionId !== action.actionId &&
+              (o.optionalEffect || o.optionalCost) &&
+              o.evidenceStart <= action.evidenceStart,
+          );
+          if (!governed) reviewStatus = "needs_review";
+        }
       }
       if (
         (action.conditionType === "if_you_do" || action.conditionType === "when_you_do") &&
         !action.dependsOnActionIds?.length
       ) {
-        reviewStatus = "needs_review";
+        const ifYouDoIdx = ability.paragraphText.search(/\bIf you do,\s/i);
+        const actionLocalStart = action.evidenceStart - ability.paragraphStart;
+        if (!(ifYouDoIdx >= 0 && actionLocalStart > ifYouDoIdx)) {
+          reviewStatus = "needs_review";
+        }
       }
       if ((action.optionalEffect || action.optionalCost) && !action.optionalityCertain) {
         reviewStatus = "needs_review";
@@ -728,7 +744,11 @@ function assignReviewStatus(input: {
     /\bthen draw that many cards\b/i.test(input.paragraph) ||
     /\bIf you do,\s/i.test(input.paragraph) ||
     /\bExile this Saga, then return\b/i.test(input.paragraph) ||
-    /\bexiles? all [\w ]+ cards from (?:their |your )?graveyard, then\b/i.test(input.paragraph);
+    /\bexiles? all [\w ]+ cards from (?:their |your )?graveyard, then\b/i.test(input.paragraph) ||
+    (/\b(?:Target opponent|Each opponent) loses? \d+ life\b/i.test(input.paragraph) &&
+      /\bsearch (?:your )?library and\/or graveyard\b/i.test(input.paragraph)) ||
+    (/\bDestroy target creature\b/i.test(input.paragraph) &&
+      /\bsearch (?:your )?library and\/or graveyard\b/i.test(input.paragraph));
   if (
     /\bthen\b/i.test(input.paragraph) &&
     !benignCompoundParagraph &&
@@ -747,6 +767,21 @@ function assignReviewStatus(input: {
   }
   if (input.actionType === "play" && /\bcast\b/i.test(input.evidenceText)) return "needs_review";
   if (input.actionType === "cast" && /\bplay land\b/i.test(input.evidenceText)) return "needs_review";
+  if (
+    input.actionType === "destroy" &&
+    input.evidenceLocalStart !== undefined &&
+    input.evidenceLocalStart < 8 &&
+    /\bDestroy target creature\b/i.test(input.evidenceText) &&
+    /\bsearch (?:your )?library and\/or graveyard\b/i.test(input.paragraph)
+  ) {
+    return "accepted";
+  }
+  if (/\bIf you do,\s/i.test(input.paragraph) && input.evidenceLocalStart !== undefined) {
+    const ifYouDoIdx = input.paragraph.search(/\bIf you do,\s/i);
+    if (ifYouDoIdx >= 0 && input.evidenceLocalStart > ifYouDoIdx && input.confidence >= 0.82) {
+      return "accepted";
+    }
+  }
   return "accepted";
 }
 
@@ -772,20 +807,49 @@ function acceptAction(input: {
 
   if (input.rule.actionType === "lose_life" || input.rule.actionType === "gain_life") {
     const verb = input.rule.actionType === "lose_life" ? "loses?" : "gains?";
+    const youGainEqual =
+      input.rule.actionType === "gain_life"
+        ? input.ability.paragraphText
+            .slice(localStart)
+            .match(/^You gain life equal to[^.]+/i)
+        : null;
+    if (youGainEqual?.[0]) {
+      evidenceText = youGainEqual[0].trim();
+    } else {
     const extended = input.ability.paragraphText
       .slice(localStart)
       .match(
         new RegExp(
-          `^((?:Each opponent |Each player |You |Target player |That player )?${verb} (?:half (?:their |your )?life|X|\\d+|up to \\d+) life|(?:Each opponent |Each player |You |Target player |That player )?${verb} life equal to[^.]+)`,
+          `^((?:Each opponent |Each player |You |Target player |Target opponent |That player )?${verb} (?:half (?:their |your )?life|X|\\d+|up to \\d+) life|(?:Each opponent |Each player |You |Target player |Target opponent |That player )?${verb} life equal to[^.]+)`,
           "i",
         ),
       );
     if (extended?.[1]) {
       evidenceText = extended[1].trim();
     }
+    }
+  }
+
+  if (input.rule.actionType === "gain_life" && /^You gain life equal to/i.test(evidenceText) && !input.ability.loyaltyCost) {
+    return null;
   }
 
   if (input.rule.actionType === "draw") {
+    const putThatCard = /\bput that card into your hand\b/i.test(evidenceText);
+    const putOneOfThem = /\bPut one of them into your hand\b/i.test(evidenceText);
+    if (
+      putThatCard &&
+      /\bsearch (?:your )?(?:library and\/or graveyard|library for)\b/i.test(input.ability.paragraphText) &&
+      /\breveal it\b/i.test(input.ability.paragraphText)
+    ) {
+      return null;
+    }
+    if (putThatCard && /\bsearch (?:your )?library for\b/i.test(input.ability.paragraphText)) {
+      return null;
+    }
+    if (putOneOfThem && !input.ability.loyaltyCost && !/\bReveal the top card\b/i.test(input.ability.paragraphText)) {
+      return null;
+    }
     const extended = input.ability.paragraphText
       .slice(localStart)
       .match(/^draws? cards? equal to half [^.]+?(?= and loses|\.$)/i);
@@ -967,7 +1031,7 @@ function acceptAction(input: {
   const abilityType = input.replacementInsteadEffect
     ? "replacement"
     : input.rule.abilityType ?? toV1AbilityType(classified);
-  const zones = inferZones(input.ability.paragraphText);
+  const zones = inferZones(evidenceText);
   const permissionWindow = input.ability.paragraphText.slice(Math.max(0, localStart - 24), localStart);
   const optionalEffect =
     input.rule.optional === true ||
@@ -1009,7 +1073,7 @@ function acceptAction(input: {
 
   const resolvedActionType = resolveActionTypeFromSemantics(input.rule.actionType, evidenceText);
 
-  const reviewStatus = assignReviewStatus({
+  let reviewStatus = assignReviewStatus({
     abilityType,
     actionType: resolvedActionType,
     confidence,
@@ -1025,6 +1089,19 @@ function acceptAction(input: {
     featurePromotion: extractionFeaturePromotion,
     variableQuantity,
   });
+
+  if (
+    resolvedActionType === "destroy" &&
+    localStart < 8 &&
+    /\bDestroy target creature\b/i.test(evidenceText) &&
+    /\bsearch (?:your )?library and\/or graveyard\b/i.test(input.ability.paragraphText)
+  ) {
+    reviewStatus = "accepted";
+  }
+  const ifYouDoIdx = input.ability.paragraphText.search(/\bIf you do,\s/i);
+  if (ifYouDoIdx >= 0 && localStart > ifYouDoIdx && confidence >= 0.82) {
+    reviewStatus = "accepted";
+  }
 
   return {
     actionId: actionId([

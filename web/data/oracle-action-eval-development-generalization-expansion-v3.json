@@ -1,0 +1,1290 @@
+{
+  "setClassification": "development_generalization_expansion_v3",
+  "evaluationSetVersion": "development-generalization-expansion-v3",
+  "taxonomyVersion": "three-layer-v1.3",
+  "contentHash": "80e1479b616b64c5bcd200b04df3b00c3d8eac01522c6c9ea0fc3af3923cd865",
+  "cases": [
+    {
+      "id": "dev-exp-v3-001",
+      "category": "exp-v3 loyalty-scope",
+      "layout": "normal",
+      "oracleId": "021b4745-4a15-462c-a6b0-2dee1dc9d196",
+      "oracleText": "Compleated ({G/U/P} can be paid with {G}, {U}, or 2 life. If life was paid, this planeswalker enters with two fewer loyalty counters.)\n+1: Tap up to one target artifact or creature. It doesn't untap during its controller's next untap step.\n−X: Exile target nonland permanent card with mana value X from your graveyard. Create a token that's a copy of that card.\n−7: Create Tamiyo's Notebook, a legendary colorless Book artifact token with \"Spells you cast cost {2} less to cast\" and \"{T}: Draw a card.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "tap",
+          "evidenceContains": "Tap up to one target artifact or creature",
+          "loyaltyCost": "+1"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target nonland permanent card with mana value X from your graveyard",
+          "loyaltyCost": "−X"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a token that's a copy of that card",
+          "loyaltyCost": "−X"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "tap",
+            "exile",
+            "create_token"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "tap",
+            "exile",
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "tap",
+            "exile",
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "wrong_ability_attachment",
+        "split": "expansion-training-v3",
+        "selectionRule": "PW +1 tap vs −X exile-copy-from-graveyard vs −7 artifact",
+        "layer1Notes": "Family training v3: wrong_ability_attachment",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Tamiyo, Compleated Sage",
+      "colorIdentity": [
+        "G",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "88da4d484547ea02c451e6ce42cddd90912c8e20a6d2e1a1fceb770d369f9b76",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-002",
+      "category": "exp-v3 loyalty-scope",
+      "layout": "normal",
+      "oracleId": "03dafab4-841f-41cb-8f2e-8188f5177837",
+      "oracleText": "Compleated ({U/P} can be paid with {U} or 2 life. If life was paid, this planeswalker enters with two fewer loyalty counters.)\n+1: Until your next turn, up to one target creature gets -3/-0.\n−2: Target player mills three cards. Then if a graveyard has twenty or more cards in it, you draw three cards. Otherwise, you draw a card.\n−X: Target player mills three times X cards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills three cards",
+          "loyaltyCost": "−2"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "you draw three cards",
+          "loyaltyCost": "−2"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "mill",
+            "draw"
+          ]
+        },
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "mill",
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "wrong_ability_attachment",
+        "split": "expansion-training-v3",
+        "selectionRule": "PW +1 debuff vs −2 mill/draw vs −X mill",
+        "layer1Notes": "Family training v3: wrong_ability_attachment",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Jace, the Perfected Mind",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "a29597667e282b2f365b0538458334f370b77026131dfd18d2dce034447ce2bf",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-003",
+      "category": "exp-v3 loyalty-scope",
+      "layout": "normal",
+      "oracleId": "0c2a9131-f3d7-4f71-8bcc-3c169574b2e3",
+      "oracleText": "+1: Create two 3/1 red Elemental creature tokens with haste. Exile them at the beginning of the next end step.\n0: Discard all the cards in your hand, then draw that many cards plus one.\n−X: Chandra deals X damage to each creature.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create two 3/1 red Elemental creature tokens",
+          "loyaltyCost": "+1"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals X damage to each creature",
+          "loyaltyCost": "−X"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token",
+            "deal_damage"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token",
+            "deal_damage"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "create_token",
+            "deal_damage"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "wrong_ability_attachment",
+        "split": "expansion-training-v3",
+        "selectionRule": "PW +1 delayed exile tokens vs 0 draw vs −X damage",
+        "layer1Notes": "Family training v3: wrong_ability_attachment",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Chandra, Flamecaller",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "19fab1eea179cb540b25065041821fb89c7aff1895d5c153773f4014c879cb95",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-004",
+      "category": "exp-v3 loyalty-scope",
+      "layout": "normal",
+      "oracleId": "3ec889bc-f4d7-492a-91c3-d3691eb90eac",
+      "oracleText": "+2: You gain life equal to the greatest power among creatures you control.\n0: Create a 3/3 green Dinosaur creature token with trample.\n−X: Huatli deals X damage divided as you choose among any number of target creatures. Creatures dealt damage this way can't block this turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "You gain life equal to the greatest power",
+          "loyaltyCost": "+2"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals X damage divided as you choose",
+          "loyaltyCost": "−X"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "gain_life",
+            "deal_damage"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "wrong_ability_attachment",
+        "split": "expansion-training-v3",
+        "selectionRule": "PW +2 gain life vs 0 token vs −X divided damage",
+        "layer1Notes": "Family training v3: wrong_ability_attachment",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Huatli, Warrior Poet",
+      "colorIdentity": [
+        "R",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "39827ce2e01fdc51c8c1452e54efe87d4c9145a77a26ace1932c2f83c831092a",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-005",
+      "category": "exp-v3 loyalty-scope",
+      "layout": "normal",
+      "oracleId": "060209fa-4b7d-4e08-bf8b-8759bba5641b",
+      "oracleText": "+1: Reveal the top two cards of your library. An opponent chooses one of them. Put that card into your hand and exile the other with a silver counter on it.\n−1: Put a card you own with a silver counter on it from exile into your hand.\n−2: Create a 0/0 colorless Construct artifact creature token with \"This token gets +1/+1 for each artifact you control.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Put that card into your hand",
+          "loyaltyCost": "+1"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile the other with a silver counter",
+          "loyaltyCost": "+1"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 0/0 colorless Construct",
+          "loyaltyCost": "−2"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "exile",
+            "create_token"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "draw",
+            "exile",
+            "create_token"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "draw",
+            "exile",
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "draw",
+            "exile",
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "wrong_ability_attachment",
+        "split": "expansion-training-v3",
+        "selectionRule": "PW +1 reveal split vs −1 silver counter return vs −2 construct",
+        "layer1Notes": "Family training v3: wrong_ability_attachment",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Karn, Scion of Urza",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "45b51b5870928c00ed7c6aff5e9e5d073295c4cc9205d142ee3fb94234bb2e2e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-006",
+      "category": "exp-v3 loyalty-scope",
+      "layout": "normal",
+      "oracleId": "05e6b243-48a6-4a42-bc5f-413441de9c33",
+      "oracleText": "+1: Create three 1/1 white Soldier creature tokens.\n−3: Destroy all creatures with power 4 or greater.\n−7: You get an emblem with \"Creatures you control get +2/+2 and have flying.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create three 1/1 white Soldier creature tokens",
+          "loyaltyCost": "+1"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy all creatures with power 4 or greater",
+          "loyaltyCost": "−3"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token",
+            "destroy"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token",
+            "destroy"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "create_token",
+            "destroy"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "wrong_ability_attachment",
+        "split": "expansion-training-v3",
+        "selectionRule": "PW +1 tokens vs −3 destroy vs −7 emblem",
+        "layer1Notes": "Family training v3: wrong_ability_attachment",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Elspeth, Sun's Champion",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "741cee71ff288297ff4458b5c81f6a5695ac7abecef18df693807b437878e920",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-007",
+      "category": "exp-v3 loyalty-scope",
+      "layout": "normal",
+      "oracleId": "07d0b06b-80cb-4518-92c9-84ea87a7e08a",
+      "oracleText": "+1: Look at the top two cards of your library. Put one of them into your hand and the other on the bottom of your library.\n−1: Untap up to four target permanents.\n−10: You get an emblem with \"You may activate loyalty abilities of planeswalkers you control on any player's turn any time you could cast an instant.\"\nTeferi, Temporal Archmage can be your commander.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Put one of them into your hand",
+          "loyaltyCost": "+1"
+        },
+        {
+          "actionType": "untap",
+          "evidenceContains": "Untap up to four target permanents",
+          "loyaltyCost": "−1"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "untap"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "wrong_ability_attachment",
+        "split": "expansion-training-v3",
+        "selectionRule": "PW +1 scry vs −1 untap vs −10 emblem",
+        "layer1Notes": "Family training v3: wrong_ability_attachment",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Teferi, Temporal Archmage",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "672afac145a1d4822d816a40073e24f51936df3916dd3e7b1bba020638f48107",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-008",
+      "category": "exp-v3 lib-gy-tutor",
+      "layout": "normal",
+      "oracleId": "06d2a96c-4f4d-4a4a-ac48-6f0fbc9d0afd",
+      "oracleText": "Flash\nWhen this creature enters, you may search your library and/or graveyard for a card named Ashiok, Sculptor of Fears, reveal it, and put it into your hand. If you search your library this way, shuffle.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library and/or graveyard",
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_tutor_resolution",
+        "split": "expansion-training-v3",
+        "selectionRule": "ETB optional search library and/or graveyard for named PW",
+        "layer1Notes": "Family training v3: search_tutor_resolution",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Ashiok's Forerunner",
+      "colorIdentity": [
+        "B",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "6b50441e3180d68d1ff4900c5ae5cfc449eee66f0c0178e1ecb7512f7379a8ce",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-009",
+      "category": "exp-v3 lib-gy-tutor",
+      "layout": "normal",
+      "oracleId": "0c107664-a9fc-4684-8a1b-fa750401a6dd",
+      "oracleText": "When Niambi enters, you may search your library and/or graveyard for a card named Teferi, Timebender, reveal it, and put it into your hand. If you search your library this way, shuffle.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library and/or graveyard",
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_tutor_resolution",
+        "split": "expansion-training-v3",
+        "selectionRule": "ETB optional search library and/or graveyard for named PW",
+        "layer1Notes": "Family training v3: search_tutor_resolution",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Niambi, Faithful Healer",
+      "colorIdentity": [
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "541cc4dffd5994c8f57264fe1b7ad8a87c96714948a1f00b139e5bfa9f633815",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-010",
+      "category": "exp-v3 lib-gy-tutor",
+      "layout": "normal",
+      "oracleId": "2359db1c-6029-4748-9f09-d57bb0ae92e9",
+      "oracleText": "Destroy target creature. You may search your library and/or graveyard for a card named Liliana, Death Mage, reveal it, and put it into your hand. If you search your library this way, shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target creature"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library and/or graveyard",
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy",
+            "search_library"
+          ]
+        },
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "destroy",
+            "search_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_tutor_resolution",
+        "split": "expansion-training-v3",
+        "selectionRule": "Destroy then optional lib/gy tutor for named card",
+        "layer1Notes": "Family training v3: search_tutor_resolution",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Liliana's Scorn",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "956c3b3a707431d216da9ec842f199ab393d66a5cc3452e68659999ff0490c44",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-011",
+      "category": "exp-v3 lib-gy-tutor",
+      "layout": "normal",
+      "oracleId": "2705a288-3b9d-4452-a320-28b86331aa09",
+      "oracleText": "When this creature enters, you may search your library and/or graveyard for a Rune card, reveal it, and put it into your hand. If you search your library this way, shuffle.\nYou may pay {1} rather than pay the mana cost for Rune spells you cast.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library and/or graveyard",
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_tutor_resolution",
+        "split": "expansion-training-v3",
+        "selectionRule": "ETB optional lib/gy search for Rune",
+        "layer1Notes": "Family training v3: search_tutor_resolution",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Runeforge Champion",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "349483f2e1030b3043531a825b54003b29b026e31c9b88c0b393425227eea663",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-012",
+      "category": "exp-v3 lib-gy-tutor",
+      "layout": "normal",
+      "oracleId": "1a9bfe76-6c74-4393-b04e-461422a29ddb",
+      "oracleText": "Reach\nWhen this creature enters, you may search your library and/or graveyard for a creature card with no abilities, reveal it, and put it into your hand. If you search your library this way, shuffle.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library and/or graveyard",
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_tutor_resolution",
+        "split": "expansion-training-v3",
+        "selectionRule": "ETB optional lib/gy search for creature with no abilities",
+        "layer1Notes": "Family training v3: search_tutor_resolution",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Fang-Druid Summoner",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3f9978b0dec2c10111d5b73aa38c77f985546c2b4196a1c2060a0061fbf19cc1",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-013",
+      "category": "exp-v3 target-opponent-life",
+      "layout": "normal",
+      "oracleId": "017f4471-db5a-4ad0-97b3-b1f12b52578a",
+      "oracleText": "Cohort — {T}, Tap an untapped Ally you control: Target opponent loses 2 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "Target opponent loses 2 life"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "variable_lose_life_regression",
+        "split": "expansion-training-v3",
+        "selectionRule": "Cohort activated target opponent loses life",
+        "layer1Notes": "Family training v3: variable_lose_life_regression",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Zulaport Chainmage",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "189cc12e6014fd2c049d99741d6c51af7d00e42f791456de2887dd89007d2184",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-014",
+      "category": "exp-v3 target-opponent-life",
+      "layout": "normal",
+      "oracleId": "22a78443-db21-4656-b38a-e3e3186fd94b",
+      "oracleText": "Escalate—Discard a card. (Pay this cost for each mode chosen beyond the first.)\nChoose one or more —\n• Target opponent reveals their hand. You choose an instant or sorcery card from it. That player discards that card.\n• Target creature gets -2/-2 until end of turn.\n• Target opponent loses 2 life and you gain 2 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "Target opponent loses 2 life"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "variable_lose_life_regression",
+        "split": "expansion-training-v3",
+        "selectionRule": "Modal escalate target opponent loses life",
+        "layer1Notes": "Family training v3: variable_lose_life_regression",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Collective Brutality",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "202420426db1d422410920305305dfff06a7af732c664c335739a12f2cf93c60",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-015",
+      "category": "exp-v3 target-opponent-life",
+      "layout": "normal",
+      "oracleId": "2ba16e4d-2de7-4906-801a-4ba2b90b5050",
+      "oracleText": "When Ghost Council of Orzhova enters, target opponent loses 1 life and you gain 1 life.\n{1}, Sacrifice a creature: Exile Ghost Council of Orzhova. Return it to the battlefield under its owner's control at the beginning of the next end step.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "target opponent loses 1 life"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "you gain 1 life"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "variable_lose_life_regression",
+        "split": "expansion-training-v3",
+        "selectionRule": "ETB target opponent loses life parallel gain",
+        "layer1Notes": "Family training v3: variable_lose_life_regression",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Ghost Council of Orzhova",
+      "colorIdentity": [
+        "B",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "e09bcb711393ce34aaac03e4996031217d9e109f29747d1966f0df97f3bd9f97",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-016",
+      "category": "exp-v3 target-opponent-life",
+      "layout": "normal",
+      "oracleId": "19ea37cc-e715-4a3c-87f3-5ed9d44f42d9",
+      "oracleText": "Devoid (This card has no color.)\n{1}{C}: Target opponent loses 1 life and you gain 1 life. ({C} represents colorless mana.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "Target opponent loses 1 life"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "variable_lose_life_regression",
+        "split": "expansion-training-v3",
+        "selectionRule": "Activated target opponent loses life",
+        "layer1Notes": "Family training v3: variable_lose_life_regression",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Essence Depleter",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "41a8682dc87189092112a66c43efc773a03721fabab33a0c5515308609a18908",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-017",
+      "category": "exp-v3 token-copy-delayed",
+      "layout": "normal",
+      "oracleId": "0124977f-06e6-430a-a874-f7d05883a97c",
+      "oracleText": "Whenever a nontoken creature you control enters, you may pay {2}. If you do, create a token that's a copy of that creature, except it has haste and \"At the beginning of the end step, sacrifice this permanent.\"",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a token that's a copy of that creature",
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "token_copy_delayed",
+        "split": "expansion-training-v3",
+        "selectionRule": "Optional pay create copy with delayed sacrifice",
+        "layer1Notes": "Family training v3: token_copy_delayed",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Minion Reflector",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "0770e2290e67ab57f226df59955c55484dc4f6a4d80b814ac33df5fc0849be56",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-018",
+      "category": "exp-v3 token-copy-delayed",
+      "layout": "normal",
+      "oracleId": "112f2b3f-32e7-40b1-b80e-0b99184a840c",
+      "oracleText": "Create a token that's a copy of target creature you control, except it has haste and \"At the beginning of the end step, sacrifice this token.\"\nFlashback {2}{R}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a token that's a copy of target creature"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "token_copy_delayed",
+        "split": "expansion-training-v3",
+        "selectionRule": "Create copy token with end-step sacrifice",
+        "layer1Notes": "Family training v3: token_copy_delayed",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Electroduplicate",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "754d497c628228f4bace52889e4c1bc9f1dd5d70a0caf0869d6c582c6665ea14",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-019",
+      "category": "exp-v3 token-copy-delayed",
+      "layout": "normal",
+      "oracleId": "0e084342-31ff-47a5-9fd8-5b385add7a1a",
+      "oracleText": "+1: Create a 1/1 colorless Servo artifact creature token.\n+1: The next spell you cast this turn has affinity for artifacts. (It costs {1} less to cast for each artifact you control as you cast it.)\n−7: For each artifact you control, create a token that's a copy of it. Those tokens gain haste. Exile those tokens at the beginning of the next end step.\nSaheeli, the Gifted can be your commander.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a token that's a copy of it",
+          "loyaltyCost": "−7"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "token_copy_delayed",
+        "split": "expansion-training-v3",
+        "selectionRule": "PW −7 copy each artifact token with delayed exile",
+        "layer1Notes": "Family training v3: token_copy_delayed",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Saheeli, the Gifted",
+      "colorIdentity": [
+        "R",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "d8a999fc69a2989ffe2b658c8310b98154eb0eefce381413022c08cf518b9a4e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-020",
+      "category": "exp-v3 token-copy-delayed",
+      "layout": "normal",
+      "oracleId": "1c6f95fd-f8d0-4d22-aa21-29e5c70b2f85",
+      "oracleText": "If a white creature is attacking, you may pay {B}{B} rather than pay this spell's mana cost.\nExile target attacking creature. Create a token that's a copy of that creature. Exile it at the beginning of the next end step.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target attacking creature"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a token that's a copy of that creature"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "create_token"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "exile",
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "exile",
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "token_copy_delayed",
+        "split": "expansion-training-v3",
+        "selectionRule": "Exile attacker create copy exile end step",
+        "layer1Notes": "Family training v3: token_copy_delayed",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Nemesis Trap",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "cb4bef057a9572f10f91959b44db227d5aacc3a38945402194c730eaf0c8b19a",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-021",
+      "category": "exp-v3 delayed-exile",
+      "layout": "normal",
+      "oracleId": "53987a39-c18c-4c13-b1ea-fd1b2a369f9e",
+      "oracleText": "Creatures you control have lifelink.\n{2}{B}{B}, {T}: Return target creature card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step. If it would leave the battlefield, exile it instead of putting it anywhere else. Activate only as a sorcery.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return target creature card from your graveyard to the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "delayed_exile_referent",
+        "split": "expansion-training-v3",
+        "selectionRule": "Reanimate from graveyard exile at next end step",
+        "layer1Notes": "Family training v3: delayed_exile_referent",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Whip of Erebos",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "d50ec48df5fcdc95e3ebbf11ef08860cd4059f4b2cb235418592ed66d01bbf6c",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-022",
+      "category": "exp-v3 delayed-exile",
+      "layout": "normal",
+      "oracleId": "7e4cbfd1-2393-4643-bc05-022d06b30210",
+      "oracleText": "At the beginning of your upkeep, you may pay {2}{B}. If you do, return a creature card at random from your graveyard to the battlefield. It gains flying, trample, and haste. Exile that card at the beginning of your next end step. If it would leave the battlefield, exile it instead of putting it anywhere else.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "return a creature card at random from your graveyard to the battlefield",
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "delayed_exile_referent",
+        "split": "expansion-training-v3",
+        "selectionRule": "Upkeep optional reanimate random exile next end step",
+        "layer1Notes": "Family training v3: delayed_exile_referent",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Kheru Lich Lord",
+      "colorIdentity": [
+        "B",
+        "G",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "eea0c7d6bbc056b37bfd9b57408cb39b0eec6d7c5ba738551399ef5acf29477f",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-023",
+      "category": "exp-v3 delayed-exile",
+      "layout": "normal",
+      "oracleId": "f87bf51e-6218-4418-ae3e-98055e9601e4",
+      "oracleText": "Put target creature card from an opponent's graveyard onto the battlefield under your control. It gains haste. Exile it at the beginning of the next end step. If that creature would leave the battlefield, exile it instead of putting it anywhere else.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Put target creature card from an opponent's graveyard onto the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "delayed_exile_referent",
+        "split": "expansion-training-v3",
+        "selectionRule": "Reanimate opponent creature exile end step",
+        "layer1Notes": "Family training v3: delayed_exile_referent",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Gruesome Encore",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "c2c79bcd0259f7a17c07cd5a3337efb97db3b742c067a7caa4a408377e50e2b6",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v3-024",
+      "category": "exp-v3 delayed-exile",
+      "layout": "normal",
+      "oracleId": "2cdbaa4e-8907-49dc-9fa9-0df70db3bf23",
+      "oracleText": "Menace, deathtouch\nWhen this creature enters, put target creature card with mana value 4 or less from a graveyard onto the battlefield under your control with a finality counter on it. That creature gains menace, deathtouch, and haste. At the beginning of your next end step, exile that creature.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "put target creature card with mana value 4 or less from a graveyard onto the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "delayed_exile_referent",
+        "split": "expansion-training-v3",
+        "selectionRule": "ETB reanimate from graveyard exile next end step",
+        "layer1Notes": "Family training v3: delayed_exile_referent",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Coalstoke Gearhulk",
+      "colorIdentity": [
+        "B",
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "214b209d2eff42bf2101eacddd17b9810c415fde1d07c28e1d1122e43dda98eb",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v3-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v3",
+      "goldReviewVersion": "development-generalization-expansion-v3-builder",
+      "goldReviewedAt": "2026-08-07T22:23:56.175Z",
+      "goldReviewer": "expansion-v3-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    }
+  ],
+  "benchmarkStatus": "catalog_clean",
+  "usableForParserEvaluation": true,
+  "parserExecutionCount": 0,
+  "expansionSplit": {
+    "trainingCount": 24,
+    "trainingOnly": true,
+    "parentSets": [
+      "development_generalization_expansion_v1",
+      "development_generalization_expansion_v2"
+    ],
+    "familyCounts": {
+      "wrong_ability_attachment": 7,
+      "search_tutor_resolution": 5,
+      "variable_lose_life_regression": 4,
+      "token_copy_delayed": 4,
+      "delayed_exile_referent": 4
+    }
+  },
+  "goldCertification": {
+    "certifierId": "development-generalization-expansion-v3-builder",
+    "certifiedAt": "2026-08-07T22:23:56.175Z",
+    "casesReviewed": "24/24",
+    "reviewer": "expansion-v3-family-miner",
+    "goldReviewStatus": "reviewed",
+    "goldCompletenessStatus": "complete",
+    "parserExecutionCount": 0,
+    "policyNote": "Family-level training mined after expansion-check-v1 milestone #2 diagnosis."
+  }
+}

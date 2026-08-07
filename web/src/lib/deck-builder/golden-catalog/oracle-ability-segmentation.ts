@@ -191,7 +191,7 @@ export function segmentCardFaces(oracleText: string): SegmentedCardFace[] {
 function expandCompositeParagraphs(faceText: string): string[] {
   const chunks: string[] = [];
 
-  for (const raw of faceText.split(/\n(?=[A-Z{("]|When |Whenever |At the beginning|Choose one|Choose two|Choose three|Suspend|Craft|Mutate|Chapter|Landfall|Cycling|Flashback|Foretell|Adventure|Aftermath|Read a chapter|[+\−-]?\d+:|I —|II —|III —|IV —|V —|•)/)) {
+  for (const raw of faceText.split(/\n(?=[A-Z{("]|When |Whenever |At the beginning|Choose one|Choose two|Choose three|Suspend|Craft|Mutate|Chapter|Landfall|Cycling|Flashback|Foretell|Adventure|Aftermath|Read a chapter|[+\u2212-](?:\d+|X):|[+\u2212-]?\d+:|I —|II —|III —|IV —|V —|•)/)) {
     const trimmed = raw.trim();
     if (!trimmed) continue;
 
@@ -213,8 +213,8 @@ function expandCompositeParagraphs(faceText: string): string[] {
       continue;
     }
 
-    if (/^[+\−-]\d+:/m.test(trimmed) || /^\d+:/m.test(trimmed)) {
-      for (const line of trimmed.split(/\n(?=[+\−-]?\d+:)/)) {
+    if (/^[+\u2212-](?:\d+|X):/m.test(trimmed) || /^\d+:/m.test(trimmed)) {
+      for (const line of trimmed.split(/\n(?=[+\u2212-](?:\d+|X):)/)) {
         const l = line.trim();
         if (l) chunks.push(l);
       }
@@ -229,7 +229,7 @@ function expandCompositeParagraphs(faceText: string): string[] {
 }
 
 function extractLoyaltyCost(paragraphText: string): string | undefined {
-  const m = paragraphText.match(/^[+\−-]\d+:/);
+  const m = paragraphText.match(/^[+\u2212-](?:\d+|X):/);
   return m ? m[0].slice(0, -1) : undefined;
 }
 
