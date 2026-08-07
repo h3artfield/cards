@@ -103,12 +103,24 @@ export interface OracleActionV1 {
   targetMinimum?: number;
   targetMaximum?: number | "X";
   quantityMayBeZero?: boolean;
-  quantityType?: "literal" | "variable";
+  quantityType?: "literal" | "variable" | "derived";
   quantitySymbol?: string;
   quantityExpression?: string;
   quantityDefinitionSpan?: string;
   quantitySource?: "ability_where_clause" | "spell_mana_cost" | "unresolved";
   quantityCertainty?: "defined_in_ability" | "spell_cost_x" | "ambiguous";
+  quantityBase?: string;
+  quantityMultiplier?: string;
+  quantityDivisor?: string;
+  quantityRounding?: "up" | "down" | "none";
+  abilityId?: string;
+  loyaltyCost?: string;
+  sagaChapterId?: string;
+  modalChooseCount?: number;
+  modalOptionId?: string;
+  modalOptionEvidence?: string;
+  referentActionId?: string;
+  referentObject?: string;
   evidenceText: string;
   evidenceStart: number;
   evidenceEnd: number;
@@ -179,6 +191,7 @@ const PLAY_PERMISSION =
   /\b(?:you may )?play (?:land cards from|that card|it\b|an additional land)/i;
 
 const ACTION_PATTERNS: ActionPattern[] = [
+  { pattern: /\bdraws? cards? equal to half\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bdraws? (?:a |one |two |three |four |five |seven |that many |up to \w+ )?cards?\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bYou may draw [\w ]+/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bYou may sacrifice [\w ]+/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
@@ -245,6 +258,7 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bmills? X cards?\b/i, actionType: "mill", sourceZones: ["library"], destinationZones: ["graveyard"] },
   { pattern: /\bgains? \d+ life\b/i, actionType: "gain_life", affectedObjects: ["player"] },
   { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?gains? X life\b/i, actionType: "gain_life", affectedObjects: ["player"] },
+  { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?loses? half (?:their |your )?life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?loses? \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?loses? up to \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?loses? X life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
@@ -287,11 +301,13 @@ function canonicalDedupKey(input: {
   sourceZones?: string[];
   destinationZones?: string[];
   affectedObjects?: string[];
+  modalOptionId?: string;
 }): string {
   return [
     input.oracleId,
     input.faceId,
     String(input.abilityIndex),
+    input.modalOptionId ?? "",
     input.actionType,
     normalizeEvidenceSpan(input.evidenceText),
     zoneKey(input.sourceZones),
@@ -752,12 +768,21 @@ function acceptAction(input: {
       .slice(localStart)
       .match(
         new RegExp(
-          `^((?:Each opponent |Each player |You |Target player |That player )?${verb} (?:X|\\d+|up to \\d+) life|(?:Each opponent |Each player |You |Target player |That player )?${verb} life equal to[^.]+)`,
+          `^((?:Each opponent |Each player |You |Target player |That player )?${verb} (?:half (?:their |your )?life|X|\\d+|up to \\d+) life|(?:Each opponent |Each player |You |Target player |That player )?${verb} life equal to[^.]+)`,
           "i",
         ),
       );
     if (extended?.[1]) {
       evidenceText = extended[1].trim();
+    }
+  }
+
+  if (input.rule.actionType === "draw") {
+    const extended = input.ability.paragraphText
+      .slice(localStart)
+      .match(/^draws? cards? equal to half [^.]+?(?= and loses|\.$)/i);
+    if (extended?.[0]) {
+      evidenceText = extended[0].trim();
     }
   }
 
@@ -1030,6 +1055,16 @@ function acceptAction(input: {
     quantityDefinitionSpan: variableQuantity.quantityDefinitionSpan,
     quantitySource: variableQuantity.quantitySource,
     quantityCertainty: variableQuantity.quantityCertainty,
+    quantityBase: variableQuantity.quantityBase,
+    quantityMultiplier: variableQuantity.quantityMultiplier,
+    quantityDivisor: variableQuantity.quantityDivisor,
+    quantityRounding: variableQuantity.quantityRounding,
+    abilityId: input.ability.abilityId,
+    loyaltyCost: input.ability.loyaltyCost,
+    sagaChapterId: input.ability.sagaChapterId,
+    modalChooseCount: input.ability.modalChooseCount,
+    modalOptionId: input.ability.modalOptionId,
+    modalOptionEvidence: input.ability.modalOptionEvidence,
     evidenceText,
     evidenceStart: cardEvidenceStart,
     evidenceEnd: cardEvidenceEnd,
@@ -1203,6 +1238,7 @@ function canonicalDedupePass(actions: OracleActionV1[]): OracleActionV1[] {
       action.oracleId,
       action.faceId,
       String(action.abilityIndex),
+      action.modalOptionId ?? "",
       action.actionType,
       action.clauseId ?? String(action.evidenceStart),
     ].join("|");
@@ -1212,6 +1248,26 @@ function canonicalDedupePass(actions: OracleActionV1[]): OracleActionV1[] {
     }
   }
   return [...best.values()].sort((a, b) => a.evidenceStart - b.evidenceStart || a.actionIndex - b.actionIndex);
+}
+
+function wireReferentActions(actions: OracleActionV1[]): OracleActionV1[] {
+  const sorted = [...actions].sort((a, b) => a.evidenceStart - b.evidenceStart || a.actionIndex - b.actionIndex);
+  for (const action of sorted) {
+    const referentMatch = action.evidenceText.match(/\b(?:it|that card|that creature|that permanent|that token)\b/i);
+    if (!referentMatch) continue;
+
+    const referentObject = referentMatch[0].toLowerCase();
+    const prior = sorted
+      .filter((a) => a.actionId !== action.actionId && a.evidenceEnd <= action.evidenceStart)
+      .pop();
+    if (prior && action.faceId === prior.faceId) {
+      action.referentActionId = prior.actionId;
+      action.referentObject = referentObject;
+    } else {
+      action.reviewStatus = "needs_review";
+    }
+  }
+  return sorted;
 }
 
 function dedupeActions(rawActions: OracleActionV1[]): {
@@ -1558,7 +1614,7 @@ export function extractOracleActionsV1(input: {
 
   const preDedupCount = rawActions.length;
   const { actions, canonicalKeyDuplicatesRemoved, semanticDuplicatesRemoved } = dedupeActions(rawActions);
-  const withOptionality = applyOptionalityPostProcess(actions, abilities, input.oracleText);
+  const withOptionality = wireReferentActions(applyOptionalityPostProcess(actions, abilities, input.oracleText));
 
   const structureAnnotations: OracleAbilityStructureAnnotation[] = [];
   for (const ability of abilities) {

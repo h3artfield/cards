@@ -228,6 +228,87 @@ function expandCompositeParagraphs(faceText: string): string[] {
   return chunks;
 }
 
+function extractLoyaltyCost(paragraphText: string): string | undefined {
+  const m = paragraphText.match(/^[+\−-]\d+:/);
+  return m ? m[0].slice(0, -1) : undefined;
+}
+
+function extractSagaChapterIds(paragraphText: string): string[] | undefined {
+  const m = paragraphText.match(/^((?:I|II|III|IV|V)(?:,\s*(?:I|II|III|IV|V))*)\s*—/);
+  if (!m) return undefined;
+  return m[1].split(/,\s*/).map((s) => s.trim());
+}
+
+function parseModalChooseCount(header: string): number | undefined {
+  const m = header.match(/^Choose (one|two|three|\d+)/i);
+  if (!m) return undefined;
+  const word = m[1].toLowerCase();
+  if (word === "one") return 1;
+  if (word === "two") return 2;
+  if (word === "three") return 3;
+  const n = Number.parseInt(word, 10);
+  return Number.isFinite(n) ? n : undefined;
+}
+
+function enrichAbilityMetadata(
+  oracleId: string,
+  cardFaceId: string,
+  abilityIndex: number,
+  paragraphText: string,
+  modalContext?: {
+    chooseCount?: number;
+    optionId?: string;
+    optionEvidence?: string;
+  },
+): Pick<
+  SegmentedAbility,
+  "abilityId" | "loyaltyCost" | "sagaChapterId" | "modalChooseCount" | "modalOptionId" | "modalOptionEvidence" | "abilityType"
+> {
+  const loyaltyCost = extractLoyaltyCost(paragraphText);
+  const sagaChapterIds = extractSagaChapterIds(paragraphText);
+  const sagaChapterId = sagaChapterIds?.length === 1 ? sagaChapterIds[0] : sagaChapterIds?.join(",");
+  let abilityType = classifyAbilityType(paragraphText);
+  if (modalContext?.optionId) abilityType = "modal";
+  else if (/^Choose (?:one|two|three|\d+)/i.test(paragraphText.trim())) abilityType = "modal";
+  return {
+    abilityId: `${oracleId}:${cardFaceId}:${abilityIndex}`,
+    loyaltyCost,
+    sagaChapterId,
+    modalChooseCount: modalContext?.chooseCount,
+    modalOptionId: modalContext?.optionId,
+    modalOptionEvidence: modalContext?.optionEvidence,
+    abilityType,
+  };
+}
+
+function buildSegmentedAbility(
+  oracleId: string,
+  cardFaceId: string,
+  abilityIndex: number,
+  paragraphText: string,
+  paragraphStart: number,
+  modalContext?: {
+    chooseCount?: number;
+    optionId?: string;
+    optionEvidence?: string;
+  },
+): SegmentedAbility {
+  const meta = enrichAbilityMetadata(oracleId, cardFaceId, abilityIndex, paragraphText, modalContext);
+  return {
+    abilityIndex,
+    cardFaceId,
+    abilityType: meta.abilityType,
+    paragraphText,
+    paragraphStart,
+    paragraphEnd: paragraphStart + paragraphText.length,
+    abilityId: meta.abilityId,
+    loyaltyCost: meta.loyaltyCost,
+    sagaChapterId: meta.sagaChapterId,
+    modalChooseCount: meta.modalChooseCount,
+    modalOptionId: meta.modalOptionId,
+    modalOptionEvidence: meta.modalOptionEvidence,
+  };
+}
 /** Segment a card face into ability paragraphs. */
 export function segmentAbilities(
   oracleId: string,
@@ -235,8 +316,29 @@ export function segmentAbilities(
   faceText: string,
   faceStartOffset = 0,
 ): SegmentedAbility[] {
-  void oracleId;
   const paragraphs = expandCompositeParagraphs(faceText);
+  let modalChooseCount: number | undefined;
+  let modalOptionCounter = 0;
+
+  const segmentParagraph = (paragraphText: string, abilityIndex: number, paragraphStart: number): SegmentedAbility => {
+    const trimmed = paragraphText.trim();
+    if (/^Choose (?:one|two|three|\d+)/i.test(trimmed)) {
+      modalChooseCount = parseModalChooseCount(trimmed);
+      modalOptionCounter = 0;
+      return buildSegmentedAbility(oracleId, cardFaceId, abilityIndex, paragraphText, paragraphStart, {
+        chooseCount: modalChooseCount,
+      });
+    }
+    if (/^•/.test(trimmed)) {
+      modalOptionCounter += 1;
+      return buildSegmentedAbility(oracleId, cardFaceId, abilityIndex, paragraphText, paragraphStart, {
+        chooseCount: modalChooseCount,
+        optionId: `opt-${modalOptionCounter}`,
+        optionEvidence: trimmed.replace(/^•\s*/, ""),
+      });
+    }
+    return buildSegmentedAbility(oracleId, cardFaceId, abilityIndex, paragraphText, paragraphStart);
+  };
 
   if (paragraphs.length <= 1 && faceText.includes("\n")) {
     const lines = faceText.split("\n").map((l) => l.trim()).filter(Boolean);
@@ -245,14 +347,7 @@ export function segmentAbilities(
       const localStart = faceText.indexOf(paragraphText, searchFrom);
       searchFrom = localStart + paragraphText.length;
       const paragraphStart = faceStartOffset + Math.max(0, localStart);
-      return {
-        abilityIndex,
-        cardFaceId,
-        abilityType: classifyAbilityType(paragraphText),
-        paragraphText,
-        paragraphStart,
-        paragraphEnd: paragraphStart + paragraphText.length,
-      };
+      return segmentParagraph(paragraphText, abilityIndex, paragraphStart);
     });
   }
 
@@ -261,14 +356,7 @@ export function segmentAbilities(
     const localStart = faceText.indexOf(paragraphText, searchFrom);
     searchFrom = localStart >= 0 ? localStart + paragraphText.length : searchFrom;
     const paragraphStart = faceStartOffset + Math.max(0, localStart);
-    return {
-      abilityIndex,
-      cardFaceId,
-      abilityType: classifyAbilityType(paragraphText),
-      paragraphText,
-      paragraphStart,
-      paragraphEnd: paragraphStart + paragraphText.length,
-    };
+    return segmentParagraph(paragraphText, abilityIndex, paragraphStart);
   });
 }
 

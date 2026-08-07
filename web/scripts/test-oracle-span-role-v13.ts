@@ -456,6 +456,67 @@ const VARIABLE_LOSE_LIFE_CASES = [
   },
 ];
 
+const V123_STRUCTURAL_CASES = [
+  {
+    name: "planeswalker_multiple_loyalty_lines",
+    oracleText:
+      "+1: Each opponent discards a card and loses 2 life.\n−3: Gain control of target creature until end of turn. Untap it.\n−8: Each opponent loses life equal to the number of cards in their graveyard.",
+    expectActions: [
+      { type: "discard", evidence: "discards a card", loyaltyCost: "+1" },
+      { type: "lose_life", evidence: "loses 2 life", loyaltyCost: "+1" },
+      { type: "untap", evidence: "Untap it", loyaltyCost: "−3" },
+      { type: "lose_life", evidence: "loses life equal to", loyaltyCost: "−8" },
+    ],
+  },
+  {
+    name: "saga_chapter_boundaries",
+    oracleText:
+      "I — You may play an additional land this turn.\nII — You gain 3 life.\nIII — Exile this Saga, then return it to the battlefield transformed under your control.",
+    expectActions: [
+      { type: "play", evidence: "play an additional land", sagaChapterId: "I" },
+      { type: "gain_life", evidence: "gain 3 life", sagaChapterId: "II" },
+      { type: "exile", evidence: "Exile this Saga", sagaChapterId: "III" },
+      { type: "return_to_battlefield", evidence: "return it to the battlefield", sagaChapterId: "III" },
+    ],
+  },
+  {
+    name: "unless_discard_retained",
+    oracleText: "Draw two cards. Then discard a card unless you attacked this turn.",
+    expectActions: [
+      { type: "draw", evidence: "Draw two cards" },
+      { type: "discard", evidence: "discard a card", conditionType: "unless" },
+    ],
+  },
+  {
+    name: "modal_option_ids_distinct",
+    oracleText:
+      "Choose one or both —\n• Create a token that's a copy of target artifact.\n• Create a token that's a copy of target creature, except it's an artifact in addition to its other types.",
+    expectActions: [
+      { type: "create_token", evidence: "target artifact", modalOptionId: "opt-1", tokenCopyOf: "target artifact" },
+      { type: "create_token", evidence: "target creature", modalOptionId: "opt-2", tokenCopyOf: "target creature, except it's an artifact in addition to its other types" },
+    ],
+  },
+  {
+    name: "peer_derived_half_life",
+    oracleText:
+      "Target player draws cards equal to half the number of cards in their library and loses half their life. Round up each time.",
+    expectActions: [
+      { type: "draw", evidence: "draws cards equal to half", quantityType: "derived" },
+      { type: "lose_life", evidence: "loses half their life", quantityType: "derived", quantityRounding: "up" },
+    ],
+  },
+  {
+    name: "blur_referent_wiring",
+    oracleText:
+      "Exile target creature you control, then return that card to the battlefield under its owner's control.\nDraw a card.",
+    expectActions: [
+      { type: "exile", evidence: "Exile target creature" },
+      { type: "return_to_battlefield", evidence: "return that card", referentObject: "that card" },
+      { type: "draw", evidence: "Draw a card" },
+    ],
+  },
+];
+
 function timed<T>(fn: () => T): { result: T; ms: number } {
   const start = Date.now();
   const result = fn();
@@ -473,6 +534,7 @@ function testRegressionCases() {
     ...CONTEXT_DEFINED_X_CASES,
     ...TOKEN_COPY_CASES,
     ...VARIABLE_LOSE_LIFE_CASES,
+    ...V123_STRUCTURAL_CASES,
   ]) {
     const { result, ms } = timed(() =>
       extractOracleActionsV1({ oracleId: `regression-${c.name}`, oracleText: c.oracleText }),
@@ -484,7 +546,10 @@ function testRegressionCases() {
         (a) =>
           a.actionType === exp.type &&
           a.evidenceText.toLowerCase().includes(String(exp.evidence).toLowerCase()) &&
-          (!exp.status || a.reviewStatus === exp.status),
+          (!exp.status || a.reviewStatus === exp.status) &&
+          (!exp.loyaltyCost || a.loyaltyCost === exp.loyaltyCost) &&
+          (!exp.sagaChapterId || a.sagaChapterId === exp.sagaChapterId) &&
+          (!exp.modalOptionId || a.modalOptionId === exp.modalOptionId),
       );
       assert.ok(hit, `${c.name}: expected ${exp.status ?? "accepted"} ${exp.type} matching "${exp.evidence}"`);
       if (exp.quantityType) assert.equal(hit!.quantityType, exp.quantityType, `${c.name}: quantityType`);
@@ -499,6 +564,13 @@ function testRegressionCases() {
       if (exp.tokenCopyOf) {
         assert.equal(hit!.tokenCopyOf, exp.tokenCopyOf, `${c.name}: tokenCopyOf`);
       }
+      if (exp.loyaltyCost) assert.equal(hit!.loyaltyCost, exp.loyaltyCost, `${c.name}: loyaltyCost`);
+      if (exp.sagaChapterId) assert.equal(hit!.sagaChapterId, exp.sagaChapterId, `${c.name}: sagaChapterId`);
+      if (exp.modalOptionId) assert.equal(hit!.modalOptionId, exp.modalOptionId, `${c.name}: modalOptionId`);
+      if (exp.quantityRounding) assert.equal(hit!.quantityRounding, exp.quantityRounding, `${c.name}: quantityRounding`);
+      if (exp.conditionType) assert.equal(hit!.conditionType, exp.conditionType, `${c.name}: conditionType`);
+      if (exp.referentObject) assert.equal(hit!.referentObject, exp.referentObject, `${c.name}: referentObject`);
+      if (exp.referentObject) assert.ok(hit!.referentActionId, `${c.name}: referentActionId should be set`);
     }
 
     for (const forbid of c.forbidActions ?? []) {
@@ -591,7 +663,7 @@ function testFullDevelopmentRuntime() {
 }
 
 function main() {
-  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.22-context-defined-x-quantity-dev/);
+  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.23-ability-modal-quantity-dev/);
   testRegressionCases();
   testCompoundClauseNoHang();
   testReminderSpanDetection();
@@ -610,7 +682,8 @@ function main() {
           VARIABLE_LOSE_LIFE_CASES.length +
           STORM_REMINDER_CASES.length +
           CONTEXT_DEFINED_X_CASES.length +
-          TOKEN_COPY_CASES.length,
+          TOKEN_COPY_CASES.length +
+          V123_STRUCTURAL_CASES.length,
         fullDevelopmentRuntimeMs: devMs,
         perfBudgetMs: PERF_BUDGET_MS,
         devBudgetMs: DEV_CASE_BUDGET_MS,

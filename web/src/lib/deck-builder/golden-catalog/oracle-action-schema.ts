@@ -132,10 +132,17 @@ export interface DerivedCardRole {
 export interface SegmentedAbility {
   abilityIndex: number;
   cardFaceId: string;
-  abilityType: OracleAbilityType | "unknown";
+  abilityType: OracleAbilityType | "unknown" | "modal";
   paragraphText: string;
   paragraphStart: number;
   paragraphEnd: number;
+  /** Stable id: oracleId:faceId:abilityIndex */
+  abilityId?: string;
+  loyaltyCost?: string;
+  sagaChapterId?: string;
+  modalChooseCount?: number;
+  modalOptionId?: string;
+  modalOptionEvidence?: string;
 }
 
 export interface OracleActionExtractionResult {
@@ -226,7 +233,7 @@ export const ORACLE_ACTION_PRODUCTION_GATES = {
   falsePositiveRate: { target: 0.02, label: "≤2%" },
 } as const;
 
-export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.22-context-defined-x-quantity-dev";
+export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.23-ability-modal-quantity-dev";
 export const ORACLE_ACTION_TAXONOMY_VERSION = "three-layer-v1.3";
 
 export const HIGH_VALUE_ACTION_TYPES = [

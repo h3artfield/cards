@@ -9,12 +9,16 @@ export type VariableQuantityCertainty =
   | "ambiguous";
 
 export interface VariableQuantityFields {
-  quantityType?: "literal" | "variable";
+  quantityType?: "literal" | "variable" | "derived";
   quantitySymbol?: string;
   quantityExpression?: string;
   quantityDefinitionSpan?: string;
   quantitySource?: "ability_where_clause" | "spell_mana_cost" | "unresolved";
   quantityCertainty?: VariableQuantityCertainty;
+  quantityBase?: string;
+  quantityMultiplier?: string;
+  quantityDivisor?: string;
+  quantityRounding?: "up" | "down" | "none";
 }
 
 const WHERE_X_IS = /\bwhere X is ([^.]+)/i;
@@ -46,6 +50,9 @@ export function parseVariableQuantityFields(
       quantityCertainty: "defined_in_ability",
     };
   }
+
+  const derived = matchDerivedQuantity(actionType, evidenceText, abilityParagraph);
+  if (derived) return derived;
 
   const symbolMatch = matchVariableSymbol(actionType, evidenceText);
   if (!symbolMatch) {
@@ -128,4 +135,53 @@ function matchLiteralQuantity(actionType: string, evidenceText: string): string 
 
 export function variableQuantityNeedsReview(fields: VariableQuantityFields): boolean {
   return fields.quantityCertainty === "ambiguous";
+}
+
+function matchDerivedQuantity(
+  actionType: string,
+  evidenceText: string,
+  abilityParagraph: string,
+): VariableQuantityFields | null {
+  const halfLife = evidenceText.match(/\b(?:Each opponent |Each player |Target player |That player |You )?lose(?:s)? half (?:their |your )?life\b/i);
+  if (halfLife && (actionType === "lose_life" || /\bloses? half/i.test(evidenceText))) {
+    const rounding = /\bRound up each time\b/i.test(abilityParagraph) ? "up" : "none";
+    return {
+      quantityType: "derived",
+      quantityExpression: "half their life",
+      quantityBase: "their life total",
+      quantityDivisor: "2",
+      quantityRounding: rounding === "up" ? "up" : "none",
+      quantitySource: "ability_where_clause",
+      quantityCertainty: "defined_in_ability",
+    };
+  }
+
+  const halfDraw = evidenceText.match(/\b(?:draw|draws) cards? equal to half (.+)$/i);
+  if (halfDraw && actionType === "draw") {
+    const rounding = /\bRound up each time\b/i.test(abilityParagraph) ? "up" : "none";
+    return {
+      quantityType: "derived",
+      quantityExpression: `half ${halfDraw[1].trim()}`,
+      quantityBase: halfDraw[1].trim(),
+      quantityDivisor: "2",
+      quantityRounding: rounding === "up" ? "up" : "none",
+      quantitySource: "ability_where_clause",
+      quantityCertainty: "defined_in_ability",
+    };
+  }
+
+  const halfMill = evidenceText.match(/\bmill(?:s)? half (.+)$/i);
+  if (halfMill && actionType === "mill") {
+    return {
+      quantityType: "derived",
+      quantityExpression: `half ${halfMill[1].trim()}`,
+      quantityBase: halfMill[1].trim(),
+      quantityDivisor: "2",
+      quantityRounding: /\bRound up each time\b/i.test(abilityParagraph) ? "up" : "none",
+      quantitySource: "ability_where_clause",
+      quantityCertainty: "defined_in_ability",
+    };
+  }
+
+  return null;
 }

@@ -238,6 +238,19 @@ export function attachOptionalityToAction(input: {
   };
 }
 
+function actionImmediatelyBeforeCondition(input: {
+  actionEvidenceEnd: number;
+  conditionStart: number;
+  paragraph: string;
+  paragraphStart: number;
+}): boolean {
+  const actionEndLocal = input.actionEvidenceEnd - input.paragraphStart;
+  const condStartLocal = input.conditionStart - input.paragraphStart;
+  if (condStartLocal < actionEndLocal) return false;
+  const between = input.paragraph.slice(actionEndLocal, condStartLocal);
+  return /^[\s.,;:—–-]*$/.test(between);
+}
+
 /** Attach conditions and if/when-you-do dependencies to specific actions within an ability. */
 export function wireConditionsToActions<T extends OptionalityAttachInput & OptionalityAttachResult>(input: {
   actions: T[];
@@ -281,8 +294,21 @@ export function wireConditionsToActions<T extends OptionalityAttachInput & Optio
         a.evidenceEnd >= cond.conditionStart &&
         cond.conditionStart < a.evidenceEnd + 4,
     );
+    const trailingAction =
+      cond.conditionType === "unless"
+        ? sorted.find(
+            (a) =>
+              !a.conditionType &&
+              actionImmediatelyBeforeCondition({
+                actionEvidenceEnd: a.evidenceEnd,
+                conditionStart: cond.conditionStart,
+                paragraph: ability.paragraphText,
+                paragraphStart: ability.paragraphStart,
+              }),
+          )
+        : undefined;
     const afterAction = sorted.find((a) => a.evidenceStart >= cond.conditionStart);
-    const governed = inlineAction ?? afterAction;
+    const governed = inlineAction ?? trailingAction ?? afterAction;
 
     if (governed && !governed.conditionType) {
       const action = byId.get(governed.actionId)!;
