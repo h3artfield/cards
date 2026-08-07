@@ -1,5 +1,5 @@
 /**
- * Regression tests — parser v1.13 span-role layer + activatedColonSplit performance.
+ * Regression tests — parser v1.14 span-boundary layer + activatedColonSplit performance.
  * Run: npx tsx scripts/test-oracle-span-role-v13.ts
  */
 import assert from "node:assert/strict";
@@ -30,11 +30,12 @@ const REGRESSION_HANG_CASES = [
   {
     name: "keldon_raider_optional_discard",
     oracleText: "When this creature enters, you may discard a card. If you do, draw a card.",
-    /** draw is currently FN — audit tracks if_you_do boundary; discard must not emit as Layer 2 */
-    forbidActions: ["discard"],
-    discardRoleAt: "cost",
-    drawRoleAt: "effect", // documents intended role; audit flags current misclassification as condition
-    drawRoleAuditOnly: true,
+    expectActions: [
+      { type: "draw", evidence: "draw a card" },
+      { type: "discard", evidence: "discard a card" },
+    ],
+    discardRoleAt: "effect",
+    drawRoleAt: "effect",
   },
   {
     name: "rest_in_peace_replacement",
@@ -166,7 +167,7 @@ function testReminderSpanDetection() {
 }
 
 function testFullDevelopmentRuntime() {
-  const devPath = resolve(process.cwd(), "data/oracle-action-eval-development-v17.json");
+  const devPath = resolve(process.cwd(), "data/oracle-action-eval-development-v18.json");
   const dev = JSON.parse(readFileSync(devPath, "utf8")) as { cases: Array<{ id: string; oracleText: string; oracleId: string; cardFace?: string }> };
   const { ms } = timed(() => {
     for (const c of dev.cases) {
@@ -178,7 +179,7 @@ function testFullDevelopmentRuntime() {
 }
 
 function main() {
-  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.13-span-roles/);
+  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.14-span-boundaries/);
   testRegressionCases();
   testCompoundClauseNoHang();
   testReminderSpanDetection();

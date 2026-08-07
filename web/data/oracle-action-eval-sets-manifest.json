@@ -1,13 +1,13 @@
 {
   "developmentSet": {
-    "path": "data/oracle-action-eval-development-v18.json",
-    "classification": "development_set_v18",
-    "contentHash": "dacabb51eec6033179baac2269713bd750983aa21590915ee4d4873f3d3fd4dd",
+    "path": "data/oracle-action-eval-development-v20.json",
+    "classification": "development_set_v20",
+    "contentHash": "9554d419fbfd67af809d20376482b9c1d60be47066f95f38dd72e21636512098",
     "caseCount": 284,
     "taxonomyVersion": "three-layer-v1.2",
-    "purpose": "Canonical development set — v18 gold_omission audit corrections",
-    "parentClassification": "development_set_v17",
-    "parentContentHash": "321900c524c19b8b3fe9adc2e108900d57cf7a34af3f83bf3a09884c993a45f9",
+    "purpose": "Canonical development set — v20 v1.14 gold_omission audit corrections",
+    "parentClassification": "development_set_v19",
+    "parentContentHash": "a642a667d21e32adc16ba4457545d659337987078cf84349d1488dc6618d45c0",
     "benchmarkStatus": "catalog_clean",
     "usableForParserEvaluation": true
   },
@@ -231,6 +231,24 @@
     "contentHash": "321900c524c19b8b3fe9adc2e108900d57cf7a34af3f83bf3a09884c993a45f9",
     "caseCount": 284,
     "purpose": "Immutable parent — none/Layer1 gold audit Layer 2 corrections",
+    "benchmarkStatus": "catalog_clean",
+    "usableForParserEvaluation": true
+  },
+  "developmentSetV18": {
+    "path": "data/oracle-action-eval-development-v18.json",
+    "classification": "development_set_v18",
+    "contentHash": "dacabb51eec6033179baac2269713bd750983aa21590915ee4d4873f3d3fd4dd",
+    "caseCount": 284,
+    "purpose": "Immutable parent — v18 gold_omission audit (frozen)",
+    "benchmarkStatus": "catalog_clean",
+    "usableForParserEvaluation": true
+  },
+  "developmentSetV19": {
+    "path": "data/oracle-action-eval-development-v19.json",
+    "classification": "development_set_v19",
+    "contentHash": "a642a667d21e32adc16ba4457545d659337987078cf84349d1488dc6618d45c0",
+    "caseCount": 284,
+    "purpose": "Immutable parent — v19 cast-permission policy gold",
     "benchmarkStatus": "catalog_clean",
     "usableForParserEvaluation": true
   }

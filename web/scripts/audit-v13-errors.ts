@@ -17,12 +17,27 @@ import { matchGoldToActions, primitiveMatchesExpected } from "./oracle-action-un
 import { evidenceMatchesExtracted, evidenceMatchesOracle } from "./oracle-action-eval-shared";
 import { evaluateCaseSet } from "./eval-oracle-action-extraction-v6";
 import { isAdjudicatedReject } from "./adjudicate-gold-omission-v18";
+import { isAdjudicatedRejectV14 } from "./adjudicate-gold-omission-v14";
+
+function datasetLabel(path: string): string {
+  if (path.includes("v20")) return "development_set_v20";
+  if (path.includes("v19")) return "development_set_v19";
+  if (path.includes("v18")) return "development_set_v18";
+  return "development_set_v17";
+}
+
+function reportName(path: string): string {
+  if (path.includes("v20")) return "v13-error-audit-v20.json";
+  if (path.includes("v19")) return "v13-error-audit-v19.json";
+  if (path.includes("v18")) return "v13-error-audit-v18.json";
+  return "v13-error-audit-v17.json";
+}
 
 const DEV_PATH =
   process.argv.find((a) => a.startsWith("--dataset="))?.slice("--dataset=".length) ??
-  "data/oracle-action-eval-development-v18.json";
-const DATASET_LABEL = DEV_PATH.includes("v18") ? "development_set_v18" : "development_set_v17";
-const REPORT_NAME = DEV_PATH.includes("v18") ? "v13-error-audit-v18.json" : "v13-error-audit-v17.json";
+  "data/oracle-action-eval-development-v20.json";
+const DATASET_LABEL = datasetLabel(DEV_PATH);
+const REPORT_NAME = reportName(DEV_PATH);
 
 type FnCategory =
   | "effect_wrongly_classified_as_trigger_event"
@@ -201,15 +216,21 @@ function classifyFp(input: {
     return { category: "wrong_span_role", reason: `Emitted from ${role} span — should be structure only` };
   }
 
-  const adjudicatedReject = isAdjudicatedReject({
-    caseId: testCase.id,
-    parserPrimitive: action.actionType,
-    parserEvidence: action.evidenceText,
-  });
+  const adjudicatedReject =
+    isAdjudicatedRejectV14({
+      caseId: testCase.id,
+      parserPrimitive: action.actionType,
+      parserEvidence: action.evidenceText,
+    }) ??
+    isAdjudicatedReject({
+      caseId: testCase.id,
+      parserPrimitive: action.actionType,
+      parserEvidence: action.evidenceText,
+    });
   if (adjudicatedReject) {
     return {
       category: "parser_defect",
-      reason: `Adjudicated reject (v18): ${adjudicatedReject.reason}`,
+      reason: `Adjudicated reject: ${adjudicatedReject.reason}`,
     };
   }
 

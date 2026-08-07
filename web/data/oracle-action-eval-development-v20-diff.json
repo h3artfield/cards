@@ -1,0 +1,31 @@
+{
+  "generatedAt": "2026-08-07T08:30:00.000Z",
+  "parentDataset": "development_set_v19",
+  "parentContentHash": "a642a667d21e32adc16ba4457545d659337987078cf84349d1488dc6618d45c0",
+  "newDataset": "development_set_v20",
+  "newContentHash": "9554d419fbfd67af809d20376482b9c1d60be47066f95f38dd72e21636512098",
+  "changedCaseIds": [
+    "dev-cond-006",
+    "dev-cond-007",
+    "dev-cond-008",
+    "dev-cond-012",
+    "dev-v9-001",
+    "eval-0033",
+    "eval-0059",
+    "eval-0064",
+    "eval-0079",
+    "eval-0092",
+    "eval-0109",
+    "eval-0112",
+    "eval-0116",
+    "eval-0135",
+    "eval-0163",
+    "eval-0193",
+    "eval-0199",
+    "eval-0200",
+    "eval-0202"
+  ],
+  "confirmedAddGold": 11,
+  "rejectedParserOutput": 9,
+  "policy": "v1.14 gold_omission audit — manual catalog adjudication, no parser changes"
+}

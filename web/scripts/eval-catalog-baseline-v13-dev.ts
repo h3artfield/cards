@@ -22,11 +22,25 @@ import { loadEnvLocal } from "./lib/script-env";
 
 loadEnvLocal();
 
+function datasetLabel(path: string): string {
+  if (path.includes("v20")) return "development_set_v20";
+  if (path.includes("v19")) return "development_set_v19";
+  if (path.includes("v18")) return "development_set_v18";
+  return "development_set_v17";
+}
+
+function reportName(path: string): string {
+  if (path.includes("v20")) return "catalog-baseline-v13-dev-v20.json";
+  if (path.includes("v19")) return "catalog-baseline-v13-dev-v19.json";
+  if (path.includes("v18")) return "catalog-baseline-v13-dev-v18.json";
+  return "catalog-baseline-v13-dev.json";
+}
+
 const DEV_PATH =
   process.argv.find((a) => a.startsWith("--dataset="))?.slice("--dataset=".length) ??
-  "data/oracle-action-eval-development-v18.json";
-const DATASET_LABEL = DEV_PATH.includes("v18") ? "development_set_v18" : "development_set_v17";
-const REPORT_NAME = DEV_PATH.includes("v18") ? "catalog-baseline-v13-dev-v18.json" : "catalog-baseline-v13-dev.json";
+  "data/oracle-action-eval-development-v20.json";
+const DATASET_LABEL = datasetLabel(DEV_PATH);
+const REPORT_NAME = reportName(DEV_PATH);
 const V16_BASELINE_PATH = "reports/catalog-baseline-v12-official.json";
 
 const TRACKED_PAIRS = [

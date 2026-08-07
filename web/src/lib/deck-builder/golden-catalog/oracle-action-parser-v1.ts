@@ -34,7 +34,11 @@ import {
   classifyTextRoleAt,
   compoundClauseSpansWithRoles,
   extractStaticPermissions,
+  findQuotedAbilitySpans,
   findReminderSpans,
+  isInsideQuotedGrantedAbility,
+  isOneShotCastPermission,
+  isReflexiveTriggerReference,
   primitiveAllowedAtRole,
   type StaticPermissionRecord,
 } from "./oracle-span-role-classifier";
@@ -152,7 +156,9 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bYou may exile [\w ]+/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bYou may destroy [\w ]+/i, actionType: "destroy", sourceZones: ["battlefield"] },
   { pattern: /\bYou may counter [\w ]+/i, actionType: "counter", sourceZones: ["stack"] },
-  { pattern: /\bYou may return [\w ]+/i, actionType: "return_to_hand", destinationZones: ["hand"] },
+  { pattern: /\bYou may return [\w ]+to the battlefield\b/i, actionType: "return_to_battlefield", destinationZones: ["battlefield"] },
+  { pattern: /\bYou may return [\w ]+to [\w ]+hand\b/i, actionType: "return_to_hand", destinationZones: ["hand"] },
+  { pattern: /\breturn that (?:card|creature|permanent) to the battlefield\b/i, actionType: "return_to_battlefield", destinationZones: ["battlefield"] },
   { pattern: /\bYou may discard [\w ]+/i, actionType: "discard", sourceZones: ["hand"], destinationZones: ["graveyard"] },
   { pattern: /\bYou may put [\w ]+ from (?:your |a |their )?(?:hand|graveyard|exile)[\w ]* onto the battlefield/i, actionType: "put_onto_battlefield", destinationZones: ["battlefield"] },
   { pattern: /\bput [\w ]+ from (?:your |a |their )?(?:hand|graveyard|exile)[\w ]* onto the battlefield/i, actionType: "put_onto_battlefield", destinationZones: ["battlefield"] },
@@ -667,15 +673,38 @@ function acceptAction(input: {
   const localStart = baseLocalStart;
   if (localStart < 0) return null;
 
+  const localEnd = localStart + evidenceText.length;
+
   if (matchStartsInTriggerCondition(input.ability.paragraphText, localStart)) {
     return null;
   }
   if (matchInsideReminderParenthetical(input.ability.paragraphText, localStart)) {
     return null;
   }
+  if (isInsideQuotedGrantedAbility(input.ability.paragraphText, localStart, input.rule.actionType)) {
+    return null;
+  }
+  if (
+    (input.rule.actionType === "sacrifice" || input.rule.actionType === "discard") &&
+    isReflexiveTriggerReference(input.ability.paragraphText, evidenceText)
+  ) {
+    return null;
+  }
   if (
     input.rule.actionType === "cast" &&
     matchIsSpuriousCastPermission(input.ability.paragraphText, localStart, evidenceText)
+  ) {
+    return null;
+  }
+  if (
+    (input.rule.actionType === "cast" || input.rule.actionType === "play") &&
+    classifyTextRoleAt({
+      paragraph: input.ability.paragraphText,
+      localStart,
+      localEnd,
+      abilityType: input.ability.abilityType,
+    }) === "static_permission" &&
+    !isOneShotCastPermission(input.ability.paragraphText, localStart, evidenceText)
   ) {
     return null;
   }
@@ -686,7 +715,6 @@ function acceptAction(input: {
     return null;
   }
 
-  const localEnd = localStart + evidenceText.length;
   const textRole: TextRole = input.replacementInsteadEffect
     ? "replacement_effect"
     : classifyTextRoleAt({
@@ -696,13 +724,20 @@ function acceptAction(input: {
         abilityType: input.ability.abilityType,
       });
 
-  if (!primitiveAllowedAtRole(textRole, input.rule.actionType)) {
+  if (
+    !primitiveAllowedAtRole(textRole, input.rule.actionType, {
+      paragraph: input.ability.paragraphText,
+      localStart,
+      localEnd,
+    })
+  ) {
     return null;
   }
 
   if (
     (input.rule.actionType === "cast" || input.rule.actionType === "play") &&
-    textRole === "static_permission"
+    textRole === "static_permission" &&
+    !isOneShotCastPermission(input.ability.paragraphText, localStart, evidenceText)
   ) {
     return null;
   }
@@ -898,7 +933,8 @@ function matchStartsInTriggerCondition(paragraph: string, localMatchStart: numbe
 
 function matchInsideReminderParenthetical(paragraph: string, localStart: number): boolean {
   const reminders = findReminderSpans(paragraph);
-  return reminders.some((r) => localStart >= r.localStart && localStart < r.localEnd);
+  if (reminders.some((r) => localStart >= r.localStart && localStart < r.localEnd)) return true;
+  return findQuotedAbilitySpans(paragraph).some((r) => localStart >= r.localStart && localStart < r.localEnd);
 }
 
 function matchIsSpuriousCastPermission(paragraph: string, localStart: number, evidenceText: string): boolean {
@@ -907,6 +943,18 @@ function matchIsSpuriousCastPermission(paragraph: string, localStart: number, ev
   if (/\badditional cost to cast this\b/i.test(context)) return true;
   if (/\bYou may cast this spell as though\b/i.test(context)) return true;
   if (/\bYou may cast this spell only if\b/i.test(context)) return true;
+  if (/\bSpend this mana only to cast\b/i.test(context)) return true;
+  if (/\bGain the next level as a sorcery\b/i.test(context)) return true;
+  if (/\bCast it as a sorcery on a later turn\b/i.test(context)) return true;
+  if (/\bPlot only as a sorcery\b/i.test(context)) return true;
+  if (/\bcast this turn\b/i.test(evidenceText)) return true;
+  if (/\bYou may cast this spell with different mana cost\b/i.test(evidenceText)) return true;
+  if (/\bIf you cast this spell for its mutate cost\b/i.test(context)) return true;
+  if (/\bYou may cast this card from your hand for its warp cost\b/i.test(context)) return true;
+  if (/\b've cast this\b/i.test(context) || /\bve cast this\b/i.test(context)) return true;
+  if (/\bWhenever you cast an instant or sorcery spell\b/i.test(paragraph) && /\bcast this\b/i.test(evidenceText)) {
+    return true;
+  }
   return false;
 }
 

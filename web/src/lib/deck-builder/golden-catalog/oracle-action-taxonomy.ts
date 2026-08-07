@@ -164,6 +164,7 @@ function inferPrimitiveFromEvidence(text: string): PrimitiveActionType | null {
   if (/\bdestroy\b/.test(t)) return "destroy";
   if (/\bexile\b/.test(t)) return "exile";
   if (/\bcounter target\b/.test(t)) return "counter";
+  if (/\breturn [\w ,']+to the battlefield\b/.test(t)) return "return_to_battlefield";
   if (/\breturn target.*to.*hand\b/.test(t)) return "return_to_hand";
   if (/graveyard.*(?:onto the battlefield|to your hand)/.test(t)) return "return_to_battlefield";
   if (/\bcreate.*token\b/.test(t)) return "create_token";

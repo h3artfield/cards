@@ -1,0 +1,38 @@
+{
+  "generatedAt": "2026-08-07T08:00:00.000Z",
+  "parentDataset": "development_set_v18",
+  "parentContentHash": "dacabb51eec6033179baac2269713bd750983aa21590915ee4d4873f3d3fd4dd",
+  "newDataset": "development_set_v19",
+  "newContentHash": "a642a667d21e32adc16ba4457545d659337987078cf84349d1488dc6618d45c0",
+  "changedCaseIds": [
+    "eval-0150",
+    "eval-0157",
+    "eval-0163"
+  ],
+  "changes": [
+    {
+      "caseId": "eval-0150",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "forbiddenPrimitiveActions",
+        "expectedRoles"
+      ],
+      "reason": "One-shot resolution cast permission → Layer 2 cast (reverses v18 reject_parser_output)"
+    },
+    {
+      "caseId": "eval-0157",
+      "changedFields": [
+        "forbiddenPrimitiveActions"
+      ],
+      "reason": "Removed contradictory forbidden draw where draw is in gold"
+    },
+    {
+      "caseId": "eval-0163",
+      "changedFields": [
+        "forbiddenPrimitiveActions"
+      ],
+      "reason": "Removed contradictory forbidden draw where draw is in gold"
+    }
+  ],
+  "policy": "Cast-permission policy gold migration — no parser changes"
+}
