@@ -32,6 +32,7 @@ export const PRIMITIVE_ACTION_TYPES = [
   "create_token",
   "cast",
   "play",
+  "put_onto_battlefield",
   "copy",
   "sacrifice",
   "mill",
@@ -48,8 +49,8 @@ export const PRIMITIVE_ACTION_TYPES = [
 export type PrimitiveActionType = (typeof PRIMITIVE_ACTION_TYPES)[number];
 
 /** Canonical taxonomy version — bump when Layer 2 primitives change. */
-export const TAXONOMY_VERSION = "three-layer-v1.1";
-export const TAXONOMY_VERSION_PREVIOUS = "three-layer-v1";
+export const TAXONOMY_VERSION = "three-layer-v1.2";
+export const TAXONOMY_VERSION_PREVIOUS = "three-layer-v1.1";
 
 /** Layer 3 — derived deck-building roles (never primitive action labels). */
 export const DERIVED_DECK_ROLES = [
@@ -154,7 +155,10 @@ export function normalizeToPrimitive(raw: string, evidenceContains?: string): Pr
 function inferPrimitiveFromEvidence(text: string): PrimitiveActionType | null {
   const t = text.toLowerCase();
   if (/\bdraw\b/.test(t)) return "draw";
-  if (/\bsearch (?:your )?library\b/.test(t)) return "search_library";
+  if (/\bsearch (?:your |their )?library\b/.test(t)) return "search_library";
+  if (/\bput [\w ]+ from (?:your |a |their )?(?:hand|graveyard|exile)\b[\w ]* onto the battlefield\b/.test(t)) {
+    return "put_onto_battlefield";
+  }
   if (/\badd \{/.test(t) || /\badd (?:one mana|three mana)/.test(t)) return "add_mana";
   if (/\bdeals? \d+ damage\b/.test(t)) return "deal_damage";
   if (/\bdestroy\b/.test(t)) return "destroy";

@@ -1,5 +1,5 @@
 /**
- * Document root causes for accepted unsupported extractions on validation_set_v2.
+ * Document root causes for accepted unsupported extractions — updated after taxonomy v1.2.
  * Run: npx tsx scripts/validation-unsupported-root-cause-v12.ts
  */
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
@@ -7,6 +7,32 @@ import { resolve } from "node:path";
 import { ORACLE_ACTION_PARSER_VERSION } from "../src/lib/deck-builder/golden-catalog/oracle-action-schema";
 import { HELD_OUT_CARD_NAMES } from "./validation-held-out-card-names";
 
+/** Resolved in validation_set_v4 + evaluator v1.2 — no longer genuinely_unsupported. */
+export const RESOLVED_V12_AUDIT_CASES = [
+  {
+    caseId: "held-0025",
+    cardName: HELD_OUT_CARD_NAMES["held-0025"],
+    priorClassification: "genuinely_unsupported_extraction (search_library mislabel)",
+    v12Resolution: "validation_set_v4 gold adds put_onto_battlefield; parser FP reclassified as wrong_primitive_action_type",
+    rootCause: "missing_gold_label + parser search_library over-match",
+  },
+  {
+    caseId: "held-0058",
+    cardName: HELD_OUT_CARD_NAMES["held-0058"],
+    priorClassification: "genuinely_unsupported_extraction (search_library mislabel)",
+    v12Resolution: "validation_set_v4 gold adds put_onto_battlefield; parser FP reclassified as wrong_primitive_action_type",
+    rootCause: "missing_gold_label + parser search_library over-match",
+  },
+  {
+    caseId: "held-0010",
+    cardName: HELD_OUT_CARD_NAMES["held-0010"],
+    priorClassification: "genuinely_unsupported_extraction (evaluator draw heuristic)",
+    v12Resolution: "Gold unchanged; inferSupportedPrimitiveFromEvidence now matches third-person 'draws cards'. Accepted TP 2/2.",
+    rootCause: "evaluator_defect",
+  },
+];
+
+/** @deprecated Pre-v1.2 records — retained for audit trail only. */
 export const UNSUPPORTED_ACCEPTED_ROOT_CAUSES = [
   {
     caseId: "held-0025",
@@ -20,9 +46,10 @@ export const UNSUPPORTED_ACCEPTED_ROOT_CAUSES = [
     whyAccepted:
       "Pattern requiresPermissionVerb false but matches search_library put-onto-battlefield regex; confidence 0.9 exceeds promotion threshold with no structural uncertainty gate for hand-origin puts.",
     safestGeneralCorrection:
-      "Restrict search_library pattern to require 'search (your|their) library' OR 'from your library' in evidence; route hand-origin 'put ... onto the battlefield' to play primitive or needs_review.",
-    proposedRouting: "needs_review",
+      "Restrict search_library pattern to require 'search (your|their) library' OR 'from your library' in evidence; route hand-origin 'put ... onto the battlefield' to put_onto_battlefield primitive.",
+    proposedRouting: "wrong_primitive_until_parser_v1.13",
     reviewer: "catalog-audit-agent",
+    resolvedIn: "validation_set_v4 + three-layer-v1.2",
   },
   {
     caseId: "held-0058",
@@ -37,9 +64,10 @@ export const UNSUPPORTED_ACCEPTED_ROOT_CAUSES = [
     whyAccepted:
       "Same overly broad put-onto-battlefield pattern as Growth Spiral family; promoted at 0.9 without zone guard.",
     safestGeneralCorrection:
-      "Require library zone token in evidence for search_library classification; hand/graveyard/exile source puts use return_to_battlefield or play/cast permission rules.",
-    proposedRouting: "needs_review",
+      "Require library zone token in evidence for search_library classification; hand-origin puts use put_onto_battlefield.",
+    proposedRouting: "wrong_primitive_until_parser_v1.13",
     reviewer: "catalog-audit-agent",
+    resolvedIn: "validation_set_v4 + three-layer-v1.2",
   },
   {
     caseId: "held-0010",
@@ -48,14 +76,15 @@ export const UNSUPPORTED_ACCEPTED_ROOT_CAUSES = [
     actionTypeAssigned: "draw",
     evidenceSpan: "draws cards",
     whyUnsupported:
-      "Third-person 'draws cards equal to' inside compound clause — inferSupported heuristics require 'draw' capitalized or 'draw a/one/two cards' form.",
+      "Third-person 'draws cards equal to' inside compound clause — inferSupported heuristics require 'draw' not 'draws'.",
     confidence: 0.9,
     whyAccepted:
-      "Draw pattern matches 'draws cards'; promoted despite evaluator support heuristic gap (counts as genuinely_unsupported in authoritative tally when unmatched).",
+      "Draw pattern matches 'draws cards'; promoted despite evaluator support heuristic gap.",
     safestGeneralCorrection:
-      "Extend draw pattern for third-person 'draws N cards' AND ensure compound 'discards... then draws' clause split; do not card-specifically gate Windfall.",
+      "Extend draw pattern for third-person 'draws N cards' AND ensure compound 'discards... then draws' clause split.",
     proposedRouting: "accepted",
     reviewer: "catalog-audit-agent",
+    resolvedIn: "evaluator fix in oracle-action-eval-shared.ts (gold unchanged)",
   },
 ];
 
@@ -68,11 +97,12 @@ function main() {
       {
         generatedAt: new Date().toISOString(),
         parserVersion: ORACLE_ACTION_PARSER_VERSION,
-        commitSha: "39a1e6108b97f084565e9151f5f3eef953762885",
-        validationSet: "validation_set_v2",
+        validationSet: "validation_set_v4",
+        taxonomyVersion: "three-layer-v1.2",
         recordCount: UNSUPPORTED_ACCEPTED_ROOT_CAUSES.length,
+        resolvedV12AuditCases: RESOLVED_V12_AUDIT_CASES,
         records: UNSUPPORTED_ACCEPTED_ROOT_CAUSES,
-        note: "Parser not modified in this milestone — corrections apply to next development-driven iteration only.",
+        note: "Original three v12 audit cases resolved. Parser grammar unchanged — put_onto_battlefield emission deferred to development_set_v8-driven v1.13 work.",
       },
       null,
       2,

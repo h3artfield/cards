@@ -40,11 +40,11 @@ function main() {
     setClassification: "development_set_v8",
     evaluationVersion: "development-v8-generalization-expansion",
     contentHash: v8Hash,
-    taxonomyVersion: TAXONOMY_VERSION,
+    taxonomyVersion: "three-layer-v1.1",
     caseCount: v8Cases.length,
     frozenAt: reviewedAt,
     usagePolicy:
-      "Parser tuning — v8 adds manually reviewed generalization cases from validation failure families (not validation cards).",
+      "Parser tuning — v8 adds manually reviewed generalization cases from validation failure families (not validation cards). Frozen — superseded by development_set_v9 for v1.2 taxonomy.",
     parentClassification: "development_set_v7",
     parentContentHash: V7_HASH,
     parentSetPath: "data/oracle-action-eval-development-v7.json",
@@ -68,6 +68,7 @@ function main() {
         parentContentHash: V7_HASH,
         newDataset: "development_set_v8",
         newContentHash: v8Hash,
+        taxonomyVersion: "three-layer-v1.1",
         addedCaseCount: expansionCases.length,
         reasonForChange:
           "Generalization expansion from validation failure families using different catalog cards.",
@@ -94,21 +95,14 @@ function main() {
     caseCount: v7.caseCount,
     purpose: "Frozen v1.12 checkpoint baseline",
   };
-  manifest.developmentSet = {
+  manifest.developmentSetV8 = {
     path: "data/oracle-action-eval-development-v8.json",
     classification: "development_set_v8",
     contentHash: v8Hash,
     caseCount: v8Cases.length,
-    purpose: "Parser tuning — v8 generalization expansion",
-    parentVersion: {
-      classification: "development_set_v7",
-      contentHash: V7_HASH,
-      path: "data/oracle-action-eval-development-v7.json",
-    },
-    diffManifest: "data/oracle-action-eval-development-v8-diff.json",
-    reviewer: REVIEWER_ID,
-    reviewTimestamp: reviewedAt,
-    expansionFamilies: familyCounts(),
+    purpose: "Frozen v1.1 taxonomy generalization expansion — immutable",
+    frozenAt: reviewedAt,
+    taxonomyVersion: "three-layer-v1.1",
   };
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), "utf8");
 
@@ -119,4 +113,6 @@ function main() {
   console.log("  families:", familyCounts());
 }
 
-main();
+if (process.argv[1]?.replace(/\\/g, "/").endsWith("create-development-set-v8-expansion.ts")) {
+  main();
+}

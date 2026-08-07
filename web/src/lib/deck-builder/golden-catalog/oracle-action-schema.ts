@@ -202,7 +202,7 @@ export const ORACLE_ACTION_PRODUCTION_GATES = {
 } as const;
 
 export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.12-unified-matcher";
-export const ORACLE_ACTION_TAXONOMY_VERSION = "three-layer-v1.1";
+export const ORACLE_ACTION_TAXONOMY_VERSION = "three-layer-v1.2";
 
 export const HIGH_VALUE_ACTION_TYPES = [
   "draw",

@@ -1,0 +1,82 @@
+{
+  "generatedAt": "2026-08-07T02:00:00.000Z",
+  "previousVersion": "three-layer-v1.1",
+  "currentVersion": "three-layer-v1.2",
+  "changes": [
+    {
+      "layer": 2,
+      "changeType": "primitive_added",
+      "primitive": "put_onto_battlefield",
+      "fields": [
+        "sourceZone",
+        "destinationZone",
+        "affectedObject",
+        "optionalEffect",
+        "condition"
+      ],
+      "reason": "Putting a card from a zone onto the battlefield is distinct from play, cast, and search_library. Hand-origin puts are not library search.",
+      "parserVersion": "oracle-action-v1.12-unified-matcher",
+      "note": "Parser grammar unchanged in this milestone — taxonomy and evaluator corrections only."
+    },
+    {
+      "layer": 2,
+      "changeType": "evaluator_correction",
+      "primitive": "draw",
+      "reason": "Third-person 'draws cards' (e.g. Windfall) is Oracle-supported draw; prior heuristic required 'draw' not 'draws'."
+    },
+    {
+      "layer": 2,
+      "changeType": "evaluator_correction",
+      "primitive": "search_library",
+      "reason": "search_library now requires explicit 'search (your|their) library' in evidence; hand-origin put onto battlefield is not search_library."
+    }
+  ],
+  "validationGoldMigrations": [
+    {
+      "caseId": "held-0025",
+      "card": "Growth Spiral",
+      "change": "Add put_onto_battlefield (sourceZone: hand, affectedObject: land_card, optionalEffect: true); not play or search_library."
+    },
+    {
+      "caseId": "held-0058",
+      "card": "Aether Vial",
+      "change": "Reclassify return_to_battlefield → put_onto_battlefield (sourceZone: hand, affectedObject: creature_card, optionalEffect: true)."
+    },
+    {
+      "caseId": "held-0010",
+      "card": "Windfall",
+      "change": "Gold unchanged (draw already present); evaluator draw heuristic fixed for third-person 'draws cards'."
+    }
+  ],
+  "parserEmittedPrimitiveAudit": {
+    "note": "Parser v1.12 unchanged; put_onto_battlefield not yet emitted by parser patterns.",
+    "canonicalPrimitives": [
+      "add_mana",
+      "draw",
+      "discard",
+      "search_library",
+      "deal_damage",
+      "destroy",
+      "exile",
+      "counter",
+      "return_to_hand",
+      "return_to_battlefield",
+      "create_token",
+      "cast",
+      "play",
+      "put_onto_battlefield",
+      "copy",
+      "sacrifice",
+      "mill",
+      "gain_life",
+      "lose_life",
+      "scry",
+      "surveil",
+      "tap",
+      "untap",
+      "put_counter",
+      "shuffle_into_library"
+    ],
+    "absentFromParserEmission": ["put_onto_battlefield"]
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "generatedAt": "2026-08-07T02:01:16.897Z",
+  "reviewer": "catalog-audit-agent",
+  "reviewTimestamp": "2026-08-07T02:01:16.897Z",
+  "parentDataset": "validation_set_v3",
+  "parentContentHash": "4cbb7dfeb4646b1c965687b528f6e3d33784951e8adb72069b0325fa35875cda",
+  "newDataset": "validation_set_v4",
+  "newContentHash": "c422988bc2816a86725cd7042c35d844c2b1cbd80ca5430c08a7f32bb403a076",
+  "taxonomyVersion": "three-layer-v1.2",
+  "changedCaseCount": 2,
+  "reasonForChange": "three-layer-v1.2 put_onto_battlefield primitive + Growth Spiral / Aether Vial gold corrections.",
+  "labelChanges": [
+    {
+      "caseId": "held-0025",
+      "cardName": "Growth Spiral",
+      "reason": "Hand→battlefield land put is put_onto_battlefield, distinct from play, cast, and search_library.",
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "Draw a card"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "Draw a card"
+            },
+            {
+              "actionType": "put_onto_battlefield",
+              "evidenceContains": "put a land card from your hand onto the battlefield",
+              "sourceZone": "hand",
+              "destinationZone": "battlefield",
+              "affectedObject": "land_card",
+              "optionalEffect": true
+            }
+          ]
+        },
+        "expectedRoles": {
+          "before": [
+            {
+              "role": "card_advantage",
+              "fromPrimitiveActions": [
+                "draw"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "role": "card_advantage",
+              "fromPrimitiveActions": [
+                "draw"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "held-0058",
+      "cardName": "Aether Vial",
+      "reason": "Creature put from hand onto battlefield is put_onto_battlefield, not return_to_battlefield or search_library.",
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "return_to_battlefield",
+              "evidenceContains": "from your hand onto the battlefield"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "put_onto_battlefield",
+              "evidenceContains": "from your hand onto the battlefield",
+              "sourceZone": "hand",
+              "destinationZone": "battlefield",
+              "affectedObject": "creature_card",
+              "optionalEffect": true,
+              "condition": "manaValueCondition: charge counter count"
+            }
+          ]
+        },
+        "expectedRoles": {
+          "before": [
+            {
+              "role": "recursion",
+              "fromPrimitiveActions": [
+                "return_to_battlefield"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "role": "recursion",
+              "fromPrimitiveActions": [
+                "put_onto_battlefield"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "evaluatorOnlyChanges": [
+    {
+      "caseId": "held-0010",
+      "cardName": "Windfall",
+      "change": "Third-person draw heuristic in inferSupportedPrimitiveFromEvidence — gold unchanged."
+    }
+  ]
+}

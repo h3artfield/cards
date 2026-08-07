@@ -13,8 +13,8 @@ import {
 import type { OracleActionEvalCaseV2 } from "./audit-oracle-action-eval-cases";
 import { buildCases } from "./generate-oracle-action-eval-cases";
 
-export const TAXONOMY_VERSION = "three-layer-v1.1";
-export const TAXONOMY_VERSION_PREVIOUS = "three-layer-v1";
+export const TAXONOMY_VERSION = "three-layer-v1.2";
+export const TAXONOMY_VERSION_PREVIOUS = "three-layer-v1.1";
 export const EVALUATION_VERSION = "eval-frozen-v1";
 export const REVIEWER_ID = "catalog-audit-agent";
 
@@ -47,6 +47,10 @@ export interface ExpectedPrimitiveAction {
   optional?: boolean;
   optionalEffect?: boolean;
   optionalCost?: boolean;
+  sourceZone?: string;
+  destinationZone?: string;
+  affectedObject?: string;
+  condition?: string;
   targetMinimum?: number;
   targetMaximum?: number | "X";
   quantityMayBeZero?: boolean;
@@ -125,18 +129,19 @@ export function inferSupportedPrimitiveFromEvidence(
   for (const primitive of PRIMITIVE_ACTION_TYPES) {
     const patterns: Record<PrimitiveActionType, RegExp> = {
       add_mana: /\bAdd \{|\badd (?:one mana|three mana|\{)/i,
-      draw: /\bdraw (?:a |one |two |three |four |five |seven |up to \w+ )?cards?\b/i,
+      draw: /\b(?:draw|draws) (?:a |one |two |three |four |five |seven |up to \w+ )?cards?\b/i,
       discard: /\b(?:discard|discards)\b/i,
-      search_library: /\bsearch (?:your |their )?library\b/i,
+      search_library: /\bsearch(?:es)? (?:your |their )?library\b/i,
       deal_damage: /\bdeals? \d+ damage\b/i,
       destroy: /\bDestroy\b/i,
       exile: /\b[Ee]xile\b/i,
       counter: /\bCounter target\b/i,
       return_to_hand: /\bReturn target[\w ]+ to (?:its|their) owner'?s hand\b/i,
-      return_to_battlefield: /\b(?:from (?:your )?graveyard (?:to your hand|onto the battlefield)|Put target[\w ]+ from a graveyard onto the battlefield)\b/i,
+      return_to_battlefield: /\b(?:from (?:your |a )?graveyard (?:to your hand|onto the battlefield)|Put target[\w ]+ from a graveyard onto the battlefield)\b/i,
       create_token: /\bcreate[\w ]*tokens?\b/i,
-      cast: /\bcast (?:any number of |spells? from|it|that card|the exiled)\b/i,
-      play: /\bplay (?:lands and )?spells? from (?:your )?graveyard\b|\bfrom (?:your )?graveyard\b/i,
+      cast: /\bcast (?:any number of |spells? from|it|that card|the exiled|target)\b/i,
+      play: /\bplay (?:an additional land|land cards from (?:your )?graveyard|lands and )?spells? from (?:your )?graveyard\b/i,
+      put_onto_battlefield: /\bput [\w ]+ from (?:your |a |their )?(?:hand|graveyard|exile)[\w ]* onto the battlefield\b/i,
       copy: /\b[Cc]opy (?:target|it|that spell|the exiled)\b/i,
       sacrifice: /\b[Ss]acrifice\b/i,
       mill: /\b[Mm]ill\b|\bgraveyard into their library\b/i,

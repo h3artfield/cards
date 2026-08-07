@@ -1,0 +1,63 @@
+{
+  "generatedAt": "2026-08-07T02:19:17.061Z",
+  "parserVersion": "oracle-action-v1.12-unified-matcher",
+  "validationSet": "validation_set_v4",
+  "validationSetHash": "c422988bc2816a86725cd7042c35d844c2b1cbd80ca5430c08a7f32bb403a076",
+  "taxonomyVersion": "three-layer-v1.2",
+  "authoritativeUnsupportedCount": 3,
+  "recordCount": 3,
+  "records": [
+    {
+      "caseId": "held-0017",
+      "cardName": "Grafdigger's Cage",
+      "oracleText": "Creature cards in graveyards and libraries can't enter the battlefield.\nPlayers can't cast spells from graveyards or libraries.",
+      "evidenceSpan": "cast spells from",
+      "evidenceStart": 86,
+      "evidenceEnd": 102,
+      "primitiveEmitted": "cast",
+      "confidence": 0.9,
+      "patternFired": "CAST_SPELLS_FROM permission pattern",
+      "whyUnsupported": "Cast token appears inside static prohibition ('can't cast spells'); Layer 1 restriction, not Layer 2 cast action.",
+      "whyAccepted": "reviewStatus=accepted, confidence=0.9 — no structural-uncertainty gate when support heuristic null or forbidden primitive emitted.",
+      "broadFailureFamily": "static_cast_restriction_not_cast",
+      "proposedGeneralGuard": "Suppress cast/play permission patterns when span is within 'can't cast' / 'can't cast spells' static restriction; emit structure annotation or abstain.",
+      "inferSupportedResult": "cast",
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "held-0030",
+      "cardName": "Storm the Festival",
+      "oracleText": "I — Return target creature card with mana value 2 or less from your graveyard to the battlefield.\nII — Return target creature card with mana value 2 or less from your graveyard to the battlefield.\nIII — Return target creature card with mana value 2 or less from your graveyard to the battlefield.",
+      "evidenceSpan": "Return target creature card with mana value 2 or less from your graveyard to the battlefield",
+      "evidenceStart": 103,
+      "evidenceEnd": 195,
+      "primitiveEmitted": "return_to_battlefield",
+      "confidence": 0.9,
+      "patternFired": "Return target ... from graveyard to the battlefield",
+      "whyUnsupported": "Oracle-valid return_to_battlefield, but inferSupportedPrimitiveFromEvidence fails on 'to the battlefield' (requires 'onto'). Evaluator gap causes unsupported tally on duplicate saga chapters.",
+      "whyAccepted": "reviewStatus=accepted, confidence=0.9 — no structural-uncertainty gate when support heuristic null or forbidden primitive emitted.",
+      "broadFailureFamily": "return_zone_wording_to_vs_onto",
+      "proposedGeneralGuard": "Extend return_to_battlefield support heuristic for 'from graveyard to the battlefield'; dedupe repeated saga chapters against single gold label.",
+      "inferSupportedResult": null,
+      "reviewer": "catalog-audit-agent"
+    },
+    {
+      "caseId": "held-0030",
+      "cardName": "Storm the Festival",
+      "oracleText": "I — Return target creature card with mana value 2 or less from your graveyard to the battlefield.\nII — Return target creature card with mana value 2 or less from your graveyard to the battlefield.\nIII — Return target creature card with mana value 2 or less from your graveyard to the battlefield.",
+      "evidenceSpan": "Return target creature card with mana value 2 or less from your graveyard to the battlefield",
+      "evidenceStart": 203,
+      "evidenceEnd": 295,
+      "primitiveEmitted": "return_to_battlefield",
+      "confidence": 0.9,
+      "patternFired": "Return target ... from graveyard to the battlefield",
+      "whyUnsupported": "Oracle-valid return_to_battlefield, but inferSupportedPrimitiveFromEvidence fails on 'to the battlefield' (requires 'onto'). Evaluator gap causes unsupported tally on duplicate saga chapters.",
+      "whyAccepted": "reviewStatus=accepted, confidence=0.9 — no structural-uncertainty gate when support heuristic null or forbidden primitive emitted.",
+      "broadFailureFamily": "return_zone_wording_to_vs_onto",
+      "proposedGeneralGuard": "Extend return_to_battlefield support heuristic for 'from graveyard to the battlefield'; dedupe repeated saga chapters against single gold label.",
+      "inferSupportedResult": null,
+      "reviewer": "catalog-audit-agent"
+    }
+  ],
+  "note": "No card-name exclusions. Unresolved patterns must route to needs_review or abstain in parser v1.13."
+}

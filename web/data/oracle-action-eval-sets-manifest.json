@@ -1,45 +1,55 @@
 {
   "developmentSet": {
-    "path": "data/oracle-action-eval-development-v8.json",
-    "classification": "development_set_v8",
-    "contentHash": "4ba04ffa00af737900f971b40955bd8b04298199e9607d6081b5e89dd7d8c43d",
-    "caseCount": 316,
-    "purpose": "Parser tuning — v8 generalization expansion",
+    "path": "data/oracle-action-eval-development-v9.json",
+    "classification": "development_set_v9",
+    "contentHash": "9078e9641560b68e31ebb188a93dd97ef558f3df4e7e8aba6e98d7c182f51a05",
+    "caseCount": 318,
+    "taxonomyVersion": "three-layer-v1.2",
+    "purpose": "Parser tuning — v1.2 taxonomy expansion for v1.13 parser work",
     "parentVersion": {
-      "classification": "development_set_v7",
-      "contentHash": "6274107dfae50b3c8938099079004e36bdf3ce18e3bb3b8407e9af1cf409a147",
-      "path": "data/oracle-action-eval-development-v7.json"
+      "classification": "development_set_v8",
+      "contentHash": "4ba04ffa00af737900f971b40955bd8b04298199e9607d6081b5e89dd7d8c43d",
+      "path": "data/oracle-action-eval-development-v8.json"
     },
-    "diffManifest": "data/oracle-action-eval-development-v8-diff.json",
+    "diffManifest": "data/oracle-action-eval-development-v9-diff.json",
     "reviewer": "catalog-audit-agent",
-    "reviewTimestamp": "2026-08-07T01:45:27.589Z",
+    "reviewTimestamp": "2026-08-07T02:20:00.514Z",
     "expansionFamilies": {
       "hand_to_battlefield_put_not_search": 4,
-      "static_cast_restriction_not_cast": 3,
-      "alternative_cost_not_cast_primitive": 3,
-      "return_zone_disambiguation": 4,
+      "graveyard_to_battlefield_put": 2,
+      "search_library_then_put_onto_battlefield": 3,
+      "explicit_play_land": 1,
+      "explicit_cast_spell": 2,
+      "play_lands_or_spells_permission": 2,
+      "action_words_in_restrictions_or_costs": 3,
+      "static_cast_restriction_not_cast": 1,
+      "alternative_cost_not_cast_primitive": 2,
+      "return_zone_disambiguation": 2,
       "third_person_draw_discard_sacrifice": 3,
-      "trigger_condition_action_words": 4,
-      "compound_then_clauses": 3,
-      "cast_vs_play_permission": 3,
-      "replacement_effect_clauses": 2,
+      "trigger_condition_action_words": 2,
+      "compound_then_clauses": 2,
+      "cast_vs_play_permission": 1,
+      "replacement_effect_clauses": 1,
       "unsupported_wording_must_abstain": 2
-    }
+    },
+    "manualReviewConfirmedCount": 33
   },
   "validationSet": {
-    "path": "data/oracle-action-eval-validation-v3.json",
-    "classification": "validation_set_v3",
-    "contentHash": "4cbb7dfeb4646b1c965687b528f6e3d33784951e8adb72069b0325fa35875cda",
+    "path": "data/oracle-action-eval-validation-v4.json",
+    "classification": "validation_set_v4",
+    "contentHash": "c422988bc2816a86725cd7042c35d844c2b1cbd80ca5430c08a7f32bb403a076",
     "caseCount": 104,
-    "purpose": "Corrected validation baseline after v12 missing-gold adjudication",
+    "taxonomyVersion": "three-layer-v1.2",
+    "purpose": "Corrected validation baseline after three-layer-v1.2 taxonomy",
     "parentVersion": {
-      "classification": "validation_set_v2",
-      "contentHash": "496a5dd7fcc5c6259f600e25aeecaeead6a036a6574b53cc58e9001321943734",
-      "path": "data/oracle-action-eval-validation-v2.json"
+      "classification": "validation_set_v3",
+      "contentHash": "4cbb7dfeb4646b1c965687b528f6e3d33784951e8adb72069b0325fa35875cda",
+      "path": "data/oracle-action-eval-validation-v3.json"
     },
-    "diffManifest": "data/oracle-action-eval-validation-v3-diff.json",
+    "diffManifest": "data/oracle-action-eval-validation-v4-diff.json",
+    "taxonomyMigration": "data/oracle-action-taxonomy-v1.2-migration.json",
     "reviewer": "catalog-audit-agent",
-    "reviewTimestamp": "2026-08-07T01:45:20.726Z",
+    "reviewTimestamp": "2026-08-07T02:01:16.897Z",
     "priorVersions": [
       {
         "path": "data/oracle-action-eval-validation-v1.json",
@@ -55,6 +65,14 @@
         "caseCount": 104,
         "supersededAt": "2026-08-07T01:45:20.726Z",
         "reason": "v12 missing-gold adjudication moved to v3; v2 frozen immutable"
+      },
+      {
+        "path": "data/oracle-action-eval-validation-v3.json",
+        "classification": "validation_set_v3",
+        "contentHash": "4cbb7dfeb4646b1c965687b528f6e3d33784951e8adb72069b0325fa35875cda",
+        "caseCount": 104,
+        "supersededAt": "2026-08-07T02:01:16.897Z",
+        "reason": "three-layer-v1.2 put_onto_battlefield taxonomy moved to v4; v3 frozen immutable"
       }
     ]
   },
@@ -136,5 +154,22 @@
     "contentHash": "6274107dfae50b3c8938099079004e36bdf3ce18e3bb3b8407e9af1cf409a147",
     "caseCount": 285,
     "purpose": "Frozen v1.12 checkpoint baseline"
+  },
+  "validationSetV3": {
+    "path": "data/oracle-action-eval-validation-v3.json",
+    "classification": "validation_set_v3",
+    "contentHash": "4cbb7dfeb4646b1c965687b528f6e3d33784951e8adb72069b0325fa35875cda",
+    "caseCount": 104,
+    "purpose": "Frozen pre-v1.2-taxonomy baseline",
+    "frozenAt": "2026-08-07T01:45:20.726Z"
+  },
+  "developmentSetV8": {
+    "path": "data/oracle-action-eval-development-v8.json",
+    "classification": "development_set_v8",
+    "contentHash": "4ba04ffa00af737900f971b40955bd8b04298199e9607d6081b5e89dd7d8c43d",
+    "caseCount": 316,
+    "purpose": "Frozen v1.1 taxonomy generalization expansion — immutable",
+    "frozenAt": "2026-08-07T01:45:27.589Z",
+    "taxonomyVersion": "three-layer-v1.1"
   }
 }
