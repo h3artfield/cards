@@ -2,7 +2,7 @@
   "developmentSet": {
     "path": "data/oracle-action-eval-development-v6.json",
     "classification": "development_set_v6",
-    "contentHash": "24d24887732e5ae6412ee3597b1654753ccccf8cd4d044c095b07822e530bb9d",
+    "contentHash": "cc9bc3ad43851a6e33e64c1fd50c4a6a1051444f53d469fdda24cf1b39660fd1",
     "caseCount": 285,
     "taxonomyVersion": "three-layer-v1.1",
     "purpose": "Parser tuning — v6 gold corrections (replacement, cast/play, incomplete labels)",
@@ -14,7 +14,7 @@
     },
     "diffManifest": "data/oracle-action-eval-development-v6-diff.json",
     "reviewer": "catalog-audit-agent",
-    "reviewTimestamp": "2026-08-07T00:16:55.274Z",
+    "reviewTimestamp": "2026-08-07T00:43:07.241Z",
     "multifaceGoldSupportByLayout": {
       "split": 6,
       "mdfc": 8,
@@ -49,6 +49,14 @@
         "contentHash": "319ef3f9fce2f2637da8582055d99ebbdf6e46f7e51763059493888e1742abbe",
         "caseCount": 285,
         "supersededAt": "2026-08-07T00:16:55.274Z",
+        "reason": "Gold-label corrections moved to v6; v5 frozen immutable"
+      },
+      {
+        "path": "data/oracle-action-eval-development-v5.json",
+        "classification": "development_set_v5",
+        "contentHash": "319ef3f9fce2f2637da8582055d99ebbdf6e46f7e51763059493888e1742abbe",
+        "caseCount": 285,
+        "supersededAt": "2026-08-07T00:43:07.241Z",
         "reason": "Gold-label corrections moved to v6; v5 frozen immutable"
       }
     ]

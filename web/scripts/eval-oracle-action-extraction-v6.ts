@@ -327,13 +327,6 @@ function evaluateTier(
         matchedActions.add(idx);
       } else {
         fn += 1;
-        const anyLoose = actionViews.some(
-          (a) =>
-            a.primitive === exp.actionType &&
-            evidenceMatchesOracle(testCase.oracleText, exp.evidenceContains) &&
-            spanValid(testCase.oracleText, a.evidenceText, a.evidenceStart, a.evidenceEnd),
-        );
-        if (anyLoose) tp += 1;
       }
     }
 

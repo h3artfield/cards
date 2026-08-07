@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-08-07T00:16:55.274Z",
+  "generatedAt": "2026-08-07T00:43:07.241Z",
   "reviewer": "catalog-audit-agent",
-  "reviewTimestamp": "2026-08-07T00:16:55.274Z",
+  "reviewTimestamp": "2026-08-07T00:43:07.241Z",
   "parentDataset": "development_set_v5",
   "parentContentHash": "319ef3f9fce2f2637da8582055d99ebbdf6e46f7e51763059493888e1742abbe",
   "parentCaseCount": 285,
   "newDataset": "development_set_v6",
-  "newContentHash": "24d24887732e5ae6412ee3597b1654753ccccf8cd4d044c095b07822e530bb9d",
+  "newContentHash": "cc9bc3ad43851a6e33e64c1fd50c4a6a1051444f53d469fdda24cf1b39660fd1",
   "newCaseCount": 285,
-  "patchCount": 21,
-  "changedCaseCount": 21,
+  "patchCount": 23,
+  "changedCaseCount": 23,
   "reasonForChange": "Gold-label corrections after v1.9 development slice: replacement/multiface labels, incomplete gold, cast/play taxonomy audit.",
   "labelChanges": [
     {
@@ -407,6 +407,92 @@
             {
               "actionType": "untap",
               "evidenceContains": "untap two lands"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0040",
+      "reason": "Graveyard-to-hand modal bullet aligns with return_to_hand taxonomy (not return_to_battlefield).",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "return_to_battlefield",
+              "evidenceContains": "graveyard to your hand"
+            },
+            {
+              "actionType": "destroy",
+              "evidenceContains": "Destroy target"
+            },
+            {
+              "actionType": "discard",
+              "evidenceContains": "discards"
+            },
+            {
+              "actionType": "draw",
+              "evidenceContains": "draws"
+            },
+            {
+              "actionType": "deal_damage",
+              "evidenceContains": "deals 2 damage to any target"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "return_to_hand",
+              "evidenceContains": "from your graveyard to your hand"
+            },
+            {
+              "actionType": "destroy",
+              "evidenceContains": "Destroy target"
+            },
+            {
+              "actionType": "discard",
+              "evidenceContains": "discards"
+            },
+            {
+              "actionType": "draw",
+              "evidenceContains": "draws"
+            },
+            {
+              "actionType": "deal_damage",
+              "evidenceContains": "deals 2 damage to any target"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0057",
+      "reason": "Shuffle hand and graveyard into library is shuffle_into_library, not mill.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "draws seven cards"
+            },
+            {
+              "actionType": "mill",
+              "evidenceContains": "graveyard into their library"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "draws seven cards"
+            },
+            {
+              "actionType": "shuffle_into_library",
+              "evidenceContains": "shuffles their hand and graveyard into their library"
             }
           ]
         }

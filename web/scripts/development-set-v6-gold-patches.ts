@@ -199,6 +199,32 @@ export function applyV6GoldPatches(cases: OracleActionEvalCaseV2[]): number {
   );
 
   patch(
+    "eval-0040",
+    "Graveyard-to-hand modal bullet aligns with return_to_hand taxonomy (not return_to_battlefield).",
+    ["expectedPrimitiveActions"],
+    (c) => {
+      const ret = c.expectedPrimitiveActions.find((e) => e.evidenceContains === "graveyard to your hand");
+      if (ret) {
+        ret.actionType = "return_to_hand";
+        ret.evidenceContains = "from your graveyard to your hand";
+      }
+    },
+  );
+
+  patch(
+    "eval-0057",
+    "Shuffle hand and graveyard into library is shuffle_into_library, not mill.",
+    ["expectedPrimitiveActions"],
+    (c) => {
+      const mill = c.expectedPrimitiveActions.find((e) => e.actionType === "mill");
+      if (mill) {
+        mill.actionType = "shuffle_into_library";
+        mill.evidenceContains = "shuffles their hand and graveyard into their library";
+      }
+    },
+  );
+
+  patch(
     "eval-0062",
     "Cast/play audit: align compound permission with split play lands + cast spells from labels.",
     ["expectedPrimitiveActions"],

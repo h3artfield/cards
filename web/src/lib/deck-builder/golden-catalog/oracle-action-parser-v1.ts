@@ -159,12 +159,15 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bDestroy all [\w ]+/i, actionType: "destroy", sourceZones: ["battlefield"], affectedObjects: ["permanent"] },
   { pattern: /\beach creature gets [-−]/i, actionType: "destroy", sourceZones: ["battlefield"], affectedObjects: ["creature"] },
   { pattern: /\bDestroy (?:target|up to (?:one|two|three) target) [\w ]+/i, actionType: "destroy", sourceZones: ["battlefield"], affectedObjects: ["permanent"] },
-  { pattern: /\bExile (?:target|up to (?:one|two|three) target|all|the top) [\w ]+/i, actionType: "exile", destinationZones: ["exile"] },
+  { pattern: /\bDestroy them\b/i, actionType: "destroy", sourceZones: ["battlefield"], affectedObjects: ["permanent"] },
+  { pattern: /\bExile (?:target|all|the top) [\w ]+/i, actionType: "exile", destinationZones: ["exile"] },
+  { pattern: /\bExile up to (?:one|two|three|\w+) target [\w ]+/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bexile (?:target|the top|a \w+ card from)/i, actionType: "exile", destinationZones: ["exile"] },
-  { pattern: /\bCounter (?:target|up to one target) [\w ]+/i, actionType: "counter", sourceZones: ["stack"], affectedObjects: ["spell", "ability"] },
+  { pattern: /\bCounter (?:target|up to (?:one|two|three|four|five) target) [\w ]+/i, actionType: "counter", sourceZones: ["stack"], affectedObjects: ["spell", "ability"] },
   { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+ to (?:its|their) owner'?s hand\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
-  { pattern: /\bReturn target [\w ]+ from (?:your )?graveyard to your hand\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["hand"] },
-  { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+ (?:card )?from (?:your )?graveyard to (?:your hand|the battlefield)\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["hand", "battlefield"] },
+  { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+(?: cards?)? from (?:your )?graveyard to your hand\b/i, actionType: "return_to_hand", sourceZones: ["graveyard"], destinationZones: ["hand"] },
+  { pattern: /\bReturn target [\w ]+ from (?:your )?graveyard to your hand\b/i, actionType: "return_to_hand", sourceZones: ["graveyard"], destinationZones: ["hand"] },
+  { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+ (?:card )?from (?:your )?graveyard to the battlefield\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
   { pattern: /\bPut target [\w ]+ (?:card )?from a graveyard onto the battlefield\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
   { pattern: /\bSacrifice (?:a |an |target |up to one target )?[\w ]+/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
   { pattern: /\b(?:create|creates|You may create) (?:a |an |one |up to \w+ )?(?:[\w-/]+ )*tokens?\b/i, actionType: "create_token", destinationZones: ["battlefield"], affectedObjects: ["token"] },
@@ -176,14 +179,20 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bMill (?:target )?(?:player|cards|\d+|up to \w+ cards)/i, actionType: "mill", sourceZones: ["library"], destinationZones: ["graveyard"] },
   { pattern: /\bmills? (?:half|fourteen|\d+|up to \w+) [\w ]*/i, actionType: "mill", sourceZones: ["library"], destinationZones: ["graveyard"] },
   { pattern: /\b(?:discard|discards) (?:a |one |two |three |their |up to \w+ )?[\w ]*cards?\b/i, actionType: "discard", sourceZones: ["hand"], destinationZones: ["graveyard"] },
+  { pattern: /\bdraw that many cards\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bdeals? \d+ damage(?: to (?:any target|target [\w ]+|each [\w ]+))?/i, actionType: "deal_damage", affectedObjects: ["player", "permanent"] },
+  { pattern: /\bDeal up to \d+ damage(?: to (?:any target|target [\w ]+))?/i, actionType: "deal_damage", affectedObjects: ["player", "permanent"] },
   { pattern: /\bgains? \d+ life\b/i, actionType: "gain_life", affectedObjects: ["player"] },
   { pattern: /\bloses? \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
+  { pattern: /\bloses? up to \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\bScry \d+\b/i, actionType: "scry", sourceZones: ["library"] },
+  { pattern: /\bScry up to \d+\b/i, actionType: "scry", sourceZones: ["library"] },
   { pattern: /\bSurveil \d+\b/i, actionType: "surveil", sourceZones: ["library"], destinationZones: ["graveyard"] },
   { pattern: /\bTap target [\w ]+/i, actionType: "tap", sourceZones: ["battlefield"] },
+  { pattern: /\bTap up to (?:one|two|three) target [\w ]+/i, actionType: "tap", sourceZones: ["battlefield"] },
   { pattern: /\bUntap (?:target |two |three |four |five |\d+ )?[\w ]+/i, actionType: "untap", sourceZones: ["battlefield"] },
   { pattern: /\bPut (?:a |one |up to one )?\+?\/?\+?\d+\/?\+?\d+ counter/i, actionType: "put_counter", destinationZones: ["battlefield"] },
+  { pattern: /\bPut up to (?:that many|\w+) \+?\/?\+?\d+\/?\+?\d+ counters?\b/i, actionType: "put_counter", destinationZones: ["battlefield"] },
   { pattern: /\bexile it instead\b/i, actionType: "exile", abilityType: "replacement", destinationZones: ["exile"] },
   { pattern: /\b(?:shuffle|shuffles) (?:your |their )?(?:hand and graveyard|graveyard and hand|hand) into (?:your |their )?library\b/i, actionType: "shuffle_into_library", sourceZones: ["hand", "graveyard"], destinationZones: ["library"] },
   { pattern: /\bExile all cards from target player'?s library\b/i, actionType: "exile", sourceZones: ["library"], destinationZones: ["exile"] },
@@ -464,12 +473,59 @@ function multifaceFaceUnambiguous(
   return overlapping.length === 1;
 }
 
+function actionInDistinctThenClause(paragraph: string, evidenceText: string, localStart: number): boolean {
+  const thenMatch = paragraph.match(/\bthen\b/i);
+  if (!thenMatch || thenMatch.index === undefined) return true;
+  const thenIdx = thenMatch.index;
+  const evidenceEnd = localStart + evidenceText.length;
+  if (evidenceEnd <= thenIdx + 1) return true;
+  if (localStart >= thenIdx + 4) return true;
+  return false;
+}
+
+function compoundClauseSpans(paragraph: string): Array<{ localStart: number; text: string }> {
+  const spans = new Map<string, { localStart: number; text: string }>();
+  const add = (localStart: number, text: string) => {
+    const trimmed = text.trim();
+    if (trimmed.length < 4) return;
+    spans.set(`${localStart}:${trimmed.slice(0, 20)}`, { localStart, text: trimmed });
+  };
+  add(0, paragraph);
+  for (const m of paragraph.matchAll(/,\s*then\s+/gi)) {
+    if (m.index !== undefined) add(m.index + m[0].length, paragraph.slice(m.index + m[0].length));
+  }
+  for (const m of paragraph.matchAll(/\.\s+Then\s+/g)) {
+    if (m.index !== undefined) add(m.index + m[0].length, paragraph.slice(m.index + m[0].length));
+  }
+  const thenMatch = paragraph.match(/\bthen\b/i);
+  if (thenMatch?.index !== undefined && thenMatch.index > 0) {
+    add(0, paragraph.slice(0, thenMatch.index).replace(/,\s*$/, ""));
+  }
+  return [...spans.values()];
+}
+
+function* iterPatternMatches(
+  text: string,
+  pattern: RegExp,
+): Generator<{ match: RegExpMatchArray; index: number }> {
+  const flags = pattern.flags.includes("g") ? pattern.flags : `${pattern.flags}g`;
+  const re = new RegExp(pattern.source, flags);
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text)) !== null) {
+    yield { match: m, index: m.index };
+    if (m[0].length === 0) re.lastIndex += 1;
+  }
+}
+
+let extractionFeaturePromotion = true;
+
 function canPromoteToAccepted(input: {
   abilityType: OracleActionV1AbilityType;
   actionType: PrimitiveActionType;
   confidence: number;
   paragraph: string;
   evidenceText: string;
+  evidenceLocalStart?: number;
   replacementInsteadEffect?: boolean;
 }): boolean {
   if (input.replacementInsteadEffect && input.confidence >= 0.92) return true;
@@ -482,10 +538,20 @@ function canPromoteToAccepted(input: {
   }
 
   const tutorThenShuffle = /\bsearch (?:your )?library for\b[\s\S]*\bthen shuffle\b/i.test(input.paragraph);
-  const benignThen = tutorThenShuffle || /\bthen draw\b/i.test(input.paragraph);
+  const benignThen =
+    tutorThenShuffle ||
+    /\bthen draw that many cards\b/i.test(input.paragraph) ||
+    /\bthen draw\b/i.test(input.paragraph) ||
+    /\bthen put\b/i.test(input.paragraph) ||
+    /\bthen that player shuffles\b/i.test(input.paragraph) ||
+    /\bthen shuffle\b/i.test(input.paragraph);
   const compoundThen = /\bthen\b/i.test(input.paragraph) && !benignThen;
-
-  if (compoundThen || input.abilityType === "replacement") return false;
+  const localStart =
+    input.evidenceLocalStart ??
+    input.paragraph.toLowerCase().indexOf(input.evidenceText.toLowerCase().trim());
+  if (compoundThen && localStart >= 0 && !actionInDistinctThenClause(input.paragraph, input.evidenceText, localStart)) {
+    return false;
+  }
 
   const reliablePrimitives: PrimitiveActionType[] = [
     "draw",
@@ -513,6 +579,7 @@ function canPromoteToAccepted(input: {
     "put_counter",
     "shuffle_into_library",
   ];
+  if (input.abilityType === "replacement" && !input.replacementInsteadEffect) return false;
   if (input.confidence >= 0.88 && reliablePrimitives.includes(input.actionType)) {
     return true;
   }
@@ -526,12 +593,14 @@ function assignReviewStatus(input: {
   confidence: number;
   paragraph: string;
   evidenceText: string;
+  evidenceLocalStart?: number;
   componentType: CardFaceComponentType;
   face?: SegmentedCardFace;
   faces?: SegmentedCardFace[];
   cardEvidenceStart?: number;
   cardEvidenceEnd?: number;
   replacementInsteadEffect?: boolean;
+  featurePromotion?: boolean;
 }): OracleActionV1ReviewStatus {
   if (input.abilityType === "replacement" && !input.replacementInsteadEffect) return "needs_review";
 
@@ -548,9 +617,16 @@ function assignReviewStatus(input: {
     return "accepted";
   }
 
-  if (canPromoteToAccepted(input)) return "accepted";
+  if (input.featurePromotion !== false && canPromoteToAccepted(input)) return "accepted";
 
   if (input.confidence < 0.82) return "needs_review";
+  if (
+    /\bthen\b/i.test(input.paragraph) &&
+    input.evidenceLocalStart !== undefined &&
+    !actionInDistinctThenClause(input.paragraph, input.evidenceText, input.evidenceLocalStart)
+  ) {
+    return "needs_review";
+  }
   if (/\bthen\b|\band then\b/i.test(input.paragraph)) return "needs_review";
   if (input.actionType === "play" && /\bcast\b/i.test(input.evidenceText)) return "needs_review";
   if (input.actionType === "cast" && /\bplay land\b/i.test(input.evidenceText)) return "needs_review";
@@ -642,10 +718,20 @@ function acceptAction(input: {
   const tutorThenShuffle = /\bsearch (?:your )?library for\b[\s\S]*\bthen shuffle\b/i.test(
     input.ability.paragraphText,
   );
+  const distinctThenClause = actionInDistinctThenClause(
+    input.ability.paragraphText,
+    evidenceText,
+    localStart,
+  );
   if (
     /\bthen\b/i.test(input.ability.paragraphText) &&
     !/\bthen draw\b/i.test(input.ability.paragraphText) &&
-    !tutorThenShuffle
+    !/\bthen draw that many cards\b/i.test(input.ability.paragraphText) &&
+    !/\bthen put\b/i.test(input.ability.paragraphText) &&
+    !/\bthen shuffle\b/i.test(input.ability.paragraphText) &&
+    !/\bthen that player shuffles\b/i.test(input.ability.paragraphText) &&
+    !tutorThenShuffle &&
+    !distinctThenClause
   ) {
     confidence = 0.8;
   }
@@ -656,12 +742,14 @@ function acceptAction(input: {
     confidence,
     paragraph: input.ability.paragraphText,
     evidenceText,
+    evidenceLocalStart: localStart,
     componentType: input.face.componentType,
     face: input.face,
     faces: input.faces,
     cardEvidenceStart,
     cardEvidenceEnd,
     replacementInsteadEffect: input.replacementInsteadEffect,
+    featurePromotion: extractionFeaturePromotion,
   });
 
   return {
@@ -838,7 +926,10 @@ export function extractOracleActionsV1(input: {
   oracleId: string;
   oracleText: string;
   cardFace?: string;
+  /** When false, feature-specific promotion rules are disabled (for metric accounting baseline). */
+  featurePromotion?: boolean;
 }): OracleActionV1Result {
+  extractionFeaturePromotion = input.featurePromotion !== false;
   const faces = segmentCardFaces(input.oracleText);
   const targetFaces = input.cardFace
     ? faces.filter((f) => f.faceId === input.cardFace)
@@ -861,24 +952,25 @@ export function extractOracleActionsV1(input: {
     let matched = false;
     const abilityMatches: OracleActionV1[] = [];
 
-    for (const rule of ACTION_PATTERNS) {
-      const match = ability.paragraphText.match(rule.pattern);
-      if (!match) continue;
-
-      const action = acceptAction({
-        oracleId: input.oracleId,
-        oracleText: input.oracleText,
-        face,
-        faces,
-        ability,
-        match,
-        rule,
-        actionIndex,
-      });
-
-      if (!action) continue;
-      abilityMatches.push(action);
-      matched = true;
+    for (const span of compoundClauseSpans(ability.paragraphText)) {
+      for (const rule of ACTION_PATTERNS) {
+        for (const { match, index } of iterPatternMatches(span.text, rule.pattern)) {
+          const action = acceptAction({
+            oracleId: input.oracleId,
+            oracleText: input.oracleText,
+            face,
+            faces,
+            ability,
+            match,
+            rule,
+            actionIndex,
+            evidenceOffsetInParagraph: span.localStart + index,
+          });
+          if (!action) continue;
+          abilityMatches.push(action);
+          matched = true;
+        }
+      }
     }
 
     const insteadSpan = insteadClauseSpan(ability.paragraphText);

@@ -1,10 +1,10 @@
 {
   "setClassification": "development_set_v6",
   "evaluationVersion": "development-v6-gold-corrections",
-  "contentHash": "24d24887732e5ae6412ee3597b1654753ccccf8cd4d044c095b07822e530bb9d",
+  "contentHash": "cc9bc3ad43851a6e33e64c1fd50c4a6a1051444f53d469fdda24cf1b39660fd1",
   "taxonomyVersion": "three-layer-v1.1",
   "caseCount": 285,
-  "frozenAt": "2026-08-07T00:16:55.274Z",
+  "frozenAt": "2026-08-07T00:43:07.241Z",
   "usagePolicy": "Parser tuning set — gold corrections on v5 multiface corpus (replacement labels, cast/play split, incomplete gold).",
   "parentClassification": "development_set_v5",
   "parentContentHash": "319ef3f9fce2f2637da8582055d99ebbdf6e46f7e51763059493888e1742abbe",
@@ -22,7 +22,7 @@
     "convert": 3
   },
   "reviewer": "catalog-audit-agent",
-  "reviewTimestamp": "2026-08-07T00:16:55.274Z",
+  "reviewTimestamp": "2026-08-07T00:43:07.241Z",
   "cases": [
     {
       "id": "eval-0001",
@@ -810,8 +810,8 @@
       "oracleText": "Choose two —\n• Return target creature card from your graveyard to your hand.\n• Kolaghan's Command deals 2 damage to any target.\n• Destroy target artifact or enchantment.\n• Each player discards their hand, then draws that many cards.",
       "expectedPrimitiveActions": [
         {
-          "actionType": "return_to_battlefield",
-          "evidenceContains": "graveyard to your hand"
+          "actionType": "return_to_hand",
+          "evidenceContains": "from your graveyard to your hand"
         },
         {
           "actionType": "destroy",
@@ -1315,8 +1315,8 @@
           "evidenceContains": "draws seven cards"
         },
         {
-          "actionType": "mill",
-          "evidenceContains": "graveyard into their library"
+          "actionType": "shuffle_into_library",
+          "evidenceContains": "shuffles their hand and graveyard into their library"
         }
       ],
       "expectedRoles": [
