@@ -9,6 +9,8 @@ import type {
   OracleActionExtractionResult,
   OracleAbilityStructureAnnotation,
   SegmentedAbility,
+  StructureAnnotationKind,
+  TextRole,
 } from "./oracle-action-schema";
 import { ORACLE_ACTION_PARSER_VERSION } from "./oracle-action-schema";
 import {
@@ -28,6 +30,14 @@ import {
   type ConditionType,
   type OptionalityController,
 } from "./oracle-action-optionality";
+import {
+  classifyTextRoleAt,
+  compoundClauseSpansWithRoles,
+  extractStaticPermissions,
+  findReminderSpans,
+  primitiveAllowedAtRole,
+  type StaticPermissionRecord,
+} from "./oracle-span-role-classifier";
 import {
   inferDerivedRoles,
   normalizeAbilityType,
@@ -91,6 +101,7 @@ export interface OracleActionV1 {
   trigger?: string;
   cost?: string;
   optionalityCertain?: boolean;
+  textRole?: TextRole;
 }
 
 export interface OracleActionV1Result {
@@ -674,6 +685,27 @@ function acceptAction(input: {
   if (matchIsAlternativeCostClause(input.ability.paragraphText, localStart, input.rule.actionType)) {
     return null;
   }
+
+  const localEnd = localStart + evidenceText.length;
+  const textRole: TextRole = input.replacementInsteadEffect
+    ? "replacement_effect"
+    : classifyTextRoleAt({
+        paragraph: input.ability.paragraphText,
+        localStart,
+        localEnd,
+        abilityType: input.ability.abilityType,
+      });
+
+  if (!primitiveAllowedAtRole(textRole, input.rule.actionType)) {
+    return null;
+  }
+
+  if (
+    (input.rule.actionType === "cast" || input.rule.actionType === "play") &&
+    textRole === "static_permission"
+  ) {
+    return null;
+  }
   if (
     input.rule.actionType === "search_library" &&
     /\bput [\w ]+ onto the battlefield\b/i.test(evidenceText) &&
@@ -812,6 +844,7 @@ function acceptAction(input: {
     cost: abilityType === "activated" || /^[+\−-]\d+:/.test(input.ability.paragraphText)
       ? extractCost(input.ability.paragraphText)
       : undefined,
+    textRole,
   };
 }
 
@@ -864,11 +897,8 @@ function matchStartsInTriggerCondition(paragraph: string, localMatchStart: numbe
 }
 
 function matchInsideReminderParenthetical(paragraph: string, localStart: number): boolean {
-  const before = paragraph.slice(0, localStart);
-  const openIdx = before.lastIndexOf("(");
-  if (openIdx < 0) return false;
-  const parenSlice = paragraph.slice(openIdx);
-  return /^\((?:As (?:this|a) |\(As this )/i.test(parenSlice);
+  const reminders = findReminderSpans(paragraph);
+  return reminders.some((r) => localStart >= r.localStart && localStart < r.localEnd);
 }
 
 function matchIsSpuriousCastPermission(paragraph: string, localStart: number, evidenceText: string): boolean {
@@ -955,6 +985,196 @@ function deriveRolesFromActions(actions: OracleActionV1[]): DerivedCardRole[] {
   })).filter((r) => r.evidenceActionIds.length > 0);
 }
 
+function roleToStructureKind(role: TextRole): StructureAnnotationKind {
+  switch (role) {
+    case "cost":
+      return "cost";
+    case "trigger_event":
+      return "trigger_event";
+    case "replacement_event":
+      return "replacement_event";
+    case "static_permission":
+      return "static_permission";
+    case "static_restriction":
+      return "static_restriction";
+    case "reminder_text":
+      return "reminder_text";
+    case "mechanic_reminder":
+      return "mechanic_reminder";
+    case "condition":
+      return "condition_only";
+    case "target_or_choice_structure":
+      return "choice_or_target";
+    default:
+      return "condition_only";
+  }
+}
+
+function emitSpanRoleStructureAnnotations(input: {
+  oracleId: string;
+  face?: SegmentedCardFace;
+  ability: SegmentedAbility;
+  parserVersion: string;
+  annotationId: (parts: string[]) => string;
+}): OracleAbilityStructureAnnotation[] {
+  const { ability, face } = input;
+  const faceId = face?.faceId ?? ability.cardFaceId;
+  const paragraph = ability.paragraphText;
+  const annotations: OracleAbilityStructureAnnotation[] = [];
+  const faceEvidence = (cardStart: number, cardEnd: number) => ({
+    cardEvidenceStart: cardStart,
+    cardEvidenceEnd: cardEnd,
+    faceEvidenceStart: face ? cardStart - face.start : undefined,
+    faceEvidenceEnd: face ? cardEnd - face.start : undefined,
+  });
+
+  for (const span of findReminderSpans(paragraph)) {
+    annotations.push({
+      annotationId: input.annotationId([
+        input.oracleId,
+        faceId,
+        String(ability.abilityIndex),
+        span.role,
+        span.text.slice(0, 40),
+      ]),
+      oracleId: input.oracleId,
+      faceId,
+      faceName: face?.faceName,
+      faceIndex: face?.faceIndex,
+      componentType: face?.componentType,
+      abilityIndex: ability.abilityIndex,
+      kind: roleToStructureKind(span.role),
+      evidenceText: span.text,
+      evidenceStart: ability.paragraphStart + span.localStart,
+      evidenceEnd: ability.paragraphStart + span.localEnd,
+      ...faceEvidence(ability.paragraphStart + span.localStart, ability.paragraphStart + span.localEnd),
+      textRole: span.role,
+      parserVersion: input.parserVersion,
+      reviewStatus: "needs_review",
+    });
+  }
+
+  for (const perm of extractStaticPermissions(paragraph)) {
+    annotations.push({
+      annotationId: input.annotationId([
+        input.oracleId,
+        faceId,
+        String(ability.abilityIndex),
+        "static-permission",
+        perm.evidenceText.slice(0, 40),
+      ]),
+      oracleId: input.oracleId,
+      faceId,
+      faceName: face?.faceName,
+      faceIndex: face?.faceIndex,
+      componentType: face?.componentType,
+      abilityIndex: ability.abilityIndex,
+      kind: "static_permission",
+      evidenceText: perm.evidenceText,
+      evidenceStart: ability.paragraphStart + perm.localStart,
+      evidenceEnd: ability.paragraphStart + perm.localEnd,
+      ...faceEvidence(ability.paragraphStart + perm.localStart, ability.paragraphStart + perm.localEnd),
+      textRole: "static_permission",
+      permissionType: perm.permissionType,
+      permittedFromZone: perm.permittedFromZone,
+      permissionSubject: perm.permissionSubject,
+      condition: perm.condition,
+      parserVersion: input.parserVersion,
+      reviewStatus: "needs_review",
+    });
+  }
+
+  const trigEnd = paragraph.match(/^(When|Whenever|At the beginning of)[^,]+,\s*/i);
+  if (trigEnd?.index === 0) {
+    const eventText = trigEnd[0].trim();
+    annotations.push({
+      annotationId: input.annotationId([
+        input.oracleId,
+        faceId,
+        String(ability.abilityIndex),
+        "trigger-event",
+        eventText.slice(0, 40),
+      ]),
+      oracleId: input.oracleId,
+      faceId,
+      faceName: face?.faceName,
+      faceIndex: face?.faceIndex,
+      componentType: face?.componentType,
+      abilityIndex: ability.abilityIndex,
+      kind: "trigger_event",
+      evidenceText: eventText,
+      evidenceStart: ability.paragraphStart,
+      evidenceEnd: ability.paragraphStart + trigEnd[0].length,
+      ...faceEvidence(ability.paragraphStart, ability.paragraphStart + trigEnd[0].length),
+      textRole: "trigger_event",
+      parserVersion: input.parserVersion,
+      reviewStatus: "needs_review",
+    });
+  }
+
+  const replMatch = paragraph.match(/\bIf (?:a |an |target |you |each |that )[^,]+ would [^,]+,\s*/i);
+  if (replMatch?.index !== undefined) {
+    annotations.push({
+      annotationId: input.annotationId([
+        input.oracleId,
+        faceId,
+        String(ability.abilityIndex),
+        "replacement-event",
+        replMatch[0].slice(0, 40),
+      ]),
+      oracleId: input.oracleId,
+      faceId,
+      faceName: face?.faceName,
+      faceIndex: face?.faceIndex,
+      componentType: face?.componentType,
+      abilityIndex: ability.abilityIndex,
+      kind: "replacement_event",
+      evidenceText: replMatch[0].trim(),
+      evidenceStart: ability.paragraphStart + replMatch.index,
+      evidenceEnd: ability.paragraphStart + replMatch.index + replMatch[0].length,
+      ...faceEvidence(
+        ability.paragraphStart + replMatch.index,
+        ability.paragraphStart + replMatch.index + replMatch[0].length,
+      ),
+      textRole: "replacement_event",
+      parserVersion: input.parserVersion,
+      reviewStatus: "needs_review",
+    });
+  }
+
+  const colonIdx = paragraph.indexOf(":");
+  if (colonIdx > 0 && colonIdx <= 80 && !/^(When|Whenever|At the beginning|If )/i.test(paragraph.trim())) {
+    const costText = paragraph.slice(0, colonIdx).trim();
+    if (costText.length > 0 && costText.length <= 80) {
+      annotations.push({
+      annotationId: input.annotationId([
+        input.oracleId,
+        faceId,
+        String(ability.abilityIndex),
+        "activated-cost",
+        costText.slice(0, 40),
+      ]),
+      oracleId: input.oracleId,
+      faceId,
+      faceName: face?.faceName,
+      faceIndex: face?.faceIndex,
+      componentType: face?.componentType,
+      abilityIndex: ability.abilityIndex,
+      kind: "cost",
+      evidenceText: costText,
+      evidenceStart: ability.paragraphStart,
+      evidenceEnd: ability.paragraphStart + colonIdx,
+      ...faceEvidence(ability.paragraphStart, ability.paragraphStart + colonIdx),
+      textRole: "cost",
+      parserVersion: input.parserVersion,
+      reviewStatus: "needs_review",
+    });
+    }
+  }
+
+  return annotations;
+}
+
 function isKeywordOnly(text: string): boolean {
   return /^[A-Z][a-z]+(?:, [a-z]+)*\.?$/.test(text.trim()) && text.length < 80;
 }
@@ -990,7 +1210,7 @@ export function extractOracleActionsV1(input: {
     let matched = false;
     const abilityMatches: OracleActionV1[] = [];
 
-    for (const span of compoundClauseSpans(ability.paragraphText)) {
+    for (const span of compoundClauseSpansWithRoles(ability.paragraphText)) {
       for (const rule of ACTION_PATTERNS) {
         for (const { match, index } of iterPatternMatches(span.text, rule.pattern)) {
           const action = acceptAction({
@@ -1066,6 +1286,13 @@ export function extractOracleActionsV1(input: {
         face,
         ability,
         existingInAbility: inAbility,
+        parserVersion: ORACLE_ACTION_PARSER_VERSION,
+        annotationId: actionId,
+      }),
+      ...emitSpanRoleStructureAnnotations({
+        oracleId: input.oracleId,
+        face,
+        ability,
         parserVersion: ORACLE_ACTION_PARSER_VERSION,
         annotationId: actionId,
       }),

@@ -148,13 +148,34 @@ export interface OracleActionExtractionResult {
   abstainedClauses: Array<{ text: string; start: number; end: number; reason: string }>;
 }
 
+/** Text span role — classifies oracle text before Layer 2 primitive extraction. */
+export type TextRole =
+  | "effect"
+  | "cost"
+  | "trigger_event"
+  | "condition"
+  | "replacement_event"
+  | "replacement_effect"
+  | "static_permission"
+  | "static_restriction"
+  | "reminder_text"
+  | "mechanic_reminder"
+  | "target_or_choice_structure"
+  | "unknown";
+
 /** Layer 1 structure markers — not primitive Oracle actions. */
 export type StructureAnnotationKind =
   | "optional_cost"
   | "optional_effect"
   | "choice_or_target"
   | "static_restriction"
+  | "static_permission"
   | "replacement_condition"
+  | "replacement_event"
+  | "trigger_event"
+  | "cost"
+  | "reminder_text"
+  | "mechanic_reminder"
   | "condition_only";
 
 export interface OracleAbilityStructureAnnotation {
@@ -184,6 +205,10 @@ export interface OracleAbilityStructureAnnotation {
   conditionText?: string;
   conditionEvidenceStart?: number;
   conditionEvidenceEnd?: number;
+  textRole?: TextRole;
+  permissionType?: "cast" | "play";
+  permittedFromZone?: string[];
+  permissionSubject?: string;
   parserVersion: string;
   reviewStatus: "needs_review";
 }
@@ -201,7 +226,7 @@ export const ORACLE_ACTION_PRODUCTION_GATES = {
   falsePositiveRate: { target: 0.02, label: "≤2%" },
 } as const;
 
-export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.13-zone-guards";
+export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.13-span-roles";
 export const ORACLE_ACTION_TAXONOMY_VERSION = "three-layer-v1.2";
 
 export const HIGH_VALUE_ACTION_TYPES = [

@@ -1,89 +1,52 @@
 {
   "developmentSet": {
-    "path": "data/oracle-action-eval-development-v9.json",
-    "classification": "development_set_v9",
-    "contentHash": "9078e9641560b68e31ebb188a93dd97ef558f3df4e7e8aba6e98d7c182f51a05",
-    "caseCount": 318,
+    "path": "data/oracle-action-eval-development-v17.json",
+    "classification": "development_set_v17",
+    "contentHash": "321900c524c19b8b3fe9adc2e108900d57cf7a34af3f83bf3a09884c993a45f9",
+    "caseCount": 284,
     "taxonomyVersion": "three-layer-v1.2",
-    "purpose": "Parser tuning — v1.2 taxonomy expansion for v1.13 parser work",
-    "parentVersion": {
-      "classification": "development_set_v8",
-      "contentHash": "4ba04ffa00af737900f971b40955bd8b04298199e9607d6081b5e89dd7d8c43d",
-      "path": "data/oracle-action-eval-development-v8.json"
-    },
-    "diffManifest": "data/oracle-action-eval-development-v9-diff.json",
-    "reviewer": "catalog-audit-agent",
-    "reviewTimestamp": "2026-08-07T02:20:00.514Z",
-    "expansionFamilies": {
-      "hand_to_battlefield_put_not_search": 4,
-      "graveyard_to_battlefield_put": 2,
-      "search_library_then_put_onto_battlefield": 3,
-      "explicit_play_land": 1,
-      "explicit_cast_spell": 2,
-      "play_lands_or_spells_permission": 2,
-      "action_words_in_restrictions_or_costs": 3,
-      "static_cast_restriction_not_cast": 1,
-      "alternative_cost_not_cast_primitive": 2,
-      "return_zone_disambiguation": 2,
-      "third_person_draw_discard_sacrifice": 3,
-      "trigger_condition_action_words": 2,
-      "compound_then_clauses": 2,
-      "cast_vs_play_permission": 1,
-      "replacement_effect_clauses": 1,
-      "unsupported_wording_must_abstain": 2
-    },
-    "manualReviewConfirmedCount": 33
+    "purpose": "Canonical development set — none/Layer1 gold audit Layer 2 corrections",
+    "parentClassification": "development_set_v16",
+    "parentContentHash": "8bc4a1c25dc84afa257cc3bb17db7c4347b70e38a2f6a14f0361fb96dd904716",
+    "benchmarkStatus": "catalog_clean",
+    "usableForParserEvaluation": true
   },
   "validationSet": {
-    "path": "data/oracle-action-eval-validation-v4.json",
-    "classification": "validation_set_v4",
-    "contentHash": "c422988bc2816a86725cd7042c35d844c2b1cbd80ca5430c08a7f32bb403a076",
+    "path": "data/oracle-action-eval-validation-v8.json",
+    "classification": "validation_set_v8",
+    "contentHash": "a1dc97477b2674ff0ca089e57233bf7d49f5226c49aa2cb6b9fd935e72d3852c",
     "caseCount": 104,
     "taxonomyVersion": "three-layer-v1.2",
-    "purpose": "Corrected validation baseline after three-layer-v1.2 taxonomy",
-    "parentVersion": {
-      "classification": "validation_set_v3",
-      "contentHash": "4cbb7dfeb4646b1c965687b528f6e3d33784951e8adb72069b0325fa35875cda",
-      "path": "data/oracle-action-eval-validation-v3.json"
-    },
-    "diffManifest": "data/oracle-action-eval-validation-v4-diff.json",
-    "taxonomyMigration": "data/oracle-action-taxonomy-v1.2-migration.json",
-    "reviewer": "catalog-audit-agent",
-    "reviewTimestamp": "2026-08-07T02:01:16.897Z",
-    "priorVersions": [
-      {
-        "path": "data/oracle-action-eval-validation-v1.json",
-        "classification": "validation_set_v1",
-        "contentHash": "ca1f02f129149e08d77eaf14e0be3ac39dcf6f6b7cb68a5925983571e0ecf622",
-        "supersededAt": "2026-08-06T13:54:18.648Z",
-        "reason": "17 missing-label proposals adjudicated from blind review"
-      },
-      {
-        "path": "data/oracle-action-eval-validation-v2.json",
-        "classification": "validation_set_v2",
-        "contentHash": "496a5dd7fcc5c6259f600e25aeecaeead6a036a6574b53cc58e9001321943734",
-        "caseCount": 104,
-        "supersededAt": "2026-08-07T01:45:20.726Z",
-        "reason": "v12 missing-gold adjudication moved to v3; v2 frozen immutable"
-      },
-      {
-        "path": "data/oracle-action-eval-validation-v3.json",
-        "classification": "validation_set_v3",
-        "contentHash": "4cbb7dfeb4646b1c965687b528f6e3d33784951e8adb72069b0325fa35875cda",
-        "caseCount": 104,
-        "supersededAt": "2026-08-07T02:01:16.897Z",
-        "reason": "three-layer-v1.2 put_onto_battlefield taxonomy moved to v4; v3 frozen immutable"
-      }
-    ]
+    "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+    "purpose": "Frozen validation set — Category B gold complete, benchmark-ready",
+    "parentClassification": "validation_set_v7",
+    "parentContentHash": "d7c4d11a9773b8d71b98c784d408ef57decb41fda220021c67e3439780fa4988",
+    "benchmarkStatus": "catalog_clean",
+    "usableForParserEvaluation": true
   },
-  "finalBlindTest": {
+  "finalBlindTestV1": {
     "path": "data/oracle-action-eval-final-blind-v1.json",
     "classification": "final_blind_test_v1",
-    "purpose": "Sealed until release candidate passes dev + validation gates",
-    "goldReviewCompletedAt": "2026-08-06T13:54:21.137Z",
-    "goldReviewManifest": "data/oracle-action-eval-final-blind-reviewed-manifest.json",
     "contentHash": "2d6f34f42cf5983f77a784bd5ccc3e07348d9f5da51ef5b11f809ebcd8a67b86",
-    "caseCount": 105
+    "caseCount": 105,
+    "benchmarkStatus": "invalid_identity",
+    "usableForParserEvaluation": false,
+    "invalidIdentityReason": "Synthetic oracleIds and hand-authored text — superseded by final_blind_test_v2",
+    "invalidIdentityMarkedAt": "2026-08-07T03:31:07.464Z"
+  },
+  "finalBlindTest": {
+    "path": "data/oracle-action-eval-final-blind-v2.json",
+    "classification": "final_blind_test_v2",
+    "contentHash": "86bbcb07701f1084962c039597f072341c9e89a18561354b16a62e2f663e6962",
+    "caseCount": 105,
+    "taxonomyVersion": "three-layer-v1.2",
+    "goldReviewVersion": "gold-review-v1",
+    "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+    "purpose": "Sealed catalog-clean blind — parser BLOCKED until RC gate",
+    "parserAccessPolicy": "BLOCKED — identity check and gold review only",
+    "benchmarkStatus": "catalog_clean",
+    "usableForParserEvaluation": false,
+    "reviewer": "catalog-audit-agent"
   },
   "gateSequence": [
     "improve parser on development set",
@@ -98,7 +61,11 @@
     "classification": "development_set_v1",
     "contentHash": "8c72f8d1b98b0f940d049cc2d6df26e0483c8b6efbd9ab25ff0f5647770bf541",
     "caseCount": 204,
-    "purpose": "Historical v6 comparison — frozen, do not modify"
+    "purpose": "Historical v6 comparison — frozen, do not modify",
+    "benchmarkStatus": "invalid_identity",
+    "usableForParserEvaluation": false,
+    "invalidIdentityReason": "Synthetic oracleIds and/or hand-authored oracle text not joined to catalogOracleCards. Preserved for audit history only.",
+    "invalidIdentityMarkedAt": "2026-08-07T03:31:07.464Z"
   },
   "developmentSetV2": {
     "path": "data/oracle-action-eval-development-v2.json",
@@ -106,7 +73,11 @@
     "contentHash": "51ae89777f0f67e6196671a90a7d3f3f79ea2d10a9847b692772399acbcc83ca",
     "caseCount": 228,
     "purpose": "Frozen at parser v1.4 — immutable, do not modify",
-    "frozenAt": "2026-08-06T14:48:01.736Z"
+    "frozenAt": "2026-08-06T14:48:01.736Z",
+    "benchmarkStatus": "invalid_identity",
+    "usableForParserEvaluation": false,
+    "invalidIdentityReason": "Synthetic oracleIds and/or hand-authored oracle text not joined to catalogOracleCards. Preserved for audit history only.",
+    "invalidIdentityMarkedAt": "2026-08-07T03:31:07.464Z"
   },
   "developmentSetV3": {
     "path": "data/oracle-action-eval-development-v3.json",
@@ -114,7 +85,11 @@
     "contentHash": "4a69de72c991c3a3173b4e5efe54ccf96f4c171e11c3f6edd1a0a256573d76d9",
     "caseCount": 256,
     "purpose": "Frozen at parser v1.5 checkpoint — immutable, do not modify",
-    "frozenAt": "2026-08-06T19:54:10.823Z"
+    "frozenAt": "2026-08-06T19:54:10.823Z",
+    "benchmarkStatus": "invalid_identity",
+    "usableForParserEvaluation": false,
+    "invalidIdentityReason": "Synthetic oracleIds and/or hand-authored oracle text not joined to catalogOracleCards. Preserved for audit history only.",
+    "invalidIdentityMarkedAt": "2026-08-07T03:31:07.464Z"
   },
   "developmentSetV4": {
     "path": "data/oracle-action-eval-development-v4.json",
@@ -122,7 +97,11 @@
     "contentHash": "d8acd3ed4752b90f9d7c0f966c221cce3d93cb8766fa2b238f59d080c292a684",
     "caseCount": 256,
     "purpose": "Frozen at parser v1.6 — optionality/condition milestone; immutable",
-    "frozenAt": "2026-08-06T21:18:25.466Z"
+    "frozenAt": "2026-08-06T21:18:25.466Z",
+    "benchmarkStatus": "invalid_identity",
+    "usableForParserEvaluation": false,
+    "invalidIdentityReason": "Synthetic oracleIds and/or hand-authored oracle text not joined to catalogOracleCards. Preserved for audit history only.",
+    "invalidIdentityMarkedAt": "2026-08-07T03:31:07.464Z"
   },
   "developmentSetV5": {
     "path": "data/oracle-action-eval-development-v5.json",
@@ -130,7 +109,11 @@
     "contentHash": "319ef3f9fce2f2637da8582055d99ebbdf6e46f7e51763059493888e1742abbe",
     "caseCount": 285,
     "purpose": "Frozen multiface gold expansion — immutable after 3612cc2",
-    "frozenAt": "2026-08-06T22:38:39.705Z"
+    "frozenAt": "2026-08-06T22:38:39.705Z",
+    "benchmarkStatus": "invalid_identity",
+    "usableForParserEvaluation": false,
+    "invalidIdentityReason": "Synthetic oracleIds and/or hand-authored oracle text not joined to catalogOracleCards. Preserved for audit history only.",
+    "invalidIdentityMarkedAt": "2026-08-07T03:31:07.464Z"
   },
   "developmentSetV6": {
     "path": "data/oracle-action-eval-development-v6.json",
@@ -138,7 +121,11 @@
     "contentHash": "24d24887732e5ae6412ee3597b1654753ccccf8cd4d044c095b07822e530bb9d",
     "caseCount": 285,
     "purpose": "Frozen at parser v1.10 — immutable after f7bf9b9",
-    "frozenAt": "2026-08-07T00:16:55.274Z"
+    "frozenAt": "2026-08-07T00:16:55.274Z",
+    "benchmarkStatus": "invalid_identity",
+    "usableForParserEvaluation": false,
+    "invalidIdentityReason": "Synthetic oracleIds and/or hand-authored oracle text not joined to catalogOracleCards. Preserved for audit history only.",
+    "invalidIdentityMarkedAt": "2026-08-07T03:31:07.464Z"
   },
   "validationSetV2": {
     "path": "data/oracle-action-eval-validation-v2.json",
@@ -146,14 +133,22 @@
     "contentHash": "496a5dd7fcc5c6259f600e25aeecaeead6a036a6574b53cc58e9001321943734",
     "caseCount": 104,
     "purpose": "Frozen pre-v12-adjudication baseline",
-    "frozenAt": "2026-08-06T13:54:18.648Z"
+    "frozenAt": "2026-08-06T13:54:18.648Z",
+    "benchmarkStatus": "invalid_identity",
+    "usableForParserEvaluation": false,
+    "invalidIdentityReason": "Synthetic oracleIds and/or hand-authored oracle text not joined to catalogOracleCards. Preserved for audit history only.",
+    "invalidIdentityMarkedAt": "2026-08-07T03:31:07.464Z"
   },
   "developmentSetV7": {
     "path": "data/oracle-action-eval-development-v7.json",
     "classification": "development_set_v7",
     "contentHash": "6274107dfae50b3c8938099079004e36bdf3ce18e3bb3b8407e9af1cf409a147",
     "caseCount": 285,
-    "purpose": "Frozen v1.12 checkpoint baseline"
+    "purpose": "Frozen v1.12 checkpoint baseline",
+    "benchmarkStatus": "invalid_identity",
+    "usableForParserEvaluation": false,
+    "invalidIdentityReason": "Synthetic oracleIds and/or hand-authored oracle text not joined to catalogOracleCards. Preserved for audit history only.",
+    "invalidIdentityMarkedAt": "2026-08-07T03:31:07.464Z"
   },
   "validationSetV3": {
     "path": "data/oracle-action-eval-validation-v3.json",
@@ -161,7 +156,11 @@
     "contentHash": "4cbb7dfeb4646b1c965687b528f6e3d33784951e8adb72069b0325fa35875cda",
     "caseCount": 104,
     "purpose": "Frozen pre-v1.2-taxonomy baseline",
-    "frozenAt": "2026-08-07T01:45:20.726Z"
+    "frozenAt": "2026-08-07T01:45:20.726Z",
+    "benchmarkStatus": "invalid_identity",
+    "usableForParserEvaluation": false,
+    "invalidIdentityReason": "Synthetic oracleIds and/or hand-authored oracle text not joined to catalogOracleCards. Preserved for audit history only.",
+    "invalidIdentityMarkedAt": "2026-08-07T03:31:07.464Z"
   },
   "developmentSetV8": {
     "path": "data/oracle-action-eval-development-v8.json",
@@ -170,6 +169,60 @@
     "caseCount": 316,
     "purpose": "Frozen v1.1 taxonomy generalization expansion — immutable",
     "frozenAt": "2026-08-07T01:45:27.589Z",
-    "taxonomyVersion": "three-layer-v1.1"
+    "taxonomyVersion": "three-layer-v1.1",
+    "benchmarkStatus": "invalid_identity",
+    "usableForParserEvaluation": false,
+    "invalidIdentityReason": "Synthetic oracleIds and/or hand-authored oracle text not joined to catalogOracleCards. Preserved for audit history only.",
+    "invalidIdentityMarkedAt": "2026-08-07T03:31:07.464Z"
+  },
+  "validationSetV4": {
+    "path": "data/oracle-action-eval-validation-v4.json",
+    "classification": "validation_set_v4",
+    "contentHash": "c422988bc2816a86725cd7042c35d844c2b1cbd80ca5430c08a7f32bb403a076",
+    "caseCount": 104,
+    "purpose": "Frozen pre-catalog-identity validation baseline",
+    "frozenAt": "2026-08-07T02:01:16.897Z",
+    "benchmarkStatus": "invalid_identity",
+    "usableForParserEvaluation": false,
+    "invalidIdentityReason": "Synthetic oracleIds and/or hand-authored oracle text not joined to catalogOracleCards. Preserved for audit history only.",
+    "invalidIdentityMarkedAt": "2026-08-07T03:31:07.464Z"
+  },
+  "developmentSetV9": {
+    "path": "data/oracle-action-eval-development-v9.json",
+    "classification": "development_set_v9",
+    "contentHash": "26cf5d1e8f251509ee68da3a3026621aaab6822f0b6678573e7bfbd3d3ed35e0",
+    "purpose": "Frozen pre-catalog-identity development baseline",
+    "benchmarkStatus": "invalid_identity",
+    "usableForParserEvaluation": false,
+    "invalidIdentityReason": "Synthetic oracleIds and/or hand-authored oracle text not joined to catalogOracleCards. Preserved for audit history only.",
+    "invalidIdentityMarkedAt": "2026-08-07T03:31:07.464Z"
+  },
+  "validationSetV5": {
+    "path": "data/oracle-action-eval-validation-v5.json",
+    "classification": "validation_set_v5",
+    "contentHash": "82753542d712572d9093696d84b826852aad9f27c5a6165ade780e23c205cf81",
+    "benchmarkStatus": "invalid_identity",
+    "usableForParserEvaluation": false,
+    "invalidIdentityReason": "Synthetic oracleIds and/or hand-authored oracle text not joined to catalogOracleCards. Preserved for audit history only.",
+    "invalidIdentityMarkedAt": "2026-08-07T03:31:07.464Z"
+  },
+  "benchmarkReconstruction": {
+    "activeDevelopmentSet": "development_set_v11",
+    "activeValidationSet": "validation_set_v6",
+    "activeBlindSet": "final_blind_test_v2",
+    "legacyPolicy": "invalid_identity datasets must not be used for parser quality claims",
+    "markedAt": "2026-08-07T03:31:07.464Z",
+    "developmentSetV12": {
+      "resolvedCount": 27,
+      "permanentlyExcludedCount": 9
+    }
+  },
+  "finalBlindTestV2": {
+    "path": "data/oracle-action-eval-final-blind-v2.json",
+    "contentHash": "86bbcb07701f1084962c039597f072341c9e89a18561354b16a62e2f663e6962",
+    "sealed": true,
+    "parserExecutionCount": 0,
+    "goldReviewStatus": "reviewed",
+    "identityStatus": "catalog_exact"
   }
 }

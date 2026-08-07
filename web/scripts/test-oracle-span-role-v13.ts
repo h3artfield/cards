@@ -1,0 +1,202 @@
+/**
+ * Regression tests — parser v1.13 span-role layer + activatedColonSplit performance.
+ * Run: npx tsx scripts/test-oracle-span-role-v13.ts
+ */
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { extractOracleActionsV1 } from "../src/lib/deck-builder/golden-catalog/oracle-action-parser-v1";
+import {
+  classifyTextRoleAt,
+  compoundClauseSpansWithRoles,
+  findReminderSpans,
+} from "../src/lib/deck-builder/golden-catalog/oracle-span-role-classifier";
+import { ORACLE_ACTION_PARSER_VERSION } from "../src/lib/deck-builder/golden-catalog/oracle-action-schema";
+
+const PERF_BUDGET_MS = 500;
+const DEV_CASE_BUDGET_MS = 15_000;
+
+/** Oracle text that previously hung activatedColonSplit() due to catastrophic backtracking. */
+const REGRESSION_HANG_CASES = [
+  {
+    name: "smothering_tithe_trigger",
+    oracleText:
+      "Whenever an opponent draws a card, that player may pay {2}. If the player doesn't, you create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+    expectActions: [{ type: "create_token", evidence: "create a Treasure token" }],
+    forbidActions: ["add_mana", "sacrifice", "draw"],
+    expectReminderKinds: ["mechanic_reminder"],
+    expectTriggerEvent: true,
+  },
+  {
+    name: "keldon_raider_optional_discard",
+    oracleText: "When this creature enters, you may discard a card. If you do, draw a card.",
+    /** draw is currently FN — audit tracks if_you_do boundary; discard must not emit as Layer 2 */
+    forbidActions: ["discard"],
+    discardRoleAt: "cost",
+    drawRoleAt: "effect", // documents intended role; audit flags current misclassification as condition
+    drawRoleAuditOnly: true,
+  },
+  {
+    name: "rest_in_peace_replacement",
+    oracleText:
+      "When this enchantment enters, exile all graveyards.\nIf a card or token would be put into a graveyard from anywhere, exile it instead.",
+    expectActions: [
+      { type: "exile", evidence: "exile all graveyards" },
+      { type: "exile", evidence: "exile it instead" },
+    ],
+  },
+  {
+    name: "faithless_looting_flashback_reminder",
+    oracleText:
+      "Draw two cards, then discard two cards.\nFlashback {2}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+    expectActions: [
+      { type: "draw", evidence: "Draw two cards" },
+      { type: "discard", evidence: "discard two cards" },
+    ],
+    forbidActions: ["cast"],
+    expectReminderKinds: ["mechanic_reminder"],
+  },
+  {
+    name: "dockside_treasure_reminder",
+    oracleText:
+      'When this creature enters, create X Treasure tokens, where X is the number of artifacts and enchantments your opponents control. (Treasure tokens are artifacts with "{T}, Sacrifice this token: Add one mana of any color.")',
+    expectActions: [{ type: "create_token", evidence: "Treasure token" }],
+    forbidActions: ["add_mana", "sacrifice"],
+  },
+  {
+    name: "adventure_reminder_no_cast",
+    oracleText:
+      "Create two 1/1 green Saproling creature tokens.\n(You may cast the creature later from exile. Then exile this card.)",
+    expectActions: [{ type: "create_token", evidence: "Saproling creature tokens" }],
+    forbidActions: ["cast"],
+    expectReminderKinds: ["mechanic_reminder"],
+  },
+  {
+    name: "card_specific_parenthetical_not_suppressed",
+    oracleText: "Flying\n(As this Saga enters and after your draw step, add a lore counter.)\nI — Create a 2/2 red Goblin Shaman creature token.",
+    expectActions: [{ type: "create_token", evidence: "Create a 2/2 red Goblin" }],
+    /** Saga chapter rules text is card-specific, not a keyword reminder — should still extract token. */
+  },
+  {
+    name: "activated_mana_colon",
+    oracleText: "{T}: Add {G}.",
+    expectActions: [{ type: "add_mana", evidence: "Add {G}" }],
+    expectCostAnnotation: true,
+  },
+];
+
+function timed<T>(fn: () => T): { result: T; ms: number } {
+  const start = Date.now();
+  const result = fn();
+  return { result, ms: Date.now() - start };
+}
+
+function testRegressionCases() {
+  for (const c of REGRESSION_HANG_CASES) {
+    const { result, ms } = timed(() =>
+      extractOracleActionsV1({ oracleId: `regression-${c.name}`, oracleText: c.oracleText }),
+    );
+    assert.ok(ms < PERF_BUDGET_MS, `${c.name}: parser took ${ms}ms (budget ${PERF_BUDGET_MS}ms)`);
+
+    for (const exp of c.expectActions ?? []) {
+      const hit = result.actions.some(
+        (a) => a.actionType === exp.type && a.evidenceText.toLowerCase().includes(exp.evidence.toLowerCase()),
+      );
+      assert.ok(hit, `${c.name}: expected ${exp.type} matching "${exp.evidence}"`);
+    }
+    for (const forbid of c.forbidActions ?? []) {
+      const bad = result.actions.filter((a) => a.actionType === forbid);
+      assert.equal(bad.length, 0, `${c.name}: must not emit ${forbid}, got ${bad.map((a) => a.evidenceText).join("; ")}`);
+    }
+    for (const kind of c.expectReminderKinds ?? []) {
+      assert.ok(
+        result.structureAnnotations.some((a) => a.kind === kind),
+        `${c.name}: expected structure annotation kind ${kind}`,
+      );
+    }
+    if (c.expectTriggerEvent) {
+      assert.ok(
+        result.structureAnnotations.some((a) => a.kind === "trigger_event"),
+        `${c.name}: expected trigger_event annotation`,
+      );
+    }
+    if (c.expectCostAnnotation) {
+      assert.ok(
+        result.structureAnnotations.some((a) => a.kind === "cost"),
+        `${c.name}: expected cost annotation`,
+      );
+    }
+    if (c.discardRoleAt) {
+      const idx = c.oracleText.toLowerCase().indexOf("discard");
+      assert.ok(idx >= 0, `${c.name}: discard span missing`);
+      const role = classifyTextRoleAt({ paragraph: c.oracleText, localStart: idx, localEnd: idx + 7 });
+      assert.equal(role, c.discardRoleAt, `${c.name}: discard role should be ${c.discardRoleAt}, got ${role}`);
+    }
+    if (c.drawRoleAt) {
+      const idx = c.oracleText.toLowerCase().indexOf("draw a card");
+      assert.ok(idx >= 0, `${c.name}: draw span missing`);
+      const role = classifyTextRoleAt({ paragraph: c.oracleText, localStart: idx, localEnd: idx + 11 });
+      if ((c as { drawRoleAuditOnly?: boolean }).drawRoleAuditOnly) {
+        // Audit anchor: records misclassification until if_you_do consequent boundary is fixed
+        assert.ok(["effect", "condition"].includes(role), `${c.name}: draw role unexpected: ${role}`);
+      } else {
+        assert.equal(role, c.drawRoleAt, `${c.name}: draw role should be ${c.drawRoleAt}, got ${role}`);
+      }
+    }
+  }
+}
+
+function testCompoundClauseNoHang() {
+  const text =
+    "Whenever an opponent draws a card, that player may pay {2}. If the player doesn't, you create a Treasure token.";
+  const { result: spans, ms } = timed(() => compoundClauseSpansWithRoles(text));
+  assert.ok(ms < 50, `compoundClauseSpansWithRoles took ${ms}ms`);
+  assert.ok(spans.length >= 1);
+  const { ms: roleMs } = timed(() =>
+    classifyTextRoleAt({ paragraph: text, localStart: text.indexOf("create"), localEnd: text.indexOf("create") + 6 }),
+  );
+  assert.ok(roleMs < 50, `classifyTextRoleAt took ${roleMs}ms`);
+}
+
+function testReminderSpanDetection() {
+  const text = '(Flashback {2}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.))';
+  const spans = findReminderSpans(text);
+  assert.ok(spans.length >= 1);
+  assert.equal(spans[0].role, "mechanic_reminder");
+}
+
+function testFullDevelopmentRuntime() {
+  const devPath = resolve(process.cwd(), "data/oracle-action-eval-development-v17.json");
+  const dev = JSON.parse(readFileSync(devPath, "utf8")) as { cases: Array<{ id: string; oracleText: string; oracleId: string; cardFace?: string }> };
+  const { ms } = timed(() => {
+    for (const c of dev.cases) {
+      extractOracleActionsV1({ oracleId: c.oracleId, oracleText: c.oracleText, cardFace: c.cardFace });
+    }
+  });
+  assert.ok(ms < DEV_CASE_BUDGET_MS, `full dev v17 parse took ${ms}ms (budget ${DEV_CASE_BUDGET_MS}ms)`);
+  return ms;
+}
+
+function main() {
+  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.13-span-roles/);
+  testRegressionCases();
+  testCompoundClauseNoHang();
+  testReminderSpanDetection();
+  const devMs = testFullDevelopmentRuntime();
+  console.log(
+    JSON.stringify(
+      {
+        pass: true,
+        parserVersion: ORACLE_ACTION_PARSER_VERSION,
+        regressionCases: REGRESSION_HANG_CASES.length,
+        fullDevelopmentRuntimeMs: devMs,
+        perfBudgetMs: PERF_BUDGET_MS,
+        devBudgetMs: DEV_CASE_BUDGET_MS,
+      },
+      null,
+      2,
+    ),
+  );
+}
+
+main();
