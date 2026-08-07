@@ -25,6 +25,7 @@ import { isAdjudicatedRejectV14 } from "./adjudicate-gold-omission-v14";
 import { isGoldV21Forbidden } from "./adjudicate-gold-policy-v21";
 
 function datasetLabel(path: string): string {
+  if (path.includes("v25")) return "development_set_v25";
   if (path.includes("v24")) return "development_set_v24";
   if (path.includes("v23")) return "development_set_v23";
   if (path.includes("v22")) return "development_set_v22";
@@ -36,6 +37,7 @@ function datasetLabel(path: string): string {
 }
 
 function reportName(path: string): string {
+  if (path.includes("v25")) return "v13-error-audit-v25.json";
   if (path.includes("v24")) return "v13-error-audit-v24.json";
   if (path.includes("v23")) return "v13-error-audit-v23.json";
   if (path.includes("v22")) return "v13-error-audit-v22.json";
@@ -48,7 +50,7 @@ function reportName(path: string): string {
 
 const DEV_PATH =
   process.argv.find((a) => a.startsWith("--dataset="))?.slice("--dataset=".length) ??
-  "data/oracle-action-eval-development-v24.json";
+  "data/oracle-action-eval-development-v25.json";
 const DATASET_LABEL = datasetLabel(DEV_PATH);
 const REPORT_NAME = reportName(DEV_PATH);
 
@@ -371,8 +373,18 @@ async function main() {
       optional: a.optional,
     }));
 
-    const acceptedMatch = matchGoldToActions({ expected, actions, tier: "accepted" });
-    const allMatch = matchGoldToActions({ expected, actions, tier: "all" });
+    const acceptedMatch = matchGoldToActions({
+      expected,
+      actions,
+      tier: "accepted",
+      oracleText: testCase.oracleText,
+    });
+    const allMatch = matchGoldToActions({
+      expected,
+      actions,
+      tier: "all",
+      oracleText: testCase.oracleText,
+    });
 
     for (const expIdx of acceptedMatch.unmatchedExpectedIndices) {
       const exp = expected[expIdx];

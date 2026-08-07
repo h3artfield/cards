@@ -65,6 +65,26 @@ export function filterActionsByTier(
   return actions.filter((a) => a.reviewStatus === tier);
 }
 
+const MODAL_CHOOSE_PATTERN =
+  /\bChoose one(?: or more|\s+or\s+more|\s+or\s+both|\s+or\s+two|\s+or\s+three)?\b|\bChoose two\b|\bChoose three\b/im;
+
+/** Modal gold may use a single verb stem (e.g. "Destroy") covering all bullets of that primitive. */
+export function isModalStemGold(exp: ExpectedPrimitiveAction, oracleText: string): boolean {
+  if (!MODAL_CHOOSE_PATTERN.test(oracleText)) return false;
+  const stem = exp.evidenceContains.trim();
+  return /^[A-Z][a-z]+$/.test(stem) && stem.length <= 15;
+}
+
+export function actionMatchesModalStem(
+  action: ExtractedActionForMatch,
+  exp: ExpectedPrimitiveAction,
+): boolean {
+  if (!action.primitive || action.primitive !== exp.actionType) return false;
+  if (exp.cardFace && !faceIdsEquivalent(action.cardFaceId, exp.cardFace)) return false;
+  const stem = exp.evidenceContains.trim().toLowerCase();
+  return action.evidenceText.toLowerCase().includes(stem);
+}
+
 export interface TierMatchOutcome {
   matches: GoldMatchResult[];
   unmatchedExpectedIndices: number[];
@@ -76,6 +96,7 @@ export function matchGoldToActions(input: {
   expected: ExpectedPrimitiveAction[];
   actions: ExtractedActionForMatch[];
   tier: EmissionTier;
+  oracleText?: string;
 }): TierMatchOutcome {
   const tierActions = filterActionsByTier(input.actions, input.tier);
   const matchedActions = new Set<number>();
@@ -102,11 +123,24 @@ export function matchGoldToActions(input: {
     }
   });
 
-  const unmatchedActionIndices = tierActions
+  if (input.oracleText) {
+    for (const action of tierActions) {
+      if (matchedActions.has(action.index)) continue;
+      const coveredByModalStem = input.expected.some(
+        (exp) =>
+          !exp.negative &&
+          isModalStemGold(exp, input.oracleText!) &&
+          actionMatchesModalStem(action, exp),
+      );
+      if (coveredByModalStem) matchedActions.add(action.index);
+    }
+  }
+
+  const finalUnmatchedActionIndices = tierActions
     .filter((a) => !matchedActions.has(a.index))
     .map((a) => a.index);
 
-  return { matches, unmatchedExpectedIndices, unmatchedActionIndices };
+  return { matches, unmatchedExpectedIndices, unmatchedActionIndices: finalUnmatchedActionIndices };
 }
 
 export interface UnifiedCaseMetrics {
@@ -142,9 +176,9 @@ export function evaluateCaseUnified(
     optionalCost: a.optionalCost,
   }));
 
-  const acceptedOnly = matchGoldToActions({ expected, actions, tier: "accepted" });
-  const needsReviewOnly = matchGoldToActions({ expected, actions, tier: "needs_review" });
-  const allTier = matchGoldToActions({ expected, actions, tier: "all" });
+  const acceptedOnly = matchGoldToActions({ expected, actions, tier: "accepted", oracleText: testCase.oracleText });
+  const needsReviewOnly = matchGoldToActions({ expected, actions, tier: "needs_review", oracleText: testCase.oracleText });
+  const allTier = matchGoldToActions({ expected, actions, tier: "all", oracleText: testCase.oracleText });
 
   const acceptedMatchedGold = new Set(
     acceptedOnly.matches.filter((m) => m.matched).map((m) => m.expectedIndex),

@@ -1,0 +1,4155 @@
+{
+  "setClassification": "final_blind_test_v2",
+  "evaluationVersion": "final-blind-v2-catalog",
+  "evaluationSetVersion": "final-blind-v2-catalog",
+  "contentHash": "a8af409f9d6622bac200be18b1f6d9704b761b40eea3db7119c0d4b20510b8f9",
+  "taxonomyVersion": "three-layer-v1.3",
+  "goldReviewVersion": "gold-review-v2",
+  "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+  "caseCount": 105,
+  "frozenAt": "2026-08-07T03:30:38.795Z",
+  "sealed": true,
+  "benchmarkStatus": "catalog_clean",
+  "usableForParserEvaluation": false,
+  "usagePolicy": "Do not run parser against this set until a release candidate passes development and validation gates. Single evaluation run only.",
+  "categoryCounts": {
+    "blind removal": 7,
+    "blind tutor": 12,
+    "blind ramp": 8,
+    "blind draw": 5,
+    "blind replacement": 5,
+    "blind cast-from-exile": 4,
+    "blind exile": 1,
+    "blind saga": 3,
+    "blind planeswalker": 4,
+    "blind split": 4,
+    "blind modal": 3,
+    "blind recursion": 5,
+    "blind token": 3,
+    "blind counter": 3,
+    "blind destroy": 3,
+    "blind mill": 3,
+    "blind static": 3,
+    "blind protection": 3,
+    "blind combo": 3,
+    "blind copy": 3,
+    "blind compound": 2,
+    "blind wipe": 3,
+    "blind extra": 5,
+    "blind extra-2": 2,
+    "blind extra split": 1,
+    "blind mdfc": 5,
+    "blind flashback": 2
+  },
+  "reviewer": "catalog-audit-agent",
+  "reviewTimestamp": "2026-08-07T03:30:38.795Z",
+  "cases": [
+    {
+      "id": "blind-0001",
+      "category": "blind removal",
+      "layout": "normal",
+      "oracleId": "b1544f21-7e98-461b-aed5-e748b0168c52",
+      "oracleText": "Exile target creature. Its controller gains life equal to its power.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target creature"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gains life"
+        }
+      ],
+      "cardName": "Swords to Plowshares",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "03c7ae8fb4c3ffc6452288ebefb73e42067962809d691be09e724ae120887155",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "gain_life"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0002",
+      "category": "blind removal",
+      "layout": "normal",
+      "oracleId": "7735eeba-693b-47e2-bd51-414379cf1016",
+      "oracleText": "Destroy target permanent. Its controller creates a 3/3 green Beast creature token.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target permanent"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "creates a 3/3"
+        }
+      ],
+      "cardName": "Beast Within",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "b22d3ad5f620f79a3b97a0eb2a47839722f7f668de1060df507dfc65ddc83817",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy",
+            "create_token"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "destroy",
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "destroy",
+            "create_token"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0003",
+      "category": "blind removal",
+      "layout": "normal",
+      "oracleId": "07a0cba9-8768-4fd9-a3d5-b0f83b4bf8e8",
+      "oracleText": "The owner of target permanent shuffles it into their library, then reveals the top card of their library. If it's a permanent card, they put it onto the battlefield.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "shuffle_into_library",
+          "evidenceContains": "shuffles it into their library"
+        }
+      ],
+      "cardName": "Chaos Warp",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "d3cbf33eeb6f65ae0f1ad69eb19a1a987728e589673535a6162b8226b3b1d213",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0004",
+      "category": "blind removal",
+      "layout": "normal",
+      "oracleId": "d75b9c82-1b49-4c3e-a1b5-aeef57d6644b",
+      "oracleText": "Return target nonland permanent you don't control to its owner's hand.\nOverload {6}{U} (You may cast this spell for its overload cost. If you do, change \"target\" in its text to \"each.\")",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target nonland permanent"
+        }
+      ],
+      "cardName": "Cyclonic Rift",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "c6622e2c086f9a84b9efddd4fb5cd1116d7a32a76c4df62ee460dedfb6ae4c4a",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0005",
+      "category": "blind removal",
+      "layout": "normal",
+      "oracleId": "63c1ac21-e3d8-40c2-8c09-3f31c52992ef",
+      "oracleText": "Destroy target permanent.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target permanent"
+        }
+      ],
+      "cardName": "Vindicate",
+      "colorIdentity": [
+        "B",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "94e9760605d1dbf0015ca518027935e0ad359e55ed0d7b81289e5ab9c566fc84",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0006",
+      "category": "blind tutor",
+      "layout": "normal",
+      "oracleId": "82004860-e589-4e38-8d61-8c0210e4ea39",
+      "oracleText": "Search your library for a card, put that card into your hand, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "cardName": "Demonic Tutor",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "e759f75c52513ff4702fecc196ac14e3c579969a34c8470c7f44ded97a3560bd",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0007",
+      "category": "blind tutor",
+      "layout": "normal",
+      "oracleId": "038519b9-bca8-4b27-b5ac-2409595469d0",
+      "oracleText": "As an additional cost to cast this spell, sacrifice a creature.\nSearch your library for a card, put that card into your hand, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifice a creature"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "cardName": "Diabolic Intent",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "8b3882e50101d0f0d683f243fc68c4422ca3a2bd030e14975ed53791c2b4d3f9",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "sacrifice",
+            "search_library",
+            "shuffle_library"
+          ]
+        },
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "sacrifice",
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0008",
+      "category": "blind tutor",
+      "layout": "normal",
+      "oracleId": "16cd0b90-f70c-4efa-b252-8de8784ef9a3",
+      "oracleText": "Search your library for a card, then shuffle and put that card on top. You lose 2 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "shuffle and put that card on top"
+        }
+      ],
+      "cardName": "Imperial Seal",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "7385e3c971920475e4c1a0d64fe7252e38ae6cab1368987d0bed7822fc90eb27",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0009",
+      "category": "blind tutor",
+      "layout": "normal",
+      "oracleId": "a54f0869-94c8-42af-9080-166efb9486a4",
+      "oracleText": "Search your library for a card, put that card into your hand, discard a card at random, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discard a card"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "cardName": "Gamble",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "7f3697ff32402a6f739f9f84f13defda94197fc2a6af934990c196c2d4faea0e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "discard",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0010",
+      "category": "blind tutor",
+      "layout": "normal",
+      "oracleId": "81c70ae7-3c18-4c9b-8505-e4db9e0e6518",
+      "oracleText": "This artifact enters with three wish counters on it.\n{1}, {T}, Remove a wish counter from this artifact: Search your library for a card, put it into your hand, then shuffle. An opponent gains control of this artifact. Activate only during your turn.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "cardName": "Wishclaw Talisman",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "2637e72c2b88d214fedcbee9a30465b1ecabed6303028f1cafd823ef2f24cd16",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0011",
+      "category": "blind ramp",
+      "layout": "normal",
+      "oracleId": "6ad8011d-3471-4369-9d68-b264cc027487",
+      "oracleText": "{T}: Add {C}{C}.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {C}"
+        }
+      ],
+      "cardName": "Sol Ring",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "8310b06afdea748af91bd3f1f23206140bba9309ef34fbd71e3211a8c3542d58",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0012",
+      "category": "blind ramp",
+      "layout": "normal",
+      "oracleId": "2c63e4e1-89d2-4bc6-a232-94e75c4b1c8a",
+      "oracleText": "At the beginning of your upkeep, flip a coin. If you lose the flip, this artifact deals 3 damage to you.\n{T}: Add {C}{C}.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {C}"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 3 damage"
+        }
+      ],
+      "cardName": "Mana Crypt",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f75bc3a2274e17612904d3f907519cfe4049eb8c35d3b8167d5dbc0799c19849",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "deal_damage"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "deal_damage"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0013",
+      "category": "blind ramp",
+      "layout": "normal",
+      "oracleId": "1b882a0e-0ede-4d1a-bd1a-9b7cffbcde8e",
+      "oracleText": "Search your library for a Forest card, put it onto the battlefield, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "cardName": "Three Visits",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "0416b1413bddd6d390b428142d16aa63214e3291adfa721b0dea1e88b4d788e9",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0014",
+      "category": "blind ramp",
+      "layout": "normal",
+      "oracleId": "78826359-fe63-44ad-adc4-a17ffcd710e4",
+      "oracleText": "Search your library for a Forest card, put that card onto the battlefield, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "cardName": "Nature's Lore",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "1969fa96656688d1b432d41afaac52db1994afdf353355b2218c4dada7c2b13f",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0015",
+      "category": "blind ramp",
+      "layout": "normal",
+      "oracleId": "495e52e6-4c2b-4574-9474-eadbdcc8b4ac",
+      "oracleText": "Search your library for a Plains, Island, Swamp, or Mountain card, put it onto the battlefield tapped, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "cardName": "Farseek",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "476d8604489ab6ec86561e2c81f75db6f2c36bb1963b50b8628d4658692f1688",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0016",
+      "category": "blind draw",
+      "layout": "normal",
+      "oracleId": "53236dd7-845a-444c-96d5-f41ed7325d8f",
+      "oracleText": "Whenever an opponent casts a spell, you may draw a card unless that player pays {1}.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "optional": true,
+          "optionalEffect": true
+        }
+      ],
+      "cardName": "Rhystic Study",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "b01edb4edf239cd0b4116ab58ea2fb90152ed9b83b068b6ea34ccbe8d67fd03c",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0017",
+      "category": "blind draw",
+      "layout": "normal",
+      "oracleId": "8a52f3c0-2552-4425-b2e3-5496eb2232a7",
+      "oracleText": "Cumulative upkeep {1} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nWhenever an opponent casts a noncreature spell, you may draw a card unless that player pays {4}.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "optional": true,
+          "optionalEffect": true
+        }
+      ],
+      "cardName": "Mystic Remora",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "4c1b24efecbfc96ef5aa572d00c124322ce5f061349ecbec21e3a0676021a00b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0018",
+      "category": "blind draw",
+      "layout": "normal",
+      "oracleId": "ee579a32-a048-4335-b966-231ba731cdea",
+      "oracleText": "At the beginning of your upkeep, you draw a card and you lose 1 life.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "lose 1 life"
+        }
+      ],
+      "cardName": "Phyrexian Arena",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "12d3e21e486f6c9c7c626ce8c0266cd6a3bb652761a2f68793d47d870f8dee49",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "lose_life"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0019",
+      "category": "blind draw",
+      "layout": "normal",
+      "oracleId": "94a844d2-0574-45a7-b347-e0e329767c42",
+      "oracleText": "Skip your draw step.\nWhenever you discard a card, exile that card from your graveyard.\nPay 1 life: Exile the top card of your library face down. Put that card into your hand at the beginning of your next end step.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile the top card"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "into your hand"
+        }
+      ],
+      "cardName": "Necropotence",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "a862c34144c341a88c52790b6db4d7a008ab1eab6554e0663dfefb4297268e5b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "draw"
+          ]
+        },
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "exile",
+            "draw"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0020",
+      "category": "blind draw",
+      "layout": "normal",
+      "oracleId": "92eed395-62ca-4293-882b-8565c40daab5",
+      "oracleText": "At the beginning of your draw step, you may draw two additional cards. If you do, choose two cards in your hand drawn this turn. For each of those cards, pay 4 life or put the card on top of your library.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw two additional cards",
+          "optional": true,
+          "optionalEffect": true
+        }
+      ],
+      "cardName": "Sylvan Library",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "32a6459a69873eb74023faaedb891e3afdb26e3ad40000e93a3f83fefd9d0941",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0021",
+      "category": "blind replacement",
+      "layout": "normal",
+      "oracleId": "087f9ad7-e74f-40e2-8102-1ed2925d0418",
+      "oracleText": "When this enchantment enters, exile all graveyards.\nIf a card or token would be put into a graveyard from anywhere, exile it instead.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile it instead"
+        }
+      ],
+      "cardName": "Rest in Peace",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "03eecb272f98ea819e9bc6fa1b5902d6ed2e93c8c12720e1f41a73c048390b48",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0022",
+      "category": "blind replacement",
+      "layout": "normal",
+      "oracleId": "97326cad-b13c-4e52-82ce-850a39e5ff08",
+      "oracleText": "Creatures entering don't cause abilities to trigger.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "destroy"
+      ],
+      "cardName": "Torpor Orb",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "2fdc036d01c447f59200422b338ea773eed9f8dc7bf87dddacabe7b733708680",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0023",
+      "category": "blind replacement",
+      "layout": "normal",
+      "oracleId": "3d21f710-6bbc-41ae-a8e5-02debe3e02bd",
+      "oracleText": "Flying, lifelink\nCreatures entering or dying don't cause abilities to trigger.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [],
+      "cardName": "Hushbringer",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "564d3a3f83aad52561c6decf3d6eebf9e0496d936b9d04515a397de48f333b8e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0024",
+      "category": "blind replacement",
+      "layout": "normal",
+      "oracleId": "7cf59255-0ad7-4ca8-bc95-f3a8cc2643d5",
+      "oracleText": "Nonbasic landwalk (This creature can't be blocked as long as defending player controls a nonbasic land.)",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw"
+      ],
+      "cardName": "Dryad Sophisticate",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "35d61152a888870ad9a6edfe52251c5a68270d0388f2f5387832281aed6dd5e5",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0025",
+      "category": "blind replacement",
+      "layout": "normal",
+      "oracleId": "0d4ecdb1-ec90-497f-a7a4-1c68092b8757",
+      "oracleText": "Until your next turn, your life total can't change and you gain protection from everything. All permanents you control phase out. (While they're phased out, they're treated as though they don't exist. They phase in before you untap during your untap step.)\nExile Teferi's Protection.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "destroy"
+      ],
+      "cardName": "Teferi's Protection",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "e1f37af71d72884039dd826f862f2f0525d32c251d3155ad8ae95f52b15f782f",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0026",
+      "category": "blind cast-from-exile",
+      "layout": "normal",
+      "oracleId": "078def07-ae5d-4591-8db6-d156834aab97",
+      "oracleText": "Whenever Etali attacks, exile the top card of each player's library, then you may cast any number of spells from among those cards without paying their mana costs.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile the top card"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast any number of spells"
+        }
+      ],
+      "cardName": "Etali, Primal Storm",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "eaa64f2761c5dbbb85e8f1d3e3a204ab695f7ecbb7d54d6c36db3cf290af568a",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "cast"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "exile",
+            "cast"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0027",
+      "category": "blind cast-from-exile",
+      "layout": "normal",
+      "oracleId": "730e39e6-c61d-48b5-8827-bfd952bf1be7",
+      "oracleText": "You may cast spells from your hand without paying their mana costs.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast spells from your hand"
+        }
+      ],
+      "cardName": "Omniscience",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f16eef51ac626925e2d8761cab0d1f3daca35f26004e2dc1d4757818ac6ce160",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "cast"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0028",
+      "category": "blind cast-from-exile",
+      "layout": "normal",
+      "oracleId": "37a18736-5fe2-4897-809b-013497bdd890",
+      "oracleText": "Each instant and sorcery card in your graveyard gains flashback until end of turn. The flashback cost is equal to its mana cost.\nFlashback {4}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "gains flashback"
+        }
+      ],
+      "cardName": "Past in Flames",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "0b1663e36830961148abf0d45378c512d6562c712dab3ca77128e9b9cf1f2621",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "cast"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0029",
+      "category": "blind cast-from-exile",
+      "layout": "normal",
+      "oracleId": "40362fe0-a1a9-4d76-8c35-eac474b91af5",
+      "oracleText": "Exile target card that's an instant or sorcery from your graveyard. For each card exiled this way, copy it, and you may cast the copy without paying its mana cost. Exile Mizzix's Mastery.\nOverload {5}{R}{R}{R} (You may cast this spell for its overload cost. If you do, change \"target\" in its text to \"each.\")",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target card that's an instant or sorcery from you"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast the copy without paying its mana cost"
+        }
+      ],
+      "cardName": "Mizzix's Mastery",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "43c984007ee90b76e8460be2fe4ca986959f482202881d26d86bb7429a0a1d97",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "cast"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "exile",
+            "cast"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0030",
+      "category": "blind exile",
+      "layout": "normal",
+      "oracleId": "b49642f6-20bd-468d-9dac-e578f9ac3091",
+      "oracleText": "Flash\nDomain — This spell costs {1} less to cast for each basic land type among lands you control.\nWhen this enchantment enters, exile target nonland permanent an opponent controls until this enchantment leaves the battlefield.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile target nonland permanent"
+        }
+      ],
+      "cardName": "Leyline Binding",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "efcd08f7ea1f3e336af7601d313d9669a12206cb283b972f4909024a04340da8",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0031",
+      "category": "blind saga",
+      "layout": "normal",
+      "oracleId": "c5e817f9-a003-45b5-8e16-1746e6096166",
+      "oracleText": "Karn's Sylex enters tapped.\nPlayers can't pay life to cast spells or to activate abilities that aren't mana abilities.\n{X}, {T}, Exile Karn's Sylex: Destroy each nonland permanent with mana value X or less. Activate only as a sorcery.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Exile Karn's Sylex: Destroy each nonland permanent with mana"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Exile Karn's Sylex: Destroy each nonland permanent with mana val"
+        }
+      ],
+      "cardName": "Karn's Sylex",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "43b93ee7c75ed7262a3baab56984dd19358e32cc4f1d6c5b629e9a47ad210767",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0032",
+      "category": "blind saga",
+      "layout": "normal",
+      "oracleId": "3437d504-bf62-4c27-b15f-f6330182ff7e",
+      "oracleText": "This land enters tapped.\n{T}: Add {G}.\nAs long as you control six or more lands, lands you control have \"{T}: Add one mana of any color.\"\n{W}{W}{U}{U}{B}{B}{R}{R}{G}{G}, {T}, Sacrifice this land: Search your library for any number of God cards, put them onto the battlefield, then shuffle.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {G}"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "cardName": "The World Tree",
+      "colorIdentity": [
+        "B",
+        "G",
+        "R",
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "0d62865a43e6fd4df94b063918f3f40823f1e82614e917262667d57a8e77f3bf",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "search_library",
+            "shuffle_library"
+          ]
+        },
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0033",
+      "category": "blind saga",
+      "layout": "saga",
+      "oracleId": "9b0b8f00-6367-4dc9-b33e-680470b3a36c",
+      "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI, II — Mill two cards, then you may return a creature card from your graveyard to your hand.\nIII — Return all land cards from your graveyard to the battlefield, then shuffle your graveyard into your library.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to your hand"
+        }
+      ],
+      "cardName": "The Mending of Dominaria",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "a3b3458a5973f0d68b996de5db9cf2b3e2e0fb940b6e004e031e5c8806ea4fbb",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0034",
+      "category": "blind planeswalker",
+      "layout": "normal",
+      "oracleId": "ae7604bb-4818-45a3-960c-cf3d83f15964",
+      "oracleText": "Each opponent can cast spells only any time they could cast a sorcery.\n+1: Until your next turn, you may cast sorcery spells as though they had flash.\n−3: Return up to one target artifact, creature, or enchantment to its owner's hand. Draw a card.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "Each opponent can cast spells only any time they could cast a so"
+        }
+      ],
+      "cardName": "Teferi, Time Raveler",
+      "colorIdentity": [
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "cfe7077bff19b307dbb9a7ff2a2faede1f2a01e94515ccfb6b80ff87818eee3b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "cast"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0035",
+      "category": "blind planeswalker",
+      "layout": "normal",
+      "oracleId": "eecb3047-a563-441a-9175-200421981ac3",
+      "oracleText": "+2: Ugin deals 3 damage to any target.\n−X: Exile each permanent with mana value X or less that's one or more colors.\n−10: You gain 7 life, draw seven cards, then put up to seven permanent cards from your hand onto the battlefield.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "to any target.\n−X: Exile each permanent with mana value X or"
+        }
+      ],
+      "cardName": "Ugin, the Spirit Dragon",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "82201572427fcafa1370b903dbaadcb0f6c1d71c01714f835042ccc00afecf7a",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0036",
+      "category": "blind planeswalker",
+      "layout": "normal",
+      "oracleId": "ef9a8bdc-3361-440d-89f6-0bf5ff7a09e8",
+      "oracleText": "+1: Destroy another target planeswalker.\n+1: Create a 3/3 black Beast creature token with deathtouch.\n−3: Destroy target creature. You gain life equal to its toughness.\n−8: Target opponent gets an emblem with \"Whenever a creature attacks you, it gets +5/+5 and gains trample until end of turn.\"",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "+1: Destroy another target planeswalker.\n+1: Create a 3"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 3/3 black Beast creature token"
+        }
+      ],
+      "cardName": "Garruk, Apex Predator",
+      "colorIdentity": [
+        "B",
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "65312036bee899571645918fd9e55ca99aeb56db85c577f12761087ee31c5394",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy",
+            "create_token"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "destroy",
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "destroy",
+            "create_token"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0037",
+      "category": "blind split",
+      "layout": "split",
+      "oracleId": "ae92942b-919c-4ea9-b693-85fcef765d5a",
+      "oracleText": "Fire deals 2 damage divided as you choose among one or two targets.\n//\nTap target permanent.\nDraw a card.",
+      "cardFace": "back",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card",
+          "cardFace": "back"
+        },
+        {
+          "actionType": "tap",
+          "evidenceContains": "Tap target permanent",
+          "cardFace": "back"
+        }
+      ],
+      "cardName": "Fire // Ice",
+      "colorIdentity": [
+        "R",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "d811dae3ab1df3b80ce0cb69083584e40e390d65ddaa5072e64dee0d73665a61",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "tap"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0038",
+      "category": "blind split",
+      "layout": "split",
+      "oracleId": "514fdac0-95f4-4034-b891-283fe0fb6da6",
+      "oracleText": "Destroy target land you control and target land you don't control.\n//\nDestroy all lands.",
+      "cardFace": "back",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy all lands.",
+          "cardFace": "back"
+        }
+      ],
+      "cardName": "Boom // Bust",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "567cf1daa0736c186e297515aa9718cc388fe4f3cbe6e74360bd0ca7225ad600",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0039",
+      "category": "blind split",
+      "layout": "split",
+      "oracleId": "57ad3c3a-6ac7-4a35-bc07-00f6ea0988c5",
+      "oracleText": "Create a 3/3 green Centaur creature token.\nFuse (You may cast one or both halves of this card from your hand.)\n//\nYou gain 2 life for each creature you control.\nFuse (You may cast one or both halves of this card from your hand.)",
+      "cardFace": "back",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "You gain 2 life for each creature you contr",
+          "cardFace": "back"
+        }
+      ],
+      "cardName": "Alive // Well",
+      "colorIdentity": [
+        "G",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "869289a1e60280f80e594917b5ea0ec2a51c59a782d36cf07f8a2a5b2877661f",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0040",
+      "category": "blind modal",
+      "layout": "normal",
+      "oracleId": "85cbb035-25df-43bb-ae06-ab098f448b02",
+      "oracleText": "Choose one —\n• Counter target spell.\n• Target player draws two cards.\n• Gain control of target nonland permanent with mana value 1 or less.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target spell"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "ll.\n• Target player draws two cards.\n• Gain control of"
+        }
+      ],
+      "cardName": "Archmage's Charm",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "1a29cd6f66f32f2abffa2539454870b1e107c7a332dac5a553b4fdd22f2d234f",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter",
+            "draw"
+          ]
+        },
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "counter",
+            "draw"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0041",
+      "category": "blind modal",
+      "layout": "normal",
+      "oracleId": "54d7d7f8-22cd-4859-b203-924d248b422b",
+      "oracleText": "Target player draws X cards plus an additional card for each time they've cast a commander from the command zone this game.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draws X cards plus an additional card for each"
+        }
+      ],
+      "cardName": "Commander's Insight",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "29dec0b7b6651ed30c9bf640663358e6406f29acc8f4bccebc0803e0306c7d8f",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0042",
+      "category": "blind modal",
+      "layout": "normal",
+      "oracleId": "713f16db-95ec-479e-a48c-7a69f7668d7f",
+      "oracleText": "This spell can't be countered.\nDestroy target nonland permanent.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target nonland permanent"
+        }
+      ],
+      "cardName": "Void Rend",
+      "colorIdentity": [
+        "B",
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "9d31dd99151cb873923cf84e345afb5e87341e6f719cfc78a942859d7afa8e59",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0043",
+      "category": "blind recursion",
+      "layout": "normal",
+      "oracleId": "27e0948b-9916-473b-8d8c-a51bdfbc7457",
+      "oracleText": "Each nonland card in your graveyard has escape. The escape cost is equal to the card's mana cost plus exile three other cards from your graveyard. (You may cast cards from your graveyard for their escape cost.)\nAt the beginning of the end step, sacrifice this enchantment.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "cardName": "Underworld Breach",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ed4f723cebff38400da3443f2d4294dae2a5116d4d1ec1b8549e14524d3ac6bb",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0044",
+      "category": "blind recursion",
+      "layout": "normal",
+      "oracleId": "e4625704-1d52-44e4-804f-2f45644d76ac",
+      "oracleText": "During each of your turns, you may play a land and cast a permanent spell of each permanent type from your graveyard. (If a card has multiple permanent types, choose one as you play it.)",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "cardName": "Muldrotha, the Gravetide",
+      "colorIdentity": [
+        "B",
+        "G",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "5d773184de35c6eeb87b39fa99793c19e5a717e86d5065c9d2175d9c449d9ffa",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0045",
+      "category": "blind recursion",
+      "layout": "normal",
+      "oracleId": "0310dfdb-0498-488d-9f1a-279f8239e024",
+      "oracleText": "Whenever another creature you control dies, you get an experience counter.\nAt the beginning of your end step, choose target creature card in your graveyard. If that card's mana value is less than or equal to the number of experience counters you have, return it to the battlefield. Otherwise, put it into your hand.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [],
+      "cardName": "Meren of Clan Nel Toth",
+      "colorIdentity": [
+        "B",
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "dfb770791d428f9fdcd570ee01f54a79b1c5892eeb2d77ada493cf5b57a14f43",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0046",
+      "category": "blind token",
+      "layout": "normal",
+      "oracleId": "697bcfe1-ecbf-42a1-bfc7-0766d48ca56b",
+      "oracleText": "When this creature enters, create X Treasure tokens, where X is the number of artifacts and enchantments your opponents control. (Treasure tokens are artifacts with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Treasure token"
+        }
+      ],
+      "cardName": "Dockside Extortionist",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "1ead093b32aaae9dec095a2f5e256874b4766596c28cd90a9b298539374930a2",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0047",
+      "category": "blind token",
+      "layout": "normal",
+      "oracleId": "ab8d5f5c-1976-4f77-8ed2-8d28ee666741",
+      "oracleText": "Landfall — Whenever a land you control enters, create a Food token or a Treasure token. (Food is an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\" Treasure is an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a Food token"
+        }
+      ],
+      "cardName": "Tireless Provisioner",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "009a80f59ebd7f1ee981c6642b7810973bf62e3159e027248a20490af978bca5",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0048",
+      "category": "blind token",
+      "layout": "normal",
+      "oracleId": "ab655810-f67e-4576-9174-35b16f5e3235",
+      "oracleText": "Whenever you cast a noncreature spell, create a 1/1 colorless Servo artifact creature token.\n−2: Target artifact you control becomes a copy of another target artifact or creature you control until end of turn, except it's an artifact in addition to its other types.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a 1/1"
+        },
+        {
+          "actionType": "copy",
+          "evidenceContains": "becomes a copy"
+        }
+      ],
+      "cardName": "Saheeli, Sublime Artificer",
+      "colorIdentity": [
+        "R",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "beb5b31316f1711fd6a64534c735e58d58f2e9feab74c103ecfb1bd9f7759ff5",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token",
+            "copy"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token",
+            "copy"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0049",
+      "category": "blind counter",
+      "layout": "normal",
+      "oracleId": "cc187110-1148-4090-bbb8-e205694a39f5",
+      "oracleText": "Counter target spell.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target spell"
+        }
+      ],
+      "cardName": "Counterspell",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "6e7e3fa9bb231a1c1910cd956dc7e5c91bb22e9705b39ed61a2ebd23201950e4",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0050",
+      "category": "blind counter",
+      "layout": "normal",
+      "oracleId": "74d3277a-38e5-4732-afed-084a56148f20",
+      "oracleText": "Counter target spell. At the beginning of your next main phase, add an amount of {C} equal to that spell's mana value.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target spell"
+        }
+      ],
+      "cardName": "Mana Drain",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "89e9be05b9bf509438f52b909acc1c04d8c68bbf1a2b6fe17def84d2ddeacd73",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0051",
+      "category": "blind counter",
+      "layout": "normal",
+      "oracleId": "8ddfc283-c9b4-41a5-af88-cf0068e986cc",
+      "oracleText": "Counter target enchantment, instant, or sorcery spell. Its controller creates a 2/2 blue Bird creature token with flying.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "creates a 2/2"
+        }
+      ],
+      "cardName": "Swan Song",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "4b60ea4fa89aa23092bce7a6ddc9813d2bf40dd4e8cce63791ac5adb222865bf",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter",
+            "create_token"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "counter",
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "counter",
+            "create_token"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0052",
+      "category": "blind destroy",
+      "layout": "normal",
+      "oracleId": "1c747fe2-289e-492a-a846-aa77707e2dc3",
+      "oracleText": "This spell can't be countered.\nDestroy target nonland permanent with mana value 3 or less.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target nonland permanent"
+        }
+      ],
+      "cardName": "Abrupt Decay",
+      "colorIdentity": [
+        "B",
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "fec935051cc6225fe69e78830b57d3775811e313f397864ef8d63cfc0004ee73",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0053",
+      "category": "blind destroy",
+      "layout": "normal",
+      "oracleId": "ac10d218-f9a6-4058-9cda-a15ca1b0b7b5",
+      "oracleText": "Destroy target permanent an opponent controls. Its controller may search their library for a basic land card, put it onto the battlefield, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target permanent"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "ntroller may search their library for a basic land card, put i"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "cardName": "Assassin's Trophy",
+      "colorIdentity": [
+        "B",
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "b1860dd781b00616fdfd3d45cdc3778b0b39000bfab2ef6b173c984a720afb90",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy",
+            "search_library",
+            "shuffle_library"
+          ]
+        },
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "destroy",
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0054",
+      "category": "blind destroy",
+      "layout": "normal",
+      "oracleId": "4eb813fd-2d5a-4b02-8193-662681ef4e7d",
+      "oracleText": "Choose one or more —\n• Exile all artifacts.\n• Exile all creatures.\n• Exile all enchantments.\n• Exile all graveyards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile all artifacts"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile all creatures"
+        }
+      ],
+      "cardName": "Farewell",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "1c66fb500faf44d897ede62641908768629d33dba439922093d765d7d4ab5388",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0055",
+      "category": "blind mill",
+      "layout": "normal",
+      "oracleId": "464c0150-3dbc-403b-9ada-fef25ab1f29d",
+      "oracleText": "Target player mills three cards.\nStorm (When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills three cards"
+        }
+      ],
+      "cardName": "Brain Freeze",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "de82967539baaabef127cdec851ab8a83cc3fd35ea8ab9e67851ae52bc065fbd",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "mill"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0056",
+      "category": "blind mill",
+      "layout": "normal",
+      "oracleId": "e2ea7d01-6564-4a7f-b935-49a5e3978dac",
+      "oracleText": "Target player mills half their library, rounded down.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills half"
+        }
+      ],
+      "cardName": "Traumatize",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "cec9ba797b422026c6c529d01ba928f2654eff76f726e8d5656e7a5a094a9dd9",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "mill"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0057",
+      "category": "blind mill",
+      "layout": "normal",
+      "oracleId": "9b55fb72-237d-4935-b645-8ebc6eb4140e",
+      "oracleText": "Consuming Aberration's power and toughness are each equal to the number of cards in your opponents' graveyards.\nWhenever you cast a spell, each opponent reveals cards from the top of their library until they reveal a land card, then puts those cards into their graveyard.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [],
+      "cardName": "Consuming Aberration",
+      "colorIdentity": [
+        "B",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "df01ae119269bb9cc6faf5101125a236a973dd395af6b4f6c289cc0055adc758",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0058",
+      "category": "blind removal",
+      "layout": "normal",
+      "oracleId": "03df6a57-37c9-46d3-83b3-4a6240100714",
+      "oracleText": "Destroy target creature or planeswalker.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target creature"
+        }
+      ],
+      "cardName": "Hero's Downfall",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "2c7b26f4124a864779aae83d4ac3ba28e01ccd382eb3e39fe3d4ed6716c69c97",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0059",
+      "category": "blind removal",
+      "layout": "normal",
+      "oracleId": "ad09b3c3-c8e7-481c-8c45-e7f234935117",
+      "oracleText": "Exile target nonland permanent. You lose 3 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target nonland permanent"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "lose 3 life"
+        }
+      ],
+      "cardName": "Anguished Unmaking",
+      "colorIdentity": [
+        "B",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "a8d7c3b29d70efbb94a0595877a146307481480a995d0cc93361ca2d3cff8651",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "lose_life"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0060",
+      "category": "blind split",
+      "layout": "split",
+      "oracleId": "ab5b697b-ab62-4ee7-a10e-cc937fef3095",
+      "oracleText": "Put a -1/-1 counter on each of up to two target creatures.\n//\nAftermath (Cast this spell only from your graveyard. Then exile it.)\nExile any number of target creatures that have -1/-1 counters on them.",
+      "cardFace": "back",
+      "expectedPrimitiveActions": [],
+      "cardName": "Grind // Dust",
+      "colorIdentity": [
+        "B",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "84c43662d0cc3f3f5521651fbbd94534a15f1a6e095c2cfb43bec1d67abf92bf",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0061",
+      "category": "blind ramp",
+      "layout": "normal",
+      "oracleId": "6b0e23cf-7d68-4329-86db-7adc26abd86b",
+      "oracleText": "Exile this creature from your hand: Add {G}.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile this creature from your hand: Add {G}"
+        },
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {G}"
+        }
+      ],
+      "cardName": "Elvish Spirit Guide",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "35d19389bfe0a09af8744d78e9bddfd143e910c1a0549437184c9fb0601e762d",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "add_mana"
+          ]
+        },
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "exile",
+            "add_mana"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0062",
+      "category": "blind ramp",
+      "layout": "normal",
+      "oracleId": "44e0ffa3-8915-4c1f-8f1a-4aeea1365f07",
+      "oracleText": "Exile this card from your hand: Add {R}.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile this card from your hand"
+        },
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {R}"
+        }
+      ],
+      "cardName": "Simian Spirit Guide",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "1bb0e6e3053815c62efc7fbe7246dcaa28e59a43efd3509163e4e57d7df88ae8",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "add_mana"
+          ]
+        },
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "exile",
+            "add_mana"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0063",
+      "category": "blind ramp",
+      "layout": "normal",
+      "oracleId": "32e5339e-9e4f-46f8-b305-f9d6d3ba8bb5",
+      "oracleText": "{T}, Sacrifice this artifact: Add one mana of any color.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this artifact"
+        },
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add one mana"
+        }
+      ],
+      "cardName": "Lotus Petal",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ea54fe0252ad36c263e593d1742d993b4a34cc969ad2efd4efcb56b3f7dea932",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "sacrifice",
+            "add_mana"
+          ]
+        },
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "sacrifice",
+            "add_mana"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0064",
+      "category": "blind static",
+      "layout": "normal",
+      "oracleId": "8aed54cb-d1bb-45ad-adbe-38e55d84ff31",
+      "oracleText": "Your opponents can't cast spells this turn.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "counter"
+      ],
+      "cardName": "Silence",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "cd9d1f522791042b2d0f475b8753158ac8d6dc70219119c65f3263182ad1954e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0065",
+      "category": "blind static",
+      "layout": "normal",
+      "oracleId": "c749f23c-40c0-4159-b84c-a70cbb062c14",
+      "oracleText": "During your turn, your opponents can't cast spells or activate abilities of artifacts, creatures, or enchantments.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw"
+      ],
+      "cardName": "Grand Abolisher",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3d2737d202cf5921baa0ce23e531c55ff88759589da2f2b609e574e9f13b0410",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0066",
+      "category": "blind static",
+      "layout": "normal",
+      "oracleId": "aadd10d0-6dd0-4bdc-8d93-ff08e29a5863",
+      "oracleText": "Your opponents can't cast spells from anywhere other than their hands.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "counter"
+      ],
+      "cardName": "Drannith Magistrate",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "e715ec507144569964610973e5cd2179b074a8682e80a8887aefb918bbe85bc4",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0067",
+      "category": "blind protection",
+      "layout": "normal",
+      "oracleId": "002965be-a36f-4a09-9ce0-c6535bca1703",
+      "oracleText": "Draw a card if an opponent has cast a blue or black spell this turn. Spells you control can't be countered this turn. You and permanents you control gain hexproof from blue and from black until end of turn. (You and they can't be the targets of blue or black spells or abilities your opponents control.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "destroy"
+      ],
+      "cardName": "Veil of Summer",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "dfc84fd927efe4676722069b1b002726f8697e37837c8f24c91aac708c3ba247",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0068",
+      "category": "blind protection",
+      "layout": "normal",
+      "oracleId": "03f5946b-e000-4b39-a49f-1c31668b51bd",
+      "oracleText": "Spells you control can't be countered by blue or black spells this turn, and creatures you control can't be the targets of blue or black spells this turn.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw"
+      ],
+      "cardName": "Autumn's Veil",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "393c1f7e1719a6803dc5b6007f0493498b6c8121189521b671ef05d6a5e3515a",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0069",
+      "category": "blind protection",
+      "layout": "normal",
+      "oracleId": "24882fa2-3fe9-4c1b-aa3d-0e6488b9db27",
+      "oracleText": "Permanents you control gain hexproof and indestructible until end of turn.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "destroy"
+      ],
+      "cardName": "Heroic Intervention",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "959e375069def6743dc1a6394b5afba77d20cab936d91b6bc87edaac51044dc3",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0070",
+      "category": "blind combo",
+      "layout": "normal",
+      "oracleId": "1de1b591-a73f-4974-b507-8c63e07a0868",
+      "oracleText": "When this creature enters, look at the top X cards of your library, where X is your devotion to blue. Put up to one of them on top of your library and the rest on the bottom of your library in a random order. If X is greater than or equal to the number of cards in your library, you win the game. (Each {U} in the mana costs of permanents you control counts toward your devotion to blue.)",
+      "expectedStructure": {
+        "minTriggeredAbilities": 2
+      },
+      "expectedPrimitiveActions": [],
+      "cardName": "Thassa's Oracle",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "82cfc8bf46425931d5e11657af31b5b8a395ba602aa4abb3d70f0e802c1ab56f",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0071",
+      "category": "blind combo",
+      "layout": "normal",
+      "oracleId": "aa286dd5-aa19-446d-9003-684d81eb57ca",
+      "oracleText": "If you would draw a card while your library has no cards in it, you win the game instead.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw"
+      ],
+      "cardName": "Laboratory Maniac",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "72ae6ec008dac47b47383571d800472e010fe3254cadf44b1ee134eccb71e67b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0072",
+      "category": "blind combo",
+      "layout": "normal",
+      "oracleId": "5277a68e-1ceb-4b40-8e10-3d0564f5d7be",
+      "oracleText": "If you would draw a card while your library has no cards in it, you win the game instead.\n+1: Target player mills two cards. Draw a card.\n−8: Draw seven cards. Then if your library has no cards in it, you win the game.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills two cards"
+        }
+      ],
+      "cardName": "Jace, Wielder of Mysteries",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "2505d05d9bba5452885fcaaace54864a62b9972ccd0201deb4db1b442bb64c88",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "mill"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0073",
+      "category": "blind copy",
+      "layout": "normal",
+      "oracleId": "d55f6c70-321f-4fb4-bd33-0850ae1a7c36",
+      "oracleText": "Copy target instant or sorcery spell, then return it to its owner's hand. You may choose new targets for the copy.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "Copy target instant"
+        },
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "return it to its owner's hand"
+        }
+      ],
+      "cardName": "Narset's Reversal",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "de8acabaf340d670f03eeed9f3ed1201f062492888f2893e47b69d8cf294e53c",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "copy",
+            "return_to_hand"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0074",
+      "category": "blind copy",
+      "layout": "normal",
+      "oracleId": "b7da26c9-78a6-41c5-a5ef-6555e8274d7a",
+      "oracleText": "Whenever you cast or copy an instant or sorcery spell, Ral deals 1 damage to target opponent or planeswalker.\n+2: Scry 1.\n−2: When you next cast an instant or sorcery spell this turn, copy that spell. You may choose new targets for the copy.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy that spell"
+        }
+      ],
+      "cardName": "Ral, Storm Conduit",
+      "colorIdentity": [
+        "R",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "7a62fbf590b98ca6fa22520f44b513f1fccd6c3308d25f495e5090ea375716f4",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "copy"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0075",
+      "category": "blind copy",
+      "layout": "normal",
+      "oracleId": "8eb7c0a5-6190-40de-b473-2d1daa3bbe28",
+      "oracleText": "Flash\nWhen this creature enters, copy target instant or sorcery spell. You may choose new targets for the copy.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy target instant"
+        }
+      ],
+      "cardName": "Dualcaster Mage",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "a7e193cb6b04235f593bb0ee263a888ef662312d16d009f97aeed7737aa9841d",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "copy"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0076",
+      "category": "blind compound",
+      "layout": "normal",
+      "oracleId": "d683d985-9888-4d21-8b5f-69e69ce4a03b",
+      "oracleText": "Exile target creature. Its controller may search their library for a basic land card, put that card onto the battlefield tapped, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target creature"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search their library",
+          "optional": true,
+          "optionalEffect": true
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "cardName": "Path to Exile",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "6b1199153087c4c11214a1438b96ab470a832fb440b7fcc3394b895e39478e44",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "search_library",
+            "shuffle_library"
+          ]
+        },
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "exile",
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0077",
+      "category": "blind compound",
+      "layout": "normal",
+      "oracleId": "2cb98ca9-d7bb-416b-a17e-ee5f8e4d78f2",
+      "oracleText": "Converge — Exile target nonland permanent if its mana value is less than or equal to the number of colors of mana spent to cast this spell.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target nonland permanent"
+        }
+      ],
+      "cardName": "Prismatic Ending",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "44f4d58eaa1bbf244b7e7cdd6a96d1cdd041f17fd536034062533302dfd6d351",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0078",
+      "category": "blind planeswalker",
+      "layout": "normal",
+      "oracleId": "f2f165b6-ef0a-42ad-9352-ba68be8248b0",
+      "oracleText": "+1: Draw a card. At the beginning of the next end step, untap up to two lands.\n−3: Put target nonland permanent into its owner's library third from the top.\n−8: You get an emblem with \"Whenever you draw a card, exile target permanent an opponent controls.\"",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile target permanent"
+        }
+      ],
+      "cardName": "Teferi, Hero of Dominaria",
+      "colorIdentity": [
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "eae94d674531898e5f5d3d6d4e88f37eeb3b793f8a2cd91cd79eac5fc36aae8a",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "exile"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "draw",
+            "exile"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0079",
+      "category": "blind tutor",
+      "layout": "normal",
+      "oracleId": "28b46183-c62f-47b1-9fee-3ba148202cab",
+      "oracleText": "As an additional cost to cast this spell, sacrifice a land.\nSearch your library for a land card, put that card onto the battlefield, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifice a land"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "cardName": "Crop Rotation",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "27a136ffecec1f87af7745898caf11f22526596a71031429b6b82d0e63c8a1ea",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "sacrifice",
+            "search_library",
+            "shuffle_library"
+          ]
+        },
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "sacrifice",
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0080",
+      "category": "blind tutor",
+      "layout": "normal",
+      "oracleId": "c5229c17-b7be-4b05-b683-f2277edc4849",
+      "oracleText": "Search your library for an artifact or enchantment card, reveal it, then shuffle and put that card on top.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "shuffle and put that card on top"
+        }
+      ],
+      "cardName": "Enlightened Tutor",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "d8aa803ac3c31c453138b5c8db74ec776deec0b211095861bee69bddebf7d4bd",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0081",
+      "category": "blind tutor",
+      "layout": "normal",
+      "oracleId": "fb81f95c-70f8-4eb7-8d15-15d0ae23ec03",
+      "oracleText": "Search your library for an instant or sorcery card, reveal it, then shuffle and put that card on top.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "shuffle and put that card on top"
+        }
+      ],
+      "cardName": "Mystical Tutor",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "a81e5f38cd7aedb01cdc85e07d39e91dea090ca664510c672cb43d5d62e2f93d",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0082",
+      "category": "blind tutor",
+      "layout": "normal",
+      "oracleId": "e8863518-0bfa-49c3-8c6e-6c9116a81051",
+      "oracleText": "Search your library for a creature card, reveal it, then shuffle and put the card on top.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "shuffle and put that card on top"
+        }
+      ],
+      "cardName": "Worldly Tutor",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "159c2194c3d4928d3cd7cfd85b64d11f5fb9ebe2160a4803beb2ce8d3c8340a4",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0083",
+      "category": "blind tutor",
+      "layout": "normal",
+      "oracleId": "ededbdae-d9dc-4206-9335-d7158f2d7700",
+      "oracleText": "Search your library for a card, then shuffle and put that card on top. You lose 2 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "at card on top. You lose 2 life."
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "shuffle and put that card on top"
+        }
+      ],
+      "cardName": "Vampiric Tutor",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "7385e3c971920475e4c1a0d64fe7252e38ae6cab1368987d0bed7822fc90eb27",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "lose_life",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0084",
+      "category": "blind wipe",
+      "layout": "normal",
+      "oracleId": "34515b16-c9a4-4f98-8c77-416a7a523407",
+      "oracleText": "Destroy all creatures. They can't be regenerated.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy all creatures"
+        }
+      ],
+      "cardName": "Wrath of God",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "35902648b91a3be15e81176ad891c95767946d2b7268082001fc5c8d9eb50372",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0085",
+      "category": "blind wipe",
+      "layout": "normal",
+      "oracleId": "d57a8f0b-7989-4db5-8756-6f2690097252",
+      "oracleText": "Destroy all creatures. They can't be regenerated.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy all creatures"
+        }
+      ],
+      "cardName": "Damnation",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "35902648b91a3be15e81176ad891c95767946d2b7268082001fc5c8d9eb50372",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0086",
+      "category": "blind wipe",
+      "layout": "normal",
+      "oracleId": "afaef788-34d1-460b-b884-9d7ae6ddeb18",
+      "oracleText": "As an additional cost to cast this spell, pay X life.\nAll creatures get -X/-X until end of turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "pay X life"
+        }
+      ],
+      "cardName": "Toxic Deluge",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "cd099260b7e7c5755a6bc1e829901385c0f97d081cae7ae862567352ec5c336a",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact",
+      "expectedRoles": []
+    },
+    {
+      "id": "blind-0087",
+      "category": "blind extra",
+      "layout": "normal",
+      "oracleId": "3407fe41-fdd3-4119-8f70-4bc4590a379f",
+      "oracleText": "Counter target noncreature spell.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target noncreature"
+        }
+      ],
+      "cardName": "Negate",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "36df929af71f70232a60fdc28fed53a4fbc27a97305ff744e4843c601e6a003a",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0088",
+      "category": "blind extra",
+      "layout": "normal",
+      "oracleId": "6d7be242-a072-40ce-b540-95880506cccd",
+      "oracleText": "Counter target instant spell.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target instant"
+        }
+      ],
+      "cardName": "Dispel",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "6e95249408b40058d5d470cd6e9edc2694825d3bac6e58ae0110b26551f020c1",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0089",
+      "category": "blind extra",
+      "layout": "normal",
+      "oracleId": "86bf58f2-7f25-4e10-b797-25e0e8e67769",
+      "oracleText": "Counter target instant or sorcery spell unless its controller pays {1}.\nStorm (When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target instant"
+        }
+      ],
+      "cardName": "Flusterstorm",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "46234390c2969f697a3dd9f5fdcaae6502bcfe9ce0150abbf67ede6cf6b21c9e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0090",
+      "category": "blind extra",
+      "layout": "normal",
+      "oracleId": "bb329a5c-b9f9-4973-a53f-090024146325",
+      "oracleText": "Choose one —\n• Counter target blue spell.\n• Destroy target blue permanent.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target blue spell"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target blue permanent"
+        }
+      ],
+      "cardName": "Red Elemental Blast",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "baca93ae5aa10651b17803aed248264090f0ffbb80b899881b96c68abb294806",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter",
+            "destroy"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0091",
+      "category": "blind extra",
+      "layout": "normal",
+      "oracleId": "ecc435e2-deb1-420a-a79f-01dd08747314",
+      "oracleText": "Choose one —\n• Counter target spell if it's blue.\n• Destroy target permanent if it's blue.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target spell"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "ell if it's blue.\n• Destroy target permanent if it's blue."
+        }
+      ],
+      "cardName": "Pyroblast",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "c13d947b7bea88227cf7f595b81fa2b954f059027b989a4ba07d74d56ac0bc2f",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter",
+            "destroy"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0092",
+      "category": "blind extra-2",
+      "layout": "normal",
+      "oracleId": "6d4e558e-9109-4918-a082-fdcbaffd516b",
+      "oracleText": "Destroy target artifact or enchantment. Its controller gains 4 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target artifact"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gains 4 life"
+        }
+      ],
+      "cardName": "Nature's Claim",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "b52be57e45076976f27af3ebb631c435825db776e7ba808cee0449077c69d7ae",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy",
+            "gain_life"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0093",
+      "category": "blind extra-2",
+      "layout": "normal",
+      "oracleId": "777b8ec4-a783-4297-96b7-4f200d0eb734",
+      "oracleText": "Choose one —\n• Destroy target artifact.\n• Destroy target enchantment.\n• Exile target card from a graveyard.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target artifact"
+        }
+      ],
+      "cardName": "Return to Nature",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "dc7082cb4613c4c61dcdf9aa1ecda03f529e7ec0553765368e5b238a586a5ccd",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0094",
+      "category": "blind extra split",
+      "layout": "split",
+      "oracleId": "9842734c-1eac-4509-a731-4c22017ae586",
+      "oracleText": "Destroy target artifact.\nFuse (You may cast one or both halves of this card from your hand.)\n//\nDestroy target enchantment.\nFuse (You may cast one or both halves of this card from your hand.)",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target artifact"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target enchantment"
+        }
+      ],
+      "cardName": "Wear // Tear",
+      "colorIdentity": [
+        "R",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3174cc16dedc7cba775fde506ebbff21d7519798302298e89e3c1a42510275af",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0095",
+      "category": "blind mdfc",
+      "layout": "modal_dfc",
+      "oracleId": "d2075f58-b0e9-4e85-b7e6-0523a27a1d5b",
+      "oracleText": "Return target card from your graveyard to your hand.\n//\nThis land enters tapped.\n{T}: Add {G}.",
+      "cardFace": "front",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to your hand",
+          "cardFace": "front"
+        }
+      ],
+      "cardName": "Bala Ged Recovery // Bala Ged Sanctuary",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "963e48156c48b707becd030952dc5d48a9abd755d50881e1168a7bdf182117e0",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0096",
+      "category": "blind mdfc",
+      "layout": "modal_dfc",
+      "oracleId": "78301998-fd9b-4cd5-afad-dbcb43cac2a7",
+      "oracleText": "Shatterskull Smashing deals X damage divided as you choose among up to two target creatures and/or planeswalkers. If X is 6 or more, Shatterskull Smashing deals twice X damage divided as you choose among them instead.\n//\nAs this land enters, you may pay 3 life. If you don't, it enters tapped.\n{T}: Add {R}.",
+      "cardFace": "front",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals X damage",
+          "cardFace": "front"
+        }
+      ],
+      "cardName": "Shatterskull Smashing // Shatterskull, the Hammer Pass",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "771e0010b20a45d1c27a7f7a7448e5b4c14489db0831a8a3c17deeb40ef6aef9",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "deal_damage"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0097",
+      "category": "blind mdfc",
+      "layout": "modal_dfc",
+      "oracleId": "403b59f3-7ade-4bc2-a3e6-de0c3c700f18",
+      "oracleText": "Look at the top seven cards of your library. You may put a creature card from among them onto the battlefield. If that card has mana value 3 or less, it enters with three additional +1/+1 counters on it. Put the rest on the bottom of your library in a random order.\n//\nAs this land enters, you may pay 3 life. If you don't, it enters tapped.\n{T}: Add {G}.",
+      "cardFace": "front",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "onto the battlefield",
+          "cardFace": "front"
+        }
+      ],
+      "cardName": "Turntimber Symbiosis // Turntimber, Serpentine Wood",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3a71cc38aacbc386a96b882e8311febc8f2458c68fa8a6efaabdbcfa5416fbcd",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0098",
+      "category": "blind mdfc",
+      "layout": "modal_dfc",
+      "oracleId": "6ec2a242-9068-4ee2-8ac8-8341cc570f56",
+      "oracleText": "Create two 4/4 white Angel Warrior creature tokens with flying. Non-Angel creatures you control gain indestructible until your next turn.\n//\nAs this land enters, you may pay 3 life. If you don't, it enters tapped.\n{T}: Add {W}.",
+      "cardFace": "front",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create two 4/4 white Angel Warrior creature token",
+          "cardFace": "front"
+        }
+      ],
+      "cardName": "Emeria's Call // Emeria, Shattered Skyclave",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "c0696710106d6dda4f8a026eab60f910b0988c6c416f19d2b1e27a4e37ae35db",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0099",
+      "category": "blind flashback",
+      "layout": "normal",
+      "oracleId": "1b9f9f5b-8712-4f00-90cb-1b7b9970eccc",
+      "oracleText": "Return target permanent card with mana value 3 or less from your graveyard to the battlefield. If this spell was cast from a graveyard, you may copy this spell and may choose a new target for the copy.\nFlashback {4}{W} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to the battlefield"
+        }
+      ],
+      "cardName": "Sevinne's Reclamation",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "6729a0e74f8f3ff67ca5f555d5e6c9cc0ab75acea2c9c6f883bfebebec0c38c6",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0100",
+      "category": "blind flashback",
+      "layout": "normal",
+      "oracleId": "4e0b647a-6e1a-421b-bca9-8d5e346bda80",
+      "oracleText": "Return target creature card with mana value 3 or less from your graveyard to the battlefield.\nCycling {2} ({2}, Discard this card: Draw a card.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to the battlefield"
+        }
+      ],
+      "cardName": "Unearth",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "b86dd9d97777715afc9e9fe61e784d64b99123a8b9f4b41fba50694589adb2f0",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0101",
+      "category": "blind recursion",
+      "layout": "normal",
+      "oracleId": "367d4cf2-270f-4236-af10-7d5e8ea8c9fe",
+      "oracleText": "Return target nonlegendary creature card from your graveyard to the battlefield with a -1/-1 counter on it.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to the battlefield"
+        }
+      ],
+      "cardName": "Persist",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "074885014dda339f3713cb912cc76ae05344ab44313d3aaa08d39517b0136781",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0102",
+      "category": "blind recursion",
+      "layout": "normal",
+      "oracleId": "62cca25f-3bf7-4b67-97d5-280bf2544722",
+      "oracleText": "Return target creature card from your graveyard to the battlefield. It gains haste until your next turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to the battlefield"
+        }
+      ],
+      "cardName": "Bond of Revival",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "8372d2e3e7cfd84702ada0376114a07baae41d1841ab86a40f9d77da9c30c984",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0103",
+      "category": "blind mdfc",
+      "layout": "modal_dfc",
+      "oracleId": "562d71b9-1646-474e-9293-55da6947a758",
+      "oracleText": "Return from your graveyard to the battlefield any number of target creature cards that each have a different mana value X or less.\n//\nAs this land enters, you may pay 3 life. If you don't, it enters tapped.\n{T}: Add {B}.",
+      "cardFace": "front",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "from your graveyard to the battlefield",
+          "cardFace": "front"
+        }
+      ],
+      "cardName": "Agadeem's Awakening // Agadeem, the Undercrypt",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "00a9320a2042f3249cb20c25840a6e7bca3af249a14796864581ff26e8b471b8",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0104",
+      "category": "blind tutor",
+      "layout": "normal",
+      "oracleId": "0d96b60b-a060-48ee-bb83-93f1c4a10669",
+      "oracleText": "Search your library for a green creature card with mana value X or less, put it onto the battlefield, then shuffle. Shuffle Green Sun's Zenith into its owner's library.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "cardName": "Green Sun's Zenith",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "db977a166f5cfd39a14527dea38b6749a9e0a0768b9af772701399642bbda574",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "blind-0105",
+      "category": "blind tutor",
+      "layout": "normal",
+      "oracleId": "69872a9a-fe54-4e58-940c-89395af71acd",
+      "oracleText": "Search your library and/or graveyard for a creature card with mana value X or less and put it onto the battlefield. If you search your library this way, shuffle. If X is 10 or more, creatures you control get +X/+X and gain haste until end of turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library"
+        },
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "put it onto the battlefield"
+        }
+      ],
+      "cardName": "Finale of Devastation",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "8084fcbf71cb4765a12d38462d6967c57cdad2f47b932a8719d8b6cfed6649a3",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.3",
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "return_to_battlefield"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "search_library",
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "goldReviewVersion": "gold-review-v2",
+      "goldReviewedAt": "2026-08-07T04:38:22.127Z",
+      "goldReviewer": "second-pass-gold-reviewer-catalog-v2",
+      "goldReviewStatus": "reviewed",
+      "identityStatus": "catalog_exact"
+    }
+  ],
+  "identityStatus": "catalog_exact",
+  "goldReviewStatus": "reviewed",
+  "parserExecutionCount": 0,
+  "secondPassGoldReview": {
+    "reviewer": "second-pass-gold-reviewer-catalog-v2",
+    "reviewedAt": "2026-08-07T04:38:22.127Z",
+    "summary": {
+      "total": 105,
+      "reviewed": 105,
+      "needsManualReview": 0,
+      "pending": 0,
+      "identityExact": 105,
+      "reviewRate": 1
+    }
+  },
+  "taxonomyMigration": {
+    "migrationId": "taxonomy-v13-shuffle-library-policy",
+    "migrationHash": "7e548d1bdbdc97fd16a6f070c57a4009949ef187d65395a0971eb7c5b7efdab1",
+    "sourceTaxonomyVersion": "three-layer-v1.2",
+    "targetTaxonomyVersion": "three-layer-v1.3",
+    "parentContentHash": "86bbcb07701f1084962c039597f072341c9e89a18561354b16a62e2f663e6962",
+    "parserExecutionCount": 0,
+    "changedCaseCount": 105,
+    "shuffleLibraryLabelsAdded": 17,
+    "shuffleIntoLibraryLabelsAdded": 0,
+    "migratedAt": "2026-08-07T15:31:18.226Z",
+    "sealedBenchmarkMaintenance": true
+  }
+}

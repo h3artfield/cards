@@ -22,7 +22,10 @@
     "parentClassification": "validation_set_v7",
     "parentContentHash": "d7c4d11a9773b8d71b98c784d408ef57decb41fda220021c67e3439780fa4988",
     "benchmarkStatus": "catalog_clean",
-    "usableForParserEvaluation": true
+    "usableForParserEvaluation": true,
+    "goldTaxonomyVersion": "three-layer-v1.2",
+    "pendingMigrationTarget": "three-layer-v1.3",
+    "pendingMigrationHash": "9d55c742bff092fb4ec3bae8e9441a7b8931cd3e869bdd3295fd1bdb27a601aa"
   },
   "finalBlindTestV1": {
     "path": "data/oracle-action-eval-final-blind-v1.json",
@@ -46,7 +49,11 @@
     "parserAccessPolicy": "BLOCKED — identity check and gold review only",
     "benchmarkStatus": "catalog_clean",
     "usableForParserEvaluation": false,
-    "reviewer": "catalog-audit-agent"
+    "reviewer": "catalog-audit-agent",
+    "goldTaxonomyVersion": "three-layer-v1.2",
+    "pendingMigrationTarget": "three-layer-v1.3",
+    "pendingMigrationHash": "9d55c742bff092fb4ec3bae8e9441a7b8931cd3e869bdd3295fd1bdb27a601aa",
+    "parserExecutionCount": 0
   },
   "gateSequence": [
     "improve parser on development set",
@@ -251,5 +258,29 @@
     "purpose": "Immutable parent — v19 cast-permission policy gold",
     "benchmarkStatus": "catalog_clean",
     "usableForParserEvaluation": true
+  },
+  "developmentSetV25": {
+    "path": "data/oracle-action-eval-development-v25.json",
+    "classification": "development_set_v25",
+    "contentHash": "b382c8ba18b3a83d1a2524a1cc265a33552d9766d300e6fee8ea45662c1204a9",
+    "taxonomyVersion": "three-layer-v1.3",
+    "parentClassification": "development_set_v24",
+    "purpose": "v1.19 precision-pass gold — oracle-action-rc1 development benchmark",
+    "usableForParserEvaluation": true
+  },
+  "validationSetV9": {
+    "path": "data/oracle-action-eval-validation-v9.json",
+    "classification": "validation_set_v9",
+    "contentHash": "81676cb6270ea004d80aac23d2e945ce19fdf98bfbb3b46a4c96c397c0624433",
+    "taxonomyVersion": "three-layer-v1.3",
+    "parentClassification": "validation_set_v8",
+    "parentContentHash": "a1dc97477b2674ff0ca089e57233bf7d49f5226c49aa2cb6b9fd935e72d3852c",
+    "purpose": "Taxonomy v1.3 shuffle_library migration — oracle-action-rc1 validation benchmark",
+    "usableForParserEvaluation": true
+  },
+  "oracleActionRc1": {
+    "rcName": "oracle-action-rc1",
+    "parserVersion": "oracle-action-v1.19-precision-pass",
+    "manifestPath": "data/oracle-action-rc1-manifest.json"
   }
 }

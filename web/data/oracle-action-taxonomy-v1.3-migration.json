@@ -33,5 +33,5 @@
       "reason": "Reserved for zone-to-library shuffle instructions only. Generic 'then shuffle' after search is shuffle_library, not shuffle_into_library."
     }
   ],
-  "parserVersion": "oracle-action-v1.18-granted-ability-boundary"
+  "parserVersion": "oracle-action-v1.19-precision-pass"
 }

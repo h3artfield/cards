@@ -1,0 +1,18 @@
+{
+  "setClassification": "final_blind_test_v2",
+  "contentHash": "a8af409f9d6622bac200be18b1f6d9704b761b40eea3db7119c0d4b20510b8f9",
+  "caseCount": 105,
+  "taxonomyVersion": "three-layer-v1.3",
+  "frozenAt": "2026-08-07T03:30:38.795Z",
+  "path": "data/oracle-action-eval-final-blind-v2.json",
+  "parserAccessPolicy": "BLOCKED — sealed until final candidate; RC1 did not execute blind",
+  "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+  "goldReviewVersion": "gold-review-v1",
+  "goldTaxonomyVersion": "three-layer-v1.3",
+  "migrationId": "taxonomy-v13-shuffle-library-policy",
+  "migrationHash": "7e548d1bdbdc97fd16a6f070c57a4009949ef187d65395a0971eb7c5b7efdab1",
+  "parentContentHash": "86bbcb07701f1084962c039597f072341c9e89a18561354b16a62e2f663e6962",
+  "parserExecutionCount": 0,
+  "sealed": true,
+  "resealedAt": "2026-08-07T15:31:18.228Z"
+}

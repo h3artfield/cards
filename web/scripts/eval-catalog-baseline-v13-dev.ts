@@ -23,6 +23,7 @@ import { loadEnvLocal } from "./lib/script-env";
 loadEnvLocal();
 
 function datasetLabel(path: string): string {
+  if (path.includes("v25")) return "development_set_v25";
   if (path.includes("v24")) return "development_set_v24";
   if (path.includes("v23")) return "development_set_v23";
   if (path.includes("v22")) return "development_set_v22";
@@ -34,6 +35,7 @@ function datasetLabel(path: string): string {
 }
 
 function reportName(path: string): string {
+  if (path.includes("v25")) return "catalog-baseline-v13-dev-v25.json";
   if (path.includes("v24")) return "catalog-baseline-v13-dev-v24.json";
   if (path.includes("v23")) return "catalog-baseline-v13-dev-v23.json";
   if (path.includes("v22")) return "catalog-baseline-v13-dev-v22.json";
@@ -46,7 +48,7 @@ function reportName(path: string): string {
 
 const DEV_PATH =
   process.argv.find((a) => a.startsWith("--dataset="))?.slice("--dataset=".length) ??
-  "data/oracle-action-eval-development-v24.json";
+  "data/oracle-action-eval-development-v25.json";
 const DATASET_LABEL = datasetLabel(DEV_PATH);
 const REPORT_NAME = reportName(DEV_PATH);
 const V16_BASELINE_PATH = "reports/catalog-baseline-v12-official.json";
@@ -84,10 +86,17 @@ function countConfusionPairs(cases: OracleActionEvalCaseV2[]): Map<string, numbe
       index,
       primitive: normalizeToPrimitive(a.actionType, a.evidenceText),
       evidenceText: a.evidenceText,
+      cardFaceId: a.faceId,
+      abilityIndex: a.abilityIndex,
       reviewStatus: a.reviewStatus as "accepted" | "needs_review",
       textRole: a.textRole,
     }));
-    const accepted = matchGoldToActions({ expected, actions, tier: "accepted" });
+    const accepted = matchGoldToActions({
+      expected,
+      actions,
+      tier: "accepted",
+      oracleText: testCase.oracleText,
+    });
     for (const actionIdx of accepted.unmatchedActionIndices) {
       const a = actions[actionIdx];
       if (a.reviewStatus !== "accepted" || !a.primitive) continue;
@@ -168,13 +177,20 @@ async function main() {
       index,
       primitive: normalizeToPrimitive(a.actionType, a.evidenceText),
       evidenceText: a.evidenceText,
+      cardFaceId: a.faceId,
+      abilityIndex: a.abilityIndex,
       reviewStatus: a.reviewStatus as "accepted" | "needs_review",
       textRole: a.textRole,
       optionalEffect: a.optionalEffect,
       optionalCost: a.optionalCost,
       optional: a.optional,
     }));
-    const acceptedMatch = matchGoldToActions({ expected, actions, tier: "accepted" });
+    const acceptedMatch = matchGoldToActions({
+      expected,
+      actions,
+      tier: "accepted",
+      oracleText: testCase.oracleText,
+    });
     for (const actionIdx of acceptedMatch.unmatchedActionIndices) {
       const a = actions[actionIdx];
       if (a.reviewStatus !== "accepted" || !a.primitive) continue;

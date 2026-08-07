@@ -389,7 +389,7 @@ function testReminderSpanDetection() {
 }
 
 function testFullDevelopmentRuntime() {
-  const devPath = resolve(process.cwd(), "data/oracle-action-eval-development-v18.json");
+  const devPath = resolve(process.cwd(), "data/oracle-action-eval-development-v25.json");
   const dev = JSON.parse(readFileSync(devPath, "utf8")) as { cases: Array<{ id: string; oracleText: string; oracleId: string; cardFace?: string }> };
   const { ms } = timed(() => {
     for (const c of dev.cases) {
@@ -401,7 +401,7 @@ function testFullDevelopmentRuntime() {
 }
 
 function main() {
-  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.18-granted-ability-boundary/);
+  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.19-precision-pass/);
   testRegressionCases();
   testCompoundClauseNoHang();
   testReminderSpanDetection();

@@ -43,6 +43,7 @@
     "test:inventory-analytics": "npx --yes tsx scripts/test-inventory-analytics.ts",
     "test:inventory-search": "npx --yes tsx scripts/test-inventory-search.ts",
     "test:deck-builder": "npx --yes tsx scripts/test-deck-builder.ts",
+    "test:oracle-span-role-v13": "npx --yes tsx scripts/test-oracle-span-role-v13.ts",
     "test:p0-clerk-safety": "npx --yes tsx scripts/test-p0-clerk-safety.ts",
     "test:p0-oracle-e2e": "npx --yes tsx scripts/test-p0-oracle-e2e.ts",
     "test:inventory-quantity-semantics": "npx --yes tsx scripts/test-inventory-quantity-semantics.ts",

@@ -210,9 +210,9 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+ to (?:its|their) owner'?s hand\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
   { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+(?: cards?)? from (?:your )?graveyard to your hand\b/i, actionType: "return_to_hand", sourceZones: ["graveyard"], destinationZones: ["hand"] },
   { pattern: /\bReturn target [\w ]+ from (?:your )?graveyard to your hand\b/i, actionType: "return_to_hand", sourceZones: ["graveyard"], destinationZones: ["hand"] },
-  { pattern: /\bPut target [\w ]+ (?:card )?from (?:your |a )?graveyard onto the battlefield\b/i, actionType: "put_onto_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
+  { pattern: /\bPut target [\w ]+ (?:card )?from (?:your |a )?graveyard onto the battlefield\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
   { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+ (?:card )?from (?:your )?graveyard to the battlefield\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
-  { pattern: /\bPut target [\w ]+ (?:card )?from a graveyard onto the battlefield\b/i, actionType: "put_onto_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
+  { pattern: /\bPut target [\w ]+ (?:card )?from a graveyard onto the battlefield\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
   { pattern: /\bSacrifice (?:a |an |target |up to one target )?[\w ]+/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
   { pattern: /\b(?:Each (?:opponent|player)|Target player|That player|Each opponent) sacrifices (?:a |an |all )?[\w ]+/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
   { pattern: /\b(?:create|creates|You may create) (?:a |an |one |up to \w+ )?(?:[\w-/]+ )*tokens?\b/i, actionType: "create_token", destinationZones: ["battlefield"], affectedObjects: ["token"] },
@@ -230,6 +230,7 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bgains? \d+ life\b/i, actionType: "gain_life", affectedObjects: ["player"] },
   { pattern: /\bloses? \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\bloses? up to \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
+  { pattern: /\b(?:You )?lose life(?: equal to|\b)/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\bScry \d+\b/i, actionType: "scry", sourceZones: ["library"] },
   { pattern: /\bScry up to \d+\b/i, actionType: "scry", sourceZones: ["library"] },
   { pattern: /\bSurveil \d+\b/i, actionType: "surveil", sourceZones: ["library"], destinationZones: ["graveyard"] },
@@ -740,6 +741,12 @@ function acceptAction(input: {
   if (matchInsideReminderParenthetical(input.ability.paragraphText, localStart)) {
     return null;
   }
+  if (
+    isCyclingDefinitionParagraph(input.ability.paragraphText) ||
+    isAftermathDefinitionParagraph(input.ability.paragraphText)
+  ) {
+    return null;
+  }
   if (!input.grantedContext && isInsideGrantedQuote(input.ability.paragraphText, localStart)) {
     return null;
   }
@@ -901,9 +908,11 @@ function acceptAction(input: {
     confidence = 0.8;
   }
 
+  const resolvedActionType = resolveActionTypeFromSemantics(input.rule.actionType, evidenceText);
+
   const reviewStatus = assignReviewStatus({
     abilityType,
-    actionType: input.rule.actionType,
+    actionType: resolvedActionType,
     confidence,
     paragraph: input.ability.paragraphText,
     evidenceText,
@@ -933,8 +942,12 @@ function acceptAction(input: {
     abilityIndex: input.ability.abilityIndex,
     actionIndex: input.actionIndex,
     abilityType,
-    actionType: input.rule.actionType,
-    sourceZones: input.rule.sourceZones ?? zones.source,
+    actionType: resolvedActionType,
+    sourceZones:
+      resolvedActionType === "return_to_battlefield" &&
+      input.rule.actionType === "put_onto_battlefield"
+        ? ["graveyard"]
+        : (input.rule.sourceZones ?? zones.source),
     destinationZones: input.rule.destinationZones ?? zones.dest,
     affectedObjects: input.rule.affectedObjects,
     conditions: conditions.length ? conditions : undefined,
@@ -1013,6 +1026,20 @@ function filterDominatedActions(actions: OracleActionV1[]): OracleActionV1[] {
   return kept.sort((a, b) => a.evidenceStart - b.evidenceStart || a.actionIndex - b.actionIndex);
 }
 
+function resolveActionTypeFromSemantics(
+  ruleType: PrimitiveActionType,
+  evidenceText: string,
+): PrimitiveActionType {
+  if (
+    ruleType === "put_onto_battlefield" &&
+    /\bfrom (?:your |a |their )?graveyard\b/i.test(evidenceText) &&
+    /\bonto the battlefield\b/i.test(evidenceText)
+  ) {
+    return "return_to_battlefield";
+  }
+  return ruleType;
+}
+
 function matchStartsInTriggerCondition(paragraph: string, localMatchStart: number): boolean {
   if (!/^(When|Whenever) /i.test(paragraph.trim())) return false;
   const commaIdx = paragraph.indexOf(", ");
@@ -1065,7 +1092,18 @@ function matchIsStaticActionRestriction(paragraph: string, localStart: number, a
     if (/\bcan'?t cast\b/i.test(clause)) return true;
     if (/\bcan'?t be cast\b/i.test(clause)) return true;
   }
+  if (actionType === "untap") {
+    if (/\b(?:doesn't|don't|does not|cannot|can't) untap\b/i.test(clause)) return true;
+  }
   return false;
+}
+
+function isCyclingDefinitionParagraph(paragraph: string): boolean {
+  return /^Cycling \{/i.test(paragraph.trim());
+}
+
+function isAftermathDefinitionParagraph(paragraph: string): boolean {
+  return /^Aftermath \(/i.test(paragraph.trim());
 }
 
 function insteadClauseSpan(paragraph: string): { localStart: number; text: string } | null {
