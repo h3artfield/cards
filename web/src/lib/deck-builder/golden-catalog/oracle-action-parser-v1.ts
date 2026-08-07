@@ -31,6 +31,11 @@ import {
   type OptionalityController,
 } from "./oracle-action-optionality";
 import {
+  parseVariableQuantityFields,
+  variableQuantityNeedsReview,
+  type VariableQuantityFields,
+} from "./oracle-variable-quantity";
+import {
   classifyTextRoleAt,
   clauseBoundaries,
   compoundClauseSpansWithRoles,
@@ -99,7 +104,11 @@ export interface OracleActionV1 {
   targetMaximum?: number | "X";
   quantityMayBeZero?: boolean;
   quantityType?: "literal" | "variable";
+  quantitySymbol?: string;
   quantityExpression?: string;
+  quantityDefinitionSpan?: string;
+  quantitySource?: "ability_where_clause" | "spell_mana_cost" | "unresolved";
+  quantityCertainty?: "defined_in_ability" | "spell_cost_x" | "ambiguous";
   evidenceText: string;
   evidenceStart: number;
   evidenceEnd: number;
@@ -121,6 +130,7 @@ export interface OracleActionV1 {
   clauseDependencyKind?: string;
   referencedClauseId?: string;
   referentTexts?: string[];
+  tokenCopyOf?: string;
   clauseSequenceIndex?: number;
   abilityOrigin?: "native" | "granted";
   grantedByAbilityId?: string;
@@ -228,8 +238,13 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\b(?:discard|discards) (?:a |one |two |three |their |up to \w+ )?(?:[\w ]*cards?|their hand)\b/i, actionType: "discard", sourceZones: ["hand"], destinationZones: ["graveyard"] },
   { pattern: /\bdraw that many cards\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bdeals? \d+ damage(?: to (?:any target|target [\w ]+|each [\w ]+))?/i, actionType: "deal_damage", affectedObjects: ["player", "permanent"] },
+  { pattern: /\bdeals? X damage(?: to (?:any target|target [\w ]+|each [\w ]+))?/i, actionType: "deal_damage", affectedObjects: ["player", "permanent"] },
   { pattern: /\bDeal up to \d+ damage(?: to (?:any target|target [\w ]+))?/i, actionType: "deal_damage", affectedObjects: ["player", "permanent"] },
+  { pattern: /\bDraw X cards?\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
+  { pattern: /\bCreate X [\w ]*tokens?\b/i, actionType: "create_token", destinationZones: ["battlefield"] },
+  { pattern: /\bmills? X cards?\b/i, actionType: "mill", sourceZones: ["library"], destinationZones: ["graveyard"] },
   { pattern: /\bgains? \d+ life\b/i, actionType: "gain_life", affectedObjects: ["player"] },
+  { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?gains? X life\b/i, actionType: "gain_life", affectedObjects: ["player"] },
   { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?loses? \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?loses? up to \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?loses? X life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
@@ -329,41 +344,6 @@ function extractTrigger(paragraph: string): string | undefined {
 function extractQuantityConstraint(text: string): string | undefined {
   const upTo = text.match(/\bup to (?:one|two|three|four|five|\w+) [\w ]+/i);
   return upTo?.[0]?.trim();
-}
-
-function parseLoseLifeQuantity(
-  evidenceText: string,
-  paragraph?: string,
-): { quantityType?: "literal" | "variable"; quantityExpression?: string } {
-  const variable = evidenceText.match(
-    /\b(?:Each opponent |Each player |You |Target player |That player )?lose(?:s)? life equal to (.+)$/i,
-  );
-  if (variable?.[1]) {
-    return { quantityType: "variable", quantityExpression: variable[1].trim() };
-  }
-  const xLife = evidenceText.match(
-    /\b(?:Each opponent |Each player |You |Target player |That player )?lose(?:s)? X life\b/i,
-  );
-  if (xLife) {
-    const whereMatch = paragraph?.match(/\bwhere X is ([^.]+)/i);
-    if (whereMatch?.[1]) {
-      return { quantityType: "variable", quantityExpression: whereMatch[1].trim() };
-    }
-    return { quantityType: "variable", quantityExpression: "X" };
-  }
-  const literal = evidenceText.match(
-    /\b(?:Each opponent |Each player |You |Target player |That player )?lose(?:s)? (\d+|up to \d+) life\b/i,
-  );
-  if (literal?.[1]) {
-    return { quantityType: "literal", quantityExpression: literal[1] };
-  }
-  return {};
-}
-
-/** X life tied to a local `where X is …` definition — defer to needs_review (not bare spell X). */
-function isContextDefinedVariableLoseLife(paragraph: string, evidenceText: string): boolean {
-  if (!/\bloses? X life\b/i.test(evidenceText)) return false;
-  return /\bwhere X is\b/i.test(paragraph);
 }
 
 function parseTargetConstraint(text: string): {
@@ -695,14 +675,10 @@ function assignReviewStatus(input: {
   cardEvidenceEnd?: number;
   replacementInsteadEffect?: boolean;
   featurePromotion?: boolean;
+  variableQuantity?: VariableQuantityFields;
 }): OracleActionV1ReviewStatus {
   if (input.abilityType === "replacement" && !input.replacementInsteadEffect) return "needs_review";
-  if (
-    input.actionType === "lose_life" &&
-    isContextDefinedVariableLoseLife(input.paragraph, input.evidenceText)
-  ) {
-    return "needs_review";
-  }
+  if (input.variableQuantity && variableQuantityNeedsReview(input.variableQuantity)) return "needs_review";
 
   const isMultiface = input.faces && input.faces.length > 1 && input.face;
   if (isMultiface) {
@@ -770,22 +746,53 @@ function acceptAction(input: {
   const localStart = baseLocalStart;
   if (localStart < 0) return null;
 
-  if (input.rule.actionType === "lose_life") {
+  if (input.rule.actionType === "lose_life" || input.rule.actionType === "gain_life") {
+    const verb = input.rule.actionType === "lose_life" ? "loses?" : "gains?";
     const extended = input.ability.paragraphText
       .slice(localStart)
       .match(
-        /^((?:Each opponent |Each player |You |Target player |That player )?loses? (?:X|\d+|up to \d+) life|(?:Each opponent |Each player |You |Target player |That player )?loses? life equal to[^.]+)/i,
+        new RegExp(
+          `^((?:Each opponent |Each player |You |Target player |That player )?${verb} (?:X|\\d+|up to \\d+) life|(?:Each opponent |Each player |You |Target player |That player )?${verb} life equal to[^.]+)`,
+          "i",
+        ),
       );
     if (extended?.[1]) {
       evidenceText = extended[1].trim();
     }
   }
 
+  if (input.rule.actionType === "destroy" && /\beach creature gets [-−]/i.test(evidenceText)) {
+    const extended = input.ability.paragraphText
+      .slice(localStart)
+      .match(/^each creature gets [-−]X\/[-−]X until end of turn/i);
+    if (extended?.[0]) {
+      evidenceText = extended[0];
+    }
+  }
+
+  if (input.rule.actionType === "create_token") {
+    const extended = input.ability.paragraphText
+      .slice(localStart)
+      .match(/^Create a token that's a copy of [^.]+/i);
+    if (extended?.[0]) {
+      evidenceText = extended[0].trim();
+    }
+  }
+
+  if (input.rule.actionType === "copy") {
+    const windowStart = Math.max(0, localStart - 24);
+    const window = input.ability.paragraphText.slice(windowStart, localStart + evidenceText.length + 8);
+    if (/\btoken that'?s a copy of\b/i.test(window)) {
+      return null;
+    }
+  }
+
   const localEnd = localStart + evidenceText.length;
-  const loseLifeQuantity =
-    input.rule.actionType === "lose_life"
-      ? parseLoseLifeQuantity(evidenceText, input.ability.paragraphText)
-      : {};
+  const variableQuantity = parseVariableQuantityFields(
+    input.rule.actionType,
+    evidenceText,
+    input.ability.paragraphText,
+  );
   const roleParagraph = input.grantedContext?.innerText ?? input.ability.paragraphText;
   const roleLocalStart = input.grantedContext
     ? localStart - input.grantedContext.innerLocalStart
@@ -983,6 +990,7 @@ function acceptAction(input: {
     cardEvidenceEnd,
     replacementInsteadEffect: input.replacementInsteadEffect,
     featurePromotion: extractionFeaturePromotion,
+    variableQuantity,
   });
 
   return {
@@ -1016,8 +1024,12 @@ function acceptAction(input: {
     targetMinimum: targetConstraint.targetMinimum,
     targetMaximum: targetConstraint.targetMaximum,
     quantityMayBeZero: targetConstraint.quantityMayBeZero,
-    quantityType: loseLifeQuantity.quantityType,
-    quantityExpression: loseLifeQuantity.quantityExpression,
+    quantityType: variableQuantity.quantityType,
+    quantitySymbol: variableQuantity.quantitySymbol,
+    quantityExpression: variableQuantity.quantityExpression,
+    quantityDefinitionSpan: variableQuantity.quantityDefinitionSpan,
+    quantitySource: variableQuantity.quantitySource,
+    quantityCertainty: variableQuantity.quantityCertainty,
     evidenceText,
     evidenceStart: cardEvidenceStart,
     evidenceEnd: cardEvidenceEnd,
@@ -1034,6 +1046,10 @@ function acceptAction(input: {
     clauseDependencyKind: input.clause?.dependency.kind,
     referencedClauseId: input.clause?.dependency.referencedClauseId,
     referentTexts: input.clause?.referentTexts.length ? input.clause.referentTexts : undefined,
+    tokenCopyOf: (() => {
+      const m = evidenceText.match(/\btoken that'?s a copy of (.+)$/i);
+      return m?.[1]?.trim();
+    })(),
     clauseSequenceIndex: input.clause?.sequenceIndex,
     abilityOrigin: input.grantedContext ? "granted" : "native",
     grantedByAbilityId: input.grantedContext?.grantedAbilityId,

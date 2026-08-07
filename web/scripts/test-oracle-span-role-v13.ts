@@ -296,12 +296,111 @@ const STORM_REMINDER_CASES = [
   },
 ];
 
-const CONTEXT_X_LOSE_LIFE_CASES = [
+const TOKEN_COPY_CASES = [
   {
-    name: "where_x_defined_lose_life_needs_review",
+    name: "saheeli_token_copy_not_imperative_copy",
+    oracleText:
+      "Choose one or both —\n• Create a token that's a copy of target artifact.\n• Create a token that's a copy of target creature, except it's an artifact in addition to its other types.",
+    expectActions: [
+      {
+        type: "create_token",
+        evidence: "Create a token that's a copy of target artifact",
+        status: "accepted",
+        tokenCopyOf: "target artifact",
+      },
+    ],
+    forbidActions: ["copy"],
+  },
+];
+
+const CONTEXT_DEFINED_X_CASES = [
+  {
+    name: "lose_x_where_defined",
     oracleText:
       "Whenever this creature attacks, each opponent loses X life and you gain X life, where X is the number of other Squirrels you control.",
-    expectReview: [{ type: "lose_life", evidence: "each opponent loses X life", status: "needs_review" as const }],
+    expectActions: [
+      {
+        type: "lose_life",
+        evidence: "each opponent loses X life",
+        status: "accepted",
+        quantityType: "variable",
+        quantitySymbol: "X",
+        quantityExpression: "the number of other Squirrels you control",
+      },
+      {
+        type: "gain_life",
+        evidence: "you gain X life",
+        status: "accepted",
+        quantityType: "variable",
+        quantitySymbol: "X",
+        quantityExpression: "the number of other Squirrels you control",
+      },
+    ],
+  },
+  {
+    name: "gain_x_where_defined",
+    oracleText: "You gain X life, where X is the number of cards in your hand.",
+    expectActions: [
+      {
+        type: "gain_life",
+        evidence: "You gain X life",
+        status: "accepted",
+        quantityType: "variable",
+        quantitySymbol: "X",
+      },
+    ],
+  },
+  {
+    name: "deals_x_where_defined",
+    oracleText: "It deals X damage to any target, where X is the number of +1/+1 counters on it.",
+    expectActions: [
+      {
+        type: "deal_damage",
+        evidence: "deals X damage",
+        status: "accepted",
+        quantityType: "variable",
+        quantitySymbol: "X",
+      },
+    ],
+  },
+  {
+    name: "draw_x_where_defined",
+    oracleText: "Draw X cards, where X is the number of creatures you control.",
+    expectActions: [
+      {
+        type: "draw",
+        evidence: "Draw X cards",
+        status: "accepted",
+        quantityType: "variable",
+        quantitySymbol: "X",
+      },
+    ],
+  },
+  {
+    name: "create_x_where_defined",
+    oracleText: "Create X 1/1 white Soldier creature tokens, where X is the number of artifacts you control.",
+    expectActions: [
+      {
+        type: "create_token",
+        evidence: "Create X",
+        status: "accepted",
+        quantityType: "variable",
+        quantitySymbol: "X",
+      },
+    ],
+  },
+  {
+    name: "mill_x_where_defined",
+    oracleText: "Target player mills X cards, where X is the number of cards in their graveyard.",
+    expectActions: [
+      {
+        type: "mill",
+        evidence: "mills X cards",
+        status: "accepted",
+        quantityType: "variable",
+        quantitySymbol: "X",
+      },
+    ],
   },
 ];
 
@@ -371,7 +470,8 @@ function testRegressionCases() {
     ...SHUFFLE_TAXONOMY_CASES,
     ...GRANTED_ABILITY_CASES,
     ...STORM_REMINDER_CASES,
-    ...CONTEXT_X_LOSE_LIFE_CASES,
+    ...CONTEXT_DEFINED_X_CASES,
+    ...TOKEN_COPY_CASES,
     ...VARIABLE_LOSE_LIFE_CASES,
   ]) {
     const { result, ms } = timed(() =>
@@ -379,36 +479,28 @@ function testRegressionCases() {
     );
     assert.ok(ms < PERF_BUDGET_MS, `${c.name}: parser took ${ms}ms (budget ${PERF_BUDGET_MS}ms)`);
 
-    for (const exp of (c as { expectReview?: Array<{ type: string; evidence: string; status: string }> }).expectReview ?? []) {
+    for (const exp of (c as { expectActions?: Array<Record<string, unknown>> }).expectActions ?? []) {
       const hit = result.actions.find(
         (a) =>
           a.actionType === exp.type &&
-          a.evidenceText.toLowerCase().includes(exp.evidence.toLowerCase()) &&
-          a.reviewStatus === exp.status,
+          a.evidenceText.toLowerCase().includes(String(exp.evidence).toLowerCase()) &&
+          (!exp.status || a.reviewStatus === exp.status),
       );
-      assert.ok(hit, `${c.name}: expected ${exp.status} ${exp.type} matching "${exp.evidence}"`);
-    }
-
-    for (const exp of c.expectActions ?? []) {
-      const hit = result.actions.find(
-        (a) => a.actionType === exp.type && a.evidenceText.toLowerCase().includes(exp.evidence.toLowerCase()),
-      );
-      assert.ok(hit, `${c.name}: expected ${exp.type} matching "${exp.evidence}"`);
-      if ((exp as { quantityType?: string }).quantityType) {
-        assert.equal(
-          hit!.quantityType,
-          (exp as { quantityType?: string }).quantityType,
-          `${c.name}: quantityType`,
-        );
-      }
-      if ((exp as { quantityExpression?: string }).quantityExpression) {
-        assert.equal(
-          hit!.quantityExpression,
-          (exp as { quantityExpression?: string }).quantityExpression,
+      assert.ok(hit, `${c.name}: expected ${exp.status ?? "accepted"} ${exp.type} matching "${exp.evidence}"`);
+      if (exp.quantityType) assert.equal(hit!.quantityType, exp.quantityType, `${c.name}: quantityType`);
+      if (exp.quantitySymbol) assert.equal(hit!.quantitySymbol, exp.quantitySymbol, `${c.name}: quantitySymbol`);
+      if (exp.quantityExpression) {
+        assert.ok(
+          hit!.quantityExpression?.includes(String(exp.quantityExpression)) ||
+            hit!.quantityDefinitionSpan?.includes(String(exp.quantityExpression)),
           `${c.name}: quantityExpression`,
         );
       }
+      if (exp.tokenCopyOf) {
+        assert.equal(hit!.tokenCopyOf, exp.tokenCopyOf, `${c.name}: tokenCopyOf`);
+      }
     }
+
     for (const forbid of c.forbidActions ?? []) {
       const bad = result.actions.filter((a) => a.actionType === forbid);
       assert.equal(bad.length, 0, `${c.name}: must not emit ${forbid}, got ${bad.map((a) => a.evidenceText).join("; ")}`);
@@ -499,7 +591,7 @@ function testFullDevelopmentRuntime() {
 }
 
 function main() {
-  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.21-unsupported-lose-life-role-cleanup-dev/);
+  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.22-context-defined-x-quantity-dev/);
   testRegressionCases();
   testCompoundClauseNoHang();
   testReminderSpanDetection();
@@ -517,7 +609,8 @@ function main() {
           GRANTED_ABILITY_CASES.length +
           VARIABLE_LOSE_LIFE_CASES.length +
           STORM_REMINDER_CASES.length +
-          CONTEXT_X_LOSE_LIFE_CASES.length,
+          CONTEXT_DEFINED_X_CASES.length +
+          TOKEN_COPY_CASES.length,
         fullDevelopmentRuntimeMs: devMs,
         perfBudgetMs: PERF_BUDGET_MS,
         devBudgetMs: DEV_CASE_BUDGET_MS,
