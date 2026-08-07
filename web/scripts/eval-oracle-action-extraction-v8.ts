@@ -322,7 +322,7 @@ function goldSupportByLayout(cases: OracleActionEvalCaseV2[]): Record<string, nu
 }
 
 function main() {
-  const devPath = resolve(process.cwd(), "data", "oracle-action-eval-development-v5.json");
+  const devPath = resolve(process.cwd(), "data", "oracle-action-eval-development-v6.json");
   const dev = JSON.parse(readFileSync(devPath, "utf8")) as {
     cases: OracleActionEvalCaseV2[];
     contentHash: string;
@@ -458,7 +458,7 @@ function main() {
   const report = {
     generatedAt: new Date().toISOString(),
     parserVersion: ORACLE_ACTION_PARSER_VERSION,
-    developmentSet: dev.setClassification ?? "development_set_v5",
+    developmentSet: dev.setClassification ?? "development_set_v6",
     developmentDatasetHash: dev.contentHash,
     caseCount: dev.caseCount,
     multifaceCaseCount: multifaceCases.length,
@@ -480,6 +480,7 @@ function main() {
       wrongFaceCases.length === 0
         ? "Prior wrong_face (v1.7 report): eval-0044 retained legacy case-level cardFace:\"back\", which scoped parsing to the back half only; gold expected deal_damage on front. Resolved by removing case-level cardFace and using per-action cardFace on all multiface gold."
         : undefined,
+    remainingMultifaceExtractionFailures: remainingMultifaceFailures,
     validationAccessed: false,
     finalBlindAccessed: false,
     note: "Development-only multiface slice. Validation and final blind not accessed.",

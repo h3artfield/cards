@@ -126,10 +126,13 @@ interface ActionPattern {
   requiresPermissionVerb?: boolean;
 }
 
+const CAST_SPELLS_FROM =
+  /\b(?:you may )?cast spells from(?: your [\w]+)?\b/i;
+const PLAY_LANDS = /\b(?:you may )?play lands\b/i;
 const CAST_PERMISSION =
-  /\b(?:you may )?cast (?:target |this |that |the copy|the exiled |any number of (?:spells|nonland)|spells from|it\b|a spell)/i;
+  /\b(?:you may )?cast (?:target |this |that |the copy|the exiled |any number of (?:spells|nonland)|spells from(?: your [\w]+)?|it\b|a spell)/i;
 const PLAY_PERMISSION =
-  /\b(?:you may )?play (?:lands and (?:cast )?spells from|land cards from|that card|it\b|lands and spells from|an additional land|lands and cast spells from)/i;
+  /\b(?:you may )?play (?:land cards from|that card|it\b|an additional land)/i;
 
 const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bdraws? (?:a |one |two |three |four |five |seven |up to \w+ )?cards?\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
@@ -143,11 +146,12 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bYou may put [\w ]+ onto the battlefield/i, actionType: "search_library", destinationZones: ["battlefield"] },
   { pattern: /\bYou may cast this spell from your graveyard\b/i, actionType: "cast", sourceZones: ["graveyard"], requiresPermissionVerb: true },
   { pattern: /\bYou may cast the copy\b/i, actionType: "cast", sourceZones: ["exile", "stack"], requiresPermissionVerb: true },
-  { pattern: /\bYou may choose new targets for the copy\b/i, actionType: "copy", sourceZones: ["stack"] },
   { pattern: /\byou may play that card\b/i, actionType: "play", sourceZones: ["exile"], requiresPermissionVerb: true },
   { pattern: /\bplay an additional land\b/i, actionType: "play", sourceZones: ["hand"], requiresPermissionVerb: true },
+  { pattern: CAST_SPELLS_FROM, actionType: "cast", sourceZones: ["graveyard", "exile"], requiresPermissionVerb: true },
+  { pattern: PLAY_LANDS, actionType: "play", sourceZones: ["hand", "graveyard"], requiresPermissionVerb: true },
   { pattern: /\bput (?:a |one )?card from your hand on top of your library\b/i, actionType: "search_library", sourceZones: ["hand"], destinationZones: ["library"] },
-  { pattern: /\bYou may play [\w ]+/i, actionType: "play", requiresPermissionVerb: true },
+  { pattern: /\bYou may play (?!(?:lands and cast|lands and spells))[\w ]+/i, actionType: "play", requiresPermissionVerb: true },
   { pattern: /\bDraw (?:a |one |two |three |four |five |seven |up to \w+ )?cards?\b/, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bAdd \{[^}]+\}(?:\{[^}]+\})*/i, actionType: "add_mana", abilityType: "activated", destinationZones: ["mana_pool"] },
   { pattern: /\bAdd (?:one mana of any color|three mana of any one color|\{C\}{1,2}|\{[WUBRG]\})/i, actionType: "add_mana", destinationZones: ["mana_pool"] },
@@ -460,6 +464,62 @@ function multifaceFaceUnambiguous(
   return overlapping.length === 1;
 }
 
+function canPromoteToAccepted(input: {
+  abilityType: OracleActionV1AbilityType;
+  actionType: PrimitiveActionType;
+  confidence: number;
+  paragraph: string;
+  evidenceText: string;
+  replacementInsteadEffect?: boolean;
+}): boolean {
+  if (input.replacementInsteadEffect && input.confidence >= 0.92) return true;
+
+  if (
+    (input.actionType === "cast" && /\bcast spells from\b/i.test(input.evidenceText)) ||
+    (input.actionType === "play" && /\bplay lands\b/i.test(input.evidenceText))
+  ) {
+    return input.confidence >= 0.88 && /\b(?:graveyard|exile)\b/i.test(input.paragraph);
+  }
+
+  const tutorThenShuffle = /\bsearch (?:your )?library for\b[\s\S]*\bthen shuffle\b/i.test(input.paragraph);
+  const benignThen = tutorThenShuffle || /\bthen draw\b/i.test(input.paragraph);
+  const compoundThen = /\bthen\b/i.test(input.paragraph) && !benignThen;
+
+  if (compoundThen || input.abilityType === "replacement") return false;
+
+  const reliablePrimitives: PrimitiveActionType[] = [
+    "draw",
+    "destroy",
+    "exile",
+    "search_library",
+    "create_token",
+    "discard",
+    "untap",
+    "gain_life",
+    "lose_life",
+    "deal_damage",
+    "sacrifice",
+    "counter",
+    "return_to_hand",
+    "return_to_battlefield",
+    "mill",
+    "scry",
+    "surveil",
+    "tap",
+    "add_mana",
+    "copy",
+    "cast",
+    "play",
+    "put_counter",
+    "shuffle_into_library",
+  ];
+  if (input.confidence >= 0.88 && reliablePrimitives.includes(input.actionType)) {
+    return true;
+  }
+
+  return false;
+}
+
 function assignReviewStatus(input: {
   abilityType: OracleActionV1AbilityType;
   actionType: PrimitiveActionType;
@@ -471,8 +531,9 @@ function assignReviewStatus(input: {
   faces?: SegmentedCardFace[];
   cardEvidenceStart?: number;
   cardEvidenceEnd?: number;
+  replacementInsteadEffect?: boolean;
 }): OracleActionV1ReviewStatus {
-  if (input.abilityType === "replacement") return "needs_review";
+  if (input.abilityType === "replacement" && !input.replacementInsteadEffect) return "needs_review";
 
   const isMultiface = input.faces && input.faces.length > 1 && input.face;
   if (isMultiface) {
@@ -486,6 +547,8 @@ function assignReviewStatus(input: {
     if (input.confidence < 0.88) return "needs_review";
     return "accepted";
   }
+
+  if (canPromoteToAccepted(input)) return "accepted";
 
   if (input.confidence < 0.82) return "needs_review";
   if (/\bthen\b|\band then\b/i.test(input.paragraph)) return "needs_review";
@@ -503,18 +566,40 @@ function acceptAction(input: {
   match: RegExpMatchArray;
   rule: ActionPattern;
   actionIndex: number;
+  replacementInsteadEffect?: boolean;
+  evidenceOffsetInParagraph?: number;
 }): OracleActionV1 | null {
   const evidenceText = input.match[0];
-  const localStart = input.ability.paragraphText.indexOf(evidenceText);
+  const baseLocalStart =
+    input.evidenceOffsetInParagraph ?? input.ability.paragraphText.indexOf(evidenceText);
+  const localStart = baseLocalStart;
   if (localStart < 0) return null;
 
+  if (matchStartsInTriggerCondition(input.ability.paragraphText, localStart)) {
+    return null;
+  }
+  if (matchInsideReminderParenthetical(input.ability.paragraphText, localStart)) {
+    return null;
+  }
+  if (
+    input.rule.actionType === "cast" &&
+    matchIsSpuriousCastPermission(input.ability.paragraphText, localStart, evidenceText)
+  ) {
+    return null;
+  }
+
   if (input.rule.requiresPermissionVerb) {
-    if (!CAST_PERMISSION.test(evidenceText) && !PLAY_PERMISSION.test(evidenceText)) {
+    if (
+      !CAST_PERMISSION.test(evidenceText) &&
+      !PLAY_PERMISSION.test(evidenceText) &&
+      !PLAY_LANDS.test(evidenceText) &&
+      !CAST_SPELLS_FROM.test(evidenceText)
+    ) {
       return null;
     }
   }
 
-  if (/\bIf you would [^,]+, instead\b/i.test(input.ability.paragraphText)) {
+  if (/\bIf you would [^,]+, instead\b/i.test(input.ability.paragraphText) && !input.replacementInsteadEffect) {
     const wouldClause = input.ability.paragraphText.match(/\bIf you would ([^,]+), instead/i)?.[1]?.trim();
     if (wouldClause && evidenceText.trim().toLowerCase() === wouldClause.toLowerCase()) {
       return null;
@@ -532,15 +617,28 @@ function acceptAction(input: {
     input.ability.abilityType === "unknown"
       ? classifyAbilityType(input.ability.paragraphText)
       : input.ability.abilityType;
-  const abilityType = input.rule.abilityType ?? toV1AbilityType(classified);
+  const abilityType = input.replacementInsteadEffect
+    ? "replacement"
+    : input.rule.abilityType ?? toV1AbilityType(classified);
   const zones = inferZones(input.ability.paragraphText);
-  const optionalEffect = false;
+  const permissionWindow = input.ability.paragraphText.slice(Math.max(0, localStart - 24), localStart);
+  const optionalEffect =
+    input.rule.optional === true ||
+    /\b(?:you|they|that player|its controller) may\b/i.test(permissionWindow) ||
+    /\b(?:you|they) may\b/i.test(evidenceText);
   const quantityConstraint = extractQuantityConstraint(evidenceText);
   const targetConstraint = parseTargetConstraint(evidenceText);
   const conditions = extractConditions(input.ability.paragraphText);
 
   let confidence = 0.9;
-  if (abilityType === "replacement") confidence = 0.78;
+  if (input.replacementInsteadEffect) confidence = 0.92;
+  else if (abilityType === "replacement") confidence = 0.78;
+  else if (
+    (input.rule.actionType === "cast" && CAST_SPELLS_FROM.test(evidenceText)) ||
+    (input.rule.actionType === "play" && PLAY_LANDS.test(evidenceText))
+  ) {
+    confidence = 0.9;
+  }
   const tutorThenShuffle = /\bsearch (?:your )?library for\b[\s\S]*\bthen shuffle\b/i.test(
     input.ability.paragraphText,
   );
@@ -563,6 +661,7 @@ function acceptAction(input: {
     faces: input.faces,
     cardEvidenceStart,
     cardEvidenceEnd,
+    replacementInsteadEffect: input.replacementInsteadEffect,
   });
 
   return {
@@ -651,19 +750,47 @@ function filterDominatedActions(actions: OracleActionV1[]): OracleActionV1[] {
   return kept.sort((a, b) => a.evidenceStart - b.evidenceStart || a.actionIndex - b.actionIndex);
 }
 
+function matchStartsInTriggerCondition(paragraph: string, localMatchStart: number): boolean {
+  if (!/^(When|Whenever) /i.test(paragraph.trim())) return false;
+  const commaIdx = paragraph.indexOf(", ");
+  if (commaIdx < 0) return false;
+  return localMatchStart < commaIdx;
+}
+
+function matchInsideReminderParenthetical(paragraph: string, localStart: number): boolean {
+  const before = paragraph.slice(0, localStart);
+  const openIdx = before.lastIndexOf("(");
+  if (openIdx < 0) return false;
+  const parenSlice = paragraph.slice(openIdx);
+  return /^\((?:As (?:this|a) |\(As this )/i.test(parenSlice);
+}
+
+function matchIsSpuriousCastPermission(paragraph: string, localStart: number, evidenceText: string): boolean {
+  const context = paragraph.slice(Math.max(0, localStart - 40), localStart + evidenceText.length + 40);
+  if (/\badditional cost to cast this\b/i.test(context)) return true;
+  if (/\bYou may cast this spell as though\b/i.test(context)) return true;
+  if (/\bYou may cast this spell only if\b/i.test(context)) return true;
+  return false;
+}
+
+function insteadClauseSpan(paragraph: string): { localStart: number; text: string } | null {
+  const m = paragraph.match(/\binstead (.+?)(?:\.|$)/i);
+  if (!m || m.index === undefined || !m[1]) return null;
+  const text = m[1].trim();
+  const offset = m[0].indexOf(text);
+  if (offset < 0) return null;
+  return { localStart: m.index + offset, text };
+}
+
 function canonicalDedupePass(actions: OracleActionV1[]): OracleActionV1[] {
   const best = new Map<string, OracleActionV1>();
   for (const action of actions) {
-    const key = canonicalDedupKey({
-      oracleId: action.oracleId,
-      faceId: action.faceId,
-      abilityIndex: action.abilityIndex,
-      actionType: action.actionType,
-      evidenceText: action.evidenceText,
-      sourceZones: action.sourceZones,
-      destinationZones: action.destinationZones,
-      affectedObjects: action.affectedObjects,
-    });
+    const key = [
+      action.oracleId,
+      action.faceId,
+      String(action.abilityIndex),
+      action.actionType,
+    ].join("|");
     const existing = best.get(key);
     if (!existing || action.evidenceText.length > existing.evidenceText.length) {
       best.set(key, action);
@@ -752,6 +879,31 @@ export function extractOracleActionsV1(input: {
       if (!action) continue;
       abilityMatches.push(action);
       matched = true;
+    }
+
+    const insteadSpan = insteadClauseSpan(ability.paragraphText);
+    if (insteadSpan) {
+      for (const rule of ACTION_PATTERNS) {
+        const match = insteadSpan.text.match(rule.pattern);
+        if (!match) continue;
+        const innerOffset = insteadSpan.text.indexOf(match[0]);
+        if (innerOffset < 0) continue;
+        const action = acceptAction({
+          oracleId: input.oracleId,
+          oracleText: input.oracleText,
+          face,
+          faces,
+          ability,
+          match,
+          rule,
+          actionIndex,
+          replacementInsteadEffect: true,
+          evidenceOffsetInParagraph: insteadSpan.localStart + innerOffset,
+        });
+        if (!action) continue;
+        abilityMatches.push(action);
+        matched = true;
+      }
     }
 
     rawActions.push(...abilityMatches);

@@ -1,0 +1,531 @@
+{
+  "generatedAt": "2026-08-07T00:16:55.274Z",
+  "reviewer": "catalog-audit-agent",
+  "reviewTimestamp": "2026-08-07T00:16:55.274Z",
+  "parentDataset": "development_set_v5",
+  "parentContentHash": "319ef3f9fce2f2637da8582055d99ebbdf6e46f7e51763059493888e1742abbe",
+  "parentCaseCount": 285,
+  "newDataset": "development_set_v6",
+  "newContentHash": "24d24887732e5ae6412ee3597b1654753ccccf8cd4d044c095b07822e530bb9d",
+  "newCaseCount": 285,
+  "patchCount": 21,
+  "changedCaseCount": 21,
+  "reasonForChange": "Gold-label corrections after v1.9 development slice: replacement/multiface labels, incomplete gold, cast/play taxonomy audit.",
+  "labelChanges": [
+    {
+      "caseId": "eval-0021",
+      "reason": "Missing untap gold on activated ability trigger.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "add_mana",
+              "evidenceContains": "Add {C}"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "add_mana",
+              "evidenceContains": "Add {C}"
+            },
+            {
+              "actionType": "untap",
+              "evidenceContains": "Untap this artifact"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0036",
+      "reason": "Gold scoped to trigger effect untap; cast-in-condition is not a Layer 2 action.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [],
+          "after": [
+            {
+              "actionType": "untap",
+              "evidenceContains": "untap all nonland permanents"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0284",
+      "reason": "Replacement instead-clause draw on transform back face; attach replacement condition.",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedConditions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "Draw a card",
+              "cardFace": "front"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "Draw a card",
+              "cardFace": "front"
+            },
+            {
+              "actionType": "draw",
+              "evidenceContains": "draw two cards",
+              "cardFace": "back"
+            }
+          ]
+        },
+        "expectedConditions": {
+          "after": [
+            {
+              "textContains": "If you would draw a card",
+              "type": "replacement",
+              "attachesToEvidence": "draw two cards"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0281",
+      "reason": "Convert back replacement ability structure annotation.",
+      "changedFields": [
+        "expectedStructure"
+      ],
+      "fieldDiff": {
+        "expectedStructure": {
+          "after": {
+            "abilityTypes": [
+              "replacement"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "caseId": "eval-0285",
+      "reason": "Static cost-reduction structure annotation.",
+      "changedFields": [
+        "expectedStructure"
+      ],
+      "fieldDiff": {
+        "expectedStructure": {
+          "after": {
+            "abilityTypes": [
+              "static"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "caseId": "eval-0266",
+      "reason": "Static P/T modification structure annotation.",
+      "changedFields": [
+        "expectedStructure"
+      ],
+      "fieldDiff": {
+        "expectedStructure": {
+          "after": {
+            "abilityTypes": [
+              "static"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "caseId": "eval-0276",
+      "reason": "Battle back static anthem structure annotation.",
+      "changedFields": [
+        "expectedStructure"
+      ],
+      "fieldDiff": {
+        "expectedStructure": {
+          "after": {
+            "abilityTypes": [
+              "static",
+              "triggered"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "caseId": "eval-0167",
+      "reason": "Correct create_token gold for Wolf token trigger.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [],
+          "after": [
+            {
+              "actionType": "create_token",
+              "evidenceContains": "create a 2/2 Wolf token"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0091",
+      "reason": "Tighten search_library evidence span to library-search clause.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "search_library",
+              "evidenceContains": "You may",
+              "optionalEffect": true
+            }
+          ],
+          "after": [
+            {
+              "actionType": "search_library",
+              "evidenceContains": "search your library for",
+              "optionalEffect": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0104",
+      "reason": "Delayed trigger create_token was missing from gold.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [],
+          "after": [
+            {
+              "actionType": "create_token",
+              "evidenceContains": "create a 3/3 token"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0109",
+      "reason": "Optional cast permission on copied spell is a distinct cast primitive.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "exile",
+              "evidenceContains": "Exile",
+              "optionalEffect": false
+            }
+          ],
+          "after": [
+            {
+              "actionType": "exile",
+              "evidenceContains": "Exile",
+              "optionalEffect": false
+            },
+            {
+              "actionType": "cast",
+              "evidenceContains": "cast the copy",
+              "optionalEffect": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0112",
+      "reason": "Second trigger create_token was missing from gold.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "draw a card"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "draw a card"
+            },
+            {
+              "actionType": "create_token",
+              "evidenceContains": "create a 1/1 token"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0142",
+      "reason": "Discard evidence span aligned to verb phrase (not generic Target).",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "discard",
+              "evidenceContains": "Target"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "discard",
+              "evidenceContains": "discards two cards"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0152",
+      "reason": "Draw evidence span aligned to matched verb phrase draws a card.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "Each"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "draws a card"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0176",
+      "reason": "Variable-X token creation is supported create_token.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [],
+          "after": [
+            {
+              "actionType": "create_token",
+              "evidenceContains": "Create X 1/1 tokens"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0180",
+      "reason": "Graveyard-to-battlefield return is return_to_battlefield primitive.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [],
+          "after": [
+            {
+              "actionType": "return_to_battlefield",
+              "evidenceContains": "from your graveyard to the battlefield"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0192",
+      "reason": "Reflexive trigger creates token; prior copy label was erroneous.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "copy",
+              "evidenceContains": "copy"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "create_token",
+              "evidenceContains": "creates a 1/1 token"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "dev-cond-008",
+      "reason": "Delayed untap on next end step was missing from gold.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "Draw a card"
+            }
+          ],
+          "after": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "Draw a card"
+            },
+            {
+              "actionType": "untap",
+              "evidenceContains": "untap two lands"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0062",
+      "reason": "Cast/play audit: align compound permission with split play lands + cast spells from labels.",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "cast",
+              "evidenceContains": "cast spells from your graveyard",
+              "optionalEffect": true
+            },
+            {
+              "actionType": "play",
+              "evidenceContains": "play lands and cast spells from your graveyard",
+              "optionalEffect": true
+            }
+          ],
+          "after": [
+            {
+              "actionType": "play",
+              "evidenceContains": "play lands",
+              "optionalEffect": true
+            },
+            {
+              "actionType": "cast",
+              "evidenceContains": "cast spells from your graveyard",
+              "optionalEffect": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "eval-0063",
+      "reason": "Cast/play audit: split compound permission — play lands (play) and cast spells from (cast).",
+      "changedFields": [
+        "expectedPrimitiveActions",
+        "expectedRoles"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "play",
+              "evidenceContains": "play lands and cast spells from your graveyard",
+              "optionalEffect": true
+            }
+          ],
+          "after": [
+            {
+              "actionType": "play",
+              "evidenceContains": "play lands",
+              "optionalEffect": true
+            },
+            {
+              "actionType": "cast",
+              "evidenceContains": "cast spells from your graveyard",
+              "optionalEffect": true
+            }
+          ]
+        },
+        "expectedRoles": {
+          "before": [
+            {
+              "role": "recursion",
+              "fromPrimitiveActions": [
+                "play"
+              ]
+            }
+          ],
+          "after": [
+            {
+              "role": "recursion",
+              "fromPrimitiveActions": [
+                "play",
+                "cast"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "caseId": "dev-opt-040",
+      "reason": "Cast/play audit: split compound permission — play lands (play) and cast spells from (cast).",
+      "changedFields": [
+        "expectedPrimitiveActions"
+      ],
+      "fieldDiff": {
+        "expectedPrimitiveActions": {
+          "before": [
+            {
+              "actionType": "play",
+              "evidenceContains": "play lands and cast spells from your graveyard",
+              "optionalEffect": true
+            }
+          ],
+          "after": [
+            {
+              "actionType": "play",
+              "evidenceContains": "play lands",
+              "optionalEffect": true
+            },
+            {
+              "actionType": "cast",
+              "evidenceContains": "cast spells from your graveyard",
+              "optionalEffect": true
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
