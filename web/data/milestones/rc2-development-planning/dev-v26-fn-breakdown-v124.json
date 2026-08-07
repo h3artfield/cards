@@ -1,0 +1,254 @@
+{
+  "fnCount": 30,
+  "breakdown": {
+    "parser_missing_grammar": 8,
+    "parser_scope_overblocking": 4,
+    "needs_review_only": 17,
+    "confidence_not_accepted": 0,
+    "matcher/evidence_failure": 1,
+    "duplicate_gold_defect": 0,
+    "independently_proven_gold_defect": 0
+  },
+  "items": [
+    {
+      "caseId": "dev-opt-007",
+      "primitive": "draw",
+      "goldEvidence": "Draw a card",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Growth Spiral"
+    },
+    {
+      "caseId": "dev-opt-023",
+      "primitive": "exile",
+      "goldEvidence": "Exile target creature",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Path to Exile"
+    },
+    {
+      "caseId": "dev-opt-026",
+      "primitive": "scry",
+      "goldEvidence": "Scry 1",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Opt"
+    },
+    {
+      "caseId": "dev-opt-030",
+      "primitive": "surveil",
+      "goldEvidence": "Surveil 1",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Consider"
+    },
+    {
+      "caseId": "dev-opt-032",
+      "primitive": "cast",
+      "goldEvidence": "You may cast this card from your graveyard for its flashback cost",
+      "category": "parser_missing_grammar",
+      "detail": "oracle supports primitive; parser abstained",
+      "cardName": "Faithless Looting"
+    },
+    {
+      "caseId": "dev-v9-001",
+      "primitive": "put_onto_battlefield",
+      "goldEvidence": "put this artifact onto the battlefield",
+      "category": "parser_scope_overblocking",
+      "detail": "parser blocked or role-filtered valid span",
+      "cardName": "Mox Diamond"
+    },
+    {
+      "caseId": "dev-v9-023",
+      "primitive": "draw",
+      "goldEvidence": "draws an additional card",
+      "category": "parser_missing_grammar",
+      "detail": "oracle supports primitive; parser abstained",
+      "cardName": "Howling Mine"
+    },
+    {
+      "caseId": "dev-v9-031",
+      "primitive": "exile",
+      "goldEvidence": "exile it instead",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Rest in Peace"
+    },
+    {
+      "caseId": "eval-0009",
+      "primitive": "exile",
+      "goldEvidence": "Exile",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Path to Exile"
+    },
+    {
+      "caseId": "eval-0019",
+      "primitive": "exile",
+      "goldEvidence": "exile the top",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Etali, Primal Storm"
+    },
+    {
+      "caseId": "eval-0031",
+      "primitive": "exile",
+      "goldEvidence": "exile it instead",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Rest in Peace"
+    },
+    {
+      "caseId": "eval-0060",
+      "primitive": "copy",
+      "goldEvidence": "Copy target instant",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Twincast"
+    },
+    {
+      "caseId": "eval-0061",
+      "primitive": "copy",
+      "goldEvidence": "copy target",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Dualcaster Mage"
+    },
+    {
+      "caseId": "eval-0082",
+      "primitive": "add_mana",
+      "goldEvidence": "Add one mana of any of the exiled cards' colors",
+      "category": "matcher/evidence_failure",
+      "detail": "accepted primitive with different evidence span",
+      "cardName": "Pit of Offerings"
+    },
+    {
+      "caseId": "eval-0108",
+      "primitive": "exile",
+      "goldEvidence": "Exile",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Aerial Caravan"
+    },
+    {
+      "caseId": "eval-0109",
+      "primitive": "exile",
+      "goldEvidence": "Exile",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Founding the Third Path"
+    },
+    {
+      "caseId": "eval-0120",
+      "primitive": "exile",
+      "goldEvidence": "exile the top",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Prosper, Tome-Bound"
+    },
+    {
+      "caseId": "eval-0135",
+      "primitive": "exile",
+      "goldEvidence": "Exile",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Flawless Forgery"
+    },
+    {
+      "caseId": "eval-0174",
+      "primitive": "destroy",
+      "goldEvidence": "Destroy X target creatures",
+      "category": "parser_missing_grammar",
+      "detail": "oracle supports primitive; parser abstained",
+      "cardName": "Eliminate the Competition"
+    },
+    {
+      "caseId": "eval-0191",
+      "primitive": "copy",
+      "goldEvidence": "copy",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Inspiring Easel"
+    },
+    {
+      "caseId": "eval-0194",
+      "primitive": "draw",
+      "goldEvidence": "draw a card",
+      "category": "parser_missing_grammar",
+      "detail": "oracle supports primitive; parser abstained",
+      "cardName": "Search the Premises"
+    },
+    {
+      "caseId": "eval-0257",
+      "primitive": "cast",
+      "goldEvidence": "Cast this spell only from your graveyard",
+      "category": "parser_missing_grammar",
+      "detail": "oracle supports primitive; parser abstained",
+      "cardName": "Dusk // Dawn"
+    },
+    {
+      "caseId": "eval-0259",
+      "primitive": "return_to_hand",
+      "goldEvidence": "returns a nonland permanent",
+      "category": "parser_scope_overblocking",
+      "detail": "parser blocked or role-filtered valid span",
+      "cardName": "Discovery // Dispersal"
+    },
+    {
+      "caseId": "eval-0260",
+      "primitive": "destroy",
+      "goldEvidence": "Destroy target artifact",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Embereth Shieldbreaker // Battle Display"
+    },
+    {
+      "caseId": "eval-0260",
+      "primitive": "cast",
+      "goldEvidence": "You may cast the creature later from exile",
+      "category": "parser_scope_overblocking",
+      "detail": "parser blocked or role-filtered valid span",
+      "cardName": "Embereth Shieldbreaker // Battle Display"
+    },
+    {
+      "caseId": "eval-0261",
+      "primitive": "sacrifice",
+      "goldEvidence": "Sacrifice this land: Return target card that has an Adventure from your graveyard to your hand",
+      "category": "parser_scope_overblocking",
+      "detail": "parser blocked or role-filtered valid span",
+      "cardName": "Edgewall Inn"
+    },
+    {
+      "caseId": "eval-0262",
+      "primitive": "create_token",
+      "goldEvidence": "Create two 1/1 green Saproling creature tokens.",
+      "category": "needs_review_only",
+      "detail": "parser emitted needs_review for matching evidence",
+      "cardName": "Brightcap Badger // Fungus Frolic"
+    },
+    {
+      "caseId": "eval-0264",
+      "primitive": "deal_damage",
+      "goldEvidence": "deals 4 damage",
+      "category": "parser_missing_grammar",
+      "detail": "oracle supports primitive; parser abstained",
+      "cardName": "Glassworks // Shattered Yard"
+    },
+    {
+      "caseId": "eval-0282",
+      "primitive": "draw",
+      "goldEvidence": "Draw a card",
+      "category": "parser_missing_grammar",
+      "detail": "oracle supports primitive; parser abstained",
+      "cardName": "Oft-Nabbed Goat"
+    },
+    {
+      "caseId": "eval-0285",
+      "primitive": "draw",
+      "goldEvidence": "draw a card",
+      "category": "parser_missing_grammar",
+      "detail": "oracle supports primitive; parser abstained",
+      "cardName": "Forensic Gadgeteer"
+    }
+  ]
+}

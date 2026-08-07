@@ -121,6 +121,8 @@ export interface OracleActionV1 {
   modalOptionEvidence?: string;
   referentActionId?: string;
   referentObject?: string;
+  delayedEffect?: boolean;
+  timingCondition?: string;
   evidenceText: string;
   evidenceStart: number;
   evidenceEnd: number;
@@ -192,6 +194,9 @@ const PLAY_PERMISSION =
 
 const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bdraws? cards? equal to half\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
+  { pattern: /\breveal [\w ]+ and put that card into your hand\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
+  { pattern: /\bPut one of those cards into your hand\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
+  { pattern: /\bPut (?:two|three|four|five) of those cards into your hand\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bdraws? (?:a |one |two |three |four |five |seven |that many |up to \w+ )?cards?\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bYou may draw [\w ]+/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bYou may sacrifice [\w ]+/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
@@ -228,11 +233,13 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\beach creature gets [-−]/i, actionType: "destroy", sourceZones: ["battlefield"], affectedObjects: ["creature"] },
   { pattern: /\bDestroy (?:target|up to (?:one|two|three) target) [\w ]+/i, actionType: "destroy", sourceZones: ["battlefield"], affectedObjects: ["permanent"] },
   { pattern: /\bDestroy them\b/i, actionType: "destroy", sourceZones: ["battlefield"], affectedObjects: ["permanent"] },
+  { pattern: /\bExile up to [\w ]+target [\w']+/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bExile (?:target|all|each|the top) [\w']+/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bExile up to (?:one|two|three|\w+) target [\w ]+/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bexile (?:target|the top|a \w+ card from)/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bCounter (?:target|up to (?:one|two|three|four|five) target) [\w ]+/i, actionType: "counter", sourceZones: ["stack"], affectedObjects: ["spell", "ability"] },
   { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+ to (?:its|their) owner'?s hand\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
+  { pattern: /\bReturn it to (?:its|their) owner'?s hand\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
   { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+(?: cards?)? from (?:your )?graveyard to your hand\b/i, actionType: "return_to_hand", sourceZones: ["graveyard"], destinationZones: ["hand"] },
   { pattern: /\bReturn target [\w ]+ from (?:your )?graveyard to your hand\b/i, actionType: "return_to_hand", sourceZones: ["graveyard"], destinationZones: ["hand"] },
   { pattern: /\bPut target [\w ]+ (?:card )?from (?:your |a )?graveyard onto the battlefield\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
@@ -243,6 +250,7 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\b(?:create|creates|You may create) (?:a |an |one |up to \w+ )?(?:[\w-/]+ )*tokens?\b/i, actionType: "create_token", destinationZones: ["battlefield"], affectedObjects: ["token"] },
   { pattern: /\bCopy target (?:instant|sorcery|spell|triggered|[\w ]+)/i, actionType: "copy", sourceZones: ["stack", "battlefield"] },
   { pattern: /\bcopy target (?:instant|sorcery|spell|triggered|[\w ]+)/i, actionType: "copy", sourceZones: ["stack", "battlefield"] },
+  { pattern: /\bbecomes a copy of target [\w ]+/i, actionType: "copy", sourceZones: ["battlefield"] },
   { pattern: /\bcopy (?:that spell|the exiled card|it)\b/i, actionType: "copy", sourceZones: ["stack", "exile"] },
   { pattern: CAST_PERMISSION, actionType: "cast", sourceZones: ["graveyard", "exile", "stack"], requiresPermissionVerb: true },
   { pattern: PLAY_PERMISSION, actionType: "play", sourceZones: ["graveyard", "exile", "hand"], requiresPermissionVerb: true },
@@ -1250,24 +1258,55 @@ function canonicalDedupePass(actions: OracleActionV1[]): OracleActionV1[] {
   return [...best.values()].sort((a, b) => a.evidenceStart - b.evidenceStart || a.actionIndex - b.actionIndex);
 }
 
+function referentObjectInEvidence(evidenceText: string): string | null {
+  const stripped = evidenceText.replace(/\b(?:if|when|unless) (?:it|that|you|they|a|there)[^.]+/gi, "");
+  const imperative =
+    stripped.match(
+      /\b(?:return|exile|untap|sacrifice|discard|destroy|copy|put|target|discards?|returns?|exiles?|untaps?)[^.]*?\b(it|that card|that creature|that permanent|that token)\b/i,
+    ) ??
+    evidenceText.match(
+      /^(?:Untap|Return|Exile|Sacrifice|Discard|Destroy|Copy) (it|that card|that creature|that permanent|that token)\b/i,
+    );
+  return imperative?.[1]?.toLowerCase() ?? null;
+}
+
+function extractDelayedTiming(paragraph: string, evidenceEndLocal: number): string | undefined {
+  const tail = paragraph.slice(evidenceEndLocal);
+  const m = tail.match(/\bat the beginning of (?:the next |your next )?[^.]+\./i);
+  return m?.[0]?.trim().replace(/\.$/, "");
+}
+
 function wireReferentActions(actions: OracleActionV1[]): OracleActionV1[] {
   const sorted = [...actions].sort((a, b) => a.evidenceStart - b.evidenceStart || a.actionIndex - b.actionIndex);
   for (const action of sorted) {
-    const referentMatch = action.evidenceText.match(/\b(?:it|that card|that creature|that permanent|that token)\b/i);
-    if (!referentMatch) continue;
+    const referentObject = referentObjectInEvidence(action.evidenceText);
+    if (!referentObject) continue;
 
-    const referentObject = referentMatch[0].toLowerCase();
     const prior = sorted
       .filter((a) => a.actionId !== action.actionId && a.evidenceEnd <= action.evidenceStart)
       .pop();
     if (prior && action.faceId === prior.faceId) {
       action.referentActionId = prior.actionId;
-      action.referentObject = referentObject;
-    } else {
-      action.reviewStatus = "needs_review";
     }
+    action.referentObject = referentObject;
   }
   return sorted;
+}
+
+function attachDelayedTiming(actions: OracleActionV1[], abilities: SegmentedAbility[]): OracleActionV1[] {
+  for (const action of actions) {
+    const ability = abilities.find(
+      (a) => a.cardFaceId === action.faceId && a.abilityIndex === action.abilityIndex,
+    );
+    if (!ability) continue;
+    const localEnd = action.evidenceEnd - ability.paragraphStart;
+    const timing = extractDelayedTiming(ability.paragraphText, localEnd);
+    if (timing) {
+      action.delayedEffect = true;
+      action.timingCondition = timing;
+    }
+  }
+  return actions;
 }
 
 function dedupeActions(rawActions: OracleActionV1[]): {
@@ -1614,7 +1653,10 @@ export function extractOracleActionsV1(input: {
 
   const preDedupCount = rawActions.length;
   const { actions, canonicalKeyDuplicatesRemoved, semanticDuplicatesRemoved } = dedupeActions(rawActions);
-  const withOptionality = wireReferentActions(applyOptionalityPostProcess(actions, abilities, input.oracleText));
+  const withOptionality = attachDelayedTiming(
+    wireReferentActions(applyOptionalityPostProcess(actions, abilities, input.oracleText)),
+    abilities,
+  );
 
   const structureAnnotations: OracleAbilityStructureAnnotation[] = [];
   for (const ability of abilities) {

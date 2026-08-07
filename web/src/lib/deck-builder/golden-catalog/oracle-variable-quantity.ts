@@ -87,6 +87,21 @@ export function parseVariableQuantityFields(
   }
 
   if (symbol === "X") {
+    const spellEffectX =
+      /\b(?:lose(?:s)?|gain(?:s)?) X life\b/i.test(evidenceText) ||
+      /\bdraw(?:s)? X cards?\b/i.test(evidenceText) ||
+      /\bdeals? X damage\b/i.test(evidenceText) ||
+      /\bcreate(?:s)? X [\w ]*tokens?\b/i.test(evidenceText) ||
+      /\bmill(?:s)? X cards?\b/i.test(evidenceText);
+    if (spellEffectX && !WHERE_X_IS.test(abilityParagraph)) {
+      return {
+        quantityType: "variable",
+        quantitySymbol: "X",
+        quantityExpression: "X",
+        quantitySource: "spell_mana_cost",
+        quantityCertainty: "spell_cost_x",
+      };
+    }
     return {
       quantityType: "variable",
       quantitySymbol: "X",

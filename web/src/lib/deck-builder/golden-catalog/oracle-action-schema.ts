@@ -233,7 +233,7 @@ export const ORACLE_ACTION_PRODUCTION_GATES = {
   falsePositiveRate: { target: 0.02, label: "≤2%" },
 } as const;
 
-export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.23-ability-modal-quantity-dev";
+export const ORACLE_ACTION_PARSER_VERSION = "oracle-action-v1.24-recall-recovery-dev";
 export const ORACLE_ACTION_TAXONOMY_VERSION = "three-layer-v1.3";
 
 export const HIGH_VALUE_ACTION_TYPES = [

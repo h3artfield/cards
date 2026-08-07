@@ -201,7 +201,7 @@ export function inferSupportedPrimitiveFromEvidence(
   for (const primitive of PRIMITIVE_ACTION_TYPES) {
     const patterns: Record<PrimitiveActionType, RegExp> = {
       add_mana: /\bAdd \{|\badd (?:one mana|three mana|\{)/i,
-      draw: /\b(?:draw|draws) (?:cards? equal to half|(?:a |one |two |three |four |five |seven |X |up to \w+ )?cards?)\b/i,
+      draw: /\b(?:draw|draws|put that card into your hand|put one of those cards into your hand|put [\w ]+of those cards into your hand) (?:cards? equal to half|(?:a |one |two |three |four |five |seven |X |up to \w+ )?cards?|into your hand)?\b/i,
       discard: /\b(?:discard|discards)\b/i,
       search_library: /\bsearch(?:es)? (?:your |their )?library\b/i,
       deal_damage: /\bdeals? (?:\d+|X) damage\b/i,
@@ -209,14 +209,14 @@ export function inferSupportedPrimitiveFromEvidence(
       exile: /\b[Ee]xiles?\b/,
       counter: /\bCounter target\b/i,
       return_to_hand:
-        /\bReturn target[\w ]+ to (?:its|their) owner'?s hand\b|\bfrom (?:your |a )?graveyard to (?:your )?hand\b|\bReturn (?:up to )?[\w ]+ from (?:your |a )?graveyard to (?:your )?hand\b/i,
+        /\bReturn (?:target|it)[\w ]* to (?:its|their) owner'?s hand\b|\bfrom (?:your |a )?graveyard to (?:your )?hand\b|\bReturn (?:up to )?[\w ]+ from (?:your |a )?graveyard to (?:your )?hand\b/i,
       return_to_battlefield:
         /\b(?:from (?:your |a )?graveyard (?:to the battlefield|onto the battlefield)|Put target[\w ]+ from a graveyard onto the battlefield|Return target[\w ]+ from (?:your )?graveyard to the battlefield|return it to the battlefield)\b/i,
       create_token: /\bcreate[\w ]*tokens?\b|\bCreate a token that's a copy of\b/i,
       cast: /\bcast (?:any number of |spells? from|it|that card|the exiled|target)\b/i,
       play: /\bplay (?:an additional land|land cards from (?:your )?graveyard|lands and )?spells? from (?:your )?graveyard\b/i,
       put_onto_battlefield: /\b(?:put (?:that |it(?:self)? |them |one )(?:card )?onto the battlefield|puts? all [\w ]+ exiled this way onto the battlefield|puts? all [\w ]+ onto the battlefield|put [\w ]+ from (?:your |a |their )?(?:hand|graveyard|exile)[\w ]* onto the battlefield)\b/i,
-      copy: /\b[Cc]opy (?:target|it|that spell|the exiled)\b/i,
+      copy: /\b[Cc]opy (?:target|it|that spell|the exiled)\b|\bbecomes a copy of target\b/i,
       sacrifice: /\b[Ss]acrifices?\b/i,
       mill: /\bmills? (?:half|fourteen|one|two|three|four|five|six|seven|eight|nine|ten|X|\d+|up to \w+)/i,
       gain_life: /\bgain(?:s)? (?:\d+|X) life\b|\bgain(?:s)? life equal to\b/i,
