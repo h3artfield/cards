@@ -218,6 +218,10 @@ async function main() {
     generatedAt: new Date().toISOString(),
     parserVersion: ORACLE_ACTION_PARSER_VERSION,
     parserCommit,
+    v16ParserCommit: "618145e",
+    v16Baseline: {
+      accepted: { tp: 298, fp: 22, fn: 57, precision: 0.93125, recall: 0.8394366197183099, unsupported: 0 },
+    },
     dataset: DATASET_LABEL,
     contentHash: dev.contentHash,
     caseCount: dev.cases.length,

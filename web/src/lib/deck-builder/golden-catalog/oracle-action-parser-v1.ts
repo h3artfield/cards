@@ -32,6 +32,7 @@ import {
 } from "./oracle-action-optionality";
 import {
   classifyTextRoleAt,
+  clauseBoundaries,
   compoundClauseSpansWithRoles,
   extractStaticPermissions,
   findQuotedAbilitySpans,
@@ -42,6 +43,7 @@ import {
   primitiveAllowedAtRole,
   type StaticPermissionRecord,
 } from "./oracle-span-role-classifier";
+import type { CompoundClauseSegment } from "./oracle-compound-clause-segmentation";
 import {
   inferDerivedRoles,
   normalizeAbilityType,
@@ -106,6 +108,12 @@ export interface OracleActionV1 {
   cost?: string;
   optionalityCertain?: boolean;
   textRole?: TextRole;
+  clauseId?: string;
+  parentAbilityId?: string;
+  clauseDependencyKind?: string;
+  referencedClauseId?: string;
+  referentTexts?: string[];
+  clauseSequenceIndex?: number;
 }
 
 export interface OracleActionV1Result {
@@ -161,7 +169,15 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\breturn that (?:card|creature|permanent) to the battlefield\b/i, actionType: "return_to_battlefield", destinationZones: ["battlefield"] },
   { pattern: /\bYou may discard [\w ]+/i, actionType: "discard", sourceZones: ["hand"], destinationZones: ["graveyard"] },
   { pattern: /\bYou may put [\w ]+ from (?:your |a |their )?(?:hand|graveyard|exile)[\w ]* onto the battlefield/i, actionType: "put_onto_battlefield", destinationZones: ["battlefield"] },
+  { pattern: /\bput (?:that|it|one|those|them|\w+) (?:card )?(?:from [\w ]+ )?onto the battlefield/i, actionType: "put_onto_battlefield", destinationZones: ["battlefield"] },
   { pattern: /\bput [\w ]+ from (?:your |a |their )?(?:hand|graveyard|exile)[\w ]* onto the battlefield/i, actionType: "put_onto_battlefield", destinationZones: ["battlefield"] },
+  { pattern: /\bputs? all [\w ]+ exiled this way onto the battlefield/i, actionType: "put_onto_battlefield", sourceZones: ["exile"], destinationZones: ["battlefield"] },
+  { pattern: /\breturn it to the battlefield transformed\b/i, actionType: "return_to_battlefield", destinationZones: ["battlefield"] },
+  { pattern: /\bExile this [\w ]+/i, actionType: "exile", destinationZones: ["exile"] },
+  { pattern: /\bexiles? all [\w ]+ cards from (?:their |your )?graveyard/i, actionType: "exile", sourceZones: ["graveyard"], destinationZones: ["exile"] },
+  { pattern: /\b(?:Target player|Each player|that player) mills? (?:one|two|three|four|five|six|seven|eight|nine|ten|half|fourteen|\d+|up to \w+) [\w ]*/i, actionType: "mill", sourceZones: ["library"], destinationZones: ["graveyard"] },
+  { pattern: /\bsacrifices? (?:a |an |all )?[\w ]+ of their choice\b/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
+  { pattern: /\bsacrifices? all [\w ]+ they control\b/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
   { pattern: /\bYou may cast this spell from your graveyard\b/i, actionType: "cast", sourceZones: ["graveyard"], requiresPermissionVerb: true },
   { pattern: /\bYou may cast the copy\b/i, actionType: "cast", sourceZones: ["exile", "stack"], requiresPermissionVerb: true },
   { pattern: /\byou may play that card\b/i, actionType: "play", sourceZones: ["exile"], requiresPermissionVerb: true },
@@ -178,7 +194,7 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\beach creature gets [-−]/i, actionType: "destroy", sourceZones: ["battlefield"], affectedObjects: ["creature"] },
   { pattern: /\bDestroy (?:target|up to (?:one|two|three) target) [\w ]+/i, actionType: "destroy", sourceZones: ["battlefield"], affectedObjects: ["permanent"] },
   { pattern: /\bDestroy them\b/i, actionType: "destroy", sourceZones: ["battlefield"], affectedObjects: ["permanent"] },
-  { pattern: /\bExile (?:target|all|the top) [\w ]+/i, actionType: "exile", destinationZones: ["exile"] },
+  { pattern: /\bExile (?:target|all|each|the top) [\w']+/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bExile up to (?:one|two|three|\w+) target [\w ]+/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bexile (?:target|the top|a \w+ card from)/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bCounter (?:target|up to (?:one|two|three|four|five) target) [\w ]+/i, actionType: "counter", sourceZones: ["stack"], affectedObjects: ["spell", "ability"] },
@@ -197,7 +213,7 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: CAST_PERMISSION, actionType: "cast", sourceZones: ["graveyard", "exile", "stack"], requiresPermissionVerb: true },
   { pattern: PLAY_PERMISSION, actionType: "play", sourceZones: ["graveyard", "exile", "hand"], requiresPermissionVerb: true },
   { pattern: /\bMill (?:target )?(?:player|cards|\d+|up to \w+ cards)/i, actionType: "mill", sourceZones: ["library"], destinationZones: ["graveyard"] },
-  { pattern: /\bmills? (?:half|fourteen|\d+|up to \w+) [\w ]*/i, actionType: "mill", sourceZones: ["library"], destinationZones: ["graveyard"] },
+  { pattern: /\bmills? (?:one|two|three|four|five|six|seven|eight|nine|ten|half|fourteen|\d+|up to \w+) [\w ]*/i, actionType: "mill", sourceZones: ["library"], destinationZones: ["graveyard"] },
   { pattern: /\b(?:discard|discards) (?:a |one |two |three |their |up to \w+ )?(?:[\w ]*cards?|their hand)\b/i, actionType: "discard", sourceZones: ["hand"], destinationZones: ["graveyard"] },
   { pattern: /\bdraw that many cards\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bdeals? \d+ damage(?: to (?:any target|target [\w ]+|each [\w ]+))?/i, actionType: "deal_damage", affectedObjects: ["player", "permanent"] },
@@ -494,14 +510,17 @@ function multifaceFaceUnambiguous(
   return overlapping.length === 1;
 }
 
-function actionInDistinctThenClause(paragraph: string, evidenceText: string, localStart: number): boolean {
-  const thenMatch = paragraph.match(/\bthen\b/i);
-  if (!thenMatch || thenMatch.index === undefined) return true;
-  const thenIdx = thenMatch.index;
-  const evidenceEnd = localStart + evidenceText.length;
-  if (evidenceEnd <= thenIdx + 1) return true;
-  if (localStart >= thenIdx + 4) return true;
-  return false;
+function actionInDistinctThenClause(paragraph: string, _evidenceText: string, localStart: number): boolean {
+  const bounds = clauseBoundaries(paragraph);
+  for (let i = 0; i < bounds.length; i++) {
+    const start = bounds[i];
+    const end = bounds[i + 1] ?? paragraph.length;
+    if (localStart < start || localStart >= end) continue;
+    if (i === 0) return true;
+    const delimiter = paragraph.slice(bounds[i - 1], start);
+    return /(?:,\s*then\s+|\.\s+Then\s+|;\s*)/i.test(delimiter);
+  }
+  return true;
 }
 
 function compoundClauseSpans(paragraph: string): Array<{ localStart: number; text: string }> {
@@ -642,14 +661,31 @@ function assignReviewStatus(input: {
   if (input.featurePromotion !== false && canPromoteToAccepted(input)) return "accepted";
 
   if (input.confidence < 0.82) return "needs_review";
+  const tutorCompound =
+    /\bsearch (?:your |their )?library for\b/i.test(input.paragraph) &&
+    /\bput [\w ]+ onto the battlefield\b/i.test(input.paragraph);
+  const benignCompoundParagraph =
+    tutorCompound ||
+    /\bthen draw that many cards\b/i.test(input.paragraph) ||
+    /\bIf you do,\s/i.test(input.paragraph) ||
+    /\bExile this Saga, then return\b/i.test(input.paragraph) ||
+    /\bexiles? all [\w ]+ cards from (?:their |your )?graveyard, then\b/i.test(input.paragraph);
   if (
     /\bthen\b/i.test(input.paragraph) &&
+    !benignCompoundParagraph &&
     input.evidenceLocalStart !== undefined &&
     !actionInDistinctThenClause(input.paragraph, input.evidenceText, input.evidenceLocalStart)
   ) {
     return "needs_review";
   }
-  if (/\bthen\b|\band then\b/i.test(input.paragraph)) return "needs_review";
+  if (
+    /\bthen\b|\band then\b/i.test(input.paragraph) &&
+    !benignCompoundParagraph &&
+    input.evidenceLocalStart !== undefined &&
+    actionInDistinctThenClause(input.paragraph, input.evidenceText, input.evidenceLocalStart)
+  ) {
+    return "accepted";
+  }
   if (input.actionType === "play" && /\bcast\b/i.test(input.evidenceText)) return "needs_review";
   if (input.actionType === "cast" && /\bplay land\b/i.test(input.evidenceText)) return "needs_review";
   return "accepted";
@@ -666,6 +702,7 @@ function acceptAction(input: {
   actionIndex: number;
   replacementInsteadEffect?: boolean;
   evidenceOffsetInParagraph?: number;
+  clause?: CompoundClauseSegment;
 }): OracleActionV1 | null {
   const evidenceText = input.match[0];
   const baseLocalStart =
@@ -875,6 +912,12 @@ function acceptAction(input: {
     confidence,
     parserVersion: ORACLE_ACTION_PARSER_VERSION,
     reviewStatus,
+    clauseId: input.clause?.clauseId,
+    parentAbilityId: input.clause?.parentAbilityId,
+    clauseDependencyKind: input.clause?.dependency.kind,
+    referencedClauseId: input.clause?.dependency.referencedClauseId,
+    referentTexts: input.clause?.referentTexts.length ? input.clause.referentTexts : undefined,
+    clauseSequenceIndex: input.clause?.sequenceIndex,
     trigger: abilityType === "triggered" ? extractTrigger(input.ability.paragraphText) : undefined,
     cost: abilityType === "activated" || /^[+\−-]\d+:/.test(input.ability.paragraphText)
       ? extractCost(input.ability.paragraphText)
@@ -994,6 +1037,7 @@ function canonicalDedupePass(actions: OracleActionV1[]): OracleActionV1[] {
       action.faceId,
       String(action.abilityIndex),
       action.actionType,
+      action.clauseId ?? String(action.evidenceStart),
     ].join("|");
     const existing = best.get(key);
     if (!existing || action.evidenceText.length > existing.evidenceText.length) {
@@ -1258,7 +1302,9 @@ export function extractOracleActionsV1(input: {
     let matched = false;
     const abilityMatches: OracleActionV1[] = [];
 
-    for (const span of compoundClauseSpansWithRoles(ability.paragraphText)) {
+    const parentAbilityId = `${input.oracleId}:${ability.cardFaceId}:${ability.abilityIndex}`;
+
+    for (const span of compoundClauseSpansWithRoles(ability.paragraphText, parentAbilityId)) {
       for (const rule of ACTION_PATTERNS) {
         for (const { match, index } of iterPatternMatches(span.text, rule.pattern)) {
           const action = acceptAction({
@@ -1271,6 +1317,7 @@ export function extractOracleActionsV1(input: {
             rule,
             actionIndex,
             evidenceOffsetInParagraph: span.localStart + index,
+            clause: span.clause,
           });
           if (!action) continue;
           abilityMatches.push(action);

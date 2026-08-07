@@ -4,6 +4,10 @@
  */
 import type { OracleAbilityType } from "./oracle-action-schema";
 import type { PrimitiveActionType } from "./oracle-action-taxonomy";
+import {
+  segmentCompoundClauses,
+  type CompoundClauseSegment,
+} from "./oracle-compound-clause-segmentation";
 
 export type TextRole =
   | "effect"
@@ -118,7 +122,7 @@ const COST_REGION_PRIMITIVES = new Set<PrimitiveActionType>([
 ]);
 
 const CLAUSE_SPLIT_PATTERN =
-  /(?:,\s*then\s+|\.\s+Then\s+|,\s*and\s+|\.\s+(?:If|When) you do,\s+|,\s*and if you do,\s+|;\s*|\.\s+(?=[A-Z]))/gi;
+  /(?:,\s*then\s+(?!shuffle(?:\s|\.|$))|\.\s+Then\s+|,\s*and\s+|\.\s+(?:If|When) you do,\s+|,\s*and if you do,\s+|;\s*|\.\s+(?=[A-Z]))/gi;
 
 function findMatchingCloseParen(text: string, openIdx: number): number {
   let depth = 0;
@@ -562,49 +566,44 @@ export function extractStaticPermissions(paragraph: string): StaticPermissionRec
 /** Build clause spans with role tags for compound paragraphs. */
 export function compoundClauseSpansWithRoles(
   paragraph: string,
-): Array<{ localStart: number; text: string; role: TextRole }> {
-  const bounds = clauseBoundaries(paragraph);
-  const spans: Array<{ localStart: number; text: string; role: TextRole }> = [];
+  parentAbilityId?: string,
+): Array<{ localStart: number; text: string; role: TextRole; clause?: CompoundClauseSegment }> {
+  const abilityId = parentAbilityId ?? paragraph.slice(0, 24);
+  const colon = activatedColonSplit(paragraph);
+  const spans: Array<{ localStart: number; text: string; role: TextRole; clause?: CompoundClauseSegment }> = [];
 
-  const emitClauseSpan = (start: number, end: number) => {
-    const slice = paragraph.slice(start, end);
-    const colon = activatedColonSplit(slice);
-    if (colon && colon.costEnd > 0) {
-      const costText = slice.slice(0, colon.costEnd).trim();
-      if (costText.length >= 2) {
-        spans.push({ localStart: start, text: costText, role: "cost" });
-      }
-      const effectSlice = slice.slice(colon.effectStart);
-      const effectAbsStart = start + colon.effectStart;
-      const effectBounds = clauseBoundaries(effectSlice);
-      for (let j = 0; j < effectBounds.length; j++) {
-        const relStart = effectBounds[j];
-        const relEnd = effectBounds[j + 1] ?? effectSlice.length;
-        const text = effectSlice.slice(relStart, relEnd).trim();
-        if (text.length < 2) continue;
-        const absStart = effectAbsStart + relStart;
-        spans.push({
-          localStart: absStart,
-          text,
-          role: classifyTextRoleAt({ paragraph, localStart: absStart, localEnd: absStart + text.length }),
-        });
-      }
-      return;
+  if (colon && colon.costEnd > 0) {
+    const costText = paragraph.slice(0, colon.costEnd).trim();
+    if (costText.length >= 2) {
+      spans.push({ localStart: 0, text: costText, role: "cost" });
     }
-
-    const text = slice.trim();
-    if (text.length < 2) return;
-    spans.push({
-      localStart: start,
-      text,
-      role: classifyTextRoleAt({ paragraph, localStart: start, localEnd: start + text.length }),
-    });
-  };
-
-  for (let i = 0; i < bounds.length; i++) {
-    emitClauseSpan(bounds[i], bounds[i + 1] ?? paragraph.length);
+    const effectSlice = paragraph.slice(colon.effectStart);
+    const effectAbsStart = colon.effectStart;
+    for (const clause of segmentCompoundClauses({
+      parentAbilityId: abilityId,
+      paragraph: effectSlice,
+      paragraphStart: effectAbsStart,
+    })) {
+      spans.push({
+        localStart: clause.evidenceStart,
+        text: clause.text,
+        role: clause.textRole,
+        clause,
+      });
+    }
+    if (spans.length > 0) return spans;
   }
-  if (spans.length === 0) {
+
+  for (const clause of segmentCompoundClauses({ parentAbilityId: abilityId, paragraph })) {
+    spans.push({
+      localStart: clause.evidenceStart,
+      text: clause.text,
+      role: clause.textRole,
+      clause,
+    });
+  }
+
+  if (spans.length === 0 && paragraph.trim().length >= 2) {
     spans.push({
       localStart: 0,
       text: paragraph.trim(),

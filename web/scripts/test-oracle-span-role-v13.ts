@@ -86,6 +86,76 @@ const REGRESSION_HANG_CASES = [
   },
 ];
 
+const COMPOUND_CLAUSE_CASES = [
+  {
+    name: "tutor_search_put_shuffle",
+    oracleText: "Search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.",
+    expectActions: [
+      { type: "search_library", evidence: "Search your library" },
+      { type: "put_onto_battlefield", evidence: "put that card onto the battlefield" },
+    ],
+  },
+  {
+    name: "then_exile_return_saga",
+    oracleText: "Exile this Saga, then return it to the battlefield transformed under your control.",
+    expectActions: [
+      { type: "exile", evidence: "Exile this Saga" },
+      { type: "return_to_battlefield", evidence: "return it to the battlefield" },
+    ],
+  },
+  {
+    name: "parallel_sacrifices",
+    oracleText:
+      "Each player loses 1 life, discards a card, sacrifices a creature of their choice, then sacrifices a land of their choice.",
+    expectActions: [
+      { type: "lose_life", evidence: "loses 1 life" },
+      { type: "discard", evidence: "discards a card" },
+      { type: "sacrifice", evidence: "sacrifices a creature" },
+      { type: "sacrifice", evidence: "sacrifices a land" },
+    ],
+  },
+  {
+    name: "mill_then_exile",
+    oracleText: "Target player mills four cards. Then exile each opponent's graveyard.",
+    expectActions: [
+      { type: "mill", evidence: "mills four cards" },
+      { type: "exile", evidence: "exile each opponent" },
+    ],
+  },
+  {
+    name: "living_end_chain",
+    oracleText:
+      "Each player exiles all creature cards from their graveyard, then sacrifices all creatures they control, then puts all cards they exiled this way onto the battlefield.",
+    expectActions: [
+      { type: "exile", evidence: "exiles all creature cards" },
+      { type: "sacrifice", evidence: "sacrifices all creatures" },
+      { type: "put_onto_battlefield", evidence: "puts all cards they exiled this way" },
+    ],
+  },
+  {
+    name: "discard_if_you_do_draw",
+    oracleText: "Discard a card. If you do, draw two cards.",
+    expectActions: [
+      { type: "discard", evidence: "Discard a card" },
+      { type: "draw", evidence: "draw two cards" },
+    ],
+  },
+  {
+    name: "modal_two_actions_and",
+    oracleText: "Choose one —\n• Destroy target artifact.\n• Destroy target enchantment.",
+    expectActions: [{ type: "destroy", evidence: "Destroy target artifact" }],
+  },
+  {
+    name: "kodama_put_one",
+    oracleText:
+      "Search your library for up to two basic land cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle.",
+    expectActions: [
+      { type: "search_library", evidence: "Search your library" },
+      { type: "put_onto_battlefield", evidence: "put one onto the battlefield" },
+    ],
+  },
+];
+
 const COST_BOUNDARY_CASES = [
   {
     name: "activated_sacrifice_cost",
@@ -164,7 +234,7 @@ function timed<T>(fn: () => T): { result: T; ms: number } {
 }
 
 function testRegressionCases() {
-  for (const c of [...REGRESSION_HANG_CASES, ...COST_BOUNDARY_CASES]) {
+  for (const c of [...REGRESSION_HANG_CASES, ...COST_BOUNDARY_CASES, ...COMPOUND_CLAUSE_CASES]) {
     const { result, ms } = timed(() =>
       extractOracleActionsV1({ oracleId: `regression-${c.name}`, oracleText: c.oracleText }),
     );
@@ -260,7 +330,7 @@ function testFullDevelopmentRuntime() {
 }
 
 function main() {
-  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.16-cost-effect-boundary/);
+  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.17-compound-clause-segmentation/);
   testRegressionCases();
   testCompoundClauseNoHang();
   testReminderSpanDetection();
@@ -270,7 +340,7 @@ function main() {
       {
         pass: true,
         parserVersion: ORACLE_ACTION_PARSER_VERSION,
-        regressionCases: REGRESSION_HANG_CASES.length + COST_BOUNDARY_CASES.length,
+        regressionCases: REGRESSION_HANG_CASES.length + COST_BOUNDARY_CASES.length + COMPOUND_CLAUSE_CASES.length,
         fullDevelopmentRuntimeMs: devMs,
         perfBudgetMs: PERF_BUDGET_MS,
         devBudgetMs: DEV_CASE_BUDGET_MS,
