@@ -152,7 +152,8 @@ export function inferSupportedPrimitiveFromEvidence(
       tap: /\bTap target\b/i,
       untap: /\bUntap\b/i,
       put_counter: /\bPut (?:a |one |up to one )?[\+\-]?\/?[\+\-]?\d+/i,
-      shuffle_into_library: /\bshuffles?[\w ]*into[\w ]*library\b/i,
+      shuffle_library: /\bthen shuffle\b|\bThen shuffle\b|\bshuffle and put\b|\b^shuffle(?: your library|\.)?$/i,
+      shuffle_into_library: /\bshuffles?[\w ]+into[\w ]+library\b/i,
     };
     if (patterns[primitive].test(evidenceText)) return primitive;
   }

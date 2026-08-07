@@ -93,6 +93,7 @@ const COMPOUND_CLAUSE_CASES = [
     expectActions: [
       { type: "search_library", evidence: "Search your library" },
       { type: "put_onto_battlefield", evidence: "put that card onto the battlefield" },
+      { type: "shuffle_library", evidence: "then shuffle" },
     ],
   },
   {
@@ -152,7 +153,65 @@ const COMPOUND_CLAUSE_CASES = [
     expectActions: [
       { type: "search_library", evidence: "Search your library" },
       { type: "put_onto_battlefield", evidence: "put one onto the battlefield" },
+      { type: "shuffle_library", evidence: "then shuffle" },
     ],
+  },
+];
+
+const SHUFFLE_TAXONOMY_CASES = [
+  {
+    name: "tutor_generic_shuffle_library",
+    oracleText: "Search your library for a card, put that card into your hand, then shuffle.",
+    expectActions: [
+      { type: "search_library", evidence: "Search your library" },
+      { type: "shuffle_library", evidence: "then shuffle" },
+    ],
+    forbidActions: ["shuffle_into_library"],
+  },
+  {
+    name: "jace_hand_shuffle_into_library",
+    oracleText:
+      "−12: Exile all cards from target player's library, then that player shuffles their hand into their library.",
+    expectActions: [
+      { type: "exile", evidence: "Exile all cards" },
+      { type: "shuffle_into_library", evidence: "shuffles their hand into their library" },
+    ],
+    forbidActions: ["shuffle_library"],
+  },
+];
+
+const GRANTED_ABILITY_CASES = [
+  {
+    name: "granted_activated_mana",
+    oracleText: 'Lands you control have "{T}: Add one mana of any color."',
+    expectActions: [{ type: "add_mana", evidence: "Add one mana of any color" }],
+    expectGranted: true,
+  },
+  {
+    name: "granted_triggered_destroy",
+    oracleText: 'All Slivers have "When this permanent enters, destroy target artifact or enchantment."',
+    expectActions: [{ type: "destroy", evidence: "destroy target artifact" }],
+    expectGranted: true,
+  },
+  {
+    name: "granted_activated_lose_life",
+    oracleText: 'Enchanted land has "{T}: Target player loses 3 life."',
+    expectActions: [{ type: "lose_life", evidence: "loses 3 life" }],
+    expectGranted: true,
+  },
+  {
+    name: "granted_triggered_draw",
+    oracleText:
+      'Enchanted creature gets +1/+1 and has "Whenever this creature deals combat damage to a player, you may draw a card."',
+    expectActions: [{ type: "draw", evidence: "draw a card" }],
+    expectGranted: true,
+  },
+  {
+    name: "token_reminder_still_suppressed",
+    oracleText:
+      'Create a Treasure token. (It\'s an artifact with "{T}, Sacrifice this token: Add one mana of any color.")',
+    expectActions: [{ type: "create_token", evidence: "Treasure token" }],
+    forbidActions: ["add_mana", "sacrifice"],
   },
 ];
 
@@ -234,7 +293,13 @@ function timed<T>(fn: () => T): { result: T; ms: number } {
 }
 
 function testRegressionCases() {
-  for (const c of [...REGRESSION_HANG_CASES, ...COST_BOUNDARY_CASES, ...COMPOUND_CLAUSE_CASES]) {
+  for (const c of [
+    ...REGRESSION_HANG_CASES,
+    ...COST_BOUNDARY_CASES,
+    ...COMPOUND_CLAUSE_CASES,
+    ...SHUFFLE_TAXONOMY_CASES,
+    ...GRANTED_ABILITY_CASES,
+  ]) {
     const { result, ms } = timed(() =>
       extractOracleActionsV1({ oracleId: `regression-${c.name}`, oracleText: c.oracleText }),
     );
@@ -295,6 +360,12 @@ function testRegressionCases() {
         assert.equal(role, c.drawRoleAt, `${c.name}: draw role should be ${c.drawRoleAt}, got ${role}`);
       }
     }
+    if ((c as { expectGranted?: boolean }).expectGranted) {
+      assert.ok(
+        result.actions.every((a) => a.abilityOrigin === "granted" && a.grantedByAbilityId),
+        `${c.name}: expected granted ability origin on all actions`,
+      );
+    }
   }
 }
 
@@ -330,7 +401,7 @@ function testFullDevelopmentRuntime() {
 }
 
 function main() {
-  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.17-compound-clause-segmentation/);
+  assert.match(ORACLE_ACTION_PARSER_VERSION, /v1\.18-granted-ability-boundary/);
   testRegressionCases();
   testCompoundClauseNoHang();
   testReminderSpanDetection();
@@ -340,7 +411,12 @@ function main() {
       {
         pass: true,
         parserVersion: ORACLE_ACTION_PARSER_VERSION,
-        regressionCases: REGRESSION_HANG_CASES.length + COST_BOUNDARY_CASES.length + COMPOUND_CLAUSE_CASES.length,
+        regressionCases:
+          REGRESSION_HANG_CASES.length +
+          COST_BOUNDARY_CASES.length +
+          COMPOUND_CLAUSE_CASES.length +
+          SHUFFLE_TAXONOMY_CASES.length +
+          GRANTED_ABILITY_CASES.length,
         fullDevelopmentRuntimeMs: devMs,
         perfBudgetMs: PERF_BUDGET_MS,
         devBudgetMs: DEV_CASE_BUDGET_MS,

@@ -45,6 +45,12 @@ import {
 } from "./oracle-span-role-classifier";
 import type { CompoundClauseSegment } from "./oracle-compound-clause-segmentation";
 import {
+  findGrantedQuoteContexts,
+  grantedClauseSpans,
+  isInsideGrantedQuote,
+  type GrantedQuoteContext,
+} from "./oracle-granted-ability-extraction";
+import {
   inferDerivedRoles,
   normalizeAbilityType,
   PRIMITIVE_TO_DERIVED_ROLES,
@@ -114,6 +120,9 @@ export interface OracleActionV1 {
   referencedClauseId?: string;
   referentTexts?: string[];
   clauseSequenceIndex?: number;
+  abilityOrigin?: "native" | "granted";
+  grantedByAbilityId?: string;
+  grantedAbilityType?: "activated" | "triggered" | "static";
 }
 
 export interface OracleActionV1Result {
@@ -230,7 +239,11 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bPut (?:a |one |up to one )?\+?\/?\+?\d+\/?\+?\d+ counter/i, actionType: "put_counter", destinationZones: ["battlefield"] },
   { pattern: /\bPut up to (?:that many|\w+) \+?\/?\+?\d+\/?\+?\d+ counters?\b/i, actionType: "put_counter", destinationZones: ["battlefield"] },
   { pattern: /\bexile it instead\b/i, actionType: "exile", abilityType: "replacement", destinationZones: ["exile"] },
+  { pattern: /\bthen shuffle(?: your library|\.)?\b/i, actionType: "shuffle_library", sourceZones: ["library"], destinationZones: ["library"] },
+  { pattern: /\bshuffle(?: your library|\.)?\b/i, actionType: "shuffle_library", sourceZones: ["library"], destinationZones: ["library"] },
+  { pattern: /\bshuffle and put that card on top\b/i, actionType: "shuffle_library", sourceZones: ["library"], destinationZones: ["library"] },
   { pattern: /\b(?:shuffle|shuffles) (?:your |their )?(?:hand and graveyard|graveyard and hand|hand) into (?:your |their )?library\b/i, actionType: "shuffle_into_library", sourceZones: ["hand", "graveyard"], destinationZones: ["library"] },
+  { pattern: /\bshuffles? (?:it|target [\w ]+) into (?:its owner's |their |your )?library\b/i, actionType: "shuffle_into_library", destinationZones: ["library"] },
   { pattern: /\bExile all cards from target player'?s library\b/i, actionType: "exile", sourceZones: ["library"], destinationZones: ["exile"] },
 ];
 
@@ -618,6 +631,7 @@ function canPromoteToAccepted(input: {
     "play",
     "put_onto_battlefield",
     "put_counter",
+    "shuffle_library",
     "shuffle_into_library",
   ];
   if (input.abilityType === "replacement" && !input.replacementInsteadEffect) return false;
@@ -703,6 +717,7 @@ function acceptAction(input: {
   replacementInsteadEffect?: boolean;
   evidenceOffsetInParagraph?: number;
   clause?: CompoundClauseSegment;
+  grantedContext?: GrantedQuoteContext;
 }): OracleActionV1 | null {
   const evidenceText = input.match[0];
   const baseLocalStart =
@@ -711,11 +726,21 @@ function acceptAction(input: {
   if (localStart < 0) return null;
 
   const localEnd = localStart + evidenceText.length;
+  const roleParagraph = input.grantedContext?.innerText ?? input.ability.paragraphText;
+  const roleLocalStart = input.grantedContext
+    ? localStart - input.grantedContext.innerLocalStart
+    : localStart;
+  const roleLocalEnd = input.grantedContext
+    ? roleLocalStart + evidenceText.length
+    : localEnd;
 
-  if (matchStartsInTriggerCondition(input.ability.paragraphText, localStart)) {
+  if (matchStartsInTriggerCondition(roleParagraph, roleLocalStart)) {
     return null;
   }
   if (matchInsideReminderParenthetical(input.ability.paragraphText, localStart)) {
+    return null;
+  }
+  if (!input.grantedContext && isInsideGrantedQuote(input.ability.paragraphText, localStart)) {
     return null;
   }
   if (isInsideQuotedGrantedAbility(input.ability.paragraphText, localStart, input.rule.actionType)) {
@@ -755,10 +780,10 @@ function acceptAction(input: {
   const textRole: TextRole = input.replacementInsteadEffect
     ? "replacement_effect"
     : classifyTextRoleAt({
-        paragraph: input.ability.paragraphText,
-        localStart,
-        localEnd,
-        abilityType: input.ability.abilityType,
+        paragraph: roleParagraph,
+        localStart: roleLocalStart,
+        localEnd: roleLocalEnd,
+        abilityType: input.grantedContext?.grantedAbilityType ?? input.ability.abilityType,
       });
 
   if (
@@ -782,6 +807,24 @@ function acceptAction(input: {
     input.rule.actionType === "search_library" &&
     /\bput [\w ]+ onto the battlefield\b/i.test(evidenceText) &&
     !/\bsearch (?:your |their )?library\b/i.test(evidenceText)
+  ) {
+    return null;
+  }
+  if (input.rule.actionType === "shuffle_library") {
+    if (/\bshuffles? [\w ]+ into [\w']+ library\b/i.test(evidenceText)) return null;
+    const para = input.ability.paragraphText;
+    const genericShuffle =
+      /\bthen shuffle\b/i.test(para) ||
+      /\bThen shuffle\b/i.test(para) ||
+      /\bshuffle and put that card on top\b/i.test(evidenceText);
+    const orphanShuffleClause =
+      /^shuffle(?: your library|\.)?$/i.test(evidenceText.trim()) &&
+      /\bsearch (?:your |their )?library for\b/i.test(para);
+    if (!genericShuffle && !orphanShuffleClause) return null;
+  }
+  if (
+    input.rule.actionType === "shuffle_into_library" &&
+    !/\binto (?:its owner's |their |your )?library\b/i.test(evidenceText)
   ) {
     return null;
   }
@@ -918,6 +961,9 @@ function acceptAction(input: {
     referencedClauseId: input.clause?.dependency.referencedClauseId,
     referentTexts: input.clause?.referentTexts.length ? input.clause.referentTexts : undefined,
     clauseSequenceIndex: input.clause?.sequenceIndex,
+    abilityOrigin: input.grantedContext ? "granted" : "native",
+    grantedByAbilityId: input.grantedContext?.grantedAbilityId,
+    grantedAbilityType: input.grantedContext?.grantedAbilityType,
     trigger: abilityType === "triggered" ? extractTrigger(input.ability.paragraphText) : undefined,
     cost: abilityType === "activated" || /^[+\−-]\d+:/.test(input.ability.paragraphText)
       ? extractCost(input.ability.paragraphText)
@@ -977,7 +1023,9 @@ function matchStartsInTriggerCondition(paragraph: string, localMatchStart: numbe
 function matchInsideReminderParenthetical(paragraph: string, localStart: number): boolean {
   const reminders = findReminderSpans(paragraph);
   if (reminders.some((r) => localStart >= r.localStart && localStart < r.localEnd)) return true;
-  return findQuotedAbilitySpans(paragraph).some((r) => localStart >= r.localStart && localStart < r.localEnd);
+  return findQuotedAbilitySpans(paragraph).some(
+    (r) => r.role === "reminder_text" && localStart >= r.localStart && localStart < r.localEnd,
+  );
 }
 
 function matchIsSpuriousCastPermission(paragraph: string, localStart: number, evidenceText: string): boolean {
@@ -1322,6 +1370,30 @@ export function extractOracleActionsV1(input: {
           if (!action) continue;
           abilityMatches.push(action);
           matched = true;
+        }
+      }
+    }
+
+    for (const granted of findGrantedQuoteContexts(ability.paragraphText, parentAbilityId)) {
+      for (const span of grantedClauseSpans(granted)) {
+        for (const rule of ACTION_PATTERNS) {
+          for (const { match, index } of iterPatternMatches(span.text, rule.pattern)) {
+            const action = acceptAction({
+              oracleId: input.oracleId,
+              oracleText: input.oracleText,
+              face,
+              faces,
+              ability,
+              match,
+              rule,
+              actionIndex,
+              evidenceOffsetInParagraph: span.localStart + index,
+              grantedContext: granted,
+            });
+            if (!action) continue;
+            abilityMatches.push(action);
+            matched = true;
+          }
         }
       }
     }

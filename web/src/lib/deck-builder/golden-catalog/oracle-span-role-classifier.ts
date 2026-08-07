@@ -109,6 +109,7 @@ const EFFECT_ONLY_PRIMITIVES = new Set<PrimitiveActionType>([
   "untap",
   "put_counter",
   "shuffle_into_library",
+  "shuffle_library",
   "search_library",
 ]);
 

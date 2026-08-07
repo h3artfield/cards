@@ -43,14 +43,15 @@ export const PRIMITIVE_ACTION_TYPES = [
   "tap",
   "untap",
   "put_counter",
+  "shuffle_library",
   "shuffle_into_library",
 ] as const;
 
 export type PrimitiveActionType = (typeof PRIMITIVE_ACTION_TYPES)[number];
 
 /** Canonical taxonomy version — bump when Layer 2 primitives change. */
-export const TAXONOMY_VERSION = "three-layer-v1.2";
-export const TAXONOMY_VERSION_PREVIOUS = "three-layer-v1.1";
+export const TAXONOMY_VERSION = "three-layer-v1.3";
+export const TAXONOMY_VERSION_PREVIOUS = "three-layer-v1.2";
 
 /** Layer 3 — derived deck-building roles (never primitive action labels). */
 export const DERIVED_DECK_ROLES = [
@@ -179,7 +180,8 @@ function inferPrimitiveFromEvidence(text: string): PrimitiveActionType | null {
   if (/\btap target\b/.test(t)) return "tap";
   if (/\buntap\b/.test(t)) return "untap";
   if (/\bput.*counter\b/.test(t)) return "put_counter";
-  if (/\bshuffles?.*into.*library\b/.test(t)) return "shuffle_into_library";
+  if (/\bthen shuffle\b/.test(t) || /\bshuffle your library\b/.test(t)) return "shuffle_library";
+  if (/\bshuffles?[\w ]*into[\w ]*library\b/.test(t)) return "shuffle_into_library";
   return null;
 }
 

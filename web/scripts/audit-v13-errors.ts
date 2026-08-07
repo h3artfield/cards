@@ -25,6 +25,7 @@ import { isAdjudicatedRejectV14 } from "./adjudicate-gold-omission-v14";
 import { isGoldV21Forbidden } from "./adjudicate-gold-policy-v21";
 
 function datasetLabel(path: string): string {
+  if (path.includes("v24")) return "development_set_v24";
   if (path.includes("v23")) return "development_set_v23";
   if (path.includes("v22")) return "development_set_v22";
   if (path.includes("v21")) return "development_set_v21";
@@ -35,6 +36,7 @@ function datasetLabel(path: string): string {
 }
 
 function reportName(path: string): string {
+  if (path.includes("v24")) return "v13-error-audit-v24.json";
   if (path.includes("v23")) return "v13-error-audit-v23.json";
   if (path.includes("v22")) return "v13-error-audit-v22.json";
   if (path.includes("v21")) return "v13-error-audit-v21.json";
@@ -46,7 +48,7 @@ function reportName(path: string): string {
 
 const DEV_PATH =
   process.argv.find((a) => a.startsWith("--dataset="))?.slice("--dataset=".length) ??
-  "data/oracle-action-eval-development-v23.json";
+  "data/oracle-action-eval-development-v24.json";
 const DATASET_LABEL = datasetLabel(DEV_PATH);
 const REPORT_NAME = reportName(DEV_PATH);
 

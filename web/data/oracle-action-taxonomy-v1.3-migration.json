@@ -1,0 +1,37 @@
+{
+  "generatedAt": "2026-08-07T13:00:00.000Z",
+  "previousVersion": "three-layer-v1.2",
+  "currentVersion": "three-layer-v1.3",
+  "changes": [
+    {
+      "layer": 2,
+      "changeType": "primitive_added",
+      "primitive": "shuffle_library",
+      "fields": ["sourceZone", "destinationZone"],
+      "reason": "Generic library randomization (e.g. tutor resolution 'then shuffle') is a distinct Layer-2 operation from moving objects from another zone into a library.",
+      "semantics": {
+        "shuffle_library": "Randomize the order of cards already in a library (including empty-library cleanup after search). Source and destination are the same library zone.",
+        "shuffle_into_library": "Move one or more cards or objects from another zone (hand, graveyard, battlefield, etc.) into a library as part of a shuffle instruction."
+      },
+      "examples": {
+        "shuffle_library": [
+          "Search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.",
+          "Search your library for a card, put that card into your hand, then shuffle."
+        ],
+        "shuffle_into_library": [
+          "that player shuffles their hand into their library",
+          "Each player shuffles their hand and graveyard into their library",
+          "The owner of target permanent shuffles it into their library"
+        ]
+      },
+      "policyNote": "Suppressing tutor shuffle emission because development gold omitted shuffle_into_library was incorrect — the prior primitive conflated both semantics. Parser v1.18+ emits shuffle_library for generic shuffles regardless of gold coverage; gold is updated separately."
+    },
+    {
+      "layer": 2,
+      "changeType": "semantic_clarification",
+      "primitive": "shuffle_into_library",
+      "reason": "Reserved for zone-to-library shuffle instructions only. Generic 'then shuffle' after search is shuffle_library, not shuffle_into_library."
+    }
+  ],
+  "parserVersion": "oracle-action-v1.18-granted-ability-boundary"
+}
