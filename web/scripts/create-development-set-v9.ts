@@ -62,6 +62,50 @@ function main() {
   }
 
   const v9Cases = [...v7.cases, ...expansionCases];
+
+  const taxonomyV12GoldPatches: Array<{
+    caseId: string;
+    reason: string;
+    apply: (c: OracleActionEvalCaseV2) => OracleActionEvalCaseV2;
+  }> = [
+    {
+      caseId: "dev-opt-007",
+      reason: "Hand→battlefield put is put_onto_battlefield under three-layer-v1.2, not search_library.",
+      apply: (c) => {
+        const next = structuredClone(c);
+        for (const exp of next.expectedPrimitiveActions) {
+          if (exp.actionType === "search_library" && exp.evidenceContains.includes("put a land card from your hand")) {
+            exp.actionType = "put_onto_battlefield";
+            exp.sourceZone = "hand";
+            exp.destinationZone = "battlefield";
+            exp.affectedObject = "land_card";
+          }
+        }
+        return next;
+      },
+    },
+    {
+      caseId: "eval-0049",
+      reason: "Put-from-graveyard onto battlefield uses put_onto_battlefield under v1.2.",
+      apply: (c) => {
+        const next = structuredClone(c);
+        for (const exp of next.expectedPrimitiveActions) {
+          if (exp.actionType === "return_to_battlefield" && exp.evidenceContains.includes("graveyard onto the battlefield")) {
+            exp.actionType = "put_onto_battlefield";
+            exp.sourceZone = "graveyard";
+            exp.destinationZone = "battlefield";
+          }
+        }
+        return next;
+      },
+    },
+  ];
+
+  for (let i = 0; i < v9Cases.length; i++) {
+    const patch = taxonomyV12GoldPatches.find((p) => p.caseId === v9Cases[i].id);
+    if (patch) v9Cases[i] = patch.apply(v9Cases[i]);
+  }
+
   const v9Hash = computeContentHash(v9Cases);
   const reviewedAt = new Date().toISOString();
 
@@ -93,6 +137,20 @@ function main() {
     before: unknown;
     after: unknown;
   }> = [];
+
+  for (const patch of taxonomyV12GoldPatches) {
+    const before = v7.cases.find((c) => c.id === patch.caseId);
+    const after = v9Cases.find((c) => c.id === patch.caseId);
+    if (before && after && JSON.stringify(before.expectedPrimitiveActions) !== JSON.stringify(after.expectedPrimitiveActions)) {
+      changedCases.push({
+        caseId: patch.caseId,
+        reason: patch.reason,
+        before: before.expectedPrimitiveActions,
+        after: after.expectedPrimitiveActions,
+      });
+    }
+  }
+
   for (const [id, v8Case] of v8ById) {
     if (v8ExpansionIds.has(id)) continue;
     const v9Case = v9ById.get(id);

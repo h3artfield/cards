@@ -1,10 +1,10 @@
 {
   "setClassification": "development_set_v9",
   "evaluationVersion": "development-v9-taxonomy-v1.2-expansion",
-  "contentHash": "9078e9641560b68e31ebb188a93dd97ef558f3df4e7e8aba6e98d7c182f51a05",
+  "contentHash": "26cf5d1e8f251509ee68da3a3026621aaab6822f0b6678573e7bfbd3d3ed35e0",
   "taxonomyVersion": "three-layer-v1.2",
   "caseCount": 318,
-  "frozenAt": "2026-08-07T02:20:00.514Z",
+  "frozenAt": "2026-08-07T02:28:51.140Z",
   "usagePolicy": "Parser tuning for v1.13+ — taxonomy v1.2 put_onto_battlefield expansion. All 33 expansion cases manually reviewed against Oracle text.",
   "parentClassification": "development_set_v8",
   "parentContentHash": "4ba04ffa00af737900f971b40955bd8b04298199e9607d6081b5e89dd7d8c43d",
@@ -33,7 +33,7 @@
   },
   "manualReviewConfirmedCount": 33,
   "reviewer": "catalog-audit-agent",
-  "reviewTimestamp": "2026-08-07T02:20:00.514Z",
+  "reviewTimestamp": "2026-08-07T02:28:51.140Z",
   "multifaceGoldSupportByLayout": {
     "split": 6,
     "mdfc": 8,
@@ -1141,8 +1141,10 @@
           "evidenceContains": "discards"
         },
         {
-          "actionType": "return_to_battlefield",
-          "evidenceContains": "graveyard onto the battlefield"
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "graveyard onto the battlefield",
+          "sourceZone": "graveyard",
+          "destinationZone": "battlefield"
         }
       ],
       "expectedRoles": [
@@ -4051,9 +4053,12 @@
           "evidenceContains": "Draw a card"
         },
         {
-          "actionType": "search_library",
+          "actionType": "put_onto_battlefield",
           "evidenceContains": "put a land card from your hand onto the battlefield",
-          "optionalEffect": true
+          "optionalEffect": true,
+          "sourceZone": "hand",
+          "destinationZone": "battlefield",
+          "affectedObject": "land_card"
         }
       ]
     },

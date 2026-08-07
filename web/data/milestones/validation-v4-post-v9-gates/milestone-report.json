@@ -1,0 +1,58 @@
+{
+  "generatedAt": "2026-08-07T02:29:33.755Z",
+  "evaluationVersion": "validation-v4-milestone-post-v9-gates",
+  "commitSha": "uncommitted",
+  "parserVersion": "oracle-action-v1.13-zone-guards",
+  "taxonomyVersion": "three-layer-v1.2",
+  "validationSet": "validation_set_v4",
+  "validationSetHash": "c422988bc2816a86725cd7042c35d844c2b1cbd80ca5430c08a7f32bb403a076",
+  "developmentSetUsedForTuning": "development_set_v9",
+  "metrics": {
+    "accepted": {
+      "truePositives": 122,
+      "falsePositives": 19,
+      "falseNegatives": 43,
+      "precision": 0.8652482269503546,
+      "recall": 0.7393939393939394,
+      "falsePositiveRate": 0.1347517730496454
+    },
+    "needsReview": {
+      "truePositives": 7,
+      "falsePositives": 0,
+      "falseNegatives": 0,
+      "precision": 1,
+      "recall": 1,
+      "falsePositiveRate": 0
+    },
+    "allEmission": {
+      "truePositives": 129,
+      "falsePositives": 19,
+      "falseNegatives": 36,
+      "precision": 0.8716216216216216,
+      "recall": 0.7818181818181819,
+      "falsePositiveRate": 0.12837837837837837
+    },
+    "tierInvariants": {
+      "tpSumHolds": true,
+      "fpSumHolds": true,
+      "goldPositiveHolds": true,
+      "details": {
+        "acceptedTp": 122,
+        "needsReviewTp": 7,
+        "allEmissionTp": 129,
+        "tpSum": 129,
+        "tpDelta": 0,
+        "acceptedFp": 19,
+        "needsReviewFp": 0,
+        "allEmissionFp": 19,
+        "fpSum": 19,
+        "fpDelta": 0,
+        "allEmissionFn": 36,
+        "goldPositiveCount": 165
+      }
+    }
+  },
+  "acceptedUnsupportedCount": 0,
+  "auditMismatchCount": 55,
+  "note": "Logged validation milestone after development_set_v9 gates passed. Blind test and pilot remain blocked."
+}

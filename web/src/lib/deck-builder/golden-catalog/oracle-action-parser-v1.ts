@@ -143,7 +143,8 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bYou may counter [\w ]+/i, actionType: "counter", sourceZones: ["stack"] },
   { pattern: /\bYou may return [\w ]+/i, actionType: "return_to_hand", destinationZones: ["hand"] },
   { pattern: /\bYou may discard [\w ]+/i, actionType: "discard", sourceZones: ["hand"], destinationZones: ["graveyard"] },
-  { pattern: /\bYou may put [\w ]+ onto the battlefield/i, actionType: "search_library", destinationZones: ["battlefield"] },
+  { pattern: /\bYou may put [\w ]+ from (?:your |a |their )?(?:hand|graveyard|exile)[\w ]* onto the battlefield/i, actionType: "put_onto_battlefield", destinationZones: ["battlefield"] },
+  { pattern: /\bput [\w ]+ from (?:your |a |their )?(?:hand|graveyard|exile)[\w ]* onto the battlefield/i, actionType: "put_onto_battlefield", destinationZones: ["battlefield"] },
   { pattern: /\bYou may cast this spell from your graveyard\b/i, actionType: "cast", sourceZones: ["graveyard"], requiresPermissionVerb: true },
   { pattern: /\bYou may cast the copy\b/i, actionType: "cast", sourceZones: ["exile", "stack"], requiresPermissionVerb: true },
   { pattern: /\byou may play that card\b/i, actionType: "play", sourceZones: ["exile"], requiresPermissionVerb: true },
@@ -167,8 +168,9 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+ to (?:its|their) owner'?s hand\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
   { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+(?: cards?)? from (?:your )?graveyard to your hand\b/i, actionType: "return_to_hand", sourceZones: ["graveyard"], destinationZones: ["hand"] },
   { pattern: /\bReturn target [\w ]+ from (?:your )?graveyard to your hand\b/i, actionType: "return_to_hand", sourceZones: ["graveyard"], destinationZones: ["hand"] },
+  { pattern: /\bPut target [\w ]+ (?:card )?from (?:your |a )?graveyard onto the battlefield\b/i, actionType: "put_onto_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
   { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+ (?:card )?from (?:your )?graveyard to the battlefield\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
-  { pattern: /\bPut target [\w ]+ (?:card )?from a graveyard onto the battlefield\b/i, actionType: "return_to_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
+  { pattern: /\bPut target [\w ]+ (?:card )?from a graveyard onto the battlefield\b/i, actionType: "put_onto_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
   { pattern: /\bSacrifice (?:a |an |target |up to one target )?[\w ]+/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
   { pattern: /\b(?:Each (?:opponent|player)|Target player|That player|Each opponent) sacrifices (?:a |an |all )?[\w ]+/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
   { pattern: /\b(?:create|creates|You may create) (?:a |an |one |up to \w+ )?(?:[\w-/]+ )*tokens?\b/i, actionType: "create_token", destinationZones: ["battlefield"], affectedObjects: ["token"] },
@@ -251,6 +253,7 @@ function inferZones(text: string): { source?: string[]; dest?: string[] } {
   if (/\bfrom (?:your )?hand\b/i.test(text)) source.add("hand");
   if (/\binto (?:your )?hand\b|\bto your hand\b/i.test(text)) dest.add("hand");
   if (/\bonto the battlefield\b/i.test(text)) dest.add("battlefield");
+  if (/\bto the battlefield\b/i.test(text)) dest.add("battlefield");
   if (/\bsearch (?:your )?library\b/i.test(text)) source.add("library");
   return {
     source: source.size ? [...source] : undefined,
@@ -577,6 +580,7 @@ function canPromoteToAccepted(input: {
     "copy",
     "cast",
     "play",
+    "put_onto_battlefield",
     "put_counter",
     "shuffle_into_library",
   ];
@@ -661,6 +665,19 @@ function acceptAction(input: {
   if (
     input.rule.actionType === "cast" &&
     matchIsSpuriousCastPermission(input.ability.paragraphText, localStart, evidenceText)
+  ) {
+    return null;
+  }
+  if (matchIsStaticActionRestriction(input.ability.paragraphText, localStart, input.rule.actionType)) {
+    return null;
+  }
+  if (matchIsAlternativeCostClause(input.ability.paragraphText, localStart, input.rule.actionType)) {
+    return null;
+  }
+  if (
+    input.rule.actionType === "search_library" &&
+    /\bput [\w ]+ onto the battlefield\b/i.test(evidenceText) &&
+    !/\bsearch (?:your |their )?library\b/i.test(evidenceText)
   ) {
     return null;
   }
@@ -856,9 +873,29 @@ function matchInsideReminderParenthetical(paragraph: string, localStart: number)
 
 function matchIsSpuriousCastPermission(paragraph: string, localStart: number, evidenceText: string): boolean {
   const context = paragraph.slice(Math.max(0, localStart - 40), localStart + evidenceText.length + 40);
+  if (/\bcan'?t cast\b/i.test(context)) return true;
   if (/\badditional cost to cast this\b/i.test(context)) return true;
   if (/\bYou may cast this spell as though\b/i.test(context)) return true;
   if (/\bYou may cast this spell only if\b/i.test(context)) return true;
+  return false;
+}
+
+function matchIsAlternativeCostClause(paragraph: string, localStart: number, actionType: PrimitiveActionType): boolean {
+  if (actionType !== "exile" && actionType !== "sacrifice") return false;
+  const context = paragraph.slice(Math.max(0, localStart - 20), localStart + 120);
+  if (/\brather than pay\b/i.test(context)) return true;
+  if (/\bas an additional cost\b/i.test(context)) return true;
+  return false;
+}
+
+function matchIsStaticActionRestriction(paragraph: string, localStart: number, actionType: PrimitiveActionType): boolean {
+  const windowStart = Math.max(0, localStart - 8);
+  const lineStart = paragraph.lastIndexOf("\n", localStart) + 1;
+  const clause = paragraph.slice(Math.min(lineStart, windowStart), localStart + 80);
+  if (actionType === "cast" || actionType === "play") {
+    if (/\bcan'?t cast\b/i.test(clause)) return true;
+    if (/\bcan'?t be cast\b/i.test(clause)) return true;
+  }
   return false;
 }
 

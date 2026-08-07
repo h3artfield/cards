@@ -1,19 +1,19 @@
 {
-  "generatedAt": "2026-08-07T02:20:00.514Z",
+  "generatedAt": "2026-08-07T02:28:51.140Z",
   "reviewer": "catalog-audit-agent",
-  "reviewTimestamp": "2026-08-07T02:20:00.514Z",
+  "reviewTimestamp": "2026-08-07T02:28:51.140Z",
   "taxonomyVersion": "three-layer-v1.2",
   "parentDataset": "development_set_v8",
   "parentContentHash": "4ba04ffa00af737900f971b40955bd8b04298199e9607d6081b5e89dd7d8c43d",
   "parentCaseCount": 316,
   "newDataset": "development_set_v9",
-  "newContentHash": "9078e9641560b68e31ebb188a93dd97ef558f3df4e7e8aba6e98d7c182f51a05",
+  "newContentHash": "26cf5d1e8f251509ee68da3a3026621aaab6822f0b6678573e7bfbd3d3ed35e0",
   "newCaseCount": 318,
   "baseDataset": "development_set_v7",
   "baseContentHash": "6274107dfae50b3c8938099079004e36bdf3ce18e3bb3b8407e9af1cf409a147",
   "removedCaseCount": 31,
   "addedCaseCount": 33,
-  "changedCaseCount": 0,
+  "changedCaseCount": 4,
   "reasonForChange": "Taxonomy three-layer-v1.2: put_onto_battlefield primitive, corrected layer labels, positive/negative contrasts for unsupported validation families. Replaces v8 expansion with 33 manually reviewed v9 seeds.",
   "removedCases": [
     {
@@ -696,7 +696,134 @@
       "reason": "Supported tutor — contrast with hand-put mislabels."
     }
   ],
-  "changedCases": [],
+  "changedCases": [
+    {
+      "caseId": "dev-opt-007",
+      "reason": "Hand→battlefield put is put_onto_battlefield under three-layer-v1.2, not search_library.",
+      "before": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "put a land card from your hand onto the battlefield",
+          "optionalEffect": true
+        }
+      ],
+      "after": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put a land card from your hand onto the battlefield",
+          "optionalEffect": true,
+          "sourceZone": "hand",
+          "destinationZone": "battlefield",
+          "affectedObject": "land_card"
+        }
+      ]
+    },
+    {
+      "caseId": "eval-0049",
+      "reason": "Put-from-graveyard onto battlefield uses put_onto_battlefield under v1.2.",
+      "before": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifices"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discards"
+        },
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "graveyard onto the battlefield"
+        }
+      ],
+      "after": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifices"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discards"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "graveyard onto the battlefield",
+          "sourceZone": "graveyard",
+          "destinationZone": "battlefield"
+        }
+      ]
+    },
+    {
+      "caseId": "eval-0049",
+      "reason": "Unexpected v7 base mutation — should be empty",
+      "before": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifices"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discards"
+        },
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "graveyard onto the battlefield"
+        }
+      ],
+      "after": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifices"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discards"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "graveyard onto the battlefield",
+          "sourceZone": "graveyard",
+          "destinationZone": "battlefield"
+        }
+      ]
+    },
+    {
+      "caseId": "dev-opt-007",
+      "reason": "Unexpected v7 base mutation — should be empty",
+      "before": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "put a land card from your hand onto the battlefield",
+          "optionalEffect": true
+        }
+      ],
+      "after": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put a land card from your hand onto the battlefield",
+          "optionalEffect": true,
+          "sourceZone": "hand",
+          "destinationZone": "battlefield",
+          "affectedObject": "land_card"
+        }
+      ]
+    }
+  ],
   "familyCounts": {
     "hand_to_battlefield_put_not_search": 4,
     "graveyard_to_battlefield_put": 2,

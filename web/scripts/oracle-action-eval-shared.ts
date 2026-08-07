@@ -137,7 +137,7 @@ export function inferSupportedPrimitiveFromEvidence(
       exile: /\b[Ee]xile\b/i,
       counter: /\bCounter target\b/i,
       return_to_hand: /\bReturn target[\w ]+ to (?:its|their) owner'?s hand\b/i,
-      return_to_battlefield: /\b(?:from (?:your |a )?graveyard (?:to your hand|onto the battlefield)|Put target[\w ]+ from a graveyard onto the battlefield)\b/i,
+      return_to_battlefield: /\b(?:from (?:your |a )?graveyard (?:to your hand|to the battlefield|onto the battlefield)|Put target[\w ]+ from a graveyard onto the battlefield|Return target[\w ]+ from (?:your )?graveyard to the battlefield)\b/i,
       create_token: /\bcreate[\w ]*tokens?\b/i,
       cast: /\bcast (?:any number of |spells? from|it|that card|the exiled|target)\b/i,
       play: /\bplay (?:an additional land|land cards from (?:your )?graveyard|lands and )?spells? from (?:your )?graveyard\b/i,
