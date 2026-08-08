@@ -34,6 +34,7 @@ import {
   applyStructuralBlockInvariants,
 } from "./oracle-action-structural-blocks";
 import { buildOracleSemanticParse } from "./oracle-semantic-parse-builder";
+import { inferOptionalEffectFromGrammar } from "./oracle-action-argument-extraction";
 import type { OracleSemanticParse } from "./oracle-semantic-parse-schema";
 import {
   parseVariableQuantityFields,
@@ -252,7 +253,14 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bExile up to (?:one|two|three|\w+) target [\w ]+/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bexile (?:target|the top|a \w+ card from)/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bCounter (?:target|up to (?:one|two|three|four|five) target) [\w ]+/i, actionType: "counter", sourceZones: ["stack"], affectedObjects: ["spell", "ability"] },
+  { pattern: /\bcounter it unless its controller pays \{[^}]+\}/i, actionType: "counter", sourceZones: ["stack"], affectedObjects: ["spell", "ability"] },
+  { pattern: /\bcounter (?:target [\w ]+|each [\w ]+) unless (?:its|their) controller pays \{[^}]+\}/i, actionType: "counter", sourceZones: ["stack"], affectedObjects: ["spell", "ability"] },
+  { pattern: /\bReturn target permanent you control and target permanent you don't control to their owners' hands\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
+  { pattern: /\bReturn those [\w ]+ to their owners' hands\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
+  { pattern: /\bReturn each [\w ]+ to its owner's hand\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
+  { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w' ]+ to (?:its|their) owner'?s hands?\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
   { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w' ]+ to (?:its|their) owner'?s hand\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
+  { pattern: /\bTarget player exiles a card from their hand\b/i, actionType: "exile", sourceZones: ["hand"], destinationZones: ["exile"] },
   { pattern: /\bReturn target [\w' ]+ to (?:its|their) owner'?s hand\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
   { pattern: /\breturn that card to (?:its|their) owner'?s hand\b/i, actionType: "return_to_hand", sourceZones: ["battlefield", "graveyard"], destinationZones: ["hand"] },
   { pattern: /\bReturn it to (?:its|their) owner'?s hand\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
@@ -287,6 +295,7 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bYou gain life equal to/i, actionType: "gain_life", affectedObjects: ["player"] },
   { pattern: /\bgains? \d+ life\b/i, actionType: "gain_life", affectedObjects: ["player"] },
   { pattern: /\b(?:Each opponent |Each player |You |Target player |That player )?gains? X life\b/i, actionType: "gain_life", affectedObjects: ["player"] },
+  { pattern: /\b(?:Each opponent |Each player |You |Target player |Target opponent |That player )?loses? a third of (?:their |your )?life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\b(?:Each opponent |Each player |You |Target player |Target opponent |That player )?loses? half (?:their |your )?life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\b(?:Each opponent |Each player |You |Target player |Target opponent |That player )?loses? \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
   { pattern: /\b(?:Each opponent |Each player |You |Target player |Target opponent |That player )?loses? up to \d+ life\b/i, actionType: "lose_life", affectedObjects: ["player"] },
@@ -1829,7 +1838,18 @@ export function extractOracleActionsV1(input: {
     );
   }
 
-  const indexedActions = withOptionality.map((a, i) => ({ ...a, actionIndex: i }));
+  const grammarSyncedActions = withOptionality.map((a) => {
+    const ability = abilities.find((ab) => ab.abilityIndex === a.abilityIndex && ab.cardFaceId === a.faceId);
+    const grammarOptional = inferOptionalEffectFromGrammar({
+      abilityParagraph: ability?.paragraphText ?? a.evidenceText,
+      actionEvidenceText: a.evidenceText,
+      actionEvidenceStart: a.evidenceStart,
+      abilityParagraphStart: ability?.paragraphStart ?? a.evidenceStart,
+    });
+    return { ...a, optionalEffect: grammarOptional, optional: grammarOptional };
+  });
+
+  const indexedActions = grammarSyncedActions.map((a, i) => ({ ...a, actionIndex: i }));
   const duplicateSuppressedCount = Math.max(0, preDedupCount - indexedActions.length);
 
   const legacyPayload = {

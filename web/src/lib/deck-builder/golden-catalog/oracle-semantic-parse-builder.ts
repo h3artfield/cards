@@ -219,6 +219,13 @@ function resolveParentAbilityId(
     if (byOrdinal) return byOrdinal.abilityId;
   }
   if (action.loyaltyCost) {
+    const bySpan = abilities.find(
+      (a) =>
+        a.abilityType === "loyalty" &&
+        action.evidenceStart >= a.abilitySpan.cardStart &&
+        action.evidenceEnd <= a.abilitySpan.cardEnd,
+    );
+    if (bySpan) return bySpan.abilityId;
     const loyalty = abilities.find(
       (a) => a.abilityType === "loyalty" && a.loyaltyCost === action.loyaltyCost,
     );

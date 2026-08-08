@@ -30,6 +30,8 @@ function testRushIntegrity() {
 function testDevelopmentCorporaIntegrity() {
   const paths = [
     "data/oracle-action-eval-development-v26.json",
+    "data/oracle-action-eval-development-generalization-expansion-v2.json",
+    "data/oracle-action-eval-development-generalization-expansion-v3.json",
     "data/oracle-action-eval-development-generalization-expansion-v5.json",
   ];
   let checked = 0;
@@ -46,7 +48,8 @@ function testDevelopmentCorporaIntegrity() {
     }
   }
   assert.equal(idViolations, 0, `expected zero ID integrity violations across ${checked} dev cases`);
-  console.log(`✓ development corpora ID integrity (${checked} cases, ${provenanceViolations} provenance violations reported)`);
+  assert.equal(provenanceViolations, 0, `expected zero provenance violations across ${checked} dev cases`);
+  console.log(`✓ development corpora ID + provenance integrity (${checked} cases)`);
 }
 
 testOracleTextHash();

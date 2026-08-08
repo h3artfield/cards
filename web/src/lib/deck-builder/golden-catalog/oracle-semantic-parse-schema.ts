@@ -105,14 +105,22 @@ export interface SemanticActionQuantity extends VariableQuantityFields {
   roundingEvidence?: EvidenceSpan;
 }
 
+export interface SemanticActionCondition {
+  type: "unless" | "if" | "when";
+  payment?: string;
+  evidence?: EvidenceSpan;
+}
+
 export interface SemanticActionArguments {
   actor?: "you" | "controller" | "spell_controller";
   affectedPlayer?: "target_opponent" | "each_opponent" | "each_player" | "target_player" | "you";
+  affectedController?: "opponent" | "you" | "controller";
   object?: SemanticActionObject;
   sourceZone?: string[];
   destinationZone?: string[];
   quantity?: SemanticActionQuantity;
   choice?: SemanticActionChoice;
+  condition?: SemanticActionCondition;
   timing?: string;
   dependency?: string;
   referentObjectId?: string;

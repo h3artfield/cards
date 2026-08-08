@@ -1,0 +1,552 @@
+{
+  "generatedAt": "2026-08-08T02:49:33.904Z",
+  "parserVersion": "oracle-action-v1.29-structural-pass-dev",
+  "parserCommit": "a302aa3276ed8c62564287632e14ac4bf2258094",
+  "parserBlobSha": "9f59114912a350dbd7b3cef5fcf975713f8075a9",
+  "combinedCorpusConstituents": [
+    {
+      "dataset": "development_v26",
+      "path": "data/oracle-action-eval-development-v26.json",
+      "caseCount": 284,
+      "contentHash": "68101b45d07f5380f709f7d691a8fd7b14d93153b807189e776b9a3bf56510e7"
+    },
+    {
+      "dataset": "expansion_v2",
+      "path": "data/oracle-action-eval-development-generalization-expansion-v2.json",
+      "caseCount": 52,
+      "contentHash": "bd73bee1b24bde6d8f630898b95c9426a975e09b69732fc5477faf6dfea5fc4b"
+    },
+    {
+      "dataset": "expansion_v3",
+      "path": "data/oracle-action-eval-development-generalization-expansion-v3.json",
+      "caseCount": 24,
+      "contentHash": "80e1479b616b64c5bcd200b04df3b00c3d8eac01522c6c9ea0fc3af3923cd865"
+    },
+    {
+      "dataset": "expansion_training_v5",
+      "path": "data/oracle-action-eval-development-generalization-expansion-v5.json",
+      "caseCount": 15,
+      "contentHash": "2edb65ecc5d276338a7846b3c095c57c8e8cfacba92e01f7b9876ce37c740b82"
+    }
+  ],
+  "combinedCaseCount": 362,
+  "combinedSemanticMetrics": {
+    "tp": 476,
+    "fp": 0,
+    "fn": 23,
+    "precision": 1,
+    "recall": 0.9539078156312625
+  },
+  "perCorpus": [
+    {
+      "label": "development_v26",
+      "path": "data/oracle-action-eval-development-v26.json",
+      "caseCount": 284,
+      "contentHash": "68101b45d07f5380f709f7d691a8fd7b14d93153b807189e776b9a3bf56510e7",
+      "semantic": {
+        "tp": 364,
+        "fp": 0,
+        "fn": 23,
+        "precision": 1,
+        "recall": 0.9405684754521964
+      },
+      "idViolations": 0,
+      "provenanceViolations": 0,
+      "parityDiffs": 0
+    },
+    {
+      "label": "expansion_v2",
+      "path": "data/oracle-action-eval-development-generalization-expansion-v2.json",
+      "caseCount": 52,
+      "contentHash": "bd73bee1b24bde6d8f630898b95c9426a975e09b69732fc5477faf6dfea5fc4b",
+      "semantic": {
+        "tp": 74,
+        "fp": 1,
+        "fn": 3,
+        "precision": 0.9866666666666667,
+        "recall": 0.961038961038961
+      },
+      "idViolations": 0,
+      "provenanceViolations": 0,
+      "parityDiffs": 0
+    },
+    {
+      "label": "expansion_v3",
+      "path": "data/oracle-action-eval-development-generalization-expansion-v3.json",
+      "caseCount": 24,
+      "contentHash": "80e1479b616b64c5bcd200b04df3b00c3d8eac01522c6c9ea0fc3af3923cd865",
+      "semantic": {
+        "tp": 36,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "idViolations": 0,
+      "provenanceViolations": 0,
+      "parityDiffs": 0
+    },
+    {
+      "label": "expansion_training_v5",
+      "path": "data/oracle-action-eval-development-generalization-expansion-v5.json",
+      "caseCount": 15,
+      "contentHash": "2edb65ecc5d276338a7846b3c095c57c8e8cfacba92e01f7b9876ce37c740b82",
+      "semantic": {
+        "tp": 17,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "idViolations": 0,
+      "provenanceViolations": 0,
+      "parityDiffs": 0
+    }
+  ],
+  "checkV4Diagnostic": {
+    "note": "spent holdout — diagnostic only",
+    "cases": [
+      {
+        "caseId": "dev-exp-chk-v4-001",
+        "cardName": "Teyo, Geometric Tactician",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-002",
+        "cardName": "Kiora, Master of the Depths",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-003",
+        "cardName": "Jaya, Venerated Firemage",
+        "legacy": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1
+        },
+        "semantic": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-004",
+        "cardName": "Karn Liberated",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-005",
+        "cardName": "Take Down",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-006",
+        "cardName": "Caught in the Crossfire",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-007",
+        "cardName": "Jailbreak Scheme",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-008",
+        "cardName": "Explosive Derailment",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-009",
+        "cardName": "Dance of the Tumbleweeds",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-010",
+        "cardName": "City of Death",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-011",
+        "cardName": "Oltec Matterweaver",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-012",
+        "cardName": "Mythos of Illuna",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-013",
+        "cardName": "Chandra's Firemaw",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-014",
+        "cardName": "The First Doctor",
+        "legacy": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1
+        },
+        "semantic": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-015",
+        "cardName": "Delivery Moogle",
+        "legacy": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1
+        },
+        "semantic": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 1
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-016",
+        "cardName": "Yomiji, Who Bars the Way",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-017",
+        "cardName": "Crusher Zendikon",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-018",
+        "cardName": "Tiana, Ship's Caretaker",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-019",
+        "cardName": "Aether Tradewinds",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-020",
+        "cardName": "Run Away Together",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-021",
+        "cardName": "Whirlwind Denial",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-022",
+        "cardName": "Pox",
+        "legacy": {
+          "tp": 2,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 2,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-023",
+        "cardName": "Mind Rot",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-024",
+        "cardName": "Naturalize",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-025",
+        "cardName": "Murder",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-026",
+        "cardName": "Izzet Guildmage",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-027",
+        "cardName": "Lay Bare the Heart",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-028",
+        "cardName": "Cast Down",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-029",
+        "cardName": "Doom Blade",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      },
+      {
+        "caseId": "dev-exp-chk-v4-030",
+        "cardName": "Light of Hope",
+        "legacy": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "semantic": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        }
+      }
+    ],
+    "legacy": {
+      "tp": 28,
+      "fp": 0,
+      "fn": 3,
+      "precision": 1,
+      "recall": 0.9032258064516129
+    },
+    "semantic": {
+      "tp": 28,
+      "fp": 0,
+      "fn": 3,
+      "precision": 1,
+      "recall": 0.9032258064516129
+    }
+  },
+  "gates": {
+    "combinedPrecision": true,
+    "combinedRecall": true,
+    "idIntegrity": true,
+    "provenanceContainment": true,
+    "parityClean": true
+  }
+}

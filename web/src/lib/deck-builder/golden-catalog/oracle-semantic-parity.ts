@@ -48,8 +48,12 @@ export function auditSemanticLegacyParity(input: {
   };
 
   const acceptedLegacy = input.legacyActions.filter((a) => a.reviewStatus === "accepted");
-  const acceptedSemantic = input.parse.actions.filter((a) => a.reviewStatus === "accepted");
-  const projected = projectLegacyFromSemanticParse(input.parse).filter((_, i) => acceptedSemantic.some((s, j) => j === i && s.reviewStatus === "accepted"));
+  const acceptedSemanticIds = new Set(
+    input.parse.actions.filter((a) => a.reviewStatus === "accepted").map((a) => a.actionId),
+  );
+  const projected = projectLegacyFromSemanticParse(input.parse).filter((p) =>
+    acceptedSemanticIds.has(p.actionId),
+  );
 
   const legacyByKey = new Map(acceptedLegacy.map((a) => [legacyKey(a), a]));
   const projectedByKey = new Map(projected.map((a) => [projectedKey(a), a]));

@@ -16,6 +16,8 @@ export interface VariableQuantityFields {
   quantitySource?: "ability_where_clause" | "spell_mana_cost" | "unresolved";
   quantityCertainty?: VariableQuantityCertainty;
   quantityBase?: string;
+  quantityNumerator?: string;
+  quantityDenominator?: string;
   quantityMultiplier?: string;
   quantityDivisor?: string;
   quantityRounding?: "up" | "down" | "none";
@@ -152,20 +154,100 @@ export function variableQuantityNeedsReview(fields: VariableQuantityFields): boo
   return fields.quantityCertainty === "ambiguous";
 }
 
+function derivedFraction(input: {
+  expression: string;
+  base: string;
+  numerator: string;
+  denominator: string;
+  rounding: "up" | "down" | "none";
+}): VariableQuantityFields {
+  return {
+    quantityType: "derived",
+    quantityExpression: input.expression,
+    quantityBase: input.base,
+    quantityNumerator: input.numerator,
+    quantityDenominator: input.denominator,
+    quantityDivisor: input.denominator,
+    quantityRounding: input.rounding,
+    quantitySource: "ability_where_clause",
+    quantityCertainty: "defined_in_ability",
+  };
+}
+
+function roundingFromParagraph(abilityParagraph: string): "up" | "down" | "none" {
+  if (/\b(?:rounded up|Round up each time)\b/i.test(abilityParagraph)) return "up";
+  if (/\brounded down\b/i.test(abilityParagraph)) return "down";
+  return "none";
+}
+
 function matchDerivedQuantity(
   actionType: string,
   evidenceText: string,
   abilityParagraph: string,
 ): VariableQuantityFields | null {
+  const rounding = roundingFromParagraph(abilityParagraph);
+
   const halfLife = evidenceText.match(/\b(?:Each opponent |Each player |Target player |Target opponent |That player |You )?lose(?:s)? half (?:their |your )?life\b/i);
   if (halfLife && (actionType === "lose_life" || /\bloses? half/i.test(evidenceText))) {
-    const rounding = /\b(?:rounded up|Round up each time)\b/i.test(abilityParagraph) ? "up" : "none";
+    return derivedFraction({
+      expression: "half their life",
+      base: "their life total",
+      numerator: "1",
+      denominator: "2",
+      rounding: rounding === "up" ? "up" : "none",
+    });
+  }
+
+  const thirdLife = evidenceText.match(/\b(?:Each player |Each opponent |Target player |Target opponent |That player |You )?loses? a third of (?:their |your )?life\b/i);
+  if (thirdLife && actionType === "lose_life") {
+    return derivedFraction({
+      expression: "a third of their life",
+      base: "their life total",
+      numerator: "1",
+      denominator: "3",
+      rounding,
+    });
+  }
+
+  const thirdCards = evidenceText.match(/\b(?:discards?|sacrifices?) a third of (the cards in their hand|the creatures they control|the lands they control)/i);
+  if (thirdCards && (actionType === "discard" || actionType === "sacrifice")) {
+    return derivedFraction({
+      expression: `a third of ${thirdCards[1]}`,
+      base: thirdCards[1]!,
+      numerator: "1",
+      denominator: "3",
+      rounding,
+    });
+  }
+
+  const twoThirds = evidenceText.match(/\b(?:discards?|sacrifices?|loses?) two thirds of ([^.]+)/i);
+  if (twoThirds) {
+    return derivedFraction({
+      expression: `two thirds of ${twoThirds[1]!.trim()}`,
+      base: twoThirds[1]!.trim(),
+      numerator: "2",
+      denominator: "3",
+      rounding,
+    });
+  }
+
+  const quarter = evidenceText.match(/\b(?:discards?|sacrifices?|loses?) (?:a |one )?quarter of ([^.]+)/i);
+  if (quarter) {
+    return derivedFraction({
+      expression: `a quarter of ${quarter[1]!.trim()}`,
+      base: quarter[1]!.trim(),
+      numerator: "1",
+      denominator: "4",
+      rounding,
+    });
+  }
+
+  const twice = evidenceText.match(/\b(?:draws?|create(?:s)?|deals?) twice (?:as many|that many)/i);
+  if (twice) {
     return {
       quantityType: "derived",
-      quantityExpression: "half their life",
-      quantityBase: "their life total",
-      quantityDivisor: "2",
-      quantityRounding: rounding === "up" ? "up" : "none",
+      quantityExpression: twice[0],
+      quantityMultiplier: "2",
       quantitySource: "ability_where_clause",
       quantityCertainty: "defined_in_ability",
     };
@@ -173,75 +255,51 @@ function matchDerivedQuantity(
 
   const halfDraw = evidenceText.match(/\b(?:draw|draws) cards? equal to half (.+)$/i);
   if (halfDraw && actionType === "draw") {
-    const rounding = /\bRound up each time\b/i.test(abilityParagraph) ? "up" : "none";
-    return {
-      quantityType: "derived",
-      quantityExpression: `half ${halfDraw[1].trim()}`,
-      quantityBase: halfDraw[1].trim(),
-      quantityDivisor: "2",
-      quantityRounding: rounding === "up" ? "up" : "none",
-      quantitySource: "ability_where_clause",
-      quantityCertainty: "defined_in_ability",
-    };
+    return derivedFraction({
+      expression: `half ${halfDraw[1]!.trim()}`,
+      base: halfDraw[1]!.trim(),
+      numerator: "1",
+      denominator: "2",
+      rounding: rounding === "up" ? "up" : "none",
+    });
   }
 
   const halfMill = evidenceText.match(/\bmill(?:s)? half (.+)$/i);
   if (halfMill && actionType === "mill") {
-    return {
-      quantityType: "derived",
-      quantityExpression: `half ${halfMill[1].trim()}`,
-      quantityBase: halfMill[1].trim(),
-      quantityDivisor: "2",
-      quantityRounding: /\bRound up each time\b/i.test(abilityParagraph) ? "up" : "none",
-      quantitySource: "ability_where_clause",
-      quantityCertainty: "defined_in_ability",
-    };
+    return derivedFraction({
+      expression: `half ${halfMill[1]!.trim()}`,
+      base: halfMill[1]!.trim(),
+      numerator: "1",
+      denominator: "2",
+      rounding,
+    });
   }
 
   const halfSac = evidenceText.match(/\bsacrifices? half (the creatures they control|the lands they control)/i);
   if (halfSac && actionType === "sacrifice") {
-    const rounding = /\brounded up\b/i.test(abilityParagraph) ? "up" : "none";
-    return {
-      quantityType: "derived",
-      quantityExpression: `half ${halfSac[1]}`,
-      quantityBase: halfSac[1],
-      quantityDivisor: "2",
-      quantityRounding: rounding,
-      quantitySource: "ability_where_clause",
-      quantityCertainty: "defined_in_ability",
-    };
+    return derivedFraction({
+      expression: `half ${halfSac[1]}`,
+      base: halfSac[1]!,
+      numerator: "1",
+      denominator: "2",
+      rounding,
+    });
   }
 
   const halfDisc = evidenceText.match(/\bdiscards? half (?:the cards(?: in their hand)?|their hand)/i)
     ?? abilityParagraph.match(/\bdiscards? half (?:the cards(?: in their hand)?|their hand)/i);
   if (halfDisc && actionType === "discard") {
-    const rounding = /\brounded up\b/i.test(abilityParagraph) ? "up" : "none";
     const base =
       /\bhalf the cards in their hand\b/i.test(abilityParagraph)
         ? "the cards in their hand"
         : "their hand";
-    return {
-      quantityType: "derived",
-      quantityExpression: `half ${base}`,
-      quantityBase: base,
-      quantityDivisor: "2",
-      quantityRounding: rounding,
-      quantitySource: "ability_where_clause",
-      quantityCertainty: "defined_in_ability",
-    };
-  }
-
-  const thirdLife = evidenceText.match(/\b(?:Each player |Each opponent |Target player )?loses? a third of their life/i);
-  if (thirdLife && actionType === "lose_life") {
-    return {
-      quantityType: "derived",
-      quantityExpression: "a third of their life",
-      quantityBase: "their life total",
-      quantityDivisor: "3",
-      quantityRounding: /\bRound up each time\b/i.test(abilityParagraph) ? "up" : "none",
-      quantitySource: "ability_where_clause",
-      quantityCertainty: "defined_in_ability",
-    };
+    return derivedFraction({
+      expression: `half ${base}`,
+      base,
+      numerator: "1",
+      denominator: "2",
+      rounding,
+    });
   }
 
   return null;

@@ -67,25 +67,68 @@ function splitClauses(text: string): LoyaltyClause[] {
   });
 }
 
-/** Build loyalty ability blocks from face text. */
+const LOYALTY_MARKER_RE = /(?:^|\n)([+\u2212-]?(?:\d+|X|0)):\s*/gm;
+
+function normalizeLoyaltyCost(raw: string): string {
+  const trimmed = raw.trim().replace(/:$/, "");
+  if (trimmed === "0" || trimmed === "+0") return "0";
+  if (trimmed.startsWith("+") || trimmed.startsWith("−") || trimmed.startsWith("-")) return trimmed;
+  return `+${trimmed}`;
+}
+
+/** Build loyalty ability blocks from face text — marker-driven, multiline-safe. */
 export function buildLoyaltyAbilities(
   oracleId: string,
   cardFaceId: string,
   faceText: string,
   faceStartOffset = 0,
 ): LoyaltyAbility[] {
-  const abilities = segmentAbilities(oracleId, cardFaceId, faceText, faceStartOffset);
+  const segmented = segmentAbilities(oracleId, cardFaceId, faceText, faceStartOffset);
+  const markers: Array<{ cost: string; blockStartLocal: number; contentStartLocal: number }> = [];
+  let match: RegExpExecArray | null;
+  const re = new RegExp(LOYALTY_MARKER_RE.source, LOYALTY_MARKER_RE.flags);
+  while ((match = re.exec(faceText)) !== null) {
+    const prefixLen = match[0].startsWith("\n") ? 1 : 0;
+    markers.push({
+      cost: normalizeLoyaltyCost(match[1]),
+      blockStartLocal: match.index + prefixLen,
+      contentStartLocal: match.index + match[0].length,
+    });
+  }
+
+  if (markers.length === 0) {
+    return segmented
+      .filter((a) => a.loyaltyCost)
+      .map((a) => ({
+        abilityId: a.abilityId,
+        loyaltyCost: a.loyaltyCost!,
+        startOffset: a.paragraphStart,
+        endOffset: a.paragraphEnd,
+        fullAbilityText: a.paragraphText,
+        abilityIndex: a.abilityIndex,
+        clauses: splitClauses(a.paragraphText.replace(/^[+\u2212-]?(?:\d+|X|0):\s*/, "")),
+      }));
+  }
+
   const blocks: LoyaltyAbility[] = [];
-  for (const a of abilities) {
-    if (!a.loyaltyCost) continue;
+  for (let i = 0; i < markers.length; i++) {
+    const marker = markers[i]!;
+    const blockEndLocal = i + 1 < markers.length ? markers[i + 1]!.blockStartLocal : faceText.length;
+    const fullAbilityText = faceText.slice(marker.blockStartLocal, blockEndLocal).trim();
+    const startOffset = faceStartOffset + marker.blockStartLocal;
+    const endOffset = faceStartOffset + blockEndLocal;
+    const bodyText = faceText.slice(marker.contentStartLocal, blockEndLocal).trim();
+    const seg =
+      segmented.find((a) => startOffset >= a.paragraphStart && startOffset < a.paragraphEnd) ??
+      segmented.find((a) => a.loyaltyCost === marker.cost);
     blocks.push({
-      abilityId: a.abilityId,
-      loyaltyCost: a.loyaltyCost,
-      startOffset: a.paragraphStart,
-      endOffset: a.paragraphEnd,
-      fullAbilityText: a.paragraphText,
-      abilityIndex: a.abilityIndex,
-      clauses: splitClauses(a.paragraphText.replace(/^[+\u2212-](?:\d+|X):\s*/, "")),
+      abilityId: seg?.abilityId ?? `${oracleId}:${cardFaceId}:loyalty-${i}`,
+      loyaltyCost: marker.cost,
+      startOffset,
+      endOffset,
+      fullAbilityText,
+      abilityIndex: seg?.abilityIndex ?? i,
+      clauses: splitClauses(bodyText),
     });
   }
   return blocks;
