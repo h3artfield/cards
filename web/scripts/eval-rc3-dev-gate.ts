@@ -9,6 +9,7 @@ import { parseOracleSemanticsRC3, ORACLE_ACTION_RC3_PARSER_VERSION } from "../sr
 import { verifySemanticParseIntegrity } from "../src/lib/deck-builder/golden-catalog/oracle-semantic-integrity";
 import type { OracleActionEvalCaseV2 } from "./audit-oracle-action-eval-cases";
 import { evaluateCaseSemantic, sumSemanticMetrics, type SemanticCaseMetrics } from "./oracle-action-semantic-matcher";
+import { applyGoldMigrationV135 } from "./lib/rc3-gold-migration-v135";
 import { isForbiddenPolicyLeak, guardrailLeakageFamily, type GuardrailLeakageFamily } from "./lib/rc3-case-scope-scoring";
 
 type Envelope = { cases: OracleActionEvalCaseV2[]; contentHash?: string };
@@ -16,6 +17,7 @@ type Envelope = { cases: OracleActionEvalCaseV2[]; contentHash?: string };
 function evalSlice(cases: OracleActionEvalCaseV2[], label: string) {
   const rows: SemanticCaseMetrics[] = [];
   let semanticInvalid = 0;
+  let semanticInvalidActions = 0;
   let idViolations = 0;
   let provenanceViolations = 0;
   let costLeakage = 0;
@@ -32,6 +34,7 @@ function evalSlice(cases: OracleActionEvalCaseV2[], label: string) {
       cardFace: testCase.cardFace,
     });
     semanticInvalid += parsed.semanticValidation.invalidCount;
+    semanticInvalidActions += parsed.semanticValidation.invalidActionCount;
     rows.push(evaluateCaseSemantic(testCase, parsed));
 
     const integrity = verifySemanticParseIntegrity(parsed, testCase.oracleText);
@@ -78,6 +81,8 @@ function evalSlice(cases: OracleActionEvalCaseV2[], label: string) {
     accepted,
     needsReview: { tp: needsReviewTp, fp: needsReviewFp },
     semanticInvalid,
+    semanticInvalidActionCount: semanticInvalidActions,
+    semanticValidatorViolationCount: semanticInvalid,
     invariants: {
       idViolations,
       provenanceViolations,
@@ -231,6 +236,10 @@ function load(path: string): OracleActionEvalCaseV2[] {
   return (JSON.parse(readFileSync(path, "utf8")) as Envelope).cases;
 }
 
+function loadScoringCases(path: string): OracleActionEvalCaseV2[] {
+  return applyGoldMigrationV135(load(path));
+}
+
 function main() {
   const repoRoot = resolve(process.cwd(), "..");
   const parserCommit = execSync("git rev-parse HEAD", { cwd: repoRoot, encoding: "utf8" }).trim();
@@ -246,12 +255,12 @@ function main() {
     { path: "data/oracle-action-eval-development-generalization-expansion-v5-v14.json", label: "legacy_exp_v5_v14" },
   ];
 
-  const legacySlices = legacyV14Paths.map((p) => evalSlice(load(p.path), p.label));
+  const legacySlices = legacyV14Paths.map((p) => evalSlice(loadScoringCases(p.path), p.label));
 
-  const positiveCatalog = load("data/oracle-action-eval-rc3-positive-training-catalog-v133.json");
+  const positiveCatalog = loadScoringCases("data/oracle-action-eval-rc3-positive-training-catalog-v133.json");
   let syntheticFixtures: OracleActionEvalCaseV2[] = [];
   try {
-    syntheticFixtures = load("data/oracle-action-eval-rc3-synthetic-structural-fixtures-v133.json");
+    syntheticFixtures = loadScoringCases("data/oracle-action-eval-rc3-synthetic-structural-fixtures-v133.json");
   } catch {
     syntheticFixtures = [];
   }
@@ -268,7 +277,7 @@ function main() {
   const familyMetrics = evalFamilyMetrics(positiveCatalog);
 
   const combinedCases = [
-    ...legacyV14Paths.flatMap((p) => load(p.path)),
+    ...legacyV14Paths.flatMap((p) => loadScoringCases(p.path)),
     ...positiveCatalog,
   ];
 
@@ -311,7 +320,7 @@ function main() {
 
   const report = {
     generatedAt: new Date().toISOString(),
-    checkpoint: "rc3-structural-v134-checkpoint-1",
+    checkpoint: "rc3-stabilization-v134-checkpoint-1",
     lineage: {
       parentCommit: "6a757a736dfda9004860bb38d5e677880590882c",
       parentVersion: "oracle-action-v1.31-rc3-ast-dev",

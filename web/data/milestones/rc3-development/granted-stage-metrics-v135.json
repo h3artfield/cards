@@ -1,0 +1,68 @@
+{
+  "generatedAt": "2026-08-08T15:34:54.400Z",
+  "methodology": "Span-based denominators — one FN per missed gold span, not per nested action",
+  "corpus": {
+    "grantedPositiveCards": 9,
+    "candidateSpanCount": 17,
+    "cardsWithCandidateSpans": 9
+  },
+  "stageA_grantedRulesSpanDetector": {
+    "unit": "gold granted-rules span",
+    "expectedGoldSpans": 12,
+    "detectedCandidateSpans": 17,
+    "tp": 12,
+    "fp": 7,
+    "fn": 0,
+    "precision": 0.631578947368421,
+    "precisionLabel": "63.2%",
+    "recall": 1,
+    "recallLabel": "100.0%"
+  },
+  "stageB_grantedRulesClassifier": {
+    "unit": "gold-matched detected span (unique detected index per ability paragraph)",
+    "conditionalPool": 10,
+    "cohortNote": "Stage A counts 12 gold-span hits; Stage B denominator is 10 because 2 gold spans share the same detected quote/paren region (deduped by detected index)",
+    "excludedFromClassifierDenominator": {
+      "reason": "multiple_gold_spans_map_to_one_detected_span",
+      "count": 2,
+      "details": [
+        {
+          "caseId": "rc3-pos-v12-0146",
+          "goldSpanCount": 2,
+          "uniqueDetectedMatches": 1
+        },
+        {
+          "caseId": "rc3-pos-v12-0148",
+          "goldSpanCount": 3,
+          "uniqueDetectedMatches": 2
+        }
+      ]
+    },
+    "classifierFalsePositiveSources": {
+      "detectorFalsePositiveSpans": 6,
+      "note": "All 6 classifier FPs are detector false-positive spans (not gold-aligned) misclassified as granted_rules_ability"
+    },
+    "tp": 5,
+    "fp": 6,
+    "fn": 5,
+    "precision": 0.45454545454545453,
+    "precisionLabel": "45.5%",
+    "recall": 0.5,
+    "recallLabel": "50.0%"
+  },
+  "stageC_clauseNativeNestedExtraction": {
+    "description": "Clause-native granted pipeline only — nested actions inside correctly classified granted spans",
+    "conditionalPool": 6,
+    "tp": 5,
+    "fp": 0,
+    "fn": 1,
+    "precision": 1,
+    "precisionLabel": "100.0%",
+    "recall": 0.8333333333333334,
+    "recallLabel": "83.3%"
+  },
+  "priorFlawedMetrics": {
+    "source": "granted-span-metrics-v134.json",
+    "note": "Prior detector FN counted once per nested gold action inside missed span — invalid for span detector"
+  }
+}

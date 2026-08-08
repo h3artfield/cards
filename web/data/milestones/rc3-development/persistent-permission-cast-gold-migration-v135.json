@@ -1,0 +1,30 @@
+{
+  "migrationVersion": "persistent-permission-cast-gold-migration-v135",
+  "frozenAt": "2026-08-08T14:20:22.896Z",
+  "parserConsulted": false,
+  "reviewer": "rc3-checkpoint-audit-v135",
+  "rule": "Persistent/static 'You may cast spells from …' → Layer 1 static_permission; NO Layer-2 cast",
+  "records": [
+    {
+      "caseId": "dev-v9-011",
+      "cardName": "Omniscience",
+      "removeCastEvidence": "cast spells from your hand",
+      "policyReason": "Persistent zone cast permission is Layer-1 static_permission under taxonomy v1.4",
+      "policyClass": "persistent_static_permission"
+    },
+    {
+      "caseId": "dev-v9-012",
+      "cardName": "Yawgmoth's Will",
+      "removeCastEvidence": "cast spells from your graveyard",
+      "policyReason": "Persistent zone cast permission is Layer-1 static_permission under taxonomy v1.4",
+      "policyClass": "persistent_static_permission"
+    },
+    {
+      "caseId": "eval-0062",
+      "cardName": "Yawgmoth's Will",
+      "removeCastEvidence": "cast spells from your graveyard",
+      "policyReason": "Persistent zone cast permission is Layer-1 static_permission under taxonomy v1.4",
+      "policyClass": "persistent_static_permission"
+    }
+  ]
+}

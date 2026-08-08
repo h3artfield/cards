@@ -50,6 +50,7 @@ import {
   findReminderSpans,
   isInsideQuotedGrantedAbility,
   isOneShotCastPermission,
+  isPersistentZoneCastPermission,
   isReflexiveTriggerReference,
   primitiveAllowedAtRole,
   type StaticPermissionRecord,
@@ -978,6 +979,9 @@ function acceptAction(input: {
     input.rule.actionType === "cast" &&
     matchIsSpuriousCastPermission(input.ability.paragraphText, localStart, evidenceText)
   ) {
+    return null;
+  }
+  if (input.rule.actionType === "cast" && isPersistentZoneCastPermission(evidenceText)) {
     return null;
   }
   if (

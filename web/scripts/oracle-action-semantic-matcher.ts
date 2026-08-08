@@ -14,6 +14,7 @@ import {
   actionMatchesModalStem,
 } from "./oracle-action-unified-matcher";
 import { evidenceMatchesExtracted, type ExpectedPrimitiveAction } from "./oracle-action-eval-shared";
+import { sortIndicesByKey, stableGoldKey, stableActionKey } from "./lib/semantic-action-identity";
 
 export interface SemanticActionForMatch {
   index: number;
@@ -116,6 +117,7 @@ export function matchGoldToSemanticActions(input: {
   parse: OracleSemanticParse;
   tier: EmissionTier;
   oracleText?: string;
+  caseId?: string;
   ignoreOptionalEffect?: boolean;
 }): SemanticTierMatchOutcome {
   const allActions = semanticActionsForMatch(input.parse);
@@ -137,9 +139,16 @@ export function matchGoldToSemanticActions(input: {
   const matches: SemanticTierMatchOutcome["matches"] = [];
   const unmatchedExpectedIndices: number[] = [];
 
-  input.expected.forEach((exp, expectedIndex) => {
+  const expectedOrder = sortIndicesByKey(input.expected, (exp, idx) =>
+    stableGoldKey(input.caseId ?? "", exp, idx),
+  );
+  const actionOrder = sortIndicesByKey(actions, (action) => stableActionKey(action));
+
+  for (const expectedIndex of expectedOrder) {
+    const exp = input.expected[expectedIndex]!;
     let found: number | null = null;
-    for (const action of actions) {
+    for (const actionIdx of actionOrder) {
+      const action = actions[actionIdx]!;
       if (matchedActions.has(action.index)) continue;
       if (semanticPrimitiveMatchesExpected(action, exp, input.parse, { ignoreOptionalEffect: input.ignoreOptionalEffect })) {
         found = action.index;
@@ -172,7 +181,9 @@ export function matchGoldToSemanticActions(input: {
     }
     matches.push({ expectedIndex, actionIndex: found, matched: found !== null });
     if (found === null) unmatchedExpectedIndices.push(expectedIndex);
-  });
+  }
+
+  matches.sort((a, b) => a.expectedIndex - b.expectedIndex);
 
   const unmatchedActionIndices = actions.filter((a) => !matchedActions.has(a.index)).map((a) => a.index);
   return { matches, unmatchedExpectedIndices, unmatchedActionIndices };
@@ -194,6 +205,7 @@ export function evaluateCaseSemantic(
     parse,
     tier: "accepted",
     oracleText: testCase.oracleText,
+    caseId: testCase.id,
     ignoreOptionalEffect: options?.ignoreOptionalEffect,
   });
   const actions = semanticActionsForMatch(parse);

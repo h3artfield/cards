@@ -11,6 +11,7 @@ import {
   classifyTextRoleAt,
   compoundClauseSpansWithRoles,
   isOneShotCastPermission,
+  isPersistentZoneCastPermission,
   primitiveAllowedAtRole,
   type TextRole,
 } from "./oracle-span-role-classifier";
@@ -264,6 +265,7 @@ function extractPrimitivesFromClause(input: {
         ) {
           continue;
         }
+        if (isPersistentZoneCastPermission(evidenceText)) continue;
       }
 
       let actionType = rule.actionType;

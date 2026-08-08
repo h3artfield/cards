@@ -38,6 +38,21 @@ function roleAt(text: string, evidence: string) {
 }
 
 {
+  const text = "You may cast spells from your hand without paying their mana costs.";
+  assert.equal(accepted(text).filter((a) => a.actionType === "cast").length, 0);
+  assert.equal(roleAt(text, "You may cast spells from your hand"), "static_permission");
+}
+
+{
+  const text =
+    "Until end of turn, you may play lands and cast spells from your graveyard.\nIf a card would be put into your graveyard from anywhere this turn, exile that card instead.";
+  const actions = accepted(text);
+  assert.equal(actions.filter((a) => a.actionType === "cast").length, 0);
+  assert.equal(actions.filter((a) => a.actionType === "play").length, 0);
+  assert.equal(roleAt(text, "you may play lands"), "static_permission");
+}
+
+{
   const text =
     "You may cast Demilich from your graveyard by exiling four instant and/or sorcery cards from your graveyard in addition to paying its other costs.";
   assert.equal(accepted(text).filter((a) => a.actionType === "cast").length, 0);

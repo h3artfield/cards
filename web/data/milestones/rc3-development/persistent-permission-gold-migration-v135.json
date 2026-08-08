@@ -1,0 +1,85 @@
+{
+  "migrationVersion": "persistent-permission-gold-migration-v135",
+  "supersedes": "persistent-permission-cast-gold-migration-v135.json",
+  "frozenAt": "2026-08-08T16:45:00.000Z",
+  "parserConsulted": false,
+  "reviewer": "rc3-stabilization-v134-precommit",
+  "rule": "Future-action permissions (cast/play from zone, including duration-limited) → Layer 1 static_permission; NO Layer-2 cast or play",
+  "records": [
+    {
+      "caseId": "dev-v9-011",
+      "cardName": "Omniscience",
+      "removeLayer2Actions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast spells from your hand"
+        }
+      ],
+      "layer1Permission": {
+        "permittedAction": "cast",
+        "objectCriteria": "spell",
+        "sourceZone": "hand",
+        "duration": "continuous"
+      },
+      "policyClass": "persistent_static_permission"
+    },
+    {
+      "caseId": "dev-v9-012",
+      "cardName": "Yawgmoth's Will",
+      "removeLayer2Actions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast spells from your graveyard"
+        },
+        {
+          "actionType": "play",
+          "evidenceContains": "play lands"
+        }
+      ],
+      "layer1Permission": [
+        {
+          "permittedAction": "play",
+          "objectCriteria": "land",
+          "sourceZone": "graveyard",
+          "duration": "until_end_of_turn"
+        },
+        {
+          "permittedAction": "cast",
+          "objectCriteria": "spell",
+          "sourceZone": "graveyard",
+          "duration": "until_end_of_turn"
+        }
+      ],
+      "policyClass": "duration_limited_permission"
+    },
+    {
+      "caseId": "eval-0062",
+      "cardName": "Yawgmoth's Will",
+      "removeLayer2Actions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast spells from your graveyard"
+        },
+        {
+          "actionType": "play",
+          "evidenceContains": "play lands"
+        }
+      ],
+      "layer1Permission": [
+        {
+          "permittedAction": "play",
+          "objectCriteria": "land",
+          "sourceZone": "graveyard",
+          "duration": "until_end_of_turn"
+        },
+        {
+          "permittedAction": "cast",
+          "objectCriteria": "spell",
+          "sourceZone": "graveyard",
+          "duration": "until_end_of_turn"
+        }
+      ],
+      "policyClass": "duration_limited_permission"
+    }
+  ]
+}

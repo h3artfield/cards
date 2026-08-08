@@ -1,0 +1,362 @@
+{
+  "lostTpCount": 12,
+  "gainedTpCount": 3,
+  "netTpDelta": -9,
+  "lostTp": [
+    {
+      "caseId": "dev-v9-027",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "destroy target artifact or enchantment",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0047",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "you may draw a card",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0141",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "loses 3 life",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0161",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add one mana of any color",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0191",
+      "goldIndex": 0,
+      "actionType": "copy",
+      "evidenceContains": "copy",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0203",
+      "goldIndex": 1,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {U}",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "goldIndex": 3,
+      "actionType": "shuffle_into_library",
+      "evidenceContains": "shuffle it into its owner's library",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0001",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {U}",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0002",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {B}",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0003",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {R}",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0004",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {W}",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0020",
+      "goldIndex": 2,
+      "actionType": "sacrifice",
+      "evidenceContains": "Sacrifice that token at end of combat",
+      "matched": false
+    }
+  ],
+  "gainedTp": [
+    {
+      "caseId": "rc3-pos-v12-0093",
+      "goldIndex": 3,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return this card from your graveyard to your hand",
+      "matched": true,
+      "extractionSource": "rc3_clause_native",
+      "afterSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "rc3-pos-v12-0125",
+      "goldIndex": 1,
+      "actionType": "search_library",
+      "evidenceContains": "search your library this way, shuffle",
+      "matched": true,
+      "extractionSource": "rc3_clause_native",
+      "afterSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "rc3-pos-v12-0131",
+      "goldIndex": 1,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return this card from your graveyard to your hand",
+      "matched": true,
+      "extractionSource": "rc3_clause_native",
+      "afterSource": "rc3_clause_native"
+    }
+  ],
+  "newFp": [
+    {
+      "caseId": "dev-opt-011",
+      "actionType": "put_into_hand",
+      "evidenceText": "put that card into its owner's hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "eval-0026",
+      "actionType": "shuffle_library",
+      "evidenceText": "then shuffle",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "eval-0055",
+      "actionType": "create_token",
+      "evidenceText": "create a token",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "eval-0102",
+      "actionType": "exile",
+      "evidenceText": "Exile another target creature you control",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "eval-0108",
+      "actionType": "exile",
+      "evidenceText": "exile it",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "eval-0149",
+      "actionType": "shuffle_library",
+      "evidenceText": "Shuffle your library",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "eval-0193",
+      "actionType": "exile",
+      "evidenceText": "exile cards from the top of your library until you exile an instant or sorcery card with lesser mana value",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v1-008",
+      "actionType": "create_token",
+      "evidenceText": "Create a token",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v1-008",
+      "actionType": "exile",
+      "evidenceText": "Exile it at the beginning of the next end step",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v1-028",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v1-028",
+      "actionType": "search_library",
+      "evidenceText": "search your library this way,",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v1-040",
+      "actionType": "put_into_hand",
+      "evidenceText": "put that card into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v1-048",
+      "actionType": "put_into_hand",
+      "evidenceText": "put that card into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-001",
+      "actionType": "draw",
+      "evidenceText": "Draw a card",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-001",
+      "actionType": "create_token",
+      "evidenceText": "Create Tamiyo's Notebook, a legendary colorless Book artifact token",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-003",
+      "actionType": "exile",
+      "evidenceText": "Exile them at the beginning of the next end step",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-005",
+      "actionType": "exile",
+      "evidenceText": "exile into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-008",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-008",
+      "actionType": "search_library",
+      "evidenceText": "search your library this way,",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-009",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-009",
+      "actionType": "search_library",
+      "evidenceText": "search your library this way,",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-010",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-010",
+      "actionType": "search_library",
+      "evidenceText": "search your library this way,",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-011",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-011",
+      "actionType": "search_library",
+      "evidenceText": "search your library this way,",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-012",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v3-012",
+      "actionType": "search_library",
+      "evidenceText": "search your library this way,",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-015",
+      "actionType": "exile",
+      "evidenceText": "Exile Ghost Council of Orzhova",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-018",
+      "actionType": "sacrifice",
+      "evidenceText": "sacrifice this token",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v3-019",
+      "actionType": "create_token",
+      "evidenceText": "create a token",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-019",
+      "actionType": "exile",
+      "evidenceText": "Exile those tokens at the beginning of the next end step",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v5-005",
+      "actionType": "destroy",
+      "evidenceText": "destroy that creature",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v5-012",
+      "actionType": "create_token",
+      "evidenceText": "Create a token",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v5-013",
+      "actionType": "exile",
+      "evidenceText": "exile it",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v5-015",
+      "actionType": "sacrifice",
+      "evidenceText": "sacrifice a creature",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "rc3-pos-v12-0125",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "rc3-pos-cat-0029",
+      "actionType": "sacrifice",
+      "evidenceText": "sacrifice a Vampire",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "rc3-pos-cat-0029",
+      "actionType": "put_onto_battlefield",
+      "evidenceText": "put a Vampire creature card with mana value 6 or less from your hand onto the battlefield",
+      "extractionSource": "rc3_clause_native"
+    }
+  ],
+  "removedFp": [
+    {
+      "caseId": "dev-exp-v5-002",
+      "actionType": "add_mana",
+      "evidenceText": "Add one mana of any color"
+    },
+    {
+      "caseId": "rc3-pos-cat-0020",
+      "actionType": "create_token",
+      "evidenceText": "create a 4/4 white Spirit creature token"
+    }
+  ]
+}

@@ -1,0 +1,798 @@
+{
+  "generatedAt": "2026-08-08T14:20:23.727Z",
+  "auditScope": "v135 checkpoint reconciliation — evaluator-only, no parser tuning, v13 not run",
+  "referenceCheckpoints": {
+    "priorAccepted": {
+      "tp": 578,
+      "fp": 5,
+      "fn": 77,
+      "recall": 0.882,
+      "source": "rc3-checkpoint-v132-report.json @ 6a757a73"
+    },
+    "currentCommitted": {
+      "tp": 569,
+      "fp": 5,
+      "fn": 86,
+      "recall": 0.869,
+      "source": "rc3-checkpoint-v134-report.json @ HEAD"
+    }
+  },
+  "A_combinedReconciliation": {
+    "note": "Pass snapshots on current parser at HEAD. v132 baseline (578/5/77) requires separate v132-parser snapshot — see subprocess note.",
+    "passes": {
+      "shadow_no_promotion": {
+        "tp": 566,
+        "fp": 5,
+        "fn": 89,
+        "precision": 0.9912434325744308,
+        "recall": 0.8641221374045801
+      },
+      "search_only": {
+        "tp": 567,
+        "fp": 5,
+        "fn": 88,
+        "precision": 0.9912587412587412,
+        "recall": 0.8656488549618321
+      },
+      "default_search_plus_activated": {
+        "tp": 569,
+        "fp": 5,
+        "fn": 86,
+        "precision": 0.9912891986062717,
+        "recall": 0.8687022900763359
+      }
+    },
+    "decomposition": {
+      "shadow_to_search_only": {
+        "lostTp": [],
+        "gainedTp": [
+          {
+            "caseId": "rc3-pos-v12-0125",
+            "cardName": "Ajani's Aid",
+            "coverageStratum": "search_put_shuffle_chain",
+            "spentV12Regression": true,
+            "goldIndex": 1,
+            "actionType": "search_library",
+            "evidenceContains": "search your library this way, shuffle",
+            "matched": true,
+            "matchedActionId": "08f336e1736ee35bfaed0657",
+            "extractionSource": "rc3_clause_native",
+            "reviewStatus": "accepted",
+            "changeClass": "parser_behavior_change"
+          }
+        ],
+        "fpChanges": [
+          {
+            "caseId": "eval-0026",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "shuffle_library: then shuffle"
+          },
+          {
+            "caseId": "dev-exp-v1-028",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_into_hand: put it into your hand"
+          },
+          {
+            "caseId": "dev-exp-v1-028",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "search_library: search your library this way,"
+          },
+          {
+            "caseId": "dev-exp-v3-008",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_into_hand: put it into your hand"
+          },
+          {
+            "caseId": "dev-exp-v3-008",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "search_library: search your library this way,"
+          },
+          {
+            "caseId": "dev-exp-v3-009",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_into_hand: put it into your hand"
+          },
+          {
+            "caseId": "dev-exp-v3-009",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "search_library: search your library this way,"
+          },
+          {
+            "caseId": "dev-exp-v3-010",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_into_hand: put it into your hand"
+          },
+          {
+            "caseId": "dev-exp-v3-010",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "search_library: search your library this way,"
+          },
+          {
+            "caseId": "dev-exp-v3-011",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_into_hand: put it into your hand"
+          },
+          {
+            "caseId": "dev-exp-v3-011",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "search_library: search your library this way,"
+          },
+          {
+            "caseId": "dev-exp-v3-012",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "search_library: search your library this way,"
+          },
+          {
+            "caseId": "rc3-pos-v12-0125",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_into_hand: put it into your hand"
+          }
+        ],
+        "netTpDelta": 1,
+        "netFnDelta": -1
+      },
+      "search_only_to_default": {
+        "lostTp": [],
+        "gainedTp": [
+          {
+            "caseId": "rc3-pos-v12-0093",
+            "cardName": "Altar of the Wretched // Wretched Bonemass",
+            "coverageStratum": "activated_post_colon_effect",
+            "spentV12Regression": true,
+            "goldIndex": 3,
+            "actionType": "return_to_hand",
+            "evidenceContains": "Return this card from your graveyard to your hand",
+            "matched": true,
+            "matchedActionId": "fd353ccaf2bfb719d0e728fe",
+            "extractionSource": "rc3_clause_native",
+            "reviewStatus": "accepted",
+            "changeClass": "parser_behavior_change"
+          },
+          {
+            "caseId": "rc3-pos-v12-0131",
+            "cardName": "Abzan Devotee",
+            "coverageStratum": "activated_post_colon_effect",
+            "spentV12Regression": true,
+            "goldIndex": 1,
+            "actionType": "return_to_hand",
+            "evidenceContains": "Return this card from your graveyard to your hand",
+            "matched": true,
+            "matchedActionId": "9508fccfafb786b382a96037",
+            "extractionSource": "rc3_clause_native",
+            "reviewStatus": "accepted",
+            "changeClass": "parser_behavior_change"
+          }
+        ],
+        "fpChanges": [
+          {
+            "caseId": "eval-0055",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "create_token: create a token"
+          },
+          {
+            "caseId": "eval-0102",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: Exile another target creature you control"
+          },
+          {
+            "caseId": "eval-0108",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: exile it"
+          },
+          {
+            "caseId": "eval-0149",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "shuffle_library: Shuffle your library"
+          },
+          {
+            "caseId": "eval-0193",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: exile cards from the top of your library until you exile an "
+          },
+          {
+            "caseId": "dev-exp-v1-008",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "create_token: Create a token"
+          },
+          {
+            "caseId": "dev-exp-v1-008",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: Exile it at the beginning of the next end step"
+          },
+          {
+            "caseId": "dev-exp-v1-040",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_into_hand: put that card into your hand"
+          },
+          {
+            "caseId": "dev-exp-v1-048",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_into_hand: put that card into your hand"
+          },
+          {
+            "caseId": "dev-exp-v3-001",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "draw: Draw a card"
+          },
+          {
+            "caseId": "dev-exp-v3-001",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "create_token: Create Tamiyo's Notebook, a legendary colorless Book artifac"
+          },
+          {
+            "caseId": "dev-exp-v3-003",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: Exile them at the beginning of the next end step"
+          },
+          {
+            "caseId": "dev-exp-v3-005",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: exile into your hand"
+          },
+          {
+            "caseId": "dev-exp-v3-015",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: Exile Ghost Council of Orzhova"
+          },
+          {
+            "caseId": "dev-exp-v3-019",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "create_token: create a token"
+          },
+          {
+            "caseId": "dev-exp-v3-019",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: Exile those tokens at the beginning of the next end step"
+          },
+          {
+            "caseId": "dev-exp-v5-005",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "destroy: destroy that creature"
+          },
+          {
+            "caseId": "dev-exp-v5-012",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "create_token: Create a token"
+          },
+          {
+            "caseId": "dev-exp-v5-013",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: exile it"
+          },
+          {
+            "caseId": "dev-exp-v5-015",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "sacrifice: sacrifice a creature"
+          },
+          {
+            "caseId": "rc3-pos-cat-0029",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "sacrifice: sacrifice a Vampire"
+          },
+          {
+            "caseId": "rc3-pos-cat-0029",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_onto_battlefield: put a Vampire creature card with mana value 6 or less from y"
+          }
+        ],
+        "netTpDelta": 2,
+        "netFnDelta": -2
+      },
+      "shadow_to_default": {
+        "lostTp": [],
+        "gainedTp": [
+          {
+            "caseId": "rc3-pos-v12-0093",
+            "cardName": "Altar of the Wretched // Wretched Bonemass",
+            "coverageStratum": "activated_post_colon_effect",
+            "spentV12Regression": true,
+            "goldIndex": 3,
+            "actionType": "return_to_hand",
+            "evidenceContains": "Return this card from your graveyard to your hand",
+            "matched": true,
+            "matchedActionId": "fd353ccaf2bfb719d0e728fe",
+            "extractionSource": "rc3_clause_native",
+            "reviewStatus": "accepted",
+            "changeClass": "parser_behavior_change"
+          },
+          {
+            "caseId": "rc3-pos-v12-0125",
+            "cardName": "Ajani's Aid",
+            "coverageStratum": "search_put_shuffle_chain",
+            "spentV12Regression": true,
+            "goldIndex": 1,
+            "actionType": "search_library",
+            "evidenceContains": "search your library this way, shuffle",
+            "matched": true,
+            "matchedActionId": "08f336e1736ee35bfaed0657",
+            "extractionSource": "rc3_clause_native",
+            "reviewStatus": "accepted",
+            "changeClass": "parser_behavior_change"
+          },
+          {
+            "caseId": "rc3-pos-v12-0131",
+            "cardName": "Abzan Devotee",
+            "coverageStratum": "activated_post_colon_effect",
+            "spentV12Regression": true,
+            "goldIndex": 1,
+            "actionType": "return_to_hand",
+            "evidenceContains": "Return this card from your graveyard to your hand",
+            "matched": true,
+            "matchedActionId": "9508fccfafb786b382a96037",
+            "extractionSource": "rc3_clause_native",
+            "reviewStatus": "accepted",
+            "changeClass": "parser_behavior_change"
+          }
+        ],
+        "fpChanges": [
+          {
+            "caseId": "eval-0026",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "shuffle_library: then shuffle"
+          },
+          {
+            "caseId": "eval-0055",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "create_token: create a token"
+          },
+          {
+            "caseId": "eval-0102",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: Exile another target creature you control"
+          },
+          {
+            "caseId": "eval-0108",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: exile it"
+          },
+          {
+            "caseId": "eval-0149",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "shuffle_library: Shuffle your library"
+          },
+          {
+            "caseId": "eval-0193",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: exile cards from the top of your library until you exile an "
+          },
+          {
+            "caseId": "dev-exp-v1-008",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "create_token: Create a token"
+          },
+          {
+            "caseId": "dev-exp-v1-008",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: Exile it at the beginning of the next end step"
+          },
+          {
+            "caseId": "dev-exp-v1-028",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_into_hand: put it into your hand"
+          },
+          {
+            "caseId": "dev-exp-v1-028",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "search_library: search your library this way,"
+          },
+          {
+            "caseId": "dev-exp-v1-040",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_into_hand: put that card into your hand"
+          },
+          {
+            "caseId": "dev-exp-v1-048",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_into_hand: put that card into your hand"
+          },
+          {
+            "caseId": "dev-exp-v3-001",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "draw: Draw a card"
+          },
+          {
+            "caseId": "dev-exp-v3-001",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "create_token: Create Tamiyo's Notebook, a legendary colorless Book artifac"
+          },
+          {
+            "caseId": "dev-exp-v3-003",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: Exile them at the beginning of the next end step"
+          },
+          {
+            "caseId": "dev-exp-v3-005",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: exile into your hand"
+          },
+          {
+            "caseId": "dev-exp-v3-008",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_into_hand: put it into your hand"
+          },
+          {
+            "caseId": "dev-exp-v3-008",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "search_library: search your library this way,"
+          },
+          {
+            "caseId": "dev-exp-v3-009",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_into_hand: put it into your hand"
+          },
+          {
+            "caseId": "dev-exp-v3-009",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "search_library: search your library this way,"
+          },
+          {
+            "caseId": "dev-exp-v3-010",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_into_hand: put it into your hand"
+          },
+          {
+            "caseId": "dev-exp-v3-010",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "search_library: search your library this way,"
+          },
+          {
+            "caseId": "dev-exp-v3-011",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_into_hand: put it into your hand"
+          },
+          {
+            "caseId": "dev-exp-v3-011",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "search_library: search your library this way,"
+          },
+          {
+            "caseId": "dev-exp-v3-012",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "search_library: search your library this way,"
+          },
+          {
+            "caseId": "dev-exp-v3-015",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: Exile Ghost Council of Orzhova"
+          },
+          {
+            "caseId": "dev-exp-v3-019",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "create_token: create a token"
+          },
+          {
+            "caseId": "dev-exp-v3-019",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: Exile those tokens at the beginning of the next end step"
+          },
+          {
+            "caseId": "dev-exp-v5-005",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "destroy: destroy that creature"
+          },
+          {
+            "caseId": "dev-exp-v5-012",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "create_token: Create a token"
+          },
+          {
+            "caseId": "dev-exp-v5-013",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "exile: exile it"
+          },
+          {
+            "caseId": "dev-exp-v5-015",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "sacrifice: sacrifice a creature"
+          },
+          {
+            "caseId": "rc3-pos-v12-0125",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_into_hand: put it into your hand"
+          },
+          {
+            "caseId": "rc3-pos-cat-0029",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "sacrifice: sacrifice a Vampire"
+          },
+          {
+            "caseId": "rc3-pos-cat-0029",
+            "beforeFp": false,
+            "afterFp": true,
+            "detail": "put_onto_battlefield: put a Vampire creature card with mana value 6 or less from y"
+          }
+        ],
+        "netTpDelta": 3,
+        "netFnDelta": -3
+      }
+    },
+    "activatedIsolatedDelta": {
+      "tp": 2,
+      "fn": -2,
+      "lostTp": [],
+      "gainedTp": [
+        {
+          "caseId": "rc3-pos-v12-0093",
+          "cardName": "Altar of the Wretched // Wretched Bonemass",
+          "coverageStratum": "activated_post_colon_effect",
+          "spentV12Regression": true,
+          "goldIndex": 3,
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return this card from your graveyard to your hand",
+          "matched": true,
+          "matchedActionId": "fd353ccaf2bfb719d0e728fe",
+          "extractionSource": "rc3_clause_native",
+          "reviewStatus": "accepted",
+          "changeClass": "parser_behavior_change"
+        },
+        {
+          "caseId": "rc3-pos-v12-0131",
+          "cardName": "Abzan Devotee",
+          "coverageStratum": "activated_post_colon_effect",
+          "spentV12Regression": true,
+          "goldIndex": 1,
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return this card from your graveyard to your hand",
+          "matched": true,
+          "matchedActionId": "9508fccfafb786b382a96037",
+          "extractionSource": "rc3_clause_native",
+          "reviewStatus": "accepted",
+          "changeClass": "parser_behavior_change"
+        }
+      ]
+    }
+  },
+  "B_unrelatedCatalogRecall": {
+    "before": {
+      "tp": 44,
+      "fp": 2,
+      "fn": 31,
+      "precision": 0.9565217391304348,
+      "recall": 0.5866666666666667
+    },
+    "after": {
+      "tp": 44,
+      "fp": 2,
+      "fn": 31,
+      "precision": 0.9565217391304348,
+      "recall": 0.5866666666666667
+    },
+    "migratedAfter": {
+      "tp": 44,
+      "fp": 2,
+      "fn": 31,
+      "precision": 0.9565217391304348,
+      "recall": 0.5866666666666667
+    },
+    "delta": {
+      "lostTp": [],
+      "gainedTp": [],
+      "fpChanges": [
+        {
+          "caseId": "rc3-pos-cat-0029",
+          "beforeFp": false,
+          "afterFp": true,
+          "detail": "sacrifice: sacrifice a Vampire"
+        },
+        {
+          "caseId": "rc3-pos-cat-0029",
+          "beforeFp": false,
+          "afterFp": true,
+          "detail": "put_onto_battlefield: put a Vampire creature card with mana value 6 or less from y"
+        }
+      ],
+      "netTpDelta": 0,
+      "netFnDelta": 0
+    },
+    "lostTp": [],
+    "gainedTp": []
+  },
+  "C_semanticInvalid": {
+    "count": 2,
+    "records": [
+      {
+        "caseId": "dev-exp-v5-007",
+        "cardName": "Trash the Town",
+        "actionId": "52608cc927408fba14040121",
+        "actionType": "draw",
+        "extractionSource": "rc3_transform",
+        "validatorErrors": [
+          "missing_parent_ability: Action 52608cc927408fba14040121 references missing parentAbilityId b47f7f1e-2d81-4b1b-870d-4c1a4f020505:front:ability-3"
+        ],
+        "evidenceText": "draw two cards"
+      },
+      {
+        "caseId": "dev-exp-v5-007",
+        "cardName": "Trash the Town",
+        "actionId": "52608cc927408fba14040121",
+        "actionType": "draw",
+        "extractionSource": "rc3_transform",
+        "validatorErrors": [
+          "dangling_parent_ability: parentAbilityId b47f7f1e-2d81-4b1b-870d-4c1a4f020505:front:ability-3 not found"
+        ],
+        "evidenceText": "draw two cards"
+      }
+    ]
+  },
+  "D_omniscienceAndPermissionCastGold": {
+    "omniscience": {
+      "caseId": "dev-v9-011",
+      "cardName": "Omniscience",
+      "oracleText": "You may cast spells from your hand without paying their mana costs.",
+      "parserBlindRole": "effect",
+      "policyPattern": "persistent_hand_cast_permission",
+      "currentGold": {
+        "actionType": "cast",
+        "evidenceContains": "cast spells from your hand",
+        "optional": true,
+        "optionalEffect": true
+      },
+      "policyVerdict": "persistent_permission — Layer 1 static_permission; NO Layer-2 cast",
+      "expectedLayer1": "static_permission",
+      "expectedLayer2": "no cast primitive",
+      "goldDefect": true,
+      "parserBlindNote": "classifyTextRoleAt returns effect on standalone enchantment ability line; policy adjudication overrides: continuous zone permission is Layer-1 only",
+      "recommendedCorrection": {
+        "removePrimitiveActions": [
+          {
+            "actionType": "cast",
+            "evidenceContains": "cast spells from your hand"
+          }
+        ],
+        "addForbiddenPrimitiveActions": [
+          "cast"
+        ],
+        "certifiedEmptyLayer2": true,
+        "layer1Annotation": {
+          "kind": "static_permission",
+          "evidenceContains": "You may cast spells from your hand"
+        }
+      }
+    },
+    "activeDevelopmentScan": [
+      {
+        "caseId": "dev-v9-011",
+        "cardName": "Omniscience",
+        "oracleText": "You may cast spells from your hand without paying their mana costs.",
+        "castGoldEvidence": "cast spells from your hand",
+        "policyClass": "persistent_static_permission",
+        "taxonomyVersion": "three-layer-v1.4",
+        "dataset": "legacy-v14-dev"
+      },
+      {
+        "caseId": "dev-v9-012",
+        "cardName": "Yawgmoth's Will",
+        "oracleText": "Until end of turn, you may play lands and cast spells from your graveyard.\nIf a card would be put into your graveyard fr",
+        "castGoldEvidence": "cast spells from your graveyard",
+        "policyClass": "persistent_static_permission",
+        "taxonomyVersion": "three-layer-v1.4",
+        "dataset": "legacy-v14-dev"
+      },
+      {
+        "caseId": "eval-0062",
+        "cardName": "Yawgmoth's Will",
+        "oracleText": "Until end of turn, you may play lands and cast spells from your graveyard.\nIf a card would be put into your graveyard fr",
+        "castGoldEvidence": "cast spells from your graveyard",
+        "policyClass": "persistent_static_permission",
+        "taxonomyVersion": "three-layer-v1.4",
+        "dataset": "legacy-v14-dev"
+      }
+    ],
+    "goldMigration": {
+      "migrationVersion": "persistent-permission-cast-gold-migration-v135",
+      "frozenAt": "2026-08-08T14:20:22.896Z",
+      "parserConsulted": false,
+      "reviewer": "rc3-checkpoint-audit-v135",
+      "rule": "Persistent/static 'You may cast spells from …' → Layer 1 static_permission; NO Layer-2 cast",
+      "records": [
+        {
+          "caseId": "dev-v9-011",
+          "cardName": "Omniscience",
+          "removeCastEvidence": "cast spells from your hand",
+          "policyReason": "Persistent zone cast permission is Layer-1 static_permission under taxonomy v1.4",
+          "policyClass": "persistent_static_permission"
+        },
+        {
+          "caseId": "dev-v9-012",
+          "cardName": "Yawgmoth's Will",
+          "removeCastEvidence": "cast spells from your graveyard",
+          "policyReason": "Persistent zone cast permission is Layer-1 static_permission under taxonomy v1.4",
+          "policyClass": "persistent_static_permission"
+        },
+        {
+          "caseId": "eval-0062",
+          "cardName": "Yawgmoth's Will",
+          "removeCastEvidence": "cast spells from your graveyard",
+          "policyReason": "Persistent zone cast permission is Layer-1 static_permission under taxonomy v1.4",
+          "policyClass": "persistent_static_permission"
+        }
+      ]
+    }
+  },
+  "E_correctedBaselineWithGoldMigration": {
+    "combined": {
+      "tp": 566,
+      "fp": 8,
+      "fn": 86,
+      "precision": 0.9860627177700348,
+      "recall": 0.8680981595092024
+    },
+    "unrelated": {
+      "tp": 44,
+      "fp": 2,
+      "fn": 31,
+      "precision": 0.9565217391304348,
+      "recall": 0.5866666666666667
+    },
+    "note": "Metrics after applying immutable v135 gold migration overlay — does not mutate historical benchmark files"
+  }
+}

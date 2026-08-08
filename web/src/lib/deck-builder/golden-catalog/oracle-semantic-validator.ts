@@ -17,6 +17,7 @@ export type SemanticValidationIssue = {
 export type SemanticValidationResult = {
   valid: boolean;
   invalidCount: number;
+  invalidActionCount: number;
   issues: SemanticValidationIssue[];
   lexicalDiagnostics: SemanticValidationIssue[];
 };
@@ -207,10 +208,15 @@ export function validateOracleSemanticParse(
     }
   }
 
-  const invalidCount = issues.filter((i) => i.severity === "invalid").length;
+  const invalidIssues = issues.filter((i) => i.severity === "invalid");
+  const invalidActionIds = new Set(
+    invalidIssues.map((i) => i.actionId).filter((id): id is string => id !== undefined),
+  );
+  const invalidCount = invalidIssues.length;
   return {
     valid: invalidCount === 0,
     invalidCount,
+    invalidActionCount: invalidActionIds.size,
     issues,
     lexicalDiagnostics,
   };

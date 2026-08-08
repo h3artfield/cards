@@ -47,7 +47,7 @@ export function buildNativeAction(input: {
     confidence: 0.92,
     reviewStatus: "accepted",
     extractionMethod: "deterministic",
-    parserVersion: "oracle-action-v1.33-rc3-ast-dev",
+    parserVersion: "oracle-action-v1.34-rc3-ast-dev",
     sourceZones: input.sourceZones,
     destinationZones: input.destinationZones,
     affectedObjects: ["card"],

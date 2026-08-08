@@ -1,0 +1,238 @@
+{
+  "generatedAt": "2026-08-08T14:20:27.949Z",
+  "summary": {
+    "prior": "578/5/77 @ v1.32 parser (6a757a73, shadow/no default promotion)",
+    "current": "569/5/86 @ v1.33 parser (HEAD, search+activated default promotion)",
+    "net": {
+      "tp": -9,
+      "fp": 0,
+      "fn": 9
+    },
+    "decomposition": {
+      "promotion_gains": 3,
+      "parser_regressions": 12,
+      "net": -9
+    },
+    "activatedIsolatedDelta": {
+      "tp": 2,
+      "fp": 0,
+      "fn": -2,
+      "note": "Matches activated-default-promotion-v134-report.json"
+    },
+    "outsideActivated": {
+      "tp": -11,
+      "fn": 11,
+      "note": "578→567 search-only on v133 parser vs 578 v132; v132→v134 default net -9 includes +2 activated"
+    }
+  },
+  "lostTp": [
+    {
+      "caseId": "dev-v9-027",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "destroy target artifact or enchantment",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "legacy_v1_path_regression",
+      "family": "legacy_dev"
+    },
+    {
+      "caseId": "eval-0047",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "you may draw a card",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "rc3_transform_or_clause_native_regression",
+      "family": "legacy_dev"
+    },
+    {
+      "caseId": "eval-0141",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "loses 3 life",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "rc3_transform_or_clause_native_regression",
+      "family": "legacy_dev"
+    },
+    {
+      "caseId": "eval-0161",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add one mana of any color",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "rc3_transform_or_clause_native_regression",
+      "family": "legacy_dev"
+    },
+    {
+      "caseId": "eval-0191",
+      "goldIndex": 0,
+      "actionType": "copy",
+      "evidenceContains": "copy",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "rc3_transform_or_clause_native_regression",
+      "family": "legacy_dev"
+    },
+    {
+      "caseId": "eval-0203",
+      "goldIndex": 1,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {U}",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "rc3_transform_or_clause_native_regression",
+      "family": "legacy_dev"
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "goldIndex": 3,
+      "actionType": "shuffle_into_library",
+      "evidenceContains": "shuffle it into its owner's library",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "search_chain_shuffle_link_regression",
+      "family": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0001",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {U}",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "granted_quote_nested_extraction_regression",
+      "family": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0002",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {B}",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "granted_quote_nested_extraction_regression",
+      "family": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0003",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {R}",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "granted_quote_nested_extraction_regression",
+      "family": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0004",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {W}",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "granted_quote_nested_extraction_regression",
+      "family": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0020",
+      "goldIndex": 2,
+      "actionType": "sacrifice",
+      "evidenceContains": "Sacrifice that token at end of combat",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "granted_quote_nested_extraction_regression",
+      "family": "replacement_if_would"
+    }
+  ],
+  "gainedTp": [
+    {
+      "caseId": "rc3-pos-v12-0093",
+      "goldIndex": 3,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return this card from your graveyard to your hand",
+      "matched": true,
+      "extractionSource": "rc3_clause_native",
+      "afterSource": "rc3_clause_native",
+      "changeClass": "promotion_source_precedence",
+      "subcause": "activated_default_promotion",
+      "delta": "+1 TP"
+    },
+    {
+      "caseId": "rc3-pos-v12-0125",
+      "goldIndex": 1,
+      "actionType": "search_library",
+      "evidenceContains": "search your library this way, shuffle",
+      "matched": true,
+      "extractionSource": "rc3_clause_native",
+      "afterSource": "rc3_clause_native",
+      "changeClass": "promotion_source_precedence",
+      "subcause": "search_default_promotion",
+      "delta": "+1 TP"
+    },
+    {
+      "caseId": "rc3-pos-v12-0131",
+      "goldIndex": 1,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return this card from your graveyard to your hand",
+      "matched": true,
+      "extractionSource": "rc3_clause_native",
+      "afterSource": "rc3_clause_native",
+      "changeClass": "promotion_source_precedence",
+      "subcause": "activated_default_promotion",
+      "delta": "+1 TP"
+    }
+  ],
+  "fpNetUnchanged": {
+    "note": "Aggregate FP held at 5 — 38 new FPs offset by 2 removed FPs + 33 implicit TP↔FP churn via semantic dedupe/matcher pairing",
+    "newFpCount": 38,
+    "removedFpCount": 2,
+    "newFpBySource": {
+      "rc3_transform": 3,
+      "rc3_clause_native": 35
+    }
+  },
+  "unrelatedCatalogRecall": {
+    "before": {
+      "tp": 49,
+      "fn": 26,
+      "recall": 0.653
+    },
+    "after": {
+      "tp": 44,
+      "fn": 31,
+      "recall": 0.587
+    },
+    "deltaTp": -5,
+    "lostInUnrelated": [
+      {
+        "caseId": "rc3-pos-cat-0001",
+        "actionType": "add_mana",
+        "evidenceContains": "Add {U}"
+      },
+      {
+        "caseId": "rc3-pos-cat-0002",
+        "actionType": "add_mana",
+        "evidenceContains": "Add {B}"
+      },
+      {
+        "caseId": "rc3-pos-cat-0003",
+        "actionType": "add_mana",
+        "evidenceContains": "Add {R}"
+      },
+      {
+        "caseId": "rc3-pos-cat-0004",
+        "actionType": "add_mana",
+        "evidenceContains": "Add {W}"
+      },
+      {
+        "caseId": "rc3-pos-cat-0020",
+        "actionType": "sacrifice",
+        "evidenceContains": "Sacrifice that token at end of combat"
+      }
+    ],
+    "explanation": "All 5 unrelated-catalog TP losses are rc3-pos-cat granted-quote nested actions (add_mana x4, sacrifice x1)"
+  }
+}

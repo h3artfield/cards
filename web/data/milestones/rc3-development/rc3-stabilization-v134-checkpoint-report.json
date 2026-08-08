@@ -1,0 +1,1489 @@
+{
+  "generatedAt": "2026-08-08T15:55:01.927Z",
+  "checkpoint": "rc3-stabilization-v134-checkpoint-1",
+  "checkpointStatus": "NOT_IMMUTABLE — awaiting new git commit after pre-commit gates close",
+  "parser": {
+    "workingParserVersion": "oracle-action-v1.34-rc3-ast-dev",
+    "parentCommit": "776093564921f6e6fb69564b3446d7befbdb7468",
+    "parentLabel": "immutable v1.33 — NOT v1.34",
+    "v133CommittedBlobs": {
+      "transformBlobSha": "2d0097ab4fb5665cf0481b451dc6271e335d7797",
+      "clauseNativeBlobSha": "17e6f9ed7f85a5f2fadb05e55c9926fb93ec24ac"
+    },
+    "workingTree": {
+      "dirty": true,
+      "transformBlobSha": "a90d2348af9c4780821789b51dd6b4ce931eaaa3",
+      "clauseNativeBlobSha": "85942113274c17c9b62f7ced5d568a3b25036f53"
+    }
+  },
+  "lineageLanguage": {
+    "immutableV131Commit": "6a757a736dfda9004860bb38d5e677880590882c",
+    "immutableV133Commit": "776093564921f6e6fb69564b3446d7befbdb7468",
+    "v132WorkingState": "uncommitted development on v1.31 parent; frozen v132-working captures executed blobs",
+    "v134WorkingState": "uncommitted development on v1.33 parent; NOT yet an immutable commit",
+    "priorFrozenHash": "842ca05e7345aea1194036c301ccc80c4ef68dc1cd79efa8afc6e0298a4eaba0",
+    "currentFrozenHash": "b9a79030d32df12d1100b587c2da3420c294ba6c5132450a0df703e90f2d9c44",
+    "warning": "Do not tag rc3-stabilization-v134-checkpoint-1 until a new commit contains working blobs"
+  },
+  "dualMetricLanes": {
+    "historicalParserDiff_rawGold": {
+      "v132Working": {
+        "label": "v132_working_raw_gold",
+        "combined": {
+          "tp": 583,
+          "fp": 5,
+          "fn": 72,
+          "precision": 0.9914965986394558,
+          "recall": 0.8900763358778626
+        },
+        "unrelated": {
+          "tp": 49,
+          "fp": 2,
+          "fn": 26,
+          "precision": 0.9607843137254902,
+          "recall": 0.6533333333333333
+        },
+        "semanticInvalidActionCount": null,
+        "semanticValidatorViolationCount": 0
+      },
+      "v134Stabilization": {
+        "label": "v134_raw_gold",
+        "combined": {
+          "tp": 581,
+          "fp": 5,
+          "fn": 74,
+          "precision": 0.9914675767918089,
+          "recall": 0.8870229007633588
+        },
+        "unrelated": {
+          "tp": 49,
+          "fp": 2,
+          "fn": 26,
+          "precision": 0.9607843137254902,
+          "recall": 0.6533333333333333
+        },
+        "semanticInvalidActionCount": 0,
+        "semanticValidatorViolationCount": 0
+      },
+      "parserRegression": {
+        "tp": -2,
+        "fn": 2
+      }
+    },
+    "policyCorrected_v135Overlay": {
+      "v132Working": {
+        "label": "v132_working_corrected",
+        "combined": {
+          "tp": 578,
+          "fp": 10,
+          "fn": 72,
+          "precision": 0.9829931972789115,
+          "recall": 0.8892307692307693
+        },
+        "unrelated": {
+          "tp": 49,
+          "fp": 2,
+          "fn": 26,
+          "precision": 0.9607843137254902,
+          "recall": 0.6533333333333333
+        },
+        "semanticInvalidActionCount": null,
+        "semanticValidatorViolationCount": 0
+      },
+      "v134FrozenLooseRescore": {
+        "label": "v134_frozen_loose_rescore",
+        "combined": {
+          "tp": 581,
+          "fp": 5,
+          "fn": 69,
+          "precision": 0.9914675767918089,
+          "recall": 0.8938461538461538
+        },
+        "unrelated": {
+          "tp": 49,
+          "fp": 2,
+          "fn": 26,
+          "precision": 0.9607843137254902,
+          "recall": 0.6533333333333333
+        },
+        "semanticInvalidActionCount": 0,
+        "semanticValidatorViolationCount": 0,
+        "note": "Frozen export rescored with actionType+evidence matcher only — NOT authoritative"
+      }
+    }
+  },
+  "frozenVsLiveReconciliation": {
+    "generatedAt": "2026-08-08T15:54:52.585Z",
+    "sharedConditions": {
+      "corpus": "combined development (431 cases)",
+      "goldOverlay": "persistent-permission-gold-migration-v135",
+      "promotionFlags": "default (search + activated)",
+      "scoringTier": "accepted",
+      "parserVersion": "oracle-action-v1.34-rc3-ast-dev (uncommitted working tree on 776093)"
+    },
+    "metrics": {
+      "frozenLooseRescore": {
+        "tp": 581,
+        "fp": 5,
+        "fn": 69,
+        "precision": 0.9914675767918089,
+        "recall": 0.8938461538461538
+      },
+      "liveReparse": {
+        "tp": 576,
+        "fp": 5,
+        "fn": 74,
+        "precision": 0.9913941480206541,
+        "recall": 0.8861538461538462
+      },
+      "delta": {
+        "tp": -5,
+        "fp": 0,
+        "fn": 5
+      }
+    },
+    "authoritativeBaseline": {
+      "designation": "live_reparse_with_full_semantic_matcher",
+      "rationale": "Frozen loose rescore uses actionType+evidence only; live dev gate uses full semanticPrimitiveMatchesExpected (optionalEffect, abilityIndex, cardFace, modal option). Authoritative baseline must use live reparse + full matcher.",
+      "metrics": {
+        "tp": 576,
+        "fp": 5,
+        "fn": 74,
+        "precision": 0.9913941480206541,
+        "recall": 0.8861538461538462
+      }
+    },
+    "netFiveDelta": {
+      "explanation": "581/5/69 (frozen loose rescore) vs 576/5/74 (live reparse): five gold actions counted TP under frozen loose matcher but FN under live full semantic matcher",
+      "actions": [
+        {
+          "caseId": "dev-cond-007",
+          "cardName": "Keldon Raider",
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "frozenLooseOutcome": "tp",
+          "frozenStrictOutcome": "tp",
+          "liveOutcome": "fn",
+          "reason": "live_reparse_differs_from_frozen_export",
+          "frozenEmissionCount": 2,
+          "liveEmissionCount": 2
+        },
+        {
+          "caseId": "eval-0009",
+          "cardName": "Path to Exile",
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put that card onto the battlefield",
+          "frozenLooseOutcome": "tp",
+          "frozenStrictOutcome": "fn",
+          "liveOutcome": "fn",
+          "reason": "frozen_loose_matcher_overcounts_optional_or_metadata",
+          "frozenEmissionCount": 3,
+          "liveEmissionCount": 3
+        },
+        {
+          "caseId": "eval-0012",
+          "cardName": "Solemn Simulacrum",
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put that card onto the battlefield",
+          "frozenLooseOutcome": "tp",
+          "frozenStrictOutcome": "fn",
+          "liveOutcome": "fn",
+          "reason": "frozen_loose_matcher_overcounts_optional_or_metadata",
+          "frozenEmissionCount": 4,
+          "liveEmissionCount": 4
+        },
+        {
+          "caseId": "eval-0059",
+          "cardName": "Fable of the Mirror-Breaker // Reflection of Kiki-Jiki",
+          "actionType": "draw",
+          "evidenceContains": "draw that many cards",
+          "frozenLooseOutcome": "tp",
+          "frozenStrictOutcome": "tp",
+          "liveOutcome": "fn",
+          "reason": "live_reparse_differs_from_frozen_export",
+          "frozenEmissionCount": 4,
+          "liveEmissionCount": 4
+        },
+        {
+          "caseId": "eval-0099",
+          "cardName": "Keldon Raider",
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "frozenLooseOutcome": "tp",
+          "frozenStrictOutcome": "tp",
+          "liveOutcome": "fn",
+          "reason": "live_reparse_differs_from_frozen_export",
+          "frozenEmissionCount": 2,
+          "liveEmissionCount": 2
+        }
+      ]
+    },
+    "actionLevelDiffs": [
+      {
+        "caseId": "dev-cond-006",
+        "cardName": "Unscrupulous Contractor",
+        "actionType": "sacrifice",
+        "evidenceContains": "you may sacrifice a creature",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 3,
+        "liveEmissionCount": 3
+      },
+      {
+        "caseId": "dev-cond-007",
+        "cardName": "Keldon Raider",
+        "actionType": "draw",
+        "evidenceContains": "draw a card",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "tp",
+        "liveOutcome": "fn",
+        "reason": "live_reparse_differs_from_frozen_export",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "dev-cond-007",
+        "cardName": "Keldon Raider",
+        "actionType": "discard",
+        "evidenceContains": "you may discard a card",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "dev-opt-001",
+        "cardName": "Vedalken Heretic",
+        "actionType": "draw",
+        "evidenceContains": "You may draw a card",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "dev-opt-005",
+        "cardName": "Rhystic Study",
+        "actionType": "draw",
+        "evidenceContains": "you may draw a card",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "dev-opt-007",
+        "cardName": "Growth Spiral",
+        "actionType": "put_onto_battlefield",
+        "evidenceContains": "put a land card from your hand onto the battlefield",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "dev-opt-012",
+        "cardName": "Mask of Memory",
+        "actionType": "draw",
+        "evidenceContains": "You may draw two cards",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "dev-v9-001",
+        "cardName": "Mox Diamond",
+        "actionType": "discard",
+        "evidenceContains": "you may discard a land card instead",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "dev-v9-003",
+        "cardName": "Burgeoning",
+        "actionType": "put_onto_battlefield",
+        "evidenceContains": "put a land card from your hand onto the battlefield",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "dev-v9-010",
+        "cardName": "Exploration",
+        "actionType": "play",
+        "evidenceContains": "play an additional land",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "dev-v9-014",
+        "cardName": "Crucible of Worlds",
+        "actionType": "play",
+        "evidenceContains": "You may play lands from your graveyard.",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "dev-v9-033",
+        "cardName": "Trinket Mage",
+        "actionType": "search_library",
+        "evidenceContains": "search your library",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 3,
+        "liveEmissionCount": 3
+      },
+      {
+        "caseId": "eval-0009",
+        "cardName": "Path to Exile",
+        "actionType": "put_onto_battlefield",
+        "evidenceContains": "put that card onto the battlefield",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "fn",
+        "reason": "frozen_loose_matcher_overcounts_optional_or_metadata",
+        "frozenEmissionCount": 3,
+        "liveEmissionCount": 3
+      },
+      {
+        "caseId": "eval-0012",
+        "cardName": "Solemn Simulacrum",
+        "actionType": "search_library",
+        "evidenceContains": "search your library for",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 4,
+        "liveEmissionCount": 4
+      },
+      {
+        "caseId": "eval-0012",
+        "cardName": "Solemn Simulacrum",
+        "actionType": "draw",
+        "evidenceContains": "draw a card",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 4,
+        "liveEmissionCount": 4
+      },
+      {
+        "caseId": "eval-0012",
+        "cardName": "Solemn Simulacrum",
+        "actionType": "put_onto_battlefield",
+        "evidenceContains": "put that card onto the battlefield",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "fn",
+        "reason": "frozen_loose_matcher_overcounts_optional_or_metadata",
+        "frozenEmissionCount": 4,
+        "liveEmissionCount": 4
+      },
+      {
+        "caseId": "eval-0016",
+        "cardName": "Rhystic Study",
+        "actionType": "draw",
+        "evidenceContains": "draw a card",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "eval-0019",
+        "cardName": "Etali, Primal Storm",
+        "actionType": "cast",
+        "evidenceContains": "cast any number of spells",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "eval-0020",
+        "cardName": "Consecrated Sphinx",
+        "actionType": "draw",
+        "evidenceContains": "draw two cards",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "eval-0047",
+        "cardName": "Curious Obsession",
+        "actionType": "draw",
+        "evidenceContains": "you may draw a card",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "eval-0052",
+        "cardName": "Hostile Hostel // Creeping Inn",
+        "actionType": "exile",
+        "evidenceContains": "exile a creature card from your graveyard",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 5,
+        "liveEmissionCount": 5
+      },
+      {
+        "caseId": "eval-0059",
+        "cardName": "Fable of the Mirror-Breaker // Reflection of Kiki-Jiki",
+        "actionType": "draw",
+        "evidenceContains": "draw that many cards",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "tp",
+        "liveOutcome": "fn",
+        "reason": "live_reparse_differs_from_frozen_export",
+        "frozenEmissionCount": 4,
+        "liveEmissionCount": 4
+      },
+      {
+        "caseId": "eval-0059",
+        "cardName": "Fable of the Mirror-Breaker // Reflection of Kiki-Jiki",
+        "actionType": "discard",
+        "evidenceContains": "You may discard up to two cards",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 4,
+        "liveEmissionCount": 4
+      },
+      {
+        "caseId": "eval-0090",
+        "cardName": "Vedalken Heretic",
+        "actionType": "draw",
+        "evidenceContains": "You may",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "eval-0091",
+        "cardName": "Squadron Hawk",
+        "actionType": "search_library",
+        "evidenceContains": "search your library for",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "eval-0092",
+        "cardName": "Unscrupulous Contractor",
+        "actionType": "sacrifice",
+        "evidenceContains": "you may sacrifice a creature",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 3,
+        "liveEmissionCount": 3
+      },
+      {
+        "caseId": "eval-0093",
+        "cardName": "King Macar, the Gold-Cursed",
+        "actionType": "exile",
+        "evidenceContains": "You may",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "eval-0094",
+        "cardName": "Frilled Mystic",
+        "actionType": "counter",
+        "evidenceContains": "You may",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "eval-0095",
+        "cardName": "Bumbling Pangolin",
+        "actionType": "destroy",
+        "evidenceContains": "You may",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "eval-0096",
+        "cardName": "Deadeye Rig-Hauler",
+        "actionType": "return_to_hand",
+        "evidenceContains": "return target creature to its owner's hand",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "eval-0098",
+        "cardName": "Ogre Slumlord",
+        "actionType": "create_token",
+        "evidenceContains": "You may",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "eval-0099",
+        "cardName": "Keldon Raider",
+        "actionType": "discard",
+        "evidenceContains": "you may discard a card",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "eval-0099",
+        "cardName": "Keldon Raider",
+        "actionType": "draw",
+        "evidenceContains": "draw a card",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "tp",
+        "liveOutcome": "fn",
+        "reason": "live_reparse_differs_from_frozen_export",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "eval-0102",
+        "cardName": "Gilraen, Dúnedain Protector",
+        "actionType": "return_to_battlefield",
+        "evidenceContains": "return that card to the battlefield",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "eval-0108",
+        "cardName": "Aerial Caravan",
+        "actionType": "play",
+        "evidenceContains": "you may play that card",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 3,
+        "liveEmissionCount": 3
+      },
+      {
+        "caseId": "eval-0109",
+        "cardName": "Founding the Third Path",
+        "actionType": "cast",
+        "evidenceContains": "cast the copy",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 4,
+        "liveEmissionCount": 4
+      },
+      {
+        "caseId": "eval-0112",
+        "cardName": "Vizier of Deferment",
+        "actionType": "exile",
+        "evidenceContains": "exile target creature",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "eval-0118",
+        "cardName": "Glissa, the Traitor",
+        "actionType": "return_to_hand",
+        "evidenceContains": "return target artifact card from your graveyard to your hand",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "eval-0120",
+        "cardName": "Prosper, Tome-Bound",
+        "actionType": "play",
+        "evidenceContains": "You may play that card",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 3,
+        "liveEmissionCount": 3
+      },
+      {
+        "caseId": "eval-0123",
+        "cardName": "Submerge",
+        "actionType": "cast",
+        "evidenceContains": "you may cast this spell without paying its mana cost",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "eval-0135",
+        "cardName": "Flawless Forgery",
+        "actionType": "cast",
+        "evidenceContains": "You may cast the copy",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "eval-0150",
+        "cardName": "Rashmi, Eternities Crafter",
+        "actionType": "cast",
+        "evidenceContains": "You may cast it without paying its mana cost",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "eval-0193",
+        "cardName": "Codie, Vociferous Codex",
+        "actionType": "cast",
+        "evidenceContains": "you may cast that card without paying its mana cost",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 3,
+        "liveEmissionCount": 3
+      },
+      {
+        "caseId": "eval-0196",
+        "cardName": "Moonring Mirror",
+        "actionType": "exile",
+        "evidenceContains": "exile all cards from your hand face down",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "dev-exp-v1-032",
+        "cardName": "Bident of Thassa",
+        "actionType": "draw",
+        "evidenceContains": "draw a card",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "dev-exp-v1-036",
+        "cardName": "Bident of Thassa",
+        "actionType": "draw",
+        "evidenceContains": "you may draw a card",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "dev-exp-v3-008",
+        "cardName": "Ashiok's Forerunner",
+        "actionType": "search_library",
+        "evidenceContains": "search your library and/or graveyard",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 5,
+        "liveEmissionCount": 5
+      },
+      {
+        "caseId": "dev-exp-v3-009",
+        "cardName": "Niambi, Faithful Healer",
+        "actionType": "search_library",
+        "evidenceContains": "search your library and/or graveyard",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 5,
+        "liveEmissionCount": 5
+      },
+      {
+        "caseId": "dev-exp-v3-010",
+        "cardName": "Liliana's Scorn",
+        "actionType": "search_library",
+        "evidenceContains": "search your library and/or graveyard",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 6,
+        "liveEmissionCount": 6
+      },
+      {
+        "caseId": "dev-exp-v3-011",
+        "cardName": "Runeforge Champion",
+        "actionType": "search_library",
+        "evidenceContains": "search your library and/or graveyard",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 5,
+        "liveEmissionCount": 5
+      },
+      {
+        "caseId": "dev-exp-v3-012",
+        "cardName": "Fang-Druid Summoner",
+        "actionType": "search_library",
+        "evidenceContains": "search your library and/or graveyard",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 5,
+        "liveEmissionCount": 5
+      },
+      {
+        "caseId": "dev-exp-v3-017",
+        "cardName": "Minion Reflector",
+        "actionType": "create_token",
+        "evidenceContains": "create a token that's a copy of that creature",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "dev-exp-v3-022",
+        "cardName": "Kheru Lich Lord",
+        "actionType": "return_to_battlefield",
+        "evidenceContains": "return a creature card at random from your graveyard to the battlefield",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 1,
+        "liveEmissionCount": 1
+      },
+      {
+        "caseId": "dev-exp-v5-003",
+        "cardName": "Domri Rade",
+        "actionType": "put_into_hand",
+        "evidenceContains": "put it into your hand",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "rc3-pos-v12-0051",
+        "cardName": "Adipose Offspring",
+        "actionType": "cast",
+        "evidenceContains": "You may cast this spell by sacrificing a creature and paying the emerge cost reduced by that creature's mana value",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 3,
+        "liveEmissionCount": 3
+      },
+      {
+        "caseId": "rc3-pos-v12-0144",
+        "cardName": "Aethersnipe",
+        "actionType": "cast",
+        "evidenceContains": "You may cast this spell for its evoke cost",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 2,
+        "liveEmissionCount": 2
+      },
+      {
+        "caseId": "rc3-pos-one-shot-cast-0001",
+        "cardName": "A-Demilich (one-shot cast branch)",
+        "actionType": "cast",
+        "evidenceContains": "cast the copy",
+        "frozenLooseOutcome": "tp",
+        "frozenStrictOutcome": "fn",
+        "liveOutcome": "tp",
+        "reason": "unknown",
+        "frozenEmissionCount": 3,
+        "liveEmissionCount": 3
+      }
+    ],
+    "summary": "57 gold actions differ between frozen-loose and live-strict evaluation"
+  },
+  "authoritativeBaseline": {
+    "designation": "live_reparse + full semantic matcher + v135 gold overlay",
+    "source": "eval-rc3-dev-gate combinedDevelopment",
+    "metrics": {
+      "tp": 576,
+      "fp": 5,
+      "fn": 74,
+      "precision": 0.9913941480206541,
+      "recall": 0.8861538461538462
+    }
+  },
+  "originalV132ToV133ParserRegressions": {
+    "count": 12,
+    "restoredInV134Working": 12,
+    "allRestored": true,
+    "actions": [
+      {
+        "caseId": "rc3-pos-cat-0001",
+        "actionType": "add_mana",
+        "evidenceContains": "Add {U}",
+        "restoredInV134Working": true
+      },
+      {
+        "caseId": "rc3-pos-cat-0002",
+        "actionType": "add_mana",
+        "evidenceContains": "Add {B}",
+        "restoredInV134Working": true
+      },
+      {
+        "caseId": "rc3-pos-cat-0003",
+        "actionType": "add_mana",
+        "evidenceContains": "Add {R}",
+        "restoredInV134Working": true
+      },
+      {
+        "caseId": "rc3-pos-cat-0004",
+        "actionType": "add_mana",
+        "evidenceContains": "Add {W}",
+        "restoredInV134Working": true
+      },
+      {
+        "caseId": "rc3-pos-cat-0020",
+        "actionType": "sacrifice",
+        "evidenceContains": "Sacrifice that token at end of combat",
+        "restoredInV134Working": true
+      },
+      {
+        "caseId": "rc3-pos-v12-0148",
+        "actionType": "shuffle_into_library",
+        "evidenceContains": "shuffle it into its owner's library",
+        "restoredInV134Working": true
+      },
+      {
+        "caseId": "eval-0047",
+        "actionType": "draw",
+        "evidenceContains": "you may draw a card",
+        "restoredInV134Working": true
+      },
+      {
+        "caseId": "eval-0141",
+        "actionType": "lose_life",
+        "evidenceContains": "loses 3 life",
+        "restoredInV134Working": true
+      },
+      {
+        "caseId": "eval-0161",
+        "actionType": "add_mana",
+        "evidenceContains": "Add one mana of any color",
+        "restoredInV134Working": true
+      },
+      {
+        "caseId": "eval-0191",
+        "actionType": "copy",
+        "evidenceContains": "copy",
+        "restoredInV134Working": true
+      },
+      {
+        "caseId": "eval-0203",
+        "actionType": "add_mana",
+        "evidenceContains": "Add {U}",
+        "restoredInV134Working": true
+      },
+      {
+        "caseId": "dev-v9-027",
+        "actionType": "destroy",
+        "evidenceContains": "destroy target artifact or enchantment",
+        "restoredInV134Working": true
+      }
+    ]
+  },
+  "policyGoldDefectsSeparate": {
+    "count": 5,
+    "actions": [
+      {
+        "caseId": "dev-v9-011",
+        "actionType": "cast",
+        "evidenceContains": "cast spells from your hand",
+        "classification": "policy_gold_defect",
+        "removedFromLayer2Gold": true
+      },
+      {
+        "caseId": "dev-v9-012",
+        "actionType": "cast",
+        "evidenceContains": "cast spells from your graveyard",
+        "classification": "policy_gold_defect",
+        "removedFromLayer2Gold": true
+      },
+      {
+        "caseId": "dev-v9-012",
+        "actionType": "play",
+        "evidenceContains": "play lands",
+        "classification": "policy_gold_defect",
+        "removedFromLayer2Gold": true
+      },
+      {
+        "caseId": "eval-0062",
+        "actionType": "cast",
+        "evidenceContains": "cast spells from your graveyard",
+        "classification": "policy_gold_defect",
+        "removedFromLayer2Gold": true
+      },
+      {
+        "caseId": "eval-0062",
+        "actionType": "play",
+        "evidenceContains": "play lands",
+        "classification": "policy_gold_defect",
+        "removedFromLayer2Gold": true
+      }
+    ],
+    "yawgmothPlayAdjudication": {
+      "adjudicationVersion": "persistent-permission-play-adjudication-v135",
+      "frozenAt": "2026-08-08T16:45:00.000Z",
+      "parserConsulted": false,
+      "reviewer": "rc3-stabilization-v134-precommit",
+      "methodology": "Parser-blind policy adjudication under taxonomy v1.4 — oracle text and gold labels only",
+      "policyDistinction": {
+        "futureActionPermission": "Layer 1 static_permission — enables game actions during a window; NO Layer-2 primitive",
+        "immediateResolutionInstruction": "Layer 2 primitive — cast/play involving a specific referent at resolution time",
+        "durationNote": "Distinction is NOT permanent vs until-end-of-turn; both durations use Layer 1 when granting future-action permission"
+      },
+      "permissionModel": {
+        "permittedAction": [
+          "cast",
+          "play"
+        ],
+        "fields": [
+          "permittedAction",
+          "objectCriteria",
+          "sourceZone",
+          "destination",
+          "duration"
+        ],
+        "durationValues": [
+          "continuous",
+          "while_condition",
+          "until_end_of_turn",
+          "this_turn",
+          "one_shot_resolution"
+        ]
+      },
+      "cases": [
+        {
+          "caseId": "dev-v9-012",
+          "cardName": "Yawgmoth's Will",
+          "oracleExcerpt": "Until end of turn, you may play lands and cast spells from your graveyard.",
+          "goldUnderReview": {
+            "actionType": "play",
+            "evidenceContains": "play lands"
+          },
+          "adjudication": "gold_defect_remove_layer2",
+          "layer1Model": {
+            "permittedAction": "play",
+            "objectCriteria": "land",
+            "sourceZone": "graveyard",
+            "duration": "until_end_of_turn"
+          },
+          "contrast": {
+            "immediateResolution": "You may play that card. → Layer-2 play when referent-specific resolution instruction",
+            "oneShotCast": "You may cast the copy. → Layer-2 cast"
+          },
+          "migrationAction": "remove_from_layer2_gold_via_v135_overlay"
+        },
+        {
+          "caseId": "eval-0062",
+          "cardName": "Yawgmoth's Will",
+          "oracleExcerpt": "Until end of turn, you may play lands and cast spells from your graveyard.",
+          "goldUnderReview": {
+            "actionType": "play",
+            "evidenceContains": "play lands"
+          },
+          "adjudication": "gold_defect_remove_layer2",
+          "layer1Model": {
+            "permittedAction": "play",
+            "objectCriteria": "land",
+            "sourceZone": "graveyard",
+            "duration": "until_end_of_turn"
+          },
+          "migrationAction": "remove_from_layer2_gold_via_v135_overlay"
+        }
+      ],
+      "outcome": {
+        "genuineParserRegressionsForPlayLands": 0,
+        "correctParserBehavior": "Suppress Layer-2 play; represent as Layer-1 permission structure only",
+        "note": "Prior TP→FN on frozen lane for these cases reflects gold correction, not parser regression"
+      }
+    }
+  },
+  "deterministicConfusionMatrix": {
+    "transitions": {
+      "priorTp_to_currentTp": 578,
+      "priorTp_to_currentFn": 5,
+      "priorFp_to_currentFp": 0,
+      "priorFp_to_removed": 5,
+      "priorFn_to_currentTp": 3,
+      "priorFn_to_currentFn": 69,
+      "newlyEmittedUnmatched": 5
+    },
+    "note": "FP transitions use policy-classified parser_false_positive only (not raw unmatched emissions)",
+    "reconciles": {
+      "netTpDelta": -2,
+      "netFnDelta": 2,
+      "netFpDelta": 0,
+      "tpDeltaFromGoldTransitions": -2,
+      "fpDeltaFromFpTransitions": 0,
+      "tpReconciles": true,
+      "fpReconciles": true
+    },
+    "details": [
+      {
+        "caseId": "dev-v9-011",
+        "gold": "cast",
+        "evidence": "cast spells from your hand",
+        "transition": "priorTp_to_currentFn"
+      },
+      {
+        "caseId": "dev-v9-012",
+        "gold": "play",
+        "evidence": "play lands",
+        "transition": "priorTp_to_currentFn"
+      },
+      {
+        "caseId": "dev-v9-012",
+        "gold": "cast",
+        "evidence": "cast spells from your graveyard",
+        "transition": "priorTp_to_currentFn"
+      },
+      {
+        "caseId": "eval-0062",
+        "gold": "play",
+        "evidence": "play lands",
+        "transition": "priorTp_to_currentFn"
+      },
+      {
+        "caseId": "eval-0062",
+        "gold": "cast",
+        "evidence": "cast spells from your graveyard",
+        "transition": "priorTp_to_currentFn"
+      },
+      {
+        "caseId": "rc3-pos-v12-0093",
+        "gold": "return_to_hand",
+        "evidence": "Return this card from your graveyard to your hand",
+        "transition": "priorFn_to_currentTp"
+      },
+      {
+        "caseId": "rc3-pos-v12-0125",
+        "gold": "search_library",
+        "evidence": "search your library this way, shuffle",
+        "transition": "priorFn_to_currentTp"
+      },
+      {
+        "caseId": "rc3-pos-v12-0131",
+        "gold": "return_to_hand",
+        "evidence": "Return this card from your graveyard to your hand",
+        "transition": "priorFn_to_currentTp"
+      }
+    ]
+  },
+  "lostTpAdjudications": [
+    {
+      "caseId": "dev-v9-011",
+      "cardName": "Omniscience",
+      "actionType": "cast",
+      "evidenceContains": "cast spells from your hand",
+      "classification": "old_gold_defect",
+      "goldValidUnderV14": false,
+      "restore": false,
+      "v134Restored": false
+    },
+    {
+      "caseId": "dev-v9-012",
+      "cardName": "Yawgmoth's Will",
+      "actionType": "play",
+      "evidenceContains": "play lands",
+      "classification": "policy_gold_defect_play_permission",
+      "goldValidUnderV14": false,
+      "restore": false,
+      "v134Restored": false
+    },
+    {
+      "caseId": "dev-v9-012",
+      "cardName": "Yawgmoth's Will",
+      "actionType": "cast",
+      "evidenceContains": "cast spells from your graveyard",
+      "classification": "old_gold_defect",
+      "goldValidUnderV14": false,
+      "restore": false,
+      "v134Restored": false
+    },
+    {
+      "caseId": "eval-0062",
+      "cardName": "Yawgmoth's Will",
+      "actionType": "play",
+      "evidenceContains": "play lands",
+      "classification": "policy_gold_defect_play_permission",
+      "goldValidUnderV14": false,
+      "restore": false,
+      "v134Restored": false
+    },
+    {
+      "caseId": "eval-0062",
+      "cardName": "Yawgmoth's Will",
+      "actionType": "cast",
+      "evidenceContains": "cast spells from your graveyard",
+      "classification": "old_gold_defect",
+      "goldValidUnderV14": false,
+      "restore": false,
+      "v134Restored": false
+    }
+  ],
+  "historicalLostTpFromV132ToV133": [
+    {
+      "caseId": "dev-v9-027",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "destroy target artifact or enchantment",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "legacy_v1_path_regression",
+      "family": "legacy_dev"
+    },
+    {
+      "caseId": "eval-0047",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "you may draw a card",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "rc3_transform_or_clause_native_regression",
+      "family": "legacy_dev"
+    },
+    {
+      "caseId": "eval-0141",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "loses 3 life",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "rc3_transform_or_clause_native_regression",
+      "family": "legacy_dev"
+    },
+    {
+      "caseId": "eval-0161",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add one mana of any color",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "rc3_transform_or_clause_native_regression",
+      "family": "legacy_dev"
+    },
+    {
+      "caseId": "eval-0191",
+      "goldIndex": 0,
+      "actionType": "copy",
+      "evidenceContains": "copy",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "rc3_transform_or_clause_native_regression",
+      "family": "legacy_dev"
+    },
+    {
+      "caseId": "eval-0203",
+      "goldIndex": 1,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {U}",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "rc3_transform_or_clause_native_regression",
+      "family": "legacy_dev"
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "goldIndex": 3,
+      "actionType": "shuffle_into_library",
+      "evidenceContains": "shuffle it into its owner's library",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "search_chain_shuffle_link_regression",
+      "family": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0001",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {U}",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "granted_quote_nested_extraction_regression",
+      "family": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0002",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {B}",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "granted_quote_nested_extraction_regression",
+      "family": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0003",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {R}",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "granted_quote_nested_extraction_regression",
+      "family": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0004",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {W}",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "granted_quote_nested_extraction_regression",
+      "family": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0020",
+      "goldIndex": 2,
+      "actionType": "sacrifice",
+      "evidenceContains": "Sacrifice that token at end of combat",
+      "matched": false,
+      "changeClass": "parser_behavior_change",
+      "subcause": "granted_quote_nested_extraction_regression",
+      "family": "replacement_if_would"
+    }
+  ],
+  "grantedMetrics": {
+    "defaultGrantedPipeline": {
+      "generatedAt": "2026-08-08T15:34:52.281Z",
+      "family": "granted_ability_quote",
+      "A_nestedSemanticActions": {
+        "description": "Granted span → rules classification → nested AbilityBlock → nested SemanticAction",
+        "caseCount": 9,
+        "goldActionCount": 27,
+        "metrics": {
+          "tp": 19,
+          "fp": 1,
+          "fn": 8,
+          "precision": 0.95,
+          "recall": 0.7037037037037037
+        }
+      },
+      "B_coOccurringPrimaryEffects": {
+        "description": "Card-native primary effects co-located in granted family pack — not nested granted pipeline",
+        "caseCount": 5,
+        "goldActionCount": 9,
+        "metrics": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 9,
+          "precision": 1,
+          "recall": 0
+        }
+      },
+      "combinedHeadline": {
+        "tp": 19,
+        "fp": 1,
+        "fn": 17,
+        "precision": 0.95,
+        "recall": 0.5277777777777778
+      }
+    },
+    "clauseNativeGrantedStages": {
+      "generatedAt": "2026-08-08T15:34:54.400Z",
+      "methodology": "Span-based denominators — one FN per missed gold span, not per nested action",
+      "corpus": {
+        "grantedPositiveCards": 9,
+        "candidateSpanCount": 17,
+        "cardsWithCandidateSpans": 9
+      },
+      "stageA_grantedRulesSpanDetector": {
+        "unit": "gold granted-rules span",
+        "expectedGoldSpans": 12,
+        "detectedCandidateSpans": 17,
+        "tp": 12,
+        "fp": 7,
+        "fn": 0,
+        "precision": 0.631578947368421,
+        "precisionLabel": "63.2%",
+        "recall": 1,
+        "recallLabel": "100.0%"
+      },
+      "stageB_grantedRulesClassifier": {
+        "unit": "gold-matched detected span (unique detected index per ability paragraph)",
+        "conditionalPool": 10,
+        "cohortNote": "Stage A counts 12 gold-span hits; Stage B denominator is 10 because 2 gold spans share the same detected quote/paren region (deduped by detected index)",
+        "excludedFromClassifierDenominator": {
+          "reason": "multiple_gold_spans_map_to_one_detected_span",
+          "count": 2,
+          "details": [
+            {
+              "caseId": "rc3-pos-v12-0146",
+              "goldSpanCount": 2,
+              "uniqueDetectedMatches": 1
+            },
+            {
+              "caseId": "rc3-pos-v12-0148",
+              "goldSpanCount": 3,
+              "uniqueDetectedMatches": 2
+            }
+          ]
+        },
+        "classifierFalsePositiveSources": {
+          "detectorFalsePositiveSpans": 6,
+          "note": "All 6 classifier FPs are detector false-positive spans (not gold-aligned) misclassified as granted_rules_ability"
+        },
+        "tp": 5,
+        "fp": 6,
+        "fn": 5,
+        "precision": 0.45454545454545453,
+        "precisionLabel": "45.5%",
+        "recall": 0.5,
+        "recallLabel": "50.0%"
+      },
+      "stageC_clauseNativeNestedExtraction": {
+        "description": "Clause-native granted pipeline only — nested actions inside correctly classified granted spans",
+        "conditionalPool": 6,
+        "tp": 5,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1,
+        "precisionLabel": "100.0%",
+        "recall": 0.8333333333333334,
+        "recallLabel": "83.3%"
+      },
+      "priorFlawedMetrics": {
+        "source": "granted-span-metrics-v134.json",
+        "note": "Prior detector FN counted once per nested gold action inside missed span — invalid for span detector"
+      }
+    },
+    "distinction": "defaultGrantedPipeline = full parser output (transform/V1/default path); clauseNativeGrantedStages = span detector → classifier → nested extraction pipeline only"
+  },
+  "liveV134WithMigration": {
+    "combined": {
+      "tp": 576,
+      "fp": 5,
+      "fn": 74,
+      "precision": 0.9913941480206541,
+      "recall": 0.8861538461538462
+    },
+    "invalidActions": 0,
+    "invalidViolations": 0
+  },
+  "promotions": {
+    "search": {
+      "status": "provisionally_accepted",
+      "isolatedDelta": "+1 TP / 0 FP"
+    },
+    "activated": {
+      "status": "provisionally_accepted",
+      "isolatedDelta": "+2 TP / 0 FP"
+    }
+  },
+  "v13Execution": "NOT_RUN"
+}

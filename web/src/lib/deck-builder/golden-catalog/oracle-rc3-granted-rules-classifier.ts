@@ -46,6 +46,23 @@ function looksLikeReminder(inner: string): boolean {
   return false;
 }
 
+function inferGrantingCueFromBefore(before: string): string | undefined {
+  const b = before.trimEnd();
+  if (/\bTarget \w+ gains\b/i.test(b)) return "target_gains";
+  if (/\b(?:Enchanted|Equipped)/i.test(b)) return "enchanted_or_equipped_has";
+  if (/\btoken has\b/i.test(b)) return "token_has";
+  if (/\bit has\b/i.test(b)) return "it_has";
+  if (/\bCreatures you control have\b/i.test(b)) return "creatures_have";
+  if (/\bAll \w+/i.test(b)) return "all_have";
+  if (/\b(?:have|has|gain|gains)\s*["(\u201c]?\s*$/i.test(b)) return "gain_or_have";
+  return undefined;
+}
+
+function hasGrantingCueBeforeQuote(paragraph: string, span: DetectedQuoteSpan | GrantedRulesSpan): boolean {
+  const before = paragraph.slice(Math.max(0, span.localStart - 96), span.localStart);
+  return inferGrantingCueFromBefore(before) !== undefined;
+}
+
 function looksLikeCardName(inner: string): boolean {
   const t = inner.trim();
   return t.length > 0 && t.length < 48 && !/[.:]/.test(t) && /^[A-Z][a-zA-Z0-9 ',-]+$/u.test(t);
@@ -63,7 +80,10 @@ export function classifyGrantedRulesSpan(paragraph: string, span: GrantedRulesSp
     return { span, classification: "quoted_card_name_reference", structuralCue: cue };
   }
 
-  if ((cue || span.typography !== "quoted") && looksLikeAbilityRules(inner)) {
+  if (
+    (cue || span.typography !== "quoted" || hasGrantingCueBeforeQuote(paragraph, span)) &&
+    looksLikeAbilityRules(inner)
+  ) {
     const abilityType = inferBlockAbilityType(inner);
     return {
       span,
@@ -97,6 +117,7 @@ export function classifyAllGrantedRulesSpans(paragraph: string, spans: GrantedRu
 }
 
 export function classifyQuotedSpan(paragraph: string, span: DetectedQuoteSpan): ClassifiedGrantedRulesSpan {
+  const before = paragraph.slice(Math.max(0, span.localStart - 96), span.localStart);
   const grantedSpan: GrantedRulesSpan = {
     localStart: span.localStart,
     localEnd: span.localEnd,
@@ -104,6 +125,7 @@ export function classifyQuotedSpan(paragraph: string, span: DetectedQuoteSpan): 
     innerText: span.innerText,
     typography: "quoted",
     confidence: 0.9,
+    structuralCue: inferGrantingCueFromBefore(before),
   };
   return classifyGrantedRulesSpan(paragraph, grantedSpan);
 }

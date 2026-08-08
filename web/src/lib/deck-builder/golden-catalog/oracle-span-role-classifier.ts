@@ -32,9 +32,22 @@ export interface TextSpanRole {
   text: string;
 }
 
+/** Layer-1 future-action permission window only — never one-shot resolution referents. */
+export type StaticPermissionDuration =
+  | "continuous"
+  | "while_condition"
+  | "until_end_of_turn"
+  | "this_turn";
+
 export interface StaticPermissionRecord {
+  /** @deprecated use permittedAction */
   permissionType: "cast" | "play";
+  permittedAction: "cast" | "play";
+  objectCriteria?: string;
   permittedFromZone?: string[];
+  destination?: string;
+  /** INVARIANT: one-shot resolution referents ("cast that card", "play the copy") never persist here — they are Layer-2 actions. */
+  duration?: StaticPermissionDuration;
   permissionSubject?: string;
   condition?: string;
   evidenceText: string;
@@ -57,9 +70,9 @@ const STATIC_PERMISSION_PATTERNS: Array<{
   persistentOnly?: boolean;
 }> = [
   {
-    pattern: /\b(?:You may )?cast spells from (?:your )?(?:graveyard|exile)\b/gi,
+    pattern: /\b(?:You may )?cast spells from (?:your )?(?:hand|graveyard|exile|library)\b/gi,
     permissionType: "cast",
-    zoneFrom: /\bfrom (?:your )?(graveyard|exile)\b/i,
+    zoneFrom: /\bfrom (?:your )?(hand|graveyard|exile|library)\b/i,
     persistentOnly: true,
   },
   {
@@ -459,6 +472,21 @@ export function classifyTextRoleAt(input: {
   }
 
   const clauseTrimmed = clauseText.trimStart();
+  for (const { pattern, persistentOnly } of STATIC_PERMISSION_PATTERNS) {
+    if (persistentOnly === false) continue;
+    const re = new RegExp(pattern.source, pattern.flags);
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(clauseText)) !== null) {
+      if (clauseLocalStart >= m.index && clauseLocalEnd <= m.index + m[0].length) {
+        if (isPersistentStaticAbility(clauseTrimmed) && !/^Choose one/i.test(clauseTrimmed)) {
+          return "static_permission";
+        }
+        if (/^Until end of turn/i.test(clauseTrimmed) && /\b(?:play lands and )?cast spells from\b/i.test(m[0])) {
+          return "static_permission";
+        }
+      }
+    }
+  }
   if (
     isPersistentStaticAbility(clauseTrimmed) &&
     !/^Choose one/i.test(clauseTrimmed)
@@ -576,7 +604,10 @@ export function extractStaticPermissions(paragraph: string): StaticPermissionRec
       const zoneMatch = zoneFrom?.exec(m[0]);
       records.push({
         permissionType,
+        permittedAction: permissionType,
+        objectCriteria: permissionType === "play" ? "land" : "spell",
         permittedFromZone: zoneMatch?.[1] ? [zoneMatch[1].toLowerCase()] : undefined,
+        duration: inferStaticPermissionDuration(paragraph),
         permissionSubject: m[0],
         evidenceText: m[0],
         localStart: m.index,
@@ -671,6 +702,46 @@ function normalizeParagraphForRole(paragraph: string): string {
 export function isReflexiveTriggerReference(paragraph: string, evidenceText: string): boolean {
   if (!/\bthis way\b/i.test(evidenceText)) return false;
   return /\bWhen you (?:sacrifice|discard|exile|pay)\b/i.test(paragraph);
+}
+
+/** Infer StaticPermissionRecord duration from enclosing clause (Layer 1 only). */
+export function inferStaticPermissionDuration(paragraph: string): StaticPermissionDuration {
+  const t = paragraph.trimStart();
+  if (/\bUntil end of turn\b/i.test(t)) return "until_end_of_turn";
+  if (/\bDuring each of your turns\b/i.test(t)) return "while_condition";
+  if (/\bthis turn\b/i.test(t)) return "this_turn";
+  return "continuous";
+}
+
+/** Persistent zone cast permission — Layer 1 only; must not emit Layer-2 cast primitive. */
+export function isPersistentZoneCastPermission(evidenceText: string): boolean {
+  if (!/\bcast\b/i.test(evidenceText)) return false;
+  if (/\bYou may cast (?:it|that card|that spell|the copy|that copy)\b/i.test(evidenceText)) return false;
+  if (/for as long as it remains exiled/i.test(evidenceText)) return false;
+  return (
+    /\bcast spells from (?:your )?(?:hand|graveyard|library|exile)\b/i.test(evidenceText) ||
+    /\bYou may cast [A-Za-z][\w',-]*(?: [A-Za-z][\w',-]*)* from (?:your )?graveyard\b/i.test(evidenceText)
+  );
+}
+
+/** Persistent/duration-limited zone play permission — Layer 1 only; must not emit Layer-2 play primitive. */
+export function isPersistentZonePlayPermission(evidenceText: string, paragraph?: string): boolean {
+  if (!/\bplay\b/i.test(evidenceText)) return false;
+  if (/\bYou may play (?:it|that card|that land|that permanent)\b/i.test(evidenceText)) return false;
+  if (/\bplay lands(?: and cast spells from|\b)/i.test(evidenceText)) return true;
+  if (/\bYou may play lands from (?:your )?(?:graveyard|hand|exile)\b/i.test(evidenceText)) return true;
+  if (paragraph && /\bplay lands\b/i.test(evidenceText) && isPersistentStaticAbility(paragraph)) return true;
+  return false;
+}
+
+/** Future-action permission (cast or play from zone) — never Layer 2. */
+export function isFutureActionZonePermission(
+  actionType: "cast" | "play",
+  evidenceText: string,
+  paragraph?: string,
+): boolean {
+  if (actionType === "cast") return isPersistentZoneCastPermission(evidenceText);
+  return isPersistentZonePlayPermission(evidenceText, paragraph);
 }
 
 /** One-shot resolution cast (Layer 2) vs persistent static grant (Layer 1). Returns true when cast SHOULD emit. */

@@ -9,6 +9,7 @@ import { classifyHandZonePrimitive, type PrimitiveActionType } from "./oracle-ac
 import {
   classifyTextRoleAt,
   compoundClauseSpansWithRoles,
+  isPersistentZoneCastPermission,
   primitiveAllowedAtRole,
 } from "./oracle-span-role-classifier";
 import {
@@ -21,7 +22,7 @@ import { getRC3PromotedFamilies } from "./oracle-rc3-promotion";
 import { tagExtractionSource, type RC3ActionExtensions } from "./oracle-rc3-extraction-metadata";
 import type { SegmentedAbility } from "./oracle-action-schema";
 
-export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.33-rc3-ast-dev";
+export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.34-rc3-ast-dev";
 
 const PUT_INTO_HAND_RE =
   /\b(?:put (?:it|that card|one of them|one of those cards|two of those cards|three of those cards|four of those cards|five of those cards|up to [^.]+?) into (?:your |their )?hand|Put (?:that card|one of them|one of those cards|two of those cards|target card from [^.]+?) into (?:your |their |its owner's )?hand|reveal (?:it|that card)[^.]* and put (?:it|that card) into your hand)\b/i;
@@ -78,6 +79,9 @@ function shouldSuppressAction(action: OracleActionV1, ability: SegmentedAbility)
     return true;
   }
   if ((role === "static_permission" || role === "static_restriction") && action.actionType === "cast") {
+    return true;
+  }
+  if (action.actionType === "cast" && isPersistentZoneCastPermission(action.evidenceText)) {
     return true;
   }
   if (role === "reminder_text" || role === "mechanic_reminder") {
@@ -191,6 +195,8 @@ function extractSearchChainActions(input: {
   return added;
 }
 
+const ADD_MANA_RE = /\bAdd \{[WUBRGC](?:\/\{[WUBRGC])*\}/i;
+
 function extractGrantedSupplement(input: {
   oracleId: string;
   ability: SegmentedAbility;
@@ -203,14 +209,16 @@ function extractGrantedSupplement(input: {
   let idx = input.nextIndex;
 
   for (const granted of findGrantedQuoteContexts(input.ability.paragraphText, parentId)) {
+    if (/^(Whenever|When|At the beginning)/i.test(granted.innerText.trim())) continue;
     for (const span of grantedClauseSpans(granted)) {
       if (span.role !== "effect" && span.role !== "replacement_effect") continue;
-      for (const pattern of [DRAW_RE, PUT_INTO_HAND_RE, /\b[Ss]acrifice this (?:token|artifact|creature)\b/i]) {
+      for (const pattern of [DRAW_RE, PUT_INTO_HAND_RE, ADD_MANA_RE, /\b[Ss]acrifice this (?:token|artifact|creature)\b/i]) {
         const m = span.text.match(pattern);
         if (!m) continue;
         let actionType: PrimitiveActionType = "draw";
         if (PUT_INTO_HAND_RE.test(m[0])) actionType = "put_into_hand";
         else if (/sacrifice/i.test(m[0])) actionType = "sacrifice";
+        else if (ADD_MANA_RE.test(m[0])) actionType = "add_mana";
         else if (DRAW_RE.test(m[0])) actionType = "draw";
 
         const absStart = input.ability.paragraphStart + span.localStart + (m.index ?? 0);

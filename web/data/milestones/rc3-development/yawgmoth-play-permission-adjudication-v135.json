@@ -1,0 +1,74 @@
+{
+  "adjudicationVersion": "persistent-permission-play-adjudication-v135",
+  "frozenAt": "2026-08-08T16:45:00.000Z",
+  "parserConsulted": false,
+  "reviewer": "rc3-stabilization-v134-precommit",
+  "methodology": "Parser-blind policy adjudication under taxonomy v1.4 — oracle text and gold labels only",
+  "policyDistinction": {
+    "futureActionPermission": "Layer 1 static_permission — enables game actions during a window; NO Layer-2 primitive",
+    "immediateResolutionInstruction": "Layer 2 primitive — cast/play involving a specific referent at resolution time",
+    "durationNote": "Distinction is NOT permanent vs until-end-of-turn; both durations use Layer 1 when granting future-action permission"
+  },
+  "permissionModel": {
+    "permittedAction": ["cast", "play"],
+    "fields": [
+      "permittedAction",
+      "objectCriteria",
+      "sourceZone",
+      "destination",
+      "duration"
+    ],
+    "durationValues": [
+      "continuous",
+      "while_condition",
+      "until_end_of_turn",
+      "this_turn"
+    ],
+    "resolutionTimeContrast": "One-shot referents (You may cast/play that card|the copy) → Layer-2 cast/play with optionalEffect=true — NOT StaticPermissionRecord"
+  },
+  "cases": [
+    {
+      "caseId": "dev-v9-012",
+      "cardName": "Yawgmoth's Will",
+      "oracleExcerpt": "Until end of turn, you may play lands and cast spells from your graveyard.",
+      "goldUnderReview": {
+        "actionType": "play",
+        "evidenceContains": "play lands"
+      },
+      "adjudication": "gold_defect_remove_layer2",
+      "layer1Model": {
+        "permittedAction": "play",
+        "objectCriteria": "land",
+        "sourceZone": "graveyard",
+        "duration": "until_end_of_turn"
+      },
+      "contrast": {
+        "immediateResolution": "You may play that card. → Layer-2 play when referent-specific resolution instruction",
+        "oneShotCast": "You may cast the copy. → Layer-2 cast"
+      },
+      "migrationAction": "remove_from_layer2_gold_via_v135_overlay"
+    },
+    {
+      "caseId": "eval-0062",
+      "cardName": "Yawgmoth's Will",
+      "oracleExcerpt": "Until end of turn, you may play lands and cast spells from your graveyard.",
+      "goldUnderReview": {
+        "actionType": "play",
+        "evidenceContains": "play lands"
+      },
+      "adjudication": "gold_defect_remove_layer2",
+      "layer1Model": {
+        "permittedAction": "play",
+        "objectCriteria": "land",
+        "sourceZone": "graveyard",
+        "duration": "until_end_of_turn"
+      },
+      "migrationAction": "remove_from_layer2_gold_via_v135_overlay"
+    }
+  ],
+  "outcome": {
+    "genuineParserRegressionsForPlayLands": 0,
+    "correctParserBehavior": "Suppress Layer-2 play; represent as Layer-1 permission structure only",
+    "note": "Prior TP→FN on frozen lane for these cases reflects gold correction, not parser regression"
+  }
+}

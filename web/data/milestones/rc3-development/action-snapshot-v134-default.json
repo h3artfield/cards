@@ -1,0 +1,6088 @@
+{
+  "label": "v134-default",
+  "promotion": "default",
+  "metrics": {
+    "tp": 569,
+    "fp": 5,
+    "fn": 86,
+    "precision": 0.9912891986062717,
+    "recall": 0.8687022900763359
+  },
+  "unrelatedMetrics": {
+    "tp": 44,
+    "fp": 2,
+    "fn": 31,
+    "precision": 0.9565217391304348,
+    "recall": 0.5866666666666667
+  },
+  "goldRows": [
+    {
+      "caseId": "dev-cond-001",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {B}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-cond-001",
+      "goldIndex": 1,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {W}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-cond-003",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "Return target planeswalker card from your graveyard to the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-cond-006",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draws two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-cond-006",
+      "goldIndex": 1,
+      "actionType": "sacrifice",
+      "evidenceContains": "you may sacrifice a creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-cond-006",
+      "goldIndex": 2,
+      "actionType": "lose_life",
+      "evidenceContains": "loses 2 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-cond-007",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": false
+    },
+    {
+      "caseId": "dev-cond-007",
+      "goldIndex": 1,
+      "actionType": "discard",
+      "evidenceContains": "you may discard a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-cond-008",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "exile target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-cond-008",
+      "goldIndex": 1,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "Return that card to the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-cond-011",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "spell's mana cost.\nDestroy target nonblack creature. It can't",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-cond-012",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-001",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "You may draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-002",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {G}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-004",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target nonblack creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-005",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "you may draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-006",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "create a Treasure token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-007",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-007",
+      "goldIndex": 1,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put a land card from your hand onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-008",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target creature or planeswalker.",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-009",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "Exile up to two target creatures",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-009",
+      "goldIndex": 1,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-010",
+      "goldIndex": 0,
+      "actionType": "surveil",
+      "evidenceContains": "Surveil 2",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-010",
+      "goldIndex": 1,
+      "actionType": "discard",
+      "evidenceContains": "discard a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-010",
+      "goldIndex": 2,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "from your graveyard to the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-012",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "You may draw two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-012",
+      "goldIndex": 1,
+      "actionType": "discard",
+      "evidenceContains": "discard a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-013",
+      "goldIndex": 0,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 3 damage to any target",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-014",
+      "goldIndex": 0,
+      "actionType": "counter",
+      "evidenceContains": "Counter target spell.",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-015",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library for a card, put that card into your hand, then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-015",
+      "goldIndex": 1,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-016",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {C}{C}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-017",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "exile all graveyards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-019",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {G}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-020",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw three cards, then put two cards from",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-021",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "Exile target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-022",
+      "goldIndex": 0,
+      "actionType": "discard",
+      "evidenceContains": "discards that card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-022",
+      "goldIndex": 1,
+      "actionType": "lose_life",
+      "evidenceContains": "lose 2 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-023",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "search their library for a basic land card, put that card onto the battlefield tapped, then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-023",
+      "goldIndex": 1,
+      "actionType": "exile",
+      "evidenceContains": "Exile target creature",
+      "matched": false
+    },
+    {
+      "caseId": "dev-opt-023",
+      "goldIndex": 2,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put that card onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-023",
+      "goldIndex": 3,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-024",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy all creatures",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-025",
+      "goldIndex": 0,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 3 damage to any target",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-026",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-026",
+      "goldIndex": 1,
+      "actionType": "scry",
+      "evidenceContains": "Scry 1",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-027",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-027",
+      "goldIndex": 1,
+      "actionType": "scry",
+      "evidenceContains": "Scry 2",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-028",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-029",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-029",
+      "goldIndex": 1,
+      "actionType": "scry",
+      "evidenceContains": "Scry 2",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-030",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-030",
+      "goldIndex": 1,
+      "actionType": "surveil",
+      "evidenceContains": "Surveil 1",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-032",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw two cards, then discard two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-032",
+      "goldIndex": 1,
+      "actionType": "cast",
+      "evidenceContains": "You may cast this card from your graveyard for its flashback cost",
+      "matched": false
+    },
+    {
+      "caseId": "dev-opt-032",
+      "goldIndex": 2,
+      "actionType": "discard",
+      "evidenceContains": "discard two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-033",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw two cards, then discard two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-033",
+      "goldIndex": 1,
+      "actionType": "discard",
+      "evidenceContains": "discard two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-034",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-034",
+      "goldIndex": 1,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-039",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-040",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-040",
+      "goldIndex": 1,
+      "actionType": "scry",
+      "evidenceContains": "Scry 2",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-001",
+      "goldIndex": 0,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put this artifact onto the battlefield",
+      "matched": false
+    },
+    {
+      "caseId": "dev-v9-001",
+      "goldIndex": 1,
+      "actionType": "add_mana",
+      "evidenceContains": "Add one mana of any color",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-001",
+      "goldIndex": 2,
+      "actionType": "discard",
+      "evidenceContains": "you may discard a land card instead",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-002",
+      "goldIndex": 0,
+      "actionType": "untap",
+      "evidenceContains": "Untap target Forest",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-003",
+      "goldIndex": 0,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put a land card from your hand onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-004",
+      "goldIndex": 0,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put it onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-004",
+      "goldIndex": 1,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library for a land card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-004",
+      "goldIndex": 2,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-005",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "Return target creature card from your graveyard to the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-006",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "from a graveyard onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-006",
+      "goldIndex": 1,
+      "actionType": "lose_life",
+      "evidenceContains": "lose life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-007",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-007",
+      "goldIndex": 1,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put them onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-007",
+      "goldIndex": 2,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-008",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-008",
+      "goldIndex": 1,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put one onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-008",
+      "goldIndex": 2,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-009",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-009",
+      "goldIndex": 1,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put that card onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-009",
+      "goldIndex": 2,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-010",
+      "goldIndex": 0,
+      "actionType": "play",
+      "evidenceContains": "play an additional land",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-011",
+      "goldIndex": 0,
+      "actionType": "cast",
+      "evidenceContains": "cast spells from your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-012",
+      "goldIndex": 0,
+      "actionType": "play",
+      "evidenceContains": "play lands",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-012",
+      "goldIndex": 1,
+      "actionType": "cast",
+      "evidenceContains": "cast spells from your graveyard",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-013",
+      "goldIndex": 0,
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrifice this enchantment",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-014",
+      "goldIndex": 0,
+      "actionType": "play",
+      "evidenceContains": "You may play lands from your graveyard.",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-016",
+      "goldIndex": 0,
+      "actionType": "counter",
+      "evidenceContains": "Counter target spell",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-018",
+      "goldIndex": 0,
+      "actionType": "mill",
+      "evidenceContains": "mills four cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-018",
+      "goldIndex": 1,
+      "actionType": "exile",
+      "evidenceContains": "exile each opponent's graveyard",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-019",
+      "goldIndex": 0,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 4 damage",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-020",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "is creature enters, exile up to one other target creature. That creature's c",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-021",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "from your graveyard to your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-022",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "from your graveyard to the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-023",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draws an additional card",
+      "matched": false
+    },
+    {
+      "caseId": "dev-v9-024",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target artifact",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-024",
+      "goldIndex": 1,
+      "actionType": "exile",
+      "evidenceContains": "Exile target card from a graveyard",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-024",
+      "goldIndex": 2,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target enchantment",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-025",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "loses 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-025",
+      "goldIndex": 1,
+      "actionType": "discard",
+      "evidenceContains": "discards a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-025",
+      "goldIndex": 2,
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrifices a creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-025",
+      "goldIndex": 3,
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrifices a land",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-026",
+      "goldIndex": 0,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-027",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "destroy target artifact or enchantment",
+      "matched": false
+    },
+    {
+      "caseId": "dev-v9-028",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-028",
+      "goldIndex": 1,
+      "actionType": "discard",
+      "evidenceContains": "discard two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-029",
+      "goldIndex": 0,
+      "actionType": "scry",
+      "evidenceContains": "Scry 2",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-029",
+      "goldIndex": 1,
+      "actionType": "draw",
+      "evidenceContains": "draw two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-029",
+      "goldIndex": 2,
+      "actionType": "lose_life",
+      "evidenceContains": "lose 2 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-030",
+      "goldIndex": 0,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 1 damage",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-030",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "Create a Blood token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-031",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "exile it instead",
+      "matched": false
+    },
+    {
+      "caseId": "dev-v9-031",
+      "goldIndex": 1,
+      "actionType": "exile",
+      "evidenceContains": "exile all graveyards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-032",
+      "goldIndex": 0,
+      "actionType": "mill",
+      "evidenceContains": "mills half",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-033",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "search your library",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-v9-033",
+      "goldIndex": 1,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0003",
+      "goldIndex": 0,
+      "actionType": "deal_damage",
+      "evidenceContains": "damage",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0004",
+      "goldIndex": 0,
+      "actionType": "counter",
+      "evidenceContains": "Counter",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0005",
+      "goldIndex": 0,
+      "actionType": "deal_damage",
+      "evidenceContains": "damage",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0007",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0008",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw three cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0009",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "Exile",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0009",
+      "goldIndex": 1,
+      "actionType": "search_library",
+      "evidenceContains": "search",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0009",
+      "goldIndex": 2,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put that card onto the battlefield",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0009",
+      "goldIndex": 3,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0010",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "Exile",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0011",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {G}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0012",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "search your library for",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0012",
+      "goldIndex": 1,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0012",
+      "goldIndex": 2,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put that card onto the battlefield",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0012",
+      "goldIndex": 3,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0013",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "loses 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0013",
+      "goldIndex": 1,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0014",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "loses 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0014",
+      "goldIndex": 1,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0015",
+      "goldIndex": 0,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 2 damage to each opponent",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0016",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0017",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Treasure token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0018",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Treasure token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0019",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "exile the top",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0019",
+      "goldIndex": 1,
+      "actionType": "cast",
+      "evidenceContains": "cast any number of spells",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0020",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0021",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {C}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0021",
+      "goldIndex": 1,
+      "actionType": "untap",
+      "evidenceContains": "Untap this artifact",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0022",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0023",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0024",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0025",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0025",
+      "goldIndex": 1,
+      "actionType": "lose_life",
+      "evidenceContains": "lose 3 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0025",
+      "goldIndex": 2,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0026",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0026",
+      "goldIndex": 1,
+      "actionType": "shuffle_library",
+      "evidenceContains": "shuffle and put that card on top",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0026",
+      "goldIndex": 2,
+      "actionType": "lose_life",
+      "evidenceContains": "lose 2 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0027",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0027",
+      "goldIndex": 1,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0028",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0028",
+      "goldIndex": 1,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0029",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0029",
+      "goldIndex": 1,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0030",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0030",
+      "goldIndex": 1,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put that card onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0030",
+      "goldIndex": 2,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0031",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "exile it instead",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0031",
+      "goldIndex": 1,
+      "actionType": "exile",
+      "evidenceContains": "exile all graveyards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0032",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "tokens",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0036",
+      "goldIndex": 0,
+      "actionType": "untap",
+      "evidenceContains": "untap all nonland permanents",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0039",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add one mana",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0040",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "from your graveyard to your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0040",
+      "goldIndex": 1,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0040",
+      "goldIndex": 2,
+      "actionType": "discard",
+      "evidenceContains": "discards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0040",
+      "goldIndex": 3,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 2 damage to any target",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0041",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy all creatures",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0041",
+      "goldIndex": 1,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card for each creature destroyed",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0042",
+      "goldIndex": 0,
+      "actionType": "counter",
+      "evidenceContains": "Counter target",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0042",
+      "goldIndex": 1,
+      "actionType": "draw",
+      "evidenceContains": "draws two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0043",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target artifact",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0043",
+      "goldIndex": 1,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0043",
+      "goldIndex": 2,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target enchantment",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0043",
+      "goldIndex": 3,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target land",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0043",
+      "goldIndex": 4,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target planeswalker",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0044",
+      "goldIndex": 0,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 2 damage",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0044",
+      "goldIndex": 1,
+      "actionType": "tap",
+      "evidenceContains": "Tap target permanent",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0044",
+      "goldIndex": 2,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0045",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target artifact",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0045",
+      "goldIndex": 1,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target enchantment",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0046",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return target nonland permanent an opponent controls to its owner's hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0047",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "you may draw a card",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0047",
+      "goldIndex": 1,
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrifice this Aura",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0048",
+      "goldIndex": 0,
+      "actionType": "put_counter",
+      "evidenceContains": "put a +1/+1 counter",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0049",
+      "goldIndex": 0,
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrifices",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0049",
+      "goldIndex": 1,
+      "actionType": "discard",
+      "evidenceContains": "discards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0049",
+      "goldIndex": 2,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "from a graveyard onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0050",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0050",
+      "goldIndex": 1,
+      "actionType": "lose_life",
+      "evidenceContains": "lose 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0051",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "each creature gets",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0051",
+      "goldIndex": 1,
+      "actionType": "lose_life",
+      "evidenceContains": "loses 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0051",
+      "goldIndex": 2,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0052",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {C}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0052",
+      "goldIndex": 1,
+      "actionType": "exile",
+      "evidenceContains": "exile a creature card from your graveyard",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0052",
+      "goldIndex": 2,
+      "actionType": "untap",
+      "evidenceContains": "untap it",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0052",
+      "goldIndex": 3,
+      "actionType": "lose_life",
+      "evidenceContains": "each opponent loses X life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0052",
+      "goldIndex": 4,
+      "actionType": "gain_life",
+      "evidenceContains": "you gain X life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0053",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return target creature to its owner's hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0053",
+      "goldIndex": 1,
+      "actionType": "exile",
+      "evidenceContains": "Exile all cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0053",
+      "goldIndex": 2,
+      "actionType": "shuffle_into_library",
+      "evidenceContains": "shuffles their hand into their library",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0053",
+      "goldIndex": 3,
+      "actionType": "draw",
+      "evidenceContains": "Draw three cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0054",
+      "goldIndex": 0,
+      "actionType": "discard",
+      "evidenceContains": "discards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0054",
+      "goldIndex": 1,
+      "actionType": "sacrifice",
+      "evidenceContains": "Target player sacrifices",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0054",
+      "goldIndex": 2,
+      "actionType": "sacrifice",
+      "evidenceContains": "That player sacrifices",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0055",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0055",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "Create a 3/3 green Elk creature token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0055",
+      "goldIndex": 2,
+      "actionType": "create_token",
+      "evidenceContains": "create a token that's a copy",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0055",
+      "goldIndex": 3,
+      "actionType": "discard",
+      "evidenceContains": "discard a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0055",
+      "goldIndex": 4,
+      "actionType": "discard",
+      "evidenceContains": "discard two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0056",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "add three mana",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0057",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "exiles all creature cards from their graveyard",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0057",
+      "goldIndex": 1,
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrifices all creatures they control",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0057",
+      "goldIndex": 2,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "puts all cards they exiled this way onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0058",
+      "goldIndex": 0,
+      "actionType": "discard",
+      "evidenceContains": "discards that card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0059",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "create a 2/2",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0059",
+      "goldIndex": 1,
+      "actionType": "draw",
+      "evidenceContains": "draw that many cards",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0059",
+      "goldIndex": 2,
+      "actionType": "discard",
+      "evidenceContains": "You may discard up to two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0059",
+      "goldIndex": 3,
+      "actionType": "exile",
+      "evidenceContains": "Exile this Saga",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0059",
+      "goldIndex": 4,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "return it to the battlefield transformed",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0060",
+      "goldIndex": 0,
+      "actionType": "copy",
+      "evidenceContains": "Copy target instant",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0061",
+      "goldIndex": 0,
+      "actionType": "copy",
+      "evidenceContains": "copy target",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0062",
+      "goldIndex": 0,
+      "actionType": "play",
+      "evidenceContains": "play lands",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0062",
+      "goldIndex": 1,
+      "actionType": "cast",
+      "evidenceContains": "cast spells from your graveyard",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0063",
+      "goldIndex": 0,
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrifice this enchantment",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0067",
+      "goldIndex": 0,
+      "actionType": "put_counter",
+      "evidenceContains": "Put a +1/+1 counter",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0070",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {U}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0071",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {G}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0082",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "Exile",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0082",
+      "goldIndex": 1,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {C}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0082",
+      "goldIndex": 2,
+      "actionType": "add_mana",
+      "evidenceContains": "Add one mana of any of the exiled cards' colors",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0083",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "from your graveyard to your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0090",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "You may",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0091",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "search your library for",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0091",
+      "goldIndex": 1,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0092",
+      "goldIndex": 0,
+      "actionType": "sacrifice",
+      "evidenceContains": "you may sacrifice a creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0092",
+      "goldIndex": 1,
+      "actionType": "draw",
+      "evidenceContains": "draws two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0092",
+      "goldIndex": 2,
+      "actionType": "lose_life",
+      "evidenceContains": "loses 2 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0093",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "You may",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0093",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "create a Gold token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0094",
+      "goldIndex": 0,
+      "actionType": "counter",
+      "evidenceContains": "You may",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0095",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "You may",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0096",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "return target creature to its owner's hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0097",
+      "goldIndex": 0,
+      "actionType": "put_counter",
+      "evidenceContains": "put a +1/+1 counter",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0098",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "You may",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0099",
+      "goldIndex": 0,
+      "actionType": "discard",
+      "evidenceContains": "you may discard a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0099",
+      "goldIndex": 1,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0102",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "return that card to the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0108",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "Exile",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0108",
+      "goldIndex": 1,
+      "actionType": "play",
+      "evidenceContains": "you may play that card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0109",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "Exile",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0109",
+      "goldIndex": 1,
+      "actionType": "cast",
+      "evidenceContains": "cast the copy",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0109",
+      "goldIndex": 2,
+      "actionType": "mill",
+      "evidenceContains": "mills four cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0110",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0112",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "exile target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0112",
+      "goldIndex": 1,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "Return that card to the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0113",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "create two 2/2 red Human Knight creature tokens",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0113",
+      "goldIndex": 1,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0115",
+      "goldIndex": 0,
+      "actionType": "counter",
+      "evidenceContains": "Counter target spell unless its controller pays ",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0115",
+      "goldIndex": 1,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card for each time Spell Contortion was kicked",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0116",
+      "goldIndex": 0,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 1 damage to target creature an opponent controls",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0117",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0118",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "return target artifact card from your graveyard to your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0119",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Treasure token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0120",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Treasure token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0120",
+      "goldIndex": 1,
+      "actionType": "exile",
+      "evidenceContains": "exile the top",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0120",
+      "goldIndex": 2,
+      "actionType": "play",
+      "evidenceContains": "You may play that card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0123",
+      "goldIndex": 0,
+      "actionType": "cast",
+      "evidenceContains": "you may cast this spell without paying its mana cost",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0126",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {G}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0127",
+      "goldIndex": 0,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals X damage to any target",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0128",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0129",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0129",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "create a black Vampire creature token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0130",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0131",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0131",
+      "goldIndex": 1,
+      "actionType": "exile",
+      "evidenceContains": "Exile target card from a graveyard",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0131",
+      "goldIndex": 2,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 2 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0132",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0133",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0134",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "Exile",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0135",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "Exile",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0135",
+      "goldIndex": 1,
+      "actionType": "cast",
+      "evidenceContains": "You may cast the copy",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0136",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "Exile",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0137",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "from your graveyard to your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0138",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0139",
+      "goldIndex": 0,
+      "actionType": "counter",
+      "evidenceContains": "Counter",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0139",
+      "goldIndex": 1,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 2 damage",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0140",
+      "goldIndex": 0,
+      "actionType": "counter",
+      "evidenceContains": "Counter",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0140",
+      "goldIndex": 1,
+      "actionType": "tap",
+      "evidenceContains": "Tap target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0141",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "loses 3 life",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0142",
+      "goldIndex": 0,
+      "actionType": "discard",
+      "evidenceContains": "discards two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0142",
+      "goldIndex": 1,
+      "actionType": "draw",
+      "evidenceContains": "Draw two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0142",
+      "goldIndex": 2,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 4 damage to any target",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0142",
+      "goldIndex": 3,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 4 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0145",
+      "goldIndex": 0,
+      "actionType": "put_counter",
+      "evidenceContains": "Put a +1/+1 counter",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0145",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "create a Food token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0145",
+      "goldIndex": 2,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0145",
+      "goldIndex": 3,
+      "actionType": "lose_life",
+      "evidenceContains": "lose 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0146",
+      "goldIndex": 0,
+      "actionType": "scry",
+      "evidenceContains": "scry 2",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0147",
+      "goldIndex": 0,
+      "actionType": "surveil",
+      "evidenceContains": "Surveil 2",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0147",
+      "goldIndex": 1,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0149",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {R}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0150",
+      "goldIndex": 0,
+      "actionType": "cast",
+      "evidenceContains": "You may cast it without paying its mana cost",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0151",
+      "goldIndex": 0,
+      "actionType": "sacrifice",
+      "evidenceContains": "Each opponent sacrifices",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0152",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draws a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0153",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "loses 2 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0153",
+      "goldIndex": 1,
+      "actionType": "untap",
+      "evidenceContains": "Untap it",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0154",
+      "goldIndex": 0,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0157",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0158",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Create a 1/1 red Devil creature token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0161",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add one mana of any color",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0163",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw that many cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0163",
+      "goldIndex": 1,
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrifice any number of artifacts",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0166",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0167",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Wolf creature token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0168",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {G}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0168",
+      "goldIndex": 1,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {C}{C}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0174",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy X target creatures",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0175",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw X cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0182",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": true,
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "eval-0188",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {B}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0191",
+      "goldIndex": 0,
+      "actionType": "copy",
+      "evidenceContains": "copy",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0191",
+      "goldIndex": 1,
+      "actionType": "add_mana",
+      "evidenceContains": "Add one mana of any color",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0192",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0192",
+      "goldIndex": 1,
+      "actionType": "discard",
+      "evidenceContains": "discard a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0193",
+      "goldIndex": 0,
+      "actionType": "cast",
+      "evidenceContains": "you may cast that card without paying its mana cost",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0194",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "eval-0194",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "Create a Clue token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0195",
+      "goldIndex": 0,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0196",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "exile the top card of your library face down",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0196",
+      "goldIndex": 1,
+      "actionType": "exile",
+      "evidenceContains": "exile all cards from your hand face down",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0197",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0197",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "create a black Vampire creature token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0198",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0199",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0201",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0201",
+      "goldIndex": 1,
+      "actionType": "discard",
+      "evidenceContains": "discard a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0202",
+      "goldIndex": 0,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals X damage to any target",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0203",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "this Class enters, draw two cards, then discard tw",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0203",
+      "goldIndex": 1,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {U}",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0203",
+      "goldIndex": 2,
+      "actionType": "discard",
+      "evidenceContains": "discard two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0204",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "create a 1/1 blue and red Otter creature token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0204",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "Whenever you cast an instant or sorcery spell, create a 1/1 blue and red Otter creature token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0204",
+      "goldIndex": 2,
+      "actionType": "return_to_hand",
+      "evidenceContains": "return target instant or sorcery card from your graveyard to your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0257",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy all creatures with power 3 or greater",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0257",
+      "goldIndex": 1,
+      "actionType": "cast",
+      "evidenceContains": "Cast this spell only from your graveyard",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0258",
+      "goldIndex": 0,
+      "actionType": "shuffle_into_library",
+      "evidenceContains": "shuffles their hand and graveyard into their library",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0258",
+      "goldIndex": 1,
+      "actionType": "draw",
+      "evidenceContains": "draws seven cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0259",
+      "goldIndex": 0,
+      "actionType": "surveil",
+      "evidenceContains": "Surveil 2",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0259",
+      "goldIndex": 1,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0259",
+      "goldIndex": 2,
+      "actionType": "return_to_hand",
+      "evidenceContains": "returns a nonland permanent",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0259",
+      "goldIndex": 3,
+      "actionType": "discard",
+      "evidenceContains": "discards a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0260",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target artifact",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0260",
+      "goldIndex": 1,
+      "actionType": "cast",
+      "evidenceContains": "You may cast the creature later from exile",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0261",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return target card that has an Adventure from your graveyard to your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0261",
+      "goldIndex": 1,
+      "actionType": "sacrifice",
+      "evidenceContains": "Sacrifice this land: Return target card that has an Adventure from your graveyard to your hand",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0262",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Create two 1/1 green Saproling creature tokens.",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0263",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "create a 1/1",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0264",
+      "goldIndex": 0,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 4 damage",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0265",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "create two 2/2 green Wolf creature tokens",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0265",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "create two 2/2 green Wolf creature tokens",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0266",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0266",
+      "goldIndex": 1,
+      "actionType": "discard",
+      "evidenceContains": "discard a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0267",
+      "goldIndex": 0,
+      "actionType": "counter",
+      "evidenceContains": "Counter target artifact spell",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0267",
+      "goldIndex": 1,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return target artifact to its owner's hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0268",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target artifact",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0269",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0269",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "Create four 1/1 white Bird creature tokens",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0270",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0270",
+      "goldIndex": 1,
+      "actionType": "discard",
+      "evidenceContains": "discard a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0272",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "dies, draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0273",
+      "goldIndex": 0,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0274",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "destroy target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0276",
+      "goldIndex": 0,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 3 damage",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0276",
+      "goldIndex": 1,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 3 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0277",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0278",
+      "goldIndex": 0,
+      "actionType": "untap",
+      "evidenceContains": "untap up to four target creatures",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0282",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": false
+    },
+    {
+      "caseId": "eval-0283",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target artifact",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0285",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "eval-0285",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "Create a Clue token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-001",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "destroy target artifact or enchantment an opponent controls",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-002",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {W}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-003",
+      "goldIndex": 0,
+      "actionType": "gain_life",
+      "evidenceContains": "You gain 3 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-004",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "return it to the battlefield transformed",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-005",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "Exile target creature you control",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-005",
+      "goldIndex": 1,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "return that card to the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-006",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "return target Vehicle card from your graveyard to the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-006",
+      "goldIndex": 1,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return it to its owner's hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-007",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "exile up to one other target creature you control",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-007",
+      "goldIndex": 1,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "return that card to the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-008",
+      "goldIndex": 0,
+      "actionType": "copy",
+      "evidenceContains": "copy of target artifact",
+      "matched": false
+    },
+    {
+      "caseId": "dev-exp-v1-009",
+      "goldIndex": 0,
+      "actionType": "copy",
+      "evidenceContains": "becomes a copy of target nonlegendary creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-010",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Create a token that's a copy of target artifact",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-010",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "Create a token that's a copy of target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-011",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-011",
+      "goldIndex": 1,
+      "actionType": "gain_life",
+      "evidenceContains": "gains 4 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-012",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target creature with flying",
+      "matched": false
+    },
+    {
+      "caseId": "dev-exp-v1-012",
+      "goldIndex": 1,
+      "actionType": "gain_life",
+      "evidenceContains": "gains 4 life",
+      "matched": false
+    },
+    {
+      "caseId": "dev-exp-v1-013",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Create a 3/2 red and white Spirit creature token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-013",
+      "goldIndex": 1,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 3 damage",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-013",
+      "goldIndex": 2,
+      "actionType": "gain_life",
+      "evidenceContains": "gains 3 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-013",
+      "goldIndex": 3,
+      "actionType": "sacrifice",
+      "evidenceContains": "Sacrifice a permanent",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-013",
+      "goldIndex": 4,
+      "actionType": "draw",
+      "evidenceContains": "draw two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-014",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "Exile target artifact or enchantment",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-015",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return target creature you control to its owner's hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-016",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return target creature or Vehicle an opponent controls",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-016",
+      "goldIndex": 1,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-017",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library for a creature card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-017",
+      "goldIndex": 1,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put it onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-017",
+      "goldIndex": 2,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-018",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library for a basic land card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-018",
+      "goldIndex": 1,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put it onto the battlefield tapped",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-018",
+      "goldIndex": 2,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-019",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return target creature to its owner's hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-020",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return target creature to its owner's hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-020",
+      "goldIndex": 1,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-021",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library for a Ninja card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-021",
+      "goldIndex": 1,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-022",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-022",
+      "goldIndex": 1,
+      "actionType": "discard",
+      "evidenceContains": "discard a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-023",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draws three cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-024",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-025",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library for a Ninja card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-025",
+      "goldIndex": 1,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-026",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library for a creature card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-026",
+      "goldIndex": 1,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put it onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-026",
+      "goldIndex": 2,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-027",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library for a basic land card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-027",
+      "goldIndex": 1,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put it onto the battlefield tapped",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-027",
+      "goldIndex": 2,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-028",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "loses 4 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-028",
+      "goldIndex": 1,
+      "actionType": "search_library",
+      "evidenceContains": "search your library and/or graveyard",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-029",
+      "goldIndex": 0,
+      "actionType": "put_into_hand",
+      "evidenceContains": "put that card into your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-029",
+      "goldIndex": 1,
+      "actionType": "lose_life",
+      "evidenceContains": "lose life equal to its mana value",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-030",
+      "goldIndex": 0,
+      "actionType": "put_into_hand",
+      "evidenceContains": "Put one of those cards into your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-031",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "return target Vehicle card from your graveyard to the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-032",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-033",
+      "goldIndex": 0,
+      "actionType": "put_into_hand",
+      "evidenceContains": "Put one of those cards into your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-034",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw two cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-035",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draws three cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-036",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "you may draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-037",
+      "goldIndex": 0,
+      "actionType": "put_counter",
+      "evidenceContains": "put a +1/+1 counter on target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-038",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-039",
+      "goldIndex": 0,
+      "actionType": "discard",
+      "evidenceContains": "discards a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-039",
+      "goldIndex": 1,
+      "actionType": "lose_life",
+      "evidenceContains": "loses 2 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-040",
+      "goldIndex": 0,
+      "actionType": "put_into_hand",
+      "evidenceContains": "put that card into your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-040",
+      "goldIndex": 1,
+      "actionType": "lose_life",
+      "evidenceContains": "loses life equal to its mana value",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-041",
+      "goldIndex": 0,
+      "actionType": "counter",
+      "evidenceContains": "Counter target noncreature spell",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-044",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library for a creature card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-045",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "loses X life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-046",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "loses X life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-047",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "loses half their life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-048",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "loses life equal to its mana value",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-049",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Create two 1/1 red Goblin creature tokens",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-050",
+      "goldIndex": 0,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 3 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-051",
+      "goldIndex": 0,
+      "actionType": "counter",
+      "evidenceContains": "Counter target artifact or enchantment spell",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-052",
+      "goldIndex": 0,
+      "actionType": "counter",
+      "evidenceContains": "Counter target creature spell",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-001",
+      "goldIndex": 0,
+      "actionType": "tap",
+      "evidenceContains": "Tap up to one target artifact or creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-001",
+      "goldIndex": 1,
+      "actionType": "exile",
+      "evidenceContains": "Exile target nonland permanent card with mana value X from your graveyard",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-001",
+      "goldIndex": 2,
+      "actionType": "create_token",
+      "evidenceContains": "Create a token that's a copy of that card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-002",
+      "goldIndex": 0,
+      "actionType": "mill",
+      "evidenceContains": "mills three cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-002",
+      "goldIndex": 1,
+      "actionType": "draw",
+      "evidenceContains": "you draw three cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-003",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Create two 3/1 red Elemental creature tokens",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-003",
+      "goldIndex": 1,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals X damage to each creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-004",
+      "goldIndex": 0,
+      "actionType": "gain_life",
+      "evidenceContains": "You gain life equal to the greatest power",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-004",
+      "goldIndex": 1,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals X damage divided as you choose",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-005",
+      "goldIndex": 0,
+      "actionType": "put_into_hand",
+      "evidenceContains": "Put that card into your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-005",
+      "goldIndex": 1,
+      "actionType": "exile",
+      "evidenceContains": "exile the other with a silver counter",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-005",
+      "goldIndex": 2,
+      "actionType": "create_token",
+      "evidenceContains": "Create a 0/0 colorless Construct",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-006",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Create three 1/1 white Soldier creature tokens",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-006",
+      "goldIndex": 1,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy all creatures with power 4 or greater",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-007",
+      "goldIndex": 0,
+      "actionType": "put_into_hand",
+      "evidenceContains": "Put one of them into your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-007",
+      "goldIndex": 1,
+      "actionType": "untap",
+      "evidenceContains": "Untap up to four target permanents",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-008",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "search your library and/or graveyard",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-009",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "search your library and/or graveyard",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-010",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-010",
+      "goldIndex": 1,
+      "actionType": "search_library",
+      "evidenceContains": "search your library and/or graveyard",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-011",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "search your library and/or graveyard",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-012",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "search your library and/or graveyard",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-013",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "Target opponent loses 2 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-014",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "Target opponent loses 2 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-015",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "target opponent loses 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-015",
+      "goldIndex": 1,
+      "actionType": "gain_life",
+      "evidenceContains": "you gain 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-016",
+      "goldIndex": 0,
+      "actionType": "lose_life",
+      "evidenceContains": "Target opponent loses 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-017",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "create a token that's a copy of that creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-018",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Create a token that's a copy of target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-019",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "create a token that's a copy of it",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-020",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "Exile target attacking creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-020",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "Create a token that's a copy of that creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-021",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "Return target creature card from your graveyard to the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-022",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "return a creature card at random from your graveyard to the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-023",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "Put target creature card from an opponent's graveyard onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-024",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "put target creature card with mana value 4 or less from a graveyard onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-001",
+      "goldIndex": 0,
+      "actionType": "put_counter",
+      "evidenceContains": "Put two +1/+1 counters on up to one target Dinosaur",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-001",
+      "goldIndex": 1,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals damage equal to its power",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-002",
+      "goldIndex": 0,
+      "actionType": "put_counter",
+      "evidenceContains": "Put a +1/+1 counter on target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-003",
+      "goldIndex": 0,
+      "actionType": "put_into_hand",
+      "evidenceContains": "put it into your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-004",
+      "goldIndex": 0,
+      "actionType": "put_counter",
+      "evidenceContains": "Put a +1/+1 counter on up to one target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-004",
+      "goldIndex": 1,
+      "actionType": "exile",
+      "evidenceContains": "Exile target tapped creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-005",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target nonland permanent",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-006",
+      "goldIndex": 0,
+      "actionType": "untap",
+      "evidenceContains": "Untap all creatures target player controls",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-007",
+      "goldIndex": 0,
+      "actionType": "put_counter",
+      "evidenceContains": "Put two +1/+1 counters on target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-008",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return target permanent card from your graveyard to your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-009",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Create a token that's a copy of target creature you control",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-010",
+      "goldIndex": 0,
+      "actionType": "tap",
+      "evidenceContains": "Tap two target creatures",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-011",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Create a token that's a copy of target creature you control",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-012",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Create a token that's a copy of target creature you control",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-013",
+      "goldIndex": 0,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "puts target nonlegendary creature card from your graveyard onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-014",
+      "goldIndex": 0,
+      "actionType": "mill",
+      "evidenceContains": "Mill seven cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-015",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Create a 1/1 black and green Insect creature token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0008",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "Exile all permanents",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0008",
+      "goldIndex": 1,
+      "actionType": "discard",
+      "evidenceContains": "discard your hand",
+      "matched": true,
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "rc3-pos-v12-0015",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0015",
+      "goldIndex": 1,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0015",
+      "goldIndex": 2,
+      "actionType": "discard",
+      "evidenceContains": "Discard a card unless Moon-Circuit Hacker entered this turn",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0015",
+      "goldIndex": 3,
+      "actionType": "scry",
+      "evidenceContains": "scry 2",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0018",
+      "goldIndex": 0,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put that card onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0018",
+      "goldIndex": 1,
+      "actionType": "shuffle_library",
+      "evidenceContains": "shuffles",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0033",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card, then discard a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0033",
+      "goldIndex": 1,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {C}",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0033",
+      "goldIndex": 2,
+      "actionType": "create_token",
+      "evidenceContains": "create a tapped Powerstone token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0033",
+      "goldIndex": 3,
+      "actionType": "cast",
+      "evidenceContains": "cast a nonartifact spell",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0033",
+      "goldIndex": 4,
+      "actionType": "discard",
+      "evidenceContains": "discard a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0033",
+      "goldIndex": 5,
+      "actionType": "discard",
+      "evidenceContains": "discard one or more artifact cards, create a tapped Powerstone token",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0051",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "create a 2/2 white Alien creature token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0051",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "create X of those token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0051",
+      "goldIndex": 2,
+      "actionType": "cast",
+      "evidenceContains": "You may cast this spell by sacrificing a creature and paying the emerge cost reduced by that creature's mana value",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0051",
+      "goldIndex": 3,
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrificed creature's toughness",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0071",
+      "goldIndex": 0,
+      "actionType": "tap",
+      "evidenceContains": "Tap all Spirits",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0071",
+      "goldIndex": 1,
+      "actionType": "tap",
+      "evidenceContains": "Tap all non-Spirit creatures",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0077",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Create a 2/2 white Cat Soldier creature token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0077",
+      "goldIndex": 1,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 1 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0077",
+      "goldIndex": 2,
+      "actionType": "put_counter",
+      "evidenceContains": "put a +1/+1 counter on this token",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0093",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "draw X cards, then mill X cards, where X is t",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0093",
+      "goldIndex": 1,
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrifice a nontoken creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0093",
+      "goldIndex": 2,
+      "actionType": "mill",
+      "evidenceContains": "mill X cards, where X is that creature's power",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0093",
+      "goldIndex": 3,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return this card from your graveyard to your hand",
+      "matched": true,
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "rc3-pos-v12-0098",
+      "goldIndex": 0,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put a creature card from among them onto the battlefield",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0107",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "exile the top card of each player's library",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0107",
+      "goldIndex": 1,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0107",
+      "goldIndex": 2,
+      "actionType": "cast",
+      "evidenceContains": "cast a spell this way, pay life equal to its mana value rather than paying its mana cost",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0108",
+      "goldIndex": 0,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0110",
+      "goldIndex": 0,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0110",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "create a Treasure token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0116",
+      "goldIndex": 0,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals that much damage to any target",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0123",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "search your library this way, shuffle",
+      "matched": true,
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "rc3-pos-v12-0123",
+      "goldIndex": 1,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put them onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0123",
+      "goldIndex": 2,
+      "actionType": "shuffle_library",
+      "evidenceContains": "shuffle",
+      "matched": true,
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "rc3-pos-v12-0125",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "search your library and/or graveyard for a card named Ajani, Valiant Protector, reveal it, and put it into your hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0125",
+      "goldIndex": 1,
+      "actionType": "search_library",
+      "evidenceContains": "search your library this way, shuffle",
+      "matched": true,
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "rc3-pos-v12-0125",
+      "goldIndex": 2,
+      "actionType": "sacrifice",
+      "evidenceContains": "Sacrifice this enchantment: Prevent all combat damage a creature of your choice would deal this turn",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0125",
+      "goldIndex": 3,
+      "actionType": "shuffle_library",
+      "evidenceContains": "shuffle",
+      "matched": true,
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "rc3-pos-v12-0126",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library for a Plains card, reveal it, put it into your hand, then shuffle",
+      "matched": true,
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "rc3-pos-v12-0126",
+      "goldIndex": 1,
+      "actionType": "exile",
+      "evidenceContains": "exile target creature an opponent controls until this creature leaves the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0126",
+      "goldIndex": 2,
+      "actionType": "discard",
+      "evidenceContains": "Discard this card: Search your library for a Plains card, reveal it, put it into your hand, then shuffle",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0126",
+      "goldIndex": 3,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "rc3-pos-v12-0130",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "Return target artifact or non-Aura enchantment card from your graveyard to the battlefield",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0131",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {W}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0131",
+      "goldIndex": 1,
+      "actionType": "return_to_hand",
+      "evidenceContains": "Return this card from your graveyard to your hand",
+      "matched": true,
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "rc3-pos-v12-0135",
+      "goldIndex": 0,
+      "actionType": "discard",
+      "evidenceContains": "Discard two cards: Return this card from your graveyard to the battlefield tapped",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0144",
+      "goldIndex": 0,
+      "actionType": "return_to_hand",
+      "evidenceContains": "return target nonland permanent to its owner's hand",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0144",
+      "goldIndex": 1,
+      "actionType": "cast",
+      "evidenceContains": "You may cast this spell for its evoke cost",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0144",
+      "goldIndex": 2,
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrificed when it enters",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0146",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": true,
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "rc3-pos-v12-0146",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "Create a Clue artifact token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0146",
+      "goldIndex": 2,
+      "actionType": "sacrifice",
+      "evidenceContains": "Sacrifice this token: Draw a card",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0147",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "create a Food token or a Treasure token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-v12-0147",
+      "goldIndex": 1,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 3 life",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "goldIndex": 0,
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "matched": true,
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "Create a colorless Clue artifact token",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "goldIndex": 2,
+      "actionType": "sacrifice",
+      "evidenceContains": "Sacrifice this artifact: Draw a card",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "goldIndex": 3,
+      "actionType": "shuffle_into_library",
+      "evidenceContains": "shuffle it into its owner's library",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "goldIndex": 4,
+      "actionType": "shuffle_library",
+      "evidenceContains": "you may shuffle",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0001",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {U}",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0001",
+      "goldIndex": 1,
+      "actionType": "cast",
+      "evidenceContains": "cast from exile",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0001",
+      "goldIndex": 2,
+      "actionType": "cast",
+      "evidenceContains": "You may cast Glamorous Outlaw for as long as it remains exiled",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0001",
+      "goldIndex": 3,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 2 damage to each opponent and you gain 2 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0001",
+      "goldIndex": 4,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 2 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0001",
+      "goldIndex": 5,
+      "actionType": "scry",
+      "evidenceContains": "Scry 2",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0002",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {B}",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0002",
+      "goldIndex": 1,
+      "actionType": "cast",
+      "evidenceContains": "cast from exile",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0002",
+      "goldIndex": 2,
+      "actionType": "cast",
+      "evidenceContains": "You may cast Masked Bandits for as long as it remains exiled",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0003",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {R}",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0003",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "create a 1/1 green and white Citizen creature token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0003",
+      "goldIndex": 2,
+      "actionType": "cast",
+      "evidenceContains": "cast from exile",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0003",
+      "goldIndex": 3,
+      "actionType": "cast",
+      "evidenceContains": "You may cast Rakish Revelers for as long as it remains exiled",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0004",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {W}",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0004",
+      "goldIndex": 1,
+      "actionType": "cast",
+      "evidenceContains": "cast from exile",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0004",
+      "goldIndex": 2,
+      "actionType": "cast",
+      "evidenceContains": "You may cast Shattered Seraph for as long as it remains exiled",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0004",
+      "goldIndex": 3,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 3 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0005",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "search your library for a card with that name, put it onto the battlefield, then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0005",
+      "goldIndex": 1,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put it onto the battlefield",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0005",
+      "goldIndex": 2,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0006",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "search your library for 1996 World Champion and reveal it to all players",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0006",
+      "goldIndex": 1,
+      "actionType": "discard",
+      "evidenceContains": "Discard your hand to search your library for 1996 World Champion and reveal it to all players",
+      "matched": true,
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "rc3-pos-cat-0006",
+      "goldIndex": 2,
+      "actionType": "put_counter",
+      "evidenceContains": "put 1996 World Champion on top of it",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0006",
+      "goldIndex": 3,
+      "actionType": "shuffle_library",
+      "evidenceContains": "Shuffle your library and put 1996 World Champion on top of it",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0007",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library for up to two basic land cards and/or Gate cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0007",
+      "goldIndex": 1,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put one onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0007",
+      "goldIndex": 2,
+      "actionType": "sacrifice",
+      "evidenceContains": "Sacrifice Navigation Orb: Search your library for up to two basic land cards and/or Gate cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0007",
+      "goldIndex": 3,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0008",
+      "goldIndex": 0,
+      "actionType": "search_library",
+      "evidenceContains": "Search your library for a basic land card, reveal it, put it into your hand, then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0008",
+      "goldIndex": 1,
+      "actionType": "sacrifice",
+      "evidenceContains": "Sacrifice Ominous Parcel: Search your library for a basic land card, reveal it, put it into your hand, then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0008",
+      "goldIndex": 2,
+      "actionType": "sacrifice",
+      "evidenceContains": "Sacrifice Ominous Parcel: It deals 4 damage to target creature",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0008",
+      "goldIndex": 3,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 4 damage to target creature",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0008",
+      "goldIndex": 4,
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0009",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "destroy target creature or planeswalker that player controls",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0009",
+      "goldIndex": 1,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0009",
+      "goldIndex": 2,
+      "actionType": "discard",
+      "evidenceContains": "discard a card",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0010",
+      "goldIndex": 0,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0011",
+      "goldIndex": 0,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0011",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "create a token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0012",
+      "goldIndex": 0,
+      "actionType": "mill",
+      "evidenceContains": "mill a card, put the top card of your library into your graveyard",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0012",
+      "goldIndex": 1,
+      "actionType": "mill",
+      "evidenceContains": "milled this way, transform this creature",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0015",
+      "goldIndex": 0,
+      "actionType": "add_mana",
+      "evidenceContains": "Add {C}",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0015",
+      "goldIndex": 1,
+      "actionType": "cast",
+      "evidenceContains": "cast spells of the chosen types or spells whose names begin with the first letter of your name",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0017",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "exile it instead",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0018",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "exile it instead",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0018",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "create a 1/1 white Spirit creature token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0019",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "exile it instead",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0019",
+      "goldIndex": 1,
+      "actionType": "cast",
+      "evidenceContains": "cast a spell from your graveyard, tap target creature you don't control",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0019",
+      "goldIndex": 2,
+      "actionType": "mill",
+      "evidenceContains": "mill four cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0019",
+      "goldIndex": 3,
+      "actionType": "tap",
+      "evidenceContains": "tap target creature you don't control",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0020",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "exile it instead",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0020",
+      "goldIndex": 1,
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrifice it at end of combat",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0020",
+      "goldIndex": 2,
+      "actionType": "sacrifice",
+      "evidenceContains": "Sacrifice that token at end of combat",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0021",
+      "goldIndex": 0,
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrifices an enchantment",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0022",
+      "goldIndex": 0,
+      "actionType": "create_token",
+      "evidenceContains": "Create two 1/1 green and white Citizen creature token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0023",
+      "goldIndex": 0,
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target enchantment",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0023",
+      "goldIndex": 1,
+      "actionType": "exile",
+      "evidenceContains": "Exile target card from a graveyard",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0023",
+      "goldIndex": 2,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 2 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0027",
+      "goldIndex": 0,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put a creature card from among them onto the battlefield",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0028",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "put an Elf or Tyvar card from your graveyard onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0028",
+      "goldIndex": 1,
+      "actionType": "mill",
+      "evidenceContains": "Mill five cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0028",
+      "goldIndex": 2,
+      "actionType": "put_counter",
+      "evidenceContains": "Put a +1/+1 counter on each Elf you control",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0029",
+      "goldIndex": 0,
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put a Vampire creature card with mana value 6 or less from your hand onto the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0029",
+      "goldIndex": 1,
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrifice a Vampire",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0029",
+      "goldIndex": 2,
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 3 damage to any target and you gain 3 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0029",
+      "goldIndex": 3,
+      "actionType": "gain_life",
+      "evidenceContains": "gain 3 life",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0029",
+      "goldIndex": 4,
+      "actionType": "put_counter",
+      "evidenceContains": "put a +1/+1 counter on it",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0030",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "return target land card from your graveyard to your hand",
+      "matched": false
+    },
+    {
+      "caseId": "rc3-pos-cat-0030",
+      "goldIndex": 1,
+      "actionType": "mill",
+      "evidenceContains": "mill four cards",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0031",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "Return target creature card from your graveyard to the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0032",
+      "goldIndex": 0,
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "Return target creature card from your graveyard to the battlefield",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0032",
+      "goldIndex": 1,
+      "actionType": "create_token",
+      "evidenceContains": "create three 1/1 green Elf Warrior creature token",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-one-shot-cast-0001",
+      "goldIndex": 0,
+      "actionType": "exile",
+      "evidenceContains": "exile up to one target",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-one-shot-cast-0001",
+      "goldIndex": 1,
+      "actionType": "copy",
+      "evidenceContains": "Copy it",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-one-shot-cast-0001",
+      "goldIndex": 2,
+      "actionType": "cast",
+      "evidenceContains": "cast the copy",
+      "matched": true,
+      "extractionSource": "v1_legacy"
+    }
+  ],
+  "fps": [
+    {
+      "caseId": "dev-cond-004",
+      "actionType": "create_token",
+      "evidenceText": "create a 1/1 blue Merfolk creature token",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-cond-007",
+      "actionType": "draw",
+      "evidenceText": "draw a card",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-opt-011",
+      "actionType": "put_into_hand",
+      "evidenceText": "put that card into its owner's hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-opt-015",
+      "actionType": "put_into_hand",
+      "evidenceText": "put that card into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-opt-031",
+      "actionType": "put_into_hand",
+      "evidenceText": "Put one of them into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-opt-036",
+      "actionType": "put_into_hand",
+      "evidenceText": "Put one of them into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-opt-037",
+      "actionType": "put_into_hand",
+      "evidenceText": "Put one of them into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-opt-038",
+      "actionType": "put_into_hand",
+      "evidenceText": "Put one of them into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-v9-018",
+      "actionType": "search_library",
+      "evidenceText": "search their library",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-v9-022",
+      "actionType": "draw",
+      "evidenceText": "Draw a card",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-v9-030",
+      "actionType": "draw",
+      "evidenceText": "Draw a card",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-v9-030",
+      "actionType": "draw",
+      "evidenceText": "Discard a card, Sacrifice this token: Draw a card",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-v9-033",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "eval-0009",
+      "actionType": "put_onto_battlefield",
+      "evidenceText": "put that card onto the battlefield",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0012",
+      "actionType": "put_onto_battlefield",
+      "evidenceText": "put that card onto the battlefield",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0025",
+      "actionType": "put_into_hand",
+      "evidenceText": "put that card into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "eval-0026",
+      "actionType": "shuffle_library",
+      "evidenceText": "then shuffle",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "eval-0027",
+      "actionType": "put_into_hand",
+      "evidenceText": "put that card into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "eval-0028",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "eval-0029",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "eval-0041",
+      "actionType": "draw",
+      "evidenceText": "Draw a card",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "eval-0047",
+      "actionType": "draw",
+      "evidenceText": "draw a card",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "eval-0055",
+      "actionType": "create_token",
+      "evidenceText": "create a token",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "eval-0059",
+      "actionType": "draw",
+      "evidenceText": "draw that many cards",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0099",
+      "actionType": "draw",
+      "evidenceText": "draw a card",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0100",
+      "actionType": "return_to_battlefield",
+      "evidenceText": "put target creature card from an opponent's graveyard onto the battlefield",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0101",
+      "actionType": "return_to_battlefield",
+      "evidenceText": "put target creature card from an opponent's graveyard onto the battlefield",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0102",
+      "actionType": "exile",
+      "evidenceText": "Exile another target creature you control",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "eval-0103",
+      "actionType": "return_to_battlefield",
+      "evidenceText": "put target creature card from an opponent's graveyard onto the battlefield",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0104",
+      "actionType": "return_to_battlefield",
+      "evidenceText": "put target creature card from an opponent's graveyard onto the battlefield",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0108",
+      "actionType": "exile",
+      "evidenceText": "exile it",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "eval-0109",
+      "actionType": "copy",
+      "evidenceText": "Copy it",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0114",
+      "actionType": "lose_life",
+      "evidenceText": "each opponent loses X life",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0114",
+      "actionType": "gain_life",
+      "evidenceText": "you gain X life",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0132",
+      "actionType": "destroy",
+      "evidenceText": "Destroy target creature",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0132",
+      "actionType": "destroy",
+      "evidenceText": "Destroy target enchantment",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0132",
+      "actionType": "destroy",
+      "evidenceText": "Destroy target land",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0132",
+      "actionType": "destroy",
+      "evidenceText": "Destroy target planeswalker",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0148",
+      "actionType": "put_into_hand",
+      "evidenceText": "Put one of them into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "eval-0149",
+      "actionType": "shuffle_library",
+      "evidenceText": "Shuffle your library",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "eval-0150",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "eval-0193",
+      "actionType": "add_mana",
+      "evidenceText": "Add {W}{U}{B}{R}{G}",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "eval-0193",
+      "actionType": "exile",
+      "evidenceText": "exile cards from the top of your library until you exile an instant or sorcery card with lesser mana value",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "eval-0277",
+      "actionType": "destroy",
+      "evidenceText": "Destroy all nonlegendary creatures",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-003",
+      "actionType": "play",
+      "evidenceText": "You may play an additional land this turn",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-003",
+      "actionType": "return_to_battlefield",
+      "evidenceText": "return it to the battlefield transformed",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-003",
+      "actionType": "untap",
+      "evidenceText": "untap up to three lands you control",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-004",
+      "actionType": "play",
+      "evidenceText": "You may play an additional land this turn",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-004",
+      "actionType": "gain_life",
+      "evidenceText": "gain 3 life",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-004",
+      "actionType": "untap",
+      "evidenceText": "untap up to three lands you control",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-005",
+      "actionType": "draw",
+      "evidenceText": "Draw a card",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-008",
+      "actionType": "create_token",
+      "evidenceText": "Create a token that's a copy of target artifact",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-008",
+      "actionType": "create_token",
+      "evidenceText": "Create a token",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v1-008",
+      "actionType": "exile",
+      "evidenceText": "Exile it at the beginning of the next end step",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v1-012",
+      "actionType": "exile",
+      "evidenceText": "Exile target creature",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-012",
+      "actionType": "gain_life",
+      "evidenceText": "gains 3 life",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-012",
+      "actionType": "search_library",
+      "evidenceText": "Search your library for a basic land card, reveal it, put it into your hand, then shuffle",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v1-012",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v1-012",
+      "actionType": "shuffle_library",
+      "evidenceText": "then shuffle",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v1-015",
+      "actionType": "return_to_hand",
+      "evidenceText": "Return target creature you don't control to its owner's hand",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-021",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v1-023",
+      "actionType": "discard",
+      "evidenceText": "discards two cards unless they discard a land card",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-023",
+      "actionType": "discard",
+      "evidenceText": "discard a land card",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v1-025",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v1-028",
+      "actionType": "put_into_hand",
+      "evidenceText": "reveal it, and put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v1-028",
+      "actionType": "shuffle_library",
+      "evidenceText": "shuffle",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v1-028",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v1-028",
+      "actionType": "search_library",
+      "evidenceText": "search your library this way,",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v1-031",
+      "actionType": "return_to_hand",
+      "evidenceText": "Return it to its owner's hand",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-034",
+      "actionType": "discard",
+      "evidenceText": "discard a card",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-035",
+      "actionType": "discard",
+      "evidenceText": "discards two cards unless they discard a land card",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-035",
+      "actionType": "discard",
+      "evidenceText": "discard a land card",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v1-038",
+      "actionType": "untap",
+      "evidenceText": "Untap target permanent",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-039",
+      "actionType": "untap",
+      "evidenceText": "Untap it",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-039",
+      "actionType": "sacrifice",
+      "evidenceText": "Sacrifice it at the beginning of the next end step if it has mana value 3 or less",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-039",
+      "actionType": "lose_life",
+      "evidenceText": "Each opponent loses life equal to the number of cards in their graveyard",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-040",
+      "actionType": "deal_damage",
+      "evidenceText": "deals X damage to target creature or planeswalker and you gain X life",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-040",
+      "actionType": "gain_life",
+      "evidenceText": "you gain X life",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-040",
+      "actionType": "create_token",
+      "evidenceText": "Create a number of 1/1 black Vampire Knight creature tokens",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-040",
+      "actionType": "put_into_hand",
+      "evidenceText": "put that card into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v1-044",
+      "actionType": "put_onto_battlefield",
+      "evidenceText": "put it onto the battlefield",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-044",
+      "actionType": "shuffle_library",
+      "evidenceText": "then shuffle",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-047",
+      "actionType": "draw",
+      "evidenceText": "draws cards equal to half the number of cards in their library",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-048",
+      "actionType": "put_into_hand",
+      "evidenceText": "Reveal the top card of your library and put that card into your hand",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-048",
+      "actionType": "deal_damage",
+      "evidenceText": "deals X damage to target creature or planeswalker and you gain X life",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-048",
+      "actionType": "gain_life",
+      "evidenceText": "you gain X life",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-048",
+      "actionType": "create_token",
+      "evidenceText": "Create a number of 1/1 black Vampire Knight creature tokens",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v1-048",
+      "actionType": "put_into_hand",
+      "evidenceText": "put that card into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-001",
+      "actionType": "draw",
+      "evidenceText": "Draw a card",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-001",
+      "actionType": "create_token",
+      "evidenceText": "Create Tamiyo's Notebook, a legendary colorless Book artifact token",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-002",
+      "actionType": "mill",
+      "evidenceText": "Target player mills three times X cards",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-003",
+      "actionType": "discard",
+      "evidenceText": "Discard all the cards",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-003",
+      "actionType": "draw",
+      "evidenceText": "draw that many cards",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-003",
+      "actionType": "exile",
+      "evidenceText": "Exile them at the beginning of the next end step",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-004",
+      "actionType": "create_token",
+      "evidenceText": "Create a 3/3 green Dinosaur creature token",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-005",
+      "actionType": "exile",
+      "evidenceText": "exile into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-008",
+      "actionType": "put_into_hand",
+      "evidenceText": "reveal it, and put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v3-008",
+      "actionType": "shuffle_library",
+      "evidenceText": "shuffle",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v3-008",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-008",
+      "actionType": "search_library",
+      "evidenceText": "search your library this way,",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-009",
+      "actionType": "put_into_hand",
+      "evidenceText": "reveal it, and put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v3-009",
+      "actionType": "shuffle_library",
+      "evidenceText": "shuffle",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v3-009",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-009",
+      "actionType": "search_library",
+      "evidenceText": "search your library this way,",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-010",
+      "actionType": "put_into_hand",
+      "evidenceText": "reveal it, and put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v3-010",
+      "actionType": "shuffle_library",
+      "evidenceText": "shuffle",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v3-010",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-010",
+      "actionType": "search_library",
+      "evidenceText": "search your library this way,",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-011",
+      "actionType": "put_into_hand",
+      "evidenceText": "reveal it, and put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v3-011",
+      "actionType": "shuffle_library",
+      "evidenceText": "shuffle",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v3-011",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-011",
+      "actionType": "search_library",
+      "evidenceText": "search your library this way,",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-012",
+      "actionType": "put_into_hand",
+      "evidenceText": "reveal it, and put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v3-012",
+      "actionType": "shuffle_library",
+      "evidenceText": "shuffle",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v3-012",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v3-012",
+      "actionType": "search_library",
+      "evidenceText": "search your library this way,",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-014",
+      "actionType": "discard",
+      "evidenceText": "Discard a card",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-014",
+      "actionType": "discard",
+      "evidenceText": "discards that card",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-014",
+      "actionType": "gain_life",
+      "evidenceText": "gain 2 life",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-015",
+      "actionType": "exile",
+      "evidenceText": "Exile Ghost Council of Orzhova",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-016",
+      "actionType": "gain_life",
+      "evidenceText": "gain 1 life",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-018",
+      "actionType": "sacrifice",
+      "evidenceText": "sacrifice this token",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v3-019",
+      "actionType": "create_token",
+      "evidenceText": "Create a 1/1 colorless Servo artifact creature token",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-019",
+      "actionType": "cast",
+      "evidenceText": "cast this ",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v3-019",
+      "actionType": "create_token",
+      "evidenceText": "create a token",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v3-019",
+      "actionType": "exile",
+      "evidenceText": "Exile those tokens at the beginning of the next end step",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v5-003",
+      "actionType": "put_into_hand",
+      "evidenceText": "reveal it and put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v5-004",
+      "actionType": "create_token",
+      "evidenceText": "Create a 2/2 white Samurai creature token",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-004",
+      "actionType": "gain_life",
+      "evidenceText": "gain 2 life",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-005",
+      "actionType": "create_token",
+      "evidenceText": "Create three 1/1 black Assassin creature tokens",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-005",
+      "actionType": "destroy",
+      "evidenceText": "destroy that creature",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v5-007",
+      "actionType": "draw",
+      "evidenceText": "draw two cards",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "dev-exp-v5-009",
+      "actionType": "create_token",
+      "evidenceText": "Create a token that's a copy of target creature an opponent controls, except it's not legendary and it's a 2/2 Coward in addition to its other types",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-012",
+      "actionType": "add_mana",
+      "evidenceText": "Add {U}",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-012",
+      "actionType": "create_token",
+      "evidenceText": "Create a token",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v5-013",
+      "actionType": "exile",
+      "evidenceText": "exile it",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "dev-exp-v5-015",
+      "actionType": "sacrifice",
+      "evidenceText": "You may sacrifice a creature",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-015",
+      "actionType": "destroy",
+      "evidenceText": "destroy target creature or planeswalker",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-015",
+      "actionType": "lose_life",
+      "evidenceText": "Each opponent loses life equal to the number of creature cards in your graveyard",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "dev-exp-v5-015",
+      "actionType": "sacrifice",
+      "evidenceText": "sacrifice a creature",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "rc3-pos-v12-0125",
+      "actionType": "put_into_hand",
+      "evidenceText": "reveal it, and put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "rc3-pos-v12-0125",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "rc3-pos-v12-0126",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "rc3-pos-v12-0147",
+      "actionType": "sacrifice",
+      "evidenceText": "Sacrifice this token: Add one mana of any color",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "rc3-pos-cat-0008",
+      "actionType": "put_into_hand",
+      "evidenceText": "put it into your hand",
+      "extractionSource": "rc3_transform"
+    },
+    {
+      "caseId": "rc3-pos-cat-0015",
+      "actionType": "add_mana",
+      "evidenceText": "Add one mana of any color",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0018",
+      "actionType": "create_token",
+      "evidenceText": "create a 1/1 white Spirit creature token",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0022",
+      "actionType": "deal_damage",
+      "evidenceText": "deals damage equal to twice the number of creatures you control to target creature or planeswalker",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0025",
+      "actionType": "deal_damage",
+      "evidenceText": "deals damage equal to the number of o's in name stickers on this enchantment to any target",
+      "extractionSource": "v1_legacy"
+    },
+    {
+      "caseId": "rc3-pos-cat-0029",
+      "actionType": "sacrifice",
+      "evidenceText": "sacrifice a Vampire",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "rc3-pos-cat-0029",
+      "actionType": "put_onto_battlefield",
+      "evidenceText": "put a Vampire creature card with mana value 6 or less from your hand onto the battlefield",
+      "extractionSource": "rc3_clause_native"
+    },
+    {
+      "caseId": "rc3-pos-cat-0030",
+      "actionType": "return_to_hand",
+      "evidenceText": "return target land card from your graveyard to your hand",
+      "extractionSource": "v1_legacy"
+    }
+  ]
+}

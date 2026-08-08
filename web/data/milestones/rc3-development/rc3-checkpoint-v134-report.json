@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-08-08T11:19:54.155Z",
-  "checkpoint": "rc3-structural-v134-checkpoint-1",
+  "generatedAt": "2026-08-08T16:06:56.850Z",
+  "checkpoint": "rc3-stabilization-v134-checkpoint-1",
   "lineage": {
     "parentCommit": "6a757a736dfda9004860bb38d5e677880590882c",
     "parentVersion": "oracle-action-v1.31-rc3-ast-dev",
     "intermediateDevelopmentState": "v1.32 — working development on parent; no separate immutable commit",
-    "currentVersion": "oracle-action-v1.33-rc3-ast-dev",
+    "currentVersion": "oracle-action-v1.34-rc3-ast-dev",
     "note": "6a757a73 is the corrected v1.31 freeze — do not retroactively label it v1.32"
   },
   "benchmarkSlices": {
@@ -25,9 +25,9 @@
     "intermediateFrom": "oracle-action-v1.31-rc3-ast-dev @ 6a757a73 via v1.32 working state"
   },
   "parser": {
-    "version": "oracle-action-v1.33-rc3-ast-dev",
-    "commit": "6a757a736dfda9004860bb38d5e677880590882c",
-    "blobSha": "9d16a2c2bc2359c5fb03a9936e95c08edd59f117",
+    "version": "oracle-action-v1.34-rc3-ast-dev",
+    "commit": "776093564921f6e6fb69564b3446d7befbdb7468",
+    "blobSha": "a90d2348af9c4780821789b51dd6b4ce931eaaa3",
     "lineage": "RC3 — separate from frozen oracle-action-rc2"
   },
   "permissionLeakageAudit": {
@@ -165,19 +165,19 @@
     },
     "granted_ability_quote": {
       "spentV12": {
-        "tp": 9,
+        "tp": 10,
         "fp": 1,
-        "fn": 10,
-        "precision": 0.9,
-        "recall": 0.47368421052631576,
+        "fn": 9,
+        "precision": 0.9090909090909091,
+        "recall": 0.5263157894736842,
         "caseCount": 5
       },
       "unrelated": {
-        "tp": 5,
+        "tp": 9,
         "fp": 0,
-        "fn": 12,
+        "fn": 8,
         "precision": 1,
-        "recall": 0.29411764705882354,
+        "recall": 0.5294117647058824,
         "caseCount": 4
       }
     },
@@ -191,11 +191,11 @@
         "caseCount": 3
       },
       "unrelated": {
-        "tp": 4,
+        "tp": 5,
         "fp": 0,
-        "fn": 6,
+        "fn": 5,
         "precision": 1,
-        "recall": 0.4,
+        "recall": 0.5,
         "caseCount": 4
       }
     },
@@ -291,7 +291,7 @@
     }
   },
   "clauseNativeStats": {
-    "v1Only": 574,
+    "v1Only": 583,
     "nativeOnly": 38,
     "overlap": 129,
     "disagreements": 0,
@@ -308,8 +308,8 @@
     }
   },
   "extractionSourceCounts": {
-    "v1_legacy": 645,
-    "rc3_transform": 58,
+    "v1_legacy": 658,
+    "rc3_transform": 54,
     "rc3_clause_native": 38,
     "untagged": 0
   },
@@ -319,17 +319,19 @@
         "label": "legacy_dev_v26_v14",
         "caseCount": 284,
         "accepted": {
-          "tp": 360,
+          "tp": 361,
           "fp": 1,
-          "fn": 27,
-          "precision": 0.997229916897507,
-          "recall": 0.9302325581395349
+          "fn": 21,
+          "precision": 0.9972375690607734,
+          "recall": 0.9450261780104712
         },
         "needsReview": {
           "tp": 5,
           "fp": 2
         },
         "semanticInvalid": 0,
+        "semanticInvalidActionCount": 0,
+        "semanticValidatorViolationCount": 0,
         "invariants": {
           "idViolations": 0,
           "provenanceViolations": 0,
@@ -354,6 +356,8 @@
           "fp": 1
         },
         "semanticInvalid": 0,
+        "semanticInvalidActionCount": 0,
+        "semanticValidatorViolationCount": 0,
         "invariants": {
           "idViolations": 0,
           "provenanceViolations": 0,
@@ -375,9 +379,11 @@
         },
         "needsReview": {
           "tp": 1,
-          "fp": 3
+          "fp": 4
         },
         "semanticInvalid": 0,
+        "semanticInvalidActionCount": 0,
+        "semanticValidatorViolationCount": 0,
         "invariants": {
           "idViolations": 0,
           "provenanceViolations": 0,
@@ -401,9 +407,11 @@
           "tp": 0,
           "fp": 0
         },
-        "semanticInvalid": 2,
+        "semanticInvalid": 0,
+        "semanticInvalidActionCount": 0,
+        "semanticValidatorViolationCount": 0,
         "invariants": {
-          "idViolations": 1,
+          "idViolations": 0,
           "provenanceViolations": 0,
           "costLeakage": 0,
           "reminderLeakage": 0,
@@ -416,17 +424,19 @@
       "label": "v12_regression_slice",
       "caseCount": 23,
       "accepted": {
-        "tp": 38,
+        "tp": 39,
         "fp": 1,
-        "fn": 25,
-        "precision": 0.9743589743589743,
-        "recall": 0.6031746031746031
+        "fn": 24,
+        "precision": 0.975,
+        "recall": 0.6190476190476191
       },
       "needsReview": {
         "tp": 1,
         "fp": 0
       },
       "semanticInvalid": 0,
+      "semanticInvalidActionCount": 0,
+      "semanticValidatorViolationCount": 0,
       "invariants": {
         "idViolations": 0,
         "provenanceViolations": 0,
@@ -440,17 +450,19 @@
       "label": "unrelated_catalog_positive_slice",
       "caseCount": 33,
       "accepted": {
-        "tp": 44,
+        "tp": 49,
         "fp": 2,
-        "fn": 31,
-        "precision": 0.9565217391304348,
-        "recall": 0.5866666666666667
+        "fn": 26,
+        "precision": 0.9607843137254902,
+        "recall": 0.6533333333333333
       },
       "needsReview": {
         "tp": 6,
         "fp": 1
       },
       "semanticInvalid": 0,
+      "semanticInvalidActionCount": 0,
+      "semanticValidatorViolationCount": 0,
       "invariants": {
         "idViolations": 0,
         "provenanceViolations": 0,
@@ -475,6 +487,8 @@
         "fp": 0
       },
       "semanticInvalid": 0,
+      "semanticInvalidActionCount": 0,
+      "semanticValidatorViolationCount": 0,
       "invariants": {
         "idViolations": 0,
         "provenanceViolations": 0,
@@ -488,17 +502,19 @@
       "label": "positive_training_combined",
       "caseCount": 57,
       "accepted": {
-        "tp": 83,
+        "tp": 89,
         "fp": 3,
-        "fn": 56,
-        "precision": 0.9651162790697675,
-        "recall": 0.5971223021582733
+        "fn": 50,
+        "precision": 0.967391304347826,
+        "recall": 0.6402877697841727
       },
       "needsReview": {
         "tp": 7,
         "fp": 1
       },
       "semanticInvalid": 0,
+      "semanticInvalidActionCount": 0,
+      "semanticValidatorViolationCount": 0,
       "invariants": {
         "idViolations": 0,
         "provenanceViolations": 0,
@@ -531,19 +547,21 @@
       "label": "combined_development",
       "caseCount": 431,
       "accepted": {
-        "tp": 569,
+        "tp": 576,
         "fp": 5,
-        "fn": 86,
-        "precision": 0.9912891986062717,
-        "recall": 0.8687022900763359
+        "fn": 74,
+        "precision": 0.9913941480206541,
+        "recall": 0.8861538461538462
       },
       "needsReview": {
         "tp": 13,
-        "fp": 7
+        "fp": 8
       },
-      "semanticInvalid": 2,
+      "semanticInvalid": 0,
+      "semanticInvalidActionCount": 0,
+      "semanticValidatorViolationCount": 0,
       "invariants": {
-        "idViolations": 1,
+        "idViolations": 0,
         "provenanceViolations": 0,
         "costLeakage": 0,
         "reminderLeakage": 0,
