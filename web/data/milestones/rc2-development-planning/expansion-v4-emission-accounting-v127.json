@@ -1,0 +1,416 @@
+{
+  "generatedAt": "2026-08-08T00:23:29.761Z",
+  "dataset": "development-generalization-expansion-v4",
+  "contentHash": "805224d33030214ece8fbdd99b533510120884b7531b00324d0b11b46b3401b1",
+  "accounting": {
+    "totalAcceptedRecords": 54,
+    "scoredLayer2Emissions": 38,
+    "unscoredAcceptedRecords": 16,
+    "tp": 37,
+    "fp": 1,
+    "excluded_missing_gold_label": 16,
+    "excluded_other": 0,
+    "precision": 0.9736842105263158,
+    "formula": "P = TP / (TP + FP); unmatched accepted emissions classified missing_gold_label are outside denominator",
+    "reconciliation": "54 total accepted = 37 TP + 1 FP + 16 excluded_missing_gold_label"
+  },
+  "records": [
+    {
+      "caseId": "dev-exp-v4-001",
+      "cardName": "Jace Reawakened",
+      "disposition": "excluded_missing_gold_label",
+      "category": "missing_gold_label",
+      "primitive": "exile",
+      "evidence": "You may exile a nonland card with mana value 3 or less from your hand"
+    },
+    {
+      "caseId": "dev-exp-v4-001",
+      "cardName": "Jace Reawakened",
+      "disposition": "excluded_missing_gold_label",
+      "category": "missing_gold_label",
+      "primitive": "cast",
+      "evidence": "cast a spell"
+    },
+    {
+      "caseId": "dev-exp-v4-001",
+      "cardName": "Jace Reawakened",
+      "disposition": "excluded_missing_gold_label",
+      "category": "missing_gold_label",
+      "primitive": "copy",
+      "evidence": "copy it"
+    },
+    {
+      "caseId": "dev-exp-v4-001",
+      "cardName": "Jace Reawakened",
+      "disposition": "tp",
+      "primitive": "draw",
+      "evidence": "Draw a card"
+    },
+    {
+      "caseId": "dev-exp-v4-001",
+      "cardName": "Jace Reawakened",
+      "disposition": "tp",
+      "primitive": "discard",
+      "evidence": "discard a card"
+    },
+    {
+      "caseId": "dev-exp-v4-002",
+      "cardName": "Nahiri, the Unforgiving",
+      "disposition": "excluded_missing_gold_label",
+      "category": "missing_gold_label",
+      "primitive": "exile",
+      "evidence": "Exile target creature"
+    },
+    {
+      "caseId": "dev-exp-v4-002",
+      "cardName": "Nahiri, the Unforgiving",
+      "disposition": "excluded_missing_gold_label",
+      "category": "missing_gold_label",
+      "primitive": "create_token",
+      "evidence": "Create a token that's a copy of it"
+    },
+    {
+      "caseId": "dev-exp-v4-002",
+      "cardName": "Nahiri, the Unforgiving",
+      "disposition": "tp",
+      "primitive": "discard",
+      "evidence": "Discard a card"
+    },
+    {
+      "caseId": "dev-exp-v4-002",
+      "cardName": "Nahiri, the Unforgiving",
+      "disposition": "tp",
+      "primitive": "draw",
+      "evidence": "draw a card"
+    },
+    {
+      "caseId": "dev-exp-v4-003",
+      "cardName": "Vraska, Betrayal's Sting",
+      "disposition": "tp",
+      "primitive": "draw",
+      "evidence": "draw a card"
+    },
+    {
+      "caseId": "dev-exp-v4-003",
+      "cardName": "Vraska, Betrayal's Sting",
+      "disposition": "tp",
+      "primitive": "lose_life",
+      "evidence": "lose 1 life"
+    },
+    {
+      "caseId": "dev-exp-v4-004",
+      "cardName": "Tezzeret, Cruel Captain",
+      "disposition": "excluded_missing_gold_label",
+      "category": "missing_gold_label",
+      "primitive": "put_counter",
+      "evidence": "put a +1/+1 counter"
+    },
+    {
+      "caseId": "dev-exp-v4-004",
+      "cardName": "Tezzeret, Cruel Captain",
+      "disposition": "excluded_missing_gold_label",
+      "category": "missing_gold_label",
+      "primitive": "shuffle_library",
+      "evidence": "then shuffle"
+    },
+    {
+      "caseId": "dev-exp-v4-004",
+      "cardName": "Tezzeret, Cruel Captain",
+      "disposition": "tp",
+      "primitive": "untap",
+      "evidence": "Untap target artifact or creature"
+    },
+    {
+      "caseId": "dev-exp-v4-004",
+      "cardName": "Tezzeret, Cruel Captain",
+      "disposition": "tp",
+      "primitive": "search_library",
+      "evidence": "Search your library for"
+    },
+    {
+      "caseId": "dev-exp-v4-005",
+      "cardName": "Elspeth, Undaunted Hero",
+      "disposition": "tp",
+      "primitive": "put_counter",
+      "evidence": "Put a +1/+1 counter"
+    },
+    {
+      "caseId": "dev-exp-v4-005",
+      "cardName": "Elspeth, Undaunted Hero",
+      "disposition": "tp",
+      "primitive": "search_library",
+      "evidence": "Search your library and/or graveyard for"
+    },
+    {
+      "caseId": "dev-exp-v4-005",
+      "cardName": "Elspeth, Undaunted Hero",
+      "disposition": "tp",
+      "primitive": "put_onto_battlefield",
+      "evidence": "put it onto the battlefield"
+    },
+    {
+      "caseId": "dev-exp-v4-006",
+      "cardName": "The Hunger Tide Rises",
+      "disposition": "excluded_missing_gold_label",
+      "category": "missing_gold_label",
+      "primitive": "create_token",
+      "evidence": "Create a 1/1 black and green Insect creature token"
+    },
+    {
+      "caseId": "dev-exp-v4-006",
+      "cardName": "The Hunger Tide Rises",
+      "disposition": "excluded_missing_gold_label",
+      "category": "missing_gold_label",
+      "primitive": "sacrifice",
+      "evidence": "Sacrifice any number of creatures"
+    },
+    {
+      "caseId": "dev-exp-v4-006",
+      "cardName": "The Hunger Tide Rises",
+      "disposition": "tp",
+      "primitive": "search_library",
+      "evidence": "Search your library and/or graveyard for"
+    },
+    {
+      "caseId": "dev-exp-v4-006",
+      "cardName": "The Hunger Tide Rises",
+      "disposition": "tp",
+      "primitive": "put_onto_battlefield",
+      "evidence": "put it onto the battlefield"
+    },
+    {
+      "caseId": "dev-exp-v4-007",
+      "cardName": "Invasion of Ikoria // Zilortha, Apex of Ikoria",
+      "disposition": "tp",
+      "primitive": "search_library",
+      "evidence": "search your library and/or graveyard for"
+    },
+    {
+      "caseId": "dev-exp-v4-007",
+      "cardName": "Invasion of Ikoria // Zilortha, Apex of Ikoria",
+      "disposition": "tp",
+      "primitive": "put_onto_battlefield",
+      "evidence": "put it onto the battlefield"
+    },
+    {
+      "caseId": "dev-exp-v4-008",
+      "cardName": "Sanctum of All",
+      "disposition": "tp",
+      "primitive": "search_library",
+      "evidence": "search your library and/or graveyard for"
+    },
+    {
+      "caseId": "dev-exp-v4-008",
+      "cardName": "Sanctum of All",
+      "disposition": "tp",
+      "primitive": "put_onto_battlefield",
+      "evidence": "put it onto the battlefield"
+    },
+    {
+      "caseId": "dev-exp-v4-009",
+      "cardName": "Grand Master of Flowers",
+      "disposition": "tp",
+      "primitive": "search_library",
+      "evidence": "Search your library and/or graveyard for"
+    },
+    {
+      "caseId": "dev-exp-v4-010",
+      "cardName": "Domri's Nodorog",
+      "disposition": "tp",
+      "primitive": "search_library",
+      "evidence": "search your library and/or graveyard for"
+    },
+    {
+      "caseId": "dev-exp-v4-011",
+      "cardName": "Unfortunate Accident",
+      "disposition": "tp",
+      "primitive": "destroy",
+      "evidence": "Destroy target creature"
+    },
+    {
+      "caseId": "dev-exp-v4-011",
+      "cardName": "Unfortunate Accident",
+      "disposition": "tp",
+      "primitive": "create_token",
+      "evidence": "Create a 1/1 red Mercenary creature token"
+    },
+    {
+      "caseId": "dev-exp-v4-012",
+      "cardName": "Rush of Dread",
+      "disposition": "excluded_missing_gold_label",
+      "category": "missing_gold_label",
+      "primitive": "sacrifice",
+      "evidence": "sacrifices half the creatures they control of their choice"
+    },
+    {
+      "caseId": "dev-exp-v4-012",
+      "cardName": "Rush of Dread",
+      "disposition": "fp",
+      "category": "parser_false_positive",
+      "primitive": "lose_life",
+      "evidence": "Target opponent loses half their life"
+    },
+    {
+      "caseId": "dev-exp-v4-012",
+      "cardName": "Rush of Dread",
+      "disposition": "tp",
+      "primitive": "discard",
+      "evidence": "discards half the cards"
+    },
+    {
+      "caseId": "dev-exp-v4-013",
+      "cardName": "Requisition Raid",
+      "disposition": "excluded_missing_gold_label",
+      "category": "missing_gold_label",
+      "primitive": "put_counter",
+      "evidence": "Put a +1/+1 counter"
+    },
+    {
+      "caseId": "dev-exp-v4-013",
+      "cardName": "Requisition Raid",
+      "disposition": "tp",
+      "primitive": "destroy",
+      "evidence": "Destroy target artifact"
+    },
+    {
+      "caseId": "dev-exp-v4-013",
+      "cardName": "Requisition Raid",
+      "disposition": "tp",
+      "primitive": "destroy",
+      "evidence": "Destroy target enchantment"
+    },
+    {
+      "caseId": "dev-exp-v4-014",
+      "cardName": "One Last Job",
+      "disposition": "excluded_missing_gold_label",
+      "category": "missing_gold_label",
+      "primitive": "return_to_battlefield",
+      "evidence": "Return target Mount or Vehicle card from your graveyard to the battlefield"
+    },
+    {
+      "caseId": "dev-exp-v4-014",
+      "cardName": "One Last Job",
+      "disposition": "excluded_missing_gold_label",
+      "category": "missing_gold_label",
+      "primitive": "return_to_battlefield",
+      "evidence": "Return target Aura or Equipment card from your graveyard to the battlefield"
+    },
+    {
+      "caseId": "dev-exp-v4-014",
+      "cardName": "One Last Job",
+      "disposition": "tp",
+      "primitive": "return_to_battlefield",
+      "evidence": "Return target creature card from your graveyard to the battlefield"
+    },
+    {
+      "caseId": "dev-exp-v4-015",
+      "cardName": "Smuggler's Surprise",
+      "disposition": "excluded_missing_gold_label",
+      "category": "missing_gold_label",
+      "primitive": "put_onto_battlefield",
+      "evidence": "You may put up to two creature cards from your hand onto the battlefield"
+    },
+    {
+      "caseId": "dev-exp-v4-015",
+      "cardName": "Smuggler's Surprise",
+      "disposition": "tp",
+      "primitive": "mill",
+      "evidence": "Mill four cards"
+    },
+    {
+      "caseId": "dev-exp-v4-015",
+      "cardName": "Smuggler's Surprise",
+      "disposition": "tp",
+      "primitive": "draw",
+      "evidence": "put up to two creature and/or land cards from among the milled cards into your h"
+    },
+    {
+      "caseId": "dev-exp-v4-016",
+      "cardName": "Squee's Embrace",
+      "disposition": "tp",
+      "primitive": "return_to_hand",
+      "evidence": "return that card to its owner's hand"
+    },
+    {
+      "caseId": "dev-exp-v4-017",
+      "cardName": "Together Forever",
+      "disposition": "excluded_missing_gold_label",
+      "category": "missing_gold_label",
+      "primitive": "put_counter",
+      "evidence": "Put a +1/+1 counter"
+    },
+    {
+      "caseId": "dev-exp-v4-017",
+      "cardName": "Together Forever",
+      "disposition": "tp",
+      "primitive": "return_to_hand",
+      "evidence": "return that card to its owner's hand"
+    },
+    {
+      "caseId": "dev-exp-v4-018",
+      "cardName": "Puppet Master",
+      "disposition": "tp",
+      "primitive": "return_to_hand",
+      "evidence": "return that card to its owner's hand"
+    },
+    {
+      "caseId": "dev-exp-v4-019",
+      "cardName": "Corrupted Zendikon",
+      "disposition": "tp",
+      "primitive": "return_to_hand",
+      "evidence": "return that card to its owner's hand"
+    },
+    {
+      "caseId": "dev-exp-v4-020",
+      "cardName": "Fading Hope",
+      "disposition": "tp",
+      "primitive": "return_to_hand",
+      "evidence": "Return target creature to its owner's hand"
+    },
+    {
+      "caseId": "dev-exp-v4-020",
+      "cardName": "Fading Hope",
+      "disposition": "tp",
+      "primitive": "scry",
+      "evidence": "scry 1"
+    },
+    {
+      "caseId": "dev-exp-v4-021",
+      "cardName": "Confounding Riddle",
+      "disposition": "excluded_missing_gold_label",
+      "category": "missing_gold_label",
+      "primitive": "counter",
+      "evidence": "Counter target spell unless its controller pays ",
+      "modalOptionId": "opt-2"
+    },
+    {
+      "caseId": "dev-exp-v4-021",
+      "cardName": "Confounding Riddle",
+      "disposition": "tp",
+      "primitive": "draw",
+      "evidence": "Put one of them into your hand",
+      "modalOptionId": "opt-1"
+    },
+    {
+      "caseId": "dev-exp-v4-022",
+      "cardName": "Angelic Shield",
+      "disposition": "tp",
+      "primitive": "return_to_hand",
+      "evidence": "Return target creature to its owner's hand"
+    },
+    {
+      "caseId": "dev-exp-v4-023",
+      "cardName": "Vapor Snag",
+      "disposition": "tp",
+      "primitive": "return_to_hand",
+      "evidence": "Return target creature to its owner's hand"
+    },
+    {
+      "caseId": "dev-exp-v4-023",
+      "cardName": "Vapor Snag",
+      "disposition": "tp",
+      "primitive": "lose_life",
+      "evidence": "loses 1 life"
+    }
+  ]
+}

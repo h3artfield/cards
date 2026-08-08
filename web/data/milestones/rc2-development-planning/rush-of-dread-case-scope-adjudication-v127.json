@@ -1,0 +1,30 @@
+{
+  "recordedAt": "2026-08-08T00:20:00.000Z",
+  "caseId": "dev-exp-v4-012",
+  "cardName": "Rush of Dread",
+  "oracleId": "0dfe6ec6-a0df-41c8-90dd-1ddf0417700a",
+  "caseScope": "modal_option",
+  "targetOptionId": "opt-2",
+  "goldSamplingStrategy": "single_option_with_forbidden_siblings",
+  "expectedPrimitiveActions": [
+    {
+      "actionType": "discard",
+      "optionId": "opt-2",
+      "evidenceContains": "Target opponent discards half the cards in their hand"
+    }
+  ],
+  "forbiddenPrimitiveActions": ["sacrifice", "lose_life"],
+  "verdict": {
+    "parserEmitsAllThreeOptions": true,
+    "isParserFpOnOpt1Sacrifice": true,
+    "reason": "Option-boundary leakage: sacrifice from opt-1 emitted while gold scopes opt-2 only and forbids sacrifice/lose_life. NOT incomplete full-card gold.",
+    "doNotSuppressLegitimateSpreeModes": true
+  },
+  "contrastFullCardExample": {
+    "caseId": "dev-exp-v4-013",
+    "cardName": "Requisition Raid",
+    "caseScope": "modal_option_multi_sample",
+    "note": "Multi-option gold lists opt-1 and opt-2 destroy without forbidden — different benchmark scope"
+  },
+  "v127FixTarget": "ModalOption span isolation — primitives must carry modalOptionId and evidence ⊆ option span"
+}

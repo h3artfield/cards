@@ -1,0 +1,184 @@
+{
+  "generatedAt": "2026-08-08T01:21:02.798Z",
+  "parserVersion": "oracle-action-v1.27-structural-blocks-dev",
+  "parserCommit": "7e794ea6f555a401505c592814150e60b988813d",
+  "parserBlobSha": "03df575353e5217a6a5a7528107ef65df3fbb77e",
+  "metrics": {
+    "originalDevelopmentV26": {
+      "caseCount": 284,
+      "accepted": {
+        "tp": 369,
+        "fp": 0,
+        "fn": 18,
+        "precision": 1,
+        "recall": 0.9534883720930233,
+        "unsupported": 0
+      }
+    },
+    "expansionTrainingV5": {
+      "caseCount": 15,
+      "accepted": {
+        "tp": 17,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "unsupported": 0
+      }
+    },
+    "combinedDevelopment": {
+      "caseCount": 362,
+      "accepted": {
+        "tp": 479,
+        "fp": 0,
+        "fn": 20,
+        "precision": 1,
+        "recall": 0.9599198396793587,
+        "unsupported": 0
+      }
+    }
+  },
+  "failures": {
+    "combined": [
+      {
+        "caseId": "dev-opt-023",
+        "cardName": "Path to Exile",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "dev-opt-032",
+        "cardName": "Faithless Looting",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "dev-v9-001",
+        "cardName": "Mox Diamond",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "dev-v9-023",
+        "cardName": "Howling Mine",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "dev-v9-031",
+        "cardName": "Rest in Peace",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "eval-0009",
+        "cardName": "Path to Exile",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "eval-0031",
+        "cardName": "Rest in Peace",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "eval-0059",
+        "cardName": "Fable of the Mirror-Breaker // Reflection of Kiki-Jiki",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "eval-0082",
+        "cardName": "Pit of Offerings",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "eval-0174",
+        "cardName": "Eliminate the Competition",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "eval-0194",
+        "cardName": "Search the Premises",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "eval-0257",
+        "cardName": "Dusk // Dawn",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "eval-0259",
+        "cardName": "Discovery // Dispersal",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "eval-0260",
+        "cardName": "Embereth Shieldbreaker // Battle Display",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "eval-0261",
+        "cardName": "Edgewall Inn",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "eval-0264",
+        "cardName": "Glassworks // Shattered Yard",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "eval-0282",
+        "cardName": "Oft-Nabbed Goat",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "eval-0285",
+        "cardName": "Forensic Gadgeteer",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "dev-exp-v3-017",
+        "cardName": "Minion Reflector",
+        "fp": 0,
+        "fn": 1
+      },
+      {
+        "caseId": "dev-exp-v3-022",
+        "cardName": "Kheru Lich Lord",
+        "fp": 0,
+        "fn": 1
+      }
+    ],
+    "expansionV5": []
+  },
+  "gates": {
+    "combinedPrecisionTarget": true,
+    "combinedRecallTarget": true,
+    "combinedFpZero": true,
+    "combinedUnsupportedZero": true,
+    "familyTrainingPrecisionTarget": true,
+    "familyTrainingRecallTarget": true,
+    "familyTrainingUnsupportedZero": true,
+    "allDevelopmentGatesPass": true
+  },
+  "nextMilestone": {
+    "action": "freeze v1.27 parser SHA and run expansion-check-v4 once",
+    "freshCheckGate": {
+      "precision": 0.95,
+      "recall": 0.85,
+      "unsupported": 0
+    }
+  }
+}

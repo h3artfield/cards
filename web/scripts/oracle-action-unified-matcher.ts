@@ -181,6 +181,8 @@ export function countParserFalsePositives(
       evidenceEnd: action.evidenceEnd,
       cardFaceId: action.cardFaceId,
       abilityIndex: action.abilityIndex,
+      loyaltyCost: action.loyaltyCost,
+      modalOptionId: action.modalOptionId,
       optionalEffect: action.optionalEffect,
       optional: action.optional,
       optionalCost: action.optionalCost,

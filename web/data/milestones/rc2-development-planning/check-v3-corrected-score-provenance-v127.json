@@ -1,0 +1,69 @@
+{
+  "generatedAt": "2026-08-08T00:22:18.469Z",
+  "holdout": {
+    "status": "spent_for_development",
+    "parserExecutionCount": 1,
+    "noParserRerun": true
+  },
+  "original": {
+    "tp": 26,
+    "fp": 1,
+    "fn": 5,
+    "precision": 0.9629629629629629,
+    "recall": 0.8387096774193549
+  },
+  "incrementalAdjudications": {
+    "threeStepsAheadOnly": {
+      "caseId": "dev-exp-chk-v3-013",
+      "change": "copy → create_token (+ tokenCopyOf referent)",
+      "delta": {
+        "tp": 1,
+        "fp": 0,
+        "fn": -1
+      },
+      "result": {
+        "tp": 27,
+        "fp": 1,
+        "fn": 4,
+        "precision": 0.9642857142857143,
+        "recall": 0.8709677419354839
+      }
+    },
+    "captainKirkOnly": {
+      "caseId": "dev-exp-chk-v3-009",
+      "change": "optionalEffect true → false (imperative search)",
+      "delta": {
+        "tp": 1,
+        "fp": 0,
+        "fn": -1
+      },
+      "result": {
+        "tp": 27,
+        "fp": 1,
+        "fn": 4,
+        "precision": 0.9642857142857143,
+        "recall": 0.8709677419354839
+      }
+    },
+    "bothCombined": {
+      "cases": [
+        "dev-exp-chk-v3-013",
+        "dev-exp-chk-v3-009"
+      ],
+      "delta": {
+        "tp": 2,
+        "fp": 0,
+        "fn": -2
+      },
+      "result": {
+        "tp": 28,
+        "fp": 1,
+        "fn": 3,
+        "precision": 0.9655172413793104,
+        "recall": 0.9032258064516129
+      },
+      "note": "Diagnostic corrected score uses BOTH adjudications together"
+    }
+  },
+  "provenanceSummary": "26/1/5 → 28/1/3 comes from BOTH Three Steps Ahead token-copy correction (+2 TP, −2 FN) AND Captain Kirk optionality correction (+0 TP, −0 FP, −0 FN on aggregate — Kirk was FN-only under wrong gold)"
+}

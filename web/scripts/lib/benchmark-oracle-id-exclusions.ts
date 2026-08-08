@@ -18,6 +18,8 @@ const DATASET_PATHS = [
   "data/oracle-action-eval-development-generalization-expansion-check-v2.json",
   "data/oracle-action-eval-development-generalization-expansion-v4.json",
   "data/oracle-action-eval-development-generalization-expansion-check-v3.json",
+  "data/oracle-action-eval-development-generalization-expansion-v5.json",
+  "data/oracle-action-eval-development-generalization-expansion-check-v4.json",
   "data/milestones/rc2-development-planning/development-probe-reserved-oracle-ids.json",
   "data/oracle-action-eval-validation-v12-fresh.json",
 ];

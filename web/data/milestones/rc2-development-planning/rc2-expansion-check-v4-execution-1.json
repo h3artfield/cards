@@ -1,0 +1,24 @@
+{
+  "generatedAt": "2026-08-08T01:22:09.581Z",
+  "parserVersion": "oracle-action-v1.27-structural-blocks-dev",
+  "parserBlobSha": "03df575353e5217a6a5a7528107ef65df3fbb77e",
+  "holdout": "data/oracle-action-eval-development-generalization-expansion-check-v4.json",
+  "contentHash": "46cdb84a374afb063761610fddcc36bbd600fd8c7e2768d3c697265b7249fc89",
+  "caseCount": 30,
+  "parserExecutionCount": 1,
+  "metrics": {
+    "tp": 23,
+    "fp": 0,
+    "fn": 8,
+    "precision": 1,
+    "recall": 0.7419354838709677,
+    "unsupported": 0
+  },
+  "gate": {
+    "precision": 0.95,
+    "recall": 0.85,
+    "unsupported": 0
+  },
+  "gatePass": false,
+  "rc2Authorized": false
+}

@@ -31,6 +31,9 @@ import {
   type OptionalityController,
 } from "./oracle-action-optionality";
 import {
+  applyStructuralBlockInvariants,
+} from "./oracle-action-structural-blocks";
+import {
   parseVariableQuantityFields,
   variableQuantityNeedsReview,
   type VariableQuantityFields,
@@ -193,6 +196,7 @@ const PLAY_PERMISSION =
   /\b(?:you may )?play (?:land cards from|that card|it\b|an additional land)/i;
 
 const ACTION_PATTERNS: ActionPattern[] = [
+  { pattern: /\bput it into your hand\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bdraws? cards? equal to half\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\breveal [\w ]+ and put that card into your hand\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bPut that card into your hand\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
@@ -211,7 +215,8 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\breturn that (?:card|creature|permanent) to the battlefield\b/i, actionType: "return_to_battlefield", destinationZones: ["battlefield"] },
   { pattern: /\bYou may discard [\w ]+/i, actionType: "discard", sourceZones: ["hand"], destinationZones: ["graveyard"] },
   { pattern: /\bYou may put [\w ]+ from (?:your |a |their )?(?:hand|graveyard|exile)[\w ]* onto the battlefield/i, actionType: "put_onto_battlefield", destinationZones: ["battlefield"] },
-  { pattern: /\bput (?:that|it|one|those|them|\w+) (?:card )?(?:from [\w ]+ )?onto the battlefield/i, actionType: "put_onto_battlefield", destinationZones: ["battlefield"] },
+  { pattern: /\bputs? target [\w ]+ from your graveyard onto the battlefield(?: under [\w ]+)?/i, actionType: "put_onto_battlefield", sourceZones: ["graveyard"], destinationZones: ["battlefield"] },
+  { pattern: /\bput (?:that |it|one|those|them|\w+) (?:card )?(?:from [\w ]+ )?onto the battlefield/i, actionType: "put_onto_battlefield", destinationZones: ["battlefield"] },
   { pattern: /\bput [\w ]+ from (?:your |a |their )?(?:hand|graveyard|exile)[\w ]* onto the battlefield/i, actionType: "put_onto_battlefield", destinationZones: ["battlefield"] },
   { pattern: /\bputs? all [\w ]+ exiled this way onto the battlefield/i, actionType: "put_onto_battlefield", sourceZones: ["exile"], destinationZones: ["battlefield"] },
   { pattern: /\breturn it to the battlefield transformed\b/i, actionType: "return_to_battlefield", destinationZones: ["battlefield"] },
@@ -268,6 +273,7 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bmills? (?:one|two|three|four|five|six|seven|eight|nine|ten|half|fourteen|\d+|up to \w+) [\w ]*/i, actionType: "mill", sourceZones: ["library"], destinationZones: ["graveyard"] },
   { pattern: /\b(?:discard|discards) (?:a |one |two |three |their |up to \w+ )?(?:[\w ]*cards?|their hand)\b/i, actionType: "discard", sourceZones: ["hand"], destinationZones: ["graveyard"] },
   { pattern: /\bdraw that many cards\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
+  { pattern: /\bdeals? damage equal to (?:its power|[^.]+)/i, actionType: "deal_damage", affectedObjects: ["player", "permanent"] },
   { pattern: /\bdeals? \d+ damage(?: to (?:any target|target [\w ]+|each [\w ]+))?/i, actionType: "deal_damage", affectedObjects: ["player", "permanent"] },
   { pattern: /\bdeals? X damage(?: to (?:any target|target [\w ]+|each [\w ]+))?/i, actionType: "deal_damage", affectedObjects: ["player", "permanent"] },
   { pattern: /\bDeal up to \d+ damage(?: to (?:any target|target [\w ]+))?/i, actionType: "deal_damage", affectedObjects: ["player", "permanent"] },
@@ -285,10 +291,11 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bScry \d+\b/i, actionType: "scry", sourceZones: ["library"] },
   { pattern: /\bScry up to \d+\b/i, actionType: "scry", sourceZones: ["library"] },
   { pattern: /\bSurveil \d+\b/i, actionType: "surveil", sourceZones: ["library"], destinationZones: ["graveyard"] },
+  { pattern: /\bTap (?:two |three |four |five |\d+ )target [\w ]+/i, actionType: "tap", sourceZones: ["battlefield"] },
   { pattern: /\bTap target [\w ]+/i, actionType: "tap", sourceZones: ["battlefield"] },
   { pattern: /\bTap up to (?:one|two|three) target [\w ]+/i, actionType: "tap", sourceZones: ["battlefield"] },
   { pattern: /\bUntap (?:target |two |three |four |five |\d+ )?[\w ]+/i, actionType: "untap", sourceZones: ["battlefield"] },
-  { pattern: /\bPut (?:a |one |up to one )?\+?\/?\+?\d+\/?\+?\d+ counter/i, actionType: "put_counter", destinationZones: ["battlefield"] },
+  { pattern: /\bPut (?:a |one |two |three |four |five |up to one )?\+?\/?\+?\d+\/?\+?\d+ counters?\b/i, actionType: "put_counter", destinationZones: ["battlefield"] },
   { pattern: /\bPut up to (?:that many|\w+) \+?\/?\+?\d+\/?\+?\d+ counters?\b/i, actionType: "put_counter", destinationZones: ["battlefield"] },
   { pattern: /\bexile it instead\b/i, actionType: "exile", abilityType: "replacement", destinationZones: ["exile"] },
   { pattern: /\bthen shuffle(?: your library|\.)?\b/i, actionType: "shuffle_library", sourceZones: ["library"], destinationZones: ["library"] },
@@ -861,6 +868,18 @@ function acceptAction(input: {
     ) {
       return null;
     }
+    if (
+      /\bput it into your hand\b/i.test(evidenceText) &&
+      /\bsearch (?:your )?(?:library and\/or graveyard|library for)\b/i.test(input.ability.paragraphText)
+    ) {
+      return null;
+    }
+    if (
+      /\bput it into your hand\b/i.test(evidenceText) &&
+      /\bYou may cast it\b/i.test(input.ability.paragraphText)
+    ) {
+      return null;
+    }
     const extended = input.ability.paragraphText
       .slice(localStart)
       .match(/^draws? cards? equal to half [^.]+?(?= and loses|\.$)/i);
@@ -882,6 +901,15 @@ function acceptAction(input: {
     const extended = input.ability.paragraphText
       .slice(localStart)
       .match(/^Create a token that's a copy of [^.]+/i);
+    if (extended?.[0]) {
+      evidenceText = extended[0].trim();
+    }
+  }
+
+  if (input.rule.actionType === "cast") {
+    const extended = input.ability.paragraphText
+      .slice(localStart)
+      .match(/^You may cast it(?: without paying its mana cost)?/i);
     if (extended?.[0]) {
       evidenceText = extended[0].trim();
     }
@@ -1254,6 +1282,12 @@ function resolveActionTypeFromSemantics(
     /\bfrom (?:your |a |their )?graveyard\b/i.test(evidenceText) &&
     /\bonto the battlefield\b/i.test(evidenceText)
   ) {
+    if (
+      /^puts? target/i.test(evidenceText.trim()) &&
+      /\bunder (?:your|their|its) control\b/i.test(evidenceText)
+    ) {
+      return "put_onto_battlefield";
+    }
     return "return_to_battlefield";
   }
   return ruleType;
@@ -1751,8 +1785,15 @@ export function extractOracleActionsV1(input: {
     void face;
   }
 
-  const preDedupCount = rawActions.length;
-  const { actions, canonicalKeyDuplicatesRemoved, semanticDuplicatesRemoved } = dedupeActions(rawActions);
+  const preStructuralCount = rawActions.length;
+  const structuralActions = applyStructuralBlockInvariants(
+    rawActions,
+    targetFaces.map((f) => ({ faceId: f.faceId, text: f.text, start: f.start })),
+    input.oracleId,
+  );
+
+  const preDedupCount = structuralActions.length;
+  const { actions, canonicalKeyDuplicatesRemoved, semanticDuplicatesRemoved } = dedupeActions(structuralActions);
   const withOptionality = attachDelayedTiming(
     wireReferentActions(applyOptionalityPostProcess(actions, abilities, input.oracleText)),
     abilities,

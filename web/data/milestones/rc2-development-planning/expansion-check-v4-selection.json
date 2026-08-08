@@ -1,0 +1,17 @@
+{
+  "contentHash": "46cdb84a374afb063761610fddcc36bbd600fd8c7e2768d3c697265b7249fc89",
+  "caseCount": 30,
+  "sealed": true,
+  "parserExecutionCount": 0,
+  "stratumCounts": {
+    "loyalty_ability_scoping": 4,
+    "modal_spree_structure": 5,
+    "token_copy_delayed": 3,
+    "search_destination_chain": 3,
+    "pronoun_coreference": 3,
+    "conditional_zone_transition": 3,
+    "quantity_constraint": 2,
+    "span_role_reminder_abstain": 7
+  },
+  "overlapCheck": "passed"
+}

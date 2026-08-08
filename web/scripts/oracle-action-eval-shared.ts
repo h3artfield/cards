@@ -158,6 +158,8 @@ export function classifyUnmatchedAction(input: {
   evidenceEnd: number;
   cardFaceId: string;
   abilityIndex: number;
+  loyaltyCost?: string;
+  modalOptionId?: string;
   optionalEffect?: boolean;
   optional?: boolean;
   optionalCost?: boolean;
@@ -173,7 +175,24 @@ export function classifyUnmatchedAction(input: {
     if (evidenceMatchesOracle(testCase.oracleText, evidenceText)) return "missing_gold_label";
     return "parser_false_positive";
   }
+  if (testCase.forbiddenPrimitiveActions?.includes(primitive as never)) {
+    return "parser_false_positive";
+  }
   if (!actionInGoldCoveredAbilityScope(testCase, cardFaceId, abilityIndex)) {
+    return "missing_gold_label";
+  }
+  const goldOptionIds = new Set(
+    testCase.expectedPrimitiveActions.filter((e) => !e.negative && e.optionId).map((e) => e.optionId!),
+  );
+  if (goldOptionIds.size > 0 && input.modalOptionId && !goldOptionIds.has(input.modalOptionId)) {
+    return "missing_gold_label";
+  }
+  const goldLoyaltyCosts = new Set(
+    testCase.expectedPrimitiveActions
+      .filter((e) => !e.negative && e.loyaltyCost)
+      .map((e) => e.loyaltyCost!),
+  );
+  if (goldLoyaltyCosts.size > 0 && input.loyaltyCost && !goldLoyaltyCosts.has(input.loyaltyCost)) {
     return "missing_gold_label";
   }
   const goldSameType = testCase.expectedPrimitiveActions.some((e) => !e.negative && e.actionType === primitive);
@@ -213,7 +232,7 @@ export function inferSupportedPrimitiveFromEvidence(
         /\bReturn (?:target|it)[\w ]* to (?:its|their) owner'?s hand\b|\bfrom (?:your |a )?graveyard to (?:your )?hand\b|\bReturn (?:up to )?[\w ]+ from (?:your |a )?graveyard to (?:your )?hand\b/i,
       return_to_battlefield:
         /\b(?:from (?:your |a )?graveyard (?:to the battlefield|onto the battlefield)|Put target[\w ]+ from a graveyard onto the battlefield|Return target[\w ]+ from (?:your )?graveyard to the battlefield|return it to the battlefield)\b/i,
-      create_token: /\bcreate[\w ]*tokens?\b|\bCreate a token that's a copy of\b/i,
+      create_token: /\bcreate[\w /+'-]*tokens?\b|\bCreate a token that's a copy of\b/i,
       cast: /\bcast (?:any number of |spells? from|it|that card|the exiled|target)\b/i,
       play: /\bplay (?:an additional land|land cards from (?:your )?graveyard|lands and )?spells? from (?:your )?graveyard\b/i,
       put_onto_battlefield: /\b(?:put (?:that |it(?:self)? |them |one )(?:card )?onto the battlefield|puts? all [\w ]+ exiled this way onto the battlefield|puts? all [\w ]+ onto the battlefield|put [\w ]+ from (?:your |a |their )?(?:hand|graveyard|exile)[\w ]* onto the battlefield)\b/i,
@@ -221,7 +240,8 @@ export function inferSupportedPrimitiveFromEvidence(
       sacrifice: /\b[Ss]acrifices?\b/i,
       mill: /\bmills? (?:half|fourteen|one|two|three|four|five|six|seven|eight|nine|ten|X|\d+|up to \w+)/i,
       gain_life: /\bgain(?:s)? (?:\d+|X) life\b|\bgain(?:s)? life equal to\b/i,
-      lose_life: /\bloses? (?:half (?:their |your )?life|\d+|up to \d+|X) life\b|\bloses? life equal to\b/i,
+      lose_life:
+        /\b(?:Target opponent |Each opponent |Each player |You |Target player |That player )?(?:loses? (?:half (?:their |your )?life|\d+ life|up to \d+ life|X life)|loses? life equal to[^.]+)/i,
       scry: /\bScry \d+\b/i,
       surveil: /\bSurveil \d+\b/i,
       tap: /\bTap target\b/i,

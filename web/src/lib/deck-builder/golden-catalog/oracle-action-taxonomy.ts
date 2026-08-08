@@ -157,6 +157,9 @@ function inferPrimitiveFromEvidence(text: string): PrimitiveActionType | null {
   const t = text.toLowerCase();
   if (/\bdraw\b/.test(t)) return "draw";
   if (/\bsearch (?:your |their )?library\b/.test(t)) return "search_library";
+  if (/\bputs? target [\w ]+ from (?:your |a )?graveyard onto the battlefield/.test(t)) {
+    return "put_onto_battlefield";
+  }
   if (/\bput [\w ]+ from (?:your |a |their )?(?:hand|graveyard|exile)\b[\w ]* onto the battlefield\b/.test(t)) {
     return "put_onto_battlefield";
   }
