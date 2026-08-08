@@ -1,0 +1,64 @@
+{
+  "recordedAt": "2026-08-08T00:06:14.466Z",
+  "parserVersion": "oracle-action-v1.26-loyalty-modal-search-dev",
+  "checkpointCommit": "325cce3865f35a87733f4228e77547129dbc3251",
+  "parserBlobSha": "8880389daff02025a601e02cb68f3199d36ebad2",
+  "policy": "Immutable gold corrections recorded post-execution; frozen check-v3 dataset unchanged at commit 325cce3",
+  "globalTaxonomyRule": {
+    "pattern": "Create a token that's a copy of X",
+    "correctPrimitive": "create_token",
+    "referentField": "tokenCopyOf",
+    "incorrectPrimitive": "copy",
+    "priorPrecedent": "expansion-gold-adjudication-v122.json (Saheeli's Artistry)"
+  },
+  "adjudications": [
+    {
+      "caseId": "dev-exp-chk-v3-013",
+      "cardName": "Three Steps Ahead",
+      "oracleId": "282dfeaa-6243-4f92-838a-5cb54fa85184",
+      "classification": "gold_taxonomy_defect",
+      "canonicalOptionText": "+ {3} — Create a token that's a copy of target artifact or creature you control.",
+      "originalGold": {
+        "actionType": "copy",
+        "optionId": "opt-2"
+      },
+      "correctedGold": {
+        "actionType": "create_token",
+        "evidenceContains": "Create a token that's a copy of target artifact or creature you control",
+        "optionId": "opt-2",
+        "tokenCopyOf": "target artifact or creature you control"
+      },
+      "parserEmissionAtV126": {
+        "actionType": "create_token",
+        "tokenCopyOf": "target artifact or creature you control",
+        "verdict": "parser_correct"
+      }
+    },
+    {
+      "caseId": "dev-exp-chk-v3-009",
+      "cardName": "Captain Kirk, Boldly Going",
+      "oracleId": "5228fffe-6347-4177-bccb-b15621c7159c",
+      "classification": "gold_error",
+      "abstractConstruction": "triggered_ability: Whenever [this] enters or attacks → imperative search lib/gy → reveal → put hand → conditional shuffle",
+      "canonicalTriggerText": "Whenever Captain Kirk enters or attacks, search your library and/or graveyard for a basic land card or a card named Starship Enterprise, reveal it, and put it into your hand. If you search your library this way, shuffle.",
+      "goldOptionality": { "optionalEffect": true, "incorrect": true },
+      "parserOptionality": { "optionalEffect": false, "correct": true },
+      "mismatchCause": "Gold incorrectly marked optionalEffect=true; oracle has no 'you may' on search. Not calibration — deterministic grammar.",
+      "verdict": "gold_error"
+    }
+  ],
+  "checkV3Scoring": {
+    "original": { "tp": 26, "fp": 1, "fn": 5, "precision": 0.963, "recall": 0.839 },
+    "goldCorrectedDiagnostic": { "tp": 28, "fp": 1, "fn": 3, "precision": 0.966, "recall": 0.903 },
+    "freshCheckGateRecall85": {
+      "originalPasses": false,
+      "correctedDiagnosticPasses": true
+    },
+    "note": "Corrected score is diagnostic only; holdout remains spent at parserExecutionCount=1"
+  },
+  "remainingRepeatFamiliesAfterCorrection": [
+    { "caseId": "dev-exp-chk-v3-001", "family": "loyalty_ability_scoping", "issue": "optionalEffect on +2 draw; spurious sacrifice/discard FP" },
+    { "caseId": "dev-exp-chk-v3-010", "family": "modal_spree_structure", "issue": "spree opt-2 return_to_battlefield not extracted inside option span" },
+    { "caseId": "dev-exp-chk-v3-023", "family": "token_copy_delayed", "issue": "optional create_token evidence span truncated; delayed exile separate" }
+  ]
+}

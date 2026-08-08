@@ -1,0 +1,226 @@
+{
+  "generatedAt": "2026-08-08T00:06:14.466Z",
+  "parserVersion": "oracle-action-v1.26-loyalty-modal-search-dev",
+  "expansionV4Reconciliation": {
+    "tier": "accepted_only",
+    "formula": "precision = TP / (TP + FP)",
+    "tp": 37,
+    "fp": 1,
+    "fn": 0,
+    "precision": 0.9736842105263158,
+    "recall": 1,
+    "acceptedEmissions": 54,
+    "goldPositives": 37,
+    "caseDetails": [
+      {
+        "caseId": "dev-exp-v4-012",
+        "cardName": "Rush of Dread",
+        "tp": 1,
+        "fp": 1,
+        "fn": 0,
+        "gold": [
+          {
+            "actionType": "discard",
+            "evidenceContains": "Target opponent discards half the cards in their hand",
+            "optionId": "opt-2"
+          }
+        ],
+        "accepted": [
+          {
+            "type": "sacrifice",
+            "evidence": "sacrifices half the creatures they control of their choice",
+            "optionalEffect": false
+          },
+          {
+            "type": "discard",
+            "evidence": "discards half the cards",
+            "optionalEffect": false
+          },
+          {
+            "type": "lose_life",
+            "evidence": "Target opponent loses half their life",
+            "optionalEffect": false
+          }
+        ]
+      }
+    ],
+    "priorReportError": "Prior summary incorrectly stated FP=0 alongside P=97.4%; checkpoint JSON rc2-checkpoint-v126-dev.json records FP=1.",
+    "note": "FP=1 implies P=0.9736842105263158"
+  },
+  "checkV3Original": {
+    "tier": "accepted_only",
+    "diagnostic": false,
+    "tp": 26,
+    "fp": 1,
+    "fn": 5,
+    "precision": 0.9629629629629629,
+    "recall": 0.8387096774193549,
+    "goldPositives": 31,
+    "acceptedEmissions": 45,
+    "holdoutStatus": "spent — not re-run"
+  },
+  "checkV3GoldCorrected": {
+    "tier": "accepted_only",
+    "diagnostic": true,
+    "corrections": [
+      {
+        "caseId": "dev-exp-chk-v3-013",
+        "cardName": "Three Steps Ahead",
+        "adjudication": "gold_taxonomy_defect",
+        "originalGold": [
+          {
+            "actionType": "copy",
+            "evidenceContains": "Create a token that's a copy of target artifact or creature you control",
+            "optionId": "opt-2"
+          }
+        ],
+        "correctedGold": [
+          {
+            "actionType": "create_token",
+            "evidenceContains": "Create a token that's a copy of target artifact or creature you control",
+            "optionId": "opt-2",
+            "tokenCopyOf": "target artifact or creature you control"
+          }
+        ],
+        "canonicalOracle": "+ {3} — Create a token that's a copy of target artifact or creature you control.",
+        "rule": "Create a token that's a copy of X → create_token + tokenCopyOf, not copy primitive"
+      },
+      {
+        "caseId": "dev-exp-chk-v3-009",
+        "cardName": "Captain Kirk, Boldly Going",
+        "adjudication": "gold_error",
+        "originalGold": [
+          {
+            "actionType": "search_library",
+            "evidenceContains": "search your library and/or graveyard",
+            "optionalEffect": true
+          }
+        ],
+        "correctedGold": [
+          {
+            "actionType": "search_library",
+            "evidenceContains": "search your library and/or graveyard",
+            "optionalEffect": false
+          }
+        ],
+        "canonicalOracle": "Whenever Captain Kirk enters or attacks, search your library and/or graveyard for a basic land card or a card named Starship Enterprise, reveal it, and put it into your hand. If you search your library this way, shuffle.",
+        "parserEmission": [
+          {
+            "optionalEffect": false,
+            "evidence": "search your library and/or graveyard for",
+            "reviewStatus": "accepted"
+          }
+        ],
+        "classification": "gold_error",
+        "reason": "Oracle uses imperative 'search...' with no 'you may'; optionalEffect=true in gold is incorrect. Parser optionalEffect=false is deterministic and correct."
+      }
+    ],
+    "tp": 28,
+    "fp": 1,
+    "fn": 3,
+    "precision": 0.9655172413793104,
+    "recall": 0.9032258064516129,
+    "goldPositives": 31,
+    "acceptedEmissions": 45,
+    "remainingFailures": [
+      {
+        "caseId": "dev-exp-chk-v3-001",
+        "cardName": "Chandra, Spark Hunter",
+        "tp": 1,
+        "fp": 1,
+        "fn": 1,
+        "gold": [
+          {
+            "actionType": "draw",
+            "evidenceContains": "draw a card",
+            "loyaltyCost": "+2",
+            "optionalEffect": true
+          },
+          {
+            "actionType": "create_token",
+            "evidenceContains": "Create a 3/2 colorless Vehicle artifact token",
+            "loyaltyCost": "0"
+          }
+        ],
+        "accepted": [
+          {
+            "type": "sacrifice",
+            "evidence": "You may sacrifice an artifact or discard a card",
+            "optionalEffect": true
+          },
+          {
+            "type": "discard",
+            "evidence": "discard a card",
+            "optionalEffect": true
+          },
+          {
+            "type": "draw",
+            "evidence": "draw a card",
+            "optionalEffect": false
+          },
+          {
+            "type": "create_token",
+            "evidence": "Create a 3/2 colorless Vehicle artifact token",
+            "optionalEffect": false
+          }
+        ]
+      },
+      {
+        "caseId": "dev-exp-chk-v3-010",
+        "cardName": "Lively Dirge",
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "gold": [
+          {
+            "actionType": "search_library",
+            "evidenceContains": "Search your library for a card",
+            "optionId": "opt-1"
+          },
+          {
+            "actionType": "return_to_battlefield",
+            "evidenceContains": "Return up to two creature cards",
+            "optionId": "opt-2"
+          }
+        ],
+        "accepted": [
+          {
+            "type": "search_library",
+            "evidence": "Search your library for",
+            "optionalEffect": false
+          },
+          {
+            "type": "shuffle_library",
+            "evidence": "then shuffle",
+            "optionalEffect": false
+          }
+        ]
+      },
+      {
+        "caseId": "dev-exp-chk-v3-023",
+        "cardName": "Shaun, Father of Synths",
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "gold": [
+          {
+            "actionType": "create_token",
+            "evidenceContains": "Create a tapped and attacking token that's a copy of target attacking legendary creature"
+          }
+        ],
+        "accepted": [
+          {
+            "type": "create_token",
+            "evidence": "you may create a tapped and attacking token",
+            "optionalEffect": true
+          },
+          {
+            "type": "exile",
+            "evidence": "exile all Synth",
+            "optionalEffect": false
+          }
+        ]
+      }
+    ]
+  }
+}

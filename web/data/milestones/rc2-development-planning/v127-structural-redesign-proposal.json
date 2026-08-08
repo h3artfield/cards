@@ -1,0 +1,58 @@
+{
+  "recordedAt": "2026-08-08T00:07:00.000Z",
+  "targetVersion": "oracle-action-v1.27-structural-blocks-dev",
+  "prerequisiteCommit": "325cce3865f35a87733f4228e77547129dbc3251",
+  "motivation": "Repeat-family failures on fresh check-v3 after v1.26 regex-level fixes; abstraction redesign required before next holdout",
+  "blocks": {
+    "LoyaltyAbility": {
+      "fields": ["abilityId", "loyaltyCost", "startOffset", "endOffset", "fullAbilityText", "clauses"],
+      "invariant": "primitive evidence span ⊆ owning loyalty ability span",
+      "regressionInvariants": [
+        "No action from loyaltyCost −X attaches to loyaltyCost +N block",
+        "Dual +1 lines produce distinct abilityIds even when loyaltyCost repeats",
+        "Cost-prefixed optional text (+2: You may sacrifice...) scopes optionalEffect to that clause only",
+        "Draw on +2 with you-may-cost does not inherit optionalEffect=false from later draw clause"
+      ],
+      "trainingTargetCount": "4-6 catalog cards after invariants land"
+    },
+    "ModalAbility": {
+      "fields": ["chooseConstraints", "options"],
+      "child": "ModalOption"
+    },
+    "ModalOption": {
+      "fields": ["optionId", "optionCost", "startOffset", "endOffset", "clauses", "actions"],
+      "invariant": "primitive extraction occurs inside individual option span only",
+      "spreeRule": "Spree + {cost} — prefix is Layer-1 optionCost metadata, never Layer-2 action",
+      "regressionInvariants": [
+        "Lively Dirge opt-2 return_to_battlefield extracted only under opt-2 span",
+        "Rush of Dread opt-1 sacrifice not emitted when evaluating opt-2-only gold",
+        "Three Steps Ahead opt-2 create_token scoped to opt-2 with tokenCopyOf"
+      ],
+      "trainingTargetCount": "4-6 catalog cards"
+    },
+    "TokenCreatedObject": {
+      "fields": ["createdObjectId", "tokenCopyOf", "createActionEvidence"],
+      "invariant": "Create a token that's a copy of X → create_token + tokenCopyOf, never copy primitive"
+    },
+    "DelayedAction": {
+      "fields": ["referentObjectId", "timingCondition", "actionType"],
+      "invariant": "Delayed exile/sacrifice references createdObjectId; optionality attaches only to grammatically optional create, not delayed consequence",
+      "regressionInvariants": [
+        "Shaun: optionalEffect on you-may-create only; exile at end step not optional",
+        "Sauron-style delayed exile uses referentObjectId linkage"
+      ],
+      "trainingTargetCount": "4-6 catalog cards"
+    }
+  },
+  "developmentGatesBeforeNextHoldout": {
+    "combined": { "precisionMin": 0.98, "recallMin": 0.9, "unsupported": 0, "fp": 0 },
+    "repeatFamilyTraining": { "precisionMin": 0.95, "recallMin": 0.9, "unsupported": 0 },
+    "workflow": "Select new training Oracle IDs → write regression invariants → tune v1.27 → gate → then seal ONE fresh check (not yet created)"
+  },
+  "explicitlyNotDoing": [
+    "create check-v4",
+    "run validation v12 or blind",
+    "re-run spent check-v3",
+    "more regex surface patterns without structural blocks"
+  ]
+}
