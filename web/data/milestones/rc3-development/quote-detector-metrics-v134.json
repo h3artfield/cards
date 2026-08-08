@@ -1,0 +1,19 @@
+{
+  "generatedAt": "2026-08-08T07:11:02.816Z",
+  "corpus": "granted_ability_quote_catalog_v133",
+  "caseCount": 9,
+  "quoteSpanDetector": {
+    "goldQuoteTargets": 28,
+    "detected": 14,
+    "falsePositives": 2,
+    "recall": 0.5,
+    "precision": 0.875
+  },
+  "grantedRulesClassifier": {
+    "goldGrantedTargets": 28,
+    "classifiedGrantedRules": 14,
+    "falsePositives": 2,
+    "recall": 0.5,
+    "precision": 0.875
+  }
+}

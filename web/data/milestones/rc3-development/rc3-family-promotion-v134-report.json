@@ -1,0 +1,115 @@
+{
+  "generatedAt": "2026-08-08T07:07:39.010Z",
+  "defaultPromotedFamilies": [
+    "search_put_shuffle_chain"
+  ],
+  "searchChainDefaultPromotion": {
+    "caseCount": 8,
+    "metrics": {
+      "tp": 22,
+      "fp": 0,
+      "fn": 7,
+      "precision": 1,
+      "recall": 0.7586206896551724
+    }
+  },
+  "extractionSourceCountsCatalog": {
+    "v1_legacy": 96,
+    "rc3_transform": 11,
+    "rc3_clause_native": 2
+  },
+  "promotions": [
+    {
+      "family": "granted_ability_quote",
+      "beforeFamilies": [
+        "search_put_shuffle_chain"
+      ],
+      "afterFamilies": [
+        "search_put_shuffle_chain",
+        "granted_ability_quote"
+      ],
+      "before": {
+        "tp": 22,
+        "fp": 1,
+        "fn": 14,
+        "precision": 0.9565217391304348,
+        "recall": 0.6111111111111112
+      },
+      "after": {
+        "tp": 22,
+        "fp": 1,
+        "fn": 14,
+        "precision": 0.9565217391304348,
+        "recall": 0.6111111111111112
+      },
+      "delta": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "fnRemoved": 0,
+        "newFp": 0
+      },
+      "semanticInvalid": {
+        "before": 0,
+        "after": 0,
+        "introduced": 0
+      },
+      "policyViolations": {
+        "before": 0,
+        "after": 0,
+        "introduced": 0
+      },
+      "costLeakage": {
+        "before": 0,
+        "after": 0,
+        "introduced": 0
+      }
+    },
+    {
+      "family": "activated_post_colon_effect",
+      "beforeFamilies": [
+        "search_put_shuffle_chain"
+      ],
+      "afterFamilies": [
+        "search_put_shuffle_chain",
+        "activated_post_colon_effect"
+      ],
+      "before": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1,
+        "recall": 0.4444444444444444
+      },
+      "after": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1,
+        "recall": 0.6666666666666666
+      },
+      "delta": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 2,
+        "fnRemoved": 2,
+        "newFp": 0
+      },
+      "semanticInvalid": {
+        "before": 0,
+        "after": 0,
+        "introduced": 0
+      },
+      "policyViolations": {
+        "before": 0,
+        "after": 0,
+        "introduced": 0
+      },
+      "costLeakage": {
+        "before": 0,
+        "after": 0,
+        "introduced": 0
+      }
+    }
+  ]
+}

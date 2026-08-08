@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-08-08T06:17:52.903Z",
+  "fixtures": [
+    {
+      "oracleId": "e1b6d0ab-4e11-43a2-8a7f-3fb51582ddf3",
+      "classification": "intentional_same_oracle_disjoint_scope_policy_fixture",
+      "guardrailCaseId": "rc3-guard-0001",
+      "guardrailScope": "clause: demilich-graveyard-cast-permission",
+      "positiveCaseId": "rc3-pos-one-shot-cast-0001",
+      "positiveScope": "ability: attack copy → optional cast branch",
+      "v13Overlap": false,
+      "note": "Same Oracle ID across development packs with disjoint caseScope — not a v13 overlap violation."
+    }
+  ]
+}

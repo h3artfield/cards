@@ -1,0 +1,97 @@
+{
+  "generatedAt": "2026-08-08T06:17:58.547Z",
+  "family": "granted_ability_quote",
+  "catalogCaseCount": 9,
+  "failureStageCounts": {
+    "quoted_span_not_detected": 9,
+    "quote_not_recognized_as_ability": 6,
+    "ability_block_not_created": 0,
+    "clause_role_wrong": 0,
+    "primitive_grammar_missing": 0,
+    "nested_provenance_offset_failure": 1,
+    "matcher_scope_mismatch": 0
+  },
+  "totalFnsClassified": 16,
+  "examples": [
+    {
+      "caseId": "rc3-pos-v12-0033",
+      "gold": "add_mana:Add {C}",
+      "stage": "quote_not_recognized_as_ability"
+    },
+    {
+      "caseId": "rc3-pos-v12-0033",
+      "gold": "cast:cast a nonartifact spell",
+      "stage": "quote_not_recognized_as_ability"
+    },
+    {
+      "caseId": "rc3-pos-v12-0077",
+      "gold": "put_counter:put a +1/+1 counter on this token",
+      "stage": "quote_not_recognized_as_ability"
+    },
+    {
+      "caseId": "rc3-pos-v12-0146",
+      "gold": "sacrifice:Sacrifice this token: Draw a card",
+      "stage": "quote_not_recognized_as_ability"
+    },
+    {
+      "caseId": "rc3-pos-v12-0147",
+      "gold": "gain_life:gain 3 life",
+      "stage": "quote_not_recognized_as_ability"
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "gold": "create_token:Create a colorless Clue artifact token",
+      "stage": "quoted_span_not_detected"
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "gold": "sacrifice:Sacrifice this artifact: Draw a card",
+      "stage": "quote_not_recognized_as_ability"
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "gold": "shuffle_library:you may shuffle",
+      "stage": "nested_provenance_offset_failure"
+    },
+    {
+      "caseId": "rc3-pos-cat-0001",
+      "gold": "cast:cast from exile",
+      "stage": "quoted_span_not_detected"
+    },
+    {
+      "caseId": "rc3-pos-cat-0001",
+      "gold": "cast:You may cast Glamorous Outlaw for as long as it remains exiled",
+      "stage": "quoted_span_not_detected"
+    },
+    {
+      "caseId": "rc3-pos-cat-0002",
+      "gold": "cast:cast from exile",
+      "stage": "quoted_span_not_detected"
+    },
+    {
+      "caseId": "rc3-pos-cat-0002",
+      "gold": "cast:You may cast Masked Bandits for as long as it remains exiled",
+      "stage": "quoted_span_not_detected"
+    },
+    {
+      "caseId": "rc3-pos-cat-0003",
+      "gold": "cast:cast from exile",
+      "stage": "quoted_span_not_detected"
+    },
+    {
+      "caseId": "rc3-pos-cat-0003",
+      "gold": "cast:You may cast Rakish Revelers for as long as it remains exiled",
+      "stage": "quoted_span_not_detected"
+    },
+    {
+      "caseId": "rc3-pos-cat-0004",
+      "gold": "cast:cast from exile",
+      "stage": "quoted_span_not_detected"
+    },
+    {
+      "caseId": "rc3-pos-cat-0004",
+      "gold": "cast:You may cast Shattered Seraph for as long as it remains exiled",
+      "stage": "quoted_span_not_detected"
+    }
+  ]
+}

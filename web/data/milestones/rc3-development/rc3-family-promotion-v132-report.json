@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-08T05:38:52.311Z",
+  "generatedAt": "2026-08-08T06:36:50.801Z",
   "promotions": [
     {
       "family": "granted_ability_quote",
@@ -47,18 +47,18 @@
       },
       "after": {
         "tp": 22,
-        "fp": 1,
+        "fp": 0,
         "fn": 7,
-        "precision": 0.9565217391304348,
+        "precision": 1,
         "recall": 0.7586206896551724
       },
       "delta": {
         "tp": 1,
-        "fp": 1,
+        "fp": 0,
         "fn": 1,
         "fnRemoved": 1,
         "tpLost": 0,
-        "newFp": 1
+        "newFp": 0
       },
       "semanticInvalid": {
         "before": 0,

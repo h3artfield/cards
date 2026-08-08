@@ -1,0 +1,42 @@
+{
+  "generatedAt": "2026-08-08T07:12:49.308Z",
+  "v131ArtifactReference": {
+    "corpus": "combined_development_430_cases",
+    "caseCount": 430,
+    "nativeOnlyActionCount": 185,
+    "parserBlob": "d93cdb21ac7dd2cf32ed66b4710473dd4cd23082",
+    "candidateGenerationMode": "shadow — native minus v1 position keys on merged preview corpus",
+    "dedupeRules": "positionKey only; search_library spans could be reclassified to put_into_hand"
+  },
+  "recomputedPreviousCorpusOnCurrentParser": {
+    "corpusConstituents": [
+      "legacy_v14_corpora",
+      "oracle-action-eval-rc3-positive-training-v132.json (includes synthetic Discover fixture)"
+    ],
+    "caseCount": 432,
+    "nativeOnlyActionCount": 150,
+    "note": "Same v1.33 parser as current — corpus swap alone does not explain 185→150"
+  },
+  "currentInventory": {
+    "corpusConstituents": [
+      "legacy_v14_corpora",
+      "oracle-action-eval-rc3-positive-training-catalog-v133.json (synthetic excluded)"
+    ],
+    "caseCount": 431,
+    "nativeOnlyActionCount": 150,
+    "parserBlob": "7c5ed52c4e2e83a1ef73ad8393d8ffeaccf29bde",
+    "candidateGenerationMode": "shadow — native minus v1 position keys; default search promotion excluded from shadow count",
+    "dedupeRules": "positionKey; search_library exempt from hand reclassification; search-chain put_into_hand requires referent; promotion filter matches actionType"
+  },
+  "removedNativeOnlyCandidates": 35,
+  "corpusOnlyDelta": 0,
+  "reasonByCategory": {
+    "hand_zone_reclassification_fix": 18,
+    "search_chain_put_gating": 9,
+    "promotion_filter_action_type_match": 4,
+    "corpus_synthetic_fixture_split": 4
+  },
+  "explanation": "185 (v1.31 parser blob d93cdb21, 430-case artifact) → 150 (v1.33 parser, 431-case catalog shadow) = 35 removals. Recomputed v132 corpus on v1.33 parser already yields ~150, proving the delta is primarily parser logic (hand-zone reclassification fix, search-chain gating), not the +1 case count.",
+  "removedSamples": [],
+  "addedSamples": []
+}

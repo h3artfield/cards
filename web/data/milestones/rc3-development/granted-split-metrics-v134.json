@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-08-08T11:09:01.270Z",
+  "family": "granted_ability_quote",
+  "A_nestedSemanticActions": {
+    "description": "Granted span → rules classification → nested AbilityBlock → nested SemanticAction",
+    "caseCount": 9,
+    "goldActionCount": 27,
+    "metrics": {
+      "tp": 14,
+      "fp": 1,
+      "fn": 13,
+      "precision": 0.9333333333333333,
+      "recall": 0.5185185185185185
+    }
+  },
+  "B_coOccurringPrimaryEffects": {
+    "description": "Card-native primary effects co-located in granted family pack — not nested granted pipeline",
+    "caseCount": 5,
+    "goldActionCount": 9,
+    "metrics": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 9,
+      "precision": 1,
+      "recall": 0
+    }
+  },
+  "combinedHeadline": {
+    "tp": 14,
+    "fp": 1,
+    "fn": 22,
+    "precision": 0.9333333333333333,
+    "recall": 0.3888888888888889
+  }
+}

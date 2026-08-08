@@ -1,0 +1,35 @@
+{
+  "setClassification": "rc3_synthetic_structural_fixtures_v133",
+  "evaluationSetVersion": "rc3-synthetic-structural-fixtures-v133",
+  "taxonomyVersion": "three-layer-v1.4",
+  "parserConsulted": false,
+  "excludedFromCatalogGeneralizationMetrics": true,
+  "cases": [
+    {
+      "id": "rc3-pos-one-shot-cast-0002",
+      "category": "rc3-positive-one_shot_cast_resolution",
+      "layout": "normal",
+      "oracleId": "synthetic-one-shot-cast-it",
+      "oracleText": "Discover. You may cast it.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast it",
+          "negative": false,
+          "optionalEffect": true
+        }
+      ],
+      "cardName": "Synthetic Discover cast-it",
+      "coverageStratum": "one_shot_cast_resolution",
+      "spentV12Regression": false,
+      "caseScope": "full_card",
+      "scopeReason": "Synthetic one-shot resolution cast instruction.",
+      "certifiedEmptyLayer2": false,
+      "goldCompletenessStatus": "complete_within_scope",
+      "parserConsulted": false,
+      "identityStatus": "synthetic_fixture",
+      "benchmarkTier": "synthetic_regression_only"
+    }
+  ],
+  "contentHash": "31cfdbefeaf6a87b10fa85aebe8ec040d4d56792cbd7b2167fde8cf7c3de4bae"
+}

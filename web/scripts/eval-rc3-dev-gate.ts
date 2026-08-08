@@ -53,8 +53,20 @@ function evalSlice(cases: OracleActionEvalCaseV2[], label: string) {
       }
       if (/\([^)]{20,}\)/.test(ev) && /Flashback|Discover|Cycling/i.test(ev)) reminderLeakage++;
       if (action.actionType === "cast" && /Whenever you cast|When you cast|If you cast/i.test(ev)) triggerEventLeakage++;
-      if (action.actionType === "cast" && /can't cast|You may cast.*from your graveyard/i.test(testCase.oracleText)) {
-        permissionLeakage++;
+      // Permission leakage: persistent cast permission emitted as L2 — not static "can't cast" restrictions
+      if (
+        action.actionType === "cast" &&
+        /You may cast[^.\n]*from your (?:graveyard|hand)\b/i.test(testCase.oracleText) &&
+        /You may cast[^.\n]*from your (?:graveyard|hand)\b/i.test(ev) &&
+        !/without paying|this turn|that card|from exile/i.test(ev)
+      ) {
+        const expectedPermissionCast = testCase.expectedPrimitiveActions.some(
+          (g) =>
+            !g.negative &&
+            g.actionType === "cast" &&
+            ev.toLowerCase().includes((g.evidenceContains ?? "").toLowerCase().slice(0, 12)),
+        );
+        if (!expectedPermissionCast) permissionLeakage++;
       }
     }
   }
@@ -236,20 +248,50 @@ function main() {
 
   const legacySlices = legacyV14Paths.map((p) => evalSlice(load(p.path), p.label));
 
-  const positiveAll = load("data/oracle-action-eval-rc3-positive-training-v132.json");
-  const v12Regression = positiveAll.filter((c) => (c as { spentV12Regression?: boolean }).spentV12Regression);
-  const unrelatedPositive = positiveAll.filter((c) => !(c as { spentV12Regression?: boolean }).spentV12Regression);
+  const positiveCatalog = load("data/oracle-action-eval-rc3-positive-training-catalog-v133.json");
+  let syntheticFixtures: OracleActionEvalCaseV2[] = [];
+  try {
+    syntheticFixtures = load("data/oracle-action-eval-rc3-synthetic-structural-fixtures-v133.json");
+  } catch {
+    syntheticFixtures = [];
+  }
+  const positiveAll = [...positiveCatalog, ...syntheticFixtures];
+
+  const v12Regression = positiveCatalog.filter((c) => (c as { spentV12Regression?: boolean }).spentV12Regression);
+  const unrelatedCatalog = positiveCatalog.filter((c) => !(c as { spentV12Regression?: boolean }).spentV12Regression);
 
   const v12Slice = evalSlice(v12Regression, "v12_regression_slice");
-  const unrelatedSlice = evalSlice(unrelatedPositive, "unrelated_positive_slice");
+  const unrelatedCatalogSlice = evalSlice(unrelatedCatalog, "unrelated_catalog_positive_slice");
+  const syntheticSlice = evalSlice(syntheticFixtures, "synthetic_structural_fixtures");
   const positiveCombined = evalSlice(positiveAll, "positive_training_combined");
   const guardrails = evalGuardrails("data/oracle-action-eval-rc3-policy-guardrail-v132.json");
-  const familyMetrics = evalFamilyMetrics(positiveAll);
+  const familyMetrics = evalFamilyMetrics(positiveCatalog);
 
   const combinedCases = [
     ...legacyV14Paths.flatMap((p) => load(p.path)),
-    ...positiveAll,
+    ...positiveCatalog,
   ];
+
+  function countExtractionSources(cases: OracleActionEvalCaseV2[]) {
+    let v1Legacy = 0;
+    let rc3Transform = 0;
+    let rc3ClauseNative = 0;
+    let untagged = 0;
+    for (const testCase of cases) {
+      const parsed = parseOracleSemanticsRC3({ oracleId: testCase.oracleId, oracleText: testCase.oracleText, cardFace: testCase.cardFace });
+      for (const action of parsed.legacy.actions) {
+        const src = (action as { extractionSource?: string }).extractionSource;
+        if (src === "v1_legacy") v1Legacy++;
+        else if (src === "rc3_transform") rc3Transform++;
+        else if (src === "rc3_clause_native") rc3ClauseNative++;
+        else untagged++;
+      }
+    }
+    return { v1_legacy: v1Legacy, rc3_transform: rc3Transform, rc3_clause_native: rc3ClauseNative, untagged };
+  }
+
+  const extractionSourceCounts = countExtractionSources(combinedCases);
+
   const combined = evalSlice(combinedCases, "combined_development");
   const clauseNativeStats = aggregateClauseNativeStats(combinedCases);
 
@@ -269,17 +311,46 @@ function main() {
 
   const report = {
     generatedAt: new Date().toISOString(),
-    checkpoint: "rc3-structural-v131-checkpoint-corrected",
+    checkpoint: "rc3-structural-v134-checkpoint-1",
+    lineage: {
+      parentCommit: "6a757a736dfda9004860bb38d5e677880590882c",
+      parentVersion: "oracle-action-v1.31-rc3-ast-dev",
+      intermediateDevelopmentState: "v1.32 — working development on parent; no separate immutable commit",
+      currentVersion: ORACLE_ACTION_RC3_PARSER_VERSION,
+      note: "6a757a73 is the corrected v1.31 freeze — do not retroactively label it v1.32",
+    },
+    benchmarkSlices: {
+      unrelatedCatalogPositive: { caseCount: unrelatedCatalog.length, note: "Catalog-backed generalization metric denominator" },
+      syntheticStructuralFixtures: { caseCount: syntheticFixtures.length, excludedFromCatalogRecall: true },
+      demilichOverlap: "intentional_same_oracle_disjoint_scope_policy_fixture — see disjoint-scope-oracle-overlap-v133.json",
+    },
     priorCheckpoint: {
-      version: "oracle-action-v1.30-rc3-ast-dev",
-      commit: "92dc31671c282e08dbfc778018113ec4a8e0856f",
-      blobSha: "70cb0ba2da31a101170a0faf45038c423fa82087",
+      version: "oracle-action-v1.33-rc3-ast-dev",
+      note: "Accepted development checkpoint — search default promoted; granted span detector introduced",
+      intermediateFrom: "oracle-action-v1.31-rc3-ast-dev @ 6a757a73 via v1.32 working state",
     },
     parser: {
       version: ORACLE_ACTION_RC3_PARSER_VERSION,
       commit: parserCommit,
       blobSha: parserBlob,
       lineage: "RC3 — separate from frozen oracle-action-rc2",
+    },
+    permissionLeakageAudit: {
+      resolution: "stale_diagnostic_false_positive",
+      cases: [
+        {
+          caseId: "eval-0193",
+          cardName: "Codie, Vociferous Codex",
+          reclassifiedAs: "legitimate_one_shot_cast",
+          explanation: "Static restriction 'can't cast permanent spells' no longer triggers heuristic.",
+        },
+        {
+          caseId: "dev-v9-011",
+          cardName: "Omniscience",
+          reclassifiedAs: "benchmark_has_gold_for_permission_cast",
+          explanation: "Persistent hand-cast permission is intentional gold on this case — not guardrail leakage.",
+        },
+      ],
     },
     guardrailViolations: {
       before: { acceptedForbidden: 2, cases: ["rc3-guard-0001", "rc3-guard-0013"], pack: "rc3-policy-guardrail-v130" },
@@ -308,11 +379,26 @@ function main() {
       put_into_hand: putIntoHandAudit,
     },
     familyMetrics,
-    clauseNativeStats,
+    clauseNativeStats: {
+      ...clauseNativeStats,
+      priorPreview: {
+        corpus: "combined_development_430_cases",
+        caseCount: 430,
+        nativeOnlyActionCount: 185,
+        note: "v1.31 preview counted native-only across full combined dev corpus including legacy v1.4",
+      },
+      currentShadowInventory: {
+        corpus: "positive_training_catalog_v133_plus_legacy_v14",
+        caseCount: combinedCases.length,
+        note: "v1.32 inventory script labels corpus explicitly — count differs by denominator only",
+      },
+    },
+    extractionSourceCounts,
     metrics: {
       legacyV14Corpora: legacySlices,
       v12RegressionSlice: v12Slice,
-      unrelatedPositiveSlice: unrelatedSlice,
+      unrelatedCatalogPositiveSlice: unrelatedCatalogSlice,
+      syntheticStructuralFixtures: syntheticSlice,
       positiveTrainingCombined: positiveCombined,
       policyGuardrails: guardrails,
       combinedDevelopment: combined,
@@ -326,11 +412,11 @@ function main() {
           combined.accepted.recall >= 0.92 &&
           combined.semanticInvalid === 0,
       },
-      unrelatedPositive: {
+      unrelatedCatalogPositive: {
         precisionTarget: 0.95,
         recallTarget: 0.9,
         pass:
-          unrelatedSlice.accepted.precision >= 0.95 && unrelatedSlice.accepted.recall >= 0.9,
+          unrelatedCatalogSlice.accepted.precision >= 0.95 && unrelatedCatalogSlice.accepted.recall >= 0.9,
       },
       policyGuardrails: {
         acceptedForbiddenEmissionsTarget: 0,
@@ -342,7 +428,7 @@ function main() {
 
   const outDir = resolve("data/milestones/rc3-development");
   mkdirSync(outDir, { recursive: true });
-  const outPath = resolve(outDir, "rc3-checkpoint-v131-corrected-report.json");
+  const outPath = resolve(outDir, "rc3-checkpoint-v134-report.json");
   writeFileSync(outPath, `${JSON.stringify(report, null, 2)}\n`);
   console.log(JSON.stringify({ outPath, report }, null, 2));
 }

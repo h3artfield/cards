@@ -18,9 +18,10 @@ import {
 } from "./oracle-granted-ability-extraction";
 import { extractClauseNativeActions, mergeClauseNativeWithV1, filterNativeActionsForPromotion } from "./oracle-rc3-clause-native";
 import { getRC3PromotedFamilies } from "./oracle-rc3-promotion";
+import { tagExtractionSource, type RC3ActionExtensions } from "./oracle-rc3-extraction-metadata";
 import type { SegmentedAbility } from "./oracle-action-schema";
 
-export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.31-rc3-ast-dev";
+export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.33-rc3-ast-dev";
 
 const PUT_INTO_HAND_RE =
   /\b(?:put (?:it|that card|one of them|one of those cards|two of those cards|three of those cards|four of those cards|five of those cards|up to [^.]+?) into (?:your |their )?hand|Put (?:that card|one of them|one of those cards|two of those cards|target card from [^.]+?) into (?:your |their |its owner's )?hand|reveal (?:it|that card)[^.]* and put (?:it|that card) into your hand)\b/i;
@@ -322,7 +323,9 @@ export function applyRC3Transforms(
   const faces = segmentCardFaces(input.oracleText);
   const targetFaces = input.cardFace ? faces.filter((f) => f.faceId === input.cardFace) : faces;
 
-  let actions = base.actions.map(reclassifyHandZone);
+  let actions = base.actions
+    .map(reclassifyHandZone)
+    .map((a) => tagExtractionSource(a as OracleActionV1 & RC3ActionExtensions, "v1_legacy"));
 
   const abilities = targetFaces.flatMap((face) =>
     segmentAbilities(input.oracleId, face.faceId, face.text, face.start),
@@ -381,25 +384,24 @@ export function applyRC3Transforms(
     nextIndex += supplemental.length;
   }
 
-  actions = [...actions, ...supplemental].map((a, i) => ({
-    ...a,
-    actionIndex: i,
-    parserVersion: ORACLE_ACTION_RC3_PARSER_VERSION,
-  }));
+  actions = [...actions, ...supplemental.map((a) => tagExtractionSource(a as OracleActionV1 & RC3ActionExtensions, "rc3_transform"))].map(
+    (a, i) => ({
+      ...a,
+      actionIndex: i,
+      parserVersion: ORACLE_ACTION_RC3_PARSER_VERSION,
+    }),
+  );
 
   const clauseNative = extractClauseNativeActions(input);
   const promoted = getRC3PromotedFamilies();
-  let clauseNativeStats: Record<string, unknown> = {};
-
-  if (promoted.length > 0) {
-    const toPromote = filterNativeActionsForPromotion(clauseNative, promoted);
-    const merged = mergeClauseNativeWithV1(actions, { ...clauseNative, actions: toPromote });
-    actions = merged.actions.map((a) => ({ ...a, parserVersion: ORACLE_ACTION_RC3_PARSER_VERSION }));
-    clauseNativeStats = { ...merged.stats, mergedIntoOutput: true, promotedFamilies: promoted };
-  } else {
-    const mergePreview = mergeClauseNativeWithV1(actions, clauseNative);
-    clauseNativeStats = { ...mergePreview.stats, mergedIntoOutput: false };
-  }
+  const toPromote = filterNativeActionsForPromotion(clauseNative, promoted);
+  const merged = mergeClauseNativeWithV1(actions, { ...clauseNative, actions: toPromote });
+  actions = merged.actions.map((a) => ({ ...a, parserVersion: ORACLE_ACTION_RC3_PARSER_VERSION }));
+  const clauseNativeStats = {
+    ...merged.stats,
+    mergedIntoOutput: toPromote.length > 0,
+    promotedFamilies: promoted,
+  };
 
   const legacyPayload = {
     ...base,

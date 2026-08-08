@@ -1,0 +1,548 @@
+{
+  "generatedAt": "2026-08-08T06:36:58.409Z",
+  "checkpoint": "rc3-structural-v132-checkpoint-1",
+  "benchmarkSlices": {
+    "unrelatedCatalogPositive": {
+      "caseCount": 33,
+      "note": "Catalog-backed generalization metric denominator"
+    },
+    "syntheticStructuralFixtures": {
+      "caseCount": 1,
+      "excludedFromCatalogRecall": true
+    },
+    "demilichOverlap": "intentional_same_oracle_disjoint_scope_policy_fixture — see disjoint-scope-oracle-overlap-v133.json"
+  },
+  "priorCheckpoint": {
+    "version": "oracle-action-v1.30-rc3-ast-dev",
+    "commit": "92dc31671c282e08dbfc778018113ec4a8e0856f",
+    "blobSha": "70cb0ba2da31a101170a0faf45038c423fa82087"
+  },
+  "parser": {
+    "version": "oracle-action-v1.32-rc3-ast-dev",
+    "commit": "6a757a736dfda9004860bb38d5e677880590882c",
+    "blobSha": "9846cc5341f8e34613d522e5d62d7f79cde5485c",
+    "lineage": "RC3 — separate from frozen oracle-action-rc2"
+  },
+  "guardrailViolations": {
+    "before": {
+      "acceptedForbidden": 2,
+      "cases": [
+        "rc3-guard-0001",
+        "rc3-guard-0013"
+      ],
+      "pack": "rc3-policy-guardrail-v130"
+    },
+    "after": {
+      "acceptedForbidden": 0,
+      "details": [],
+      "leakageByFamily": {
+        "persistent_cast_permission": 0,
+        "trigger_event_cast_reference": 0,
+        "reminder_mechanic_text": 0,
+        "static_cost_reduction": 0,
+        "activated_cost_only": 0,
+        "static_restriction": 0,
+        "ability_scope_exclusion": 0,
+        "other": 0
+      },
+      "pack": "rc3-policy-guardrail-v132"
+    }
+  },
+  "taxonomyV14": {
+    "put_into_hand": "implemented",
+    "distinctFromDraw": true,
+    "distinctFromReturnToHand": true
+  },
+  "semanticValidator": {
+    "status": "implemented",
+    "releaseGate": "structural invalid only — inferSupportedPrimitiveFromEvidence removed from gating"
+  },
+  "structuralFamilies": {
+    "granted_ability": {
+      "status": "clause_native_recursive",
+      "note": "GrantedAbility → nestedAbilityBlock recursive parse"
+    },
+    "search_put_shuffle": {
+      "status": "clause_native_object_identity",
+      "note": "selectedObjectId → referentObjectId chain links"
+    },
+    "mdfc_transform": {
+      "status": "partial_explicit_state",
+      "note": "TransformTransitionNode with mode/source/destination"
+    },
+    "activated_post_colon": {
+      "status": "clause_native_colon_aware",
+      "note": "costRegion/effectRegion structural split"
+    },
+    "replacement": {
+      "status": "clause_native_replacement_ast",
+      "note": "ReplacementEffect eventClause + replacementClause"
+    },
+    "put_into_hand": {
+      "wrongDrawBefore": "RC2 mapped put-into-hand phrases to draw",
+      "rc3Reclassified": 32,
+      "remainingDrawForPutPhrases": 0
+    }
+  },
+  "familyMetrics": {
+    "compound_second_clause": {
+      "spentV12": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "caseCount": 1
+      },
+      "unrelated": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0,
+        "recall": 1,
+        "caseCount": 3
+      }
+    },
+    "mdfc_transform_zone_transition": {
+      "spentV12": {
+        "tp": 6,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1,
+        "recall": 0.6,
+        "caseCount": 4
+      },
+      "unrelated": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1,
+        "recall": 0.375,
+        "caseCount": 4
+      }
+    },
+    "search_put_shuffle_chain": {
+      "spentV12": {
+        "tp": 10,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1,
+        "recall": 0.7692307692307693,
+        "caseCount": 4
+      },
+      "unrelated": {
+        "tp": 11,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1,
+        "recall": 0.6875,
+        "caseCount": 4
+      }
+    },
+    "granted_ability_quote": {
+      "spentV12": {
+        "tp": 10,
+        "fp": 1,
+        "fn": 9,
+        "precision": 0.9090909090909091,
+        "recall": 0.5263157894736842,
+        "caseCount": 5
+      },
+      "unrelated": {
+        "tp": 9,
+        "fp": 0,
+        "fn": 8,
+        "precision": 1,
+        "recall": 0.5294117647058824,
+        "caseCount": 4
+      }
+    },
+    "replacement_if_would": {
+      "spentV12": {
+        "tp": 5,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1,
+        "recall": 0.625,
+        "caseCount": 3
+      },
+      "unrelated": {
+        "tp": 5,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1,
+        "recall": 0.5,
+        "caseCount": 4
+      }
+    },
+    "modal_each_option_action": {
+      "spentV12": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1,
+        "recall": 0,
+        "caseCount": 1
+      },
+      "unrelated": {
+        "tp": 5,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.8333333333333334,
+        "recall": 1,
+        "caseCount": 3
+      }
+    },
+    "activated_post_colon_effect": {
+      "spentV12": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1,
+        "recall": 0.42857142857142855,
+        "caseCount": 3
+      },
+      "unrelated": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1,
+        "recall": 0.5,
+        "caseCount": 4
+      }
+    },
+    "optional_put_onto_battlefield": {
+      "spentV12": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1,
+        "recall": 0,
+        "caseCount": 1
+      },
+      "unrelated": {
+        "tp": 8,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1,
+        "recall": 0.8888888888888888,
+        "caseCount": 3
+      }
+    },
+    "zone_transition_return": {
+      "spentV12": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1,
+        "recall": 0,
+        "caseCount": 1
+      },
+      "unrelated": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1,
+        "recall": 0.8,
+        "caseCount": 3
+      }
+    },
+    "one_shot_cast_resolution": {
+      "spentV12": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "caseCount": 0
+      },
+      "unrelated": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "caseCount": 1
+      }
+    }
+  },
+  "clauseNativeStats": {
+    "v1Only": 358,
+    "nativeOnly": 167,
+    "overlap": 356,
+    "disagreements": 0,
+    "priorPreview": {
+      "corpus": "combined_development_430_cases",
+      "caseCount": 430,
+      "nativeOnlyActionCount": 185,
+      "note": "v1.31 preview counted native-only across full combined dev corpus including legacy v1.4"
+    },
+    "currentShadowInventory": {
+      "corpus": "positive_training_catalog_v133_plus_legacy_v14",
+      "caseCount": 431,
+      "note": "v1.32 inventory script labels corpus explicitly — count differs by denominator only"
+    }
+  },
+  "extractionSourceCounts": {
+    "v1_legacy": 661,
+    "rc3_transform": 53,
+    "rc3_clause_native": 0,
+    "untagged": 0
+  },
+  "metrics": {
+    "legacyV14Corpora": [
+      {
+        "label": "legacy_dev_v26_v14",
+        "caseCount": 284,
+        "accepted": {
+          "tp": 366,
+          "fp": 1,
+          "fn": 21,
+          "precision": 0.997275204359673,
+          "recall": 0.9457364341085271
+        },
+        "needsReview": {
+          "tp": 5,
+          "fp": 2
+        },
+        "semanticInvalid": 0,
+        "invariants": {
+          "idViolations": 0,
+          "provenanceViolations": 0,
+          "costLeakage": 0,
+          "reminderLeakage": 0,
+          "triggerEventLeakage": 0,
+          "permissionLeakage": 1
+        }
+      },
+      {
+        "label": "legacy_exp_v2_v14",
+        "caseCount": 52,
+        "accepted": {
+          "tp": 74,
+          "fp": 1,
+          "fn": 3,
+          "precision": 0.9866666666666667,
+          "recall": 0.961038961038961
+        },
+        "needsReview": {
+          "tp": 0,
+          "fp": 1
+        },
+        "semanticInvalid": 0,
+        "invariants": {
+          "idViolations": 0,
+          "provenanceViolations": 0,
+          "costLeakage": 0,
+          "reminderLeakage": 0,
+          "triggerEventLeakage": 0,
+          "permissionLeakage": 0
+        }
+      },
+      {
+        "label": "legacy_exp_v3_v14",
+        "caseCount": 24,
+        "accepted": {
+          "tp": 36,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "needsReview": {
+          "tp": 1,
+          "fp": 3
+        },
+        "semanticInvalid": 0,
+        "invariants": {
+          "idViolations": 0,
+          "provenanceViolations": 0,
+          "costLeakage": 0,
+          "reminderLeakage": 0,
+          "triggerEventLeakage": 0,
+          "permissionLeakage": 0
+        }
+      },
+      {
+        "label": "legacy_exp_v5_v14",
+        "caseCount": 15,
+        "accepted": {
+          "tp": 17,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "needsReview": {
+          "tp": 0,
+          "fp": 0
+        },
+        "semanticInvalid": 0,
+        "invariants": {
+          "idViolations": 0,
+          "provenanceViolations": 0,
+          "costLeakage": 0,
+          "reminderLeakage": 0,
+          "triggerEventLeakage": 0,
+          "permissionLeakage": 0
+        }
+      }
+    ],
+    "v12RegressionSlice": {
+      "label": "v12_regression_slice",
+      "caseCount": 23,
+      "accepted": {
+        "tp": 36,
+        "fp": 1,
+        "fn": 27,
+        "precision": 0.972972972972973,
+        "recall": 0.5714285714285714
+      },
+      "needsReview": {
+        "tp": 1,
+        "fp": 0
+      },
+      "semanticInvalid": 0,
+      "invariants": {
+        "idViolations": 0,
+        "provenanceViolations": 0,
+        "costLeakage": 0,
+        "reminderLeakage": 0,
+        "triggerEventLeakage": 0,
+        "permissionLeakage": 0
+      }
+    },
+    "unrelatedCatalogPositiveSlice": {
+      "label": "unrelated_catalog_positive_slice",
+      "caseCount": 33,
+      "accepted": {
+        "tp": 49,
+        "fp": 2,
+        "fn": 26,
+        "precision": 0.9607843137254902,
+        "recall": 0.6533333333333333
+      },
+      "needsReview": {
+        "tp": 6,
+        "fp": 1
+      },
+      "semanticInvalid": 0,
+      "invariants": {
+        "idViolations": 0,
+        "provenanceViolations": 0,
+        "costLeakage": 0,
+        "reminderLeakage": 0,
+        "triggerEventLeakage": 0,
+        "permissionLeakage": 0
+      }
+    },
+    "syntheticStructuralFixtures": {
+      "label": "synthetic_structural_fixtures",
+      "caseCount": 1,
+      "accepted": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "needsReview": {
+        "tp": 0,
+        "fp": 0
+      },
+      "semanticInvalid": 0,
+      "invariants": {
+        "idViolations": 0,
+        "provenanceViolations": 0,
+        "costLeakage": 0,
+        "reminderLeakage": 0,
+        "triggerEventLeakage": 0,
+        "permissionLeakage": 0
+      }
+    },
+    "positiveTrainingCombined": {
+      "label": "positive_training_combined",
+      "caseCount": 57,
+      "accepted": {
+        "tp": 86,
+        "fp": 3,
+        "fn": 53,
+        "precision": 0.9662921348314607,
+        "recall": 0.6187050359712231
+      },
+      "needsReview": {
+        "tp": 7,
+        "fp": 1
+      },
+      "semanticInvalid": 0,
+      "invariants": {
+        "idViolations": 0,
+        "provenanceViolations": 0,
+        "costLeakage": 0,
+        "reminderLeakage": 0,
+        "triggerEventLeakage": 0,
+        "permissionLeakage": 0
+      }
+    },
+    "policyGuardrails": {
+      "label": "policy_guardrail",
+      "path": "data/oracle-action-eval-rc3-policy-guardrail-v132.json",
+      "caseCount": 35,
+      "forbiddenActionsEmitted": 0,
+      "acceptedViolations": 0,
+      "needsReviewViolations": 0,
+      "violationDetails": [],
+      "leakageByFamily": {
+        "persistent_cast_permission": 0,
+        "trigger_event_cast_reference": 0,
+        "reminder_mechanic_text": 0,
+        "static_cost_reduction": 0,
+        "activated_cost_only": 0,
+        "static_restriction": 0,
+        "ability_scope_exclusion": 0,
+        "other": 0
+      }
+    },
+    "combinedDevelopment": {
+      "label": "combined_development",
+      "caseCount": 431,
+      "accepted": {
+        "tp": 578,
+        "fp": 5,
+        "fn": 77,
+        "precision": 0.9914236706689536,
+        "recall": 0.8824427480916031
+      },
+      "needsReview": {
+        "tp": 13,
+        "fp": 7
+      },
+      "semanticInvalid": 0,
+      "invariants": {
+        "idViolations": 0,
+        "provenanceViolations": 0,
+        "costLeakage": 0,
+        "reminderLeakage": 0,
+        "triggerEventLeakage": 0,
+        "permissionLeakage": 1
+      }
+    }
+  },
+  "gates": {
+    "combinedDevelopment": {
+      "precisionTarget": 0.98,
+      "recallTarget": 0.92,
+      "pass": false
+    },
+    "unrelatedCatalogPositive": {
+      "precisionTarget": 0.95,
+      "recallTarget": 0.9,
+      "pass": false
+    },
+    "policyGuardrails": {
+      "acceptedForbiddenEmissionsTarget": 0,
+      "pass": true
+    }
+  },
+  "v13Execution": "NOT_RUN — parserExecutionCount remains 0"
+}

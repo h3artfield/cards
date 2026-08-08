@@ -1,0 +1,33 @@
+{
+  "generatedAt": "2026-08-08T11:09:06.711Z",
+  "family": "activated_post_colon_effect",
+  "promotionState": "default_promoted",
+  "remainingFnCount": 3,
+  "failureStageCounts": {
+    "activated_block_not_recognized": 0,
+    "colon_boundary_incorrect": 0,
+    "cost_effect_region_incorrect": 2,
+    "effect_clause_not_segmented": 1,
+    "clause_role_incorrect": 0,
+    "ordinary_primitive_missing": 0,
+    "referent_argument_failure": 0,
+    "evaluator_mismatch": 0
+  },
+  "rows": [
+    {
+      "caseId": "rc3-pos-v12-0093",
+      "goldAction": "draw:draw X cards, then mill X cards, where X is t",
+      "stage": "cost_effect_region_incorrect"
+    },
+    {
+      "caseId": "rc3-pos-v12-0135",
+      "goldAction": "discard:Discard two cards: Return this card from your graveyard to the battlefield tapped",
+      "stage": "cost_effect_region_incorrect"
+    },
+    {
+      "caseId": "rc3-pos-cat-0015",
+      "goldAction": "cast:cast spells of the chosen types or spells whose names begin with the first letter of your name",
+      "stage": "effect_clause_not_segmented"
+    }
+  ]
+}

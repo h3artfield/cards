@@ -8,6 +8,8 @@ import {
   segmentCompoundClauses,
   type CompoundClauseSegment,
 } from "./oracle-compound-clause-segmentation";
+import { detectQuoteSpans } from "./oracle-rc3-quote-span-detector";
+import { classifyQuotedSpan } from "./oracle-rc3-granted-rules-classifier";
 
 export type TextRole =
   | "effect"
@@ -151,15 +153,6 @@ function findMatchingQuote(text: string, openIdx: number): number {
   return text.length;
 }
 
-function isGrantedAbilityQuote(paragraph: string, quoteStart: number): boolean {
-  const before = paragraph.slice(Math.max(0, quoteStart - 80), quoteStart).trimEnd();
-  if (/\b(?:have|has|gain|gains|get|gets)\s*$/i.test(before)) return true;
-  if (/\b(?:Lands|Creatures|Artifacts|Enchantments|Slivers|Permanents) (?:you control )?have\s*$/i.test(before)) return true;
-  if (/\bAll \w+(?:s)? have\s*$/i.test(before)) return true;
-  if (/\bEnchanted (?:creature|land|artifact|permanent|(?:\w+ )) has\s*$/i.test(before)) return true;
-  return false;
-}
-
 function investigateTokenDefinitionStart(inner: string): number | null {
   const m = inner.match(/\bIt(?:'|\u2019)s an artifact with\b/i);
   return m?.index ?? null;
@@ -269,20 +262,17 @@ export function findReminderSpans(paragraph: string): TextSpanRole[] {
 }
 
 export function findQuotedAbilitySpans(paragraph: string): TextSpanRole[] {
-  const spans: TextSpanRole[] = [];
-  for (let i = 0; i < paragraph.length; i++) {
-    if (paragraph[i] !== '"') continue;
-    const close = findMatchingQuote(paragraph, i);
-    const role: TextRole = isGrantedAbilityQuote(paragraph, i) ? "effect" : "reminder_text";
-    spans.push({
+  return detectQuoteSpans(paragraph).map((span) => {
+    const classified = classifyQuotedSpan(paragraph, span);
+    const role: TextRole =
+      classified.classification === "granted_rules_ability" ? "effect" : "reminder_text";
+    return {
       role,
-      localStart: i,
-      localEnd: close,
-      text: paragraph.slice(i, close),
-    });
-    i = close - 1;
-  }
-  return spans;
+      localStart: span.localStart,
+      localEnd: span.localEnd,
+      text: span.text,
+    };
+  });
 }
 
 function insideSpan(spans: TextSpanRole[], localStart: number, localEnd?: number): TextSpanRole | undefined {

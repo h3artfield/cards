@@ -1,0 +1,71 @@
+{
+  "generatedAt": "2026-08-08T11:16:35.347Z",
+  "defaultPromotedFamilies": [
+    "search_put_shuffle_chain",
+    "activated_post_colon_effect"
+  ],
+  "activatedFamilyExperiment": {
+    "beforeFamilies": [
+      "search_put_shuffle_chain"
+    ],
+    "afterFamilies": [
+      "search_put_shuffle_chain",
+      "activated_post_colon_effect"
+    ],
+    "before": {
+      "tp": 4,
+      "fp": 0,
+      "fn": 5,
+      "precision": 1,
+      "recall": 0.4444444444444444
+    },
+    "after": {
+      "tp": 6,
+      "fp": 0,
+      "fn": 3,
+      "precision": 1,
+      "recall": 0.6666666666666666
+    },
+    "delta": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 2
+    }
+  },
+  "fullCorpusRegression": {
+    "caseCount": 431,
+    "beforeCombined": {
+      "tp": 567,
+      "fp": 5,
+      "fn": 88,
+      "precision": 0.9912587412587412,
+      "recall": 0.8656488549618321
+    },
+    "afterCombined": {
+      "tp": 569,
+      "fp": 5,
+      "fn": 86,
+      "precision": 0.9912891986062717,
+      "recall": 0.8687022900763359
+    },
+    "delta": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 2
+    },
+    "guardrailViolations": {
+      "before": 0,
+      "after": 0
+    },
+    "semanticInvalid": {
+      "before": 2,
+      "after": 2
+    },
+    "accepted": true
+  },
+  "extractionSourceCounts": {
+    "v1_legacy": 667,
+    "rc3_transform": 58,
+    "rc3_clause_native": 39
+  }
+}

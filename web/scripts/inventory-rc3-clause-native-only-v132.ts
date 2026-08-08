@@ -43,9 +43,11 @@ function classifyNativeAction(
 
 function loadCases(): OracleActionEvalCaseV2[] {
   const paths = [
-    "data/oracle-action-eval-rc3-positive-training-v132.json",
-    "data/oracle-action-eval-rc3-positive-training-v130.json",
+    "data/oracle-action-eval-rc3-positive-training-catalog-v133.json",
     "data/oracle-action-eval-development-v26-v14.json",
+    "data/oracle-action-eval-development-generalization-expansion-v2-v14.json",
+    "data/oracle-action-eval-development-generalization-expansion-v3-v14.json",
+    "data/oracle-action-eval-development-generalization-expansion-v5-v14.json",
   ];
   const all: OracleActionEvalCaseV2[] = [];
   for (const p of paths) {
@@ -149,6 +151,18 @@ function main() {
 
   const report = {
     generatedAt: new Date().toISOString(),
+    corpus: {
+      name: "positive_training_catalog_v133_plus_legacy_v14",
+      caseCount: positive.length,
+      legacyCaseCount: positive.filter((c) => !String(c.id).startsWith("rc3-")).length,
+      catalogPositiveCaseCount: positive.filter((c) => String(c.id).startsWith("rc3-")).length,
+    },
+    priorPreviewComparison: {
+      corpus: "combined_development_430_cases",
+      caseCount: 430,
+      nativeOnlyActionCount: 185,
+      note: "185 vs current totalNativeOnly differs by corpus scope, not necessarily parser regression",
+    },
     totalNativeOnly: Object.values(byFamily).reduce((a, b) => a + b, 0),
     byFamily,
     classification: { goldTpCandidates, outsideScope, policyForbidden, unscored, semanticInvalid },

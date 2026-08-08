@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-08-08T07:11:05.755Z",
+  "family": "mdfc_transform_zone_transition",
+  "unrelatedCaseCount": 4,
+  "unrelatedFnCount": 5,
+  "failureStageCounts": {
+    "transform_in_place": 0,
+    "enter_transformed": 0,
+    "exile_return_transformed": 0,
+    "card_face_referent_failure": 0,
+    "zone_transition_failure": 4,
+    "ordinary_primitive_missing": 1
+  },
+  "rows": [
+    {
+      "caseId": "rc3-pos-cat-0009",
+      "goldAction": "put_onto_battlefield:Put this card onto the battlefield",
+      "stage": "zone_transition_failure"
+    },
+    {
+      "caseId": "rc3-pos-cat-0010",
+      "goldAction": "put_onto_battlefield:Put this card onto the battlefield",
+      "stage": "zone_transition_failure"
+    },
+    {
+      "caseId": "rc3-pos-cat-0011",
+      "goldAction": "put_onto_battlefield:Put this card onto the battlefield",
+      "stage": "zone_transition_failure"
+    },
+    {
+      "caseId": "rc3-pos-cat-0012",
+      "goldAction": "mill:mill a card, put the top card of your library into your graveyard",
+      "stage": "zone_transition_failure"
+    },
+    {
+      "caseId": "rc3-pos-cat-0012",
+      "goldAction": "mill:milled this way, transform this creature",
+      "stage": "ordinary_primitive_missing"
+    }
+  ]
+}

@@ -1,0 +1,257 @@
+{
+  "generatedAt": "2026-08-08T07:12:46.088Z",
+  "family": "granted_ability_quote",
+  "v132AcceptedCheckpointFrozen": {
+    "note": "Immutable v1.32 acceptance baseline (parser at 6a757a73) — 17=17 reconciled before v1.33 quote pipeline",
+    "evaluatorFnCount": 17,
+    "classifiedFnCount": 17,
+    "reconciled": true,
+    "missingSeventeenthFn": {
+      "caseId": "rc3-pos-v12-0033",
+      "goldAction": "discard:discard one or more artifact cards, create a tapped Powerstone token",
+      "primaryFailureStage": "non_granted_primary_effect",
+      "secondaryTags": [
+        "trigger_event_discard_not_granted_quote"
+      ],
+      "accountingNote": "Prior diagnose script matched loosely on discard-a-card and skipped this FN; proper matcher alignment yields 17 classified rows."
+    },
+    "failureStageCounts": {
+      "quoted_span_not_detected": 9,
+      "quote_not_recognized_as_ability": 6,
+      "nested_provenance_offset_failure": 1,
+      "non_granted_primary_effect": 1
+    }
+  },
+  "v132BaselineReconciliation": {
+    "label": "v1.32_shadow_no_default_promotion",
+    "evaluatorFnCount": 14,
+    "classifiedFnCount": 14,
+    "reconciled": true,
+    "failureStageCounts": {
+      "nested_provenance_offset_failure": 2,
+      "non_granted_primary_effect": 9,
+      "clause_role_wrong": 2,
+      "quoted_span_not_detected": 1
+    },
+    "rows": [
+      {
+        "caseId": "rc3-pos-v12-0033",
+        "goldAction": "cast:cast a nonartifact spell",
+        "primaryFailureStage": "nested_provenance_offset_failure",
+        "secondaryTags": []
+      },
+      {
+        "caseId": "rc3-pos-v12-0033",
+        "goldAction": "discard:discard one or more artifact cards, create a tapped Powerstone token",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "trigger_event_discard_not_granted_quote"
+        ]
+      },
+      {
+        "caseId": "rc3-pos-v12-0146",
+        "goldAction": "sacrifice:Sacrifice this token: Draw a card",
+        "primaryFailureStage": "clause_role_wrong",
+        "secondaryTags": []
+      },
+      {
+        "caseId": "rc3-pos-v12-0148",
+        "goldAction": "create_token:Create a colorless Clue artifact token",
+        "primaryFailureStage": "quoted_span_not_detected",
+        "secondaryTags": []
+      },
+      {
+        "caseId": "rc3-pos-v12-0148",
+        "goldAction": "sacrifice:Sacrifice this artifact: Draw a card",
+        "primaryFailureStage": "clause_role_wrong",
+        "secondaryTags": []
+      },
+      {
+        "caseId": "rc3-pos-v12-0148",
+        "goldAction": "shuffle_library:you may shuffle",
+        "primaryFailureStage": "nested_provenance_offset_failure",
+        "secondaryTags": []
+      },
+      {
+        "caseId": "rc3-pos-cat-0001",
+        "goldAction": "cast:cast from exile",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "non_quote_cast_permission"
+        ]
+      },
+      {
+        "caseId": "rc3-pos-cat-0001",
+        "goldAction": "cast:You may cast Glamorous Outlaw for as long as it remains exiled",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "non_quote_cast_permission"
+        ]
+      },
+      {
+        "caseId": "rc3-pos-cat-0002",
+        "goldAction": "cast:cast from exile",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "non_quote_cast_permission"
+        ]
+      },
+      {
+        "caseId": "rc3-pos-cat-0002",
+        "goldAction": "cast:You may cast Masked Bandits for as long as it remains exiled",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "non_quote_cast_permission"
+        ]
+      },
+      {
+        "caseId": "rc3-pos-cat-0003",
+        "goldAction": "cast:cast from exile",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "non_quote_cast_permission"
+        ]
+      },
+      {
+        "caseId": "rc3-pos-cat-0003",
+        "goldAction": "cast:You may cast Rakish Revelers for as long as it remains exiled",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "non_quote_cast_permission"
+        ]
+      },
+      {
+        "caseId": "rc3-pos-cat-0004",
+        "goldAction": "cast:cast from exile",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "non_quote_cast_permission"
+        ]
+      },
+      {
+        "caseId": "rc3-pos-cat-0004",
+        "goldAction": "cast:You may cast Shattered Seraph for as long as it remains exiled",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "non_quote_cast_permission"
+        ]
+      }
+    ]
+  },
+  "currentCheckpoint": {
+    "label": "v1.33_default_search_promoted",
+    "evaluatorFnCount": 14,
+    "classifiedFnCount": 14,
+    "reconciled": true,
+    "failureStageCounts": {
+      "nested_provenance_offset_failure": 2,
+      "non_granted_primary_effect": 9,
+      "clause_role_wrong": 2,
+      "quoted_span_not_detected": 1
+    },
+    "rows": [
+      {
+        "caseId": "rc3-pos-v12-0033",
+        "goldAction": "cast:cast a nonartifact spell",
+        "primaryFailureStage": "nested_provenance_offset_failure",
+        "secondaryTags": []
+      },
+      {
+        "caseId": "rc3-pos-v12-0033",
+        "goldAction": "discard:discard one or more artifact cards, create a tapped Powerstone token",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "trigger_event_discard_not_granted_quote"
+        ]
+      },
+      {
+        "caseId": "rc3-pos-v12-0146",
+        "goldAction": "sacrifice:Sacrifice this token: Draw a card",
+        "primaryFailureStage": "clause_role_wrong",
+        "secondaryTags": []
+      },
+      {
+        "caseId": "rc3-pos-v12-0148",
+        "goldAction": "create_token:Create a colorless Clue artifact token",
+        "primaryFailureStage": "quoted_span_not_detected",
+        "secondaryTags": []
+      },
+      {
+        "caseId": "rc3-pos-v12-0148",
+        "goldAction": "sacrifice:Sacrifice this artifact: Draw a card",
+        "primaryFailureStage": "clause_role_wrong",
+        "secondaryTags": []
+      },
+      {
+        "caseId": "rc3-pos-v12-0148",
+        "goldAction": "shuffle_library:you may shuffle",
+        "primaryFailureStage": "nested_provenance_offset_failure",
+        "secondaryTags": []
+      },
+      {
+        "caseId": "rc3-pos-cat-0001",
+        "goldAction": "cast:cast from exile",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "non_quote_cast_permission"
+        ]
+      },
+      {
+        "caseId": "rc3-pos-cat-0001",
+        "goldAction": "cast:You may cast Glamorous Outlaw for as long as it remains exiled",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "non_quote_cast_permission"
+        ]
+      },
+      {
+        "caseId": "rc3-pos-cat-0002",
+        "goldAction": "cast:cast from exile",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "non_quote_cast_permission"
+        ]
+      },
+      {
+        "caseId": "rc3-pos-cat-0002",
+        "goldAction": "cast:You may cast Masked Bandits for as long as it remains exiled",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "non_quote_cast_permission"
+        ]
+      },
+      {
+        "caseId": "rc3-pos-cat-0003",
+        "goldAction": "cast:cast from exile",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "non_quote_cast_permission"
+        ]
+      },
+      {
+        "caseId": "rc3-pos-cat-0003",
+        "goldAction": "cast:You may cast Rakish Revelers for as long as it remains exiled",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "non_quote_cast_permission"
+        ]
+      },
+      {
+        "caseId": "rc3-pos-cat-0004",
+        "goldAction": "cast:cast from exile",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "non_quote_cast_permission"
+        ]
+      },
+      {
+        "caseId": "rc3-pos-cat-0004",
+        "goldAction": "cast:You may cast Shattered Seraph for as long as it remains exiled",
+        "primaryFailureStage": "non_granted_primary_effect",
+        "secondaryTags": [
+          "non_quote_cast_permission"
+        ]
+      }
+    ]
+  }
+}

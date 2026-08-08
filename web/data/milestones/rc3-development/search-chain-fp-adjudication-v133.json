@@ -1,0 +1,7 @@
+{
+  "generatedAt": "2026-08-08T06:36:53.309Z",
+  "family": "search_put_shuffle_chain",
+  "promotionExperimentFpDelta": 0,
+  "adjudication": [],
+  "note": "Promotion remains in shadow until FP=0 on catalog slice with net recall gain."
+}

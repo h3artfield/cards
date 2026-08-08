@@ -18,9 +18,13 @@ type Case = OracleActionEvalCaseV2 & { coverageStratum?: string; spentV12Regress
 
 function loadPositive(): Case[] {
   try {
-    return (JSON.parse(readFileSync("data/oracle-action-eval-rc3-positive-training-v132.json", "utf8")) as { cases: Case[] }).cases;
+    return (JSON.parse(readFileSync("data/oracle-action-eval-rc3-positive-training-catalog-v133.json", "utf8")) as { cases: Case[] }).cases;
   } catch {
-    return (JSON.parse(readFileSync("data/oracle-action-eval-rc3-positive-training-v130.json", "utf8")) as { cases: Case[] }).cases;
+    try {
+      return (JSON.parse(readFileSync("data/oracle-action-eval-rc3-positive-training-v132.json", "utf8")) as { cases: Case[] }).cases;
+    } catch {
+      return (JSON.parse(readFileSync("data/oracle-action-eval-rc3-positive-training-v130.json", "utf8")) as { cases: Case[] }).cases;
+    }
   }
 }
 

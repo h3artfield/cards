@@ -1,0 +1,62 @@
+{
+  "version": "rc3-granted-span-negative-v134",
+  "description": "Development negatives for GrantedRulesSpanDetector/Classifier precision — not v13.",
+  "cases": [
+    {
+      "id": "rc3-grant-neg-0001",
+      "oracleId": "00000000-0000-4000-8000-000000000001",
+      "oracleText": "Search your library for a card named \"Lightning Bolt\", reveal it, put it into your hand, then shuffle.",
+      "expectedSpanClass": "quoted_card_name_reference",
+      "mustNotClassifyAs": "granted_rules_ability"
+    },
+    {
+      "id": "rc3-grant-neg-0002",
+      "oracleId": "00000000-0000-4000-8000-000000000002",
+      "oracleText": "Flashback {2}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+      "expectedSpanClass": "reminder_mechanic_text",
+      "mustNotClassifyAs": "granted_rules_ability"
+    },
+    {
+      "id": "rc3-grant-neg-0003",
+      "oracleId": "00000000-0000-4000-8000-000000000003",
+      "oracleText": "Discover 4 (Whenever you cast your fourth spell this turn, discover 4.)",
+      "expectedSpanClass": "reminder_mechanic_text",
+      "mustNotClassifyAs": "granted_rules_ability"
+    },
+    {
+      "id": "rc3-grant-neg-0004",
+      "oracleId": "00000000-0000-4000-8000-000000000004",
+      "oracleText": "Choose one — • \"Aurora\" — Draw a card. • \"Ember\" — Deal 2 damage.",
+      "expectedSpanClass": "other_quoted_text",
+      "mustNotClassifyAs": "granted_rules_ability"
+    },
+    {
+      "id": "rc3-grant-neg-0005",
+      "oracleId": "00000000-0000-4000-8000-000000000005",
+      "oracleText": "Equipped creature gets +2/+0 and has \"This creature can't be blocked except by Walls.\"",
+      "expectedPositiveSpan": true,
+      "note": "Positive control within negative pack — granted rules inside equipped has"
+    },
+    {
+      "id": "rc3-grant-neg-0006",
+      "oracleId": "00000000-0000-4000-8000-000000000006",
+      "oracleText": "Creatures you control have \"Whenever you cast a spell, draw a card.\"",
+      "expectedPositiveSpan": true,
+      "note": "Positive control — creatures have quoted triggered ability"
+    },
+    {
+      "id": "rc3-grant-neg-0007",
+      "oracleId": "00000000-0000-4000-8000-000000000007",
+      "oracleText": "As long as you control a creature named \"Ashnod, Flesh Mechanist\", this spell costs {2} less to cast.",
+      "expectedSpanClass": "quoted_card_name_reference",
+      "mustNotClassifyAs": "granted_rules_ability"
+    },
+    {
+      "id": "rc3-grant-neg-0008",
+      "oracleId": "00000000-0000-4000-8000-000000000008",
+      "oracleText": "Cycling {2} ({2}, Discard this card: Draw a card.)",
+      "expectedSpanClass": "reminder_mechanic_text",
+      "mustNotClassifyAs": "granted_rules_ability"
+    }
+  ]
+}

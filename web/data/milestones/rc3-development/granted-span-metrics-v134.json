@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-08-08T11:09:03.751Z",
+  "corpus": {
+    "grantedPositiveCards": 9,
+    "grantedNegativeControls": 6,
+    "candidateSpanCount": 21,
+    "cardsWithCandidateSpans": 9
+  },
+  "grantedRulesSpanDetector": {
+    "tp": 14,
+    "fp": 7,
+    "fn": 49,
+    "tn": 4,
+    "precision": 0.6666666666666666,
+    "recall": 0.2222222222222222
+  },
+  "grantedRulesClassifier": {
+    "tp": 6,
+    "fp": 6,
+    "fn": 57,
+    "tn": 4,
+    "precision": 0.5,
+    "recall": 0.09523809523809523
+  },
+  "downstreamNestedParserErrors": 63,
+  "errorSeparationNote": "Detector/classifier counts are not identical by construction — compare FP sources separately."
+}
