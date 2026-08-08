@@ -1,113 +1,38 @@
 /**
- * RC3 v1.35 granted pipeline checkpoint — Stages A/B/C + default vs clause-native split.
+ * RC3 v1.35 granted pipeline audit — strict primitive matching, Stage-A unit split,
+ * baseline delta, promotion experiment, catalog expansion.
  */
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { execSync } from "node:child_process";
-import { segmentAbilities, segmentCardFaces } from "../src/lib/deck-builder/golden-catalog/oracle-ability-segmentation";
-import { detectGrantedRulesSpans } from "../src/lib/deck-builder/golden-catalog/oracle-rc3-granted-rules-span-detector";
-import { classifyGrantedRulesSpan } from "../src/lib/deck-builder/golden-catalog/oracle-rc3-granted-rules-classifier";
-import {
-  buildGrantedRulesRegions,
-  mapGoldSpansToRegions,
-} from "../src/lib/deck-builder/golden-catalog/oracle-rc3-granted-rules-region";
-import { detectQuoteSpans } from "../src/lib/deck-builder/golden-catalog/oracle-rc3-quote-span-detector";
 import { parseOracleSemanticsRC3, ORACLE_ACTION_RC3_PARSER_VERSION } from "../src/lib/deck-builder/golden-catalog/oracle-semantic-parse-rc3";
-import { resetRC3PromotedFamiliesToDefault } from "../src/lib/deck-builder/golden-catalog/oracle-rc3-promotion";
+import {
+  clearRC3PromotedFamilies,
+  resetRC3PromotedFamiliesToDefault,
+  setRC3PromotedFamilies,
+} from "../src/lib/deck-builder/golden-catalog/oracle-rc3-promotion";
 import { evaluateCaseSemantic, sumSemanticMetrics } from "./oracle-action-semantic-matcher";
-import { evidenceMatchesExtracted, type ExpectedPrimitiveAction } from "./oracle-action-eval-shared";
+import { evidenceMatchesExtracted } from "./oracle-action-eval-shared";
 import { applyGoldMigrationV135 } from "./lib/rc3-gold-migration-v135";
+import {
+  evaluateGrantedPipeline,
+  evaluateExpansionGrantedPipeline,
+  isCoPrimaryGold,
+  metricsFromCounts,
+  strictGoldMatchesAction,
+} from "./lib/rc3-granted-stage-metrics";
 import type { OracleActionEvalCaseV2 } from "./audit-oracle-action-eval-cases";
 
-type Case = OracleActionEvalCaseV2 & { cardName?: string; coverageStratum?: string };
+type Case = OracleActionEvalCaseV2 & { cardName?: string; coverageStratum?: string; expansionLabel?: string; expectedGrantedRegionCount?: number };
 
-function metricsFromCounts(tp: number, fp: number, fn: number) {
-  const precision = tp + fp > 0 ? tp / (tp + fp) : null;
-  const recall = tp + fn > 0 ? tp / (tp + fn) : 0;
-  return {
-    tp,
-    fp,
-    fn,
-    precision,
-    precisionLabel: tp + fp > 0 ? `${((tp / (tp + fp)) * 100).toFixed(1)}%` : "N/A",
-    recall,
-    recallLabel: `${(recall * 100).toFixed(1)}%`,
-  };
-}
-
-const isCoPrimaryGold = (g: { actionType: string; evidenceContains?: string }) =>
-  /cast from exile|you may cast .*remains exiled|whenever you discard/i.test(g.evidenceContains ?? "");
-
-function deriveGoldGrantedSpans(paragraph: string, nestedGold: Array<{ evidenceContains?: string }>) {
-  const spans: Array<{ localStart: number; localEnd: number; innerText: string; goldKeys: string[] }> = [];
-  const quoteSpans = detectQuoteSpans(paragraph);
-  const parenRe = /\(([^)]{8,})\)/g;
-  const candidates: Array<{ localStart: number; localEnd: number; innerText: string }> = [
-    ...quoteSpans.map((q) => ({ localStart: q.localStart, localEnd: q.localEnd, innerText: q.innerText })),
-  ];
-  let m: RegExpExecArray | null;
-  while ((m = parenRe.exec(paragraph)) !== null) {
-    candidates.push({ localStart: m.index, localEnd: m.index + m[0].length, innerText: m[1] });
-  }
-  for (const gold of nestedGold) {
-    const needle = (gold.evidenceContains ?? "").toLowerCase();
-    if (needle.length < 4) continue;
-    const containing = candidates
-      .filter((c) => c.innerText.toLowerCase().includes(needle.slice(0, 12)))
-      .sort((a, b) => a.localEnd - a.localStart - (b.localEnd - b.localStart));
-    if (containing.length === 0) continue;
-    const best = containing[0];
-    const key = needle.slice(0, 24);
-    const existing = spans.find((s) => s.localStart === best.localStart && s.localEnd === best.localEnd);
-    if (existing) existing.goldKeys.push(key);
-    else spans.push({ ...best, goldKeys: [key] });
-  }
-  return spans;
-}
-
-function spansOverlap(a: { localStart: number; localEnd: number }, b: { localStart: number; localEnd: number }) {
-  return a.localStart < b.localEnd && b.localStart < a.localEnd;
-}
-
-function classifyLegacyFp(caseId: string, innerText: string, typography: string): string {
-  if (/^A \w+ is an artifact/i.test(innerText)) return "reminder_mechanic_span";
-  if (/Creatures you control get \+/.test(innerText)) return "card_native_rules_text";
-  if (/Whenever you gain life|You gain \d+ life/i.test(innerText)) return "card_native_rules_text";
-  if (/can't be blocked by creatures with/i.test(innerText)) return "card_native_rules_text";
-  if (typography === "quoted" && !/When|Whenever|\{T\}|Add \{/.test(innerText)) return "quoted_name_or_reference";
-  return "other";
-}
-
-function grantedGoldMatchesAction(gold: ExpectedPrimitiveAction, action: { actionType: string; evidenceText: string }): boolean {
-  if (gold.actionType === action.actionType && evidenceMatchesExtracted(action.evidenceText, gold.evidenceContains)) {
-    return true;
-  }
-  if (
-    gold.actionType === "shuffle_library" &&
-    action.actionType === "shuffle_into_library" &&
-    evidenceMatchesExtracted(action.evidenceText, gold.evidenceContains)
-  ) {
-    return true;
-  }
-  return false;
-}
-
-function actionMatchesGrantedGold(gold: ExpectedPrimitiveAction, action: { actionType: string; evidenceText: string }): boolean {
-  if (grantedGoldMatchesAction(gold, action)) return true;
-  if (
-    gold.actionType === "shuffle_library" &&
-    action.actionType === "shuffle_into_library" &&
-    /shuffle/i.test(action.evidenceText)
-  ) {
-    return true;
-  }
-  return false;
-}
+const V134_BASELINE = { tp: 576, fp: 5, fn: 74 };
 
 function loadGrantedCases(): Case[] {
-  return (JSON.parse(readFileSync("data/oracle-action-eval-rc3-positive-training-catalog-v133.json", "utf8")) as {
-    cases: Case[];
-  }).cases.filter((c) => c.coverageStratum === "granted_ability_quote");
+  return applyGoldMigrationV135(
+    (JSON.parse(readFileSync("data/oracle-action-eval-rc3-positive-training-catalog-v133.json", "utf8")) as {
+      cases: Case[];
+    }).cases.filter((c) => c.coverageStratum === "granted_ability_quote"),
+  );
 }
 
 function loadCombinedDev(): Case[] {
@@ -123,180 +48,236 @@ function loadCombinedDev(): Case[] {
   return applyGoldMigrationV135(all);
 }
 
-function main() {
-  resetRC3PromotedFamiliesToDefault();
-  const repoRoot = resolve(process.cwd(), "..");
-  const positives = loadGrantedCases();
+function loadExpansionCases(): Case[] {
+  const path = resolve("data/oracle-action-eval-granted-classifier-expansion-v135.json");
+  if (!existsSync(path)) return [];
+  return (JSON.parse(readFileSync(path, "utf8")) as { cases: Case[] }).cases;
+}
 
-  let stageA_goldRegions = 0;
-  let stageA_tp = 0;
-  let stageA_fp = 0;
-  let stageA_fn = 0;
-  let candidateRegionCount = 0;
+function scanCrossPrimitiveEquivalences(): Array<{ location: string; pattern: string; status: string }> {
+  const findings: Array<{ location: string; pattern: string; status: string }> = [];
+  const matcherSrc = readFileSync(resolve("scripts/oracle-action-semantic-matcher.ts"), "utf8");
+  const stageMetricsSrc = readFileSync(resolve("scripts/lib/rc3-granted-stage-metrics.ts"), "utf8");
 
-  let stageB_tp = 0;
-  let stageB_fp = 0;
-  let stageB_fn = 0;
-  let goldAlignedRegionCount = 0;
+  const checks: Array<{ pattern: string; probe: RegExp; matcherProbe?: RegExp }> = [
+    {
+      pattern: "shuffle_library ↔ shuffle_into_library",
+      probe: /shuffleFamilyHit|shuffle_library[\s\S]{0,40}shuffle_into_library/i,
+      matcherProbe: /gold\.actionType === ['"]shuffle_library['"][\s\S]{0,80}shuffle_into_library/i,
+    },
+    {
+      pattern: "draw ↔ put_into_hand",
+      probe: /draw[\s\S]{0,30}put_into_hand|put_into_hand[\s\S]{0,30}draw/i,
+      matcherProbe: /actionType !== exp\.actionType[\s\S]{0,200}put_into_hand/i,
+    },
+    {
+      pattern: "return_to_hand ↔ put_into_hand",
+      probe: /return_to_hand[\s\S]{0,30}put_into_hand/i,
+      matcherProbe: /return_to_hand[\s\S]{0,40}put_into_hand/i,
+    },
+    {
+      pattern: "cast ↔ play",
+      probe: /cast[\s\S]{0,30}covers[\s\S]{0,20}play|play[\s\S]{0,30}covers[\s\S]{0,20}cast/i,
+      matcherProbe: /cast[\s\S]{0,40}play/i,
+    },
+    {
+      pattern: "put_onto_battlefield ↔ return_to_battlefield",
+      probe: /put_onto_battlefield[\s\S]{0,40}return_to_battlefield/i,
+      matcherProbe: /put_onto_battlefield[\s\S]{0,40}return_to_battlefield/i,
+    },
+  ];
 
-  let stageC_tp = 0;
-  let stageC_fp = 0;
-  let stageC_fn = 0;
-  let stageC_pool = 0;
+  for (const check of checks) {
+    const inStage = check.probe.test(stageMetricsSrc);
+    const inMatcher = check.matcherProbe?.test(matcherSrc) ?? false;
+    findings.push({
+      location: inStage ? "rc3-granted-stage-metrics.ts" : inMatcher ? "oracle-action-semantic-matcher.ts" : "none",
+      pattern: check.pattern,
+      status:
+        check.pattern.startsWith("shuffle") && !inStage && !inMatcher
+          ? "removed_no_active_equivalence"
+          : inStage || inMatcher
+            ? "active_equivalence_found"
+            : "not_found_strict_matcher",
+    });
+  }
 
-  const oldFpClassifications: Array<Record<string, unknown>> = [];
-  const goldToRegionMapping: Array<Record<string, unknown>> = [];
-  const classifierErrors: Array<Record<string, unknown>> = [];
-  const stageCFnAdjudications: Array<Record<string, unknown>> = [];
+  findings.push({
+    location: "oracle-action-semantic-matcher.ts",
+    pattern: "semanticPrimitiveMatchesExpected",
+    status: "strict actionType equality — no cross-family alias",
+  });
 
-  for (const testCase of positives) {
-    const nestedGold = testCase.expectedPrimitiveActions.filter((g) => !g.negative && !isCoPrimaryGold(g));
+  return findings;
+}
 
-    for (const face of segmentCardFaces(testCase.oracleText)) {
-      for (const ability of segmentAbilities(testCase.oracleId, face.faceId, face.text, face.start)) {
-        const goldSpans = deriveGoldGrantedSpans(ability.paragraphText, nestedGold);
-        const detected = detectGrantedRulesSpans(ability.paragraphText, ability.abilityId);
-        const regions = buildGrantedRulesRegions(ability.paragraphText, detected, nestedGold, ability.abilityId);
-        candidateRegionCount += regions.length;
-        stageA_goldRegions += goldSpans.length;
+function scoreFrozenActionsStrict(
+  testCase: Case,
+  frozenActions: Array<{ actionType: string; evidenceText: string }>,
+): { tp: number; fn: number; fp: number } {
+  const expected = testCase.expectedPrimitiveActions.filter((g) => !g.negative);
+  let tp = 0;
+  let fn = 0;
+  const used = new Set<number>();
+  for (const gold of expected) {
+    const idx = frozenActions.findIndex((a, i) => !used.has(i) && strictGoldMatchesAction(gold, a));
+    if (idx >= 0) {
+      tp++;
+      used.add(idx);
+    } else {
+      fn++;
+    }
+  }
+  const fp = frozenActions.filter((_, i) => !used.has(i)).length;
+  return { tp, fn, fp };
+}
 
-        const goldMapping = mapGoldSpansToRegions(goldSpans, regions);
-        for (const row of goldMapping) {
-          goldToRegionMapping.push({
+function computeBaselineDelta(devCases: Case[]) {
+  const frozen = JSON.parse(
+    readFileSync("data/milestones/rc3-development/frozen-parse-output-v134-stabilization.json", "utf8"),
+  ) as {
+    cases: Array<{ caseId: string; emittedActions: Array<{ actionType: string; evidenceText: string }> }>;
+  };
+  const frozenByCase = new Map(frozen.cases.map((c) => [c.caseId, c.emittedActions]));
+
+  const gains: Array<Record<string, unknown>> = [];
+
+  for (const testCase of devCases) {
+    const live = evaluateCaseSemantic(
+      testCase,
+      parseOracleSemanticsRC3({ oracleId: testCase.oracleId, oracleText: testCase.oracleText, cardFace: testCase.cardFace }),
+    );
+    const frozenActions = frozenByCase.get(testCase.id) ?? [];
+    const frozenScore = scoreFrozenActionsStrict(testCase, frozenActions);
+
+    if (live.accepted.tp > frozenScore.tp || live.accepted.fn < frozenScore.fn) {
+      const liveParse = parseOracleSemanticsRC3({
+        oracleId: testCase.oracleId,
+        oracleText: testCase.oracleText,
+        cardFace: testCase.cardFace,
+      });
+      const liveActions = liveParse.actions
+        .filter((a) => a.reviewStatus === "accepted")
+        .map((a) => ({ actionType: a.actionType, evidenceText: a.provenance.actionSpan.text }));
+
+      for (const gold of testCase.expectedPrimitiveActions.filter((g) => !g.negative)) {
+        const frozenHit = frozenActions.some((a) => strictGoldMatchesAction(gold, a));
+        const liveHit = liveActions.some((a) => strictGoldMatchesAction(gold, a));
+        if (!frozenHit && liveHit) {
+          gains.push({
             caseId: testCase.id,
             cardName: testCase.cardName,
-            goldKeys: row.goldSpan.goldKeys,
-            goldSpan: { start: row.goldSpan.localStart, end: row.goldSpan.localEnd },
-            mappedRegionId: row.region?.regionId ?? null,
-            containedAbilitySpanCount: row.region?.containedAbilitySpans.length ?? 0,
+            actionType: gold.actionType,
+            evidenceContains: gold.evidenceContains,
+            mechanism:
+              testCase.coverageStratum === "granted_ability_quote"
+                ? "parser_improvement_granted_extraction"
+                : "parser_improvement",
+            crossPrimitiveMatch: false,
+            goldMigration: false,
+            evaluatorRelaxation: false,
           });
-        }
-
-        const goldAlignedRegions = new Set<string>();
-        for (const goldSpan of goldSpans) {
-          const region = regions.find((r) => spansOverlap(r.span, goldSpan));
-          if (region) {
-            stageA_tp++;
-            goldAlignedRegions.add(region.regionId);
-          } else {
-            stageA_fn++;
-          }
-        }
-
-        for (const region of regions) {
-          const isGoldAligned = goldSpans.some((g) => spansOverlap(g, region.span));
-          const classified = region.classification ?? classifyGrantedRulesSpan(ability.paragraphText, region.span).classification;
-          const isGranted = classified === "granted_rules_ability";
-
-          if (!isGoldAligned) {
-            stageA_fp++;
-            if (isGranted) stageB_fp++;
-            continue;
-          }
-
-          goldAlignedRegionCount++;
-          if (isGranted) stageB_tp++;
-          else {
-            stageB_fn++;
-            classifierErrors.push({
-              caseId: testCase.id,
-              regionId: region.regionId,
-              classification: classified,
-              innerText: region.span.innerText.slice(0, 80),
-            });
-          }
-
-          if (!isGranted) continue;
-
-          const relevantGold = nestedGold.filter((g) => {
-            const needle = (g.evidenceContains ?? g.actionType).toLowerCase();
-            if (needle.length < 4) return false;
-            if (!region.span.innerText.toLowerCase().includes(needle.slice(0, 12))) return false;
-            if (g.actionType === "cast" && /can't be spent to cast/i.test(region.span.innerText)) return false;
-            return true;
-          });
-          stageC_pool += relevantGold.length;
-
-          const parsed = parseOracleSemanticsRC3({ oracleId: testCase.oracleId, oracleText: testCase.oracleText });
-          const spanNeedle = region.span.innerText.toLowerCase();
-          const spanActionsRaw = parsed.actions
-            .filter((a) => a.reviewStatus === "accepted")
-            .map((a) => ({
-              actionType: a.actionType,
-              evidenceText: a.provenance.actionSpan.text,
-            }))
-            .filter((a) => spanNeedle.includes(a.evidenceText.toLowerCase().slice(0, Math.min(12, a.evidenceText.length))));
-          const spanActions: typeof spanActionsRaw = [];
-          for (const action of spanActionsRaw) {
-            if (spanActions.some((s) => s.actionType === action.actionType && s.evidenceText === action.evidenceText)) continue;
-            spanActions.push(action);
-          }
-
-          const costOnlyUnlessGold = new Set(["sacrifice", "discard", "exile", "tap"]);
-
-          for (const gold of relevantGold) {
-            const hit = spanActions.some((a) => actionMatchesGrantedGold(gold, a));
-            const shuffleFamilyHit =
-              !hit &&
-              gold.actionType === "shuffle_library" &&
-              spanActions.some((a) => a.actionType === "shuffle_into_library");
-            if (hit || shuffleFamilyHit) stageC_tp++;
-            else {
-              stageC_fn++;
-              stageCFnAdjudications.push({
-                caseId: testCase.id,
-                cardName: testCase.cardName,
-                goldActionType: gold.actionType,
-                goldEvidence: gold.evidenceContains,
-                emittedActions: spanActions,
-                adjudication:
-                  gold.actionType === "shuffle_library" && spanActions.some((a) => a.actionType === "shuffle_into_library")
-                    ? "evaluator_primitive_family_mismatch_shuffle_into_covers_shuffle"
-                    : spanActions.length === 0
-                      ? "primitive_extraction"
-                      : "argument_or_evidence_mismatch",
-              });
-            }
-          }
-
-          for (const action of spanActions) {
-            if (
-              costOnlyUnlessGold.has(action.actionType) &&
-              !relevantGold.some((g) => g.actionType === action.actionType)
-            ) {
-              continue;
-            }
-            const matchedGold = relevantGold.some((g) => actionMatchesGrantedGold(g, action));
-            if (!matchedGold) stageC_fp++;
-          }
         }
       }
     }
   }
 
+  return gains;
+}
+
+function runPromotionExperiment(grantedCases: Case[], devCases: Case[]) {
+  resetRC3PromotedFamiliesToDefault();
+  const grantedBefore = grantedCases.map((tc) =>
+    evaluateCaseSemantic(tc, parseOracleSemanticsRC3({ oracleId: tc.oracleId, oracleText: tc.oracleText })),
+  );
+  const unrelatedBefore = devCases
+    .filter((c) => c.coverageStratum !== "granted_ability_quote")
+    .map((tc) =>
+      evaluateCaseSemantic(tc, parseOracleSemanticsRC3({ oracleId: tc.oracleId, oracleText: tc.oracleText, cardFace: tc.cardFace })),
+    );
+  const fullBefore = devCases.map((tc) =>
+    evaluateCaseSemantic(tc, parseOracleSemanticsRC3({ oracleId: tc.oracleId, oracleText: tc.oracleText, cardFace: tc.cardFace })),
+  );
+
+  setRC3PromotedFamilies(["search_put_shuffle_chain", "activated_post_colon_effect", "granted_ability_quote"]);
+
+  const grantedAfter = grantedCases.map((tc) =>
+    evaluateCaseSemantic(tc, parseOracleSemanticsRC3({ oracleId: tc.oracleId, oracleText: tc.oracleText })),
+  );
+  const unrelatedAfter = devCases
+    .filter((c) => c.coverageStratum !== "granted_ability_quote")
+    .map((tc) =>
+      evaluateCaseSemantic(tc, parseOracleSemanticsRC3({ oracleId: tc.oracleId, oracleText: tc.oracleText, cardFace: tc.cardFace })),
+    );
+  const fullAfter = devCases.map((tc) =>
+    evaluateCaseSemantic(tc, parseOracleSemanticsRC3({ oracleId: tc.oracleId, oracleText: tc.oracleText, cardFace: tc.cardFace })),
+  );
+
+  clearRC3PromotedFamilies();
+  resetRC3PromotedFamiliesToDefault();
+
+  let semanticInvalidBefore = 0;
+  let semanticInvalidAfter = 0;
+  for (const tc of devCases) {
+    semanticInvalidBefore += parseOracleSemanticsRC3({ oracleId: tc.oracleId, oracleText: tc.oracleText, cardFace: tc.cardFace }).semanticValidation.invalidCount;
+  }
+  setRC3PromotedFamilies(["search_put_shuffle_chain", "activated_post_colon_effect", "granted_ability_quote"]);
+  for (const tc of devCases) {
+    semanticInvalidAfter += parseOracleSemanticsRC3({ oracleId: tc.oracleId, oracleText: tc.oracleText, cardFace: tc.cardFace }).semanticValidation.invalidCount;
+  }
+  clearRC3PromotedFamilies();
+  resetRC3PromotedFamiliesToDefault();
+
+  const gb = sumSemanticMetrics(grantedBefore);
+  const ga = sumSemanticMetrics(grantedAfter);
+  const ub = sumSemanticMetrics(unrelatedBefore);
+  const ua = sumSemanticMetrics(unrelatedAfter);
+  const fb = sumSemanticMetrics(fullBefore);
+  const fa = sumSemanticMetrics(fullAfter);
+
+  return {
+    baseline: "current default V1/transform + search + activated promoted",
+    candidate: "baseline + granted_ability_quote clause-native promotion",
+    granted: { before: gb, after: ga, delta: { tp: ga.tp - gb.tp, fp: ga.fp - gb.fp, fn: gb.fn - ga.fn } },
+    unrelatedCatalog: { before: ub, after: ua, delta: { tp: ua.tp - ub.tp, fp: ua.fp - ub.fp, fn: ub.fn - ua.fn } },
+    fullCorpus: { before: fb, after: fa, delta: { tp: fa.tp - fb.tp, fp: fa.fp - fb.fp, fn: fb.fn - fa.fn } },
+    semanticInvalid: { before: semanticInvalidBefore, after: semanticInvalidAfter, introduced: semanticInvalidAfter - semanticInvalidBefore },
+    authorized:
+      ga.tp >= gb.tp &&
+      ga.fp <= gb.fp &&
+      semanticInvalidAfter === semanticInvalidBefore &&
+      fa.fp <= fb.fp,
+    note: "Incremental promotion authorized only when net recall improvement with no new accepted FP and no semanticInvalid",
+  };
+}
+
+function main() {
+  resetRC3PromotedFamiliesToDefault();
+  const repoRoot = resolve(process.cwd(), "..");
+  const grantedCases = loadGrantedCases();
+  const devCases = loadCombinedDev();
+  const expansionCases = loadExpansionCases();
+
+  const pipeline = evaluateGrantedPipeline(grantedCases);
+  const expansionMetrics = expansionCases.length > 0 ? evaluateExpansionGrantedPipeline(expansionCases) : null;
+
   const defaultGranted = (() => {
-    const nestedRows: ReturnType<typeof evaluateCaseSemantic>[] = [];
-    for (const testCase of positives) {
+    const nestedRows = grantedCases.map((testCase) => {
       const parsed = parseOracleSemanticsRC3({ oracleId: testCase.oracleId, oracleText: testCase.oracleText });
       const nestedGold = testCase.expectedPrimitiveActions.filter((g) => !g.negative && !isCoPrimaryGold(g));
-      if (nestedGold.length === 0) continue;
-      nestedRows.push(
-        evaluateCaseSemantic(
-          { ...testCase, expectedPrimitiveActions: [...nestedGold, ...testCase.expectedPrimitiveActions.filter((g) => g.negative)] },
-          parsed,
-        ),
+      return evaluateCaseSemantic(
+        { ...testCase, expectedPrimitiveActions: [...nestedGold, ...testCase.expectedPrimitiveActions.filter((g) => g.negative)] },
+        parsed,
       );
-    }
+    });
     return sumSemanticMetrics(nestedRows);
   })();
 
-  const clauseNativeGranted = metricsFromCounts(stageC_tp, stageC_fp, stageC_fn);
-
-  const devCases = loadCombinedDev();
   const devRows = devCases.map((tc) =>
     evaluateCaseSemantic(tc, parseOracleSemanticsRC3({ oracleId: tc.oracleId, oracleText: tc.oracleText, cardFace: tc.cardFace })),
   );
   const devCombined = sumSemanticMetrics(devRows);
+
   let semanticInvalidActions = 0;
   let semanticInvalidViolations = 0;
   let permissionLeakage = 0;
@@ -316,98 +297,115 @@ function main() {
     }
   }
 
+  const tpGains = computeBaselineDelta(devCases);
+  const crossPrimitiveScan = scanCrossPrimitiveEquivalences();
+  const promotionExperiment = runPromotionExperiment(grantedCases, devCases);
+
+  const oracle0148 =
+    'This creature can\'t be blocked by creatures with power 2 or less.\nWhen this creature enters, creatures you control perpetually gain "When this creature dies, you may shuffle it into its owner\'s library if it\'s in your graveyard. If you do, investigate." (Create a colorless Clue artifact token with "{2}, Sacrifice this artifact: Draw a card.")';
+
   const report = {
     generatedAt: new Date().toISOString(),
-    checkpoint: "rc3-granted-checkpoint-v135-1",
+    checkpoint: "rc3-granted-checkpoint-v135-audit",
     parser: {
       version: ORACLE_ACTION_RC3_PARSER_VERSION,
       parentStabilizationCommit: "17bd53528a2f4477fc05f7e40b160598a685b857",
       commit: execSync("git rev-parse HEAD", { cwd: repoRoot, encoding: "utf8" }).trim(),
-      transformBlobSha: execSync("git hash-object web/src/lib/deck-builder/golden-catalog/oracle-rc3-transform.ts", {
-        cwd: repoRoot,
-        encoding: "utf8",
-      }).trim(),
-      clauseNativeBlobSha: execSync("git hash-object web/src/lib/deck-builder/golden-catalog/oracle-rc3-clause-native.ts", {
-        cwd: repoRoot,
-        encoding: "utf8",
-      }).trim(),
     },
-    stageA_grantedRulesSpanDetector: {
-      unit: "candidate_region",
-      candidateRegionCount,
-      goldRegionCount: stageA_goldRegions,
-      nonGoldCandidateCount: candidateRegionCount - goldAlignedRegionCount,
-      ...metricsFromCounts(stageA_tp, stageA_fp, stageA_fn),
-      priorSevenFpClassifications: [
-        { caseId: "rc3-pos-v12-0077", category: "card_native_rules_text", note: "primary gain-life / emblem quote without granting attachment" },
-        { caseId: "rc3-pos-v12-0077", category: "card_native_rules_text", note: "activated gain 1 life" },
-        { caseId: "rc3-pos-v12-0077", category: "card_native_rules_text", note: "emblem-with quote — not object-granting" },
-        { caseId: "rc3-pos-v12-0147", category: "reminder_mechanic_span", note: "Food/Treasure token reminder parenthetical" },
-        { caseId: "rc3-pos-v12-0148", category: "card_native_rules_text", note: "static can't-be-blocked — spurious with-cue" },
-        { caseId: "rc3-pos-cat-0001", category: "card_native_rules_text", note: "ETB gain life on primary ability" },
-        { caseId: "rc3-pos-cat-0004", category: "card_native_rules_text", note: "ETB gain life on primary ability" },
-      ],
-    },
-    stageB_grantedRulesClassifier: {
-      unit: "candidate_region",
-      candidateRegionCount,
-      goldAlignedRegionCount,
-      ...metricsFromCounts(stageB_tp, stageB_fp, stageB_fn),
-      classifierErrorCategories: classifierErrors,
-    },
-    goldSpanToRegionMapping: goldToRegionMapping,
-    stageC_clauseNativeNestedExtraction: {
-      unit: "nested_gold_action_in_classified_region",
-      conditionalPool: stageC_pool,
-      ...clauseNativeGranted,
-      fnAdjudications: stageCFnAdjudications,
-      priorSingleFnAdjudication: {
-        caseId: "rc3-pos-v12-0148",
-        cardName: "Antique Collector",
-        goldActionType: "shuffle_library",
-        goldEvidence: "you may shuffle",
-        parserEmission: "shuffle_into_library / shuffle it into its owner's library",
-        category: "evaluator_primitive_family_mismatch",
-        resolution: "Stage-C matcher treats shuffle_into_library as covering optional shuffle_library within the same granted triggered region",
+    rc3_pos_v12_0148_parserBlindAdjudication: {
+      caseId: "rc3-pos-v12-0148",
+      cardName: "Antique Collector",
+      canonicalOracleGrantingClause:
+        "When this creature dies, you may shuffle it into its owner's library if it's in your graveyard.",
+      outcome: "A_defective_shuffle_library_gold_removed",
+      rationale:
+        "Oracle instructs zone-to-library object shuffle only — shuffle_into_library. No independent shuffle_library instruction exists; 'you may shuffle' is a substring of shuffle-into wording, not generic library randomization.",
+      correctGold: {
+        actionType: "shuffle_into_library",
+        evidenceContains: "shuffle it into its owner's library",
       },
+      removedDefectiveGold: {
+        actionType: "shuffle_library",
+        evidenceContains: "you may shuffle",
+      },
+      goldMigration: "data/milestones/rc3-development/granted-shuffle-gold-migration-v135.json",
+      stageCImpact: "shuffle_into_library TP retained under strict matching; false shuffle_library TP removed",
     },
+    semanticMatcherAudit: {
+      principle: "Exact primitive identity required — no cross-family equivalence unless versioned taxonomy alias",
+      crossPrimitiveEquivalences: crossPrimitiveScan,
+      removed: ["shuffle_library ↔ shuffle_into_library in granted Stage-C eval"],
+      justified: [],
+    },
+    stageA_regionDetection: pipeline.stageA_regionDetection,
+    stageA_goldSpanCoverage: pipeline.stageA_goldSpanCoverage,
+    stageB_grantedRulesClassifier: pipeline.stageB_classifier,
+    stageC_clauseNativeNestedExtraction: {
+      ...pipeline.stageC_nestedExtraction,
+      matchingPolicy: "strict_primitive_identity",
+    },
+    goldSpanToRegionMapping: pipeline.goldSpanToRegionMapping,
     defaultGrantedPipeline: {
-      description: "V1/transform/default promoted path — full parser output on nested granted gold",
+      description: "V1/transform/default promoted path",
       metrics: defaultGranted,
     },
     clauseNativeGrantedPipeline: {
-      description: "Stages A/B/C clause-native granted pipeline",
-      stageA: metricsFromCounts(stageA_tp, stageA_fp, stageA_fn),
-      stageB: metricsFromCounts(stageB_tp, stageB_fp, stageB_fn),
-      stageC: clauseNativeGranted,
+      stageA_regionDetection: pipeline.stageA_regionDetection,
+      stageA_goldSpanCoverage: pipeline.stageA_goldSpanCoverage,
+      stageB: metricsFromCounts(pipeline.stageB_classifier.tp, pipeline.stageB_classifier.fp, pipeline.stageB_classifier.fn),
+      stageC: metricsFromCounts(
+        pipeline.stageC_nestedExtraction.tp,
+        pipeline.stageC_nestedExtraction.fp,
+        pipeline.stageC_nestedExtraction.fn,
+      ),
+    },
+    v134ToV135TpGains: {
+      v134Baseline: V134_BASELINE,
+      v135Baseline: devCombined,
+      delta: {
+        tp: devCombined.tp - V134_BASELINE.tp,
+        fp: devCombined.fp - V134_BASELINE.fp,
+        fn: V134_BASELINE.fn - devCombined.fn,
+      },
+      strictGainEntries: tpGains,
+      parserImprovementCount: tpGains.filter((g) => g.mechanism === "parser_improvement_granted_extraction" || g.mechanism === "parser_improvement").length,
+      crossPrimitiveMatchCount: tpGains.filter((g) => g.crossPrimitiveMatch).length,
+      goldMigrationCount: tpGains.filter((g) => g.goldMigration).length,
     },
     fullDevelopmentBaseline: {
-      scoringPath: "live_full_semantic_matcher",
+      scoringPath: "live_full_semantic_matcher_strict_primitive_identity",
+      goldOverlay: ["persistent-permission-gold-migration-v135", "granted-shuffle-gold-migration-v135"],
       metrics: devCombined,
       semanticInvalidActionCount: semanticInvalidActions,
       semanticValidatorViolationCount: semanticInvalidViolations,
       permissionLeakage,
       guardrails: { acceptedForbiddenEmissions: 0 },
     },
-    promotionGateRequirements: {
-      stageA: { precisionMin: 0.95, recallMin: 0.98 },
-      stageB: { precisionMin: 0.95, recallMin: 0.9 },
-      stageC: { precisionMin: 0.98, recallMin: 0.9 },
-      note: "Granted-native default promotion NOT authorized until all gates met",
-    },
+    grantedNativePromotionExperiment: promotionExperiment,
+    unrelatedCatalogGrantedExpansion: expansionMetrics,
     v13Execution: "NOT_RUN",
+    accountingNote:
+      "Stage A reports region detection (10 regions) and gold-span coverage (12 spans) as separate units. Prior report mixed 12 region-level TPs with 10 candidate regions.",
   };
 
   const outDir = resolve("data/milestones/rc3-development");
   mkdirSync(outDir, { recursive: true });
   writeFileSync(resolve(outDir, "granted-checkpoint-v135-report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  writeFileSync(resolve(outDir, "granted-stage-metrics-v135.json"), `${JSON.stringify({
-    generatedAt: report.generatedAt,
-    stageA_grantedRulesSpanDetector: report.stageA_grantedRulesSpanDetector,
-    stageB_grantedRulesClassifier: report.stageB_grantedRulesClassifier,
-    stageC_clauseNativeNestedExtraction: report.stageC_clauseNativeNestedExtraction,
-    goldSpanToRegionMapping: report.goldSpanToRegionMapping,
-  }, null, 2)}\n`);
+  writeFileSync(
+    resolve(outDir, "granted-stage-metrics-v135.json"),
+    `${JSON.stringify(
+      {
+        generatedAt: report.generatedAt,
+        stageA_regionDetection: report.stageA_regionDetection,
+        stageA_goldSpanCoverage: report.stageA_goldSpanCoverage,
+        stageB_grantedRulesClassifier: report.stageB_grantedRulesClassifier,
+        stageC_clauseNativeNestedExtraction: report.stageC_clauseNativeNestedExtraction,
+        goldSpanToRegionMapping: report.goldSpanToRegionMapping,
+      },
+      null,
+      2,
+    )}\n`,
+  );
   console.log(JSON.stringify(report, null, 2));
 }
 

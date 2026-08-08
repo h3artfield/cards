@@ -1,57 +1,25 @@
 {
-  "generatedAt": "2026-08-08T18:11:26.227Z",
-  "stageA_grantedRulesSpanDetector": {
-    "unit": "candidate_region",
+  "generatedAt": "2026-08-08T18:42:05.597Z",
+  "stageA_regionDetection": {
+    "unit": "GrantedRulesRegion",
     "candidateRegionCount": 10,
-    "goldRegionCount": 12,
-    "nonGoldCandidateCount": 0,
-    "tp": 12,
-    "fp": 0,
-    "fn": 0,
-    "precision": 1,
-    "precisionLabel": "100.0%",
-    "recall": 1,
-    "recallLabel": "100.0%",
-    "priorSevenFpClassifications": [
-      {
-        "caseId": "rc3-pos-v12-0077",
-        "category": "card_native_rules_text",
-        "note": "primary gain-life / emblem quote without granting attachment"
-      },
-      {
-        "caseId": "rc3-pos-v12-0077",
-        "category": "card_native_rules_text",
-        "note": "activated gain 1 life"
-      },
-      {
-        "caseId": "rc3-pos-v12-0077",
-        "category": "card_native_rules_text",
-        "note": "emblem-with quote — not object-granting"
-      },
-      {
-        "caseId": "rc3-pos-v12-0147",
-        "category": "reminder_mechanic_span",
-        "note": "Food/Treasure token reminder parenthetical"
-      },
-      {
-        "caseId": "rc3-pos-v12-0148",
-        "category": "card_native_rules_text",
-        "note": "static can't-be-blocked — spurious with-cue"
-      },
-      {
-        "caseId": "rc3-pos-cat-0001",
-        "category": "card_native_rules_text",
-        "note": "ETB gain life on primary ability"
-      },
-      {
-        "caseId": "rc3-pos-cat-0004",
-        "category": "card_native_rules_text",
-        "note": "ETB gain life on primary ability"
-      }
-    ]
+    "goldAlignedRegionCount": 10,
+    "nonGoldRegionCount": 0,
+    "regionTp": 10,
+    "regionFp": 0,
+    "regionPrecision": 1,
+    "regionPrecisionLabel": "100.0%"
+  },
+  "stageA_goldSpanCoverage": {
+    "unit": "gold_ability_span",
+    "goldAbilitySpanCount": 12,
+    "coveredGoldSpanCount": 12,
+    "missedGoldSpanCount": 0,
+    "coverageRecall": 1,
+    "coverageRecallLabel": "100.0%"
   },
   "stageB_grantedRulesClassifier": {
-    "unit": "candidate_region",
+    "unit": "GrantedRulesRegion",
     "candidateRegionCount": 10,
     "goldAlignedRegionCount": 10,
     "tp": 10,
@@ -61,12 +29,12 @@
     "precisionLabel": "100.0%",
     "recall": 1,
     "recallLabel": "100.0%",
-    "classifierErrorCategories": []
+    "classifierErrors": []
   },
   "stageC_clauseNativeNestedExtraction": {
     "unit": "nested_gold_action_in_classified_region",
-    "conditionalPool": 13,
-    "tp": 13,
+    "conditionalPool": 12,
+    "tp": 12,
     "fp": 0,
     "fn": 0,
     "precision": 1,
@@ -74,15 +42,7 @@
     "recall": 1,
     "recallLabel": "100.0%",
     "fnAdjudications": [],
-    "priorSingleFnAdjudication": {
-      "caseId": "rc3-pos-v12-0148",
-      "cardName": "Antique Collector",
-      "goldActionType": "shuffle_library",
-      "goldEvidence": "you may shuffle",
-      "parserEmission": "shuffle_into_library / shuffle it into its owner's library",
-      "category": "evaluator_primitive_family_mismatch",
-      "resolution": "Stage-C matcher treats shuffle_into_library as covering optional shuffle_library within the same granted triggered region"
-    }
+    "matchingPolicy": "strict_primitive_identity"
   },
   "goldSpanToRegionMapping": [
     {
@@ -183,8 +143,7 @@
       "caseId": "rc3-pos-v12-0148",
       "cardName": "Antique Collector",
       "goldKeys": [
-        "shuffle it into its owne",
-        "you may shuffle"
+        "shuffle it into its owne"
       ],
       "goldSpan": {
         "start": 66,

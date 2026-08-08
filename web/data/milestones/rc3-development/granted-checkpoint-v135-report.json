@@ -1,65 +1,87 @@
 {
-  "generatedAt": "2026-08-08T18:11:26.227Z",
-  "checkpoint": "rc3-granted-checkpoint-v135-1",
+  "generatedAt": "2026-08-08T18:42:05.597Z",
+  "checkpoint": "rc3-granted-checkpoint-v135-audit",
   "parser": {
     "version": "oracle-action-v1.35-rc3-granted-dev",
     "parentStabilizationCommit": "17bd53528a2f4477fc05f7e40b160598a685b857",
-    "commit": "b15e77398d3de183388fd9d4834a7b04f5301d9c",
-    "transformBlobSha": "4a23a71f37d9354e7c00659426a80388dc63dedf",
-    "clauseNativeBlobSha": "e562f2166ac5980dbc2d2372c9dcb39bcc56efe1"
+    "commit": "9608e60f3175573972cf6e6a3e763a9b5c5e8741"
   },
-  "stageA_grantedRulesSpanDetector": {
-    "unit": "candidate_region",
-    "candidateRegionCount": 10,
-    "goldRegionCount": 12,
-    "nonGoldCandidateCount": 0,
-    "tp": 12,
-    "fp": 0,
-    "fn": 0,
-    "precision": 1,
-    "precisionLabel": "100.0%",
-    "recall": 1,
-    "recallLabel": "100.0%",
-    "priorSevenFpClassifications": [
+  "rc3_pos_v12_0148_parserBlindAdjudication": {
+    "caseId": "rc3-pos-v12-0148",
+    "cardName": "Antique Collector",
+    "canonicalOracleGrantingClause": "When this creature dies, you may shuffle it into its owner's library if it's in your graveyard.",
+    "outcome": "A_defective_shuffle_library_gold_removed",
+    "rationale": "Oracle instructs zone-to-library object shuffle only — shuffle_into_library. No independent shuffle_library instruction exists; 'you may shuffle' is a substring of shuffle-into wording, not generic library randomization.",
+    "correctGold": {
+      "actionType": "shuffle_into_library",
+      "evidenceContains": "shuffle it into its owner's library"
+    },
+    "removedDefectiveGold": {
+      "actionType": "shuffle_library",
+      "evidenceContains": "you may shuffle"
+    },
+    "goldMigration": "data/milestones/rc3-development/granted-shuffle-gold-migration-v135.json",
+    "stageCImpact": "shuffle_into_library TP retained under strict matching; false shuffle_library TP removed"
+  },
+  "semanticMatcherAudit": {
+    "principle": "Exact primitive identity required — no cross-family equivalence unless versioned taxonomy alias",
+    "crossPrimitiveEquivalences": [
       {
-        "caseId": "rc3-pos-v12-0077",
-        "category": "card_native_rules_text",
-        "note": "primary gain-life / emblem quote without granting attachment"
+        "location": "none",
+        "pattern": "shuffle_library ↔ shuffle_into_library",
+        "status": "removed_no_active_equivalence"
       },
       {
-        "caseId": "rc3-pos-v12-0077",
-        "category": "card_native_rules_text",
-        "note": "activated gain 1 life"
+        "location": "none",
+        "pattern": "draw ↔ put_into_hand",
+        "status": "not_found_strict_matcher"
       },
       {
-        "caseId": "rc3-pos-v12-0077",
-        "category": "card_native_rules_text",
-        "note": "emblem-with quote — not object-granting"
+        "location": "none",
+        "pattern": "return_to_hand ↔ put_into_hand",
+        "status": "not_found_strict_matcher"
       },
       {
-        "caseId": "rc3-pos-v12-0147",
-        "category": "reminder_mechanic_span",
-        "note": "Food/Treasure token reminder parenthetical"
+        "location": "none",
+        "pattern": "cast ↔ play",
+        "status": "not_found_strict_matcher"
       },
       {
-        "caseId": "rc3-pos-v12-0148",
-        "category": "card_native_rules_text",
-        "note": "static can't-be-blocked — spurious with-cue"
+        "location": "none",
+        "pattern": "put_onto_battlefield ↔ return_to_battlefield",
+        "status": "not_found_strict_matcher"
       },
       {
-        "caseId": "rc3-pos-cat-0001",
-        "category": "card_native_rules_text",
-        "note": "ETB gain life on primary ability"
-      },
-      {
-        "caseId": "rc3-pos-cat-0004",
-        "category": "card_native_rules_text",
-        "note": "ETB gain life on primary ability"
+        "location": "oracle-action-semantic-matcher.ts",
+        "pattern": "semanticPrimitiveMatchesExpected",
+        "status": "strict actionType equality — no cross-family alias"
       }
-    ]
+    ],
+    "removed": [
+      "shuffle_library ↔ shuffle_into_library in granted Stage-C eval"
+    ],
+    "justified": []
+  },
+  "stageA_regionDetection": {
+    "unit": "GrantedRulesRegion",
+    "candidateRegionCount": 10,
+    "goldAlignedRegionCount": 10,
+    "nonGoldRegionCount": 0,
+    "regionTp": 10,
+    "regionFp": 0,
+    "regionPrecision": 1,
+    "regionPrecisionLabel": "100.0%"
+  },
+  "stageA_goldSpanCoverage": {
+    "unit": "gold_ability_span",
+    "goldAbilitySpanCount": 12,
+    "coveredGoldSpanCount": 12,
+    "missedGoldSpanCount": 0,
+    "coverageRecall": 1,
+    "coverageRecallLabel": "100.0%"
   },
   "stageB_grantedRulesClassifier": {
-    "unit": "candidate_region",
+    "unit": "GrantedRulesRegion",
     "candidateRegionCount": 10,
     "goldAlignedRegionCount": 10,
     "tp": 10,
@@ -69,7 +91,20 @@
     "precisionLabel": "100.0%",
     "recall": 1,
     "recallLabel": "100.0%",
-    "classifierErrorCategories": []
+    "classifierErrors": []
+  },
+  "stageC_clauseNativeNestedExtraction": {
+    "unit": "nested_gold_action_in_classified_region",
+    "conditionalPool": 12,
+    "tp": 12,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1,
+    "precisionLabel": "100.0%",
+    "recall": 1,
+    "recallLabel": "100.0%",
+    "fnAdjudications": [],
+    "matchingPolicy": "strict_primitive_identity"
   },
   "goldSpanToRegionMapping": [
     {
@@ -170,8 +205,7 @@
       "caseId": "rc3-pos-v12-0148",
       "cardName": "Antique Collector",
       "goldKeys": [
-        "shuffle it into its owne",
-        "you may shuffle"
+        "shuffle it into its owne"
       ],
       "goldSpan": {
         "start": 66,
@@ -233,47 +267,34 @@
       "containedAbilitySpanCount": 1
     }
   ],
-  "stageC_clauseNativeNestedExtraction": {
-    "unit": "nested_gold_action_in_classified_region",
-    "conditionalPool": 13,
-    "tp": 13,
-    "fp": 0,
-    "fn": 0,
-    "precision": 1,
-    "precisionLabel": "100.0%",
-    "recall": 1,
-    "recallLabel": "100.0%",
-    "fnAdjudications": [],
-    "priorSingleFnAdjudication": {
-      "caseId": "rc3-pos-v12-0148",
-      "cardName": "Antique Collector",
-      "goldActionType": "shuffle_library",
-      "goldEvidence": "you may shuffle",
-      "parserEmission": "shuffle_into_library / shuffle it into its owner's library",
-      "category": "evaluator_primitive_family_mismatch",
-      "resolution": "Stage-C matcher treats shuffle_into_library as covering optional shuffle_library within the same granted triggered region"
-    }
-  },
   "defaultGrantedPipeline": {
-    "description": "V1/transform/default promoted path — full parser output on nested granted gold",
+    "description": "V1/transform/default promoted path",
     "metrics": {
       "tp": 24,
       "fp": 0,
-      "fn": 4,
+      "fn": 3,
       "precision": 1,
-      "recall": 0.8571428571428571
+      "recall": 0.8888888888888888
     }
   },
   "clauseNativeGrantedPipeline": {
-    "description": "Stages A/B/C clause-native granted pipeline",
-    "stageA": {
-      "tp": 12,
-      "fp": 0,
-      "fn": 0,
-      "precision": 1,
-      "precisionLabel": "100.0%",
-      "recall": 1,
-      "recallLabel": "100.0%"
+    "stageA_regionDetection": {
+      "unit": "GrantedRulesRegion",
+      "candidateRegionCount": 10,
+      "goldAlignedRegionCount": 10,
+      "nonGoldRegionCount": 0,
+      "regionTp": 10,
+      "regionFp": 0,
+      "regionPrecision": 1,
+      "regionPrecisionLabel": "100.0%"
+    },
+    "stageA_goldSpanCoverage": {
+      "unit": "gold_ability_span",
+      "goldAbilitySpanCount": 12,
+      "coveredGoldSpanCount": 12,
+      "missedGoldSpanCount": 0,
+      "coverageRecall": 1,
+      "coverageRecallLabel": "100.0%"
     },
     "stageB": {
       "tp": 10,
@@ -285,7 +306,7 @@
       "recallLabel": "100.0%"
     },
     "stageC": {
-      "tp": 13,
+      "tp": 12,
       "fp": 0,
       "fn": 0,
       "precision": 1,
@@ -294,14 +315,92 @@
       "recallLabel": "100.0%"
     }
   },
+  "v134ToV135TpGains": {
+    "v134Baseline": {
+      "tp": 576,
+      "fp": 5,
+      "fn": 74
+    },
+    "v135Baseline": {
+      "tp": 580,
+      "fp": 5,
+      "fn": 69,
+      "precision": 0.9914529914529915,
+      "recall": 0.8936825885978429
+    },
+    "delta": {
+      "tp": 4,
+      "fp": 0,
+      "fn": 5
+    },
+    "strictGainEntries": [
+      {
+        "caseId": "rc3-pos-v12-0033",
+        "cardName": "A-Urza, Powerstone Prodigy",
+        "actionType": "add_mana",
+        "evidenceContains": "Add {C}",
+        "mechanism": "parser_improvement_granted_extraction",
+        "crossPrimitiveMatch": false,
+        "goldMigration": false,
+        "evaluatorRelaxation": false
+      },
+      {
+        "caseId": "rc3-pos-v12-0077",
+        "cardName": "Ajani Resolute",
+        "actionType": "put_counter",
+        "evidenceContains": "put a +1/+1 counter on this token",
+        "mechanism": "parser_improvement_granted_extraction",
+        "crossPrimitiveMatch": false,
+        "goldMigration": false,
+        "evaluatorRelaxation": false
+      },
+      {
+        "caseId": "rc3-pos-v12-0146",
+        "cardName": "Angelic Sleuth",
+        "actionType": "sacrifice",
+        "evidenceContains": "Sacrifice this token: Draw a card",
+        "mechanism": "parser_improvement_granted_extraction",
+        "crossPrimitiveMatch": false,
+        "goldMigration": false,
+        "evaluatorRelaxation": false
+      },
+      {
+        "caseId": "rc3-pos-v12-0147",
+        "cardName": "Ant-Man's Army",
+        "actionType": "gain_life",
+        "evidenceContains": "gain 3 life",
+        "mechanism": "parser_improvement_granted_extraction",
+        "crossPrimitiveMatch": false,
+        "goldMigration": false,
+        "evaluatorRelaxation": false
+      },
+      {
+        "caseId": "rc3-pos-v12-0148",
+        "cardName": "Antique Collector",
+        "actionType": "sacrifice",
+        "evidenceContains": "Sacrifice this artifact: Draw a card",
+        "mechanism": "parser_improvement_granted_extraction",
+        "crossPrimitiveMatch": false,
+        "goldMigration": false,
+        "evaluatorRelaxation": false
+      }
+    ],
+    "parserImprovementCount": 5,
+    "crossPrimitiveMatchCount": 0,
+    "goldMigrationCount": 0
+  },
   "fullDevelopmentBaseline": {
-    "scoringPath": "live_full_semantic_matcher",
+    "scoringPath": "live_full_semantic_matcher_strict_primitive_identity",
+    "goldOverlay": [
+      "persistent-permission-gold-migration-v135",
+      "granted-shuffle-gold-migration-v135"
+    ],
     "metrics": {
       "tp": 580,
       "fp": 5,
-      "fn": 70,
+      "fn": 69,
       "precision": 0.9914529914529915,
-      "recall": 0.8923076923076924
+      "recall": 0.8936825885978429
     },
     "semanticInvalidActionCount": 0,
     "semanticValidatorViolationCount": 0,
@@ -310,20 +409,234 @@
       "acceptedForbiddenEmissions": 0
     }
   },
-  "promotionGateRequirements": {
-    "stageA": {
-      "precisionMin": 0.95,
-      "recallMin": 0.98
+  "grantedNativePromotionExperiment": {
+    "baseline": "current default V1/transform + search + activated promoted",
+    "candidate": "baseline + granted_ability_quote clause-native promotion",
+    "granted": {
+      "before": {
+        "tp": 24,
+        "fp": 0,
+        "fn": 11,
+        "precision": 1,
+        "recall": 0.6857142857142857
+      },
+      "after": {
+        "tp": 24,
+        "fp": 0,
+        "fn": 11,
+        "precision": 1,
+        "recall": 0.6857142857142857
+      },
+      "delta": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0
+      }
     },
-    "stageB": {
-      "precisionMin": 0.95,
-      "recallMin": 0.9
+    "unrelatedCatalog": {
+      "before": {
+        "tp": 556,
+        "fp": 5,
+        "fn": 58,
+        "precision": 0.9910873440285205,
+        "recall": 0.9055374592833876
+      },
+      "after": {
+        "tp": 556,
+        "fp": 7,
+        "fn": 58,
+        "precision": 0.9875666074600356,
+        "recall": 0.9055374592833876
+      },
+      "delta": {
+        "tp": 0,
+        "fp": 2,
+        "fn": 0
+      }
     },
-    "stageC": {
-      "precisionMin": 0.98,
-      "recallMin": 0.9
+    "fullCorpus": {
+      "before": {
+        "tp": 580,
+        "fp": 5,
+        "fn": 69,
+        "precision": 0.9914529914529915,
+        "recall": 0.8936825885978429
+      },
+      "after": {
+        "tp": 580,
+        "fp": 7,
+        "fn": 69,
+        "precision": 0.9880749574105622,
+        "recall": 0.8936825885978429
+      },
+      "delta": {
+        "tp": 0,
+        "fp": 2,
+        "fn": 0
+      }
     },
-    "note": "Granted-native default promotion NOT authorized until all gates met"
+    "semanticInvalid": {
+      "before": 0,
+      "after": 0,
+      "introduced": 0
+    },
+    "authorized": false,
+    "note": "Incremental promotion authorized only when net recall improvement with no new accepted FP and no semanticInvalid"
   },
-  "v13Execution": "NOT_RUN"
+  "unrelatedCatalogGrantedExpansion": {
+    "caseCount": 18,
+    "positiveCases": 16,
+    "negativeCases": 2,
+    "positiveRegionsDetected": 7,
+    "positiveRegionsClassifiedGranted": 6,
+    "negativeFalsePositiveRegions": 0,
+    "details": [
+      {
+        "caseId": "granted-exp-v135-002",
+        "cardName": "Darksteel Plate",
+        "label": "positive_granted_region",
+        "detectedRegions": 1,
+        "classifiedGrantedRegions": 1,
+        "expectedGrantedRegionCount": 1
+      },
+      {
+        "caseId": "granted-exp-v135-003",
+        "cardName": "Fireshrieker",
+        "label": "positive_granted_region",
+        "detectedRegions": 1,
+        "classifiedGrantedRegions": 1,
+        "expectedGrantedRegionCount": 1
+      },
+      {
+        "caseId": "granted-exp-v135-004",
+        "cardName": "Alpha Brawl",
+        "label": "positive_granted_region",
+        "detectedRegions": 0,
+        "classifiedGrantedRegions": 0,
+        "expectedGrantedRegionCount": 1
+      },
+      {
+        "caseId": "granted-exp-v135-005",
+        "cardName": "Akroma's Will",
+        "label": "positive_granted_region",
+        "detectedRegions": 2,
+        "classifiedGrantedRegions": 2,
+        "expectedGrantedRegionCount": 1
+      },
+      {
+        "caseId": "granted-exp-v135-006",
+        "cardName": "Archetype of Imagination",
+        "label": "positive_granted_region",
+        "detectedRegions": 1,
+        "classifiedGrantedRegions": 1,
+        "expectedGrantedRegionCount": 1
+      },
+      {
+        "caseId": "granted-exp-v135-007",
+        "cardName": "Conclave Mentor",
+        "label": "positive_granted_region",
+        "detectedRegions": 0,
+        "classifiedGrantedRegions": 0,
+        "expectedGrantedRegionCount": 1
+      },
+      {
+        "caseId": "granted-exp-v135-008",
+        "cardName": "Bant Charm",
+        "label": "positive_granted_region",
+        "detectedRegions": 0,
+        "classifiedGrantedRegions": 0,
+        "expectedGrantedRegionCount": 1
+      },
+      {
+        "caseId": "granted-exp-v135-009",
+        "cardName": "Kaya's Ghostform",
+        "label": "positive_granted_region",
+        "detectedRegions": 0,
+        "classifiedGrantedRegions": 0,
+        "expectedGrantedRegionCount": 1
+      },
+      {
+        "caseId": "granted-exp-v135-011",
+        "cardName": "Rhys the Redeemed",
+        "label": "positive_granted_region",
+        "detectedRegions": 0,
+        "classifiedGrantedRegions": 0,
+        "expectedGrantedRegionCount": 1
+      },
+      {
+        "caseId": "granted-exp-v135-013",
+        "cardName": "Sword of Vengeance",
+        "label": "positive_granted_region",
+        "detectedRegions": 0,
+        "classifiedGrantedRegions": 0,
+        "expectedGrantedRegionCount": 1
+      },
+      {
+        "caseId": "granted-exp-v135-014",
+        "cardName": "Spirit Mantle",
+        "label": "positive_granted_region",
+        "detectedRegions": 0,
+        "classifiedGrantedRegions": 0,
+        "expectedGrantedRegionCount": 1
+      },
+      {
+        "caseId": "granted-exp-v135-015",
+        "cardName": "Holy Avenger",
+        "label": "positive_granted_region",
+        "detectedRegions": 1,
+        "classifiedGrantedRegions": 1,
+        "expectedGrantedRegionCount": 1
+      },
+      {
+        "caseId": "granted-exp-v135-016",
+        "cardName": "Cathars' Crusade",
+        "label": "negative_non_granted_region",
+        "detectedRegions": 0,
+        "classifiedGrantedRegions": 0,
+        "expectedGrantedRegionCount": 0
+      },
+      {
+        "caseId": "granted-exp-v135-021",
+        "cardName": "Krenko, Mob Boss",
+        "label": "positive_granted_region",
+        "detectedRegions": 0,
+        "classifiedGrantedRegions": 0,
+        "expectedGrantedRegionCount": 0
+      },
+      {
+        "caseId": "granted-exp-v135-022",
+        "cardName": "Sword of Feast and Famine",
+        "label": "positive_granted_region",
+        "detectedRegions": 0,
+        "classifiedGrantedRegions": 0,
+        "expectedGrantedRegionCount": 1
+      },
+      {
+        "caseId": "granted-exp-v135-023",
+        "cardName": "Steelshaper's Gift",
+        "label": "negative_non_granted_region",
+        "detectedRegions": 0,
+        "classifiedGrantedRegions": 0,
+        "expectedGrantedRegionCount": 0
+      },
+      {
+        "caseId": "granted-exp-v135-024",
+        "cardName": "Hero's Blade",
+        "label": "positive_granted_region",
+        "detectedRegions": 0,
+        "classifiedGrantedRegions": 0,
+        "expectedGrantedRegionCount": 1
+      },
+      {
+        "caseId": "granted-exp-v135-025",
+        "cardName": "Mirrex",
+        "label": "positive_granted_region",
+        "detectedRegions": 1,
+        "classifiedGrantedRegions": 0,
+        "expectedGrantedRegionCount": 1
+      }
+    ]
+  },
+  "v13Execution": "NOT_RUN",
+  "accountingNote": "Stage A reports region detection (10 regions) and gold-span coverage (12 spans) as separate units. Prior report mixed 12 region-level TPs with 10 candidate regions."
 }

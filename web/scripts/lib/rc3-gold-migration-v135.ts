@@ -41,6 +41,9 @@ export type GoldMigrationEnvelope = {
 
 const DEFAULT_PATH = resolve("data/milestones/rc3-development/persistent-permission-gold-migration-v135.json");
 const LEGACY_PATH = resolve("data/milestones/rc3-development/persistent-permission-cast-gold-migration-v135.json");
+const SHUFFLE_MIGRATION_PATH = resolve("data/milestones/rc3-development/granted-shuffle-gold-migration-v135.json");
+
+const MIGRATION_PATHS = [DEFAULT_PATH, SHUFFLE_MIGRATION_PATH];
 
 function normalizeRecord(record: GoldMigrationRecord): Layer2Removal[] {
   if (record.removeLayer2Actions?.length) return record.removeLayer2Actions;
@@ -64,13 +67,31 @@ function shouldRemoveGold(g: { actionType: string; evidenceContains?: string }, 
   return (g.evidenceContains ?? "").toLowerCase().includes(needle);
 }
 
+function loadAllGoldMigrationsV135(): GoldMigrationRecord[] {
+  const records: GoldMigrationRecord[] = [];
+  for (const path of MIGRATION_PATHS) {
+    try {
+      records.push(...loadGoldMigrationV135(path).records);
+    } catch {
+      if (path === DEFAULT_PATH) {
+        records.push(...loadGoldMigrationV135(LEGACY_PATH).records);
+      }
+    }
+  }
+  return records;
+}
+
 export function applyGoldMigrationV135<T extends OracleActionEvalCaseV2>(
   cases: T[],
-  migration: GoldMigrationEnvelope = loadGoldMigrationV135(),
+  migration?: GoldMigrationEnvelope,
 ): T[] {
-  const removalsByCase = new Map(
-    migration.records.map((r) => [r.caseId, normalizeRecord(r)] as const),
-  );
+  const records = migration?.records ?? loadAllGoldMigrationsV135();
+  const removalsByCase = new Map<string, Layer2Removal[]>();
+  for (const record of records) {
+    const existing = removalsByCase.get(record.caseId) ?? [];
+    existing.push(...normalizeRecord(record));
+    removalsByCase.set(record.caseId, existing);
+  }
   return cases.map((testCase) => {
     const removals = removalsByCase.get(testCase.id);
     if (!removals?.length) return testCase;

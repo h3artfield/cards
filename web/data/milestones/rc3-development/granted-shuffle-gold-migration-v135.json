@@ -1,0 +1,21 @@
+{
+  "migrationVersion": "granted-shuffle-gold-migration-v135",
+  "frozenAt": "2026-08-08T18:30:00.000Z",
+  "parserConsulted": false,
+  "reviewer": "rc3-granted-checkpoint-v135-audit",
+  "rule": "shuffle_into_library (zone-to-library object shuffle) is distinct from shuffle_library (library randomization). Defective shuffle_library gold anchored on 'you may shuffle' substring of shuffle-into instruction is removed.",
+  "records": [
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "cardName": "Antique Collector",
+      "removeLayer2Actions": [
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "you may shuffle"
+        }
+      ],
+      "policyClass": "defective_shuffle_library_gold_on_shuffle_into_instruction",
+      "policyReason": "Oracle: 'you may shuffle it into its owner's library' — object zone transition is shuffle_into_library only; no independent shuffle_library instruction exists."
+    }
+  ]
+}
