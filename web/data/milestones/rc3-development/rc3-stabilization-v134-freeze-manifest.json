@@ -1,0 +1,69 @@
+{
+  "freezeLabel": "rc3-stabilization-v134-checkpoint-1",
+  "frozenAt": "2026-08-08T16:08:53.781Z",
+  "immutableV133ParentCommit": "776093564921f6e6fb69564b3446d7befbdb7468",
+  "commitSha": "17bd53528a2f4477fc05f7e40b160598a685b857",
+  "parserVersion": "oracle-action-v1.34-rc3-ast-dev",
+  "parserBlobs": {
+    "transform": "a90d2348af9c4780821789b51dd6b4ce931eaaa3",
+    "clauseNative": "85942113274c17c9b62f7ced5d568a3b25036f53"
+  },
+  "taxonomyVersion": "three-layer-v1.4",
+  "taxonomyV14Hash": "b5aa3aa3871e3e738c8a3e61ca8a788335b6f080ae295c4c92b1b86af84cf4a3",
+  "goldMigrationOverlay": {
+    "path": "data/milestones/rc3-development/persistent-permission-gold-migration-v135.json",
+    "hash": "cd4c3cbebbdb8cc74d73b90be025660c75dc39503a68c82827f85b53ba4740f6"
+  },
+  "caseScopeSchema": {
+    "path": "data/milestones/rc3-foundations/benchmark-case-scope-schema-v1.1.json",
+    "hash": "eed611169f8f57f9be11aa6daad26e28a662e25bd5d60d3488d6252ca6172c21"
+  },
+  "evaluator": {
+    "matcherScript": "web/scripts/oracle-action-semantic-matcher.ts",
+    "matcherBlobSha": "fddf5405c24fd491bde51e2929ead4595560cc70",
+    "scoringPath": "live_full_semantic_matcher",
+    "scoringPathNote": "Authoritative development metrics use live reparse + semanticPrimitiveMatchesExpected — NOT frozen loose rescore"
+  },
+  "DEFAULT_RC3_PROMOTED_FAMILIES": [
+    "search_put_shuffle_chain",
+    "activated_post_colon_effect"
+  ],
+  "authoritativeDevelopment": {
+    "scoringPath": "live_full_semantic_matcher",
+    "tp": 576,
+    "fp": 5,
+    "fn": 74,
+    "precision": 0.9913941480206541,
+    "recall": 0.8861538461538462
+  },
+  "unrelatedCatalogPositive": {
+    "tp": 49,
+    "fp": 2,
+    "fn": 26,
+    "precision": 0.9607843137254902,
+    "recall": 0.6533333333333333
+  },
+  "policyGuardrails": {
+    "acceptedViolations": 0,
+    "forbiddenActionsEmitted": 0,
+    "pass": true
+  },
+  "semanticInvalidActionCount": 0,
+  "semanticValidatorViolationCount": 0,
+  "permissionLeakage": 0,
+  "stabilizationAccounting": {
+    "originalV132ToV133ParserRegressionsRestored": "12/12",
+    "yawgmothPlayRegressions": 0
+  },
+  "staticPermissionInvariant": "StaticPermissionRecord.duration is continuous|while_condition|until_end_of_turn|this_turn only — one-shot resolution referents are Layer-2 cast/play, never persisted permissions",
+  "v13": {
+    "sealed": true,
+    "parserExecutionCount": 0
+  },
+  "artifactRefs": {
+    "devGateReport": "data/milestones/rc3-development/rc3-checkpoint-v134-report.json",
+    "checkpointReport": "data/milestones/rc3-development/rc3-stabilization-v134-checkpoint-report.json",
+    "frozenVsLiveReconciliation": "data/milestones/rc3-development/frozen-vs-live-reconciliation-v134.json"
+  },
+  "manifestContentHash": "58bd6f4e9f1723ae3fdef2db0b52f141affa883a6e88919ed2e04943b32b0081"
+}

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-08T16:06:56.850Z",
+  "generatedAt": "2026-08-08T16:08:51.585Z",
   "checkpoint": "rc3-stabilization-v134-checkpoint-1",
   "lineage": {
     "parentCommit": "6a757a736dfda9004860bb38d5e677880590882c",
@@ -26,7 +26,7 @@
   },
   "parser": {
     "version": "oracle-action-v1.34-rc3-ast-dev",
-    "commit": "776093564921f6e6fb69564b3446d7befbdb7468",
+    "commit": "17bd53528a2f4477fc05f7e40b160598a685b857",
     "blobSha": "a90d2348af9c4780821789b51dd6b4ce931eaaa3",
     "lineage": "RC3 — separate from frozen oracle-action-rc2"
   },
