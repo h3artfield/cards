@@ -1,0 +1,201 @@
+{
+  "generatedAt": "2026-08-08T05:38:49.400Z",
+  "totalNativeOnly": 126,
+  "byFamily": {
+    "granted_ability": 2,
+    "search_chain": 17,
+    "activated_effect": 21,
+    "replacement_effect": 0,
+    "mdfc_transform": 3,
+    "other": 83
+  },
+  "classification": {
+    "goldTpCandidates": 36,
+    "outsideScope": 0,
+    "policyForbidden": 0,
+    "unscored": 90,
+    "semanticInvalid": 5
+  },
+  "samples": [
+    {
+      "family": "other",
+      "actionType": "shuffle_library",
+      "evidence": "shuffle",
+      "cardName": "Acquire"
+    },
+    {
+      "family": "activated_effect",
+      "actionType": "sacrifice",
+      "evidence": "sacrifice a nontoken creature",
+      "cardName": "Altar of the Wretched // Wretched Bonemass"
+    },
+    {
+      "family": "activated_effect",
+      "actionType": "return_to_hand",
+      "evidence": "Return this card from your graveyard to your hand",
+      "cardName": "Altar of the Wretched // Wretched Bonemass"
+    },
+    {
+      "family": "granted_ability",
+      "actionType": "put_onto_battlefield",
+      "evidence": "put a creature card from among them onto the battlefield",
+      "cardName": "Aethermage's Touch"
+    },
+    {
+      "family": "search_chain",
+      "actionType": "put_into_hand",
+      "evidence": "put it into your hand",
+      "cardName": "Ajani's Aid"
+    },
+    {
+      "family": "search_chain",
+      "actionType": "search_library",
+      "evidence": "search your library this way,",
+      "cardName": "Ajani's Aid"
+    },
+    {
+      "family": "activated_effect",
+      "actionType": "return_to_hand",
+      "evidence": "Return this card from your graveyard to your hand",
+      "cardName": "Abzan Devotee"
+    },
+    {
+      "family": "other",
+      "actionType": "draw",
+      "evidence": "Sacrifice this token: Draw a card",
+      "cardName": "Angelic Sleuth"
+    },
+    {
+      "family": "other",
+      "actionType": "sacrifice",
+      "evidence": "Sacrifice this token: You gain 3 life",
+      "cardName": "Ant-Man's Army"
+    },
+    {
+      "family": "other",
+      "actionType": "exile",
+      "evidence": "Exile it at the beginning of the next end step",
+      "cardName": "\"Ach! Hans, Run!\""
+    },
+    {
+      "family": "search_chain",
+      "actionType": "put_into_hand",
+      "evidence": "Search your library for up to two basic land cards and/or Gate cards, reveal tho",
+      "cardName": "A-Navigation Orb"
+    },
+    {
+      "family": "search_chain",
+      "actionType": "put_into_hand",
+      "evidence": "Search your library for a basic land card, reveal it, put it into your hand, the",
+      "cardName": "A-Ominous Parcel"
+    },
+    {
+      "family": "other",
+      "actionType": "discard",
+      "evidence": "discard a card",
+      "cardName": "A-Dokuchi Silencer"
+    },
+    {
+      "family": "other",
+      "actionType": "copy",
+      "evidence": "copy of another target attacking creature",
+      "cardName": "A-Thousand-Faced Shadow"
+    },
+    {
+      "family": "mdfc_transform",
+      "actionType": "transform",
+      "evidence": "transform",
+      "cardName": "Aberrant Researcher // Perfected Form"
+    },
+    {
+      "family": "other",
+      "actionType": "put_onto_battlefield",
+      "evidence": "put a creature card from among them onto the battlefield",
+      "cardName": "A Reckoning Approaches"
+    },
+    {
+      "family": "other",
+      "actionType": "put_onto_battlefield",
+      "evidence": "put an Elf or Tyvar card from your graveyard onto the battlefield",
+      "cardName": "A-Harald Unites the Elves"
+    },
+    {
+      "family": "activated_effect",
+      "actionType": "sacrifice",
+      "evidence": "sacrifice a Vampire",
+      "cardName": "A-Sorin, Imperious Bloodlord"
+    },
+    {
+      "family": "activated_effect",
+      "actionType": "put_onto_battlefield",
+      "evidence": "put a Vampire creature card with mana value 6 or less from your hand onto the ba",
+      "cardName": "A-Sorin, Imperious Bloodlord"
+    },
+    {
+      "family": "other",
+      "actionType": "shuffle_library",
+      "evidence": "shuffle",
+      "cardName": "Acquire"
+    },
+    {
+      "family": "activated_effect",
+      "actionType": "sacrifice",
+      "evidence": "sacrifice a nontoken creature",
+      "cardName": "Altar of the Wretched // Wretched Bonemass"
+    },
+    {
+      "family": "activated_effect",
+      "actionType": "return_to_hand",
+      "evidence": "Return this card from your graveyard to your hand",
+      "cardName": "Altar of the Wretched // Wretched Bonemass"
+    },
+    {
+      "family": "granted_ability",
+      "actionType": "put_onto_battlefield",
+      "evidence": "put a creature card from among them onto the battlefield",
+      "cardName": "Aethermage's Touch"
+    },
+    {
+      "family": "search_chain",
+      "actionType": "put_into_hand",
+      "evidence": "put it into your hand",
+      "cardName": "Ajani's Aid"
+    },
+    {
+      "family": "search_chain",
+      "actionType": "search_library",
+      "evidence": "search your library this way,",
+      "cardName": "Ajani's Aid"
+    },
+    {
+      "family": "activated_effect",
+      "actionType": "return_to_hand",
+      "evidence": "Return this card from your graveyard to your hand",
+      "cardName": "Abzan Devotee"
+    },
+    {
+      "family": "other",
+      "actionType": "draw",
+      "evidence": "Sacrifice this token: Draw a card",
+      "cardName": "Angelic Sleuth"
+    },
+    {
+      "family": "other",
+      "actionType": "sacrifice",
+      "evidence": "Sacrifice this token: You gain 3 life",
+      "cardName": "Ant-Man's Army"
+    },
+    {
+      "family": "other",
+      "actionType": "exile",
+      "evidence": "Exile it at the beginning of the next end step",
+      "cardName": "\"Ach! Hans, Run!\""
+    },
+    {
+      "family": "search_chain",
+      "actionType": "put_into_hand",
+      "evidence": "Search your library for up to two basic land cards and/or Gate cards, reveal tho",
+      "cardName": "A-Navigation Orb"
+    }
+  ]
+}

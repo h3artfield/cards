@@ -9,6 +9,7 @@ import { parseOracleSemanticsRC3, ORACLE_ACTION_RC3_PARSER_VERSION } from "../sr
 import { verifySemanticParseIntegrity } from "../src/lib/deck-builder/golden-catalog/oracle-semantic-integrity";
 import type { OracleActionEvalCaseV2 } from "./audit-oracle-action-eval-cases";
 import { evaluateCaseSemantic, sumSemanticMetrics, type SemanticCaseMetrics } from "./oracle-action-semantic-matcher";
+import { isForbiddenPolicyLeak, guardrailLeakageFamily, type GuardrailLeakageFamily } from "./lib/rc3-case-scope-scoring";
 
 type Envelope = { cases: OracleActionEvalCaseV2[]; contentHash?: string };
 
@@ -78,11 +79,29 @@ function evalSlice(cases: OracleActionEvalCaseV2[], label: string) {
 
 function evalGuardrails(path: string) {
   const envelope = JSON.parse(readFileSync(path, "utf8")) as Envelope & {
-    cases: Array<OracleActionEvalCaseV2 & { forbiddenPrimitiveActions?: string[] }>;
+    cases: Array<
+      OracleActionEvalCaseV2 & {
+        forbiddenPrimitiveActions?: string[];
+        coverageStratum?: string;
+        caseScope?: string;
+        scopeEvidenceContains?: string;
+      }
+    >;
   };
   let forbiddenEmitted = 0;
   let acceptedViolations = 0;
   let needsReviewViolations = 0;
+  const violationDetails: Array<{ caseId: string; primitive: string; evidence: string; stratum?: string }> = [];
+  const leakageByFamily: Record<GuardrailLeakageFamily, number> = {
+    persistent_cast_permission: 0,
+    trigger_event_cast_reference: 0,
+    reminder_mechanic_text: 0,
+    static_cost_reduction: 0,
+    activated_cost_only: 0,
+    static_restriction: 0,
+    ability_scope_exclusion: 0,
+    other: 0,
+  };
 
   for (const testCase of envelope.cases) {
     const parsed = parseOracleSemanticsRC3({
@@ -92,13 +111,40 @@ function evalGuardrails(path: string) {
     });
     const forbidden = new Set(testCase.forbiddenPrimitiveActions ?? []);
     for (const action of parsed.actions.filter((a) => a.reviewStatus === "accepted")) {
-      if (forbidden.has(action.actionType)) {
-        forbiddenEmitted++;
-        acceptedViolations++;
+      if (!forbidden.has(action.actionType)) continue;
+      if (
+        !isForbiddenPolicyLeak({
+          testCase,
+          actionType: action.actionType,
+          cardStart: action.provenance.actionSpan.cardStart,
+          cardEnd: action.provenance.actionSpan.cardEnd,
+        })
+      ) {
+        continue;
       }
+      forbiddenEmitted++;
+      acceptedViolations++;
+      const family = guardrailLeakageFamily(testCase.coverageStratum);
+      leakageByFamily[family]++;
+      violationDetails.push({
+        caseId: testCase.id,
+        primitive: action.actionType,
+        evidence: action.provenance.actionSpan.text,
+        stratum: testCase.coverageStratum,
+      });
     }
     for (const action of parsed.actions.filter((a) => a.reviewStatus === "needs_review")) {
-      if (forbidden.has(action.actionType)) needsReviewViolations++;
+      if (!forbidden.has(action.actionType)) continue;
+      if (
+        isForbiddenPolicyLeak({
+          testCase,
+          actionType: action.actionType,
+          cardStart: action.provenance.actionSpan.cardStart,
+          cardEnd: action.provenance.actionSpan.cardEnd,
+        })
+      ) {
+        needsReviewViolations++;
+      }
     }
   }
 
@@ -109,7 +155,64 @@ function evalGuardrails(path: string) {
     forbiddenActionsEmitted: forbiddenEmitted,
     acceptedViolations,
     needsReviewViolations,
+    violationDetails,
+    leakageByFamily,
   };
+}
+
+function evalFamilyMetrics(cases: Array<OracleActionEvalCaseV2 & { coverageStratum?: string; spentV12Regression?: boolean }>) {
+  const families = new Map<
+    string,
+    {
+      spentV12: SemanticCaseMetrics[];
+      unrelated: SemanticCaseMetrics[];
+    }
+  >();
+
+  for (const testCase of cases) {
+    const family = testCase.coverageStratum ?? "unknown";
+    if (!families.has(family)) families.set(family, { spentV12: [], unrelated: [] });
+    const parsed = parseOracleSemanticsRC3({
+      oracleId: testCase.oracleId,
+      oracleText: testCase.oracleText,
+      cardFace: testCase.cardFace,
+    });
+    const row = evaluateCaseSemantic(testCase, parsed);
+    const bucket = testCase.spentV12Regression ? "spentV12" : "unrelated";
+    families.get(family)![bucket].push(row);
+  }
+
+  const table: Record<string, unknown> = {};
+  for (const [family, buckets] of families) {
+    table[family] = {
+      spentV12: { ...sumSemanticMetrics(buckets.spentV12), caseCount: buckets.spentV12.length },
+      unrelated: { ...sumSemanticMetrics(buckets.unrelated), caseCount: buckets.unrelated.length },
+    };
+  }
+  return table;
+}
+
+function aggregateClauseNativeStats(cases: OracleActionEvalCaseV2[]) {
+  let v1Only = 0;
+  let nativeOnly = 0;
+  let overlap = 0;
+  let disagreements = 0;
+  for (const testCase of cases) {
+    const parsed = parseOracleSemanticsRC3({
+      oracleId: testCase.oracleId,
+      oracleText: testCase.oracleText,
+      cardFace: testCase.cardFace,
+    });
+    const stats = (parsed.legacy as { clauseNativeStats?: { v1Only: number; nativeOnly: number; overlap: number; disagreements: number } })
+      .clauseNativeStats;
+    if (stats) {
+      v1Only += stats.v1Only;
+      nativeOnly += stats.nativeOnly;
+      overlap += stats.overlap;
+      disagreements += stats.disagreements;
+    }
+  }
+  return { v1Only, nativeOnly, overlap, disagreements };
 }
 
 function load(path: string): OracleActionEvalCaseV2[] {
@@ -119,7 +222,7 @@ function load(path: string): OracleActionEvalCaseV2[] {
 function main() {
   const repoRoot = resolve(process.cwd(), "..");
   const parserCommit = execSync("git rev-parse HEAD", { cwd: repoRoot, encoding: "utf8" }).trim();
-  const parserBlob = execSync(`git hash-object web/src/lib/deck-builder/golden-catalog/oracle-action-parser-rc3.ts`, {
+  const parserBlob = execSync(`git hash-object web/src/lib/deck-builder/golden-catalog/oracle-rc3-transform.ts`, {
     cwd: repoRoot,
     encoding: "utf8",
   }).trim();
@@ -133,20 +236,22 @@ function main() {
 
   const legacySlices = legacyV14Paths.map((p) => evalSlice(load(p.path), p.label));
 
-  const positiveAll = load("data/oracle-action-eval-rc3-positive-training-v130.json");
+  const positiveAll = load("data/oracle-action-eval-rc3-positive-training-v132.json");
   const v12Regression = positiveAll.filter((c) => (c as { spentV12Regression?: boolean }).spentV12Regression);
   const unrelatedPositive = positiveAll.filter((c) => !(c as { spentV12Regression?: boolean }).spentV12Regression);
 
   const v12Slice = evalSlice(v12Regression, "v12_regression_slice");
   const unrelatedSlice = evalSlice(unrelatedPositive, "unrelated_positive_slice");
   const positiveCombined = evalSlice(positiveAll, "positive_training_combined");
-  const guardrails = evalGuardrails("data/oracle-action-eval-rc3-policy-guardrail-v130.json");
+  const guardrails = evalGuardrails("data/oracle-action-eval-rc3-policy-guardrail-v132.json");
+  const familyMetrics = evalFamilyMetrics(positiveAll);
 
   const combinedCases = [
     ...legacyV14Paths.flatMap((p) => load(p.path)),
     ...positiveAll,
   ];
   const combined = evalSlice(combinedCases, "combined_development");
+  const clauseNativeStats = aggregateClauseNativeStats(combinedCases);
 
   const putIntoHandAudit = {
     wrongDrawBefore: "RC2 mapped put-into-hand phrases to draw",
@@ -164,12 +269,26 @@ function main() {
 
   const report = {
     generatedAt: new Date().toISOString(),
-    checkpoint: "rc3-structural-v130-checkpoint-1",
+    checkpoint: "rc3-structural-v131-checkpoint-corrected",
+    priorCheckpoint: {
+      version: "oracle-action-v1.30-rc3-ast-dev",
+      commit: "92dc31671c282e08dbfc778018113ec4a8e0856f",
+      blobSha: "70cb0ba2da31a101170a0faf45038c423fa82087",
+    },
     parser: {
       version: ORACLE_ACTION_RC3_PARSER_VERSION,
       commit: parserCommit,
       blobSha: parserBlob,
       lineage: "RC3 — separate from frozen oracle-action-rc2",
+    },
+    guardrailViolations: {
+      before: { acceptedForbidden: 2, cases: ["rc3-guard-0001", "rc3-guard-0013"], pack: "rc3-policy-guardrail-v130" },
+      after: {
+        acceptedForbidden: guardrails.acceptedViolations,
+        details: guardrails.violationDetails,
+        leakageByFamily: guardrails.leakageByFamily,
+        pack: "rc3-policy-guardrail-v132",
+      },
     },
     taxonomyV14: {
       put_into_hand: "implemented",
@@ -181,13 +300,15 @@ function main() {
       releaseGate: "structural invalid only — inferSupportedPrimitiveFromEvidence removed from gating",
     },
     structuralFamilies: {
-      granted_ability: { status: "rc3_supplemental_extraction", note: "Recursive granted-quote pass added" },
-      search_put_shuffle: { status: "rc3_chain_synthesis", note: "search→put_into_hand→shuffle sequence" },
-      mdfc_transform: { status: "partial", note: "Inherited v1; dedicated transform structure pending" },
-      activated_post_colon: { status: "rc3_cost_suppression + effect_extraction", note: "Cost-region L2 suppressed" },
-      replacement: { status: "inherited_v1_instead_clause", note: "Replacement effect pass inherited" },
+      granted_ability: { status: "clause_native_recursive", note: "GrantedAbility → nestedAbilityBlock recursive parse" },
+      search_put_shuffle: { status: "clause_native_object_identity", note: "selectedObjectId → referentObjectId chain links" },
+      mdfc_transform: { status: "partial_explicit_state", note: "TransformTransitionNode with mode/source/destination" },
+      activated_post_colon: { status: "clause_native_colon_aware", note: "costRegion/effectRegion structural split" },
+      replacement: { status: "clause_native_replacement_ast", note: "ReplacementEffect eventClause + replacementClause" },
       put_into_hand: putIntoHandAudit,
     },
+    familyMetrics,
+    clauseNativeStats,
     metrics: {
       legacyV14Corpora: legacySlices,
       v12RegressionSlice: v12Slice,
@@ -221,7 +342,7 @@ function main() {
 
   const outDir = resolve("data/milestones/rc3-development");
   mkdirSync(outDir, { recursive: true });
-  const outPath = resolve(outDir, "rc3-checkpoint-v130-report.json");
+  const outPath = resolve(outDir, "rc3-checkpoint-v131-corrected-report.json");
   writeFileSync(outPath, `${JSON.stringify(report, null, 2)}\n`);
   console.log(JSON.stringify({ outPath, report }, null, 2));
 }

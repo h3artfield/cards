@@ -1,0 +1,82 @@
+{
+  "generatedAt": "2026-08-08T05:38:52.311Z",
+  "promotions": [
+    {
+      "family": "granted_ability_quote",
+      "before": {
+        "tp": 19,
+        "fp": 1,
+        "fn": 17,
+        "precision": 0.95,
+        "recall": 0.5277777777777778
+      },
+      "after": {
+        "tp": 19,
+        "fp": 1,
+        "fn": 17,
+        "precision": 0.95,
+        "recall": 0.5277777777777778
+      },
+      "delta": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "fnRemoved": 0,
+        "tpLost": 0,
+        "newFp": 0
+      },
+      "semanticInvalid": {
+        "before": 0,
+        "after": 0,
+        "introduced": 0
+      },
+      "policyViolations": {
+        "before": 0,
+        "after": 0,
+        "introduced": 0
+      }
+    },
+    {
+      "family": "search_put_shuffle_chain",
+      "before": {
+        "tp": 21,
+        "fp": 0,
+        "fn": 8,
+        "precision": 1,
+        "recall": 0.7241379310344828
+      },
+      "after": {
+        "tp": 22,
+        "fp": 1,
+        "fn": 7,
+        "precision": 0.9565217391304348,
+        "recall": 0.7586206896551724
+      },
+      "delta": {
+        "tp": 1,
+        "fp": 1,
+        "fn": 1,
+        "fnRemoved": 1,
+        "tpLost": 0,
+        "newFp": 1
+      },
+      "semanticInvalid": {
+        "before": 0,
+        "after": 0,
+        "introduced": 0
+      },
+      "policyViolations": {
+        "before": 0,
+        "after": 0,
+        "introduced": 0
+      }
+    }
+  ],
+  "grantedAbilityActiveMetrics": {
+    "tp": 19,
+    "fp": 1,
+    "fn": 17,
+    "precision": 0.95,
+    "recall": 0.5277777777777778
+  }
+}

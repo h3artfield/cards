@@ -1,0 +1,3331 @@
+{
+  "setClassification": "rc3_positive_training_v132",
+  "evaluationSetVersion": "rc3-positive-training-v132",
+  "taxonomyVersion": "three-layer-v1.4",
+  "contentHash": "578dc4f1a85b3fe2e3b7a420ef9c0697a03046505a81eb5ec6306d8b1dd69acd",
+  "cases": [
+    {
+      "id": "rc3-pos-v12-0008",
+      "category": "rc3-positive-compound_second_clause",
+      "layout": "normal",
+      "oracleId": "82c8f5dd-563d-4fd0-bd43-7ee2001d3777",
+      "oracleText": "Exile all permanents. You discard your hand.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile all permanents"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discard your hand"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "discard"
+          ]
+        }
+      ],
+      "cardName": "Apocalypse",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "88113618521256af1b100a040dfd1ed704a5023bed15b33b189931e8990ce0ec",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "compound_second_clause",
+      "sourceCaseId": "vh12-0008",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0015",
+      "category": "rc3-positive-mdfc_transform_zone_transition",
+      "layout": "normal",
+      "oracleId": "c8446615-7c84-49bb-996e-ee11d60aac6f",
+      "oracleText": "Ninjutsu {U} ({U}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nWhenever Moon-Circuit Hacker deals combat damage to a player, scry 2, then draw a card. Discard a card unless Moon-Circuit Hacker entered this turn.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "Discard a card unless Moon-Circuit Hacker entered this turn"
+        },
+        {
+          "actionType": "scry",
+          "evidenceContains": "scry 2"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "put_onto_battlefield",
+            "discard",
+            "scry"
+          ]
+        }
+      ],
+      "cardName": "A-Moon-Circuit Hacker",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "7c52e426ae0b942c1026ee8e74a5fc34233479686334d1c5ba81bad1523922e4",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "mdfc_transform_zone_transition",
+      "sourceCaseId": "vh12-0015",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0018",
+      "category": "rc3-positive-search_put_shuffle_chain",
+      "layout": "normal",
+      "oracleId": "f1c3d749-5cdb-4af2-967f-6413d6cb04fe",
+      "oracleText": "Search target opponent's library for an artifact card and put that card onto the battlefield under your control. Then that player shuffles.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put that card onto the battlefield"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "shuffles"
+        }
+      ],
+      "expectedRoles": [],
+      "cardName": "Acquire",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "abbbfa8768c316ebb32957641cff59013e8f6f979b08cf0e356cb954e3856764",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "search_put_shuffle_chain",
+      "sourceCaseId": "vh12-0018",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0033",
+      "category": "rc3-positive-granted_ability_quote",
+      "layout": "normal",
+      "oracleId": "7c5b0ed7-ee9d-4aa2-8d63-5b70eaf5f52b",
+      "oracleText": "{1}, {T}: Draw a card, then discard a card.\nWhenever you discard one or more artifact cards, create a tapped Powerstone token. This ability triggers only once each turn. (The token is an artifact with \"{T}: Add {C}. This mana can't be spent to cast a nonartifact spell.\")",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card, then discard a card"
+        },
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {C}"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a tapped Powerstone token"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast a nonartifact spell"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discard a card"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discard one or more artifact cards, create a tapped Powerstone token"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "add_mana",
+            "create_token",
+            "cast",
+            "discard",
+            "discard"
+          ]
+        },
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "draw",
+            "add_mana",
+            "create_token",
+            "cast",
+            "discard",
+            "discard"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "draw",
+            "add_mana",
+            "create_token",
+            "cast",
+            "discard",
+            "discard"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "draw",
+            "add_mana",
+            "create_token",
+            "cast",
+            "discard",
+            "discard"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "draw",
+            "add_mana",
+            "create_token",
+            "cast",
+            "discard",
+            "discard"
+          ]
+        }
+      ],
+      "cardName": "A-Urza, Powerstone Prodigy",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3f93a9276de9482bb6717c12bf6256907f318de5c45b81e2ec36ee57ba89a705",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "granted_ability_quote",
+      "sourceCaseId": "vh12-0033",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0051",
+      "category": "rc3-positive-replacement_if_would",
+      "layout": "normal",
+      "oracleId": "1e21e57e-3bc9-41a8-9746-57b583a5ad63",
+      "oracleText": "Emerge {5}{W} (You may cast this spell by sacrificing a creature and paying the emerge cost reduced by that creature's mana value.)\nWhen this creature enters, create a 2/2 white Alien creature token. If this creature's emerge cost was paid, instead create X of those tokens, where X is the sacrificed creature's toughness.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a 2/2 white Alien creature token"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create X of those token"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast this spell by sacrificing a creature and paying the emerge cost reduced by that creature's mana value",
+          "optional": true,
+          "optionalEffect": true
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrificed creature's toughness"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token",
+            "create_token",
+            "cast",
+            "sacrifice"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token",
+            "create_token",
+            "cast",
+            "sacrifice"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "create_token",
+            "create_token",
+            "cast",
+            "sacrifice"
+          ]
+        }
+      ],
+      "cardName": "Adipose Offspring",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "1bad88b397150e57fa34ed2727df71c82205215e087a1ea5f300024a3a8a5e7a",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "replacement_if_would",
+      "sourceCaseId": "vh12-0051",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0071",
+      "category": "rc3-positive-modal_each_option_action",
+      "layout": "normal",
+      "oracleId": "e9db79fd-a5b6-4d59-9176-e713e2e9c708",
+      "oracleText": "Choose one —\n• Tap all Spirits.\n• Tap all non-Spirit creatures.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "tap",
+          "evidenceContains": "Tap all Spirits"
+        },
+        {
+          "actionType": "tap",
+          "evidenceContains": "Tap all non-Spirit creatures"
+        }
+      ],
+      "expectedRoles": [],
+      "cardName": "Aether Shockwave",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3b6d706ef2dcdfe746381c7ce0faa42bdcdca814a1e1c51efe9dfa40ddabb51d",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "modal_each_option_action",
+      "sourceCaseId": "vh12-0071",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0077",
+      "category": "rc3-positive-granted_ability_quote",
+      "layout": "normal",
+      "oracleId": "0d60c095-4c6c-4618-8ef3-508f3d454efa",
+      "oracleText": "Whenever you gain life, put a loyalty counter on Ajani.\n0: You gain 1 life.\n−4: Create a 2/2 white Cat Soldier creature token named Ajani's Pridemate with \"Whenever you gain life, put a +1/+1 counter on this token.\"\n−10: You get an emblem with \"Creatures you control get +2/+2.\"",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 2/2 white Cat Soldier creature token"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 1 life"
+        },
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "put a +1/+1 counter on this token"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token",
+            "gain_life",
+            "put_counter"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token",
+            "gain_life",
+            "put_counter"
+          ]
+        }
+      ],
+      "cardName": "Ajani Resolute",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f74fa6152bd58b24abebdb8c80dc3067e83929185bf15720010e0bded6a007c8",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "granted_ability_quote",
+      "sourceCaseId": "vh12-0077",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0093",
+      "category": "rc3-positive-activated_post_colon_effect",
+      "layout": "transform",
+      "oracleId": "c551f007-9740-4a2a-8ef5-7be1a7afe14b",
+      "oracleText": "When this artifact enters, you may sacrifice a nontoken creature. If you do, draw X cards, then mill X cards, where X is that creature's power.\nCraft with one or more creatures {2}{B}{B}\n{2}{B}: Return this card from your graveyard to your hand.\n//\nWretched Bonemass's power and toughness are each equal to the total power of the exiled cards used to craft it.\nThis creature has flying as long as an exiled card used to craft it has flying. The same is true for first strike, double strike, deathtouch, haste, hexproof, indestructible, lifelink, menace, protection, reach, trample, and vigilance.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw X cards, then mill X cards, where X is t",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifice a nontoken creature",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "mill",
+          "evidenceContains": "mill X cards, where X is that creature's power",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return this card from your graveyard to your hand"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "sacrifice",
+            "mill"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "draw",
+            "sacrifice",
+            "mill"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "draw",
+            "sacrifice",
+            "mill"
+          ]
+        }
+      ],
+      "cardName": "Altar of the Wretched // Wretched Bonemass",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "cd5a2fc7fe2bfc84572c331ca06785007e597139f484b6b1f115c91ae1a57e81",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "activated_post_colon_effect",
+      "sourceCaseId": "vh12-0093",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0098",
+      "category": "rc3-positive-optional_put_onto_battlefield",
+      "layout": "normal",
+      "oracleId": "15692698-ef57-4672-bf76-5fe4a00c693a",
+      "oracleText": "Reveal the top four cards of your library. You may put a creature card from among them onto the battlefield. It gains \"At the beginning of your end step, return this creature to its owner's hand.\" Then put the rest of the cards revealed this way on the bottom of your library in any order.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put a creature card from among them onto the battlefield"
+        }
+      ],
+      "expectedRoles": [],
+      "cardName": "Aethermage's Touch",
+      "colorIdentity": [
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ab6578c9c273575459e7659c679062d4840f4ff824ad99d6d6a1e23c6df2aad9",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "optional_put_onto_battlefield",
+      "sourceCaseId": "vh12-0098",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0107",
+      "category": "rc3-positive-mdfc_transform_zone_transition",
+      "layout": "normal",
+      "oracleId": "d6112a8a-e0b8-422e-9904-ca1d87bf7322",
+      "oracleText": "Ninjutsu {2}{B} ({2}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nWhenever Nashi, Moon Sage's Scion deals combat damage to a player, exile the top card of each player's library. Until end of turn, you may play one of those cards. If you cast a spell this way, pay life equal to its mana value rather than paying its mana cost.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile the top card of each player's library"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast a spell this way, pay life equal to its mana value rather than paying its mana cost"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "put_onto_battlefield",
+            "cast"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "exile",
+            "put_onto_battlefield",
+            "cast"
+          ]
+        }
+      ],
+      "cardName": "A-Nashi, Moon Sage's Scion",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "65f9963b106ed28e5d04b7cbca056e8d7c7cfbeaa679464861faab58f7000f79",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "mdfc_transform_zone_transition",
+      "sourceCaseId": "vh12-0107",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0108",
+      "category": "rc3-positive-mdfc_transform_zone_transition",
+      "layout": "normal",
+      "oracleId": "af039289-69bc-42a6-b774-1b7497700526",
+      "oracleText": "Ninjutsu {1}{B} ({1}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nWhen Nezumi Prowler enters, put a deathtouch counter and a lifelink counter on target creature you control.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield"
+        }
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Nezumi Prowler",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ae3d6d6ae51170828db54b191584bdef075162b39eae090adfdabca0fc950bb5",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "mdfc_transform_zone_transition",
+      "sourceCaseId": "vh12-0108",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0110",
+      "category": "rc3-positive-mdfc_transform_zone_transition",
+      "layout": "normal",
+      "oracleId": "031d8937-16e9-4cf7-b058-2bda5d1f51b2",
+      "oracleText": "Ninjutsu {1}{U} ({1}{U}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nWhenever one or more Ninja or Rogue creatures you control deal combat damage to a player, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this artifact: Add one mana of any color.\")",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a Treasure token"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "put_onto_battlefield",
+            "create_token",
+            "sacrifice"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "put_onto_battlefield",
+            "create_token",
+            "sacrifice"
+          ]
+        }
+      ],
+      "cardName": "A-Prosperous Thief",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "98d8cdc331ff87a16482571cf3716cf62bf40a033aa494166fa481803d4bdeba",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "mdfc_transform_zone_transition",
+      "sourceCaseId": "vh12-0110",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0116",
+      "category": "rc3-positive-replacement_if_would",
+      "layout": "normal",
+      "oracleId": "944689b2-f9f7-45c3-952c-54287b9824d5",
+      "oracleText": "Prevent the next X damage that would be dealt to target creature this turn, where X is your devotion to white. If damage is prevented this way, Acolyte's Reward deals that much damage to any target. (Each {W} in the mana costs of permanents you control counts toward your devotion to white.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals that much damage to any target"
+        }
+      ],
+      "expectedRoles": [],
+      "cardName": "Acolyte's Reward",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "8878d56ed01806a13f4bb91784173d014d0a62ab935b3e6d9c173a5018a8fd7d",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "replacement_if_would",
+      "sourceCaseId": "vh12-0116",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0123",
+      "category": "rc3-positive-search_put_shuffle_chain",
+      "layout": "normal",
+      "oracleId": "23b2de61-a29c-4a32-b38c-408c723727ce",
+      "oracleText": "Flying\nWhen this creature enters, you may search your graveyard, hand and/or library for a card named Magnifying Glass and/or a card named Thinking Cap and put them onto the battlefield. If you search your library this way, shuffle.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library this way, shuffle"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put them onto the battlefield"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "shuffle"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "put_onto_battlefield",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "cardName": "Agency Outfitter",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "bfae429887d359b59d88d21c3a13b91237cb1a2a9a86a08bb1510a31b0e7a6d7",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "search_put_shuffle_chain",
+      "sourceCaseId": "vh12-0123",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0125",
+      "category": "rc3-positive-search_put_shuffle_chain",
+      "layout": "normal",
+      "oracleId": "b3779fbe-7701-433b-afad-bebd6096a3c8",
+      "oracleText": "When this enchantment enters, you may search your library and/or graveyard for a card named Ajani, Valiant Protector, reveal it, and put it into your hand. If you search your library this way, shuffle.\nSacrifice this enchantment: Prevent all combat damage a creature of your choice would deal this turn.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library and/or graveyard for a card named Ajani, Valiant Protector, reveal it, and put it into your hand"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library this way, shuffle"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this enchantment: Prevent all combat damage a creature of your choice would deal this turn"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "shuffle"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "search_library",
+            "sacrifice",
+            "shuffle_library"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "search_library",
+            "search_library",
+            "sacrifice",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "cardName": "Ajani's Aid",
+      "colorIdentity": [
+        "G",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "74ad6f800f6b239d13efb94b434515737dbeae00e762c3656e3faa6601d2b9ac",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "search_put_shuffle_chain",
+      "sourceCaseId": "vh12-0125",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0126",
+      "category": "rc3-positive-search_put_shuffle_chain",
+      "layout": "normal",
+      "oracleId": "d1d719e9-9c02-40cf-8849-91a5c120a516",
+      "oracleText": "When this creature enters, exile target creature an opponent controls until this creature leaves the battlefield.\nPlainscycling {2} ({2}, Discard this card: Search your library for a Plains card, reveal it, put it into your hand, then shuffle.)",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for a Plains card, reveal it, put it into your hand, then shuffle"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile target creature an opponent controls until this creature leaves the battlefield"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "Discard this card: Search your library for a Plains card, reveal it, put it into your hand, then shuffle"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "exile",
+            "discard",
+            "shuffle_library"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "search_library",
+            "exile",
+            "discard",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "cardName": "Alabaster Host Intercessor",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "e900157dbfa2da57f0fe18436b94109fcdbf337f027d484149ffbc35a969ae71",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "search_put_shuffle_chain",
+      "sourceCaseId": "vh12-0126",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0130",
+      "category": "rc3-positive-zone_transition_return",
+      "layout": "normal",
+      "oracleId": "2b22cf44-7b03-4919-9812-6796bf193484",
+      "oracleText": "Return target artifact or non-Aura enchantment card from your graveyard to the battlefield with X additional +1/+1 counters on it. It's a 1/1 Spirit creature with flying in addition to its other types.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return target artifact or non-Aura enchantment card from your graveyard to the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "cardName": "Abuelo's Awakening",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "1e067bb400a24f54e85113feb309374208d92e3e117c9d8c01b9d2b53af8b4d4",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "zone_transition_return",
+      "sourceCaseId": "vh12-0130",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0131",
+      "category": "rc3-positive-activated_post_colon_effect",
+      "layout": "normal",
+      "oracleId": "3d02ee2f-b7bd-40b0-b9be-2420991b2be0",
+      "oracleText": "{1}: Add {W}, {B}, or {G}. Activate only once each turn.\n{2}{B}: Return this card from your graveyard to your hand.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {W}"
+        },
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return this card from your graveyard to your hand"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana"
+          ]
+        }
+      ],
+      "cardName": "Abzan Devotee",
+      "colorIdentity": [
+        "B",
+        "G",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "9389ffe00cc20feff39d57b9d9cbbbba67bf1e5b0c9e242fb845ebcf60fd7fcf",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "activated_post_colon_effect",
+      "sourceCaseId": "vh12-0131",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0135",
+      "category": "rc3-positive-activated_post_colon_effect",
+      "layout": "normal",
+      "oracleId": "7e5d2801-873f-4318-9c23-9a73e00e31a4",
+      "oracleText": "Flying\n{2}{U}, Discard two cards: Return this card from your graveyard to the battlefield tapped.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "discard",
+          "evidenceContains": "Discard two cards: Return this card from your graveyard to the battlefield tapped"
+        }
+      ],
+      "expectedRoles": [],
+      "cardName": "Advanced Stitchwing",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ce56c06653dd45294e81b6cfd604139d3f0fdeb20d769245887ac9e7568e7852",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "activated_post_colon_effect",
+      "sourceCaseId": "vh12-0135",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0144",
+      "category": "rc3-positive-replacement_if_would",
+      "layout": "normal",
+      "oracleId": "3e0be003-4f42-4917-b85d-46baf2afd734",
+      "oracleText": "When this creature enters, return target nonland permanent to its owner's hand.\nEvoke {1}{U}{U} (You may cast this spell for its evoke cost. If you do, it's sacrificed when it enters.)",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "return target nonland permanent to its owner's hand"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast this spell for its evoke cost",
+          "optional": true,
+          "optionalEffect": true
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrificed when it enters"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_hand",
+            "cast",
+            "sacrifice"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "return_to_hand",
+            "cast",
+            "sacrifice"
+          ]
+        }
+      ],
+      "cardName": "Aethersnipe",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "8f2ede27aa1779838bc94980c0146bfed3de4441afd6ef1a41c8ded9b3d3e828",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "replacement_if_would",
+      "sourceCaseId": "vh12-0144",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0146",
+      "category": "rc3-positive-granted_ability_quote",
+      "layout": "normal",
+      "oracleId": "2579e9e0-b00f-4a1b-8fce-15d06bb7fe5a",
+      "oracleText": "Flying\nWhenever another permanent you control leaves the battlefield, if it had counters on it, investigate. (Create a Clue artifact token with \"{2}, Sacrifice this token: Draw a card.\")",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a Clue artifact token"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this token: Draw a card"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token",
+            "sacrifice"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token",
+            "sacrifice"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token",
+            "sacrifice"
+          ]
+        }
+      ],
+      "cardName": "Angelic Sleuth",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "a5774939841830d03bb282b7b8dfa270abfab7747e6edd15e6bfefcac22c3357",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "granted_ability_quote",
+      "sourceCaseId": "vh12-0146",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0147",
+      "category": "rc3-positive-granted_ability_quote",
+      "layout": "normal",
+      "oracleId": "34c0f75d-10a9-428d-b202-3defb3949090",
+      "oracleText": "When this creature enters, create a Food token or a Treasure token. (A Food token is an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\" A Treasure token is an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a Food token or a Treasure token"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 3 life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token",
+            "sacrifice",
+            "sacrifice",
+            "gain_life"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token",
+            "sacrifice",
+            "sacrifice",
+            "gain_life"
+          ]
+        }
+      ],
+      "cardName": "Ant-Man's Army",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "676930942ee7bd801b83809218156902cbf5c59a113656c09646b57a3b3d6004",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "granted_ability_quote",
+      "sourceCaseId": "vh12-0147",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-v12-0148",
+      "category": "rc3-positive-granted_ability_quote",
+      "layout": "normal",
+      "oracleId": "f002dd34-a58d-4bd2-a914-39042f7f264a",
+      "oracleText": "This creature can't be blocked by creatures with power 2 or less.\nWhen this creature enters, creatures you control perpetually gain \"When this creature dies, you may shuffle it into its owner's library if it's in your graveyard. If you do, investigate.\" (Create a colorless Clue artifact token with \"{2}, Sacrifice this artifact: Draw a card.\")",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a colorless Clue artifact token"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this artifact: Draw a card"
+        },
+        {
+          "actionType": "shuffle_into_library",
+          "evidenceContains": "shuffle it into its owner's library"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "you may shuffle",
+          "optional": true,
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token",
+            "sacrifice",
+            "shuffle_into_library",
+            "shuffle_library"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token",
+            "sacrifice",
+            "shuffle_into_library",
+            "shuffle_library"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token",
+            "sacrifice",
+            "shuffle_into_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "cardName": "Antique Collector",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ca2af4932de68ae5271f62963057bc41d79efa034612af69b5a8c864a5c2fcbe",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewedAt": "2026-08-07T18:51:05.297Z",
+      "goldReviewer": "validation-v12-fresh-gold-certifier-v1",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "granted_ability_quote",
+      "sourceCaseId": "vh12-0148",
+      "spentV12Regression": true,
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0001",
+      "category": "rc3-positive-granted_ability_quote",
+      "layout": "normal",
+      "oracleId": "e1c00c2b-146d-4923-aa1e-5cb3fcb0e99b",
+      "oracleText": "When Glamorous Outlaw enters, it deals 2 damage to each opponent and you gain 2 life. Scry 2.\n{1}, Exile Glamorous Outlaw from your hand: Target land gains \"{T}: Add {U}, {B}, or {R}\" until Glamorous Outlaw is cast from exile. You may cast Glamorous Outlaw for as long as it remains exiled.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {U}"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast from exile"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast Glamorous Outlaw for as long as it remains exiled",
+          "optional": true,
+          "optionalEffect": true
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 2 damage to each opponent and you gain 2 life"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 2 life"
+        },
+        {
+          "actionType": "scry",
+          "evidenceContains": "Scry 2"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "cast",
+            "cast",
+            "deal_damage",
+            "gain_life",
+            "scry"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "cast",
+            "cast",
+            "deal_damage",
+            "gain_life",
+            "scry"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "cast",
+            "cast",
+            "deal_damage",
+            "gain_life",
+            "scry"
+          ]
+        }
+      ],
+      "cardName": "A-Glamorous Outlaw",
+      "colorIdentity": [
+        "B",
+        "R",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "45f372e3b3b1336682efcd32ebe03870aded6af9460c3950212eb2aef4f42d91",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "granted_ability_quote",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0002",
+      "category": "rc3-positive-granted_ability_quote",
+      "layout": "normal",
+      "oracleId": "71608acf-bb4d-437d-8c36-26db40bf4a01",
+      "oracleText": "Vigilance\nMenace (This creature can't be blocked except by two or more creatures.)\n{1}, Exile Masked Bandits from your hand: Target land gains \"{T}: Add {B}, {R}, or {G}\" until Masked Bandits is cast from exile. You may cast Masked Bandits for as long as it remains exiled.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {B}"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast from exile"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast Masked Bandits for as long as it remains exiled",
+          "optional": true,
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "cast",
+            "cast"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "cast",
+            "cast"
+          ]
+        }
+      ],
+      "cardName": "A-Masked Bandits",
+      "colorIdentity": [
+        "B",
+        "G",
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "914f60dff13e654384424c4801d3d8313370f1b366b2cf00b586ca464f22b624",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "granted_ability_quote",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0003",
+      "category": "rc3-positive-granted_ability_quote",
+      "layout": "normal",
+      "oracleId": "9358135f-8083-41a8-b4f9-01befaaa0a98",
+      "oracleText": "When Rakish Revelers enters, create a 1/1 green and white Citizen creature token.\n{1}, Exile Rakish Revelers from your hand: Target land gains \"{T}: Add {R}, {G}, or {W}\" until Rakish Revelers is cast from exile. You may cast Rakish Revelers for as long as it remains exiled.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {R}"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a 1/1 green and white Citizen creature token"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast from exile"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast Rakish Revelers for as long as it remains exiled",
+          "optional": true,
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "cast",
+            "cast"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "cast",
+            "cast"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "cast",
+            "cast"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "cast",
+            "cast"
+          ]
+        }
+      ],
+      "cardName": "A-Rakish Revelers",
+      "colorIdentity": [
+        "G",
+        "R",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "49e52bd4d9fe1a168811614820f9cc6a46860b63b2736f3fcf1e4200b64dabb9",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "granted_ability_quote",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0004",
+      "category": "rc3-positive-granted_ability_quote",
+      "layout": "normal",
+      "oracleId": "1d01c702-dad9-4101-8f69-421e996b7a44",
+      "oracleText": "Flying\nWhen Shattered Seraph enters, you gain 3 life.\n{1}, Exile Shattered Seraph from your hand: Target land gains \"{T}: Add {W}, {U}, or {B}\" until Shattered Seraph is cast from exile. You may cast Shattered Seraph for as long as it remains exiled.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {W}"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast from exile"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast Shattered Seraph for as long as it remains exiled",
+          "optional": true,
+          "optionalEffect": true
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 3 life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "cast",
+            "cast",
+            "gain_life"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "cast",
+            "cast",
+            "gain_life"
+          ]
+        }
+      ],
+      "cardName": "A-Shattered Seraph",
+      "colorIdentity": [
+        "B",
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "519540423a218e5b8aaf72b6ae355b882cb19185ddaf7bb3d8215b73b76eba64",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "granted_ability_quote",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0005",
+      "category": "rc3-positive-search_put_shuffle_chain",
+      "layout": "normal",
+      "oracleId": "a2c5ee76-6084-413c-bb70-45490d818374",
+      "oracleText": "At the beginning of your upkeep, you may say \"Ach! Hans, run! It's the . . .\" and the name of a creature card. If you do, search your library for a card with that name, put it onto the battlefield, then shuffle. That creature gains haste. Exile it at the beginning of the next end step.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library for a card with that name, put it onto the battlefield, then shuffle"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put it onto the battlefield"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "put_onto_battlefield",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "cardName": "\"Ach! Hans, Run!\"",
+      "colorIdentity": [
+        "G",
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "8ec59535eb0fcb278204af08c580bfd1973f2da1a9a7598b05a7e88245032ce4",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "search_put_shuffle_chain",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0006",
+      "category": "rc3-positive-search_put_shuffle_chain",
+      "layout": "normal",
+      "oracleId": "39302443-4614-4e62-832a-b74eb2136bc7",
+      "oracleText": "Cannot be the target of spells or effects. World Champion has power and toughness equal to the life total of target opponent.\n{0}: Discard your hand to search your library for 1996 World Champion and reveal it to all players. Shuffle your library and put 1996 World Champion on top of it. Use this ability only at the beginning of your upkeep, and only if 1996 World Champion is in your library.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library for 1996 World Champion and reveal it to all players"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "Discard your hand to search your library for 1996 World Champion and reveal it to all players"
+        },
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "put 1996 World Champion on top of it"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "Shuffle your library and put 1996 World Champion on top of it"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "discard",
+            "put_counter",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "cardName": "1996 World Champion",
+      "colorIdentity": [
+        "B",
+        "G",
+        "R",
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "b45e7c2805bd2ce355e55dd35ee195386eef9f5ac606b3b4a5e0f0a1b20bee7a",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "search_put_shuffle_chain",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0007",
+      "category": "rc3-positive-search_put_shuffle_chain",
+      "layout": "normal",
+      "oracleId": "3c49df27-b725-4578-a059-f7f4cee5f853",
+      "oracleText": "{1}, {T}, Sacrifice Navigation Orb: Search your library for up to two basic land cards and/or Gate cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for up to two basic land cards and/or Gate cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle",
+          "quantityMayBeZero": true,
+          "optionalEffect": false,
+          "targetMaximum": 2
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put one onto the battlefield"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice Navigation Orb: Search your library for up to two basic land cards and/or Gate cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle",
+          "quantityMayBeZero": true,
+          "optionalEffect": false,
+          "targetMaximum": 2
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "put_onto_battlefield",
+            "sacrifice",
+            "shuffle_library"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "search_library",
+            "put_onto_battlefield",
+            "sacrifice",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "cardName": "A-Navigation Orb",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "dce921232640027a5a931b08dbdfd08cf830ce94f6f9af239a65fc1e8ec1775a",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "search_put_shuffle_chain",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0008",
+      "category": "rc3-positive-search_put_shuffle_chain",
+      "layout": "normal",
+      "oracleId": "78ce839e-6701-4e6a-8ffd-90e75358d706",
+      "oracleText": "{1}, {T}, Sacrifice Ominous Parcel: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.\n{5}, {T}, Sacrifice Ominous Parcel: It deals 4 damage to target creature.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for a basic land card, reveal it, put it into your hand, then shuffle"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice Ominous Parcel: Search your library for a basic land card, reveal it, put it into your hand, then shuffle"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice Ominous Parcel: It deals 4 damage to target creature"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 4 damage to target creature"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "sacrifice",
+            "sacrifice",
+            "deal_damage",
+            "shuffle_library"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "search_library",
+            "sacrifice",
+            "sacrifice",
+            "deal_damage",
+            "shuffle_library"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "search_library",
+            "sacrifice",
+            "sacrifice",
+            "deal_damage",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "cardName": "A-Ominous Parcel",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ea6a9ed22a771270083b0f680dc3089134bf7e7e2bc223c7509e630e5533df4f",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "search_put_shuffle_chain",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0009",
+      "category": "rc3-positive-mdfc_transform_zone_transition",
+      "layout": "normal",
+      "oracleId": "b7d6af23-dcb7-45fa-985b-23e704cf93a3",
+      "oracleText": "Ninjutsu {1}{B} ({1}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nWhenever Dokuchi Silencer deals combat damage to a player, you may discard a card. When you do, destroy target creature or planeswalker that player controls.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "destroy target creature or planeswalker that player controls"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discard a card"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy",
+            "put_onto_battlefield",
+            "discard"
+          ]
+        }
+      ],
+      "cardName": "A-Dokuchi Silencer",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "7b15dec6067001a3be603436b7bf00ada76cfc29477022aff7daf79363e021c5",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "mdfc_transform_zone_transition",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0010",
+      "category": "rc3-positive-mdfc_transform_zone_transition",
+      "layout": "normal",
+      "oracleId": "cc1f8468-473e-4fca-9745-3aca2db87e13",
+      "oracleText": "Ninjutsu {U/B} ({U/B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nNinjutsu abilities you activate cost {1} less to activate.\nOther Ninja and Rogue creatures you control get +1/+1.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield"
+        }
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Silver-Fur Master",
+      "colorIdentity": [
+        "B",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "b8631274386909ca8ac47d6217f9b89b39a110b57c98ba838b612c937070c7f6",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "mdfc_transform_zone_transition",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0011",
+      "category": "rc3-positive-mdfc_transform_zone_transition",
+      "layout": "normal",
+      "oracleId": "c091f964-745e-4949-9593-e004eaad1fd2",
+      "oracleText": "Ninjutsu {2}{U} ({2}{U}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nFlying\nWhen Thousand-Faced Shadow enters from your hand, if it's attacking, create a token that's a copy of another target attacking creature. The token enters tapped and attacking.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a token"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "put_onto_battlefield",
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "put_onto_battlefield",
+            "create_token"
+          ]
+        }
+      ],
+      "cardName": "A-Thousand-Faced Shadow",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ef448b02ac62af6f78579af1ced7be9145dab3f78a2fdeaf116cb7a07103d9de",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "mdfc_transform_zone_transition",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0012",
+      "category": "rc3-positive-mdfc_transform_zone_transition",
+      "layout": "transform",
+      "oracleId": "722ee05f-6815-41b7-9813-5ec3902c1e9f",
+      "oracleText": "Flying\nAt the beginning of your upkeep, mill a card. If an instant or sorcery card was milled this way, transform this creature. (To mill a card, put the top card of your library into your graveyard.)\n//\nFlying",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "mill a card, put the top card of your library into your graveyard",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "mill",
+          "evidenceContains": "milled this way, transform this creature",
+          "cardFace": "front"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "mill",
+            "mill"
+          ]
+        }
+      ],
+      "cardName": "Aberrant Researcher // Perfected Form",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "1ff539ee17f267c842676180000a7a7308ace277fd916390610ce658777aa0de",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "mdfc_transform_zone_transition",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0013",
+      "category": "rc3-positive-activated_post_colon_effect",
+      "layout": "normal",
+      "oracleId": "4e536142-4ebe-4062-887b-5dd123c41d39",
+      "oracleText": "{1}: This card's name becomes the card name of your choice. Activate anywhere, anytime.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [],
+      "expectedRoles": [],
+      "cardName": "_____",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "eab3dd75e8aa0e6681ec6bf7f670d848f0fb0f69a73edbc8e95f47146c34cf7c",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "activated_post_colon_effect",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-pos-cat-0014",
+      "category": "rc3-positive-activated_post_colon_effect",
+      "layout": "normal",
+      "oracleId": "75854e14-5f15-443d-b342-b27fc3ab4b6e",
+      "oracleText": "When this creature enters, you may put a name sticker on it.\n{3}{U}: This creature gets +1/+0 until end of turn for each name sticker on it. It can't be blocked this turn.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "expectedRoles": [],
+      "cardName": "_____ _____ _____ Trespasser",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "73ae4bd567ac17c540a32ec47afb2a8b1ecc2c6ade7ede4b9cbf793aec92b00e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "activated_post_colon_effect",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-pos-cat-0015",
+      "category": "rc3-positive-activated_post_colon_effect",
+      "layout": "normal",
+      "oracleId": "571ccaf0-d2a0-46d3-af4b-14245a9a79ff",
+      "oracleText": "When you play this land for the first time, its name forever becomes a creature type and a noncreature card type of your choice belonging to your first name. (For example, Gavin's Dragon and Sorceries. Make sure to fill in the name so everyone knows where they're shopping.)\n{T}: Add {C}.\n{T}: Add one mana of any color. Spend this mana only to cast spells of the chosen types or spells whose names begin with the first letter of your name.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {C}"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast spells of the chosen types or spells whose names begin with the first letter of your name"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "cast"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "cast"
+          ]
+        }
+      ],
+      "cardName": "______",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "15d5cc665a8ffcdccded8ab4b0e0d94c2327ddf056b1fae706c683827e4441c4",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "activated_post_colon_effect",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0016",
+      "category": "rc3-positive-activated_post_colon_effect",
+      "layout": "normal",
+      "oracleId": "629fe1be-272d-465f-b9b1-2ce177410f13",
+      "oracleText": "Equipped creature gets +2/+2.\nEquip {3} ({3}: Attach to target creature you control. Equip only as a sorcery.)",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [],
+      "expectedRoles": [],
+      "cardName": "+2 Mace",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3531a335e1ab8de63ba90293c3714526a02f5aaf9821901a4193edad8811a14e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "activated_post_colon_effect",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-pos-cat-0017",
+      "category": "rc3-positive-replacement_if_would",
+      "layout": "transform",
+      "oracleId": "ee12e2e0-7eda-4f5e-9373-d4c029995adb",
+      "oracleText": "Whenever Binding Geist attacks, target creature an opponent controls gets -2/-0 until your next turn.\nDisturb {U} (You may cast this card from your graveyard transformed for its disturb cost.)\n//\nEnchant creature\nEnchanted creature gets -2/-0.\nIf Spectral Binding would be put into a graveyard from anywhere, exile it instead.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile it instead",
+          "cardFace": "back"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ],
+      "cardName": "A-Binding Geist // A-Spectral Binding",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "dc86ec3a2a7e3e019f4d3dbb9af6a7e29c47814eb8cde7fd0fd151ca97d882da",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "replacement_if_would",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0018",
+      "category": "rc3-positive-replacement_if_would",
+      "layout": "transform",
+      "oracleId": "55717e47-c1ab-4218-bc1c-10e58e91fa87",
+      "oracleText": "Whenever this creature enters or becomes the target of an Aura spell, create a 1/1 white Spirit creature token with flying.\nDisturb {W}{U} (You may cast this card from your graveyard transformed for its disturb cost.)\n//\nEnchant creature\nWhenever this Aura enters or enchanted creature becomes the target of an Aura spell, create a 1/1 white Spirit creature token with flying.\nIf Brinebound Gift would be put into a graveyard from anywhere, exile it instead.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile it instead",
+          "cardFace": "back"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create a 1/1 white Spirit creature token"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "create_token"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "exile",
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "exile",
+            "create_token"
+          ]
+        }
+      ],
+      "cardName": "A-Brine Comber // A-Brinebound Gift",
+      "colorIdentity": [
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "05c6aaa3b2cd6bd5e24a20af6cdec956bd6818e5c0abea1dcf685ec98faf6b2e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "replacement_if_would",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0019",
+      "category": "rc3-positive-replacement_if_would",
+      "layout": "transform",
+      "oracleId": "35f53871-203a-41da-930e-76540c62d3da",
+      "oracleText": "When Devoted Grafkeeper enters, mill four cards.\nWhenever you cast a spell from your graveyard, tap target creature you don't control.\nDisturb {1}{W}{U} (You may cast this card from your graveyard transformed for its disturb cost.)\n//\nFlying\nIf Departed Soulkeeper would be put into a graveyard from anywhere, exile it instead.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile it instead",
+          "cardFace": "back"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast a spell from your graveyard, tap target creature you don't control",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "mill",
+          "evidenceContains": "mill four cards",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "tap",
+          "evidenceContains": "tap target creature you don't control",
+          "cardFace": "front"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "cast",
+            "mill",
+            "tap"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "exile",
+            "cast",
+            "mill",
+            "tap"
+          ]
+        }
+      ],
+      "cardName": "A-Devoted Grafkeeper // A-Departed Soulkeeper",
+      "colorIdentity": [
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "a00e04583935ec66a58ee98fa883b389e646f79a3d9961cce6cdeda720ca1d34",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "replacement_if_would",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0020",
+      "category": "rc3-positive-replacement_if_would",
+      "layout": "transform",
+      "oracleId": "9ef53bd8-9999-4ea3-a43a-4084a9f208db",
+      "oracleText": "Flying\nWhen Dorothea, Vengeful Victim attacks or blocks, sacrifice it at end of combat.\nDisturb {W}{U} (You may cast this card from your graveyard transformed for its disturb cost.)\n//\nEnchant creature\nEnchanted creature has \"Whenever this creature attacks, create a 4/4 white Spirit creature token with flying that's tapped and attacking. Sacrifice that token at end of combat.\"\nIf Dorothea's Retribution would be put into a graveyard from anywhere, exile it instead.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile it instead",
+          "cardFace": "back"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifice it at end of combat",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice that token at end of combat",
+          "cardFace": "back"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "sacrifice",
+            "sacrifice"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "exile",
+            "sacrifice",
+            "sacrifice"
+          ]
+        }
+      ],
+      "cardName": "A-Dorothea, Vengeful Victim // A-Dorothea's Retribution",
+      "colorIdentity": [
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "5b188d14ed90a72821ee39340787d0fd74d82f968456f654fb176d5605c163d0",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "replacement_if_would",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0021",
+      "category": "rc3-positive-modal_each_option_action",
+      "layout": "normal",
+      "oracleId": "9ffed3f8-31c8-4671-8357-e0ab23b21551",
+      "oracleText": "When Baleful Beholder enters, choose one —\n• Antimagic Cone — Each opponent sacrifices an enchantment.\n• Fear Ray — Creatures you control gain menace until end of turn. (A creature with menace can't be blocked except by two or more creatures.)",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifices an enchantment"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "sacrifice"
+          ]
+        }
+      ],
+      "cardName": "A-Baleful Beholder",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "8b70e0e04eb3b9dcbfbfd3916446b4842ac7acb49692547e07909e255614a5a7",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "modal_each_option_action",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0022",
+      "category": "rc3-positive-modal_each_option_action",
+      "layout": "normal",
+      "oracleId": "71b3e813-7205-43e5-8411-7945191c766f",
+      "oracleText": "Choose one —\n• Cabaretti Charm deals damage equal to twice the number of creatures you control to target creature or planeswalker.\n• Creatures you control get +1/+1 and gain trample until end of turn.\n• Create two 1/1 green and white Citizen creature tokens.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create two 1/1 green and white Citizen creature token"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "cardName": "A-Cabaretti Charm",
+      "colorIdentity": [
+        "G",
+        "R",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f9bfe8d64cb8ff146fdbf62e57124fdf1c2f4774aabe65ea208d4229deea84c2",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "modal_each_option_action",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0023",
+      "category": "rc3-positive-modal_each_option_action",
+      "layout": "normal",
+      "oracleId": "594829d5-a5ea-4ef1-8b0e-bb1a5c62b491",
+      "oracleText": "When this creature enters, choose one —\n• Cure Wounds — You gain 2 life.\n• Dispel Magic — Destroy target enchantment.\n• Gentle Repose — Exile target card from a graveyard.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target enchantment"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target card from a graveyard"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 2 life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy",
+            "exile",
+            "gain_life"
+          ]
+        }
+      ],
+      "cardName": "A-Dawnbringer Cleric",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "edf59906df935abde0765f6e05ded0c42f2f44f288084c9ccdfd71f34a9c2a94",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "modal_each_option_action",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0024",
+      "category": "rc3-positive-compound_second_clause",
+      "layout": "normal",
+      "oracleId": "1009f979-b1fa-4427-bf9e-2a533a4ca19b",
+      "oracleText": "Flying\nWhen this Vehicle enters, you may put up to two name stickers on it.\nWhenever this Vehicle attacks, choose a letter. This Vehicle gets +1/+1 until end of turn for each name sticker on it that begins with the chosen letter.\nCrew 2",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "expectedRoles": [],
+      "cardName": "_____ _____ Rocketship",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "a3f3ab45c518d8e791e7ce7c3d12a446452aad893f4e8ae5e53bf402c5b4d2dc",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "compound_second_clause",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-pos-cat-0025",
+      "category": "rc3-positive-compound_second_clause",
+      "layout": "normal",
+      "oracleId": "82c2a58b-0ee2-454b-9ddd-670c1e788166",
+      "oracleText": "When this enchantment enters, you may put a name sticker on it.\nWhenever you put a sticker on this enchantment, it deals damage equal to the number of o's in name stickers on this enchantment to any target.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "expectedRoles": [],
+      "cardName": "_____ Balls of Fire",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "88009747a2a5257ac45a1ce5935d440a90634484b8ea6e2a1c1918c82d8bd4f1",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "compound_second_clause",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-pos-cat-0026",
+      "category": "rc3-positive-compound_second_clause",
+      "layout": "normal",
+      "oracleId": "2ce375c8-7c37-40b3-95cf-e0aa958bb317",
+      "oracleText": "Flying\nWhen this creature enters, you may put a name sticker on it. You gain X life, where X is the number of unique vowels on that sticker. (The vowels are A, E, I, O, U, and Y.)",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "expectedRoles": [],
+      "cardName": "_____ Bird Gets the Worm",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ba0a15ac3bdd75111f740a67f7c6bf610c6b5db48dd0f2011a4b7ae067e11c72",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "compound_second_clause",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-pos-cat-0027",
+      "category": "rc3-positive-optional_put_onto_battlefield",
+      "layout": "scheme",
+      "oracleId": "f8174641-3514-4811-9eb4-f0dc89ad79e1",
+      "oracleText": "When you set this scheme in motion, look at the top six cards of your library. You may put a creature card from among them onto the battlefield. Put the rest on the bottom of your library in any order.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put a creature card from among them onto the battlefield"
+        }
+      ],
+      "expectedRoles": [],
+      "cardName": "A Reckoning Approaches",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ed42f181e7271d92ef66d87c4b23ae79c8012c86b0ec4f97e829add3f0a15371",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "optional_put_onto_battlefield",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0028",
+      "category": "rc3-positive-optional_put_onto_battlefield",
+      "layout": "saga",
+      "oracleId": "ace367ed-0684-4f41-bfbb-147cff168362",
+      "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Mill five cards. You may put an Elf or Tyvar card from your graveyard onto the battlefield.\nII — Put a +1/+1 counter on each Elf you control.\nIII — Whenever an Elf you control attacks this turn, target creature an opponent controls gets -1/-1 until end of turn.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "put an Elf or Tyvar card from your graveyard onto the battlefield",
+          "sourceZone": "graveyard",
+          "destinationZone": "battlefield"
+        },
+        {
+          "actionType": "mill",
+          "evidenceContains": "Mill five cards"
+        },
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "Put a +1/+1 counter on each Elf you control"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield",
+            "mill",
+            "put_counter"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "return_to_battlefield",
+            "mill",
+            "put_counter"
+          ]
+        }
+      ],
+      "cardName": "A-Harald Unites the Elves",
+      "colorIdentity": [
+        "B",
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "4616d56889602bce7646e0b826f5c127f1550b674ccc5540c9103b830db495de",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "optional_put_onto_battlefield",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0029",
+      "category": "rc3-positive-optional_put_onto_battlefield",
+      "layout": "normal",
+      "oracleId": "10d1d908-6e62-48a4-9c87-c355cfe66dc5",
+      "oracleText": "+1: Target creature you control gains deathtouch and lifelink until end of turn. If it's a Vampire, put a +1/+1 counter on it.\n+1: You may sacrifice a Vampire. When you do, Sorin deals 3 damage to any target and you gain 3 life.\n−3: You may put a Vampire creature card with mana value 6 or less from your hand onto the battlefield.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put a Vampire creature card with mana value 6 or less from your hand onto the battlefield",
+          "sourceZone": "hand",
+          "destinationZone": "battlefield"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrifice a Vampire"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 3 damage to any target and you gain 3 life"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 3 life"
+        },
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "put a +1/+1 counter on it"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "put_onto_battlefield",
+            "sacrifice",
+            "deal_damage",
+            "gain_life",
+            "put_counter"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "put_onto_battlefield",
+            "sacrifice",
+            "deal_damage",
+            "gain_life",
+            "put_counter"
+          ]
+        }
+      ],
+      "cardName": "A-Sorin, Imperious Bloodlord",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "e570812fb5a04dbe5b2154e2b8ab325f1b8f775a632739b21459a7ef7e7a597d",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "optional_put_onto_battlefield",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0030",
+      "category": "rc3-positive-zone_transition_return",
+      "layout": "normal",
+      "oracleId": "c6a4a39e-87e6-47bd-bbe3-ca3c98c2049c",
+      "oracleText": "When Circle of the Land Druid enters, you may mill four cards. (You may put the top four cards of your library into your graveyard.)\nNatural Recovery — When Circle of the Land Druid dies, return target land card from your graveyard to your hand.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "return target land card from your graveyard to your hand"
+        },
+        {
+          "actionType": "mill",
+          "evidenceContains": "mill four cards"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield",
+            "mill"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "return_to_battlefield",
+            "mill"
+          ]
+        }
+      ],
+      "cardName": "A-Circle of the Land Druid",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "1ae02339ffba3ca44abf994740bbf0eb0c9ae61c5a3b9c5972b8c08f93188de8",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "zone_transition_return",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0031",
+      "category": "rc3-positive-zone_transition_return",
+      "layout": "normal",
+      "oracleId": "0d0698f5-569c-4933-8758-670a28bbce08",
+      "oracleText": "This spell has flash as long as there are five or more mana values among cards in your graveyard.\nReturn target creature card from your graveyard to the battlefield with an additional +1/+1 counter on it.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return target creature card from your graveyard to the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "cardName": "A-Graveyard Shift",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "78bccea29115888cb2f6af3135708617ca32c667c623b89b3063cc7434119c8d",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "zone_transition_return",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-cat-0032",
+      "category": "rc3-positive-zone_transition_return",
+      "layout": "normal",
+      "oracleId": "0e688e1a-e034-4bcb-af00-74555c553d94",
+      "oracleText": "Return target creature card from your graveyard to the battlefield. If it's an Elf, create three 1/1 green Elf Warrior creature tokens.\nForetell {3}{B}",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return target creature card from your graveyard to the battlefield"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create three 1/1 green Elf Warrior creature token"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield",
+            "create_token"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "return_to_battlefield",
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "return_to_battlefield",
+            "create_token"
+          ]
+        }
+      ],
+      "cardName": "A-Return Upon the Tide",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "15865de74f644fc9c52e740865c11f8a18f0943a99b93398f0f2f6465eedc535",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-positive-training-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "zone_transition_return",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-pos-one-shot-cast-0001",
+      "category": "rc3-positive-one_shot_cast_resolution",
+      "layout": "normal",
+      "oracleId": "e1b6d0ab-4e11-43a2-8a7f-3fb51582ddf3",
+      "oracleText": "Whenever Demilich attacks, exile up to one target instant or sorcery card from your graveyard. Copy it. You may cast the copy.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile up to one target",
+          "negative": false
+        },
+        {
+          "actionType": "copy",
+          "evidenceContains": "Copy it",
+          "negative": false
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast the copy",
+          "negative": false,
+          "optionalEffect": true
+        }
+      ],
+      "cardName": "A-Demilich (one-shot cast branch)",
+      "coverageStratum": "one_shot_cast_resolution",
+      "spentV12Regression": false,
+      "caseScope": "ability",
+      "scopeReason": "Triggered attack ability — copy then optional cast the copy.",
+      "certifiedEmptyLayer2": false,
+      "goldCompletenessStatus": "complete_within_scope",
+      "parserConsulted": false
+    },
+    {
+      "id": "rc3-pos-one-shot-cast-0002",
+      "category": "rc3-positive-one_shot_cast_resolution",
+      "layout": "normal",
+      "oracleId": "synthetic-one-shot-cast-it",
+      "oracleText": "Discover. You may cast it.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast it",
+          "negative": false,
+          "optionalEffect": true
+        }
+      ],
+      "cardName": "Synthetic Discover cast-it",
+      "coverageStratum": "one_shot_cast_resolution",
+      "spentV12Regression": false,
+      "caseScope": "full_card",
+      "scopeReason": "Synthetic one-shot resolution cast instruction.",
+      "certifiedEmptyLayer2": false,
+      "goldCompletenessStatus": "complete_within_scope",
+      "parserConsulted": false
+    }
+  ],
+  "sealed": true,
+  "parserExecutionCount": 0,
+  "parserConsulted": false,
+  "holdoutStatus": "development",
+  "benchmarkStatus": "catalog_clean",
+  "usableForParserEvaluation": true,
+  "goldCertification": {
+    "certifierId": "rc3-benchmark-selector-v130",
+    "certifiedAt": "2026-08-08T04:25:21.250Z",
+    "casesReviewed": "55/55",
+    "taxonomy": "three-layer-v1.4",
+    "goldReviewStatus": "reviewed",
+    "goldCompletenessStatus": "complete_within_scope",
+    "parserExecutionCount": 0,
+    "parserConsulted": false,
+    "familyCounts": {
+      "compound_second_clause": 4,
+      "mdfc_transform_zone_transition": 8,
+      "search_put_shuffle_chain": 8,
+      "granted_ability_quote": 9,
+      "replacement_if_would": 7,
+      "modal_each_option_action": 4,
+      "activated_post_colon_effect": 7,
+      "optional_put_onto_battlefield": 4,
+      "zone_transition_return": 4
+    }
+  },
+  "parentPackVersion": "rc3-positive-training-v130",
+  "revisedAt": "2026-08-08T05:37:50.096Z"
+}

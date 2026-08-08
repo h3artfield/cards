@@ -1,0 +1,48 @@
+{
+  "specVersion": "rc3-guardrail-revision-v132",
+  "guardrailV1": {
+    "path": "data/oracle-action-eval-rc3-policy-guardrail-v130.json",
+    "hash": "3a250fc7d4303d6ff5f1fd9f4b25b71e08c6daa2ccefeea4b0720b15acc4f629"
+  },
+  "guardrailV2": {
+    "path": "data/oracle-action-eval-rc3-policy-guardrail-v132.json",
+    "hash": "f65b1096bbd770c166712ee55fcfd87dc75971b5765bfbee419fab4c726043d7"
+  },
+  "revisions": [
+    {
+      "caseId": "rc3-guard-0001",
+      "oldForbiddenActions": [
+        "cast"
+      ],
+      "newForbiddenActions": [
+        "cast"
+      ],
+      "oracleEvidence": "You may cast Demilich from your graveyard by exiling four instant and/or sorcery cards from your graveyard in addition to paying its other costs.",
+      "policyReason": "Whole-card forbidden cast incorrectly suppressed legitimate one-shot cast the copy. Scoped to persistent graveyard permission only; copy→cast is positive-training coverage.",
+      "parserConsultedForCorrection": false,
+      "caseScope": "clause",
+      "scopeEvidenceContains": "You may cast Demilich from your graveyard by exiling four instant and/or sorcery cards from your graveyard in addition to paying its other costs.",
+      "targetClauseId": "demilich-graveyard-cast-permission"
+    },
+    {
+      "caseId": "rc3-guard-0013",
+      "oldForbiddenActions": [
+        "draw",
+        "sacrifice",
+        "create_token"
+      ],
+      "newForbiddenActions": [
+        "draw",
+        "sacrifice",
+        "create_token"
+      ],
+      "oracleEvidence": "(You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+      "policyReason": "Main spell create_token is card-native L2 outside reminder benchmark scope.",
+      "parserConsultedForCorrection": false,
+      "caseScope": "clause",
+      "scopeEvidenceContains": "(You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+      "targetClauseId": "acorn-harvest-flashback-reminder"
+    }
+  ],
+  "parserConsultedForCorrection": false
+}

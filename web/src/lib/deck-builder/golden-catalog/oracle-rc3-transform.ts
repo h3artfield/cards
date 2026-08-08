@@ -16,9 +16,11 @@ import {
   grantedClauseSpans,
   type GrantedQuoteContext,
 } from "./oracle-granted-ability-extraction";
+import { extractClauseNativeActions, mergeClauseNativeWithV1, filterNativeActionsForPromotion } from "./oracle-rc3-clause-native";
+import { getRC3PromotedFamilies } from "./oracle-rc3-promotion";
 import type { SegmentedAbility } from "./oracle-action-schema";
 
-export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.30-rc3-ast-dev";
+export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.31-rc3-ast-dev";
 
 const PUT_INTO_HAND_RE =
   /\b(?:put (?:it|that card|one of them|one of those cards|two of those cards|three of those cards|four of those cards|five of those cards|up to [^.]+?) into (?:your |their )?hand|Put (?:that card|one of them|one of those cards|two of those cards|target card from [^.]+?) into (?:your |their |its owner's )?hand|reveal (?:it|that card)[^.]* and put (?:it|that card) into your hand)\b/i;
@@ -385,10 +387,25 @@ export function applyRC3Transforms(
     parserVersion: ORACLE_ACTION_RC3_PARSER_VERSION,
   }));
 
+  const clauseNative = extractClauseNativeActions(input);
+  const promoted = getRC3PromotedFamilies();
+  let clauseNativeStats: Record<string, unknown> = {};
+
+  if (promoted.length > 0) {
+    const toPromote = filterNativeActionsForPromotion(clauseNative, promoted);
+    const merged = mergeClauseNativeWithV1(actions, { ...clauseNative, actions: toPromote });
+    actions = merged.actions.map((a) => ({ ...a, parserVersion: ORACLE_ACTION_RC3_PARSER_VERSION }));
+    clauseNativeStats = { ...merged.stats, mergedIntoOutput: true, promotedFamilies: promoted };
+  } else {
+    const mergePreview = mergeClauseNativeWithV1(actions, clauseNative);
+    clauseNativeStats = { ...mergePreview.stats, mergedIntoOutput: false };
+  }
+
   const legacyPayload = {
     ...base,
     actions,
     parserVersion: ORACLE_ACTION_RC3_PARSER_VERSION,
+    clauseNativeStats,
   };
 
   const semanticParse = buildOracleSemanticParse(legacyPayload, input.oracleText);

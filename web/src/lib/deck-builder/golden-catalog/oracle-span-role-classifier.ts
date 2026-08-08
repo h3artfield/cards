@@ -72,6 +72,12 @@ const STATIC_PERMISSION_PATTERNS: Array<{
     persistentOnly: true,
   },
   {
+    pattern: /\b(?:You may )?cast [A-Za-z][\w',-]*(?: [A-Za-z][\w',-]*)* from (?:your )?graveyard\b/gi,
+    permissionType: "cast",
+    zoneFrom: /\bfrom (?:your )?(graveyard)\b/i,
+    persistentOnly: true,
+  },
+  {
     pattern: /\b(?:You may )?cast (?:this card|this spell) any time you could cast an instant\b/gi,
     permissionType: "cast",
     persistentOnly: true,
@@ -580,7 +586,7 @@ export function extractStaticPermissions(paragraph: string): StaticPermissionRec
       const zoneMatch = zoneFrom?.exec(m[0]);
       records.push({
         permissionType,
-        permittedFromZone: zoneMatch ? [zoneMatch[1].toLowerCase()] : undefined,
+        permittedFromZone: zoneMatch?.[1] ? [zoneMatch[1].toLowerCase()] : undefined,
         permissionSubject: m[0],
         evidenceText: m[0],
         localStart: m.index,
@@ -677,13 +683,18 @@ export function isReflexiveTriggerReference(paragraph: string, evidenceText: str
   return /\bWhen you (?:sacrifice|discard|exile|pay)\b/i.test(paragraph);
 }
 
-/** One-shot resolution cast permission (Layer 2) vs persistent static grant (Layer 1). */
+/** One-shot resolution cast (Layer 2) vs persistent static grant (Layer 1). Returns true when cast SHOULD emit. */
 export function isOneShotCastPermission(paragraph: string, localStart: number, evidenceText: string): boolean {
   if (!/\bcast\b/i.test(evidenceText)) return false;
   const clause = clauseAtPosition(paragraph, localStart).clauseText;
   if (isPersistentStaticAbility(clause.trimStart()) && /\bcast spells from\b/i.test(clause)) return false;
+  if (/\b(?:You may cast (?:it|that card|that spell|the copy)[^.\n]*(?:without paying|\.|$))/i.test(evidenceText)) {
+    return true;
+  }
   if (/\b(?:You may cast (?:it|that card|that spell)[^.\n]*without paying)/i.test(clause)) return true;
   if (/\b(?:you may cast an instant or sorcery spell with mana value)/i.test(clause)) return true;
   if (/^(?:When|Whenever|At the beginning)[^.\n]*\bYou may cast\b/i.test(clause.trimStart())) return true;
+  if (/\bYou may cast the copy\b/i.test(evidenceText)) return true;
+  if (/\bYou may cast\b/i.test(evidenceText) && /\bCopy it\b/i.test(clause)) return true;
   return false;
 }
