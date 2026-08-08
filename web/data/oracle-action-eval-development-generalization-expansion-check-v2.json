@@ -1084,7 +1084,12 @@
     },
     "caseCount": 22,
     "firstExecutionAt": "2026-08-07T22:31:44.336Z",
-    "firstExecutionResult": "failed"
+    "firstExecutionResult": "failed",
+    "holdoutStatus": "spent_for_development",
+    "spentReason": "recall gate failure after execution #1 (P=100%, R=80.6%)",
+    "result": "failed_recall_gate",
+    "spentAt": "2026-08-07T23:11:23.661Z",
+    "doNotRunExecution": 2
   },
   "goldCertification": {
     "certifierId": "development-generalization-expansion-check-v2-builder",
@@ -1095,5 +1100,13 @@
     "goldCompletenessStatus": "complete",
     "parserExecutionCount": 0,
     "policyNote": "Fresh sealed check after expansion-check-v1 spent. Do not tune against before milestone gate."
+  },
+  "expansionCheckHoldout": {
+    "holdoutStatus": "spent_for_development",
+    "spentReason": "recall gate failure after execution #1 (P=100%, R=80.6%)",
+    "parserExecutionCount": 1,
+    "result": "failed_recall_gate",
+    "spentAt": "2026-08-07T23:11:23.661Z",
+    "doNotRunExecution": 2
   }
 }

@@ -1,0 +1,1299 @@
+{
+  "setClassification": "development_generalization_expansion_check_v3",
+  "evaluationSetVersion": "development-generalization-expansion-check-v3",
+  "taxonomyVersion": "three-layer-v1.3",
+  "contentHash": "ed656226762f6327608cd90d5ea69e0a889f98f0376d6d90edf41c8f617fb9b7",
+  "cases": [
+    {
+      "id": "dev-exp-chk-v3-001",
+      "category": "exp-chk-v3 loyalty",
+      "layout": "normal",
+      "oracleId": "30bb01c1-9253-4251-80e7-fb8236b3d858",
+      "oracleText": "At the beginning of combat on your turn, choose up to one target Vehicle you control. Until end of turn, it becomes an artifact creature and gains haste.\n+2: You may sacrifice an artifact or discard a card. If you do, draw a card.\n0: Create a 3/2 colorless Vehicle artifact token with crew 1.\n−7: You get an emblem with \"Whenever an artifact you control enters, this emblem deals 3 damage to any target.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "loyaltyCost": "+2",
+          "optionalEffect": true
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 3/2 colorless Vehicle artifact token",
+          "loyaltyCost": "0"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "loyalty_ability_scoping",
+        "split": "expansion-check-v3",
+        "selectionRule": "+2 draw vs 0 vehicle token vs −7 emblem",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Chandra, Spark Hunter",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "6ae2c2e312a2be764057c084bb2ab96cc7c658b4df0edd9fd66d5177a5f24c6d",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-002",
+      "category": "exp-chk-v3 loyalty",
+      "layout": "normal",
+      "oracleId": "17fd42f6-f388-4ffc-8fec-ca9ada2506ee",
+      "oracleText": "Whenever one or more creatures you control deal combat damage to a player, you may return one of them to its owner's hand. If you do, you may activate loyalty abilities of Kaito twice this turn rather than only once.\n+1: Up to one target creature can't attack or block until your next turn.\n0: Draw a card.\n−2: Create a 2/2 colorless Drone artifact creature token with deathtouch and \"When this token leaves the battlefield, each opponent loses 2 life and you gain 2 life.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "loyaltyCost": "+1"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "loyalty_ability_scoping",
+        "split": "expansion-check-v3",
+        "selectionRule": "+1 draw vs −2 bounce vs −4 ultimate",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Kaito, Dancing Shadow",
+      "colorIdentity": [
+        "B",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "53abd9d62d2eefe40f14da697956f5e3365e6a8ff69bc2f5e433490a0bcb881c",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-003",
+      "category": "exp-chk-v3 loyalty",
+      "layout": "normal",
+      "oracleId": "14c8a590-88ec-4982-ad7b-36a219ff6de7",
+      "oracleText": "Elves you control have \"{T}: Add {B}.\"\n+1: Put a +1/+1 counter on up to one target Elf. Untap it. It gains deathtouch until end of turn.\n0: Create a 1/1 green Elf Warrior creature token.\n−6: You get an emblem with \"Whenever you cast an Elf spell, it gains haste until end of turn and you draw two cards.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "Put a +1/+1 counter on up to one target Elf",
+          "loyaltyCost": "+1"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "loyalty_ability_scoping",
+        "split": "expansion-check-v3",
+        "selectionRule": "+1 vs −2 vs −6 wolf tokens",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Tyvar Kell",
+      "colorIdentity": [
+        "B",
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3d3144c1b4b2c85ec9dd49dfc50290ad3692c8169e29056c341ec9655053c65f",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-004",
+      "category": "exp-chk-v3 loyalty",
+      "layout": "normal",
+      "oracleId": "4cbce730-7b70-41bd-b463-bfec46afe3b0",
+      "oracleText": "+2: Untap all creatures you control. Those creatures get +1/+1 until end of turn.\n0: Until end of turn, Gideon becomes a 5/5 Human Soldier creature with indestructible that's still a planeswalker. Prevent all damage that would be dealt to him this turn.\n−10: Creatures you control get +2/+2 until end of turn. Tap all creatures your opponents control.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "untap",
+          "evidenceContains": "Untap all creatures you control",
+          "loyaltyCost": "+2"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "loyalty_ability_scoping",
+        "split": "expansion-check-v3",
+        "selectionRule": "+1 counters vs −3 destroy vs −10 emblem",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Gideon, Martial Paragon",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "c13d4aae37177a30920a67a08e82d9f87c6f52c4595bea22545572361d6f763a",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-005",
+      "category": "exp-chk-v3 loyalty",
+      "layout": "normal",
+      "oracleId": "b1fbfcf3-6921-4417-a58e-0f5e5d34a105",
+      "oracleText": "Jeska enters with a loyalty counter on her for each time you've cast a commander from the command zone this game.\n0: Choose target creature. Until your next turn, if that creature would deal combat damage to one of your opponents, it deals triple that damage to that player instead.\n−X: Jeska deals X damage to each of up to three targets.\nJeska, Thrice Reborn can be your commander.\nPartner",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals X damage to each of up to three targets",
+          "loyaltyCost": "−X"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "deal_damage"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "loyalty_ability_scoping",
+        "split": "expansion-check-v3",
+        "selectionRule": "−X damage vs −6 emblem",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Jeska, Thrice Reborn",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "b50cb928756b906b4b9d878f6f5ebd108399255437153f21c84381e0485005c4",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-006",
+      "category": "exp-chk-v3 search",
+      "layout": "normal",
+      "oracleId": "373c6cd0-0bf7-4dab-bc18-7ecf5f015e10",
+      "oracleText": "Return up to two target creatures to their owner's hand.\nSearch your library and/or graveyard for a card named Mu Yanling, reveal it, and put it into your hand. If you searched your library this way, shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return up to two target creatures to their owner's hand"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library and/or graveyard"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "return_to_hand",
+            "search_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_destination_chain",
+        "split": "expansion-check-v3",
+        "selectionRule": "Bounce up to two then lib/gy search put hand",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Rhythmic Water Vortex",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "5036ce4d7181c37641f2d1626d128c299a7401ddf53e1384b16c22e0638b245c",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-007",
+      "category": "exp-chk-v3 search",
+      "layout": "normal",
+      "oracleId": "38f43685-7aab-4a0e-8a46-717632b50694",
+      "oracleText": "Dr. Julius Jumblemorph is every creature type (even if this card isn't on the battlefield).\nWhenever a host you control enters, you may search your library and/or graveyard for a card with augment and combine it with that host. If you search your library this way, shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library and/or graveyard",
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_destination_chain",
+        "split": "expansion-check-v3",
+        "selectionRule": "Mutate optional lib/gy search put hand",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Dr. Julius Jumblemorph",
+      "colorIdentity": [
+        "G",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "a2f02b201f12d304fa1a035cc7b34b7583e05a2f989c640cdf63ea8f7144389e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-008",
+      "category": "exp-chk-v3 search",
+      "layout": "normal",
+      "oracleId": "36f5f161-b25e-48e4-b8f9-e6c36dfefe5b",
+      "oracleText": "When this creature enters, you may search your library and/or graveyard for a card named Sorin, Vampire Lord, reveal it, and put it into your hand. If you search your library this way, shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library and/or graveyard",
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_destination_chain",
+        "split": "expansion-check-v3",
+        "selectionRule": "Lib/gy search vampire put hand",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Sorin's Guide",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "43d4acc43f5f345b9b943d258c185d7fe1825f21a9282d22dd83b8ee0b1fb366",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-009",
+      "category": "exp-chk-v3 search",
+      "layout": "normal",
+      "oracleId": "5228fffe-6347-4177-bccb-b15621c7159c",
+      "oracleText": "Vigilance\nSpacecraft creatures you control get +3/+3.\nWhenever Captain Kirk enters or attacks, search your library and/or graveyard for a basic land card or a card named Starship Enterprise, reveal it, and put it into your hand. If you search your library this way, shuffle.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library and/or graveyard",
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_destination_chain",
+        "split": "expansion-check-v3",
+        "selectionRule": "Attack trigger lib/gy search land/Enterprise put hand",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Captain Kirk, Boldly Going",
+      "colorIdentity": [
+        "G",
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f8ddb69291d45463a876e1429b69be438aa36849a5eb34c8e5ad34fc0ea7dc79",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-010",
+      "category": "exp-chk-v3 spree",
+      "layout": "normal",
+      "oracleId": "0b23d9aa-d4ed-4ccf-8810-4a4d11d6fb9c",
+      "oracleText": "Spree (Choose one or more additional costs.)\n+ {1} — Search your library for a card, put it into your graveyard, then shuffle.\n+ {2} — Return up to two creature cards with total mana value 4 or less from your graveyard to the battlefield.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for a card",
+          "optionId": "opt-1"
+        },
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return up to two creature cards",
+          "optionId": "opt-2"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "return_to_battlefield"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "search_library",
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "modal_spree_structure",
+        "split": "expansion-check-v3",
+        "selectionRule": "Spree search gy vs return creatures",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Lively Dirge",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "d787ffbe7b2c68110715b3da0bec176aa8690a36bdf8f8977a04b4a35cb2ceb6",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-011",
+      "category": "exp-chk-v3 spree",
+      "layout": "normal",
+      "oracleId": "0db20037-35b3-4b1f-8dd6-3ee797c421ca",
+      "oracleText": "Spree (Choose one or more additional costs.)\n+ {3} — Create a 2/2 white Spirit creature token with flying.\n+ {1} — Counter target spell unless its controller pays {2}.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target spell unless its controller pays",
+          "optionId": "opt-2"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "modal_spree_structure",
+        "split": "expansion-check-v3",
+        "selectionRule": "Spree counter vs draw",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Phantom Interference",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "01e8b797ab59b0fc56f40f272b19ad7cb2f91add88f647dd19a136e90eec1566",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-012",
+      "category": "exp-chk-v3 spree",
+      "layout": "normal",
+      "oracleId": "30377bd5-99ab-4888-9ea7-e5a069b527e8",
+      "oracleText": "Spree (Choose one or more additional costs.)\n+ {1} — Copy target instant spell, sorcery spell, activated ability, or triggered ability. You may choose new targets for the copy.\n+ {1} — Change the target of target spell or ability with a single target.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "Copy target instant spell",
+          "optionId": "opt-1"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "copy"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "modal_spree_structure",
+        "split": "expansion-check-v3",
+        "selectionRule": "Spree copy spell vs return permanent",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Return the Favor",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "27be05adbd7a3769a796f25c859f85298678605602b354e7c62388b2ea6d8641",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-013",
+      "category": "exp-chk-v3 spree",
+      "layout": "normal",
+      "oracleId": "282dfeaa-6243-4f92-838a-5cb54fa85184",
+      "oracleText": "Spree (Choose one or more additional costs.)\n+ {1}{U} — Counter target spell.\n+ {3} — Create a token that's a copy of target artifact or creature you control.\n+ {2} — Draw two cards, then discard a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "Create a token that's a copy of target artifact or creature you control",
+          "optionId": "opt-2"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "copy"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "modal_spree_structure",
+        "split": "expansion-check-v3",
+        "selectionRule": "Spree counter/copy modal",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Three Steps Ahead",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "a87a5977e3eae7b0288c2a3b5fac03b84a7e500c6bc4026dd011c39939982472",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-014",
+      "category": "exp-chk-v3 modal-look",
+      "layout": "normal",
+      "oracleId": "75325029-e6f1-44af-88b2-53cc2b7233c0",
+      "oracleText": "Choose one —\n• Counter target spell unless its controller pays {3}.\n• Look at the top four cards of your library. Put one of them into your hand and the rest on the bottom of your library in any order.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Put one of them into your hand",
+          "optionId": "opt-2"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "modal_spree_structure",
+        "split": "expansion-check-v3",
+        "selectionRule": "Modal look partition vs counter unless",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Supreme Will",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "cd27f3c6e2c36ee91d6754f9770ffc214e664ad1b907fdebeeba597a7001c4df",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-015",
+      "category": "exp-chk-v3 pronoun",
+      "layout": "normal",
+      "oracleId": "10172c40-7169-4098-9452-b35797d27065",
+      "oracleText": "Enchant land\nEnchanted land is a 6/4 green Elemental creature. It's still a land.\nWhen enchanted land dies, return that card to its owner's hand.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "return that card to its owner's hand"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "pronoun_coreference",
+        "split": "expansion-check-v3",
+        "selectionRule": "When enchanted land dies return that card",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Vastwood Zendikon",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "55b274c4de28ef10d455f1780973d37700819fc276ad4a220d5c9df1738c6b47",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-016",
+      "category": "exp-chk-v3 pronoun",
+      "layout": "normal",
+      "oracleId": "1b8c4cbe-b2fc-4d52-9382-1e03c40003be",
+      "oracleText": "Enchant land\nEnchanted land is a 4/4 Elemental creature with reach and haste. It's still a land.\nWhen enchanted land dies, return that card to its owner's hand.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "return that card to its owner's hand"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "pronoun_coreference",
+        "split": "expansion-check-v3",
+        "selectionRule": "When enchanted land dies return that card",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Nissa's Zendikon",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "7adf9e8b0967a07b818ed36166d04142300062403a26d63c4d2552b5c7359af2",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-017",
+      "category": "exp-chk-v3 pronoun",
+      "layout": "normal",
+      "oracleId": "44154004-e50e-45d1-bde0-ba6e3354067c",
+      "oracleText": "Enchant land\nEnchanted land is a 2/6 white Wall creature with defender. It's still a land.\nWhen enchanted land dies, return that card to its owner's hand.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "return that card to its owner's hand"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "pronoun_coreference",
+        "split": "expansion-check-v3",
+        "selectionRule": "When enchanted land dies return that card",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Guardian Zendikon",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "83ee7f6d384954a492c56b25b6f3c8ec1c71e78106ca693435b4bb770abba594",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-018",
+      "category": "exp-chk-v3 sacrifice-exile",
+      "layout": "normal",
+      "oracleId": "0f8ebf11-b5ec-4f21-8c49-90d569b5a4c5",
+      "oracleText": "As an additional cost to cast this spell, sacrifice a creature.\nExile target creature or planeswalker.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target creature or planeswalker"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "conditional_zone_transition",
+        "split": "expansion-check-v3",
+        "selectionRule": "Additional cost sacrifice + exile target",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Worthy Cost",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "a5201b1a3fe71957d72ff1579f0ace7f49e06e040bebc2ad2b198ad2fbcbcbf9",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-019",
+      "category": "exp-chk-v3 conditional-bounce",
+      "layout": "normal",
+      "oracleId": "9d8fe3f8-5027-4f9e-999e-e277caa96478",
+      "oracleText": "Return target nonland permanent to its owner's hand.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target nonland permanent to its owner's hand"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "conditional_zone_transition",
+        "split": "expansion-check-v3",
+        "selectionRule": "Return nonland permanent to hand",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Disperse",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "b04c6dc57919c570543209fe41e656414ec21294f396fe442bb85ecdabbd5929",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-020",
+      "category": "exp-chk-v3 bounce",
+      "layout": "normal",
+      "oracleId": "f0ae687a-7222-4521-a514-ba10373fed7e",
+      "oracleText": "Return target permanent you control to its owner's hand.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target permanent you control to its owner's hand"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "conditional_zone_transition",
+        "split": "expansion-check-v3",
+        "selectionRule": "Return target permanent you control",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Rescue",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "95a5c64bdead74fd60fe5da5c43a9e20b31e87d95b0878c084a8f4acd062ec6f",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-021",
+      "category": "exp-chk-v3 bounce",
+      "layout": "normal",
+      "oracleId": "dc4a4996-108a-4aac-850f-2d9f76403446",
+      "oracleText": "Return target permanent to its owner's hand.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target permanent to its owner's hand"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "conditional_zone_transition",
+        "split": "expansion-check-v3",
+        "selectionRule": "Return target permanent",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Boomerang",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "4cd870dbd2f05590c18288ce61dd453d1be92a4f20e211378adde96aa6f42e45",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-022",
+      "category": "exp-chk-v3 token-copy",
+      "layout": "normal",
+      "oracleId": "142b2f24-49f6-4ef8-9731-9ae2e513f796",
+      "oracleText": "Create a token that's a copy of target non-Frog creature, except it's a 1/1 green Frog.\nFlashback {3}{G}{U} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a token that's a copy of target non-Frog creature"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "token_copy_delayed",
+        "split": "expansion-check-v3",
+        "selectionRule": "Create frog token copy",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Croaking Counterpart",
+      "colorIdentity": [
+        "G",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "64319f085f3e9fd9b24afd257448f16ce88e8bb29d68f7284430b87c2c1aef1a",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-023",
+      "category": "exp-chk-v3 token-copy",
+      "layout": "normal",
+      "oracleId": "0bd11d6c-b707-4b37-b49c-a3274b2a5a81",
+      "oracleText": "Whenever you attack, you may create a tapped and attacking token that's a copy of target attacking legendary creature you control other than Shaun, except it's not legendary and it's a Synth artifact creature in addition to its other types.\nWhen Shaun leaves the battlefield, exile all Synth tokens you control.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a tapped and attacking token that's a copy of target attacking legendary creature"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "token_copy_delayed",
+        "split": "expansion-check-v3",
+        "selectionRule": "Create token copy of artifact",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Shaun, Father of Synths",
+      "colorIdentity": [
+        "R",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "6d218acb81fd5128cba06367c3f51228130947e8221bf31b88a5028bb0865255",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-024",
+      "category": "exp-chk-v3 delayed-exile",
+      "layout": "normal",
+      "oracleId": "830d3450-18e7-4bac-b330-3906ef5e4514",
+      "oracleText": "Ascend (If you control ten or more permanents, you get the city's blessing for the rest of the game.)\nWhenever this creature attacks, you may pay {X}{R}. If you do, create X 1/1 red Elemental creature tokens that are tapped and attacking. At the beginning of the next end step, exile those tokens unless you have the city's blessing.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create X 1/1 red Elemental creature tokens that are tapped and attacking"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "delayed_exile_referent",
+        "split": "expansion-check-v3",
+        "selectionRule": "Attack create tokens + exile end step unless ascend",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Tilonalli's Summoner",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "090190a8569866abb1bd2b286d6805ea1c7cc0875db869d1596757caa396fa1e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-025",
+      "category": "exp-chk-v3 delayed-exile",
+      "layout": "normal",
+      "oracleId": "8dcd7e2b-75a9-476a-a0a0-798613e8dad6",
+      "oracleText": "Menace\nWhenever Sauron attacks, exile target creature card from your graveyard. Create a tapped and attacking token that's a copy of that card, except it's a 3/3 black Wraith with menace. At the beginning of the next end step, exile that token unless Sauron is your Ring-bearer.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a tapped and attacking token that's a copy of that card, except it's a 3/3 black Wraith"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "delayed_exile_referent",
+        "split": "expansion-check-v3",
+        "selectionRule": "Amass + delayed exile referent",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Sauron, the Necromancer",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "53c152a2111b6576b672e5ce694ce6d6734e9690d447cff4f3cda589015bb979",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-026",
+      "category": "exp-chk-v3 control",
+      "layout": "normal",
+      "oracleId": "858e12e9-3eaa-40cf-9e22-f9ccdfe485b3",
+      "oracleText": "Destroy target artifact or enchantment. You may put a land card from your hand onto the battlefield.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target artifact or enchantment"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "span_role_reminder_abstain",
+        "split": "expansion-check-v3",
+        "selectionRule": "Destroy artifact/enchantment",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Broken Bond",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "cb8dd1ca7bddd88e513592173f015c4ad94991c692f59a33fb269989ce4a0273",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-027",
+      "category": "exp-chk-v3 control",
+      "layout": "normal",
+      "oracleId": "3c6913cc-c543-45f8-ad3b-ccd282efa6f7",
+      "oracleText": "Sacrifice this creature: Destroy target enchantment.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target enchantment"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "span_role_reminder_abstain",
+        "split": "expansion-check-v3",
+        "selectionRule": "Destroy enchantment",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Ronom Unicorn",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ec95633cc2fa16d8e5138c47d45b14540a332f6d5276344683593b54c7285e8e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-chk-v3-028",
+      "category": "exp-chk-v3 control",
+      "layout": "normal",
+      "oracleId": "020503f5-0915-4cd5-a617-1c7bde045e10",
+      "oracleText": "Counter target spell unless its controller pays {2}.\nSuspect up to one target creature. (A suspected creature has menace and can't block.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target spell unless its controller pays"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "span_role_reminder_abstain",
+        "split": "expansion-check-v3",
+        "selectionRule": "Counter unless pay",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Reasonable Doubt",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f99f9e39c29de727ec5d62ea9df04ce58866c12ac61f2820c6cf9369f96153c9",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-check-v3-selector",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-check-v3",
+      "goldReviewVersion": "development-generalization-expansion-check-v3-builder",
+      "goldReviewedAt": "2026-08-07T23:50:38.052Z",
+      "goldReviewer": "expansion-check-v3-selector",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    }
+  ],
+  "benchmarkStatus": "catalog_clean",
+  "usableForParserEvaluation": true,
+  "parserExecutionCount": 1,
+  "sealed": true,
+  "checkHoldout": {
+    "sealed": true,
+    "parserExecutionCount": 1,
+    "selectedBeforeParserTuning": true,
+    "frozenAt": "2026-08-07T23:50:38.052Z",
+    "stratumCounts": {
+      "loyalty_ability_scoping": 5,
+      "search_destination_chain": 4,
+      "modal_spree_structure": 5,
+      "pronoun_coreference": 3,
+      "conditional_zone_transition": 4,
+      "token_copy_delayed": 2,
+      "delayed_exile_referent": 2,
+      "span_role_reminder_abstain": 3
+    },
+    "caseCount": 28,
+    "holdoutStatus": "spent_for_development",
+    "spentReason": "fresh check failed (P=0.9629629629629629, R=0.8387096774193549)",
+    "result": "failed_recall_or_precision_gate",
+    "spentAt": "2026-08-07T23:50:41.953Z",
+    "doNotRunExecution": 2,
+    "firstExecutionAt": "2026-08-07T23:50:41.953Z",
+    "firstExecutionResult": "failed"
+  },
+  "goldCertification": {
+    "certifierId": "development-generalization-expansion-check-v3-builder",
+    "certifiedAt": "2026-08-07T23:50:38.052Z",
+    "casesReviewed": "28/28",
+    "reviewer": "expansion-check-v3-selector",
+    "goldReviewStatus": "reviewed",
+    "goldCompletenessStatus": "complete",
+    "parserExecutionCount": 0
+  },
+  "expansionCheckHoldout": {
+    "holdoutStatus": "spent_for_development",
+    "spentReason": "fresh check failed (P=0.9629629629629629, R=0.8387096774193549)",
+    "parserExecutionCount": 1,
+    "result": "failed_recall_or_precision_gate",
+    "spentAt": "2026-08-07T23:50:41.953Z",
+    "doNotRunExecution": 2
+  }
+}

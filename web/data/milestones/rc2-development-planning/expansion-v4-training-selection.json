@@ -1,0 +1,11 @@
+{
+  "caseCount": 23,
+  "contentHash": "805224d33030214ece8fbdd99b533510120884b7531b00324d0b11b46b3401b1",
+  "familyCounts": {
+    "loyalty_ability_scoping": 5,
+    "search_destination_chain": 5,
+    "modal_spree_structure": 5,
+    "pronoun_coreference": 4,
+    "conditional_zone_transition": 4
+  }
+}

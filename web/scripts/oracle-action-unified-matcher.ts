@@ -53,6 +53,13 @@ export function primitiveMatchesExpected(
   if (!evidenceMatchesExtracted(action.evidenceText, exp.evidenceContains)) return false;
   if (exp.cardFace && !faceIdsEquivalent(action.cardFaceId, exp.cardFace)) return false;
   if (exp.loyaltyCost && action.loyaltyCost && exp.loyaltyCost !== action.loyaltyCost) return false;
+  if (
+    exp.abilityIndex !== undefined &&
+    action.abilityIndex !== undefined &&
+    exp.abilityIndex !== action.abilityIndex
+  ) {
+    return false;
+  }
   if (exp.sagaChapterId && action.sagaChapterId && exp.sagaChapterId !== action.sagaChapterId) return false;
   if (exp.optionId && action.modalOptionId && exp.optionId !== action.modalOptionId) return false;
 

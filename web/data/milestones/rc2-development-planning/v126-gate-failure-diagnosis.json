@@ -1,0 +1,863 @@
+{
+  "generatedAt": "2026-08-07T23:29:05.035Z",
+  "sets": [
+    {
+      "label": "dev_v26",
+      "path": "data/oracle-action-eval-development-v26.json",
+      "parserVersion": "oracle-action-v1.26-loyalty-modal-search-dev",
+      "failureCount": 23,
+      "failures": [
+        {
+          "caseId": "dev-opt-023",
+          "cardName": "Path to Exile",
+          "tp": 3,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "search_library",
+              "evidenceContains": "search their library for a basic land card, put that card onto the battlefield tapped, then shuffle"
+            },
+            {
+              "actionType": "exile",
+              "evidenceContains": "Exile target creature"
+            },
+            {
+              "actionType": "put_onto_battlefield",
+              "evidenceContains": "put that card onto the battlefield"
+            },
+            {
+              "actionType": "shuffle_library",
+              "evidenceContains": "then shuffle"
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "search_library",
+              "evidence": "search their library for"
+            },
+            {
+              "primitive": "put_onto_battlefield",
+              "evidence": "put that card onto the battlefield"
+            },
+            {
+              "primitive": "shuffle_library",
+              "evidence": "then shuffle"
+            }
+          ],
+          "needsReview": [
+            {
+              "primitive": "exile",
+              "evidence": "Exile target creature"
+            }
+          ]
+        },
+        {
+          "caseId": "dev-opt-031",
+          "cardName": "Expressive Iteration",
+          "tp": 0,
+          "fp": 1,
+          "fn": 0,
+          "gold": [],
+          "accepted": [
+            {
+              "primitive": "draw",
+              "evidence": "Put one of them into your hand"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "dev-opt-032",
+          "cardName": "Faithless Looting",
+          "tp": 2,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "Draw two cards, then discard two cards"
+            },
+            {
+              "actionType": "cast",
+              "evidenceContains": "You may cast this card from your graveyard for its flashback cost",
+              "optional": true,
+              "optionalEffect": true
+            },
+            {
+              "actionType": "discard",
+              "evidenceContains": "discard two cards"
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "draw",
+              "evidence": "Draw two cards"
+            },
+            {
+              "primitive": "discard",
+              "evidence": "discard two cards"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "dev-opt-036",
+          "cardName": "Impulse",
+          "tp": 0,
+          "fp": 1,
+          "fn": 0,
+          "gold": [],
+          "accepted": [
+            {
+              "primitive": "draw",
+              "evidence": "Put one of them into your hand"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "dev-opt-037",
+          "cardName": "Anticipate",
+          "tp": 0,
+          "fp": 1,
+          "fn": 0,
+          "gold": [],
+          "accepted": [
+            {
+              "primitive": "draw",
+              "evidence": "Put one of them into your hand"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "dev-opt-038",
+          "cardName": "Sleight of Hand",
+          "tp": 0,
+          "fp": 1,
+          "fn": 0,
+          "gold": [],
+          "accepted": [
+            {
+              "primitive": "draw",
+              "evidence": "Put one of them into your hand"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "dev-v9-001",
+          "cardName": "Mox Diamond",
+          "tp": 2,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "put_onto_battlefield",
+              "evidenceContains": "put this artifact onto the battlefield",
+              "optional": true,
+              "optionalEffect": true,
+              "sourceZone": "hand",
+              "destinationZone": "battlefield",
+              "affectedObject": "land_card"
+            },
+            {
+              "actionType": "add_mana",
+              "evidenceContains": "Add one mana of any color"
+            },
+            {
+              "actionType": "discard",
+              "evidenceContains": "you may discard a land card instead",
+              "optionalEffect": true
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "discard",
+              "evidence": "you may discard a land card instead"
+            },
+            {
+              "primitive": "add_mana",
+              "evidence": "Add one mana of any color"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "dev-v9-023",
+          "cardName": "Howling Mine",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "draws an additional card"
+            }
+          ],
+          "accepted": [],
+          "needsReview": []
+        },
+        {
+          "caseId": "dev-v9-031",
+          "cardName": "Rest in Peace",
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "exile",
+              "evidenceContains": "exile it instead"
+            },
+            {
+              "actionType": "exile",
+              "evidenceContains": "exile all graveyards"
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "exile",
+              "evidence": "exile all graveyards"
+            }
+          ],
+          "needsReview": [
+            {
+              "primitive": "exile",
+              "evidence": "exile it instead"
+            }
+          ]
+        },
+        {
+          "caseId": "eval-0009",
+          "cardName": "Path to Exile",
+          "tp": 3,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "exile",
+              "evidenceContains": "Exile"
+            },
+            {
+              "actionType": "search_library",
+              "evidenceContains": "search"
+            },
+            {
+              "actionType": "put_onto_battlefield",
+              "evidenceContains": "put that card onto the battlefield",
+              "optionalEffect": true
+            },
+            {
+              "actionType": "shuffle_library",
+              "evidenceContains": "then shuffle"
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "search_library",
+              "evidence": "search their library for"
+            },
+            {
+              "primitive": "put_onto_battlefield",
+              "evidence": "put that card onto the battlefield"
+            },
+            {
+              "primitive": "shuffle_library",
+              "evidence": "then shuffle"
+            }
+          ],
+          "needsReview": [
+            {
+              "primitive": "exile",
+              "evidence": "Exile target creature"
+            }
+          ]
+        },
+        {
+          "caseId": "eval-0031",
+          "cardName": "Rest in Peace",
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "exile",
+              "evidenceContains": "exile it instead"
+            },
+            {
+              "actionType": "exile",
+              "evidenceContains": "exile all graveyards"
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "exile",
+              "evidence": "exile all graveyards"
+            }
+          ],
+          "needsReview": [
+            {
+              "primitive": "exile",
+              "evidence": "exile it instead"
+            }
+          ]
+        },
+        {
+          "caseId": "eval-0059",
+          "cardName": "Fable of the Mirror-Breaker // Reflection of Kiki-Jiki",
+          "tp": 4,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "create_token",
+              "evidenceContains": "create a 2/2"
+            },
+            {
+              "actionType": "draw",
+              "evidenceContains": "draw that many cards",
+              "optionalEffect": false
+            },
+            {
+              "actionType": "discard",
+              "evidenceContains": "You may discard up to two cards",
+              "optionalEffect": true
+            },
+            {
+              "actionType": "exile",
+              "evidenceContains": "Exile this Saga"
+            },
+            {
+              "actionType": "return_to_battlefield",
+              "evidenceContains": "return it to the battlefield transformed"
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "create_token",
+              "evidence": "Create a 2/2 red Goblin Shaman creature token"
+            },
+            {
+              "primitive": "discard",
+              "evidence": "You may discard up to two cards"
+            },
+            {
+              "primitive": "draw",
+              "evidence": "draw that many cards"
+            },
+            {
+              "primitive": "return_to_battlefield",
+              "evidence": "return it to the battlefield transformed"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "eval-0082",
+          "cardName": "Pit of Offerings",
+          "tp": 2,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "exile",
+              "evidenceContains": "Exile",
+              "optionalEffect": false,
+              "targetMaximum": 3,
+              "quantityMayBeZero": true
+            },
+            {
+              "actionType": "add_mana",
+              "evidenceContains": "Add {C}"
+            },
+            {
+              "actionType": "add_mana",
+              "evidenceContains": "Add one mana of any of the exiled cards' colors"
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "exile",
+              "evidence": "exile up to three target cards from graveyards"
+            },
+            {
+              "primitive": "add_mana",
+              "evidence": "Add {C}"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "eval-0148",
+          "cardName": "Strategic Planning",
+          "tp": 0,
+          "fp": 1,
+          "fn": 0,
+          "gold": [],
+          "accepted": [
+            {
+              "primitive": "draw",
+              "evidence": "Put one of them into your hand"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "eval-0174",
+          "cardName": "Eliminate the Competition",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "destroy",
+              "evidenceContains": "Destroy X target creatures"
+            }
+          ],
+          "accepted": [],
+          "needsReview": []
+        },
+        {
+          "caseId": "eval-0194",
+          "cardName": "Search the Premises",
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "draw a card"
+            },
+            {
+              "actionType": "create_token",
+              "evidenceContains": "Create a Clue token"
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "create_token",
+              "evidence": "Create a Clue token"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "eval-0257",
+          "cardName": "Dusk // Dawn",
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "destroy",
+              "evidenceContains": "Destroy all creatures with power 3 or greater",
+              "cardFace": "front"
+            },
+            {
+              "actionType": "cast",
+              "evidenceContains": "Cast this spell only from your graveyard",
+              "cardFace": "back"
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "destroy",
+              "evidence": "Destroy all creatures with power 3 or greater"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "eval-0259",
+          "cardName": "Discovery // Dispersal",
+          "tp": 3,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "surveil",
+              "evidenceContains": "Surveil 2",
+              "cardFace": "front"
+            },
+            {
+              "actionType": "draw",
+              "evidenceContains": "draw a card",
+              "cardFace": "front"
+            },
+            {
+              "actionType": "return_to_hand",
+              "evidenceContains": "returns a nonland permanent",
+              "cardFace": "back"
+            },
+            {
+              "actionType": "discard",
+              "evidenceContains": "discards a card",
+              "cardFace": "back"
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "surveil",
+              "evidence": "Surveil 2"
+            },
+            {
+              "primitive": "draw",
+              "evidence": "draw a card"
+            },
+            {
+              "primitive": "discard",
+              "evidence": "discards a card"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "eval-0260",
+          "cardName": "Embereth Shieldbreaker // Battle Display",
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "destroy",
+              "evidenceContains": "Destroy target artifact"
+            },
+            {
+              "actionType": "cast",
+              "evidenceContains": "You may cast the creature later from exile",
+              "optional": true,
+              "optionalEffect": true
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "destroy",
+              "evidence": "Destroy target artifact"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "eval-0261",
+          "cardName": "Edgewall Inn",
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "return_to_hand",
+              "evidenceContains": "Return target card that has an Adventure from your graveyard to your hand"
+            },
+            {
+              "actionType": "sacrifice",
+              "evidenceContains": "Sacrifice this land: Return target card that has an Adventure from your graveyard to your hand"
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "return_to_hand",
+              "evidence": "Return target card that has an Adventure from your graveyard to your hand"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "eval-0264",
+          "cardName": "Glassworks // Shattered Yard",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "deal_damage",
+              "evidenceContains": "deals 4 damage",
+              "cardFace": "front"
+            }
+          ],
+          "accepted": [],
+          "needsReview": []
+        },
+        {
+          "caseId": "eval-0282",
+          "cardName": "Oft-Nabbed Goat",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "Draw a card",
+              "cardFace": "back"
+            }
+          ],
+          "accepted": [],
+          "needsReview": []
+        },
+        {
+          "caseId": "eval-0285",
+          "cardName": "Forensic Gadgeteer",
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "draw a card",
+              "cardFace": "front"
+            },
+            {
+              "actionType": "create_token",
+              "evidenceContains": "Create a Clue token"
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "create_token",
+              "evidence": "Create a Clue token"
+            }
+          ],
+          "needsReview": []
+        }
+      ]
+    },
+    {
+      "label": "exp_v4",
+      "path": "data/oracle-action-eval-development-generalization-expansion-v4.json",
+      "parserVersion": "oracle-action-v1.26-loyalty-modal-search-dev",
+      "failureCount": 5,
+      "failures": [
+        {
+          "caseId": "dev-exp-v4-001",
+          "cardName": "Jace Reawakened",
+          "family": "loyalty_ability_scoping",
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "gold": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "Draw a card",
+              "loyaltyCost": "+1",
+              "abilityIndex": 0
+            },
+            {
+              "actionType": "discard",
+              "evidenceContains": "discard a card",
+              "loyaltyCost": "+1",
+              "abilityIndex": 0
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "draw",
+              "evidence": "Draw a card",
+              "loyaltyCost": "+1"
+            },
+            {
+              "primitive": "discard",
+              "evidence": "discard a card",
+              "loyaltyCost": "+1"
+            },
+            {
+              "primitive": "exile",
+              "evidence": "You may exile a nonland card with mana value 3 or less from your hand",
+              "loyaltyCost": "+1"
+            },
+            {
+              "primitive": "cast",
+              "evidence": "cast a spell",
+              "loyaltyCost": "−6"
+            },
+            {
+              "primitive": "copy",
+              "evidence": "copy it",
+              "loyaltyCost": "−6"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "dev-exp-v4-002",
+          "cardName": "Nahiri, the Unforgiving",
+          "family": "loyalty_ability_scoping",
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "gold": [
+            {
+              "actionType": "discard",
+              "evidenceContains": "Discard a card",
+              "loyaltyCost": "+1",
+              "abilityIndex": 1
+            },
+            {
+              "actionType": "draw",
+              "evidenceContains": "draw a card",
+              "loyaltyCost": "+1",
+              "abilityIndex": 1
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "discard",
+              "evidence": "Discard a card",
+              "loyaltyCost": "+1"
+            },
+            {
+              "primitive": "draw",
+              "evidence": "draw a card",
+              "loyaltyCost": "+1"
+            },
+            {
+              "primitive": "exile",
+              "evidence": "Exile target creature"
+            },
+            {
+              "primitive": "create_token",
+              "evidence": "Create a token that's a copy of it"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "dev-exp-v4-009",
+          "cardName": "Grand Master of Flowers",
+          "family": "search_destination_chain",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "search_library",
+              "evidenceContains": "Search your library and/or graveyard",
+              "loyaltyCost": "+1",
+              "abilityIndex": 1
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "search_library",
+              "evidence": "Search your library and/or graveyard for",
+              "loyaltyCost": "+1"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "dev-exp-v4-012",
+          "cardName": "Rush of Dread",
+          "family": "modal_spree_structure",
+          "tp": 1,
+          "fp": 1,
+          "fn": 0,
+          "gold": [
+            {
+              "actionType": "discard",
+              "evidenceContains": "Target opponent discards half the cards in their hand",
+              "optionId": "opt-2"
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "sacrifice",
+              "evidence": "sacrifices half the creatures they control of their choice"
+            },
+            {
+              "primitive": "discard",
+              "evidence": "discards half the cards"
+            },
+            {
+              "primitive": "lose_life",
+              "evidence": "Target opponent loses half their life"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "dev-exp-v4-015",
+          "cardName": "Smuggler's Surprise",
+          "family": "modal_spree_structure",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "draw",
+              "evidenceContains": "put up to two creature and/or land cards from among the milled cards into your hand",
+              "optionId": "opt-1"
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "mill",
+              "evidence": "Mill four cards"
+            },
+            {
+              "primitive": "put_onto_battlefield",
+              "evidence": "You may put up to two creature cards from your hand onto the battlefield"
+            }
+          ],
+          "needsReview": []
+        }
+      ]
+    },
+    {
+      "label": "exp_v3",
+      "path": "data/oracle-action-eval-development-generalization-expansion-v3.json",
+      "parserVersion": "oracle-action-v1.26-loyalty-modal-search-dev",
+      "failureCount": 2,
+      "failures": [
+        {
+          "caseId": "dev-exp-v3-017",
+          "cardName": "Minion Reflector",
+          "family": "token_copy_delayed",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "create_token",
+              "evidenceContains": "create a token that's a copy of that creature",
+              "optionalEffect": true
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "create_token",
+              "evidence": "create a token that's a copy of that creature, except it has haste and \"At the b"
+            }
+          ],
+          "needsReview": []
+        },
+        {
+          "caseId": "dev-exp-v3-022",
+          "cardName": "Kheru Lich Lord",
+          "family": "delayed_exile_referent",
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "gold": [
+            {
+              "actionType": "return_to_battlefield",
+              "evidenceContains": "return a creature card at random from your graveyard to the battlefield",
+              "optionalEffect": true
+            }
+          ],
+          "accepted": [
+            {
+              "primitive": "return_to_battlefield",
+              "evidence": "return a creature card at random from your graveyard to the battlefield"
+            }
+          ],
+          "needsReview": [
+            {
+              "primitive": "exile",
+              "evidence": "exile it instead"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

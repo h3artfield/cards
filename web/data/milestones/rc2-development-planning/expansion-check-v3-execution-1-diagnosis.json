@@ -1,0 +1,191 @@
+{
+  "generatedAt": "2026-08-07T23:51:41.510Z",
+  "parserVersion": "oracle-action-v1.26-loyalty-modal-search-dev",
+  "executionNumber": 1,
+  "failureCount": 5,
+  "familyCounts": {
+    "loyalty_ability_scoping": 1,
+    "search_destination_chain": 1,
+    "modal_spree_structure": 2,
+    "token_copy_delayed": 1
+  },
+  "failureClassification": "pending_review",
+  "failures": [
+    {
+      "caseId": "dev-exp-chk-v3-001",
+      "cardName": "Chandra, Spark Hunter",
+      "stratum": "loyalty_ability_scoping",
+      "tp": 1,
+      "fp": 1,
+      "fn": 1,
+      "gold": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "loyaltyCost": "+2",
+          "optionalEffect": true
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 3/2 colorless Vehicle artifact token",
+          "loyaltyCost": "0"
+        }
+      ],
+      "accepted": [
+        {
+          "type": "sacrifice",
+          "evidence": "You may sacrifice an artifact or discard a card",
+          "loyaltyCost": "+2",
+          "abilityIndex": 1,
+          "optionalEffect": true
+        },
+        {
+          "type": "discard",
+          "evidence": "discard a card",
+          "loyaltyCost": "+2",
+          "abilityIndex": 1,
+          "optionalEffect": true
+        },
+        {
+          "type": "draw",
+          "evidence": "draw a card",
+          "loyaltyCost": "+2",
+          "abilityIndex": 1,
+          "optionalEffect": false
+        },
+        {
+          "type": "create_token",
+          "evidence": "Create a 3/2 colorless Vehicle artifact token",
+          "abilityIndex": 2,
+          "optionalEffect": false
+        }
+      ]
+    },
+    {
+      "caseId": "dev-exp-chk-v3-009",
+      "cardName": "Captain Kirk, Boldly Going",
+      "stratum": "search_destination_chain",
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "gold": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library and/or graveyard",
+          "optionalEffect": true
+        }
+      ],
+      "accepted": [
+        {
+          "type": "search_library",
+          "evidence": "search your library and/or graveyard for",
+          "abilityIndex": 2,
+          "optionalEffect": false
+        }
+      ]
+    },
+    {
+      "caseId": "dev-exp-chk-v3-010",
+      "cardName": "Lively Dirge",
+      "stratum": "modal_spree_structure",
+      "tp": 1,
+      "fp": 0,
+      "fn": 1,
+      "gold": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for a card",
+          "optionId": "opt-1"
+        },
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return up to two creature cards",
+          "optionId": "opt-2"
+        }
+      ],
+      "accepted": [
+        {
+          "type": "search_library",
+          "evidence": "Search your library for",
+          "abilityIndex": 1,
+          "optionalEffect": false
+        },
+        {
+          "type": "shuffle_library",
+          "evidence": "then shuffle",
+          "abilityIndex": 1,
+          "optionalEffect": false
+        }
+      ]
+    },
+    {
+      "caseId": "dev-exp-chk-v3-013",
+      "cardName": "Three Steps Ahead",
+      "stratum": "modal_spree_structure",
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "gold": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "Create a token that's a copy of target artifact or creature you control",
+          "optionId": "opt-2"
+        }
+      ],
+      "accepted": [
+        {
+          "type": "counter",
+          "evidence": "Counter target spell",
+          "abilityIndex": 1,
+          "optionalEffect": false
+        },
+        {
+          "type": "create_token",
+          "evidence": "Create a token that's a copy of target artifact or creature you control",
+          "abilityIndex": 2,
+          "optionalEffect": false
+        },
+        {
+          "type": "draw",
+          "evidence": "Draw two cards",
+          "abilityIndex": 3,
+          "optionalEffect": false
+        },
+        {
+          "type": "discard",
+          "evidence": "discard a card",
+          "abilityIndex": 3,
+          "optionalEffect": false
+        }
+      ]
+    },
+    {
+      "caseId": "dev-exp-chk-v3-023",
+      "cardName": "Shaun, Father of Synths",
+      "stratum": "token_copy_delayed",
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "gold": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a tapped and attacking token that's a copy of target attacking legendary creature"
+        }
+      ],
+      "accepted": [
+        {
+          "type": "create_token",
+          "evidence": "you may create a tapped and attacking token",
+          "abilityIndex": 0,
+          "optionalEffect": true
+        },
+        {
+          "type": "exile",
+          "evidence": "exile all Synth",
+          "abilityIndex": 1,
+          "optionalEffect": false
+        }
+      ]
+    }
+  ]
+}

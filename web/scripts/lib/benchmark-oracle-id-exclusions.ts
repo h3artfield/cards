@@ -16,8 +16,13 @@ const DATASET_PATHS = [
   "data/oracle-action-eval-development-generalization-expansion-v2.json",
   "data/oracle-action-eval-development-generalization-expansion-v3.json",
   "data/oracle-action-eval-development-generalization-expansion-check-v2.json",
+  "data/oracle-action-eval-development-generalization-expansion-v4.json",
+  "data/oracle-action-eval-development-generalization-expansion-check-v3.json",
+  "data/milestones/rc2-development-planning/development-probe-reserved-oracle-ids.json",
   "data/oracle-action-eval-validation-v12-fresh.json",
 ];
+
+const PROBE_RESERVED_REL = "data/milestones/rc2-development-planning/development-probe-reserved-oracle-ids.json";
 
 export function loadExcludedOracleIds(cwd = process.cwd(), skipPaths: string[] = []): Set<string> {
   const ids = new Set<string>();
@@ -25,9 +30,15 @@ export function loadExcludedOracleIds(cwd = process.cwd(), skipPaths: string[] =
     if (skipPaths.includes(rel)) continue;
     const path = resolve(cwd, rel);
     if (!existsSync(path)) continue;
-    const envelope = JSON.parse(readFileSync(path, "utf8")) as { cases?: Array<{ oracleId: string }> };
+    const envelope = JSON.parse(readFileSync(path, "utf8")) as {
+      cases?: Array<{ oracleId: string }>;
+      oracleIds?: string[];
+    };
     for (const c of envelope.cases ?? []) {
       if (c.oracleId) ids.add(c.oracleId);
+    }
+    for (const id of envelope.oracleIds ?? []) {
+      if (id) ids.add(id);
     }
   }
   return ids;

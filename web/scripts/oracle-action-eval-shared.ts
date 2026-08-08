@@ -58,6 +58,7 @@ export interface ExpectedPrimitiveAction {
   loyaltyCost?: string;
   sagaChapterId?: string;
   optionId?: string;
+  abilityIndex?: number;
 }
 
 export interface ExpectedCondition {

@@ -1,0 +1,190 @@
+{
+  "generatedAt": "2026-08-07T22:44:58.000Z",
+  "parserVersion": "oracle-action-v1.25-family-grammar-dev",
+  "failureCount": 5,
+  "caseFailures": 5,
+  "familyCounts": {
+    "wrong_ability_attachment": 1,
+    "pronoun_coreference": 1,
+    "modal_wording": 2,
+    "zone_transition_wording": 1
+  },
+  "failures": [
+    {
+      "caseId": "dev-exp-chk-v2-001",
+      "family": "wrong_ability_attachment",
+      "tp": 1,
+      "fp": 0,
+      "fn": 2,
+      "gold": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "optionalEffect": true,
+          "loyaltyCost": "+1"
+        },
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add two mana in any combination",
+          "loyaltyCost": "+1"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create four 5/5 red Dragon creature tokens",
+          "loyaltyCost": "−7"
+        }
+      ],
+      "accepted": [
+        {
+          "index": 0,
+          "primitive": "discard",
+          "evidenceText": "You may discard a card",
+          "reviewStatus": "accepted",
+          "loyaltyCost": "+1",
+          "abilityIndex": 0
+        },
+        {
+          "index": 1,
+          "primitive": "draw",
+          "evidenceText": "draw a card",
+          "reviewStatus": "accepted",
+          "loyaltyCost": "+1",
+          "abilityIndex": 0
+        },
+        {
+          "index": 2,
+          "primitive": "create_token",
+          "evidenceText": "Create four 5/5 red Dragon creature tokens",
+          "reviewStatus": "accepted",
+          "loyaltyCost": "−7",
+          "abilityIndex": 2
+        }
+      ],
+      "needsReview": []
+    },
+    {
+      "caseId": "dev-exp-chk-v2-014",
+      "family": "pronoun_coreference",
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "gold": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "return that card to its owner's hand"
+        }
+      ],
+      "accepted": [],
+      "needsReview": []
+    },
+    {
+      "caseId": "dev-exp-chk-v2-016",
+      "family": "modal_wording",
+      "tp": 2,
+      "fp": 0,
+      "fn": 1,
+      "gold": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target nonland permanent to its owner's hand"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "Target opponent discards a card"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "Put one of them into your hand"
+        }
+      ],
+      "accepted": [
+        {
+          "index": 0,
+          "primitive": "cast",
+          "evidenceText": "cast this ",
+          "reviewStatus": "accepted",
+          "abilityIndex": 0
+        },
+        {
+          "index": 1,
+          "primitive": "return_to_hand",
+          "evidenceText": "Return target nonland permanent to its owner's hand",
+          "reviewStatus": "accepted",
+          "abilityIndex": 1,
+          "modalOptionId": "opt-1"
+        },
+        {
+          "index": 2,
+          "primitive": "discard",
+          "evidenceText": "discards a card",
+          "reviewStatus": "accepted",
+          "abilityIndex": 2,
+          "modalOptionId": "opt-2"
+        }
+      ],
+      "needsReview": []
+    },
+    {
+      "caseId": "dev-exp-chk-v2-017",
+      "family": "modal_wording",
+      "tp": 1,
+      "fp": 0,
+      "fn": 1,
+      "gold": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target nonland permanent to its owner's hand"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "optionalEffect": true
+        }
+      ],
+      "accepted": [
+        {
+          "index": 0,
+          "primitive": "return_to_hand",
+          "evidenceText": "Return target nonland permanent to its owner's hand",
+          "reviewStatus": "accepted",
+          "abilityIndex": 1
+        },
+        {
+          "index": 1,
+          "primitive": "draw",
+          "evidenceText": "draw a card",
+          "reviewStatus": "accepted",
+          "abilityIndex": 1
+        }
+      ],
+      "needsReview": []
+    },
+    {
+      "caseId": "dev-exp-chk-v2-020",
+      "family": "zone_transition_wording",
+      "tp": 1,
+      "fp": 0,
+      "fn": 1,
+      "gold": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target nonland permanent you don't control to its owner's hand"
+        },
+        {
+          "actionType": "scry",
+          "evidenceContains": "scry 2"
+        }
+      ],
+      "accepted": [
+        {
+          "index": 0,
+          "primitive": "scry",
+          "evidenceText": "scry 2",
+          "reviewStatus": "accepted",
+          "abilityIndex": 0
+        }
+      ],
+      "needsReview": []
+    }
+  ]
+}

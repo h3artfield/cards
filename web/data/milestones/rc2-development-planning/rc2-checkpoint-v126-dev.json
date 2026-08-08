@@ -1,0 +1,80 @@
+{
+  "generatedAt": "2026-08-07T23:48:02.272Z",
+  "parserVersion": "oracle-action-v1.26-loyalty-modal-search-dev",
+  "parserCommit": "d270312ce1f16c4a2b9ba0768bae831cb02223fa",
+  "metrics": {
+    "originalDevelopmentV26": {
+      "caseCount": 284,
+      "accepted": {
+        "tp": 369,
+        "fp": 0,
+        "fn": 18,
+        "precision": 1,
+        "recall": 0.9534883720930233,
+        "unsupported": 0
+      }
+    },
+    "expansionTrainingV2": {
+      "caseCount": 39,
+      "accepted": {
+        "tp": 59,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1,
+        "unsupported": 0
+      }
+    },
+    "expansionTrainingV3": {
+      "caseCount": 24,
+      "accepted": {
+        "tp": 34,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1,
+        "recall": 0.9444444444444444,
+        "unsupported": 0
+      }
+    },
+    "expansionTrainingV4": {
+      "caseCount": 23,
+      "accepted": {
+        "tp": 37,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.9736842105263158,
+        "recall": 1,
+        "unsupported": 0
+      }
+    },
+    "combinedDevelopment": {
+      "caseCount": 347,
+      "accepted": {
+        "tp": 462,
+        "fp": 0,
+        "fn": 20,
+        "precision": 1,
+        "recall": 0.9585062240663901,
+        "unsupported": 0
+      }
+    }
+  },
+  "gates": {
+    "combinedPrecisionTarget": true,
+    "combinedRecallTarget": true,
+    "combinedFpZero": true,
+    "combinedUnsupportedZero": true,
+    "familyTrainingPrecisionTarget": true,
+    "familyTrainingRecallTarget": true,
+    "familyTrainingUnsupportedZero": true,
+    "allDevelopmentGatesPass": true
+  },
+  "nextMilestone": {
+    "action": "freeze v1.26 and run expansion-check-v3 once",
+    "freshCheckGate": {
+      "precision": 0.95,
+      "recall": 0.85,
+      "unsupported": 0
+    }
+  }
+}

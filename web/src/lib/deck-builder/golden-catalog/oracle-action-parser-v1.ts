@@ -199,6 +199,7 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bPut one of them into your hand\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bPut one of those cards into your hand\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bPut (?:two|three|four|five) of those cards into your hand\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
+  { pattern: /\bput up to [\w /]+ cards from among the milled cards into your hand\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bdraws? (?:a |one |two |three |four |five |seven |that many |up to \w+ )?cards?\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bYou may draw [\w ]+/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bYou may sacrifice [\w ]+/i, actionType: "sacrifice", sourceZones: ["battlefield"] },
@@ -228,6 +229,7 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bput (?:a |one )?card from your hand on top of your library\b/i, actionType: "search_library", sourceZones: ["hand"], destinationZones: ["library"] },
   { pattern: /\bYou may play (?!(?:lands and cast|lands and spells))[\w ]+/i, actionType: "play", requiresPermissionVerb: true },
   { pattern: /\bDraw (?:a |one |two |three |four |five |seven |that many |up to \w+ )?cards?\b/, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
+  { pattern: /\bAdd (?:two|three|four) mana in any combination of colors\b/i, actionType: "add_mana", destinationZones: ["mana_pool"] },
   { pattern: /\bAdd \{[^}]+\}(?:\{[^}]+\})*/i, actionType: "add_mana", abilityType: "activated", destinationZones: ["mana_pool"] },
   { pattern: /\bAdd (?:one mana of any color|three mana of any one color|\{C\}{1,2}|\{[WUBRG]\})/i, actionType: "add_mana", destinationZones: ["mana_pool"] },
   { pattern: /\bsearch (?:your )?library and\/or graveyard for\b/i, actionType: "search_library", sourceZones: ["library", "graveyard"], destinationZones: ["hand"] },
@@ -241,7 +243,9 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bExile up to (?:one|two|three|\w+) target [\w ]+/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bexile (?:target|the top|a \w+ card from)/i, actionType: "exile", destinationZones: ["exile"] },
   { pattern: /\bCounter (?:target|up to (?:one|two|three|four|five) target) [\w ]+/i, actionType: "counter", sourceZones: ["stack"], affectedObjects: ["spell", "ability"] },
-  { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+ to (?:its|their) owner'?s hand\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
+  { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w' ]+ to (?:its|their) owner'?s hand\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
+  { pattern: /\bReturn target [\w' ]+ to (?:its|their) owner'?s hand\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
+  { pattern: /\breturn that card to (?:its|their) owner'?s hand\b/i, actionType: "return_to_hand", sourceZones: ["battlefield", "graveyard"], destinationZones: ["hand"] },
   { pattern: /\bReturn it to (?:its|their) owner'?s hand\b/i, actionType: "return_to_hand", sourceZones: ["battlefield"], destinationZones: ["hand"] },
   { pattern: /\bReturn (?:target|up to (?:one|two) target) [\w ]+(?: cards?)? from (?:your )?graveyard to your hand\b/i, actionType: "return_to_hand", sourceZones: ["graveyard"], destinationZones: ["hand"] },
   { pattern: /\bReturn target [\w ]+ from (?:your )?graveyard to your hand\b/i, actionType: "return_to_hand", sourceZones: ["graveyard"], destinationZones: ["hand"] },
@@ -748,7 +752,9 @@ function assignReviewStatus(input: {
     (/\b(?:Target opponent|Each opponent) loses? \d+ life\b/i.test(input.paragraph) &&
       /\bsearch (?:your )?library and\/or graveyard\b/i.test(input.paragraph)) ||
     (/\bDestroy target creature\b/i.test(input.paragraph) &&
-      /\bsearch (?:your )?library and\/or graveyard\b/i.test(input.paragraph));
+      /\bsearch (?:your )?library and\/or graveyard\b/i.test(input.paragraph)) ||
+    (/\bReturn target[\s\S]{0,80}to (?:its|their) owner'?s hand\b/i.test(input.paragraph) &&
+      /\bIf its mana value was\b/i.test(input.paragraph));
   if (
     /\bthen\b/i.test(input.paragraph) &&
     !benignCompoundParagraph &&
@@ -847,7 +853,12 @@ function acceptAction(input: {
     if (putThatCard && /\bsearch (?:your )?library for\b/i.test(input.ability.paragraphText)) {
       return null;
     }
-    if (putOneOfThem && !input.ability.loyaltyCost && !/\bReveal the top card\b/i.test(input.ability.paragraphText)) {
+    if (
+      putOneOfThem &&
+      !input.ability.loyaltyCost &&
+      !input.ability.modalOptionId &&
+      !/\bReveal the top card\b/i.test(input.ability.paragraphText)
+    ) {
       return null;
     }
     const extended = input.ability.paragraphText
@@ -1033,7 +1044,7 @@ function acceptAction(input: {
     : input.rule.abilityType ?? toV1AbilityType(classified);
   const zones = inferZones(evidenceText);
   const permissionWindow = input.ability.paragraphText.slice(Math.max(0, localStart - 24), localStart);
-  const optionalEffect =
+  let optionalEffect =
     input.rule.optional === true ||
     /\b(?:you|they|that player|its controller) may\b/i.test(permissionWindow) ||
     /\b(?:you|they) may\b/i.test(evidenceText);
@@ -1072,6 +1083,17 @@ function acceptAction(input: {
   }
 
   const resolvedActionType = resolveActionTypeFromSemantics(input.rule.actionType, evidenceText);
+
+  if (
+    resolvedActionType === "draw" &&
+    /\bIf this spell was kicked,\s*draw a card\b/i.test(input.ability.paragraphText)
+  ) {
+    optionalEffect = true;
+  }
+  const ifYouDoDrawIdx = input.ability.paragraphText.search(/\bIf you do,\s/i);
+  if (resolvedActionType === "draw" && ifYouDoDrawIdx >= 0 && localStart > ifYouDoDrawIdx) {
+    optionalEffect = true;
+  }
 
   let reviewStatus = assignReviewStatus({
     abilityType,
@@ -1270,6 +1292,7 @@ function matchIsSpuriousCastPermission(paragraph: string, localStart: number, ev
   if (/\bWhenever you cast an instant or sorcery spell\b/i.test(paragraph) && /\bcast this\b/i.test(evidenceText)) {
     return true;
   }
+  if (/\bDescend \d+\b/i.test(paragraph) && /\bcast this\b/i.test(evidenceText)) return true;
   if (/\bStorm\s*\(/i.test(paragraph)) {
     const stormIdx = paragraph.indexOf("Storm");
     if (stormIdx >= 0 && localStart >= stormIdx) return true;

@@ -1,0 +1,1108 @@
+{
+  "setClassification": "development_generalization_expansion_v4",
+  "evaluationSetVersion": "development-generalization-expansion-v4",
+  "taxonomyVersion": "three-layer-v1.3",
+  "contentHash": "805224d33030214ece8fbdd99b533510120884b7531b00324d0b11b46b3401b1",
+  "cases": [
+    {
+      "id": "dev-exp-v4-001",
+      "category": "exp-v4 loyalty-scope",
+      "layout": "normal",
+      "oracleId": "cbd483b5-5554-43ed-a729-535d01b0d5d3",
+      "oracleText": "You can't cast Jace Reawakened during your first, second, or third turns of the game.\n+1: Draw a card, then discard a card.\n+1: You may exile a nonland card with mana value 3 or less from your hand. If you do, it becomes plotted.\n−6: Until end of turn, whenever you cast a spell, copy it. You may choose new targets for the copy.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card",
+          "loyaltyCost": "+1",
+          "abilityIndex": 1
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discard a card",
+          "loyaltyCost": "+1",
+          "abilityIndex": 1
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "discard"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "loyalty_ability_scoping",
+        "split": "expansion-training-v4",
+        "selectionRule": "Dual +1 lines: draw/discard vs plot exile; −6 copy",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Jace Reawakened",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "66f0b0c2b5bc202fcf0a43ff087e3df64f88e4564b4ae182e71a8ab8183c34d5",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-002",
+      "category": "exp-v4 loyalty-scope",
+      "layout": "normal",
+      "oracleId": "d71d42e0-cd56-4f53-95ff-ecab7f8c6552",
+      "oracleText": "Compleated ({R/W/P} can be paid with {R}, {W}, or 2 life. If life was paid, this planeswalker enters with two fewer loyalty counters.)\n+1: Until your next turn, up to one target creature attacks a player each combat if able.\n+1: Discard a card, then draw a card.\n0: Exile target creature or Equipment card with mana value less than Nahiri's loyalty from your graveyard. Create a token that's a copy of it. That token gains haste. Exile it at the beginning of the next end step.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "discard",
+          "evidenceContains": "Discard a card",
+          "loyaltyCost": "+1",
+          "abilityIndex": 2
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "loyaltyCost": "+1",
+          "abilityIndex": 2
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "discard",
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "loyalty_ability_scoping",
+        "split": "expansion-training-v4",
+        "selectionRule": "Dual +1 attack restriction vs discard/draw; 0 graveyard copy",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Nahiri, the Unforgiving",
+      "colorIdentity": [
+        "R",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "0357c45e7cc6a9caf8694759d59f10050666d4a27cc27daceddb5a0ee0780ebe",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-003",
+      "category": "exp-v4 loyalty-scope",
+      "layout": "normal",
+      "oracleId": "05d09c55-f551-4cb4-a8d2-4811dccc848d",
+      "oracleText": "Compleated ({B/P} can be paid with {B} or 2 life. If life was paid, this planeswalker enters with two fewer loyalty counters.)\n0: You draw a card and lose 1 life. Proliferate.\n−2: Target creature becomes a Treasure artifact with \"{T}, Sacrifice this artifact: Add one mana of any color\" and loses all other card types and abilities.\n−9: If target player has fewer than nine poison counters, they get a number of poison counters equal to the difference.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "You draw a card",
+          "loyaltyCost": "0"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "lose 1 life",
+          "loyaltyCost": "0"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "lose_life"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "loyalty_ability_scoping",
+        "split": "expansion-training-v4",
+        "selectionRule": "0 draw/proliferate vs −2 transform vs −9 poison",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Vraska, Betrayal's Sting",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "717220f5593cd53c73d562bba418485dddae29799afb0fdf20a957c035a77eef",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-004",
+      "category": "exp-v4 loyalty-scope",
+      "layout": "normal",
+      "oracleId": "0eb11b2d-a397-48da-a0f3-9f0f83f42282",
+      "oracleText": "Whenever an artifact you control enters, put a loyalty counter on Tezzeret.\n0: Untap target artifact or creature. If it's an artifact creature, put a +1/+1 counter on it.\n−3: Search your library for an artifact card with mana value 1 or less, reveal it, put it into your hand, then shuffle.\n−7: You get an emblem with \"At the beginning of combat on your turn, put three +1/+1 counters on target artifact you control. If it's not a creature, it becomes a 0/0 Robot artifact creature.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "untap",
+          "evidenceContains": "Untap target artifact or creature",
+          "loyaltyCost": "0"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for an artifact card",
+          "loyaltyCost": "−3"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "untap",
+            "search_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "loyalty_ability_scoping",
+        "split": "expansion-training-v4",
+        "selectionRule": "0 untap/pump vs −3 artifact tutor vs −7 emblem",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Tezzeret, Cruel Captain",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "cba30af49a763e276e2697c2a7fd6be0891b580ae11556d3947d9241829b9a75",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-005",
+      "category": "exp-v4 loyalty-scope",
+      "layout": "normal",
+      "oracleId": "3f9a797b-85e7-474e-aefe-7e2ec08fc5b7",
+      "oracleText": "+2: Put a +1/+1 counter on each of up to two target creatures.\n−2: Search your library and/or graveyard for a card named Sunlit Hoplite and put it onto the battlefield. If you search your library this way, shuffle.\n−8: Until end of turn, creatures you control gain flying and get +X/+X, where X is your devotion to white.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "Put a +1/+1 counter on each of up to two target creatures",
+          "loyaltyCost": "+2"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library and/or graveyard",
+          "loyaltyCost": "−2"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put it onto the battlefield",
+          "loyaltyCost": "−2"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "put_counter",
+            "search_library",
+            "put_onto_battlefield"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "loyalty_ability_scoping",
+        "split": "expansion-training-v4",
+        "selectionRule": "+2 counters vs −2 lib/gy put battlefield vs −8 devotion pump",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Elspeth, Undaunted Hero",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "bd5a9baf9fb976b18fd8c030ceb281e909ec2b03866abff98c581067953bdcd2",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-006",
+      "category": "exp-v4 search-put",
+      "layout": "saga",
+      "oracleId": "356edd68-7dd5-4ab6-a738-6cb0eb2d4e56",
+      "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after IV.)\nI, II, III — Create a 1/1 black and green Insect creature token.\nIV — Sacrifice any number of creatures. Search your library and/or graveyard for a creature card with mana value less than or equal to the number of creatures sacrificed this way and put it onto the battlefield. If you search your library this way, shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library and/or graveyard"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put it onto the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "put_onto_battlefield"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_destination_chain",
+        "split": "expansion-training-v4",
+        "selectionRule": "Saga IV lib/gy search put creature onto battlefield",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "The Hunger Tide Rises",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "1ba9597e0200caed170e0df754667f7eea1aa1b09ea8c0c12b4bb36bed9405b2",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-007",
+      "category": "exp-v4 search-put",
+      "layout": "transform",
+      "cardFace": "front",
+      "oracleId": "21d90735-5e04-4a8c-a546-ff26d4d5998d",
+      "oracleText": "(As a Siege enters, choose an opponent to protect it. You and others can attack it. When it's defeated, exile it, then cast it transformed.)\nWhen this Siege enters, search your library and/or graveyard for a non-Human creature card with mana value X or less and put it onto the battlefield. If you search your library this way, shuffle.\n//\nReach\nFor each non-Human creature you control, you may have that creature assign its combat damage as though it weren't blocked.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library and/or graveyard",
+          "cardFace": "front"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put it onto the battlefield",
+          "cardFace": "front"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "put_onto_battlefield"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_destination_chain",
+        "split": "expansion-training-v4",
+        "selectionRule": "Siege ETB lib/gy search put non-Human onto battlefield",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Invasion of Ikoria // Zilortha, Apex of Ikoria",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "5829cb0be51515e3b9e653bafce7c80bfaef07d2da4c00adebce1f93f8a27e11",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-008",
+      "category": "exp-v4 search-put",
+      "layout": "normal",
+      "oracleId": "63f60dfc-2bc4-411f-ae53-504156fe0102",
+      "oracleText": "At the beginning of your upkeep, you may search your library and/or graveyard for a Shrine card and put it onto the battlefield. If you search your library this way, shuffle.\nIf a triggered ability of another Shrine you control triggers while you control six or more Shrines, that ability triggers an additional time.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library and/or graveyard",
+          "optionalEffect": true
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put it onto the battlefield",
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "put_onto_battlefield"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_destination_chain",
+        "split": "expansion-training-v4",
+        "selectionRule": "Upkeep lib/gy search Shrine put onto battlefield",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Sanctum of All",
+      "colorIdentity": [
+        "B",
+        "G",
+        "R",
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "73fadf8b8c98722cf94bc8f333d5659f6d2c63f2275978d929493f41ed660895",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-009",
+      "category": "exp-v4 search-put",
+      "layout": "normal",
+      "oracleId": "1f3dbc53-4075-40b8-b70d-ce74d3ff5f6d",
+      "oracleText": "As long as Grand Master of Flowers has seven or more loyalty counters on him, he's a 7/7 Dragon God creature with flying and indestructible.\n+1: Target creature without first strike, double strike, or vigilance can't attack or block until your next turn.\n+1: Search your library and/or graveyard for a card named Monk of the Open Hand, reveal it, and put it into your hand. If you search your library this way, shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library and/or graveyard",
+          "loyaltyCost": "+1",
+          "abilityIndex": 2
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_destination_chain",
+        "split": "expansion-training-v4",
+        "selectionRule": "Second +1 lib/gy search Monk put hand",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Grand Master of Flowers",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "04acefb3496664ba5e0aed437c97be5ea5b8858072758a3bdfe534df62534e73",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-010",
+      "category": "exp-v4 search-hand",
+      "layout": "normal",
+      "oracleId": "3992209a-0a28-449d-8ba5-f75e861a79b4",
+      "oracleText": "Trample\nWhen this creature enters, you may search your library and/or graveyard for a card named Domri, City Smasher, reveal it, and put it into your hand. If you search your library this way, shuffle.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library and/or graveyard",
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_destination_chain",
+        "split": "expansion-training-v4",
+        "selectionRule": "ETB lib/gy search named card put hand",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Domri's Nodorog",
+      "colorIdentity": [
+        "G",
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "7b7fd3e8a0e2e071f36967362778e11253e0306692d5782a66a385be17ac56f0",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-011",
+      "category": "exp-v4 spree",
+      "layout": "normal",
+      "oracleId": "011558f3-3c23-430e-a08b-8f91238e7971",
+      "oracleText": "Spree (Choose one or more additional costs.)\n+ {2}{B} — Destroy target creature.\n+ {1} — Create a 1/1 red Mercenary creature token with \"{T}: Target creature you control gets +1/+0 until end of turn. Activate only as a sorcery.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target creature",
+          "optionId": "opt-1"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 1/1 red Mercenary creature token",
+          "optionId": "opt-2"
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "add_mana"
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy",
+            "create_token"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "destroy",
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "destroy",
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "modal_spree_structure",
+        "split": "expansion-training-v4",
+        "selectionRule": "Spree destroy vs create token — costs are L1 only",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Unfortunate Accident",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "e2fd16a8a9ab84aea32c77126e37d2e08d9bb94908e372170160bed468ba1e0f",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-012",
+      "category": "exp-v4 spree",
+      "layout": "normal",
+      "oracleId": "0dfe6ec6-a0df-41c8-90dd-1ddf0417700a",
+      "oracleText": "Spree (Choose one or more additional costs.)\n+ {1} — Target opponent sacrifices half the creatures they control of their choice, rounded up.\n+ {2} — Target opponent discards half the cards in their hand, rounded up.\n+ {2} — Target opponent loses half their life, rounded up.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "discard",
+          "evidenceContains": "Target opponent discards half the cards in their hand",
+          "optionId": "opt-2"
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "sacrifice",
+        "lose_life"
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "modal_spree_structure",
+        "split": "expansion-training-v4",
+        "selectionRule": "Spree sacrifice/discard/lose-life half options",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Rush of Dread",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "18572ada7b78108e2ac2a7f184b5ecde4c627ce339f6373d3dc829f9642c24e4",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-013",
+      "category": "exp-v4 spree",
+      "layout": "normal",
+      "oracleId": "09669283-eb14-46a2-b37a-51d7a52da891",
+      "oracleText": "Spree (Choose one or more additional costs.)\n+ {1} — Destroy target artifact.\n+ {1} — Destroy target enchantment.\n+ {1} — Put a +1/+1 counter on each creature target player controls.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target artifact",
+          "optionId": "opt-1"
+        },
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target enchantment",
+          "optionId": "opt-2"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy",
+            "destroy"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "modal_spree_structure",
+        "split": "expansion-training-v4",
+        "selectionRule": "Spree destroy artifact/enchantment or put counter",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Requisition Raid",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "b5647dc42518ddde21146ad09fb06c1307de4cb6bd4eb1ad64840bb0944a6f40",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-014",
+      "category": "exp-v4 spree",
+      "layout": "normal",
+      "oracleId": "55cba59c-932c-4295-87dc-9179fbdfbd53",
+      "oracleText": "Spree (Choose one or more additional costs.)\n+ {2} — Return target creature card from your graveyard to the battlefield.\n+ {1} — Return target Mount or Vehicle card from your graveyard to the battlefield.\n+ {1} — Return target Aura or Equipment card from your graveyard to the battlefield attached to a creature you control.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return target creature card from your graveyard to the battlefield",
+          "optionId": "opt-1"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "modal_spree_structure",
+        "split": "expansion-training-v4",
+        "selectionRule": "Spree return creature/Mount/Aura from graveyard",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "One Last Job",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "01c72b83636b28e91dad5df97e7ff94b0ab4bf80b8f1ee3601e556ed8757c4f0",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-015",
+      "category": "exp-v4 spree",
+      "layout": "normal",
+      "oracleId": "605f719d-01f8-406c-9d4c-3f4992c6a69f",
+      "oracleText": "Spree (Choose one or more additional costs.)\n+ {2} — Mill four cards. You may put up to two creature and/or land cards from among the milled cards into your hand.\n+ {4}{G} — You may put up to two creature cards from your hand onto the battlefield.\n+ {1} — Creatures you control with power 4 or greater gain hexproof and indestructible until end of turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "Mill four cards",
+          "optionId": "opt-1"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "put up to two creature and/or land cards from among the milled cards into your hand",
+          "optionId": "opt-1"
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "put_onto_battlefield"
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "mill",
+            "draw"
+          ]
+        },
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "mill",
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "modal_spree_structure",
+        "split": "expansion-training-v4",
+        "selectionRule": "Spree discard/draw/token options",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Smuggler's Surprise",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "e5cd3ee5a49ac83008148c79d1220ae498c211cfa614a9ffda7eff80b22fd4a5",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-016",
+      "category": "exp-v4 pronoun",
+      "layout": "normal",
+      "oracleId": "095f8dac-15b8-4c28-ae33-6dc71152bcc7",
+      "oracleText": "Enchant creature\nEnchanted creature gets +2/+2.\nWhen enchanted creature dies, return that card to its owner's hand.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "return that card to its owner's hand"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "pronoun_coreference",
+        "split": "expansion-training-v4",
+        "selectionRule": "When enchanted creature dies return that card",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Squee's Embrace",
+      "colorIdentity": [
+        "R",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "9641d23d6f659ffe66ebea56d2e5033dae614d7406d47a9ece446c466e252d2b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-017",
+      "category": "exp-v4 pronoun",
+      "layout": "normal",
+      "oracleId": "36b19ec0-d581-4213-bfae-1d7808a2f60d",
+      "oracleText": "When this enchantment enters, support 2. (Put a +1/+1 counter on each of up to two target creatures.)\n{1}: Choose target creature with a counter on it. When that creature dies this turn, return that card to its owner's hand.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "return that card to its owner's hand"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "pronoun_coreference",
+        "split": "expansion-training-v4",
+        "selectionRule": "Activated: when creature dies return that card",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Together Forever",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "505d188cdd9cf9bbcf743aeacf8b4ca62020db5f648162a8547b7363919d0eeb",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-018",
+      "category": "exp-v4 pronoun",
+      "layout": "normal",
+      "oracleId": "42c7e933-f169-444b-917d-b4dca918d989",
+      "oracleText": "Enchant creature\nWhen enchanted creature dies, return that card to its owner's hand. If that card is returned to its owner's hand this way, you may pay {U}{U}{U}. If you do, return this card to its owner's hand.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "return that card to its owner's hand"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "pronoun_coreference",
+        "split": "expansion-training-v4",
+        "selectionRule": "When enchanted creature dies return that card to hand",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Puppet Master",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "5c7febd6bd6d497502b161568832b398c6419619f7c2200ccd50d5187cf8d085",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-019",
+      "category": "exp-v4 pronoun",
+      "layout": "normal",
+      "oracleId": "3902048e-b7bf-4676-be92-e590bc76c729",
+      "oracleText": "Enchant land\nEnchanted land is a 3/3 black Ooze creature. It's still a land.\nWhen enchanted land dies, return that card to its owner's hand.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "return that card to its owner's hand"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "pronoun_coreference",
+        "split": "expansion-training-v4",
+        "selectionRule": "When land dies return that card to hand",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Corrupted Zendikon",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "dfe7957b3124d3bc3455b6f039c05fc1fac28e53b95692fb73ffa6358497dec6",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-020",
+      "category": "exp-v4 conditional-bounce",
+      "layout": "normal",
+      "oracleId": "64883ef2-c536-42e2-b52f-cfd1984fcdfd",
+      "oracleText": "Return target creature to its owner's hand. If its mana value was 3 or less, scry 1. (Look at the top card of your library. You may put that card on the bottom.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target creature to its owner's hand"
+        },
+        {
+          "actionType": "scry",
+          "evidenceContains": "scry 1"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "conditional_zone_transition",
+        "split": "expansion-training-v4",
+        "selectionRule": "Return creature + conditional scry if MV ≤3",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Fading Hope",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "8eec341a4ff3bbbe307264640af97d1f4c3f718c819bee83b736a7816919ce66",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-021",
+      "category": "exp-v4 modal-look",
+      "layout": "normal",
+      "oracleId": "3df49c4d-a285-4826-824e-b742b0deed3a",
+      "oracleText": "Choose one —\n• Look at the top four cards of your library. Put one of them into your hand and the rest into your graveyard.\n• Counter target spell unless its controller pays {4}.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Put one of them into your hand",
+          "optionId": "opt-1"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "conditional_zone_transition",
+        "split": "expansion-training-v4",
+        "selectionRule": "Modal look partition + counter unless sibling option",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Confounding Riddle",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "935f314be8e9e965069c39dff7915e9a27788ef27245c78128483f2b90ea8024",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-022",
+      "category": "exp-v4 sacrifice-bounce",
+      "layout": "normal",
+      "oracleId": "05b020fd-21be-495d-ae45-7de3b1224e6d",
+      "oracleText": "Creatures you control get +0/+1.\nSacrifice this enchantment: Return target creature to its owner's hand.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target creature to its owner's hand"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "conditional_zone_transition",
+        "split": "expansion-training-v4",
+        "selectionRule": "Sacrifice: return target creature to hand",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Angelic Shield",
+      "colorIdentity": [
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "d9d8acd1166a535d6e3d3e6966116712140715fd93be34487204b75195c69ca1",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    },
+    {
+      "id": "dev-exp-v4-023",
+      "category": "exp-v4 instant-bounce",
+      "layout": "normal",
+      "oracleId": "a1408bae-ed5f-4837-a1a7-438dc30a2786",
+      "oracleText": "Return target creature to its owner's hand. Its controller loses 1 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target creature to its owner's hand"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "Its controller loses 1 life"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "conditional_zone_transition",
+        "split": "expansion-training-v4",
+        "selectionRule": "Return creature + controller loses life rider",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Vapor Snag",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "634eb6b41e5bf077b20c1f3e2b7005d53cf2cec7f2d112806ca2bd7061fbeb7b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v4-family-miner",
+      "taxonomyVersion": "three-layer-v1.3",
+      "evaluationSetVersion": "development-generalization-expansion-v4",
+      "goldReviewVersion": "development-generalization-expansion-v4-builder",
+      "goldReviewedAt": "2026-08-07T23:47:24.237Z",
+      "goldReviewer": "expansion-v4-family-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete",
+      "identityStatus": "catalog_exact"
+    }
+  ],
+  "benchmarkStatus": "catalog_clean",
+  "usableForParserEvaluation": true,
+  "parserExecutionCount": 0,
+  "goldCertification": {
+    "certifierId": "development-generalization-expansion-v4-builder",
+    "certifiedAt": "2026-08-07T23:47:24.237Z",
+    "casesReviewed": "23/23",
+    "reviewer": "expansion-v4-family-miner",
+    "goldReviewStatus": "reviewed",
+    "goldCompletenessStatus": "complete",
+    "parserExecutionCount": 0
+  }
+}

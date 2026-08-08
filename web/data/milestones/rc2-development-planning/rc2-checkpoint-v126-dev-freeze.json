@@ -1,0 +1,43 @@
+{
+  "recordedAt": "2026-08-07T23:50:00.000Z",
+  "parserVersion": "oracle-action-v1.26-loyalty-modal-search-dev",
+  "acceptedAsDevelopmentCheckpoint": true,
+  "developmentGates": {
+    "combinedDevelopment": { "precision": 1, "recall": 0.9585, "fp": 0, "unsupported": 0 },
+    "expansionTrainingV4": { "precision": 0.9737, "recall": 1, "unsupported": 0 },
+    "allPassed": true
+  },
+  "expansionCheckV2": {
+    "holdoutStatus": "spent_for_development",
+    "parserExecutionCount": 1,
+    "result": "failed_recall_gate",
+    "doNotReRun": true
+  },
+  "expansionCheckV3": {
+    "executionNumber": 1,
+    "holdoutStatus": "spent_for_development",
+    "parserExecutionCount": 1,
+    "result": "failed_recall_gate",
+    "metrics": { "precision": 0.963, "recall": 0.839, "unsupported": 0 },
+    "rc2Authorized": false,
+    "doNotReRun": true,
+    "failureDiagnosisRef": "expansion-check-v3-execution-1-diagnosis.json",
+    "failureClassification": {
+      "loyalty_ability_scoping": "repeat_family — optionalEffect attachment on cost-prefixed +2 (Chandra)",
+      "search_destination_chain": "calibration-only — optionalEffect on attack trigger search (Captain Kirk)",
+      "modal_spree_structure": "repeat_family — spree option span (Lively Dirge opt-2); copy vs create_token granularity (Three Steps Ahead)",
+      "token_copy_delayed": "repeat_family — optional token copy evidence span (Shaun)"
+    },
+    "note": "Do not auto-create check-v4; redesign abstractions for repeat families before next holdout"
+  },
+  "v126StructuralAbstractions": [
+    "LoyaltyAbility: loyaltyCost + abilityIndex disambiguation for dual +1 lines",
+    "SearchAction: lib/gy search → destination chains",
+    "ModalOption: optionId scoping; Put-one-of-them draw only inside modalOptionId",
+    "Spree: Layer-1 costs; option-scoped actions",
+    "return_that_card pronoun coreference",
+    "conditional bounce + scry (don't apostrophe)",
+    "kicked draw optionalEffect"
+  ],
+  "provenanceRef": "rc2-checkpoint-v125-dev-freeze.json"
+}

@@ -1,0 +1,40 @@
+{
+  "recordedAt": "2026-08-07T22:50:00.000Z",
+  "parserVersion": "oracle-action-v1.25-family-grammar-dev",
+  "acceptedAsDevelopmentCheckpoint": true,
+  "expansionCheckV2": {
+    "executionCount": 1,
+    "holdoutStatus": "spent_for_development",
+    "result": "failed_recall_gate",
+    "metrics": {
+      "precision": 1,
+      "recall": 0.8064516129032258,
+      "unsupported": 0
+    },
+    "rc2Authorized": false
+  },
+  "developmentProbeProvenance": [
+    {
+      "purpose": "control_baseline_selection",
+      "selectionRule": "Quiet Purity chosen only after overlap exclusion against Essence Scatter, Negate, Dispel, Hero's Downfall, and other benchmark-reserved counter/removal cards",
+      "cardName": "Quiet Purity",
+      "usedIn": "expansion-check-v2",
+      "reservedFromFutureBenchmarks": true
+    },
+    {
+      "purpose": "loyalty_development_evidence",
+      "selectionRule": "Teferi/Karn multi-line loyalty Oracle structures used for development abstraction (segmentation, draw-from-reveal, loyaltyCost scoping)",
+      "cardNames": ["Teferi, Temporal Archmage", "Karn, Scion of Urza"],
+      "usedIn": "expansion-training-v3",
+      "reservedFromFutureBenchmarks": true
+    }
+  ],
+  "reservedOracleIdPolicy": "Oracle IDs from probe-selected development seeds are excluded via benchmark overlap manifests (expansion-check-v2, expansion-training-v3) and DEVELOPMENT_PROBE_RESERVED path in benchmark-oracle-id-exclusions.ts",
+  "checkV2AbstractFailureFamilies": {
+    "loyalty_ability_scoping": 1,
+    "modal_option_structure": 2,
+    "pronoun_coreference": 1,
+    "conditional_zone_transition": 1
+  },
+  "note": "search_destination_chain passed check-v2 but included in v1.26 training for structural reinforcement"
+}
