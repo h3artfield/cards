@@ -1,0 +1,2641 @@
+{
+  "setClassification": "development_generalization_expansion_v2_v14",
+  "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+  "taxonomyVersion": "three-layer-v1.4",
+  "contentHash": "057b24415bcd9e3c6c0505ed6b64efd65aa67100fca61dbaa317407b4709d402",
+  "cases": [
+    {
+      "id": "dev-exp-v1-001",
+      "category": "exp-v1 multiface",
+      "layout": "modal_dfc",
+      "cardFace": "front",
+      "oracleId": "0355249a-8e4e-41db-9cea-1b901faffbe6",
+      "oracleText": "When this creature enters, destroy target artifact or enchantment an opponent controls.\n//\nAs this land enters, you may pay 3 life. If you don't, it enters tapped.\n{T}: Add {W}.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "destroy target artifact or enchantment an opponent controls",
+          "cardFace": "front"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "multiface_structure",
+        "split": "expansion-training",
+        "selectionRule": "split: destroy on creature face",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Witch Enchanter // Witch-Blessed Meadow",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "8aa37678e0b738c892bbb9b19b758edb05742613c85552eb1b5d24d68c4d05ae",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v2-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T20:00:00.000Z",
+      "goldReviewer": "expansion-gold-completeness-v2",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "layer2GoldAuditNote": "Full Oracle evidence span for destroy on creature face.",
+      "caseScope": "face",
+      "targetFaceId": "front",
+      "scopeReason": "Gold scoped to specific card face.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-002",
+      "category": "exp-v1 multiface",
+      "layout": "modal_dfc",
+      "cardFace": "back",
+      "oracleId": "0355249a-8e4e-41db-9cea-1b901faffbe6",
+      "oracleText": "When this creature enters, destroy target artifact or enchantment an opponent controls.\n//\nAs this land enters, you may pay 3 life. If you don't, it enters tapped.\n{T}: Add {W}.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {W}",
+          "cardFace": "back"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "multiface_structure",
+        "split": "expansion-training",
+        "selectionRule": "split: mana on land face",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Witch Enchanter // Witch-Blessed Meadow",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "8aa37678e0b738c892bbb9b19b758edb05742613c85552eb1b5d24d68c4d05ae",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "face",
+      "targetFaceId": "back",
+      "scopeReason": "Gold scoped to specific card face.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-003",
+      "category": "exp-v1 multiface",
+      "layout": "transform",
+      "oracleId": "02c60b8b-f665-4279-a00f-ae03991df4a6",
+      "oracleText": "(As this Saga enters and after your draw step, add a lore counter.)\nI — You may play an additional land this turn.\nII — You gain 3 life.\nIII — Exile this Saga, then return it to the battlefield transformed under your control.\n//\nWhenever this creature becomes blocked, untap up to three lands you control.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "You gain 3 life"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "multiface_structure",
+        "split": "expansion-training",
+        "selectionRule": "saga chapter gain life + return transformed",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Azusa's Many Journeys // Likeness of the Seeker",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "378d61eb08c91ceeb53285caf963b20d6a6891bee1684830573c0cc77ac47e4b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-004",
+      "category": "exp-v1 multiface",
+      "layout": "transform",
+      "oracleId": "02c60b8b-f665-4279-a00f-ae03991df4a6",
+      "oracleText": "(As this Saga enters and after your draw step, add a lore counter.)\nI — You may play an additional land this turn.\nII — You gain 3 life.\nIII — Exile this Saga, then return it to the battlefield transformed under your control.\n//\nWhenever this creature becomes blocked, untap up to three lands you control.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "return it to the battlefield transformed"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "multiface_structure",
+        "split": "expansion-check",
+        "selectionRule": "saga return to battlefield transformed",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Azusa's Many Journeys // Likeness of the Seeker",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "378d61eb08c91ceeb53285caf963b20d6a6891bee1684830573c0cc77ac47e4b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-005",
+      "category": "exp-v1 pronoun",
+      "layout": "normal",
+      "oracleId": "00b36996-43c6-42a5-892c-c7c8864cf973",
+      "oracleText": "Exile target creature you control, then return that card to the battlefield under its owner's control.\nDraw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target creature you control"
+        },
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "return that card to the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "pronoun_coreference",
+        "split": "expansion-training",
+        "selectionRule": "exile + return that card",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Blur",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "a9e191243c8fab70297e4fdc8963c01ecc294ab6b4f185980a552a5ef3183fc3",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-006",
+      "category": "exp-v1 pronoun",
+      "layout": "normal",
+      "oracleId": "0129ffe2-389f-4e05-8a04-96461bac39a5",
+      "oracleText": "At the beginning of combat on your turn, return target Vehicle card from your graveyard to the battlefield. It gains haste. Return it to its owner's hand at the beginning of your next end step.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "return target Vehicle card from your graveyard to the battlefield"
+        },
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return it to its owner's hand"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield",
+            "return_to_hand"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "pronoun_coreference",
+        "split": "expansion-training",
+        "selectionRule": "return Vehicle + return to hand at end step",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Greasefang, Okiba Boss",
+      "colorIdentity": [
+        "B",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "b69de435a0b2ffad711a79c1589ab93f181c68245b115f0021df915e952a48ef",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-007",
+      "category": "exp-v1 pronoun",
+      "layout": "normal",
+      "oracleId": "2396299a-c031-4020-b13e-1f9bf9d64511",
+      "oracleText": "Indestructible\nAs long as your devotion to blue is less than five, Thassa isn't a creature.\nAt the beginning of your end step, exile up to one other target creature you control, then return that card to the battlefield under your control.\n{3}{U}: Tap another target creature.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile up to one other target creature you control"
+        },
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "return that card to the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "pronoun_coreference",
+        "split": "expansion-training",
+        "selectionRule": "exile + return that card end step",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Thassa, Deep-Dwelling",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "dc3fb3b81af9344393150e77e86e8929a39963383bfa7824fc52f910901ae6b7",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-008",
+      "category": "exp-v1 pronoun",
+      "layout": "normal",
+      "oracleId": "01cebebb-050c-4b69-8a13-c569183a3cc3",
+      "oracleText": "{7}: Create a token that's a copy of target artifact. That token gains haste. Exile it at the beginning of the next end step.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy of target artifact"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        }
+      ],
+      "expansionMetadata": {
+        "family": "pronoun_coreference",
+        "split": "expansion-check",
+        "selectionRule": "Create token copy of target artifact",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Cogwork Assembler",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "8b943cb9a10835b5942bf1f627e7dcc9bc3292bc05105f3f30eeb01c10c44e7b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-009",
+      "category": "exp-v1 copy-of-target",
+      "layout": "normal",
+      "oracleId": "009a4073-5946-4131-928c-c5c373745344",
+      "oracleText": "Flying\nWhenever this Vehicle becomes crewed for the first time each turn, until end of turn, this Vehicle becomes a copy of target nonlegendary creature that crewed it this turn, except it's 4/3, it's a Vehicle artifact in addition to its other types, and it has flying.\nCrew 1",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "becomes a copy of target nonlegendary creature"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        }
+      ],
+      "expansionMetadata": {
+        "family": "unusual_imperative_verb",
+        "split": "expansion-training",
+        "selectionRule": "becomes a copy of target nonlegendary creature",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Mindlink Mech",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "20e547968b945a8886f827e79fc6c1888576ab45b6b517719ab49d7e532f944b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-010",
+      "category": "exp-v1 modal-copy",
+      "layout": "normal",
+      "oracleId": "0038e74a-b950-47ff-8853-dba6a3b31091",
+      "oracleText": "Choose one or both —\n• Create a token that's a copy of target artifact.\n• Create a token that's a copy of target creature, except it's an artifact in addition to its other types.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a token that's a copy of target artifact"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a token that's a copy of target creature"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "unusual_imperative_verb",
+        "split": "expansion-training",
+        "selectionRule": "Create token that's a copy of target",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Saheeli's Artistry",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "92bfefb6657844f83092b8e062257189dd73f7d4b00707a206b2e67f62f5586d",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v2-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T20:00:00.000Z",
+      "goldReviewer": "expansion-gold-completeness-v2",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "layer2GoldAuditNote": "Token-copy is create_token semantics, not imperative copy primitive.",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-011",
+      "category": "exp-v1 third-person-gain",
+      "layout": "normal",
+      "oracleId": "01b778d7-0965-48ab-a81f-e29f8a233d07",
+      "oracleText": "Destroy target creature. Its owner gains 4 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target creature"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gains 4 life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "unusual_imperative_verb",
+        "split": "expansion-training",
+        "selectionRule": "Its owner gains N life",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Misfortune's Gain",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "821f9def18e11b98c55f1fd10bcd40943953e087b2d380f300b4a08f7d9cb853",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-012",
+      "category": "exp-v1 destroy-gain",
+      "layout": "normal",
+      "oracleId": "223db021-979f-4312-8cb5-169ae4bf17bc",
+      "oracleText": "Exile target creature. Each player gains 3 life.\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target creature with flying"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gains 4 life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "unusual_imperative_verb",
+        "split": "expansion-check",
+        "selectionRule": "destroy + controller gains life",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Fall to Earth",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "a91ee4a0ff5a0e3b383887e97bb9a051cbd38ecd33f3ff37ade2bf9f0e048e57",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-013",
+      "category": "exp-v1 modal",
+      "layout": "normal",
+      "oracleId": "107becb1-f8a3-4777-b39f-a0456c2d580e",
+      "oracleText": "Choose two —\n• Create a 3/2 red and white Spirit creature token.\n• Creatures you control get +1/+0 and gain indestructible and haste until end of turn.\n• Lorehold Command deals 3 damage to any target. Target player gains 3 life.\n• Sacrifice a permanent, then draw two cards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 3/2 red and white Spirit creature token"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 3 damage"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gains 3 life"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice a permanent"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw two cards"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token",
+            "deal_damage",
+            "gain_life",
+            "sacrifice",
+            "draw"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token",
+            "deal_damage",
+            "gain_life",
+            "sacrifice",
+            "draw"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "create_token",
+            "deal_damage",
+            "gain_life",
+            "sacrifice",
+            "draw"
+          ]
+        },
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "create_token",
+            "deal_damage",
+            "gain_life",
+            "sacrifice",
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "modal_wording",
+        "split": "expansion-training",
+        "selectionRule": "Choose two — create token / deal damage",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Lorehold Command",
+      "colorIdentity": [
+        "R",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "1be086d4ad8789f416dd3642cd81a5284876b23f9656ca4f076e48a5e0819b9e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v2-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T20:00:00.000Z",
+      "goldReviewer": "expansion-gold-completeness-v2",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "layer2GoldAuditNote": "Modal gold must include all option capabilities, not only two sampled options.",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-014",
+      "category": "exp-v1 modal",
+      "layout": "normal",
+      "oracleId": "289e1a7c-b301-4395-baf8-e9a1c6d38aab",
+      "oracleText": "Exile target artifact or enchantment.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target artifact or enchantment"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "modal_wording",
+        "split": "expansion-training",
+        "selectionRule": "Exile target artifact or enchantment",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Revoke Existence",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "91d4e8e7b81aee18aace7b8ce2a41432c45614950a4505c068e5b5d621fea33e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-015",
+      "category": "exp-v1 modal",
+      "layout": "normal",
+      "oracleId": "02600fd0-8538-4d38-aa9f-60b211366653",
+      "oracleText": "Choose one or both —\n• Return target creature you control to its owner's hand. That card perpetually gains \"This spell costs {1} less to cast.\"\n• Return target creature you don't control to its owner's hand. That card perpetually gains \"This spell costs {1} more to cast.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target creature you control to its owner's hand"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "modal_wording",
+        "split": "expansion-training",
+        "selectionRule": "Choose one or both — return creature",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Paths of Tuinvale",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "96a416570645c6d924d08b9a5ef86f4c1a87803af89f351af76677de155a61c0",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-016",
+      "category": "exp-v1 modal",
+      "layout": "normal",
+      "oracleId": "03008c7d-c738-473d-a968-1922b2899d1a",
+      "oracleText": "This spell costs {2} less to cast if it targets a permanent with mana value 1.\nReturn target creature or Vehicle an opponent controls to its owner's hand.\nDraw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target creature or Vehicle an opponent controls"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "modal_wording",
+        "split": "expansion-check",
+        "selectionRule": "Return opponent creature or Vehicle + draw",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Roadside Blowout",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f7c9db642daccde9b5715d97826f2ffd42e36ba9eb2eb7786a1a3f9bd26109c4",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-017",
+      "category": "exp-v1 up-to",
+      "layout": "normal",
+      "oracleId": "0259f063-3e3f-4e07-9066-f748d4819829",
+      "oracleText": "Search your library for a creature card with mana value X or less, put it onto the battlefield, then shuffle.\nHarmonize {X}{G}{G}{G}{G} (You may cast this card from your graveyard for its harmonize cost. You may tap a creature you control to reduce that cost by an amount of generic mana equal to its power. Then exile this spell.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for a creature card"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put it onto the battlefield"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "put_onto_battlefield",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "quantified_action",
+        "split": "expansion-training",
+        "selectionRule": "Search creature MV X or less + put onto battlefield",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Nature's Rhythm",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3800471b90e98e348333141a7752d906d0c13aae4c502e31b318dde6ca59a405",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v2-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T20:00:00.000Z",
+      "goldReviewer": "expansion-gold-completeness-v2",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "layer2GoldAuditNote": "Search tutor resolution includes shuffle step in Oracle text.",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-018",
+      "category": "exp-v1 up-to",
+      "layout": "normal",
+      "oracleId": "006bbd8b-2007-419d-8b84-9ff73f2f95b7",
+      "oracleText": "As an additional cost to cast this spell, reveal a Dinosaur card from your hand or pay {1}.\nSearch your library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for a basic land card"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put it onto the battlefield tapped"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "put_onto_battlefield",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "quantified_action",
+        "split": "expansion-training",
+        "selectionRule": "Search basic land put tapped",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Thunderherd Migration",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "723a735010741847cfca4e9be4849717133967f2438ba3372221fc84973af4dd",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v2-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T20:00:00.000Z",
+      "goldReviewer": "expansion-gold-completeness-v2",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "layer2GoldAuditNote": "Land tutor resolution includes shuffle step in Oracle text.",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-019",
+      "category": "exp-v1 bounce",
+      "layout": "normal",
+      "oracleId": "837182db-1bf3-4a2c-bd01-1af9d9873561",
+      "oracleText": "Return target creature to its owner's hand.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target creature to its owner's hand"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "quantified_action",
+        "split": "expansion-training",
+        "selectionRule": "Return target creature",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Unsummon",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "949ea0ec2b12afb4e8dd8a5b647f2ae7adfb1af38909f725f589c3cc8814dfa2",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-020",
+      "category": "exp-v1 bounce-draw",
+      "layout": "normal",
+      "oracleId": "021d8596-782a-4cfd-8b70-ac5bb8a5aff1",
+      "oracleText": "Return target creature to its owner's hand.\nDraw a card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target creature to its owner's hand"
+        },
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "quantified_action",
+        "split": "expansion-check",
+        "selectionRule": "Return creature + draw",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Drag Under",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f0d49a015a3832bcd77609f6ef5536d08014f06f25a7048a67478f439bbff568",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-021",
+      "category": "exp-v1 tutor",
+      "layout": "normal",
+      "oracleId": "01197456-62f1-4bc0-9f2f-127f97f9b05d",
+      "oracleText": "Ninjutsu {2}{U}{U} ({2}{U}{U}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nWhenever Higure deals combat damage to a player, you may search your library for a Ninja card, reveal it, put it into your hand, then shuffle.\n{2}: Target Ninja creature can't be blocked this turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for a Ninja card"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "zone_transition_wording",
+        "split": "expansion-training",
+        "selectionRule": "Search Ninja put hand",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Higure, the Still Wind",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f680f46fcb1941d2b4430aae0259900c62c9e33de8eaa3ee8197d3e26db8e1c9",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v2-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T20:00:00.000Z",
+      "goldReviewer": "expansion-gold-completeness-v2",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "layer2GoldAuditNote": "Optional Ninja tutor includes shuffle step.",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-022",
+      "category": "exp-v1 draw-discard",
+      "layout": "normal",
+      "oracleId": "05878e49-93ad-4144-9c50-a0bb86126c2e",
+      "oracleText": "Draw two cards. Then discard a card unless you attacked this turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw two cards"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discard a card"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "zone_transition_wording",
+        "split": "expansion-training",
+        "selectionRule": "Draw two then discard unless",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Chart a Course",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "bf7c8cd684783fc5f9153323dca46a4b2044e66a7d816c028200cad712836091",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-023",
+      "category": "exp-v1 target-draw",
+      "layout": "normal",
+      "oracleId": "f947808c-a1cc-41ea-9d06-e1279a0da527",
+      "oracleText": "Target player draws three cards. Then that player discards two cards unless they discard a land card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draws three cards"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "zone_transition_wording",
+        "split": "expansion-training",
+        "selectionRule": "Target player draws three",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Compulsive Research",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "8fc3d36726f5374375a276d9a7ca9d4dfadb48686ece59b844964b814a6e3915",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-024",
+      "category": "exp-v1 etb-draw",
+      "layout": "normal",
+      "oracleId": "ef4d5fb3-70a3-433d-a9d3-18b2beb8d79f",
+      "oracleText": "Defender\nWhen this creature enters, draw a card.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "zone_transition_wording",
+        "split": "expansion-check",
+        "selectionRule": "When enters draw a card",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Wall of Blossoms",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "2e081e6e66865a42547c194d6d9f78320cae2edfec76eccac308d8c6cc3c53a0",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-025",
+      "category": "exp-v1 ninja-tutor",
+      "layout": "normal",
+      "oracleId": "01197456-62f1-4bc0-9f2f-127f97f9b05d",
+      "oracleText": "Ninjutsu {2}{U}{U} ({2}{U}{U}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nWhenever Higure deals combat damage to a player, you may search your library for a Ninja card, reveal it, put it into your hand, then shuffle.\n{2}: Target Ninja creature can't be blocked this turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for a Ninja card"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_tutor_resolution",
+        "split": "expansion-training",
+        "selectionRule": "Search library reveal shuffle hand",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Higure, the Still Wind",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f680f46fcb1941d2b4430aae0259900c62c9e33de8eaa3ee8197d3e26db8e1c9",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v2-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T20:00:00.000Z",
+      "goldReviewer": "expansion-gold-completeness-v2",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "layer2GoldAuditNote": "Duplicate Higure tutor case — shuffle step missing from gold.",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-026",
+      "category": "exp-v1 creature-tutor",
+      "layout": "normal",
+      "oracleId": "0259f063-3e3f-4e07-9066-f748d4819829",
+      "oracleText": "Search your library for a creature card with mana value X or less, put it onto the battlefield, then shuffle.\nHarmonize {X}{G}{G}{G}{G} (You may cast this card from your graveyard for its harmonize cost. You may tap a creature you control to reduce that cost by an amount of generic mana equal to its power. Then exile this spell.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for a creature card"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put it onto the battlefield"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "put_onto_battlefield",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_tutor_resolution",
+        "split": "expansion-training",
+        "selectionRule": "Search creature put battlefield shuffle",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Nature's Rhythm",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3800471b90e98e348333141a7752d906d0c13aae4c502e31b318dde6ca59a405",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v2-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T20:00:00.000Z",
+      "goldReviewer": "expansion-gold-completeness-v2",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "layer2GoldAuditNote": "Search-only gold incomplete for put+shuffle tutor chain.",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-027",
+      "category": "exp-v1 land-tutor",
+      "layout": "normal",
+      "oracleId": "006bbd8b-2007-419d-8b84-9ff73f2f95b7",
+      "oracleText": "As an additional cost to cast this spell, reveal a Dinosaur card from your hand or pay {1}.\nSearch your library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for a basic land card"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put it onto the battlefield tapped"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "put_onto_battlefield",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_tutor_resolution",
+        "split": "expansion-training",
+        "selectionRule": "Search basic land put tapped shuffle",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Thunderherd Migration",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "723a735010741847cfca4e9be4849717133967f2438ba3372221fc84973af4dd",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v2-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T20:00:00.000Z",
+      "goldReviewer": "expansion-gold-completeness-v2",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "layer2GoldAuditNote": "Search-only gold incomplete for land tutor chain.",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-028",
+      "category": "exp-v1 search-gy",
+      "layout": "normal",
+      "oracleId": "020c26ba-ed46-47c3-925c-b9f32500f503",
+      "oracleText": "Target opponent loses 4 life. You may search your library and/or graveyard for a card named Vraska, Scheming Gorgon, reveal it, and put it into your hand. If you search your library this way, shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses 4 life"
+        },
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library and/or graveyard"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "search_tutor_resolution",
+        "split": "expansion-check",
+        "selectionRule": "Search library and/or graveyard for named card",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Vraska's Scorn",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "e08eb2ae002463da6aeb836bf0dccb4286e6c3b0116c2ee66e5a4fca67cbaf1d",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-029",
+      "category": "exp-v1 upkeep",
+      "layout": "normal",
+      "oracleId": "0c6ce7c9-316b-4171-a8fa-ca26af1eecb7",
+      "oracleText": "At the beginning of your upkeep, reveal the top card of your library and put that card into your hand. You lose life equal to its mana value.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_into_hand",
+          "evidenceContains": "put that card into your hand"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "lose life equal to its mana value"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "delayed_later_action",
+        "split": "expansion-training",
+        "selectionRule": "At upkeep reveal put hand lose life equal",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Dark Tutelage",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "20982e5e2be24c7d531aded6a97a1a70e475a31c0e069d7765b92c9281338c0c",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-030",
+      "category": "exp-v1 look-draw",
+      "layout": "normal",
+      "oracleId": "192f3c8a-1120-4f7f-ae0f-fe9bde59cd08",
+      "oracleText": "Look at the top three cards of your library. Put one of those cards into your hand, one on top of your library, and one on the bottom of your library.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_into_hand",
+          "evidenceContains": "Put one of those cards into your hand"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "delayed_later_action",
+        "split": "expansion-training",
+        "selectionRule": "Look at top three + put one hand",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Telling Time",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "bc4466245865c75028f2c5e7a958c13492677ba1ac07eb134c8bde2bdc72e843",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-031",
+      "category": "exp-v1 combat-return",
+      "layout": "normal",
+      "oracleId": "0129ffe2-389f-4e05-8a04-96461bac39a5",
+      "oracleText": "At the beginning of combat on your turn, return target Vehicle card from your graveyard to the battlefield. It gains haste. Return it to its owner's hand at the beginning of your next end step.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "return target Vehicle card from your graveyard to the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "return_to_battlefield"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "delayed_later_action",
+        "split": "expansion-training",
+        "selectionRule": "At beginning of combat return Vehicle",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Greasefang, Okiba Boss",
+      "colorIdentity": [
+        "B",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "b69de435a0b2ffad711a79c1589ab93f181c68245b115f0021df915e952a48ef",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-032",
+      "category": "exp-v1 combat-draw",
+      "layout": "normal",
+      "oracleId": "e1afaef7-9fa3-4662-a95f-adfb0da9fd11",
+      "oracleText": "Whenever a creature you control deals combat damage to a player, you may draw a card.\n{1}{U}, {T}: Creatures your opponents control attack this turn if able.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "delayed_later_action",
+        "split": "expansion-check",
+        "selectionRule": "Whenever combat damage draw",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Bident of Thassa",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f3ccd76f6ee44194f2ed37fb8032d8c9f893d46f3cc04650385ba6751dd8b338",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-033",
+      "category": "exp-v1 optional-look",
+      "layout": "normal",
+      "oracleId": "192f3c8a-1120-4f7f-ae0f-fe9bde59cd08",
+      "oracleText": "Look at the top three cards of your library. Put one of those cards into your hand, one on top of your library, and one on the bottom of your library.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_into_hand",
+          "evidenceContains": "Put one of those cards into your hand"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "optionality_attachment",
+        "split": "expansion-training",
+        "selectionRule": "Look at top three partition",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Telling Time",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "bc4466245865c75028f2c5e7a958c13492677ba1ac07eb134c8bde2bdc72e843",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-034",
+      "category": "exp-v1 unless",
+      "layout": "normal",
+      "oracleId": "05878e49-93ad-4144-9c50-a0bb86126c2e",
+      "oracleText": "Draw two cards. Then discard a card unless you attacked this turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw two cards"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "optionality_attachment",
+        "split": "expansion-training",
+        "selectionRule": "Draw two unless attacked",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Chart a Course",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "bf7c8cd684783fc5f9153323dca46a4b2044e66a7d816c028200cad712836091",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-035",
+      "category": "exp-v1 unless-discard",
+      "layout": "normal",
+      "oracleId": "f947808c-a1cc-41ea-9d06-e1279a0da527",
+      "oracleText": "Target player draws three cards. Then that player discards two cards unless they discard a land card.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draws three cards"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "optionality_attachment",
+        "split": "expansion-training",
+        "selectionRule": "Draw three unless discard land",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Compulsive Research",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "8fc3d36726f5374375a276d9a7ca9d4dfadb48686ece59b844964b814a6e3915",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-036",
+      "category": "exp-v1 you-may-draw",
+      "layout": "normal",
+      "oracleId": "e1afaef7-9fa3-4662-a95f-adfb0da9fd11",
+      "oracleText": "Whenever a creature you control deals combat damage to a player, you may draw a card.\n{1}{U}, {T}: Creatures your opponents control attack this turn if able.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "you may draw a card",
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "optionality_attachment",
+        "split": "expansion-check",
+        "selectionRule": "You may draw on combat damage",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Bident of Thassa",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f3ccd76f6ee44194f2ed37fb8032d8c9f893d46f3cc04650385ba6751dd8b338",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-037",
+      "category": "exp-v1 pw-static",
+      "layout": "normal",
+      "oracleId": "63e596a2-9126-4af6-8782-c38687d664ad",
+      "oracleText": "Indestructible\nAs long as your devotion to white is less than five, Heliod isn't a creature.\nWhenever you gain life, put a +1/+1 counter on target creature or enchantment you control.\n{1}{W}: Another target creature gains lifelink until end of turn.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "put a +1/+1 counter on target creature"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "wrong_ability_attachment",
+        "split": "expansion-training",
+        "selectionRule": "Static devotion + triggered gain life counter",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Heliod, Sun-Crowned",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "553bdaab5eeb659faf31fd7da6228dc6e7ec187b38b418d9ac2b054fc8f0ea57",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-038",
+      "category": "exp-v1 pw-trigger",
+      "layout": "normal",
+      "oracleId": "1efe485e-6874-4f4c-b981-e10f41670865",
+      "oracleText": "Whenever a creature you control with power 4 or greater enters, draw a card.\n−1: Untap target permanent.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "wrong_ability_attachment",
+        "split": "expansion-training",
+        "selectionRule": "Triggered draw on power 4+ separate from loyalty",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Kiora, Behemoth Beckoner",
+      "colorIdentity": [
+        "G",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "e374d4499a73756c348d6dab5b75a74144db18f868674c7e6a3f4cc5c5b0e359",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-039",
+      "category": "exp-v1 pw-loyalty",
+      "layout": "normal",
+      "oracleId": "092ceffb-1ee4-452c-b15e-5b79267d42a6",
+      "oracleText": "+1: Each opponent discards a card and loses 2 life.\n−3: Gain control of target creature until end of turn. Untap it. It gains haste until end of turn. Sacrifice it at the beginning of the next end step if it has mana value 3 or less.\n−8: Each opponent loses life equal to the number of cards in their graveyard.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "discard",
+          "evidenceContains": "discards a card"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses 2 life"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "wrong_ability_attachment",
+        "split": "expansion-training",
+        "selectionRule": "Loyalty discard + lose life separate abilities",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Angrath, the Flame-Chained",
+      "colorIdentity": [
+        "B",
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "61cfc78145545e8af61e1a66290941e693c18a274cecc75e7e017b436661d2ac",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-040",
+      "category": "exp-v1 pw-draw",
+      "layout": "normal",
+      "oracleId": "0a01dd05-e289-489f-b3ad-88e15e157bd0",
+      "oracleText": "+1: Reveal the top card of your library and put that card into your hand. Each opponent loses life equal to its mana value.\n−X: Sorin deals X damage to target creature or planeswalker and you gain X life.\n−9: Create a number of 1/1 black Vampire Knight creature tokens with lifelink equal to the highest life total among all players.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_into_hand",
+          "evidenceContains": "put that card into your hand"
+        },
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses life equal to its mana value"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "wrong_ability_attachment",
+        "split": "expansion-check",
+        "selectionRule": "Loyalty reveal draw + opponent lose life",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Sorin, Grim Nemesis",
+      "colorIdentity": [
+        "B",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "bcf7ad166e9f36f1c115aebd1c1b00d450319fba6bd198b2294b57ca0ad007cd",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-041",
+      "category": "exp-v1 alt-cast",
+      "layout": "normal",
+      "oracleId": "ac2173f9-f223-440a-9231-fd98762bdc6f",
+      "oracleText": "If it's not your turn, you may exile a blue card from your hand rather than pay this spell's mana cost.\nCounter target noncreature spell. If that spell is countered this way, exile it instead of putting it into its owner's graveyard.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target noncreature spell"
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "static_cast_permission_leak",
+        "split": "expansion-training",
+        "selectionRule": "Alternative cost — not cast L2",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Force of Negation",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "0ba9d8a8d2bb2d46a3c43671e5beeef14a66deebd6d64b9af3bca371d79ed8b7",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-042",
+      "category": "exp-v1 static-permission",
+      "layout": "normal",
+      "oracleId": "9dc65ffe-17fc-4280-b4bd-78073ac7e12b",
+      "oracleText": "If this card is in your opening hand, you may begin the game with it on the battlefield.\nYou may cast spells as though they had flash.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "static_cast_permission_leak",
+        "split": "expansion-training",
+        "selectionRule": "Static flash permission",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Leyline of Anticipation",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3c050f8d01d0a8d46f0c97fd35f6e096df8088ebf7627313a585126b11ce8d96",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "incomplete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "structure_only",
+      "scopeReason": "Zero within-scope Layer-2 gold — requires certifiedEmptyLayer2=true.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "dev-exp-v1-043",
+      "category": "exp-v1 static-permission",
+      "layout": "normal",
+      "oracleId": "60d640a4-032b-4279-ac75-8f200ca776fb",
+      "oracleText": "You may cast spells as though they had flash.",
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "static_cast_permission_leak",
+        "split": "expansion-training",
+        "selectionRule": "Static flash permission",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Vedalken Orrery",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "cd67e7ffd98826b30f8e5dc211249a61540cef090f5d3331366b3028fc0740df",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "incomplete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "structure_only",
+      "scopeReason": "Zero within-scope Layer-2 gold — requires certifiedEmptyLayer2=true.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "dev-exp-v1-044",
+      "category": "exp-v1 harmonize",
+      "layout": "normal",
+      "oracleId": "0259f063-3e3f-4e07-9066-f748d4819829",
+      "oracleText": "Search your library for a creature card with mana value X or less, put it onto the battlefield, then shuffle.\nHarmonize {X}{G}{G}{G}{G} (You may cast this card from your graveyard for its harmonize cost. You may tap a creature you control to reduce that cost by an amount of generic mana equal to its power. Then exile this spell.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for a creature card"
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "static_cast_permission_leak",
+        "split": "expansion-check",
+        "selectionRule": "Harmonize cast from graveyard — abstain cast from reminder",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Nature's Rhythm",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3800471b90e98e348333141a7752d906d0c13aae4c502e31b318dde6ca59a405",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-045",
+      "category": "exp-v1 x-life",
+      "layout": "normal",
+      "oracleId": "8164b1e8-3350-465e-8a17-75f57d326344",
+      "oracleText": "Each opponent loses X life. You gain life equal to the life lost this way.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses X life"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "variable_lose_life_regression",
+        "split": "expansion-training",
+        "selectionRule": "Each opponent loses X life",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Exsanguinate",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "c5df71917238dce021e4a331fc0e5eb29bfb7ec1ffc9cd7d2d02fbe7ff89fe6d",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-046",
+      "category": "exp-v1 equal-devotion",
+      "layout": "normal",
+      "oracleId": "38f3b157-0df4-409b-89cc-086e1531cd5b",
+      "oracleText": "When this creature enters, each opponent loses X life, where X is your devotion to black. You gain life equal to the life lost this way. (Each {B} in the mana costs of permanents you control counts toward your devotion to black.)",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses X life"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "variable_lose_life_regression",
+        "split": "expansion-training",
+        "selectionRule": "loses X life devotion",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Gray Merchant of Asphodel",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "70eb07a3dd308f1f4203ef363925a719f00a267d1b72c42f2f69231e8b1ec518",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-047",
+      "category": "exp-v1 half-life",
+      "layout": "normal",
+      "oracleId": "21fa2442-6eac-4dce-a9cc-76f0053fdb8f",
+      "oracleText": "Target player draws cards equal to half the number of cards in their library and loses half their life. Round up each time.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses half their life"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "variable_lose_life_regression",
+        "split": "expansion-training",
+        "selectionRule": "loses half their life",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Peer into the Abyss",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "de8267fbb067d64853fbb8f96032217c0fef4667e194245cbeeb44e7769c9e8f",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-048",
+      "category": "exp-v1 equal-mv",
+      "layout": "normal",
+      "oracleId": "0a01dd05-e289-489f-b3ad-88e15e157bd0",
+      "oracleText": "+1: Reveal the top card of your library and put that card into your hand. Each opponent loses life equal to its mana value.\n−X: Sorin deals X damage to target creature or planeswalker and you gain X life.\n−9: Create a number of 1/1 black Vampire Knight creature tokens with lifelink equal to the highest life total among all players.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "loses life equal to its mana value"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "variable_lose_life_regression",
+        "split": "expansion-check",
+        "selectionRule": "loses life equal to mana value",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Sorin, Grim Nemesis",
+      "colorIdentity": [
+        "B",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "bcf7ad166e9f36f1c115aebd1c1b00d450319fba6bd198b2294b57ca0ad007cd",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-049",
+      "category": "exp-v1 storm-reminder",
+      "layout": "normal",
+      "oracleId": "3a59c882-8bb8-49ba-862f-125020dd5bec",
+      "oracleText": "Create two 1/1 red Goblin creature tokens.\nStorm (When you cast this spell, copy it for each spell cast before it this turn.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create two 1/1 red Goblin creature tokens"
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "copy"
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": []
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": []
+        }
+      ],
+      "expansionMetadata": {
+        "family": "span_role_reminder_abstain",
+        "split": "expansion-training",
+        "selectionRule": "Storm reminder — abstain copy",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Empty the Warrens",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "c83b9bd4f2aaa2ea92311caceca276466ddd7dcc07cf7cc254b1e2c46e2df848",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-050",
+      "category": "exp-v1 storm-reminder",
+      "layout": "normal",
+      "oracleId": "3a091f7b-efc9-4aaa-9da8-157ef8099a36",
+      "oracleText": "You gain 3 life.\nStorm (When you cast this spell, copy it for each spell cast before it this turn.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 3 life"
+        }
+      ],
+      "forbiddenPrimitiveActions": [
+        "copy"
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "span_role_reminder_abstain",
+        "split": "expansion-training",
+        "selectionRule": "Storm + gain life abstain copy",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Weather the Storm",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "e71e33d70dcdb6897806fbf6c5dcdec97bd36855bd7e10d5cfa42d7612729d64",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-051",
+      "category": "exp-v1 simple",
+      "layout": "normal",
+      "oracleId": "d08e9784-75f7-4164-ac48-d06160f8c56b",
+      "oracleText": "Counter target artifact or enchantment spell.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target artifact or enchantment spell"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "span_role_reminder_abstain",
+        "split": "expansion-training",
+        "selectionRule": "Baseline counter",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Annul",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ba5cdf27dc4c57546be37c81545440467aeae11c0f36b69bc1aeb7b824209cd9",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v1-052",
+      "category": "exp-v1 simple",
+      "layout": "normal",
+      "oracleId": "46665089-aa3d-44c3-964d-6638dfbb5782",
+      "oracleText": "Counter target creature spell.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "counter",
+          "evidenceContains": "Counter target creature spell"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "counter"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "span_role_reminder_abstain",
+        "split": "expansion-check",
+        "selectionRule": "Baseline counter creature spell",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Essence Scatter",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "610b3ff41023168008e4b70606e2006b047d2609505b546d3617a13af020cbf9",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "catalog-audit-agent",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v1-v14",
+      "goldReviewVersion": "development-generalization-expansion-v1-builder",
+      "goldReviewedAt": "2026-08-07T18:04:37.600Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    }
+  ],
+  "benchmarkStatus": "catalog_clean",
+  "usableForParserEvaluation": true,
+  "parserExecutionCount": 0,
+  "expansionSplit": {
+    "trainingCount": 39,
+    "checkCount": 13,
+    "checkFrozenAt": "2026-08-07T18:04:37.600Z",
+    "checkFrozenBeforeParserTuning": true,
+    "trainingIds": [
+      "dev-exp-v1-001",
+      "dev-exp-v1-002",
+      "dev-exp-v1-003",
+      "dev-exp-v1-005",
+      "dev-exp-v1-006",
+      "dev-exp-v1-007",
+      "dev-exp-v1-009",
+      "dev-exp-v1-010",
+      "dev-exp-v1-011",
+      "dev-exp-v1-013",
+      "dev-exp-v1-014",
+      "dev-exp-v1-015",
+      "dev-exp-v1-017",
+      "dev-exp-v1-018",
+      "dev-exp-v1-019",
+      "dev-exp-v1-021",
+      "dev-exp-v1-022",
+      "dev-exp-v1-023",
+      "dev-exp-v1-025",
+      "dev-exp-v1-026",
+      "dev-exp-v1-027",
+      "dev-exp-v1-029",
+      "dev-exp-v1-030",
+      "dev-exp-v1-031",
+      "dev-exp-v1-033",
+      "dev-exp-v1-034",
+      "dev-exp-v1-035",
+      "dev-exp-v1-037",
+      "dev-exp-v1-038",
+      "dev-exp-v1-039",
+      "dev-exp-v1-041",
+      "dev-exp-v1-042",
+      "dev-exp-v1-043",
+      "dev-exp-v1-045",
+      "dev-exp-v1-046",
+      "dev-exp-v1-047",
+      "dev-exp-v1-049",
+      "dev-exp-v1-050",
+      "dev-exp-v1-051"
+    ],
+    "checkIds": [
+      "dev-exp-v1-004",
+      "dev-exp-v1-008",
+      "dev-exp-v1-012",
+      "dev-exp-v1-016",
+      "dev-exp-v1-020",
+      "dev-exp-v1-024",
+      "dev-exp-v1-028",
+      "dev-exp-v1-032",
+      "dev-exp-v1-036",
+      "dev-exp-v1-040",
+      "dev-exp-v1-044",
+      "dev-exp-v1-048",
+      "dev-exp-v1-052"
+    ],
+    "checkHoldout": {
+      "holdoutStatus": "spent_for_development",
+      "spentReason": "failure-family diagnosis after milestone #2",
+      "parserExecutionCount": 2,
+      "spentAt": "2026-08-07T21:30:00.000Z",
+      "doNotRunExecution": 3
+    }
+  },
+  "goldCertification": {
+    "certifierId": "development-generalization-expansion-v1-builder",
+    "certifiedAt": "2026-08-07T18:04:37.600Z",
+    "casesReviewed": "52/52",
+    "reviewer": "catalog-audit-agent",
+    "goldReviewStatus": "reviewed",
+    "goldCompletenessStatus": "complete",
+    "parserExecutionCount": 0,
+    "policyNote": "Genuine parser families only — excludes disproven v10 policy families."
+  },
+  "parentContentHash": "bd73bee1b24bde6d8f630898b95c9426a975e09b69732fc5477faf6dfea5fc4b",
+  "parentClassification": "development_generalization_expansion_v1",
+  "parentSetPath": "data/oracle-action-eval-development-generalization-expansion-v1.json",
+  "generatedAt": "2026-08-07T20:03:15.411Z",
+  "goldPatchNote": "v2 expansion gold completeness: tutor chains, modal options, token-copy semantics.",
+  "expansionCheckHoldout": {
+    "holdoutStatus": "spent_for_development",
+    "spentReason": "failure-family diagnosis after milestone #2",
+    "parserExecutionCount": 2,
+    "spentAt": "2026-08-07T21:30:00.000Z",
+    "doNotRunExecution": 3
+  },
+  "parentTaxonomyVersion": "three-layer-v1.2",
+  "migratedAt": "2026-08-08T04:25:46.497Z",
+  "migrationReviewer": "rc3-benchmark-selector-v130",
+  "parserConsulted": false
+}

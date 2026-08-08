@@ -63,6 +63,7 @@ function extractPlayerTarget(input: {
     "discard",
     "sacrifice",
     "draw",
+    "put_into_hand",
     "search_library",
   ]);
   if (!playerActionTypes.has(input.actionType)) {
@@ -157,6 +158,27 @@ export function extractActionArguments(input: {
         pattern: /\b(?:cards in their hand|their hand|cards in your hand|your hand)\b/i,
       }),
     };
+  }
+
+  if (actionType === "draw") {
+    args.destinationZone = ["hand"];
+    args.sourceZone = ["library"];
+    args.object = { type: "card", zone: "library", controller: "you" };
+  }
+
+  if (actionType === "put_into_hand") {
+    args.destinationZone = ["hand"];
+    const fromLib = /\bfrom (?:your )?library\b/i.test(actionEvidence.text);
+    const fromGy = /\bfrom (?:your |a )?graveyard\b/i.test(actionEvidence.text);
+    const fromExile = /\bfrom exile\b/i.test(actionEvidence.text);
+    args.sourceZone = fromGy ? ["graveyard"] : fromExile ? ["exile"] : fromLib ? ["library"] : ["library"];
+    args.object = {
+      type: "card",
+      zone: args.sourceZone[0],
+      controller: "you",
+      evidence: actionEvidence,
+    };
+    provenance.objectSpan = actionEvidence;
   }
 
   if (actionType === "return_to_hand") {

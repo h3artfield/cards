@@ -1,0 +1,81 @@
+{
+  "specVersion": "rc3-pipeline-spec-v129",
+  "frozenAt": "2026-08-08T04:08:20.028Z",
+  "parserLineage": "oracle-action-v1.30+ / RC3",
+  "pipeline": [
+    "Oracle text",
+    "AbilityBlock[]",
+    "Clause[] per ability",
+    "ClauseRole assignment",
+    "objects / referents resolution",
+    "zone transitions / events / permissions",
+    "Layer-2 actions + typed arguments"
+  ],
+  "clauseRoles": [
+    "effect",
+    "cost",
+    "trigger_event",
+    "condition",
+    "replacement_event",
+    "replacement_effect",
+    "permission",
+    "restriction",
+    "reminder",
+    "granted_ability",
+    "choice",
+    "modal_option",
+    "delayed_effect"
+  ],
+  "primitiveExtractionScopes": [
+    "effect clauses",
+    "replacement_effect clauses",
+    "granted-ability effect clauses (when gold scopes card-native)"
+  ],
+  "excludedFromPrimitiveExtraction": [
+    "cost clauses (except as action prerequisites)",
+    "trigger_event headers",
+    "permission/restriction static text",
+    "reminder parentheticals",
+    "granted-ability quote interiors (unless explicitly scoped)"
+  ],
+  "priorityStructuralFamilies": [
+    {
+      "priorityRank": 1,
+      "primaryGrammarFamily": "granted_ability_quote",
+      "genuineMissCount": 9,
+      "rc3StructuralPriority": "high"
+    },
+    {
+      "priorityRank": 2,
+      "primaryGrammarFamily": "search_put_shuffle_chain",
+      "genuineMissCount": 7,
+      "rc3StructuralPriority": "high"
+    },
+    {
+      "priorityRank": 3,
+      "primaryGrammarFamily": "mdfc_transform_zone_transition",
+      "genuineMissCount": 4,
+      "rc3StructuralPriority": "high"
+    },
+    {
+      "priorityRank": 4,
+      "primaryGrammarFamily": "activated_post_colon_effect",
+      "genuineMissCount": 4,
+      "rc3StructuralPriority": "high"
+    },
+    {
+      "priorityRank": 5,
+      "primaryGrammarFamily": "replacement_if_would",
+      "genuineMissCount": 3,
+      "rc3StructuralPriority": "high"
+    },
+    {
+      "priorityRank": 6,
+      "primaryGrammarFamily": "modal_each_option_action",
+      "genuineMissCount": 2,
+      "rc3StructuralPriority": "high"
+    }
+  ],
+  "activatedTriggeredNote": "activated: 39 dev examples / poor v12; triggered: 89 dev examples / poor v12 — abstraction failure, not example shortage",
+  "contentHash": "ca211a3ffc9c01f903aaacfe988c8fd70ce9e342bbaf90e6bbb701c4b0a3c974"
+}

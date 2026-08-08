@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "benchmark-case-scope-v1.1",
+  "frozenAt": "2026-08-08T04:25:21.250Z",
+  "amends": "benchmark-case-scope-v1",
+  "parentSchemaHash": "53262df4f00bde1e6d24dcf0979165c376f1bcfd8e8694c4421153ec662fea94",
+  "preservesImmutable": "benchmark-case-scope-schema-v1.json — do not mutate v1",
+  "caseScopeEnum": [
+    "full_card",
+    "face",
+    "ability",
+    "modal_option",
+    "clause",
+    "structure_only"
+  ],
+  "requiredFields": [
+    "caseScope",
+    "goldCompletenessStatus",
+    "certifiedEmptyLayer2",
+    "scopeReason"
+  ],
+  "goldCompletenessStatusEnum": [
+    "complete_within_scope",
+    "incomplete_within_scope"
+  ],
+  "emptyGoldRule": {
+    "priorV1": "certifiedEmptyLayer2 required when structure_only + zero expected L2",
+    "v11": "certifiedEmptyLayer2 MUST be true whenever expected Layer-2 actions within declared caseScope = 0, for ANY caseScope type",
+    "corollary": "An empty expectedPrimitiveActions array alone must never mean 'no Layer-2 actions'"
+  },
+  "scoringRules": [
+    "Legitimate parser actions outside explicit caseScope → excluded from scoring, not FP",
+    "If within-scope gold list is empty → certifiedEmptyLayer2=true required before sealing",
+    "goldCompletenessStatus=complete_within_scope required for sealed benchmarks"
+  ],
+  "contentHash": "394076e8d0366b039ac5899b9eb9b95c3427dd66afe0567a2c4b90e8bcd62a2a"
+}

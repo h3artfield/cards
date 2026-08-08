@@ -1,0 +1,70 @@
+{
+  "specVersion": "three-layer-v1.4",
+  "frozenAt": "2026-08-08T04:08:20.026Z",
+  "parentTaxonomyVersion": "three-layer-v1.3",
+  "parentTaxonomyRef": "web/src/lib/deck-builder/golden-catalog/oracle-action-taxonomy.ts",
+  "doNotMutateV13Benchmarks": true,
+  "layer2Additions": [
+    {
+      "primitive": "put_into_hand",
+      "semantics": "Move a card object into the controller's hand zone using Oracle 'put' instruction — distinct from draw and return_to_hand.",
+      "distinctFrom": [
+        "draw",
+        "return_to_hand"
+      ],
+      "classificationRule": "Classify from Oracle action verb + source/destination, not destination zone alone. 'Put target card from graveyard into your hand' → put_into_hand. 'Return … to hand' → return_to_hand.",
+      "requiredArguments": [
+        "object",
+        "destinationZone:hand",
+        "sourceZone?"
+      ],
+      "oraclePatterns": [
+        "put it into your hand",
+        "put that card into your hand",
+        "put one of those cards into your hand",
+        "reveal it and put it into your hand",
+        "Put target card from your graveyard into your hand"
+      ],
+      "notPatterns": [
+        "Draw a card",
+        "draws N cards",
+        "return target … to its owner's hand"
+      ]
+    }
+  ],
+  "preservedPrimitives": {
+    "draw": "Library → hand via draw instruction only",
+    "return_to_hand": "Explicit 'return … to hand' bounce/recursion wording",
+    "put_into_hand": "Explicit 'put … into your/hand' zone transition"
+  },
+  "primitiveActionTypes": [
+    "add_mana",
+    "cast",
+    "copy",
+    "counter",
+    "create_token",
+    "deal_damage",
+    "destroy",
+    "discard",
+    "draw",
+    "exile",
+    "gain_life",
+    "lose_life",
+    "mill",
+    "play",
+    "put_counter",
+    "put_into_hand",
+    "put_onto_battlefield",
+    "return_to_battlefield",
+    "return_to_hand",
+    "sacrifice",
+    "scry",
+    "search_library",
+    "shuffle_into_library",
+    "shuffle_library",
+    "surveil",
+    "tap",
+    "untap"
+  ],
+  "contentHash": "c5620beb6b067c166d22dc4edb4c3ecc19bee8a0578619f1974b3cf4968f2894"
+}

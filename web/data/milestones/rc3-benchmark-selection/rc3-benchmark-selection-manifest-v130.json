@@ -1,0 +1,136 @@
+{
+  "manifestVersion": "rc3-benchmark-selection-manifest-v130",
+  "frozenAt": "2026-08-08T04:25:21.250Z",
+  "status": "BENCHMARKS_SELECTED",
+  "parserExecutionCount": 0,
+  "parserConsulted": false,
+  "blockedUntilSealed": [],
+  "foundationRefs": {
+    "taxonomyV14Spec": "c5620beb6b067c166d22dc4edb4c3ecc19bee8a0578619f1974b3cf4968f2894",
+    "caseScopeV11": "394076e8d0366b039ac5899b9eb9b95c3427dd66afe0567a2c4b90e8bcd62a2a",
+    "semanticValidatorSpec": "cda5b0744c8271522d57827a68125c1e88cda8f8344eeb7bb3ba02a1e006f4fd",
+    "rc3PipelineSpec": "ca211a3ffc9c01f903aaacfe988c8fd70ce9e342bbaf90e6bbb701c4b0a3c974"
+  },
+  "activeDevelopmentV14Migration": {
+    "artifactHash": "cae07222618a7337dd9803c29fb8d5e40e5be21d6fea989f501b83596ee0a447",
+    "datasets": [
+      {
+        "path": "data/oracle-action-eval-development-v26.json",
+        "outPath": "data/oracle-action-eval-development-v26-v14.json",
+        "parentHash": "68101b45d07f5380f709f7d691a8fd7b14d93153b807189e776b9a3bf56510e7",
+        "contentHash": "c6c037111e8b32df1b2872413c75f4c9411d740d469bb9af4d8172292c8cd0e9",
+        "caseCount": 284,
+        "changedCases": 0,
+        "changedPrimitives": 0
+      },
+      {
+        "path": "data/oracle-action-eval-development-generalization-expansion-v2.json",
+        "outPath": "data/oracle-action-eval-development-generalization-expansion-v2-v14.json",
+        "parentHash": "bd73bee1b24bde6d8f630898b95c9426a975e09b69732fc5477faf6dfea5fc4b",
+        "contentHash": "057b24415bcd9e3c6c0505ed6b64efd65aa67100fca61dbaa317407b4709d402",
+        "caseCount": 52,
+        "changedCases": 4,
+        "changedPrimitives": 4
+      },
+      {
+        "path": "data/oracle-action-eval-development-generalization-expansion-v3.json",
+        "outPath": "data/oracle-action-eval-development-generalization-expansion-v3-v14.json",
+        "parentHash": "80e1479b616b64c5bcd200b04df3b00c3d8eac01522c6c9ea0fc3af3923cd865",
+        "contentHash": "cca99e70455d8c51a1bb0c5f364f3327d6075758265c0505f20fc2ea0549befe",
+        "caseCount": 24,
+        "changedCases": 2,
+        "changedPrimitives": 2
+      },
+      {
+        "path": "data/oracle-action-eval-development-generalization-expansion-v5.json",
+        "outPath": "data/oracle-action-eval-development-generalization-expansion-v5-v14.json",
+        "parentHash": "2edb65ecc5d276338a7846b3c095c57c8e8cfacba92e01f7b9876ce37c740b82",
+        "contentHash": "9c61089004b35fb83d10a016ce1439b754fcbb36691d04b7002383c7b3e48d82",
+        "caseCount": 15,
+        "changedCases": 1,
+        "changedPrimitives": 1
+      }
+    ]
+  },
+  "rc3PositiveTraining": {
+    "path": "data/oracle-action-eval-rc3-positive-training-v130.json",
+    "contentHash": "4243251c4583a5777fc17dcbe32d8abcce19e586fbe4d9405b29b9860a4285f3",
+    "caseCount": 55,
+    "casesByFamily": {
+      "compound_second_clause": 4,
+      "mdfc_transform_zone_transition": 8,
+      "search_put_shuffle_chain": 8,
+      "granted_ability_quote": 9,
+      "replacement_if_would": 7,
+      "modal_each_option_action": 4,
+      "activated_post_colon_effect": 7,
+      "optional_put_onto_battlefield": 4,
+      "zone_transition_return": 4
+    },
+    "spentV12RegressionCases": 23
+  },
+  "rc3PolicyGuardrail": {
+    "path": "data/oracle-action-eval-rc3-policy-guardrail-v130.json",
+    "contentHash": "3a250fc7d4303d6ff5f1fd9f4b25b71e08c6daa2ccefeea4b0720b15acc4f629",
+    "caseCount": 35,
+    "casesByFamily": {
+      "persistent_cast_permission": 6,
+      "trigger_event_cast_reference": 6,
+      "reminder_mechanic_text": 5,
+      "static_cost_reduction": 4,
+      "activated_cost_only": 5,
+      "static_restriction": 5,
+      "ability_scope_exclusion": 4
+    }
+  },
+  "validationV13": {
+    "path": "data/oracle-action-eval-validation-v13.json",
+    "contentHash": "9e20260619de3eff9f8be5b579d635bf8756fcefc22efa87d198f98aa079911f",
+    "caseCount": 220,
+    "layer2GoldPrimitiveCount": 330,
+    "stratumCounts": {
+      "challenge_granted_ability": 12,
+      "challenge_search_shuffle": 12,
+      "challenge_zone_transition": 12,
+      "challenge_replacement": 10,
+      "challenge_activated": 10,
+      "challenge_modal": 10,
+      "challenge_compound": 8,
+      "broad_simple_effect": 18,
+      "broad_triggered": 18,
+      "broad_activated": 16,
+      "broad_modal": 14,
+      "broad_saga_planeswalker": 14,
+      "broad_multiface": 14,
+      "broad_recursion": 12,
+      "broad_variable_quantity": 10,
+      "policy_static_permission": 12,
+      "policy_reminder_heavy": 10,
+      "policy_granted_static": 0,
+      "policy_trigger_condition": 8
+    },
+    "bucketCounts": {
+      "challenge": 74,
+      "broad": 116,
+      "policy": 30
+    },
+    "sealed": true,
+    "parserExecutionCount": 0
+  },
+    "overlapMatrix": {
+      "v13VsAllDevelopmentPriorValidationBlindProbes": 0,
+      "newCatalogTrainingAdditionsVsPriorBenchmarks": 0,
+      "positiveTrainingVsSpentValidationV12": "intentional_designated_development_regression_reuse",
+      "positiveTrainingCatalogAdditionsVsV13": 0,
+      "policyGuardrailVsV13": 0,
+      "note": "Full cross-holdout overlap matrix is zero. The 23 spent v12 Oracle IDs in positive training are intentional regression reuse — not v13 overlap.",
+      "positiveVsV13": 0,
+      "guardrailVsV13": 0,
+      "positiveVsGuardrail": 0,
+      "trainingVsBenchmarks": 0,
+      "v13VsBenchmarks": 0,
+      "fullMatrixZero": true
+    },
+  "selectionTimestamp": "2026-08-08T04:25:21.250Z",
+  "contentHash": "90be97d91fa3c757fe24c46465ccc401db3fb425a987f76c080c19d63b56aaa4"
+}

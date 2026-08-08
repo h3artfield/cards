@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "benchmark-case-scope-v1",
+  "frozenAt": "2026-08-08T04:08:20.028Z",
+  "requiredFields": [
+    "caseScope"
+  ],
+  "caseScopeEnum": [
+    "full_card",
+    "face",
+    "ability",
+    "modal_option",
+    "clause",
+    "structure_only"
+  ],
+  "optionalTargetFields": [
+    "targetFaceId",
+    "targetAbilityId",
+    "targetOptionId",
+    "targetClauseId"
+  ],
+  "scoringRules": [
+    "Legitimate parser actions outside explicit caseScope are excluded from scoring — not counted as FP.",
+    "Empty expectedPrimitiveActions does NOT imply no Layer-2 actions unless caseScope=structure_only AND certifiedEmptyLayer2=true.",
+    "Gold must be complete within declared caseScope before sealing validation sets.",
+    "Wrong-primitive and over-extraction are separate error classes in RC3 reporting."
+  ],
+  "certifiedEmptyLayer2": {
+    "requiredWhen": "caseScope=structure_only AND benchmark expects zero Layer-2 primitive actions",
+    "fields": [
+      "certifiedEmptyLayer2: true",
+      "scopeReason"
+    ]
+  },
+  "contentHash": "53262df4f00bde1e6d24dcf0979165c376f1bcfd8e8694c4421153ec662fea94"
+}

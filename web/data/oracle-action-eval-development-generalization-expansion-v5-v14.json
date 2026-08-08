@@ -1,0 +1,742 @@
+{
+  "setClassification": "development_generalization_expansion_v5_v14",
+  "evaluationSetVersion": "development-generalization-expansion-v5-v14",
+  "taxonomyVersion": "three-layer-v1.4",
+  "contentHash": "9c61089004b35fb83d10a016ce1439b754fcbb36691d04b7002383c7b3e48d82",
+  "cases": [
+    {
+      "id": "dev-exp-v5-001",
+      "category": "exp-v5 loyalty",
+      "layout": "normal",
+      "oracleId": "04aa210a-235f-4e07-87d1-0d28cdf6888b",
+      "oracleText": "+2: Put two +1/+1 counters on up to one target Dinosaur you control.\n−3: Target Dinosaur you control deals damage equal to its power to target creature you don't control.\n−7: Dinosaurs you control get +4/+4 until end of turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "Put two +1/+1 counters on up to one target Dinosaur",
+          "loyaltyCost": "+2"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals damage equal to its power",
+          "loyaltyCost": "−3"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "put_counter",
+            "deal_damage"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "loyalty_ability_scoping",
+        "split": "expansion-training-v5",
+        "selectionRule": "+2 counters vs −3 power damage vs −7 pump",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Huatli, Dinosaur Knight",
+      "colorIdentity": [
+        "R",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "40e0e32bce7f6d2237154d3ce8f8768d30c4432678871f3360d02fecc33c2d5b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v5-structural-miner",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v5-v14",
+      "goldReviewVersion": "development-generalization-expansion-v5-builder",
+      "goldReviewedAt": "2026-08-08T00:32:56.358Z",
+      "goldReviewer": "expansion-v5-structural-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "ability",
+      "targetAbilityId": "loyalty-+2",
+      "scopeReason": "Gold scoped to loyalty ability via loyaltyCost.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v5-002",
+      "category": "exp-v5 loyalty",
+      "layout": "normal",
+      "oracleId": "04f2c320-dfcc-440a-9e24-3c2083d74e7c",
+      "oracleText": "Each creature you control with a +1/+1 counter on it has \"{T}: Add one mana of any color.\"\n−1: Put a +1/+1 counter on target creature.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "Put a +1/+1 counter on target creature",
+          "loyaltyCost": "−1"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "loyalty_ability_scoping",
+        "split": "expansion-training-v5",
+        "selectionRule": "Static excluded; −1 counter only",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Jiang Yanggu, Wildcrafter",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "1a972e74995616a71869f6e33b1485c90343564f3d2bc52ec702d02caa2076d1",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v5-structural-miner",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v5-v14",
+      "goldReviewVersion": "development-generalization-expansion-v5-builder",
+      "goldReviewedAt": "2026-08-08T00:32:56.358Z",
+      "goldReviewer": "expansion-v5-structural-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "ability",
+      "targetAbilityId": "loyalty-−1",
+      "scopeReason": "Gold scoped to loyalty ability via loyaltyCost.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v5-003",
+      "category": "exp-v5 loyalty",
+      "layout": "normal",
+      "oracleId": "0c4a2c42-0874-40b4-8d12-47eeadc3e976",
+      "oracleText": "+1: Look at the top card of your library. If it's a creature card, you may reveal it and put it into your hand.\n−2: Target creature you control fights another target creature.\n−7: You get an emblem with \"Creatures you control have double strike, trample, hexproof, and haste.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_into_hand",
+          "evidenceContains": "put it into your hand",
+          "loyaltyCost": "+1",
+          "optionalEffect": true
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "loyalty_ability_scoping",
+        "split": "expansion-training-v5",
+        "selectionRule": "+1 reveal/put hand vs −2 fight",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Domri Rade",
+      "colorIdentity": [
+        "G",
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "5a2faff227530a7a68e9f950b2268d1edd4d757241cd3756fc55d69f2fc722b5",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v5-structural-miner",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v5-v14",
+      "goldReviewVersion": "development-generalization-expansion-v5-builder",
+      "goldReviewedAt": "2026-08-08T00:32:56.358Z",
+      "goldReviewer": "expansion-v5-structural-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "ability",
+      "targetAbilityId": "loyalty-+1",
+      "scopeReason": "Gold scoped to loyalty ability via loyaltyCost.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v5-004",
+      "category": "exp-v5 loyalty",
+      "layout": "normal",
+      "oracleId": "0c7f18d5-36cb-4bc6-a358-443b97666215",
+      "oracleText": "Flash\nAs long as The Wandering Emperor entered this turn, you may activate her loyalty abilities any time you could cast an instant.\n+1: Put a +1/+1 counter on up to one target creature. It gains first strike until end of turn.\n−1: Create a 2/2 white Samurai creature token with vigilance.\n−2: Exile target tapped creature. You gain 2 life.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "Put a +1/+1 counter on up to one target creature",
+          "loyaltyCost": "+1"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "Exile target tapped creature",
+          "loyaltyCost": "−2"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "put_counter",
+            "exile"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "loyalty_ability_scoping",
+        "split": "expansion-training-v5",
+        "selectionRule": "+1 counter/first strike vs −2 exile tapped",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "The Wandering Emperor",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "809481eaf6eab29c2d4a4f12f8c5860bf8ba03dcb0d26f01a47e3d8542ec5b30",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v5-structural-miner",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v5-v14",
+      "goldReviewVersion": "development-generalization-expansion-v5-builder",
+      "goldReviewedAt": "2026-08-08T00:32:56.358Z",
+      "goldReviewer": "expansion-v5-structural-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "ability",
+      "targetAbilityId": "loyalty-+1",
+      "scopeReason": "Gold scoped to loyalty ability via loyaltyCost.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v5-005",
+      "category": "exp-v5 loyalty",
+      "layout": "normal",
+      "oracleId": "0d2bbce0-8c27-4b82-ab62-51a0c3cfc9b0",
+      "oracleText": "+1: Until your next turn, whenever a creature deals combat damage to Vraska, destroy that creature.\n−3: Destroy target nonland permanent.\n−7: Create three 1/1 black Assassin creature tokens with \"Whenever this token deals combat damage to a player, that player loses the game.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target nonland permanent",
+          "loyaltyCost": "−3"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "destroy"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "loyalty_ability_scoping",
+        "split": "expansion-training-v5",
+        "selectionRule": "+1 destroy attacker vs −3 destroy permanent vs −7 assassins",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Vraska the Unseen",
+      "colorIdentity": [
+        "B",
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "2484e39330f6256442241c161ea4f59a1ab8b8e5e87f6e008d4e3788596962a1",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v5-structural-miner",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v5-v14",
+      "goldReviewVersion": "development-generalization-expansion-v5-builder",
+      "goldReviewedAt": "2026-08-08T00:32:56.358Z",
+      "goldReviewer": "expansion-v5-structural-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "ability",
+      "targetAbilityId": "loyalty-−3",
+      "scopeReason": "Gold scoped to loyalty ability via loyaltyCost.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v5-006",
+      "category": "exp-v5 spree",
+      "layout": "normal",
+      "oracleId": "ef0c0f28-e1ee-42a1-9878-95a0ceb0a9fa",
+      "oracleText": "Spree (Choose one or more additional costs.)\n+ {1} — Untap all creatures target player controls.\n+ {1} — Target creature gains double strike until end of turn.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "untap",
+          "evidenceContains": "Untap all creatures target player controls",
+          "optionId": "opt-1"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "modal_spree_structure",
+        "split": "expansion-training-v5",
+        "selectionRule": "Spree untap vs double strike",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Rustler Rampage",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "b0d081be7bae0d1eab21ab51f61ecba3088bc7811018788420b77a476fb005e6",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v5-structural-miner",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v5-v14",
+      "goldReviewVersion": "development-generalization-expansion-v5-builder",
+      "goldReviewedAt": "2026-08-08T00:32:56.358Z",
+      "goldReviewer": "expansion-v5-structural-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "modal_option",
+      "targetOptionId": "opt-1",
+      "scopeReason": "Gold carries modal optionId — scoped to single modal branch.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v5-007",
+      "category": "exp-v5 spree",
+      "layout": "normal",
+      "oracleId": "b47f7f1e-2d81-4b1b-870d-4c1a4f020505",
+      "oracleText": "Spree (Choose one or more additional costs.)\n+ {2} — Put two +1/+1 counters on target creature.\n+ {1} — Target creature gains trample until end of turn.\n+ {1} — Until end of turn, target creature gains \"Whenever this creature deals combat damage to a player, draw two cards.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "Put two +1/+1 counters on target creature",
+          "optionId": "opt-1"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "modal_spree_structure",
+        "split": "expansion-training-v5",
+        "selectionRule": "Spree counters vs trample vs haste",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Trash the Town",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "cc96818136cc1f2f1ccbb2be9ebaf7b132aeb7e592e8072269239863e07ae847",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v5-structural-miner",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v5-v14",
+      "goldReviewVersion": "development-generalization-expansion-v5-builder",
+      "goldReviewedAt": "2026-08-08T00:32:56.358Z",
+      "goldReviewer": "expansion-v5-structural-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "modal_option",
+      "targetOptionId": "opt-1",
+      "scopeReason": "Gold carries modal optionId — scoped to single modal branch.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v5-008",
+      "category": "exp-v5 modal",
+      "layout": "normal",
+      "oracleId": "0007c283-5b7a-4c00-9ca1-b455c8dff8c3",
+      "oracleText": "Choose one —\n• Return target permanent card from your graveyard to your hand.\n• Put your commander into your hand from the command zone.\nEntwine {2} (Choose both if you pay the entwine cost.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "return_to_hand",
+          "evidenceContains": "Return target permanent card from your graveyard to your hand",
+          "optionId": "opt-1"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "modal_spree_structure",
+        "split": "expansion-training-v5",
+        "selectionRule": "Choose one gy return vs commander",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Road of Return",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "4f09bdb4632ce9852ee85e20d3a32862a22abfbcc5fa49a7089861f44a4d64b2",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v5-structural-miner",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v5-v14",
+      "goldReviewVersion": "development-generalization-expansion-v5-builder",
+      "goldReviewedAt": "2026-08-08T00:32:56.358Z",
+      "goldReviewer": "expansion-v5-structural-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "modal_option",
+      "targetOptionId": "opt-1",
+      "scopeReason": "Gold carries modal optionId — scoped to single modal branch.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v5-009",
+      "category": "exp-v5 modal",
+      "layout": "normal",
+      "oracleId": "0b786547-67ed-49fa-9981-35c4c2175f62",
+      "oracleText": "Choose one —\n• Create a token that's a copy of target creature you control, except it's not legendary and it's a 4/4 Hero in addition to its other types.\n• Create a token that's a copy of target creature an opponent controls, except it's not legendary and it's a 2/2 Coward in addition to its other types.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a token that's a copy of target creature you control",
+          "optionId": "opt-1",
+          "tokenCopyOf": "target creature you control"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "modal_spree_structure",
+        "split": "expansion-training-v5",
+        "selectionRule": "Choose one token copy hero vs creature",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Ember Island Production",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "75d487fd9102025e2a37749a51f6c6747a12cd9b8c0a226f27a7f385a6d3e27e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v5-structural-miner",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v5-v14",
+      "goldReviewVersion": "development-generalization-expansion-v5-builder",
+      "goldReviewedAt": "2026-08-08T00:32:56.358Z",
+      "goldReviewer": "expansion-v5-structural-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "modal_option",
+      "targetOptionId": "opt-1",
+      "scopeReason": "Gold carries modal optionId — scoped to single modal branch.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v5-010",
+      "category": "exp-v5 modal",
+      "layout": "normal",
+      "oracleId": "0766cf02-ea55-4271-8c73-213c93b0baac",
+      "oracleText": "Choose one —\n• Tap two target creatures.\n• Creatures don't untap during target player's next untap step.\nEntwine {1} (Choose both if you pay the entwine cost.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "tap",
+          "evidenceContains": "Tap two target creatures",
+          "optionId": "opt-1"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "modal_spree_structure",
+        "split": "expansion-training-v5",
+        "selectionRule": "Choose one tap two vs skip untap step",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Blinding Beam",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "656b24d88378fdd1ad92181981c8e4911938af83a91f6fc3fa97cb475762ea72",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v5-structural-miner",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v5-v14",
+      "goldReviewVersion": "development-generalization-expansion-v5-builder",
+      "goldReviewedAt": "2026-08-08T00:32:56.358Z",
+      "goldReviewer": "expansion-v5-structural-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "modal_option",
+      "targetOptionId": "opt-1",
+      "scopeReason": "Gold carries modal optionId — scoped to single modal branch.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v5-011",
+      "category": "exp-v5 token-copy",
+      "layout": "normal",
+      "oracleId": "5c68853e-4fb8-465e-b262-e6dbaf972533",
+      "oracleText": "Create a token that's a copy of target creature you control.\nFlashback {3}{U} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a token that's a copy of target creature you control",
+          "tokenCopyOf": "target creature you control"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "token_copy_delayed",
+        "split": "expansion-training-v5",
+        "selectionRule": "Create token copy controlled creature",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Self-Reflection",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "9d8d9f713e55964d6081c0fdd54a0a556e3d436ab43dbfce5ace8a3526df6520",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v5-structural-miner",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v5-v14",
+      "goldReviewVersion": "development-generalization-expansion-v5-builder",
+      "goldReviewedAt": "2026-08-08T00:32:56.358Z",
+      "goldReviewer": "expansion-v5-structural-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v5-012",
+      "category": "exp-v5 token-copy",
+      "layout": "normal",
+      "oracleId": "3b577179-10d0-43f1-ac17-9dd2d12c965d",
+      "oracleText": "This land enters tapped.\n{T}: Add {U}.\n{2}{G}{G}{U}, {T}, Sacrifice this land: Create a token that's a copy of target creature you control, except it enters with an additional +1/+1 counter on it. Activate only as a sorcery.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a token that's a copy of target creature you control",
+          "tokenCopyOf": "target creature you control"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "token_copy_delayed",
+        "split": "expansion-training-v5",
+        "selectionRule": "Activated sacrifice land create copy with counter",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Littjara Mirrorlake",
+      "colorIdentity": [
+        "G",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "d2e7e9671a0627095a34d94a51400e21adc8fca7d6f7dfce883bc3d69a290101",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v5-structural-miner",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v5-v14",
+      "goldReviewVersion": "development-generalization-expansion-v5-builder",
+      "goldReviewedAt": "2026-08-08T00:32:56.358Z",
+      "goldReviewer": "expansion-v5-structural-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v5-013",
+      "category": "exp-v5 delayed-exile",
+      "layout": "normal",
+      "oracleId": "62d394e1-6e7d-4703-8fd8-494f0f043876",
+      "oracleText": "Vigilance, haste\n{T}: Target opponent whose turn it is puts target nonlegendary creature card from your graveyard onto the battlefield under their control. It gains haste. Goad it. At the beginning of the next end step, exile it. (Until your next turn, that creature attacks each combat if able and attacks a player other than you if able.)",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "puts target nonlegendary creature card from your graveyard onto the battlefield"
+        }
+      ],
+      "expectedRoles": [],
+      "expansionMetadata": {
+        "family": "token_copy_delayed",
+        "split": "expansion-training-v5",
+        "selectionRule": "Activated goad put gy creature + delayed exile",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "The Beamtown Bullies",
+      "colorIdentity": [
+        "B",
+        "G",
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3af18b6c3826f45cfb26ab88ff74f5a4ee1cb0144b90b56a126720bbfd3810f7",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v5-structural-miner",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v5-v14",
+      "goldReviewVersion": "development-generalization-expansion-v5-builder",
+      "goldReviewedAt": "2026-08-08T00:32:56.358Z",
+      "goldReviewer": "expansion-v5-structural-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v5-014",
+      "category": "exp-v5 delayed-exile",
+      "layout": "normal",
+      "oracleId": "d95dd8cc-ce7d-4d43-afbd-efaa2d3c7a35",
+      "oracleText": "Mill seven cards. At the beginning of the next end step, exile seven cards from your graveyard.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "Mill seven cards"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "mill"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "token_copy_delayed",
+        "split": "expansion-training-v5",
+        "selectionRule": "Mill seven + delayed exile gy at end step",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "False Memories",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "107b058c6bcaffa5f0cf39439aa2850b5feae079b8f381f4c781f14f84f50ba6",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v5-structural-miner",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v5-v14",
+      "goldReviewVersion": "development-generalization-expansion-v5-builder",
+      "goldReviewedAt": "2026-08-08T00:32:56.358Z",
+      "goldReviewer": "expansion-v5-structural-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "dev-exp-v5-015",
+      "category": "exp-v5 loyalty-insect",
+      "layout": "normal",
+      "oracleId": "0efb0d7e-dea0-4817-a243-15066e9ef333",
+      "oracleText": "As long as Grist isn't on the battlefield, it's a 1/1 Insect creature in addition to its other types.\n+1: Create a 1/1 black and green Insect creature token, then mill a card. If an Insect card was milled this way, put a loyalty counter on Grist and repeat this process.\n−2: You may sacrifice a creature. When you do, destroy target creature or planeswalker.\n−5: Each opponent loses life equal to the number of creature cards in your graveyard.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 1/1 black and green Insect creature token",
+          "loyaltyCost": "+1"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "expansionMetadata": {
+        "family": "token_copy_delayed",
+        "split": "expansion-training-v5",
+        "selectionRule": "+1 create insect + mill chain",
+        "manualReviewConfirmed": true
+      },
+      "cardName": "Grist, the Hunger Tide",
+      "colorIdentity": [
+        "B",
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "66c9bfe4247ad66a88c6e4ec25fe0d0ada47d9811175011f714d0f57fac092fa",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "reviewer": "expansion-v5-structural-miner",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "development-generalization-expansion-v5-v14",
+      "goldReviewVersion": "development-generalization-expansion-v5-builder",
+      "goldReviewedAt": "2026-08-08T00:32:56.358Z",
+      "goldReviewer": "expansion-v5-structural-miner",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "caseScope": "ability",
+      "targetAbilityId": "loyalty-+1",
+      "scopeReason": "Gold scoped to loyalty ability via loyaltyCost.",
+      "certifiedEmptyLayer2": false
+    }
+  ],
+  "benchmarkStatus": "catalog_clean",
+  "usableForParserEvaluation": true,
+  "parserExecutionCount": 0,
+  "goldCertification": {
+    "certifierId": "development-generalization-expansion-v5-builder",
+    "certifiedAt": "2026-08-08T00:32:56.358Z",
+    "casesReviewed": "15/15",
+    "reviewer": "expansion-v5-structural-miner",
+    "goldReviewStatus": "reviewed",
+    "goldCompletenessStatus": "complete",
+    "parserExecutionCount": 0
+  },
+  "parentContentHash": "2edb65ecc5d276338a7846b3c095c57c8e8cfacba92e01f7b9876ce37c740b82",
+  "parentTaxonomyVersion": "three-layer-v1.3",
+  "migratedAt": "2026-08-08T04:25:46.501Z",
+  "migrationReviewer": "rc3-benchmark-selector-v130",
+  "parserConsulted": false
+}

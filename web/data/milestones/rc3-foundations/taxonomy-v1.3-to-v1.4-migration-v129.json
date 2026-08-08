@@ -1,0 +1,43 @@
+{
+  "migrationVersion": "taxonomy-v1.3-to-v1.4-migration-v129",
+  "frozenAt": "2026-08-08T04:08:20.028Z",
+  "parentHash": "e4ca33f217044a86ba50cba88455aa0320a14c63a8515b6d8c67c51cefb25523",
+  "taxonomyFrom": "three-layer-v1.3",
+  "taxonomyTo": "three-layer-v1.4",
+  "parserConsulted": false,
+  "changedCases": [
+    {
+      "caseId": "vh12-0049",
+      "oldPrimitive": "draw",
+      "newPrimitive": "put_into_hand",
+      "evidenceContains": "Put one of those cards into your hand",
+      "policyReason": "Oracle put instruction is zone transition, not draw. Gold defect under v1.3.",
+      "parserConsulted": false
+    },
+    {
+      "caseId": "vh12-0106",
+      "oldPrimitive": null,
+      "newPrimitive": "put_into_hand",
+      "evidenceContains": "put it into your hand",
+      "policyReason": "Gold completion: otherwise-branch put instruction missing from v1.3 gold.",
+      "parserConsulted": false
+    },
+    {
+      "caseId": "vh12-0145",
+      "oldPrimitive": null,
+      "newPrimitive": "put_counter",
+      "evidenceContains": "Put two +1/+1 counters",
+      "policyReason": "Gold completion: empty benchmark defect; main spell effect in full_card scope.",
+      "parserConsulted": false
+    },
+    {
+      "caseId": "vh12-0151",
+      "oldPrimitive": null,
+      "newPrimitive": "put_into_hand",
+      "evidenceContains": "put it into your hand",
+      "policyReason": "Gold completion: empty benchmark defect; main spell put branch in full_card scope.",
+      "parserConsulted": false
+    }
+  ],
+  "contentHash": "8360d0b799f3a7226dfd97c74a93b3746463522dc790aebe2b501f3d028b6c85"
+}

@@ -221,7 +221,9 @@ export function inferSupportedPrimitiveFromEvidence(
   for (const primitive of PRIMITIVE_ACTION_TYPES) {
     const patterns: Record<PrimitiveActionType, RegExp> = {
       add_mana: /\bAdd \{|\badd (?:one mana|three mana|\{)/i,
-      draw: /\b(?:draw|draws|put that card into your hand|put one of those cards into your hand|put [\w ]+of those cards into your hand) (?:cards? equal to half|(?:a |one |two |three |four |five |seven |X |up to \w+ )?cards?|into your hand)?\b/i,
+      draw: /\b(?:Draw|draws?) (?:cards? equal to half|(?:a |one |two |three |four |five |seven |X |up to \w+ )?cards?)\b/i,
+      put_into_hand:
+        /\b(?:put (?:it|that card|one of them|one of those cards|two of those cards|target card from [^.]+?) into (?:your |their |its owner's )?hand|Put (?:that card|one of them|one of those cards|target card from [^.]+?) into (?:your |their |its owner's )?hand|reveal (?:it|that card)[^.]* and put (?:it|that card) into your hand)\b/i,
       discard: /\b(?:discard|discards)\b/i,
       search_library: /\bsearch(?:es)? (?:your |their )?library\b/i,
       deal_damage: /\bdeals? (?:\d+|X) damage\b/i,

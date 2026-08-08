@@ -1,0 +1,100 @@
+{
+  "migrationVersion": "active-development-v1.3-to-v1.4-v130",
+  "frozenAt": "2026-08-08T04:25:21.250Z",
+  "taxonomyFrom": "three-layer-v1.3",
+  "taxonomyTo": "three-layer-v1.4",
+  "parserConsulted": false,
+  "reviewer": "rc3-benchmark-selector-v130",
+  "datasets": [
+    {
+      "path": "data/oracle-action-eval-development-v26.json",
+      "outPath": "data/oracle-action-eval-development-v26-v14.json",
+      "parentHash": "68101b45d07f5380f709f7d691a8fd7b14d93153b807189e776b9a3bf56510e7",
+      "contentHash": "c6c037111e8b32df1b2872413c75f4c9411d740d469bb9af4d8172292c8cd0e9",
+      "caseCount": 284,
+      "changedCases": 0,
+      "changedPrimitives": 0
+    },
+    {
+      "path": "data/oracle-action-eval-development-generalization-expansion-v2.json",
+      "outPath": "data/oracle-action-eval-development-generalization-expansion-v2-v14.json",
+      "parentHash": "bd73bee1b24bde6d8f630898b95c9426a975e09b69732fc5477faf6dfea5fc4b",
+      "contentHash": "057b24415bcd9e3c6c0505ed6b64efd65aa67100fca61dbaa317407b4709d402",
+      "caseCount": 52,
+      "changedCases": 4,
+      "changedPrimitives": 4
+    },
+    {
+      "path": "data/oracle-action-eval-development-generalization-expansion-v3.json",
+      "outPath": "data/oracle-action-eval-development-generalization-expansion-v3-v14.json",
+      "parentHash": "80e1479b616b64c5bcd200b04df3b00c3d8eac01522c6c9ea0fc3af3923cd865",
+      "contentHash": "cca99e70455d8c51a1bb0c5f364f3327d6075758265c0505f20fc2ea0549befe",
+      "caseCount": 24,
+      "changedCases": 2,
+      "changedPrimitives": 2
+    },
+    {
+      "path": "data/oracle-action-eval-development-generalization-expansion-v5.json",
+      "outPath": "data/oracle-action-eval-development-generalization-expansion-v5-v14.json",
+      "parentHash": "2edb65ecc5d276338a7846b3c095c57c8e8cfacba92e01f7b9876ce37c740b82",
+      "contentHash": "9c61089004b35fb83d10a016ce1439b754fcbb36691d04b7002383c7b3e48d82",
+      "caseCount": 15,
+      "changedCases": 1,
+      "changedPrimitives": 1
+    }
+  ],
+  "totalChangedCases": 7,
+  "totalChangedPrimitives": 7,
+  "records": [
+    {
+      "caseId": "dev-exp-v1-029",
+      "oracleEvidence": "put that card into your hand",
+      "oldPrimitive": "draw",
+      "newPrimitive": "put_into_hand",
+      "policyReason": "Oracle 'put … into hand' wording — not draw under v1.4"
+    },
+    {
+      "caseId": "dev-exp-v1-030",
+      "oracleEvidence": "Put one of those cards into your hand",
+      "oldPrimitive": "draw",
+      "newPrimitive": "put_into_hand",
+      "policyReason": "Oracle 'put … into hand' wording — not draw under v1.4"
+    },
+    {
+      "caseId": "dev-exp-v1-033",
+      "oracleEvidence": "Put one of those cards into your hand",
+      "oldPrimitive": "draw",
+      "newPrimitive": "put_into_hand",
+      "policyReason": "Oracle 'put … into hand' wording — not draw under v1.4"
+    },
+    {
+      "caseId": "dev-exp-v1-040",
+      "oracleEvidence": "put that card into your hand",
+      "oldPrimitive": "draw",
+      "newPrimitive": "put_into_hand",
+      "policyReason": "Oracle 'put … into hand' wording — not draw under v1.4"
+    },
+    {
+      "caseId": "dev-exp-v3-005",
+      "oracleEvidence": "Put that card into your hand",
+      "oldPrimitive": "draw",
+      "newPrimitive": "put_into_hand",
+      "policyReason": "Oracle 'put … into hand' wording — not draw under v1.4"
+    },
+    {
+      "caseId": "dev-exp-v3-007",
+      "oracleEvidence": "Put one of them into your hand",
+      "oldPrimitive": "draw",
+      "newPrimitive": "put_into_hand",
+      "policyReason": "Oracle 'put … into hand' wording — not draw under v1.4"
+    },
+    {
+      "caseId": "dev-exp-v5-003",
+      "oracleEvidence": "put it into your hand",
+      "oldPrimitive": "draw",
+      "newPrimitive": "put_into_hand",
+      "policyReason": "Oracle 'put … into hand' wording — not draw under v1.4"
+    }
+  ],
+  "contentHash": "cae07222618a7337dd9803c29fb8d5e40e5be21d6fea989f501b83596ee0a447"
+}

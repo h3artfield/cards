@@ -1,0 +1,1095 @@
+{
+  "overlayVersion": "validation-v12-case-scope-overlay-v129",
+  "frozenAt": "2026-08-08T04:08:20.028Z",
+  "parentDatasetHash": "e4ca33f217044a86ba50cba88455aa0320a14c63a8515b6d8c67c51cefb25523",
+  "parentDatasetRef": "data/oracle-action-eval-validation-v12-fresh.json",
+  "parserConsulted": false,
+  "caseCount": 151,
+  "entries": [
+    {
+      "caseId": "vh12-0001",
+      "cardName": "Amnesia",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0002",
+      "cardName": "Anarchy",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0003",
+      "cardName": "Ancestral Recall",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0004",
+      "cardName": "Ancestral Reminiscence",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0005",
+      "cardName": "Angelic Ascension",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0006",
+      "cardName": "Angelic Edict",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0007",
+      "cardName": "Annihilate",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0008",
+      "cardName": "Apocalypse",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0009",
+      "cardName": "Appetite for the Unnatural",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0010",
+      "cardName": "Armageddon",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0011",
+      "cardName": "Artifact Blast",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0012",
+      "cardName": "Artificer's Epiphany",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0013",
+      "cardName": "Ashes to Ashes",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0014",
+      "cardName": "Asphyxiate",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0015",
+      "cardName": "A-Moon-Circuit Hacker",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0016",
+      "cardName": "Abeyance",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0017",
+      "cardName": "Abyssal Harvester",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0018",
+      "cardName": "Acquire",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0019",
+      "cardName": "Adriana's Valor",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0020",
+      "cardName": "Aerie Worshippers",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0021",
+      "cardName": "Aether Poisoner",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0022",
+      "cardName": "Aether Refinery",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0023",
+      "cardName": "Aetherplasm",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0024",
+      "cardName": "Afterlife Insurance",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0025",
+      "cardName": "A-Find the Path",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0026",
+      "cardName": "A-Glittermonger",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0027",
+      "cardName": "A-Jade Orb of Dragonkind",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0028",
+      "cardName": "A-Lantern of Revealing",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0029",
+      "cardName": "A-Lapis Orb of Dragonkind",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0030",
+      "cardName": "A-Llanowar Loamspeaker",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0031",
+      "cardName": "A-Skemfar Elderhall",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0032",
+      "cardName": "A-Town",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0033",
+      "cardName": "A-Urza, Powerstone Prodigy",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0034",
+      "cardName": "A-Visions of Phyrexia",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0035",
+      "cardName": "A Chaotic Night in Vegas",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0036",
+      "cardName": "A Display of My Dark Power",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0037",
+      "cardName": "A Girl and Her Dogs",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0038",
+      "cardName": "A Mysterious Creature",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0039",
+      "cardName": "A-Acererak the Archlich",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0040",
+      "cardName": "A-Ancestral Katana",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0041",
+      "cardName": "A-Asari Captain",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0042",
+      "cardName": "A-Briar Hydra",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0043",
+      "cardName": "A-Celebrity Fencer",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0044",
+      "cardName": "A-Celestial Regulator",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0045",
+      "cardName": "A-Precipitous Drop",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0046",
+      "cardName": "Abandoned Sarcophagus",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0047",
+      "cardName": "Abundance",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0048",
+      "cardName": "Academy Manufactor",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": false,
+      "scopeReason": "Empty gold without structure certification — flagged for v13 gold review; not auto no-action.",
+      "goldWithinScope": false
+    },
+    {
+      "caseId": "vh12-0049",
+      "cardName": "Accumulate Wisdom",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0050",
+      "cardName": "Accursed Duneyard",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0051",
+      "cardName": "Adipose Offspring",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0052",
+      "cardName": "Admiral Brass, Unsinkable",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0053",
+      "cardName": "A-Lier, Disciple of the Drowned",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": false,
+      "scopeReason": "Empty gold without structure certification — flagged for v13 gold review; not auto no-action.",
+      "goldWithinScope": false
+    },
+    {
+      "caseId": "vh12-0054",
+      "cardName": "A-Peerless Samurai",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0055",
+      "cardName": "A-Revel Ruiner",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0056",
+      "cardName": "A-Rulik Mons, Warren Chief",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0057",
+      "cardName": "A-Sewer Crocodile",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0058",
+      "cardName": "A-Sizzling Soloist",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0059",
+      "cardName": "A.I.M. Bot",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": false,
+      "scopeReason": "Empty gold without structure certification — flagged for v13 gold review; not auto no-action.",
+      "goldWithinScope": false
+    },
+    {
+      "caseId": "vh12-0060",
+      "cardName": "Aang, Air Nomad",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": false,
+      "scopeReason": "Empty gold without structure certification — flagged for v13 gold review; not auto no-action.",
+      "goldWithinScope": false
+    },
+    {
+      "caseId": "vh12-0061",
+      "cardName": "Abomination of Llanowar",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": false,
+      "scopeReason": "Empty gold without structure certification — flagged for v13 gold review; not auto no-action.",
+      "goldWithinScope": false
+    },
+    {
+      "caseId": "vh12-0062",
+      "cardName": "Aboshan's Desire",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": false,
+      "scopeReason": "Empty gold without structure certification — flagged for v13 gold review; not auto no-action.",
+      "goldWithinScope": false
+    },
+    {
+      "caseId": "vh12-0063",
+      "cardName": "Abrade",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0064",
+      "cardName": "Abuna's Chant",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0065",
+      "cardName": "Academic Probation",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0066",
+      "cardName": "Acquisitions Expert",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0067",
+      "cardName": "Active Volcano",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0068",
+      "cardName": "Adaptive Sporesinger",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0069",
+      "cardName": "Aerith Rescue Mission",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0070",
+      "cardName": "Aether Channeler",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0071",
+      "cardName": "Aether Shockwave",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0072",
+      "cardName": "Aetheric Amplifier",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0073",
+      "cardName": "Abian, Luvion Usurper",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0074",
+      "cardName": "Age of Ultron",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0075",
+      "cardName": "Ajani Fells the Godsire",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0076",
+      "cardName": "Ajani Goldmane",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0077",
+      "cardName": "Ajani Resolute",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0078",
+      "cardName": "Ajani Steadfast",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0079",
+      "cardName": "Ajani Unrelenting",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0080",
+      "cardName": "Ajani Unyielding",
+      "caseScope": "ability",
+      "targetAbilityId": "loyalty-minus-2-exile",
+      "scopeReason": "Gold scoped to −2 exile loyalty ability only; −9 ultimate omitted from gold by design.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0081",
+      "cardName": "Ajani Vengeant",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0082",
+      "cardName": "Ajani, Adversary of Tyrants",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0083",
+      "cardName": "Adventurous Eater // Have a Bite",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0084",
+      "cardName": "Aetherblade Agent // Gitaxian Mindstinger",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0085",
+      "cardName": "Afflicted Deserter // Werewolf Ransacker",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0086",
+      "cardName": "Ajani, Nacatl Pariah // Ajani, Nacatl Avenger",
+      "caseScope": "ability",
+      "targetFaceId": "back",
+      "targetAbilityId": "loyalty-zero-conditional",
+      "scopeReason": "Back-face 0: loyalty ability partially gold-scoped; deal_damage branch omitted from gold.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0087",
+      "cardName": "Akki Lavarunner // Tok-Tok, Volcano Born",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0088",
+      "cardName": "Akoum Warrior // Akoum Teeth",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0089",
+      "cardName": "Albiorix, Goose Tyrant // Wild Goose Chase",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0090",
+      "cardName": "Alluring Suitor // Deadly Dancer",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0091",
+      "cardName": "Alrund, God of the Cosmos // Hakka, Whispering Raven",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0092",
+      "cardName": "Altar of Bhaal // Bone Offering",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0093",
+      "cardName": "Altar of the Wretched // Wretched Bonemass",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0094",
+      "cardName": "Ambitious Farmhand // Seasoned Cathar",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0095",
+      "cardName": "Acidic Sliver",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0096",
+      "cardName": "Acolyte of Bahamut",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0097",
+      "cardName": "Adventurers' Guildhouse",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": false,
+      "scopeReason": "Empty gold without structure certification — flagged for v13 gold review; not auto no-action.",
+      "goldWithinScope": false
+    },
+    {
+      "caseId": "vh12-0098",
+      "cardName": "Aethermage's Touch",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0099",
+      "cardName": "Agent of Raffine",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0100",
+      "cardName": "Agent of the Iron Throne",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0101",
+      "cardName": "Agent of the Shadow Thieves",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0102",
+      "cardName": "Aggressive Biomancy",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0103",
+      "cardName": "A-Dragon's Rage Channeler",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0104",
+      "cardName": "A-Geological Appraiser",
+      "caseScope": "clause",
+      "scopeReason": "Discover reminder parenthetical is mechanic definition, not card-native Layer-2 scope.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0105",
+      "cardName": "A-Kona, Rescue Beastie",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0106",
+      "cardName": "A-Nadu, Winged Wisdom",
+      "caseScope": "ability",
+      "scopeReason": "Triggered conditional branch gold incomplete for otherwise put_into_hand branch.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0107",
+      "cardName": "A-Nashi, Moon Sage's Scion",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0108",
+      "cardName": "A-Nezumi Prowler",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0109",
+      "cardName": "A-Patrician Geist",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0110",
+      "cardName": "A-Prosperous Thief",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0111",
+      "cardName": "A-Satoru Umezawa",
+      "caseScope": "structure_only",
+      "certifiedEmptyLayer2": true,
+      "scopeReason": "Layer-1 structure benchmark with certified empty Layer-2 gold (expectedStructure present, no primitive gold).",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0112",
+      "cardName": "A-Shipwreck Sifters",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0113",
+      "cardName": "Abundant Maw",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0114",
+      "cardName": "Acolyte of Aclazotz",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0115",
+      "cardName": "Acolyte of Xathrid",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0116",
+      "cardName": "Acolyte's Reward",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0117",
+      "cardName": "Agate-Blade Assassin",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0118",
+      "cardName": "Agent of Masks",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0119",
+      "cardName": "Agent Venom",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0120",
+      "cardName": "Agonizing Remorse",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0121",
+      "cardName": "Abzan Monument",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0122",
+      "cardName": "Aerial Surveyor",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0123",
+      "cardName": "Agency Outfitter",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0124",
+      "cardName": "Ainok Guide",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0125",
+      "cardName": "Ajani's Aid",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0126",
+      "cardName": "Alabaster Host Intercessor",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0127",
+      "cardName": "Alpine Guide",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0128",
+      "cardName": "Alpine Houndmaster",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0129",
+      "cardName": "Abstergo Entertainment",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0130",
+      "cardName": "Abuelo's Awakening",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0131",
+      "cardName": "Abzan Devotee",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0132",
+      "cardName": "Acolyte of Affliction",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0133",
+      "cardName": "Adéwalé, Breaker of Chains",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0134",
+      "cardName": "Adun Oakenshield",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0135",
+      "cardName": "Advanced Stitchwing",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0136",
+      "cardName": "Aerith, Last Ancient",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0137",
+      "cardName": "Academy Wall",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0138",
+      "cardName": "Act of Authority",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0139",
+      "cardName": "Aegis Sculptor",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0140",
+      "cardName": "Aether Chaser",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0141",
+      "cardName": "Aether Herder",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0142",
+      "cardName": "Aether Inspector",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0143",
+      "cardName": "Aether Swooper",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0144",
+      "cardName": "Aethersnipe",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0145",
+      "cardName": "Angelfire Ignition",
+      "caseScope": "full_card",
+      "scopeReason": "Prior empty gold was benchmark defect; main spell effect (put_counter) is in scope under v1.4 audit.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0146",
+      "cardName": "Angelic Sleuth",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0147",
+      "cardName": "Ant-Man's Army",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0148",
+      "cardName": "Antique Collector",
+      "caseScope": "ability",
+      "scopeReason": "Gold scopes ETB investigate; granted-ability quote and token reminder actions require explicit ability/clause scope.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0149",
+      "cardName": "Antiquities on the Loose",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0150",
+      "cardName": "April O'Neil, Live on the Scene",
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "goldWithinScope": true
+    },
+    {
+      "caseId": "vh12-0151",
+      "cardName": "Arcane Infusion",
+      "caseScope": "full_card",
+      "scopeReason": "Prior empty gold was benchmark defect; main spell put_into_hand branch is in scope under v1.4 audit.",
+      "goldWithinScope": true
+    }
+  ],
+  "contentHash": "ae961e1d67ba2ccc88818df0cf599d9d21cb7570d83aba654542802da3e7d36b"
+}

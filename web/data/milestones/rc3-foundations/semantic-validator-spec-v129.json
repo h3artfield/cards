@@ -1,0 +1,36 @@
+{
+  "specVersion": "semantic-validator-spec-v129",
+  "frozenAt": "2026-08-08T04:08:20.028Z",
+  "taxonomyVersion": "three-layer-v1.4",
+  "canonicalInput": "OracleSemanticParse",
+  "removedFromReleaseGating": [
+    "inferSupportedPrimitiveFromEvidence"
+  ],
+  "unsupportedGateDefinition": "semantically invalid or unrepresentable action record — NOT evaluator phrase-dictionary failure",
+  "structuralValidation": [
+    "actionType exists in taxonomy v1.4 PRIMITIVE_ACTION_TYPES",
+    "required arguments structurally valid for actionType",
+    "parent ability exists and action.clauseId resolves",
+    "modal option exists when modalOptionId referenced",
+    "object/referent IDs resolve in parse.objects",
+    "provenance.actionSpan exists",
+    "provenance spans contained within oracleText bounds",
+    "zones coherent for zone-transition primitives (put_into_hand, return_to_hand, etc.)",
+    "quantity representation valid when present"
+  ],
+  "diagnosticOnly": {
+    "evidenceSupportConfidence": "Optional lexical overlap check — never triggers unsupported gate",
+    "lexicalDiagnostic": "Regex/phrase hints for developer triage only"
+  },
+  "unsupportedExamples": [
+    "actionType not in taxonomy",
+    "put_into_hand missing destinationZone hand",
+    "parentAbilityId dangling reference",
+    "provenance span outside oracle text"
+  ],
+  "notUnsupported": [
+    "regex did not recognize phrase in inferSupportedPrimitiveFromEvidence",
+    "evidenceSupportConfidence below threshold"
+  ],
+  "contentHash": "cda5b0744c8271522d57827a68125c1e88cda8f8344eeb7bb3ba02a1e006f4fd"
+}

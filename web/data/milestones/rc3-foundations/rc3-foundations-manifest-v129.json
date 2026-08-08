@@ -1,0 +1,55 @@
+{
+  "manifestVersion": "rc3-foundations-manifest-v129",
+  "frozenAt": "2026-08-08T04:08:20.038Z",
+  "status": "FOUNDATIONS_FROZEN",
+  "blockedUntilComplete": [
+    "RC3 parser tuning",
+    "validation v13 creation",
+    "blind taxonomy migration"
+  ],
+  "parentRefs": {
+    "v12DatasetHash": "e4ca33f217044a86ba50cba88455aa0320a14c63a8515b6d8c67c51cefb25523",
+    "rc2ExecutionRef": "data/milestones/validation-v12-fresh-certification/validation-v12-rc2-execution-1-raw.json",
+    "policyAuditRef": "data/milestones/validation-v12-fresh-certification/validation-v12-policy-audit-v129.json",
+    "forensicRef": "data/milestones/validation-v12-fresh-certification/validation-v12-rc2-forensic-diagnosis.json"
+  },
+  "artifacts": {
+    "taxonomyV14Spec": {
+      "hash": "c5620beb6b067c166d22dc4edb4c3ecc19bee8a0578619f1974b3cf4968f2894",
+      "path": "data/milestones/rc3-foundations/taxonomy-v1.4-spec.json"
+    },
+    "taxonomyMigration": {
+      "hash": "8360d0b799f3a7226dfd97c74a93b3746463522dc790aebe2b501f3d028b6c85",
+      "path": "data/milestones/rc3-foundations/taxonomy-v1.3-to-v1.4-migration-v129.json"
+    },
+    "caseScopeSchema": {
+      "hash": "53262df4f00bde1e6d24dcf0979165c376f1bcfd8e8694c4421153ec662fea94",
+      "path": "data/milestones/rc3-foundations/benchmark-case-scope-schema-v1.json"
+    },
+    "caseScopeOverlay": {
+      "hash": "ae961e1d67ba2ccc88818df0cf599d9d21cb7570d83aba654542802da3e7d36b",
+      "path": "data/milestones/rc3-foundations/validation-v12-case-scope-overlay-v129.json"
+    },
+    "metrics": {
+      "hash": "df97f690a54fffb00a8e4cd6d0a3d753696cd406e4b72a48839bc67877148862",
+      "path": "data/milestones/rc3-foundations/v12-metrics-historical-vs-corrected-v129.json"
+    },
+    "genuineGrammarFailures": {
+      "hash": "319c6f77f131a758d39dc1cc7dee434677b617389f029f0c80a14403fa9bcc46",
+      "path": "data/milestones/rc3-foundations/genuine-grammar-failures-v129.json"
+    },
+    "policyStructureFamilies": {
+      "hash": "e22421b3711715f858517a935da55b9031623a29b01906729bcd046d88fb71c4",
+      "path": "data/milestones/rc3-foundations/policy-structure-families-v129.json"
+    },
+    "semanticValidatorSpec": {
+      "hash": "cda5b0744c8271522d57827a68125c1e88cda8f8344eeb7bb3ba02a1e006f4fd",
+      "path": "data/milestones/rc3-foundations/semantic-validator-spec-v129.json"
+    },
+    "rc3PipelineSpec": {
+      "hash": "ca211a3ffc9c01f903aaacfe988c8fd70ce9e342bbaf90e6bbb701c4b0a3c974",
+      "path": "data/milestones/rc3-foundations/rc3-pipeline-spec-v129.json"
+    }
+  },
+  "contentHash": "0083cbfa759d4e2cc73baa64784f2a7187550ea10f1ef9e68fbd6d8b0137e0c8"
+}

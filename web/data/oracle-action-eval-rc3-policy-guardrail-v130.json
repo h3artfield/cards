@@ -1,0 +1,1506 @@
+{
+  "setClassification": "rc3_policy_guardrail_v130",
+  "evaluationSetVersion": "rc3-policy-guardrail-v130",
+  "taxonomyVersion": "three-layer-v1.4",
+  "contentHash": "3a250fc7d4303d6ff5f1fd9f4b25b71e08c6daa2ccefeea4b0720b15acc4f629",
+  "cases": [
+    {
+      "id": "rc3-guard-0001",
+      "category": "rc3-policy-persistent_cast_permission",
+      "layout": "normal",
+      "oracleId": "e1b6d0ab-4e11-43a2-8a7f-3fb51582ddf3",
+      "oracleText": "This spell costs {U} less to cast for each instant and sorcery spell you've cast this turn.\nWhenever Demilich attacks, exile up to one target instant or sorcery card from your graveyard. Copy it. You may cast the copy.\nYou may cast Demilich from your graveyard by exiling four instant and/or sorcery cards from your graveyard in addition to paying its other costs.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Demilich",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "14fcc568b2e6e8d434e220e4767bba6712d9e49cb8050e5dc589d9dd83e8e44f",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "persistent_cast_permission",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0002",
+      "category": "rc3-policy-persistent_cast_permission",
+      "layout": "transform",
+      "oracleId": "5228730a-cebc-472e-ab9a-f424e0c893fd",
+      "oracleText": "Gutter Skulker can't be blocked as long as it's attacking alone.\nDisturb {2}{U} (You may cast this card from your graveyard transformed for its disturb cost.)\n//\nEnchant creature\nEnchanted creature gets +3/+0. It can't be blocked as long as it's attacking alone.\nIf Gutter Shortcut would be put into a graveyard from anywhere, exile it instead.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Gutter Skulker // A-Gutter Shortcut",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "c710ad34aaac6da0d011b479853de09fb8d1d653d03f1d3795ebb0e24833040c",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "persistent_cast_permission",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0003",
+      "category": "rc3-policy-persistent_cast_permission",
+      "layout": "transform",
+      "oracleId": "ba790609-7b48-4a96-a21f-5a0cfcf316a3",
+      "oracleText": "Flying\nDisturb {1}{U} (You may cast this card from your graveyard transformed for its disturb cost.)\n//\nEnchant creature\nEnchanted creature gets +1/+1 and has flying.\nIf Lanterns' Lift would be put into a graveyard from anywhere, exile it instead.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Lantern Bearer // A-Lanterns' Lift",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "56b2a75233681927a1303328514135dd8f1d49110927f9bf33feaf7ca0f474ca",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "persistent_cast_permission",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0004",
+      "category": "rc3-policy-persistent_cast_permission",
+      "layout": "transform",
+      "oracleId": "3e155876-6086-4499-9963-6efc97cfa5a6",
+      "oracleText": "Whenever Mischievous Catgeist deals combat damage to a player, draw a card.\nDisturb {1}{U} (You may cast this card from your graveyard transformed for its disturb cost.)\n//\nEnchant creature\nEnchanted creature gets +1/+1.\nEnchanted creature has \"Whenever this creature deals combat damage to a player, draw a card.\"\nIf Catlike Curiosity would be put into a graveyard from anywhere, exile it instead.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Mischievous Catgeist // A-Catlike Curiosity",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "6fa593476887d9e455f371dec71e055fc36651d869d89144f04952505ce00e3b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "persistent_cast_permission",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0005",
+      "category": "rc3-policy-persistent_cast_permission",
+      "layout": "normal",
+      "oracleId": "5404c6a5-399d-4237-b03c-41b6a1b79050",
+      "oracleText": "Up to two target creatures can't block this turn.\nFlashback {3}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "cardName": "Abandon the Post",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "586f9debb705662a848db25e3304f61697d6e8e8a89469d0601d3bcf9fbfbaca",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "persistent_cast_permission",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0006",
+      "category": "rc3-policy-persistent_cast_permission",
+      "layout": "normal",
+      "oracleId": "e0b12c48-7234-40b5-a84c-6901d2b4e5b0",
+      "oracleText": "Menace, trample\nMayhem {4}{R} (You may cast this card from your graveyard for {4}{R} if you discarded it this turn. Timing rules still apply.)",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "cardName": "Abomination, World Ravager",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "0ba57bf3ad3126605b213288907168bfbc19315fbfe39f76c8fe7630aeb68456",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "persistent_cast_permission",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0007",
+      "category": "rc3-policy-trigger_event_cast_reference",
+      "layout": "normal",
+      "oracleId": "04c6aa4e-b328-44b8-9d47-3c0d10289048",
+      "oracleText": "If this card is in your opening hand, you may begin the game with it on the battlefield.\nWhenever you cast an instant or sorcery spell that targets only a single creature you control, you may pay {1}. If you do, copy that spell. You may choose new targets for the copy.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Leyline of Resonance",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "bec8e74314bce28b0d72f97f6f20b605e548449468cb6090c5619297cfc900db",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "trigger_event_cast_reference",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0008",
+      "category": "rc3-policy-trigger_event_cast_reference",
+      "layout": "normal",
+      "oracleId": "60237125-503e-4310-a6ae-529b789e18cb",
+      "oracleText": "Flying\nWhen Master of Winds enters, draw two cards, then discard a card.\nWhenever you cast an instant, sorcery, or Wizard spell, you may have Master of Winds's base power and toughness become 5/1 or 1/5 until end of turn.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Master of Winds",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "212f100b11d0138374c2d6646f16384c7d29ee36fdbb20ad1a7baea498954a2e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "trigger_event_cast_reference",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0009",
+      "category": "rc3-policy-trigger_event_cast_reference",
+      "layout": "normal",
+      "oracleId": "49c2261c-6680-44f9-b8d6-7e7c9890aaea",
+      "oracleText": "Whenever you cast an instant, sorcery, or Wizard spell, this creature deals 1 damage to any target.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Rockslide Sorcerer",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f59f15186ec234d7da240291bd385e28ff5c33618b6bc41e06cf5c2fc54b327c",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "trigger_event_cast_reference",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0010",
+      "category": "rc3-policy-trigger_event_cast_reference",
+      "layout": "modal_dfc",
+      "oracleId": "0be4bf5e-1c93-49ea-a568-209638bf738e",
+      "oracleText": "Instant and sorcery spells you cast cost {1} less to cast.\n+1: Rowan, Scholar of Sparks deals 1 damage to each opponent. If you've drawn three or more cards this turn, she deals 3 damage to each opponent instead.\n−5: You get an emblem with \"Whenever you cast an instant or sorcery spell, you may pay {2}. If you do, copy that spell. You may choose new targets for the copy.\"\n//\nInstant and sorcery spells you cast cost {1} less to cast.\n+1: Up to one target creature has base power and toughness 0/2 until your next turn.\n−3: Draw two cards.\n−8: Exile up to five target permanents. For each permanent exiled this way, its controller creates a 4/4 blue and red Elemental creature token.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Rowan, Scholar of Sparks // A-Will, Scholar of Frost",
+      "colorIdentity": [
+        "R",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f3a604b9429cb3ecb3fefc6a768eaa327a8f3bfe1542df41f0a75ddddc930750",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "trigger_event_cast_reference",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0011",
+      "category": "rc3-policy-trigger_event_cast_reference",
+      "layout": "class",
+      "oracleId": "bab09005-927b-4ebc-93ca-d8feddb7fb38",
+      "oracleText": "(Gain the next level as a sorcery to add its ability.)\nWhen this Class enters, draw two cards, then discard two cards.\n{U}{R}: Level 2\nCreatures you control have \"{T}: Add {U} or {R}. Spend this mana only to cast an instant or sorcery spell or to gain a Class level.\"\n{1}{U}{R}: Level 3\nWhenever you cast an instant or sorcery spell, that spell deals damage to each opponent equal to the number of instant and sorcery spells you've cast this turn.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Sorcerer Class",
+      "colorIdentity": [
+        "R",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "57afaa44a7219b461ede7904fc70692bc4700554be0070e432e45f89ab7866fa",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "trigger_event_cast_reference",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0012",
+      "category": "rc3-policy-trigger_event_cast_reference",
+      "layout": "normal",
+      "oracleId": "dedcb109-2f39-4059-b67b-75ea61296c8d",
+      "oracleText": "Elves you control have \"{T}: Add {B}.\"\n+1: Put two +1/+1 counters on up to one target Elf. Untap it. It gains deathtouch until end of turn.\n0: Create a 1/1 green Elf Warrior creature token.\n−7: You get an emblem with \"Whenever you cast an Elf spell, it gains haste until end of turn and you draw two cards.\"",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Tyvar Kell",
+      "colorIdentity": [
+        "B",
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ae6a0cad0f72fc8cc2bdb17da0b48f52c8cd78b5aae5706e948805f2cc800e65",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "trigger_event_cast_reference",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0013",
+      "category": "rc3-policy-reminder_mechanic_text",
+      "layout": "normal",
+      "oracleId": "6aeba615-2d37-4eb8-a377-41a517e95aa3",
+      "oracleText": "Create two 1/1 green Squirrel creature tokens.\nFlashback—{1}{G}, Pay 3 life. (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "sacrifice",
+        "create_token"
+      ],
+      "expectedRoles": [],
+      "cardName": "Acorn Harvest",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "0178017c6cf57d6d8dde27737e83f301590912729aa2d1a7336dbf1945fb122e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "reminder_mechanic_text",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0014",
+      "category": "rc3-policy-reminder_mechanic_text",
+      "layout": "normal",
+      "oracleId": "054c00b4-c940-455a-ad88-b8aa35931ecf",
+      "oracleText": "Change the text of target spell or permanent by replacing all instances of one color word with another. (This effect lasts indefinitely.)\nFlashback {1}{U} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "sacrifice",
+        "create_token"
+      ],
+      "expectedRoles": [],
+      "cardName": "Alter Reality",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "81c59e10dda93d4f4dc74c043b14ae5ddee6ea865d7479e0eb0d2365f7679072",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "reminder_mechanic_text",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0015",
+      "category": "rc3-policy-reminder_mechanic_text",
+      "layout": "normal",
+      "oracleId": "380ea3b6-8eb4-466a-8680-ce5cfed9b8c4",
+      "oracleText": "You gain 2 life for each card in your graveyard.\nFlashback {9}{W}{W}{W} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "sacrifice",
+        "create_token"
+      ],
+      "expectedRoles": [],
+      "cardName": "Ancestral Tribute",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "6bdc8ad4da9cc7e60853c1b992abc06aefb17e642f05a4fcf22a0979dcb2c7d6",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "reminder_mechanic_text",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0016",
+      "category": "rc3-policy-reminder_mechanic_text",
+      "layout": "normal",
+      "oracleId": "306593b0-6ea8-476f-a3f2-e17876c1bab4",
+      "oracleText": "Destroy target artifact.\nFlashback {G} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "sacrifice",
+        "create_token"
+      ],
+      "expectedRoles": [],
+      "cardName": "Ancient Grudge",
+      "colorIdentity": [
+        "G",
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "4121cacb526e7ceb0f76f67f1c6c123cdc3a5adf3b89528f8ad655f53a6a0ac1",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "reminder_mechanic_text",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0017",
+      "category": "rc3-policy-reminder_mechanic_text",
+      "layout": "normal",
+      "oracleId": "75ffebc4-8db9-4de6-a330-e3f41cdccecc",
+      "oracleText": "Whenever this creature deals combat damage to a player, target instant or sorcery card in your graveyard gains flashback until end of turn. The flashback cost is equal to its mana cost. That card gains flashback {0} until end of turn instead if this creature is saddled. (You may cast that card from your graveyard for its flashback cost. Then exile it.)\nSaddle 3",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "sacrifice",
+        "create_token"
+      ],
+      "expectedRoles": [],
+      "cardName": "Archmage's Newt",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f069cfc8c7d089986c3d4c7e0c49437cfb1ac9a40acb20eedbd30d80e6540384",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "reminder_mechanic_text",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0018",
+      "category": "rc3-policy-static_cost_reduction",
+      "layout": "normal",
+      "oracleId": "25a7330a-f67a-48fc-a8c1-d349cb693553",
+      "oracleText": "This spell costs {2} less to cast if it targets a red creature.\nDestroy target tapped creature. You gain 2 life.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 0
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Knockout Blow",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "90d930c9c3b61c2bb78ebe8847d56cd31d6f8d3599d500ad03a46829f94d16be",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "static_cost_reduction",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0019",
+      "category": "rc3-policy-static_cost_reduction",
+      "layout": "normal",
+      "oracleId": "57920afe-61b7-4db1-ad79-dca4f0bc281b",
+      "oracleText": "Reach, trample\nDomain — {5}{G}: Return Llanowar Greenwidow from your graveyard to the battlefield tapped with a finality counter on it. This ability costs {1} less to activate for each basic land type among lands you control.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Llanowar Greenwidow",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "5bbac379250ba652fee8600ae05974d03c389d208824078ee353e3698730419a",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "static_cost_reduction",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0020",
+      "category": "rc3-policy-static_cost_reduction",
+      "layout": "normal",
+      "oracleId": "77ac3718-fcf2-4a84-968b-799e4783d581",
+      "oracleText": "Equipped creature gets +3/+3 and has ward {1}. (Whenever equipped creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {1}.)\nEquip {3}. This ability costs {1} less to activate for each other Equipment you control.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Plate Armor",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "852ebb75cc85e45d12eec1c2842eb0105fd5937274cd73ff675f166122c74611",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "static_cost_reduction",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0021",
+      "category": "rc3-policy-static_cost_reduction",
+      "layout": "normal",
+      "oracleId": "247767d2-33a1-4078-9a9d-cf380cb91d58",
+      "oracleText": "Whenever Radha's Firebrand attacks, target creature defending player controls with power less than or equal to Radha's Firebrand's power can't block this turn.\nDomain — {5}{R}: Radha's Firebrand gets +2/+2 until end of turn. This ability costs {1} less to activate for each basic land type among lands you control. Activate only once each turn.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Radha's Firebrand",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "2bfc653dba788e008955ead3ed5860190ea8c73f7d54dbe4de7b7ad82f305c23",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "static_cost_reduction",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0022",
+      "category": "rc3-policy-activated_cost_only",
+      "layout": "normal",
+      "oracleId": "da73c44c-08b5-469c-ace0-1f048ce447a2",
+      "oracleText": "{1}, {T}: Draw a card, then discard a card.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card, then discard a card"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discard a card"
+        }
+      ],
+      "forbiddenPrimitiveActions": [],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "discard"
+          ]
+        }
+      ],
+      "cardName": "A-Dragonborn Looter",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "deaebede08bec767260159fb2996d341a79ab10388d8e55544c321c06bfb5d5c",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "activated_cost_only",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-guard-0023",
+      "category": "rc3-policy-activated_cost_only",
+      "layout": "class",
+      "oracleId": "b53fce6f-68aa-4db4-b189-e608b0c2c8ca",
+      "oracleText": "(Gain the next level as a sorcery to add its ability.)\nLandfall — Whenever a land enters under your control, you gain 1 life.\n{2}{G}: Level 2\nYou may play an additional land on each of your turns.\n{2}{G}: Level 3\nWhen this Class becomes level 3, target land you control becomes a creature with haste and \"This creature's power and toughness are each equal to the number of lands you control.\" It's still a land.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "play",
+          "evidenceContains": "You may play an additional land",
+          "optional": true,
+          "optionalEffect": true
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 1 life"
+        }
+      ],
+      "forbiddenPrimitiveActions": [],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "play",
+            "gain_life"
+          ]
+        }
+      ],
+      "cardName": "A-Druid Class",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3e5caa4cb59c240f7949cdebd529f9dc3354464dc2f5a52b1811f72ed319220d",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "activated_cost_only",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-guard-0024",
+      "category": "rc3-policy-activated_cost_only",
+      "layout": "normal",
+      "oracleId": "ce7f8cef-f76f-41ff-a8e0-7164412d2757",
+      "oracleText": "When Dueling Coach enters, distribute two +1/+1 counters among one or two target creatures you control.\n{W}, {T}: Put a +1/+1 counter on each creature you control with a +1/+1 counter on it.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_counter",
+          "evidenceContains": "Put a +1/+1 counter on each creature you control with a +1/+1 counter on it"
+        }
+      ],
+      "forbiddenPrimitiveActions": [],
+      "expectedRoles": [],
+      "cardName": "A-Dueling Coach",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "49ba54b19891ab1f32db241ae430466d50f3d554cc738cd64349ab6be312dc8b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "activated_cost_only",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-guard-0025",
+      "category": "rc3-policy-activated_cost_only",
+      "layout": "normal",
+      "oracleId": "0c61925b-e086-4cb8-94b6-16b4308140ec",
+      "oracleText": "As long as Futurist Operative is tapped, it's a Human Citizen with base power and toughness 1/1 and can't be blocked.\n{2}{U}: Untap Futurist Operative.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [],
+      "expectedRoles": [],
+      "cardName": "A-Futurist Operative",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "2bcc33ecd37291c69f046eb78542232a5f4ec466968ca2a123e1bb21514a899f",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "activated_cost_only",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0026",
+      "category": "rc3-policy-activated_cost_only",
+      "layout": "normal",
+      "oracleId": "00ddbb94-5ccd-488f-b0cf-1726d8324621",
+      "oracleText": "{T}: Add {C}.\n{1}, {T}: Add one mana of any color.\n{3}, {T}: Create a tapped Powerstone token. (It's an artifact with \"{T}: Add {C}. This mana can't be spent to cast a nonartifact spell.\")",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {C}"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a tapped Powerstone token"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast a nonartifact spell"
+        }
+      ],
+      "forbiddenPrimitiveActions": [],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "cast"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "cast"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "cast"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "cast"
+          ]
+        }
+      ],
+      "cardName": "A-Hall of Tagsin",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "d441cb5000d951847217b0640afb96cea29835fa589e0dad76ca56b56cf72ab1",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "activated_cost_only",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-guard-0027",
+      "category": "rc3-policy-static_restriction",
+      "layout": "normal",
+      "oracleId": "9cfdc604-71de-44e4-8ba7-2a3ee03aab68",
+      "oracleText": "Spells and abilities you control can't destroy, exile, target, or cause you to sacrifice A Good Thing.\nAt the beginning of your upkeep, double your life total. Then, if you have 1,000 or more life, you lose the game.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "cast",
+        "destroy"
+      ],
+      "expectedRoles": [],
+      "cardName": "A Good Thing",
+      "colorIdentity": [
+        "B",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "7fb22215cdb3ea8ff5ee6e55ba49c0807eeabb0e3e64c04f4e62cd973b4ac3eb",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "static_restriction",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0028",
+      "category": "rc3-policy-static_restriction",
+      "layout": "normal",
+      "oracleId": "21fa88e8-c236-4f4e-989a-09efffb30c77",
+      "oracleText": "Ward—Pay 2 life.\nAs long as Armory Veteran is equipped, it has menace. (It can't be blocked except by two or more creatures.)",
+      "expectedStructure": {
+        "minTriggeredAbilities": 0
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "cast",
+        "destroy"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Armory Veteran",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "2eaa73abbed7ecd61321cb373b941aa81544fc27289401726d5b7459cf668a3b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "static_restriction",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0029",
+      "category": "rc3-policy-static_restriction",
+      "layout": "normal",
+      "oracleId": "6a94fb8a-c0bf-40d9-ad78-de9695797888",
+      "oracleText": "A-Cauldron Familiar can't block.\nWhen Cauldron Familiar enters, each opponent loses 1 life and you gain 1 life.\nSacrifice a Food: Return Cauldron Familiar from your graveyard to the battlefield.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "cast",
+        "destroy"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Cauldron Familiar",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "7604aa2b7b46147c701f17fc8c292934a29717e3171db9e6c44ccacca9c3c729",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "static_restriction",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0030",
+      "category": "rc3-policy-static_restriction",
+      "layout": "normal",
+      "oracleId": "dfe59362-7f14-4cb2-8dd8-2a7de7f7723f",
+      "oracleText": "Excavation Explosion deals 4 damage to target creature or planeswalker. Create a tapped Powerstone token. (It's an artifact with \"{T}: Add {C}. This mana can't be spent to cast a nonartifact spell.\")",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "cast",
+        "destroy"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Excavation Explosion",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ad0bacf7b346a9d1632058113d44e8da1d354ae11ba103ae89929cf512b978a3",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "static_restriction",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0031",
+      "category": "rc3-policy-static_restriction",
+      "layout": "normal",
+      "oracleId": "3adb972d-8c06-43a6-aac8-cb0109676e98",
+      "oracleText": "Flash\nFlying\nWhen Falcon Abomination enters, create a 2/2 black Zombie creature token with decayed. (It can't block. When it attacks, sacrifice it at end of combat.)",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [],
+      "forbiddenPrimitiveActions": [
+        "draw",
+        "cast",
+        "destroy"
+      ],
+      "expectedRoles": [],
+      "cardName": "A-Falcon Abomination",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "2fc15991019e5b2acb175398885e3e174fde98788c6abbd39938fb74efeb2299",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "static_restriction",
+      "parserConsulted": false,
+      "caseScope": "structure_only",
+      "scopeReason": "Layer-1 structure benchmark; certified zero Layer-2 primitives within structure_only scope.",
+      "certifiedEmptyLayer2": true
+    },
+    {
+      "id": "rc3-guard-0032",
+      "category": "rc3-policy-ability_scope_exclusion",
+      "layout": "normal",
+      "oracleId": "fbd5f5ed-cdd9-4cf7-a66f-788d63151a05",
+      "oracleText": "+1: Venture into the dungeon. (Enter the first room or advance to the next room.)\n−2: Look at the top six cards of your library. You may reveal a creature card from among them and put it into your hand. If it's legendary, you gain 3 life. Put the rest on the bottom of your library in a random order.\n−6: You get an emblem with \"Creatures you control have trample and haste and get +2/+2 for each differently named dungeon you've completed.\"",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gain 3 life"
+        }
+      ],
+      "forbiddenPrimitiveActions": [],
+      "expectedRoles": [],
+      "cardName": "A-Ellywick Tumblestrum",
+      "colorIdentity": [
+        "G"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "4b62646dbc5ff5c0640d439bf3ccfe6d988406648285a7bcd5942f9872518241",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "ability_scope_exclusion",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-guard-0033",
+      "category": "rc3-policy-ability_scope_exclusion",
+      "layout": "normal",
+      "oracleId": "a2edc11f-c838-4550-91b8-2b2d11843d03",
+      "oracleText": "+1: Create a tapped Powerstone token. (It's an artifact with \"{T}: Add {C}. This mana can't be spent to cast a nonartifact spell.\")\n0: Pay any amount of mana. Look at that many cards from the top of your library, then put one of those cards into your hand and the rest on the bottom of your library in a random order.\n−6: You get an emblem with \"Tap an untapped artifact you control: This emblem deals 1 damage to any target.\"",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add {C}"
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a tapped Powerstone token"
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast a nonartifact spell"
+        }
+      ],
+      "forbiddenPrimitiveActions": [],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "cast"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "cast"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "cast"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "cast"
+          ]
+        }
+      ],
+      "cardName": "A-Karn, Living Legacy",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "c4f8df477c8bbfaf20fa2fbed9aea9aa39acda835f9be09d46afd1cd5c46f2b5",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "ability_scope_exclusion",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-guard-0034",
+      "category": "rc3-policy-ability_scope_exclusion",
+      "layout": "normal",
+      "oracleId": "94cf9969-9546-4c75-b42a-668109600b6f",
+      "oracleText": "When Minsc & Boo, Timeless Heroes enters and at the beginning of your upkeep, if you don't control a creature named Boo, create Boo, a legendary 1/1 red Hamster creature token with trample and haste.\n+1: Put three +1/+1 counters on up to one target creature with trample or haste.\n−2: Sacrifice a creature. When you do, Minsc & Boo, Timeless Heroes deals X damage to any target, where X is that creature's power. If the sacrificed creature was a Hamster, draw X cards.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw X cards"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice a creature"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrificed creature was a Hamster, draw X cards"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals X damage to any target, where X is that creature's power"
+        }
+      ],
+      "forbiddenPrimitiveActions": [],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "sacrifice",
+            "sacrifice",
+            "deal_damage"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "draw",
+            "sacrifice",
+            "sacrifice",
+            "deal_damage"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "draw",
+            "sacrifice",
+            "sacrifice",
+            "deal_damage"
+          ]
+        }
+      ],
+      "cardName": "A-Minsc & Boo, Timeless Heroes",
+      "colorIdentity": [
+        "G",
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "7d5bed99a12ab8609f278a873353ffafef4d6255543a825791b4558f8cd12ec8",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "ability_scope_exclusion",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    },
+    {
+      "id": "rc3-guard-0035",
+      "category": "rc3-policy-ability_scope_exclusion",
+      "layout": "normal",
+      "oracleId": "15680f04-872b-4b35-804d-be73522b3457",
+      "oracleText": "+1: Create a 1/1 white Kor Warrior creature token. You may attach an Equipment you control to it.\n−2: Look at the top six cards of your library. You may reveal a Warrior card and/or an Equipment card from among them and put them into your hand. Put the rest on the bottom of your library in a random order.\n−3: Nahiri, Heir of the Ancients deals damage to target creature or planeswalker equal to twice the number of Warriors and Equipment you control.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a 1/1 white Kor Warrior creature token"
+        }
+      ],
+      "forbiddenPrimitiveActions": [],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token"
+          ]
+        }
+      ],
+      "cardName": "A-Nahiri, Heir of the Ancients",
+      "colorIdentity": [
+        "R",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "7957e7a5ff0294ce56898fa4d242b17bac9ff3261f5bfbfb5acce5d00056236b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc3-policy-guardrail-v130",
+      "goldReviewVersion": "rc3-benchmark-selector-v130",
+      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "ability_scope_exclusion",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false
+    }
+  ],
+  "sealed": true,
+  "parserExecutionCount": 0,
+  "parserConsulted": false,
+  "holdoutStatus": "development",
+  "note": "Negative policy guardrails — not Layer-2 recall targets",
+  "goldCertification": {
+    "certifierId": "rc3-benchmark-selector-v130",
+    "certifiedAt": "2026-08-08T04:25:21.250Z",
+    "familyCounts": {
+      "persistent_cast_permission": 6,
+      "trigger_event_cast_reference": 6,
+      "reminder_mechanic_text": 5,
+      "static_cost_reduction": 4,
+      "activated_cost_only": 5,
+      "static_restriction": 5,
+      "ability_scope_exclusion": 4
+    },
+    "parserExecutionCount": 0,
+    "parserConsulted": false
+  }
+}

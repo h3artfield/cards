@@ -1,0 +1,386 @@
+{
+  "specVersion": "genuine-grammar-failures-v129",
+  "frozenAt": "2026-08-08T04:08:20.037Z",
+  "parentPolicyAuditRef": "data/milestones/validation-v12-fresh-certification/validation-v12-policy-audit-v129.json",
+  "totalGenuineMisses": 32,
+  "mutuallyExclusivePrimaryFamilies": true,
+  "rankedFamilies": [
+    {
+      "priorityRank": 1,
+      "primaryGrammarFamily": "granted_ability_quote",
+      "genuineMissCount": 9,
+      "rc3StructuralPriority": "high"
+    },
+    {
+      "priorityRank": 2,
+      "primaryGrammarFamily": "search_put_shuffle_chain",
+      "genuineMissCount": 7,
+      "rc3StructuralPriority": "high"
+    },
+    {
+      "priorityRank": 3,
+      "primaryGrammarFamily": "mdfc_transform_zone_transition",
+      "genuineMissCount": 4,
+      "rc3StructuralPriority": "high"
+    },
+    {
+      "priorityRank": 4,
+      "primaryGrammarFamily": "activated_post_colon_effect",
+      "genuineMissCount": 4,
+      "rc3StructuralPriority": "high"
+    },
+    {
+      "priorityRank": 5,
+      "primaryGrammarFamily": "replacement_if_would",
+      "genuineMissCount": 3,
+      "rc3StructuralPriority": "high"
+    },
+    {
+      "priorityRank": 6,
+      "primaryGrammarFamily": "modal_each_option_action",
+      "genuineMissCount": 2,
+      "rc3StructuralPriority": "high"
+    },
+    {
+      "priorityRank": 7,
+      "primaryGrammarFamily": "compound_second_clause",
+      "genuineMissCount": 1,
+      "rc3StructuralPriority": "medium"
+    },
+    {
+      "priorityRank": 8,
+      "primaryGrammarFamily": "optional_put_onto_battlefield",
+      "genuineMissCount": 1,
+      "rc3StructuralPriority": "medium"
+    },
+    {
+      "priorityRank": 9,
+      "primaryGrammarFamily": "zone_transition_return",
+      "genuineMissCount": 1,
+      "rc3StructuralPriority": "medium"
+    }
+  ],
+  "entries": [
+    {
+      "rank": 1,
+      "caseId": "vh12-0008",
+      "cardName": "Apocalypse",
+      "expectedPrimitive": "discard",
+      "evidenceContains": "discard your hand",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "compound_second_clause",
+      "secondaryTags": []
+    },
+    {
+      "rank": 2,
+      "caseId": "vh12-0015",
+      "cardName": "A-Moon-Circuit Hacker",
+      "expectedPrimitive": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "auditClassification": "gold_transform_zone_transition",
+      "primaryGrammarFamily": "mdfc_transform_zone_transition",
+      "secondaryTags": []
+    },
+    {
+      "rank": 3,
+      "caseId": "vh12-0018",
+      "cardName": "Acquire",
+      "expectedPrimitive": "shuffle_library",
+      "evidenceContains": "shuffles",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "search_put_shuffle_chain",
+      "secondaryTags": []
+    },
+    {
+      "rank": 4,
+      "caseId": "vh12-0033",
+      "cardName": "A-Urza, Powerstone Prodigy",
+      "expectedPrimitive": "add_mana",
+      "evidenceContains": "Add {C}",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "granted_ability_quote",
+      "secondaryTags": []
+    },
+    {
+      "rank": 5,
+      "caseId": "vh12-0051",
+      "cardName": "Adipose Offspring",
+      "expectedPrimitive": "sacrifice",
+      "evidenceContains": "sacrificed creature's toughness",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "replacement_if_would",
+      "secondaryTags": []
+    },
+    {
+      "rank": 6,
+      "caseId": "vh12-0071",
+      "cardName": "Aether Shockwave",
+      "expectedPrimitive": "tap",
+      "evidenceContains": "Tap all Spirits",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "modal_each_option_action",
+      "secondaryTags": []
+    },
+    {
+      "rank": 7,
+      "caseId": "vh12-0071",
+      "cardName": "Aether Shockwave",
+      "expectedPrimitive": "tap",
+      "evidenceContains": "Tap all non-Spirit creatures",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "modal_each_option_action",
+      "secondaryTags": []
+    },
+    {
+      "rank": 8,
+      "caseId": "vh12-0077",
+      "cardName": "Ajani Resolute",
+      "expectedPrimitive": "put_counter",
+      "evidenceContains": "put a +1/+1 counter on this token",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "granted_ability_quote",
+      "secondaryTags": []
+    },
+    {
+      "rank": 9,
+      "caseId": "vh12-0093",
+      "cardName": "Altar of the Wretched // Wretched Bonemass",
+      "expectedPrimitive": "return_to_hand",
+      "evidenceContains": "Return this card from your graveyard to your hand",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "activated_post_colon_effect",
+      "secondaryTags": []
+    },
+    {
+      "rank": 10,
+      "caseId": "vh12-0098",
+      "cardName": "Aethermage's Touch",
+      "expectedPrimitive": "put_onto_battlefield",
+      "evidenceContains": "put a creature card from among them onto the battlefield",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "optional_put_onto_battlefield",
+      "secondaryTags": []
+    },
+    {
+      "rank": 11,
+      "caseId": "vh12-0107",
+      "cardName": "A-Nashi, Moon Sage's Scion",
+      "expectedPrimitive": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "auditClassification": "gold_transform_zone_transition",
+      "primaryGrammarFamily": "mdfc_transform_zone_transition",
+      "secondaryTags": []
+    },
+    {
+      "rank": 12,
+      "caseId": "vh12-0108",
+      "cardName": "A-Nezumi Prowler",
+      "expectedPrimitive": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "auditClassification": "gold_transform_zone_transition",
+      "primaryGrammarFamily": "mdfc_transform_zone_transition",
+      "secondaryTags": []
+    },
+    {
+      "rank": 13,
+      "caseId": "vh12-0110",
+      "cardName": "A-Prosperous Thief",
+      "expectedPrimitive": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "auditClassification": "gold_transform_zone_transition",
+      "primaryGrammarFamily": "mdfc_transform_zone_transition",
+      "secondaryTags": []
+    },
+    {
+      "rank": 14,
+      "caseId": "vh12-0116",
+      "cardName": "Acolyte's Reward",
+      "expectedPrimitive": "deal_damage",
+      "evidenceContains": "deals that much damage to any target",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "replacement_if_would",
+      "secondaryTags": []
+    },
+    {
+      "rank": 15,
+      "caseId": "vh12-0123",
+      "cardName": "Agency Outfitter",
+      "expectedPrimitive": "search_library",
+      "evidenceContains": "search your library this way, shuffle",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "search_put_shuffle_chain",
+      "secondaryTags": []
+    },
+    {
+      "rank": 16,
+      "caseId": "vh12-0123",
+      "cardName": "Agency Outfitter",
+      "expectedPrimitive": "shuffle_library",
+      "evidenceContains": "shuffle",
+      "auditClassification": "gold_compound_shuffle_step",
+      "primaryGrammarFamily": "search_put_shuffle_chain",
+      "secondaryTags": []
+    },
+    {
+      "rank": 17,
+      "caseId": "vh12-0125",
+      "cardName": "Ajani's Aid",
+      "expectedPrimitive": "search_library",
+      "evidenceContains": "search your library this way, shuffle",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "search_put_shuffle_chain",
+      "secondaryTags": []
+    },
+    {
+      "rank": 18,
+      "caseId": "vh12-0125",
+      "cardName": "Ajani's Aid",
+      "expectedPrimitive": "shuffle_library",
+      "evidenceContains": "shuffle",
+      "auditClassification": "gold_compound_shuffle_step",
+      "primaryGrammarFamily": "search_put_shuffle_chain",
+      "secondaryTags": []
+    },
+    {
+      "rank": 19,
+      "caseId": "vh12-0126",
+      "cardName": "Alabaster Host Intercessor",
+      "expectedPrimitive": "search_library",
+      "evidenceContains": "Search your library for a Plains card, reveal it, put it into your hand, then shuffle",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "search_put_shuffle_chain",
+      "secondaryTags": []
+    },
+    {
+      "rank": 20,
+      "caseId": "vh12-0126",
+      "cardName": "Alabaster Host Intercessor",
+      "expectedPrimitive": "discard",
+      "evidenceContains": "Discard this card: Search your library for a Plains card, reveal it, put it into your hand, then shuffle",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "activated_post_colon_effect",
+      "secondaryTags": []
+    },
+    {
+      "rank": 21,
+      "caseId": "vh12-0126",
+      "cardName": "Alabaster Host Intercessor",
+      "expectedPrimitive": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "auditClassification": "gold_compound_shuffle_step",
+      "primaryGrammarFamily": "search_put_shuffle_chain",
+      "secondaryTags": []
+    },
+    {
+      "rank": 22,
+      "caseId": "vh12-0130",
+      "cardName": "Abuelo's Awakening",
+      "expectedPrimitive": "return_to_battlefield",
+      "evidenceContains": "Return target artifact or non-Aura enchantment card from your graveyard to the battlefield",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "zone_transition_return",
+      "secondaryTags": []
+    },
+    {
+      "rank": 23,
+      "caseId": "vh12-0131",
+      "cardName": "Abzan Devotee",
+      "expectedPrimitive": "return_to_hand",
+      "evidenceContains": "Return this card from your graveyard to your hand",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "activated_post_colon_effect",
+      "secondaryTags": []
+    },
+    {
+      "rank": 24,
+      "caseId": "vh12-0135",
+      "cardName": "Advanced Stitchwing",
+      "expectedPrimitive": "discard",
+      "evidenceContains": "Discard two cards: Return this card from your graveyard to the battlefield tapped",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "activated_post_colon_effect",
+      "secondaryTags": []
+    },
+    {
+      "rank": 25,
+      "caseId": "vh12-0144",
+      "cardName": "Aethersnipe",
+      "expectedPrimitive": "sacrifice",
+      "evidenceContains": "sacrificed when it enters",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "replacement_if_would",
+      "secondaryTags": []
+    },
+    {
+      "rank": 26,
+      "caseId": "vh12-0146",
+      "cardName": "Angelic Sleuth",
+      "expectedPrimitive": "draw",
+      "evidenceContains": "Draw a card",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "granted_ability_quote",
+      "secondaryTags": []
+    },
+    {
+      "rank": 27,
+      "caseId": "vh12-0146",
+      "cardName": "Angelic Sleuth",
+      "expectedPrimitive": "sacrifice",
+      "evidenceContains": "Sacrifice this token: Draw a card",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "granted_ability_quote",
+      "secondaryTags": []
+    },
+    {
+      "rank": 28,
+      "caseId": "vh12-0147",
+      "cardName": "Ant-Man's Army",
+      "expectedPrimitive": "gain_life",
+      "evidenceContains": "gain 3 life",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "granted_ability_quote",
+      "secondaryTags": []
+    },
+    {
+      "rank": 29,
+      "caseId": "vh12-0148",
+      "cardName": "Antique Collector",
+      "expectedPrimitive": "draw",
+      "evidenceContains": "Draw a card",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "granted_ability_quote",
+      "secondaryTags": []
+    },
+    {
+      "rank": 30,
+      "caseId": "vh12-0148",
+      "cardName": "Antique Collector",
+      "expectedPrimitive": "create_token",
+      "evidenceContains": "Create a colorless Clue artifact token",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "granted_ability_quote",
+      "secondaryTags": []
+    },
+    {
+      "rank": 31,
+      "caseId": "vh12-0148",
+      "cardName": "Antique Collector",
+      "expectedPrimitive": "sacrifice",
+      "evidenceContains": "Sacrifice this artifact: Draw a card",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "granted_ability_quote",
+      "secondaryTags": []
+    },
+    {
+      "rank": 32,
+      "caseId": "vh12-0148",
+      "cardName": "Antique Collector",
+      "expectedPrimitive": "shuffle_library",
+      "evidenceContains": "you may shuffle",
+      "auditClassification": "genuine_parser_not_emitted",
+      "primaryGrammarFamily": "granted_ability_quote",
+      "secondaryTags": []
+    }
+  ],
+  "contentHash": "319c6f77f131a758d39dc1cc7dee434677b617389f029f0c80a14403fa9bcc46"
+}

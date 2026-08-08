@@ -1,0 +1,50 @@
+{
+  "specVersion": "policy-structure-families-v129",
+  "frozenAt": "2026-08-08T04:08:20.028Z",
+  "note": "Regression families — not Layer-2 recall targets. Do not mix with GENUINE RC3 GRAMMAR FAILURES.",
+  "families": [
+    {
+      "family": "persistent_cast_permission",
+      "description": "You may cast [category] / player can't cast — Layer 1 permission, not cast primitive",
+      "v12PolicyExemptCount": 6,
+      "isRecallTarget": false
+    },
+    {
+      "family": "trigger_event_cast_reference",
+      "description": "Whenever you cast / if you cast — trigger condition, not cast resolution",
+      "v12PolicyExemptCount": 6,
+      "isRecallTarget": false
+    },
+    {
+      "family": "reminder_mechanic_text",
+      "description": "Mechanic definition parentheticals (discover, flashback, etc.)",
+      "v12PolicyExemptCount": 2,
+      "isRecallTarget": false
+    },
+    {
+      "family": "static_cost_reduction",
+      "description": "Costs N less to cast — static modifier, not cast action",
+      "v12PolicyExemptCount": 1,
+      "isRecallTarget": false
+    },
+    {
+      "family": "ability_scope_exclusions",
+      "description": "Ability-scoped gold omits modal/back-face/loyalty branches",
+      "v12PolicyExemptCount": 1,
+      "isRecallTarget": false
+    },
+    {
+      "family": "loyalty_gold_scope_mismatch",
+      "description": "Legitimate loyalty actions omitted from ability-scoped gold — scoring scope issue, not parser FP",
+      "v12AffectedFpCount": 2,
+      "isRecallTarget": false
+    },
+    {
+      "family": "empty_benchmark_scope",
+      "description": "Empty gold without structure certification — requires explicit caseScope before scoring",
+      "v12AffectedCount": 2,
+      "isRecallTarget": false
+    }
+  ],
+  "contentHash": "e22421b3711715f858517a935da55b9031623a29b01906729bcd046d88fb71c4"
+}

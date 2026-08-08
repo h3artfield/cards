@@ -21,6 +21,7 @@ export type AbilityStructureType = (typeof ABILITY_STRUCTURE_TYPES)[number];
 export const PRIMITIVE_ACTION_TYPES = [
   "add_mana",
   "draw",
+  "put_into_hand",
   "discard",
   "search_library",
   "deal_damage",
@@ -51,7 +52,10 @@ export type PrimitiveActionType = (typeof PRIMITIVE_ACTION_TYPES)[number];
 
 /** Canonical taxonomy version — bump when Layer 2 primitives change. */
 export const TAXONOMY_VERSION = "three-layer-v1.3";
+export const TAXONOMY_VERSION_V14 = "three-layer-v1.4";
 export const TAXONOMY_VERSION_PREVIOUS = "three-layer-v1.2";
+/** RC3 development line uses v1.4 taxonomy. */
+export const TAXONOMY_VERSION_RC3 = TAXONOMY_VERSION_V14;
 
 /** Layer 3 — derived deck-building roles (never primitive action labels). */
 export const DERIVED_DECK_ROLES = [
@@ -102,6 +106,7 @@ export const PRIMITIVE_TO_DERIVED_ROLES: Partial<Record<PrimitiveActionType, Der
   add_mana: ["ramp"],
   search_library: ["tutor"],
   draw: ["card_advantage"],
+  put_into_hand: ["card_advantage"],
   destroy: ["removal"],
   exile: ["removal"],
   deal_damage: ["removal"],
@@ -153,8 +158,20 @@ export function normalizeToPrimitive(raw: string, evidenceContains?: string): Pr
   return inferPrimitiveFromEvidence(evidenceContains ?? raw);
 }
 
+/** Classify hand-zone primitive from Oracle evidence — verb semantics, not destination alone. */
+export function classifyHandZonePrimitive(text: string): "draw" | "put_into_hand" | "return_to_hand" | null {
+  const t = text.trim();
+  if (/\breturn\b[^.]*\bto\b[^.]*(?:owner'?s )?hand\b/i.test(t)) return "return_to_hand";
+  if (/\bput\b[^.]*\binto\b[^.]*(?:your |their |its owner'?s )?hand\b/i.test(t)) return "put_into_hand";
+  if (/\breveal\b[^.]*\band put\b[^.]*\binto\b[^.]*hand\b/i.test(t)) return "put_into_hand";
+  if (/\bdraw(?:s)?\b/i.test(t) && !/\bput\b[^.]*\binto\b/i.test(t)) return "draw";
+  return null;
+}
+
 function inferPrimitiveFromEvidence(text: string): PrimitiveActionType | null {
   const t = text.toLowerCase();
+  const handZone = classifyHandZonePrimitive(text);
+  if (handZone) return handZone;
   if (/\bdraw\b/.test(t)) return "draw";
   if (/\bsearch (?:your |their )?library\b/.test(t)) return "search_library";
   if (/\bputs? target [\w ]+ from (?:your |a )?graveyard onto the battlefield/.test(t)) {
