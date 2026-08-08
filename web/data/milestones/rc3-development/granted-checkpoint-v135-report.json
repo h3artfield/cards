@@ -1,5 +1,13 @@
 {
   "generatedAt": "2026-08-08T18:11:26.227Z",
+  "checkpoint": "rc3-granted-checkpoint-v135-1",
+  "parser": {
+    "version": "oracle-action-v1.35-rc3-granted-dev",
+    "parentStabilizationCommit": "17bd53528a2f4477fc05f7e40b160598a685b857",
+    "commit": "b15e77398d3de183388fd9d4834a7b04f5301d9c",
+    "transformBlobSha": "4a23a71f37d9354e7c00659426a80388dc63dedf",
+    "clauseNativeBlobSha": "e562f2166ac5980dbc2d2372c9dcb39bcc56efe1"
+  },
   "stageA_grantedRulesSpanDetector": {
     "unit": "candidate_region",
     "candidateRegionCount": 10,
@@ -62,27 +70,6 @@
     "recall": 1,
     "recallLabel": "100.0%",
     "classifierErrorCategories": []
-  },
-  "stageC_clauseNativeNestedExtraction": {
-    "unit": "nested_gold_action_in_classified_region",
-    "conditionalPool": 13,
-    "tp": 13,
-    "fp": 0,
-    "fn": 0,
-    "precision": 1,
-    "precisionLabel": "100.0%",
-    "recall": 1,
-    "recallLabel": "100.0%",
-    "fnAdjudications": [],
-    "priorSingleFnAdjudication": {
-      "caseId": "rc3-pos-v12-0148",
-      "cardName": "Antique Collector",
-      "goldActionType": "shuffle_library",
-      "goldEvidence": "you may shuffle",
-      "parserEmission": "shuffle_into_library / shuffle it into its owner's library",
-      "category": "evaluator_primitive_family_mismatch",
-      "resolution": "Stage-C matcher treats shuffle_into_library as covering optional shuffle_library within the same granted triggered region"
-    }
   },
   "goldSpanToRegionMapping": [
     {
@@ -245,5 +232,98 @@
       "mappedRegionId": "1d01c702-dad9-4101-8f69-421e996b7a44:front:2:granted-region:62:0",
       "containedAbilitySpanCount": 1
     }
-  ]
+  ],
+  "stageC_clauseNativeNestedExtraction": {
+    "unit": "nested_gold_action_in_classified_region",
+    "conditionalPool": 13,
+    "tp": 13,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1,
+    "precisionLabel": "100.0%",
+    "recall": 1,
+    "recallLabel": "100.0%",
+    "fnAdjudications": [],
+    "priorSingleFnAdjudication": {
+      "caseId": "rc3-pos-v12-0148",
+      "cardName": "Antique Collector",
+      "goldActionType": "shuffle_library",
+      "goldEvidence": "you may shuffle",
+      "parserEmission": "shuffle_into_library / shuffle it into its owner's library",
+      "category": "evaluator_primitive_family_mismatch",
+      "resolution": "Stage-C matcher treats shuffle_into_library as covering optional shuffle_library within the same granted triggered region"
+    }
+  },
+  "defaultGrantedPipeline": {
+    "description": "V1/transform/default promoted path — full parser output on nested granted gold",
+    "metrics": {
+      "tp": 24,
+      "fp": 0,
+      "fn": 4,
+      "precision": 1,
+      "recall": 0.8571428571428571
+    }
+  },
+  "clauseNativeGrantedPipeline": {
+    "description": "Stages A/B/C clause-native granted pipeline",
+    "stageA": {
+      "tp": 12,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "precisionLabel": "100.0%",
+      "recall": 1,
+      "recallLabel": "100.0%"
+    },
+    "stageB": {
+      "tp": 10,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "precisionLabel": "100.0%",
+      "recall": 1,
+      "recallLabel": "100.0%"
+    },
+    "stageC": {
+      "tp": 13,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "precisionLabel": "100.0%",
+      "recall": 1,
+      "recallLabel": "100.0%"
+    }
+  },
+  "fullDevelopmentBaseline": {
+    "scoringPath": "live_full_semantic_matcher",
+    "metrics": {
+      "tp": 580,
+      "fp": 5,
+      "fn": 70,
+      "precision": 0.9914529914529915,
+      "recall": 0.8923076923076924
+    },
+    "semanticInvalidActionCount": 0,
+    "semanticValidatorViolationCount": 0,
+    "permissionLeakage": 0,
+    "guardrails": {
+      "acceptedForbiddenEmissions": 0
+    }
+  },
+  "promotionGateRequirements": {
+    "stageA": {
+      "precisionMin": 0.95,
+      "recallMin": 0.98
+    },
+    "stageB": {
+      "precisionMin": 0.95,
+      "recallMin": 0.9
+    },
+    "stageC": {
+      "precisionMin": 0.98,
+      "recallMin": 0.9
+    },
+    "note": "Granted-native default promotion NOT authorized until all gates met"
+  },
+  "v13Execution": "NOT_RUN"
 }

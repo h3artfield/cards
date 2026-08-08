@@ -22,7 +22,7 @@ import { getRC3PromotedFamilies } from "./oracle-rc3-promotion";
 import { tagExtractionSource, type RC3ActionExtensions } from "./oracle-rc3-extraction-metadata";
 import type { SegmentedAbility } from "./oracle-action-schema";
 
-export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.34-rc3-ast-dev";
+export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.35-rc3-granted-dev";
 
 const PUT_INTO_HAND_RE =
   /\b(?:put (?:it|that card|one of them|one of those cards|two of those cards|three of those cards|four of those cards|five of those cards|up to [^.]+?) into (?:your |their )?hand|Put (?:that card|one of them|one of those cards|two of those cards|target card from [^.]+?) into (?:your |their |its owner's )?hand|reveal (?:it|that card)[^.]* and put (?:it|that card) into your hand)\b/i;
@@ -210,6 +210,30 @@ function extractGrantedSupplement(input: {
 
   for (const granted of findGrantedQuoteContexts(input.ability.paragraphText, parentId)) {
     if (/^(Whenever|When|At the beginning)/i.test(granted.innerText.trim())) continue;
+    const colonIdx = granted.innerText.indexOf(":");
+    if (colonIdx > 0 && /\{[^}]+\}|Sacrifice|Discard|Exile|\{T\}/i.test(granted.innerText.slice(0, colonIdx))) {
+      const costText = granted.innerText.slice(0, colonIdx);
+      for (const pattern of [/\b[Ss]acrifice this (?:token|artifact|creature|permanent)\b[^.]*/i]) {
+        const m = costText.match(pattern);
+        if (!m) continue;
+        const absStart = input.ability.paragraphStart + granted.innerLocalStart + (m.index ?? 0);
+        const dupe = input.existing.some(
+          (a) => a.actionType === "sacrifice" && Math.abs(a.evidenceStart - absStart) < 8,
+        );
+        if (dupe) continue;
+        added.push(
+          synthesizeFromMatch({
+            oracleId: input.oracleId,
+            ability: input.ability,
+            faceId: input.faceId,
+            match: m,
+            actionType: "sacrifice",
+            actionIndex: idx++,
+            grantedContext: granted,
+          }),
+        );
+      }
+    }
     for (const span of grantedClauseSpans(granted)) {
       if (span.role !== "effect" && span.role !== "replacement_effect") continue;
       for (const pattern of [DRAW_RE, PUT_INTO_HAND_RE, ADD_MANA_RE, /\b[Ss]acrifice this (?:token|artifact|creature)\b/i]) {

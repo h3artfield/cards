@@ -296,6 +296,64 @@ function extractPrimitivesFromClause(input: {
   return actions;
 }
 
+const GRANTED_ACTIVATED_COST_PATTERNS: Array<{ pattern: RegExp; actionType: PrimitiveActionType }> = [
+  { pattern: /\b[Ss]acrifice this (?:token|artifact|creature|permanent)\b[^.]*/i, actionType: "sacrifice" },
+  { pattern: /\b[Dd]iscard [^.]+/i, actionType: "discard" },
+  { pattern: /\b[Ee]xile [^.]+/i, actionType: "exile" },
+];
+
+function extractGrantedActivatedCostPrimitives(input: {
+  oracleId: string;
+  ability: SegmentedAbility;
+  faceId: string;
+  ctx: GrantedQuoteContext;
+  actionIndexStart: number;
+  grantingClauseId: string;
+}): OracleActionV1[] {
+  const activated = parseActivatedAbility(input.ctx.innerText, input.ctx.grantedAbilityId);
+  if (!activated) return [];
+
+  const nestedAbility: SegmentedAbility = {
+    ...input.ability,
+    paragraphText: input.ctx.innerText,
+    paragraphStart: input.ability.paragraphStart + input.ctx.innerLocalStart,
+    abilityType: "activated",
+  };
+
+  const grantedExtensions = tagGrantedContext({
+    action: { extractionSource: "rc3_clause_native" },
+    grantingClauseId: input.grantingClauseId,
+    grantedAbilityId: input.ctx.grantedAbilityId,
+  });
+
+  const actions: OracleActionV1[] = [];
+  let idx = input.actionIndexStart;
+  const costBase = nestedAbility.paragraphStart + activated.costRegion.start;
+
+  for (const { pattern, actionType } of GRANTED_ACTIVATED_COST_PATTERNS) {
+    const m = activated.costRegion.text.match(pattern);
+    if (!m) continue;
+    const matchOffset = m.index ?? 0;
+    actions.push(
+      buildNativeAction({
+        oracleId: input.oracleId,
+        ability: nestedAbility,
+        faceId: input.faceId,
+        actionType,
+        evidenceText: m[0],
+        evidenceStart: costBase + matchOffset,
+        evidenceEnd: costBase + matchOffset + m[0].length,
+        actionIndex: idx++,
+        textRole: "cost",
+        clauseId: `${input.ctx.grantedAbilityId}:cost`,
+        extensions: grantedExtensions,
+      }),
+    );
+  }
+
+  return actions;
+}
+
 function extractSearchChain(input: {
   oracleId: string;
   ability: SegmentedAbility;
@@ -658,7 +716,7 @@ export function extractClauseNativeActions(input: {
         };
 
         for (const clause of nestedBlock.clauses) {
-          if (clause.role === "cost" || clause.role === "trigger_event" || clause.role === "replacement_event") {
+          if (clause.role === "trigger_event" || clause.role === "replacement_event") {
             continue;
           }
           const grantedExtensions = tagGrantedContext({
@@ -666,6 +724,24 @@ export function extractClauseNativeActions(input: {
             grantingClauseId: parentId,
             grantedAbilityId: ctx.grantedAbilityId,
           });
+
+          if (clause.role === "cost") {
+            if (nestedBlock.abilityType === "activated") {
+              actions.push(
+                ...extractGrantedActivatedCostPrimitives({
+                  oracleId: input.oracleId,
+                  ability,
+                  faceId: face.faceId,
+                  ctx,
+                  actionIndexStart: actionIndex,
+                  grantingClauseId: parentId,
+                }),
+              );
+              actionIndex = actions.length;
+            }
+            continue;
+          }
+
           actions.push(
             ...extractPrimitivesFromClause({
               oracleId: input.oracleId,

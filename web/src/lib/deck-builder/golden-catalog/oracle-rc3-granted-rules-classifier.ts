@@ -1,7 +1,11 @@
 /**
- * GrantedRulesClassifier — classify detected granted-rules spans by grammar and inner ability shape.
+ * GrantedRulesClassifier — classify candidate regions by structural granting context + nested ability shape.
  */
 import type { GrantedRulesSpan } from "./oracle-rc3-granted-rules-span-detector";
+import {
+  hasStructuralGrantingCue,
+  inferStructuralCue,
+} from "./oracle-rc3-granted-rules-span-detector";
 import type { DetectedQuoteSpan } from "./oracle-rc3-quote-span-detector";
 import { inferBlockAbilityType } from "./oracle-rc3-ability-block";
 
@@ -11,11 +15,20 @@ export type QuotedContentClass =
   | "quoted_card_name_reference"
   | "other_quoted_text";
 
+export type ClassifierErrorCategory =
+  | "missing_granting_cue"
+  | "reminder_mechanic"
+  | "card_name_reference"
+  | "primary_ability_text"
+  | "ability_shape_mismatch"
+  | "other";
+
 export interface ClassifiedGrantedRulesSpan {
   span: GrantedRulesSpan;
   classification: QuotedContentClass;
   grantedAbilityType?: "activated" | "triggered" | "static" | "replacement";
   structuralCue?: string;
+  errorCategory?: ClassifierErrorCategory;
 }
 
 function looksLikeAbilityRules(inner: string): boolean {
@@ -37,30 +50,26 @@ function looksLikeAbilityRules(inner: string): boolean {
   return inferBlockAbilityType(t) !== "unknown";
 }
 
-function looksLikeReminder(inner: string): boolean {
+function nestedQuotedAbility(inner: string): string | undefined {
+  const match = inner.match(/["\u201c]([^"\u201d]+)["\u201d]/);
+  return match?.[1]?.trim();
+}
+
+function looksLikeReminder(inner: string, span?: GrantedRulesSpan): boolean {
   const t = inner.trim();
+  if (span?.typography === "parenthetical_rules" && /is an artifact with/i.test(t)) {
+    const quoted = nestedQuotedAbility(t);
+    if (quoted && looksLikeAbilityRules(quoted)) return false;
+  }
   if (/^This (?:mana|ability|creature|token|artifact|enchantment|permanent)\b/i.test(t)) return true;
-  if (/can't be spent to cast/i.test(t)) return true;
-  if (/^A \w+ is /i.test(t)) return true;
+  if (/can't be spent to cast/i.test(t)) {
+    if (/^\{[^}]+\}:/.test(t) || /\{T\}:/.test(t)) return false;
+    if (/["\u201c][^"\u201d]*(?:\{T\}|Sacrifice|Add \{)/i.test(t)) return false;
+    return true;
+  }
+  if (/^A \w+ is (?:an artifact|a creature|an enchantment)/i.test(t)) return true;
   if (/^Choose one/i.test(t)) return true;
   return false;
-}
-
-function inferGrantingCueFromBefore(before: string): string | undefined {
-  const b = before.trimEnd();
-  if (/\bTarget \w+ gains\b/i.test(b)) return "target_gains";
-  if (/\b(?:Enchanted|Equipped)/i.test(b)) return "enchanted_or_equipped_has";
-  if (/\btoken has\b/i.test(b)) return "token_has";
-  if (/\bit has\b/i.test(b)) return "it_has";
-  if (/\bCreatures you control have\b/i.test(b)) return "creatures_have";
-  if (/\bAll \w+/i.test(b)) return "all_have";
-  if (/\b(?:have|has|gain|gains)\s*["(\u201c]?\s*$/i.test(b)) return "gain_or_have";
-  return undefined;
-}
-
-function hasGrantingCueBeforeQuote(paragraph: string, span: DetectedQuoteSpan | GrantedRulesSpan): boolean {
-  const before = paragraph.slice(Math.max(0, span.localStart - 96), span.localStart);
-  return inferGrantingCueFromBefore(before) !== undefined;
 }
 
 function looksLikeCardName(inner: string): boolean {
@@ -68,39 +77,62 @@ function looksLikeCardName(inner: string): boolean {
   return t.length > 0 && t.length < 48 && !/[.:]/.test(t) && /^[A-Z][a-zA-Z0-9 ',-]+$/u.test(t);
 }
 
-export function classifyGrantedRulesSpan(paragraph: string, span: GrantedRulesSpan): ClassifiedGrantedRulesSpan {
-  const cue = span.structuralCue;
-  const inner = span.innerText.trim();
+function inferAbilityType(inner: string): ClassifiedGrantedRulesSpan["grantedAbilityType"] {
+  const abilityType = inferBlockAbilityType(inner);
+  if (abilityType === "triggered") return "triggered";
+  if (abilityType === "activated") return "activated";
+  if (abilityType === "replacement") return "replacement";
+  return "static";
+}
 
-  if (looksLikeReminder(inner)) {
-    return { span, classification: "reminder_mechanic_text", structuralCue: cue };
+export function classifyGrantedRulesSpan(paragraph: string, span: GrantedRulesSpan): ClassifiedGrantedRulesSpan {
+  const inner = span.innerText.trim();
+  const cue = span.structuralCue ?? inferStructuralCue(paragraph.slice(Math.max(0, span.localStart - 120), span.localStart));
+  const grantingContext =
+    span.typography !== "quoted" ? cue !== undefined : hasStructuralGrantingCue(paragraph, span.localStart);
+
+  const abilityInner =
+    span.typography === "parenthetical_rules" && /is an artifact with/i.test(inner)
+      ? (nestedQuotedAbility(inner) ?? inner)
+      : inner;
+
+  if (looksLikeReminder(inner, span)) {
+    return {
+      span,
+      classification: "reminder_mechanic_text",
+      structuralCue: cue,
+      errorCategory: "reminder_mechanic",
+    };
   }
 
   if (looksLikeCardName(inner) && span.typography === "quoted") {
-    return { span, classification: "quoted_card_name_reference", structuralCue: cue };
+    return {
+      span,
+      classification: "quoted_card_name_reference",
+      structuralCue: cue,
+      errorCategory: "card_name_reference",
+    };
   }
 
-  if (
-    (cue || span.typography !== "quoted" || hasGrantingCueBeforeQuote(paragraph, span)) &&
-    looksLikeAbilityRules(inner)
-  ) {
-    const abilityType = inferBlockAbilityType(inner);
+  if (!grantingContext) {
+    return {
+      span,
+      classification: "other_quoted_text",
+      structuralCue: cue,
+      errorCategory: span.typography === "quoted" ? "missing_granting_cue" : "primary_ability_text",
+    };
+  }
+
+  if (looksLikeAbilityRules(abilityInner)) {
     return {
       span,
       classification: "granted_rules_ability",
-      grantedAbilityType:
-        abilityType === "triggered"
-          ? "triggered"
-          : abilityType === "activated"
-            ? "activated"
-            : abilityType === "replacement"
-              ? "replacement"
-              : "static",
+      grantedAbilityType: inferAbilityType(abilityInner),
       structuralCue: cue,
     };
   }
 
-  if (cue && inner.length >= 3) {
+  if (cue && inner.length >= 3 && span.typography === "unquoted_complement") {
     return {
       span,
       classification: "granted_rules_ability",
@@ -109,7 +141,12 @@ export function classifyGrantedRulesSpan(paragraph: string, span: GrantedRulesSp
     };
   }
 
-  return { span, classification: "other_quoted_text", structuralCue: cue };
+  return {
+    span,
+    classification: "other_quoted_text",
+    structuralCue: cue,
+    errorCategory: "ability_shape_mismatch",
+  };
 }
 
 export function classifyAllGrantedRulesSpans(paragraph: string, spans: GrantedRulesSpan[]): ClassifiedGrantedRulesSpan[] {
@@ -117,7 +154,7 @@ export function classifyAllGrantedRulesSpans(paragraph: string, spans: GrantedRu
 }
 
 export function classifyQuotedSpan(paragraph: string, span: DetectedQuoteSpan): ClassifiedGrantedRulesSpan {
-  const before = paragraph.slice(Math.max(0, span.localStart - 96), span.localStart);
+  const before = paragraph.slice(Math.max(0, span.localStart - 120), span.localStart);
   const grantedSpan: GrantedRulesSpan = {
     localStart: span.localStart,
     localEnd: span.localEnd,
@@ -125,7 +162,7 @@ export function classifyQuotedSpan(paragraph: string, span: DetectedQuoteSpan): 
     innerText: span.innerText,
     typography: "quoted",
     confidence: 0.9,
-    structuralCue: inferGrantingCueFromBefore(before),
+    structuralCue: inferStructuralCue(before),
   };
   return classifyGrantedRulesSpan(paragraph, grantedSpan);
 }
