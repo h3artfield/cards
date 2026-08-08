@@ -262,6 +262,12 @@ export function applyStructuralBlockInvariants<T extends StructuralActionLike>(
   actions: T[],
   faces: Array<{ faceId: string; text: string; start: number }>,
   oracleId: string,
+  segmentedAbilities?: Array<{
+    cardFaceId: string;
+    abilityIndex: number;
+    paragraphStart: number;
+    paragraphEnd: number;
+  }>,
 ): T[] {
   const kept: T[] = [];
   let createdObjectSeq = 0;
@@ -283,15 +289,31 @@ export function applyStructuralBlockInvariants<T extends StructuralActionLike>(
       if (loyaltyBlock) {
         updated.loyaltyCost = loyaltyBlock.loyaltyCost;
         updated.abilityId = loyaltyBlock.abilityId;
-        (updated as { abilityIndex?: number }).abilityIndex = loyaltyBlock.abilityIndex;
       }
 
       if (modalOpt) {
         updated.modalOptionId = modalOpt.optionId;
         updated.modalOptionEvidence = modalOpt.fullOptionText;
-        if (!loyaltyBlock) {
-          (updated as { abilityIndex?: number }).abilityIndex = modalOpt.abilityIndex;
-        }
+      }
+
+      const seg = segmentedAbilities?.find(
+        (a) =>
+          a.cardFaceId === face.faceId &&
+          action.evidenceStart >= a.paragraphStart &&
+          action.evidenceEnd <= a.paragraphEnd,
+      );
+      if (seg) {
+        (updated as { abilityIndex?: number }).abilityIndex = seg.abilityIndex;
+      } else if (loyaltyBlock) {
+        (updated as { abilityIndex?: number }).abilityIndex = loyaltyBlock.abilityIndex;
+      } else if (modalOpt && segmentedAbilities) {
+        const optSeg = segmentedAbilities.find(
+          (a) =>
+            a.cardFaceId === face.faceId &&
+            modalOpt.startOffset >= a.paragraphStart &&
+            modalOpt.endOffset <= a.paragraphEnd,
+        );
+        if (optSeg) (updated as { abilityIndex?: number }).abilityIndex = optSeg.abilityIndex;
       }
 
       if (updated.loyaltyCost && loyaltyBlock && updated.loyaltyCost !== loyaltyBlock.loyaltyCost) {

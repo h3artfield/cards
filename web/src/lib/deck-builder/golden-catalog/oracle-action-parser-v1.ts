@@ -33,6 +33,8 @@ import {
 import {
   applyStructuralBlockInvariants,
 } from "./oracle-action-structural-blocks";
+import { buildOracleSemanticParse } from "./oracle-semantic-parse-builder";
+import type { OracleSemanticParse } from "./oracle-semantic-parse-schema";
 import {
   parseVariableQuantityFields,
   variableQuantityNeedsReview,
@@ -159,6 +161,8 @@ export interface OracleActionV1Result {
   faceName?: string;
   abilities: SegmentedAbility[];
   actions: OracleActionV1[];
+  /** Canonical semantic representation — primary consumer-facing parse output. */
+  semanticParse: OracleSemanticParse;
   structureAnnotations: OracleAbilityStructureAnnotation[];
   derivedRoles: DerivedCardRole[];
   abstainedClauses: Array<{ text: string; start: number; end: number; reason: string }>;
@@ -1790,6 +1794,7 @@ export function extractOracleActionsV1(input: {
     rawActions,
     targetFaces.map((f) => ({ faceId: f.faceId, text: f.text, start: f.start })),
     input.oracleId,
+    abilities,
   );
 
   const preDedupCount = structuralActions.length;
@@ -1827,7 +1832,7 @@ export function extractOracleActionsV1(input: {
   const indexedActions = withOptionality.map((a, i) => ({ ...a, actionIndex: i }));
   const duplicateSuppressedCount = Math.max(0, preDedupCount - indexedActions.length);
 
-  return {
+  const legacyPayload = {
     oracleId: input.oracleId,
     faceName: targetFaces[0]?.faceId,
     abilities,
@@ -1841,6 +1846,10 @@ export function extractOracleActionsV1(input: {
     rawEmissionCount: preDedupCount,
     modelAssistedLog: [],
   };
+
+  const semanticParse = buildOracleSemanticParse(legacyPayload, input.oracleText);
+
+  return { ...legacyPayload, semanticParse };
 }
 
 export function toLegacyExtractionResult(result: OracleActionV1Result): OracleActionExtractionResult {

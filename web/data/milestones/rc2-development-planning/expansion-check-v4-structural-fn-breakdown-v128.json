@@ -1,0 +1,229 @@
+{
+  "generatedAt": "2026-08-08T01:46:33.584Z",
+  "parserVersion": "oracle-action-v1.28-semantic-parse-dev",
+  "holdout": "expansion-check-v4 (spent)",
+  "failureCount": 8,
+  "summary": {
+    "incorrect_ability_block": [
+      "dev-exp-chk-v4-003",
+      "dev-exp-chk-v4-004"
+    ],
+    "semantic_ast_would_resolve": [
+      "dev-exp-chk-v4-014",
+      "dev-exp-chk-v4-015",
+      "dev-exp-chk-v4-022"
+    ],
+    "action_grammar": [
+      "dev-exp-chk-v4-019",
+      "dev-exp-chk-v4-020",
+      "dev-exp-chk-v4-021"
+    ],
+    "quantity_parsing": [
+      "dev-exp-chk-v4-022"
+    ]
+  },
+  "breakdown": [
+    {
+      "caseId": "dev-exp-chk-v4-003",
+      "cardName": "Jaya, Venerated Firemage",
+      "family": "loyalty_ability_scoping",
+      "legacyMetrics": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1
+      },
+      "semanticActionCount": 1,
+      "semanticAbilityCount": 2,
+      "goldExpectations": 1,
+      "layerClassification": [
+        {
+          "primaryLayer": "incorrect_ability_block",
+          "notes": "No loyalty ability block for +1",
+          "semanticHasMatchingAction": false
+        }
+      ],
+      "primaryLayers": [
+        "incorrect_ability_block"
+      ],
+      "wouldResolveWithSemanticAst": false
+    },
+    {
+      "caseId": "dev-exp-chk-v4-004",
+      "cardName": "Karn Liberated",
+      "family": "loyalty_ability_scoping",
+      "legacyMetrics": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1
+      },
+      "semanticActionCount": 2,
+      "semanticAbilityCount": 3,
+      "goldExpectations": 1,
+      "layerClassification": [
+        {
+          "primaryLayer": "incorrect_ability_block",
+          "notes": "Action tagged with wrong loyaltyCost −3 vs gold +4",
+          "semanticHasMatchingAction": false
+        }
+      ],
+      "primaryLayers": [
+        "incorrect_ability_block"
+      ],
+      "wouldResolveWithSemanticAst": false
+    },
+    {
+      "caseId": "dev-exp-chk-v4-014",
+      "cardName": "The First Doctor",
+      "family": "search_destination_chain",
+      "legacyMetrics": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1
+      },
+      "semanticActionCount": 2,
+      "semanticAbilityCount": 2,
+      "goldExpectations": 1,
+      "layerClassification": [
+        {
+          "primaryLayer": "semantic_ast_would_resolve",
+          "notes": "Canonical semantic parse contains matching action; legacy matcher/abilityIndex path fails",
+          "semanticHasMatchingAction": true
+        }
+      ],
+      "primaryLayers": [
+        "semantic_ast_would_resolve"
+      ],
+      "wouldResolveWithSemanticAst": true
+    },
+    {
+      "caseId": "dev-exp-chk-v4-015",
+      "cardName": "Delivery Moogle",
+      "family": "search_destination_chain",
+      "legacyMetrics": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1
+      },
+      "semanticActionCount": 1,
+      "semanticAbilityCount": 2,
+      "goldExpectations": 1,
+      "layerClassification": [
+        {
+          "primaryLayer": "semantic_ast_would_resolve",
+          "notes": "Canonical semantic parse contains matching action; legacy matcher/abilityIndex path fails",
+          "semanticHasMatchingAction": true
+        }
+      ],
+      "primaryLayers": [
+        "semantic_ast_would_resolve"
+      ],
+      "wouldResolveWithSemanticAst": true
+    },
+    {
+      "caseId": "dev-exp-chk-v4-019",
+      "cardName": "Aether Tradewinds",
+      "family": "conditional_zone_transition",
+      "legacyMetrics": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1
+      },
+      "semanticActionCount": 0,
+      "semanticAbilityCount": 1,
+      "goldExpectations": 1,
+      "layerClassification": [
+        {
+          "primaryLayer": "action_grammar",
+          "notes": "Return-to-hand pattern not matched for compound permanent clause",
+          "semanticHasMatchingAction": false
+        }
+      ],
+      "primaryLayers": [
+        "action_grammar"
+      ],
+      "wouldResolveWithSemanticAst": false
+    },
+    {
+      "caseId": "dev-exp-chk-v4-020",
+      "cardName": "Run Away Together",
+      "family": "conditional_zone_transition",
+      "legacyMetrics": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1
+      },
+      "semanticActionCount": 0,
+      "semanticAbilityCount": 1,
+      "goldExpectations": 1,
+      "layerClassification": [
+        {
+          "primaryLayer": "action_grammar",
+          "notes": "No accepted legacy action matches gold evidence",
+          "semanticHasMatchingAction": false
+        }
+      ],
+      "primaryLayers": [
+        "action_grammar"
+      ],
+      "wouldResolveWithSemanticAst": false
+    },
+    {
+      "caseId": "dev-exp-chk-v4-021",
+      "cardName": "Whirlwind Denial",
+      "family": "conditional_zone_transition",
+      "legacyMetrics": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1
+      },
+      "semanticActionCount": 0,
+      "semanticAbilityCount": 1,
+      "goldExpectations": 1,
+      "layerClassification": [
+        {
+          "primaryLayer": "action_grammar",
+          "notes": "Counter-unless-pay pattern not in ACTION_PATTERNS",
+          "semanticHasMatchingAction": false
+        }
+      ],
+      "primaryLayers": [
+        "action_grammar"
+      ],
+      "wouldResolveWithSemanticAst": false
+    },
+    {
+      "caseId": "dev-exp-chk-v4-022",
+      "cardName": "Pox",
+      "family": "quantity_constraint",
+      "legacyMetrics": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 1
+      },
+      "semanticActionCount": 3,
+      "semanticAbilityCount": 1,
+      "goldExpectations": 2,
+      "layerClassification": [
+        {
+          "primaryLayer": "quantity_parsing",
+          "notes": "Third-fraction lose_life not extracted; discard/sacrifice thirds may match instead",
+          "semanticHasMatchingAction": false
+        },
+        {
+          "primaryLayer": "semantic_ast_would_resolve",
+          "notes": "Canonical semantic parse contains matching action; legacy matcher/abilityIndex path fails",
+          "semanticHasMatchingAction": true
+        }
+      ],
+      "primaryLayers": [
+        "quantity_parsing",
+        "semantic_ast_would_resolve"
+      ],
+      "wouldResolveWithSemanticAst": true
+    }
+  ],
+  "astResolutionHypothesis": {
+    "countWouldResolve": 3,
+    "note": "Cases where canonical semantic parse already contains gold-aligned action but legacy eval path FN"
+  }
+}

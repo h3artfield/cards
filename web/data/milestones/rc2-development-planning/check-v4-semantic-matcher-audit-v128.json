@@ -1,0 +1,177 @@
+{
+  "generatedAt": "2026-08-08T02:21:36.171Z",
+  "parserVersion": "oracle-action-v1.28-semantic-parse-dev",
+  "holdout": "expansion-check-v4 (spent — audit only, no re-execution)",
+  "savedLegacyExecution": {
+    "tp": 23,
+    "fp": 0,
+    "fn": 8,
+    "precision": 1,
+    "recall": 0.7419354838709677,
+    "unsupported": 0
+  },
+  "legacyMatcherScore": {
+    "tp": 23,
+    "fp": 0,
+    "fn": 8,
+    "precision": 1,
+    "recall": 0.7419354838709677
+  },
+  "semanticMatcherScore": {
+    "tp": 23,
+    "fp": 0,
+    "fn": 8,
+    "precision": 1,
+    "recall": 0.7419354838709677
+  },
+  "semanticScopeOnlyMatcherScore": {
+    "tp": 25,
+    "fp": 0,
+    "fn": 6,
+    "precision": 1,
+    "recall": 0.8064516129032258
+  },
+  "fnConversions": {
+    "totalLegacyFnCases": 8,
+    "convertedStrictCount": 0,
+    "convertedStrictCaseIds": [],
+    "convertedScopeOnlyCount": 2,
+    "convertedScopeOnlyCaseIds": [
+      "dev-exp-chk-v4-014",
+      "dev-exp-chk-v4-015"
+    ],
+    "details": [
+      {
+        "caseId": "dev-exp-chk-v4-003",
+        "cardName": "Jaya, Venerated Firemage",
+        "legacyFn": 1,
+        "semanticFn": 1,
+        "semanticScopeOnlyFn": 1,
+        "convertedStrict": false,
+        "convertedScopeOnly": false,
+        "family": "loyalty_ability_scoping"
+      },
+      {
+        "caseId": "dev-exp-chk-v4-004",
+        "cardName": "Karn Liberated",
+        "legacyFn": 1,
+        "semanticFn": 1,
+        "semanticScopeOnlyFn": 1,
+        "convertedStrict": false,
+        "convertedScopeOnly": false,
+        "family": "loyalty_ability_scoping"
+      },
+      {
+        "caseId": "dev-exp-chk-v4-014",
+        "cardName": "The First Doctor",
+        "legacyFn": 1,
+        "semanticFn": 1,
+        "semanticScopeOnlyFn": 0,
+        "convertedStrict": false,
+        "convertedScopeOnly": true,
+        "family": "search_destination_chain"
+      },
+      {
+        "caseId": "dev-exp-chk-v4-015",
+        "cardName": "Delivery Moogle",
+        "legacyFn": 1,
+        "semanticFn": 1,
+        "semanticScopeOnlyFn": 0,
+        "convertedStrict": false,
+        "convertedScopeOnly": true,
+        "family": "search_destination_chain"
+      },
+      {
+        "caseId": "dev-exp-chk-v4-019",
+        "cardName": "Aether Tradewinds",
+        "legacyFn": 1,
+        "semanticFn": 1,
+        "semanticScopeOnlyFn": 1,
+        "convertedStrict": false,
+        "convertedScopeOnly": false,
+        "family": "conditional_zone_transition"
+      },
+      {
+        "caseId": "dev-exp-chk-v4-020",
+        "cardName": "Run Away Together",
+        "legacyFn": 1,
+        "semanticFn": 1,
+        "semanticScopeOnlyFn": 1,
+        "convertedStrict": false,
+        "convertedScopeOnly": false,
+        "family": "conditional_zone_transition"
+      },
+      {
+        "caseId": "dev-exp-chk-v4-021",
+        "cardName": "Whirlwind Denial",
+        "legacyFn": 1,
+        "semanticFn": 1,
+        "semanticScopeOnlyFn": 1,
+        "convertedStrict": false,
+        "convertedScopeOnly": false,
+        "family": "conditional_zone_transition"
+      },
+      {
+        "caseId": "dev-exp-chk-v4-022",
+        "cardName": "Pox",
+        "legacyFn": 1,
+        "semanticFn": 1,
+        "semanticScopeOnlyFn": 1,
+        "convertedStrict": false,
+        "convertedScopeOnly": false,
+        "family": "quantity_constraint"
+      }
+    ]
+  },
+  "remainingSemanticFns": [
+    {
+      "caseId": "dev-exp-chk-v4-003",
+      "cardName": "Jaya, Venerated Firemage",
+      "semanticFn": 1,
+      "family": "loyalty_ability_scoping"
+    },
+    {
+      "caseId": "dev-exp-chk-v4-004",
+      "cardName": "Karn Liberated",
+      "semanticFn": 1,
+      "family": "loyalty_ability_scoping"
+    },
+    {
+      "caseId": "dev-exp-chk-v4-014",
+      "cardName": "The First Doctor",
+      "semanticFn": 1,
+      "family": "search_destination_chain"
+    },
+    {
+      "caseId": "dev-exp-chk-v4-015",
+      "cardName": "Delivery Moogle",
+      "semanticFn": 1,
+      "family": "search_destination_chain"
+    },
+    {
+      "caseId": "dev-exp-chk-v4-019",
+      "cardName": "Aether Tradewinds",
+      "semanticFn": 1,
+      "family": "conditional_zone_transition"
+    },
+    {
+      "caseId": "dev-exp-chk-v4-020",
+      "cardName": "Run Away Together",
+      "semanticFn": 1,
+      "family": "conditional_zone_transition"
+    },
+    {
+      "caseId": "dev-exp-chk-v4-021",
+      "cardName": "Whirlwind Denial",
+      "semanticFn": 1,
+      "family": "conditional_zone_transition"
+    },
+    {
+      "caseId": "dev-exp-chk-v4-022",
+      "cardName": "Pox",
+      "semanticFn": 1,
+      "family": "quantity_constraint"
+    }
+  ],
+  "note": "Semantic matcher uses parentAbilityId/modalOptionId/provenance — no check-v4 re-run"
+}

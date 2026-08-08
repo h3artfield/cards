@@ -157,9 +157,9 @@ function matchDerivedQuantity(
   evidenceText: string,
   abilityParagraph: string,
 ): VariableQuantityFields | null {
-  const halfLife = evidenceText.match(/\b(?:Each opponent |Each player |Target player |That player |You )?lose(?:s)? half (?:their |your )?life\b/i);
+  const halfLife = evidenceText.match(/\b(?:Each opponent |Each player |Target player |Target opponent |That player |You )?lose(?:s)? half (?:their |your )?life\b/i);
   if (halfLife && (actionType === "lose_life" || /\bloses? half/i.test(evidenceText))) {
-    const rounding = /\bRound up each time\b/i.test(abilityParagraph) ? "up" : "none";
+    const rounding = /\b(?:rounded up|Round up each time)\b/i.test(abilityParagraph) ? "up" : "none";
     return {
       quantityType: "derived",
       quantityExpression: "half their life",
@@ -192,6 +192,52 @@ function matchDerivedQuantity(
       quantityExpression: `half ${halfMill[1].trim()}`,
       quantityBase: halfMill[1].trim(),
       quantityDivisor: "2",
+      quantityRounding: /\bRound up each time\b/i.test(abilityParagraph) ? "up" : "none",
+      quantitySource: "ability_where_clause",
+      quantityCertainty: "defined_in_ability",
+    };
+  }
+
+  const halfSac = evidenceText.match(/\bsacrifices? half (the creatures they control|the lands they control)/i);
+  if (halfSac && actionType === "sacrifice") {
+    const rounding = /\brounded up\b/i.test(abilityParagraph) ? "up" : "none";
+    return {
+      quantityType: "derived",
+      quantityExpression: `half ${halfSac[1]}`,
+      quantityBase: halfSac[1],
+      quantityDivisor: "2",
+      quantityRounding: rounding,
+      quantitySource: "ability_where_clause",
+      quantityCertainty: "defined_in_ability",
+    };
+  }
+
+  const halfDisc = evidenceText.match(/\bdiscards? half (?:the cards(?: in their hand)?|their hand)/i)
+    ?? abilityParagraph.match(/\bdiscards? half (?:the cards(?: in their hand)?|their hand)/i);
+  if (halfDisc && actionType === "discard") {
+    const rounding = /\brounded up\b/i.test(abilityParagraph) ? "up" : "none";
+    const base =
+      /\bhalf the cards in their hand\b/i.test(abilityParagraph)
+        ? "the cards in their hand"
+        : "their hand";
+    return {
+      quantityType: "derived",
+      quantityExpression: `half ${base}`,
+      quantityBase: base,
+      quantityDivisor: "2",
+      quantityRounding: rounding,
+      quantitySource: "ability_where_clause",
+      quantityCertainty: "defined_in_ability",
+    };
+  }
+
+  const thirdLife = evidenceText.match(/\b(?:Each player |Each opponent |Target player )?loses? a third of their life/i);
+  if (thirdLife && actionType === "lose_life") {
+    return {
+      quantityType: "derived",
+      quantityExpression: "a third of their life",
+      quantityBase: "their life total",
+      quantityDivisor: "3",
       quantityRounding: /\bRound up each time\b/i.test(abilityParagraph) ? "up" : "none",
       quantitySource: "ability_where_clause",
       quantityCertainty: "defined_in_ability",

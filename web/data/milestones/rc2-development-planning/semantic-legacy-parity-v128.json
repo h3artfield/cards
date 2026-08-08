@@ -1,0 +1,50 @@
+{
+  "generatedAt": "2026-08-08T02:17:03.914Z",
+  "parserVersion": "oracle-action-v1.28-semantic-parse-dev",
+  "corpora": [
+    "data/oracle-action-eval-development-v26.json",
+    "data/oracle-action-eval-development-generalization-expansion-v2.json",
+    "data/oracle-action-eval-development-generalization-expansion-v3.json",
+    "data/oracle-action-eval-development-generalization-expansion-v5.json"
+  ],
+  "caseCount": 375,
+  "totals": {
+    "semantic_only": 3,
+    "legacy_only": 3,
+    "argument_difference": 0,
+    "provenance_difference": 0,
+    "review_status_difference": 0
+  },
+  "casesWithDifferences": [
+    {
+      "caseId": "dev-opt-023",
+      "counts": {
+        "semantic_only": 1,
+        "legacy_only": 1,
+        "argument_difference": 0,
+        "provenance_difference": 0,
+        "review_status_difference": 0
+      }
+    },
+    {
+      "caseId": "eval-0009",
+      "counts": {
+        "semantic_only": 1,
+        "legacy_only": 1,
+        "argument_difference": 0,
+        "provenance_difference": 0,
+        "review_status_difference": 0
+      }
+    },
+    {
+      "caseId": "dev-exp-v3-002",
+      "counts": {
+        "semantic_only": 1,
+        "legacy_only": 1,
+        "argument_difference": 0,
+        "provenance_difference": 0,
+        "review_status_difference": 0
+      }
+    }
+  ]
+}
