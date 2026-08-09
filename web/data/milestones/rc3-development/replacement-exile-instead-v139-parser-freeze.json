@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-08-09T16:11:36.368Z",
+  "generatedAt": "2026-08-09T16:13:24.159Z",
   "checkpoint": "replacement-exile-instead-v139",
   "parserVersion": "oracle-action-v1.39-rc3-replacement-exile-instead",
   "tag": "oracle-action-v1.39-rc3-replacement-exile-instead",
   "parentCheckpoint": "oracle-action-v1.38-rc3-look-reveal-put-chain",
   "parentCommitSha": "ac4e161a18915d89b7dfb0f93eebd316b63cf74a",
-  "parserCommitSha": "ac4e161a18915d89b7dfb0f93eebd316b63cf74a",
-  "parserScopeClean": false,
+  "parserCommitSha": "31c2bbfe87c9af7ee8af7e9fe53a8fc6f00009ee",
+  "parserScopeClean": true,
   "parserScopePaths": [
     "src/lib/deck-builder/golden-catalog/oracle-rc3-transform.ts",
     "src/lib/deck-builder/golden-catalog/oracle-rc3-clause-native.ts",
