@@ -32,6 +32,12 @@ export interface SemanticActionForMatch {
   reviewStatus: "accepted" | "needs_review" | "overridden";
   optionalEffect?: boolean;
   optionalCost?: boolean;
+  executionContext?: string;
+  semanticOwner?: string;
+  cardNativeLayer2Eligible?: boolean;
+  choiceGroupId?: string;
+  choiceAlternativeIndex?: number;
+  choiceMutuallyExclusive?: boolean;
 }
 
 function abilityForAction(parse: OracleSemanticParse, action: SemanticAction) {
@@ -68,6 +74,12 @@ export function semanticActionsForMatch(parse: OracleSemanticParse): SemanticAct
       reviewStatus: action.reviewStatus,
       optionalEffect: action.optionalEffect,
       optionalCost: action.optionalCost,
+      executionContext: action.executionContext,
+      semanticOwner: action.semanticOwner,
+      cardNativeLayer2Eligible: action.cardNativeLayer2Eligible,
+      choiceGroupId: action.choiceGroupId,
+      choiceAlternativeIndex: action.choiceAlternativeIndex,
+      choiceMutuallyExclusive: action.choiceMutuallyExclusive,
     };
   });
 }
@@ -100,6 +112,14 @@ export function semanticPrimitiveMatchesExpected(
   if (expectedOptional !== undefined && !options?.ignoreOptionalEffect) {
     const gotOptional = action.optionalEffect ?? false;
     if (gotOptional !== expectedOptional) return false;
+  }
+  if (exp.choiceGroupId !== undefined) {
+    if (!action.choiceGroupId) return false;
+    if (exp.choiceAlternativeIndex !== undefined && action.choiceAlternativeIndex !== exp.choiceAlternativeIndex) {
+      return false;
+    }
+  } else if (exp.choiceAlternativeIndex !== undefined && action.choiceAlternativeIndex !== exp.choiceAlternativeIndex) {
+    return false;
   }
   if (exp.optionalCost !== undefined && action.optionalCost !== exp.optionalCost) return false;
 
@@ -227,6 +247,9 @@ export function evaluateCaseSemantic(
     optionalEffect: a.optionalEffect,
     optional: a.optionalEffect,
     optionalCost: a.optionalCost,
+    cardNativeLayer2Eligible: a.cardNativeLayer2Eligible,
+    cardStart: a.evidenceStart,
+    cardEnd: a.evidenceEnd,
   })) as ExtractedActionForMatch[];
 
   return {

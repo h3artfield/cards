@@ -152,6 +152,10 @@ export interface SemanticAction {
   choiceMutuallyExclusive?: boolean;
   reviewStatus: "accepted" | "needs_review" | "overridden";
   parserVersion: string;
+  extractionSource?: import("./oracle-rc3-extraction-metadata").ExtractionSource;
+  executionContext?: import("./oracle-rc3-extraction-metadata").ExecutionContext;
+  semanticOwner?: import("./oracle-rc3-extraction-metadata").SemanticOwner;
+  cardNativeLayer2Eligible?: boolean;
 }
 
 export interface SemanticDiagnostic {

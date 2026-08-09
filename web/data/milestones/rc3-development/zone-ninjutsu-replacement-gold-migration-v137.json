@@ -1,0 +1,290 @@
+{
+  "migrationVersion": "zone-ninjutsu-replacement-gold-migration-v137",
+  "frozenAt": "2026-08-09T13:00:00.000Z",
+  "parserConsulted": false,
+  "reviewer": "rc3-v137-zone-replacement-policy-adjudication",
+  "rule": "Ninjutsu keyword reminder text and trigger-event cast references are structural/mechanic semantics — NOT source-card Layer-2 actions. Return-to-hand gold must match destination zone.",
+  "policyDistinction": {
+    "ninjutsu_reminder": "Parenthetical Ninjutsu reminder (Return unblocked attacker…: Put this card onto the battlefield…) → mechanic_definition/reminder — cardNativeLayer2Eligible=false",
+    "trigger_event_cast": "Whenever you cast a spell from your graveyard → trigger-event reference — NOT Layer-2 cast primitive",
+    "return_destination": "return … from graveyard to your hand → return_to_hand, not return_to_battlefield"
+  },
+  "records": [
+    {
+      "caseId": "rc3-pos-cat-0009",
+      "cardName": "A-Dokuchi Silencer",
+      "removeLayer2Actions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield"
+        }
+      ],
+      "expectedMechanicContext": {
+        "mechanic": "ninjutsu",
+        "executionContext": "mechanic_definition",
+        "cardNativeLayer2Eligible": false,
+        "derivedMechanicBehaviors": {
+          "activatedCostIncludes": [
+            "Return an unblocked attacker you control to hand"
+          ],
+          "resolutionZoneTransition": {
+            "movementVerb": "put",
+            "sourceZone": "hand",
+            "destinationZone": "battlefield",
+            "stateModifiers": ["tapped", "attacking"]
+          }
+        },
+        "excludedReminderSpans": [
+          "Put this card onto the battlefield from your hand tapped and attacking",
+          "Return an unblocked attacker you control to hand"
+        ]
+      },
+      "expectedStructurePatch": {
+        "minActivatedAbilities": 1
+      },
+      "policyClass": "keyword_reminder_mechanic_definition",
+      "policyReason": "Ninjutsu reminder parenthetical defines mechanic resolution — not source-card immediate Layer-2 put_onto_battlefield."
+    },
+    {
+      "caseId": "rc3-pos-cat-0010",
+      "cardName": "A-Silver-Fur Master",
+      "removeLayer2Actions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield"
+        }
+      ],
+      "expectedMechanicContext": {
+        "mechanic": "ninjutsu",
+        "executionContext": "mechanic_definition",
+        "cardNativeLayer2Eligible": false,
+        "derivedMechanicBehaviors": {
+          "activatedCostIncludes": [
+            "Return an unblocked attacker you control to hand"
+          ],
+          "resolutionZoneTransition": {
+            "movementVerb": "put",
+            "sourceZone": "hand",
+            "destinationZone": "battlefield",
+            "stateModifiers": ["tapped", "attacking"]
+          }
+        },
+        "excludedReminderSpans": [
+          "Put this card onto the battlefield from your hand tapped and attacking",
+          "Return an unblocked attacker you control to hand"
+        ]
+      },
+      "expectedStructurePatch": {
+        "minActivatedAbilities": 1
+      },
+      "policyClass": "keyword_reminder_mechanic_definition",
+      "policyReason": "Ninjutsu reminder parenthetical only — card has no other card-native Layer-2 gold."
+    },
+    {
+      "caseId": "rc3-pos-cat-0011",
+      "cardName": "A-Thousand-Faced Shadow",
+      "removeLayer2Actions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield"
+        }
+      ],
+      "expectedMechanicContext": {
+        "mechanic": "ninjutsu",
+        "executionContext": "mechanic_definition",
+        "cardNativeLayer2Eligible": false,
+        "derivedMechanicBehaviors": {
+          "activatedCostIncludes": [
+            "Return an unblocked attacker you control to hand"
+          ],
+          "resolutionZoneTransition": {
+            "movementVerb": "put",
+            "sourceZone": "hand",
+            "destinationZone": "battlefield",
+            "stateModifiers": ["tapped", "attacking"]
+          }
+        },
+        "excludedReminderSpans": [
+          "Put this card onto the battlefield from your hand tapped and attacking",
+          "Return an unblocked attacker you control to hand"
+        ]
+      },
+      "expectedStructurePatch": {
+        "minActivatedAbilities": 1
+      },
+      "policyClass": "keyword_reminder_mechanic_definition",
+      "policyReason": "Ninjutsu reminder parenthetical defines mechanic resolution — create_token on ETB trigger remains card-native L2."
+    },
+    {
+      "caseId": "rc3-pos-cat-0019",
+      "cardName": "A-Devoted Grafkeeper // A-Departed Soulkeeper",
+      "removeLayer2Actions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast a spell from your graveyard, tap target creature you don't control"
+        }
+      ],
+      "layer1Condition": {
+        "kind": "future_event_reference",
+        "eventReference": "cast_spell_from_graveyard",
+        "evidenceContains": "Whenever you cast a spell from your graveyard"
+      },
+      "policyClass": "trigger_event_cast_reference",
+      "policyReason": "Trigger condition references a cast event — tap effect is card-native L2; cast on trigger line is NOT L2."
+    },
+    {
+      "caseId": "rc3-pos-cat-0030",
+      "cardName": "A-Circle of the Land Druid",
+      "replaceLayer2Actions": [
+        {
+          "fromActionType": "return_to_battlefield",
+          "fromEvidenceContains": "return target land card from your graveyard to your hand",
+          "toActionType": "return_to_hand",
+          "toEvidenceContains": "return target land card from your graveyard to your hand"
+        }
+      ],
+      "policyClass": "gold_destination_zone_correction",
+      "policyReason": "Oracle destination is hand — gold mislabeled return_to_battlefield."
+    },
+    {
+      "caseId": "rc3-pos-v12-0015",
+      "cardName": "A-Moon-Circuit Hacker",
+      "removeLayer2Actions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield"
+        }
+      ],
+      "expectedMechanicContext": {
+        "mechanic": "ninjutsu",
+        "executionContext": "mechanic_definition",
+        "cardNativeLayer2Eligible": false,
+        "derivedMechanicBehaviors": {
+          "activatedCostIncludes": [
+            "Return an unblocked attacker you control to hand"
+          ],
+          "resolutionZoneTransition": {
+            "movementVerb": "put",
+            "sourceZone": "hand",
+            "destinationZone": "battlefield",
+            "stateModifiers": ["tapped", "attacking"]
+          }
+        },
+        "excludedReminderSpans": [
+          "Put this card onto the battlefield from your hand tapped and attacking",
+          "Return an unblocked attacker you control to hand"
+        ]
+      },
+      "expectedStructurePatch": {
+        "minActivatedAbilities": 1
+      },
+      "policyClass": "keyword_reminder_mechanic_definition",
+      "policyReason": "Historical v12 regression — Ninjutsu reminder L2 excluded from current-policy scoring overlay only."
+    },
+    {
+      "caseId": "rc3-pos-v12-0107",
+      "cardName": "A-Nashi, Moon Sage's Scion",
+      "removeLayer2Actions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield"
+        }
+      ],
+      "expectedMechanicContext": {
+        "mechanic": "ninjutsu",
+        "executionContext": "mechanic_definition",
+        "cardNativeLayer2Eligible": false,
+        "derivedMechanicBehaviors": {
+          "activatedCostIncludes": [
+            "Return an unblocked attacker you control to hand"
+          ],
+          "resolutionZoneTransition": {
+            "movementVerb": "put",
+            "sourceZone": "hand",
+            "destinationZone": "battlefield",
+            "stateModifiers": ["tapped", "attacking"]
+          }
+        },
+        "excludedReminderSpans": [
+          "Put this card onto the battlefield from your hand tapped and attacking",
+          "Return an unblocked attacker you control to hand"
+        ]
+      },
+      "expectedStructurePatch": {
+        "minActivatedAbilities": 1
+      },
+      "policyClass": "keyword_reminder_mechanic_definition",
+      "policyReason": "Historical v12 regression — Ninjutsu reminder L2 excluded from current-policy scoring overlay only."
+    },
+    {
+      "caseId": "rc3-pos-v12-0108",
+      "cardName": "A-Nezumi Prowler",
+      "removeLayer2Actions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield"
+        }
+      ],
+      "expectedMechanicContext": {
+        "mechanic": "ninjutsu",
+        "executionContext": "mechanic_definition",
+        "cardNativeLayer2Eligible": false,
+        "derivedMechanicBehaviors": {
+          "activatedCostIncludes": [
+            "Return an unblocked attacker you control to hand"
+          ],
+          "resolutionZoneTransition": {
+            "movementVerb": "put",
+            "sourceZone": "hand",
+            "destinationZone": "battlefield",
+            "stateModifiers": ["tapped", "attacking"]
+          }
+        },
+        "excludedReminderSpans": [
+          "Put this card onto the battlefield from your hand tapped and attacking",
+          "Return an unblocked attacker you control to hand"
+        ]
+      },
+      "expectedStructurePatch": {
+        "minActivatedAbilities": 1
+      },
+      "policyClass": "keyword_reminder_mechanic_definition",
+      "policyReason": "Historical v12 regression — Ninjutsu reminder L2 excluded from current-policy scoring overlay only."
+    },
+    {
+      "caseId": "rc3-pos-v12-0110",
+      "cardName": "A-Prosperous Thief",
+      "removeLayer2Actions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield"
+        }
+      ],
+      "expectedMechanicContext": {
+        "mechanic": "ninjutsu",
+        "executionContext": "mechanic_definition",
+        "cardNativeLayer2Eligible": false,
+        "derivedMechanicBehaviors": {
+          "activatedCostIncludes": [
+            "Return an unblocked attacker you control to hand"
+          ],
+          "resolutionZoneTransition": {
+            "movementVerb": "put",
+            "sourceZone": "hand",
+            "destinationZone": "battlefield",
+            "stateModifiers": ["tapped", "attacking"]
+          }
+        },
+        "excludedReminderSpans": [
+          "Put this card onto the battlefield from your hand tapped and attacking",
+          "Return an unblocked attacker you control to hand"
+        ]
+      },
+      "expectedStructurePatch": {
+        "minActivatedAbilities": 1
+      },
+      "policyClass": "keyword_reminder_mechanic_definition",
+      "policyReason": "Historical v12 regression — Ninjutsu reminder L2 excluded from current-policy scoring overlay only."
+    }
+  ]
+}

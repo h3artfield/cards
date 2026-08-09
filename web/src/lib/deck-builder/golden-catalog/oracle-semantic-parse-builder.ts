@@ -4,6 +4,7 @@
 import type { SegmentedAbility } from "./oracle-action-schema";
 import type { OracleActionV1, OracleActionV1Result } from "./oracle-action-parser-v1";
 import type { RC3ActionExtensions } from "./oracle-rc3-extraction-metadata";
+import { resolveActionScoringScope } from "./oracle-rc3-scoring-scope";
 import { ORACLE_ACTION_PARSER_VERSION } from "./oracle-action-schema";
 import {
   buildLoyaltyAbilities,
@@ -359,6 +360,8 @@ export function buildOracleSemanticParse(
       });
     }
 
+    const scope = resolveActionScoringScope(action as OracleActionV1 & RC3ActionExtensions, oracleText);
+
     return {
       actionId: action.actionId,
       parentAbilityId,
@@ -375,6 +378,10 @@ export function buildOracleSemanticParse(
       choiceMutuallyExclusive: (action as OracleActionV1 & RC3ActionExtensions).choiceMutuallyExclusive,
       reviewStatus: action.reviewStatus,
       parserVersion: ORACLE_ACTION_PARSER_VERSION,
+      extractionSource: scope.extractionSource,
+      executionContext: scope.executionContext,
+      semanticOwner: scope.semanticOwner,
+      cardNativeLayer2Eligible: scope.cardNativeLayer2Eligible,
     };
   });
 

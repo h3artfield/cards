@@ -52,17 +52,46 @@ export interface ActivatedAbilityNode {
   effectClauses: ClauseNode[];
 }
 
+export interface InterceptedReplacementEvent {
+  objectPhrase: string;
+  movement: "put" | "die";
+  destinationZone?: "graveyard";
+  evidenceText: string;
+}
+
 export interface ReplacementEffectNode {
   eventClause: ClauseNode;
   replacementClause: ClauseNode;
   condition?: ClauseNode;
   replacementActionIds: string[];
+  interceptedEvent?: InterceptedReplacementEvent;
+  replacementCue?: "instead";
+  referentMap?: { replacementObjectRef: string; interceptedObjectRef: string };
 }
 
 export interface SearchChainLink {
   actionType: PrimitiveActionType;
   objectId: string;
   referentObjectId?: string;
+  evidenceText: string;
+  absStart: number;
+  absEnd: number;
+}
+
+export interface LookRevealPutChainLink {
+  actionType: "put_onto_battlefield";
+  objectId: string;
+  referentObjectId: string;
+  sourceZone: string;
+  evidenceText: string;
+  absStart: number;
+  absEnd: number;
+  optionalEffect: boolean;
+}
+
+export interface LookRevealReferentLink {
+  objectId: string;
+  sourceZone: string;
   evidenceText: string;
   absStart: number;
   absEnd: number;
@@ -85,6 +114,7 @@ export interface ClauseNativeExtractionResult {
   activatedAbilities: ActivatedAbilityNode[];
   replacementEffects: ReplacementEffectNode[];
   searchChains: SearchChainLink[][];
+  lookRevealPutChains: LookRevealPutChainLink[][];
   transformTransitions: TransformTransitionNode[];
   provenance: "clause_native" | "v1_fallback";
 }
@@ -139,6 +169,28 @@ const PRIMITIVE_PATTERNS: Array<{
   },
   { pattern: /\bdeals? \d+ damage(?: to (?:any target|target [\w ]+|each [\w ]+))?\.?/i, actionType: "deal_damage" },
 ];
+
+const LOOK_REVEAL_ANTECEDENT_PATTERNS: Array<{ pattern: RegExp; sourceZone: string }> = [
+  {
+    pattern: /\blook at the top (?:\w+|\d+) cards of (?:your |target player's )?library\b/i,
+    sourceZone: "library",
+  },
+  {
+    pattern: /\breveal the top (?:\w+|\d+) cards of (?:your )?library\b/i,
+    sourceZone: "library",
+  },
+  {
+    pattern: /\bexile the top (?:\w+|\d+) cards of (?:your )?library\b/i,
+    sourceZone: "exile",
+  },
+  {
+    pattern: /\bexile the top card of each player's library\b/i,
+    sourceZone: "exile",
+  },
+];
+
+const PUT_FROM_AMONG_THEM_ONTO_BF =
+  /\b(?:You may )?put [\w ]+ from among them onto the battlefield\b/i;
 
 function actionId(seed: string): string {
   return createHash("sha256").update(seed).digest("hex").slice(0, 24);
@@ -203,6 +255,104 @@ function parseActivatedAbility(paragraph: string, abilityId: string): ActivatedA
     effectRegion: { text: effectText, start: effectAbsStart, end: paragraph.length },
     effectClauses,
   };
+}
+
+function parseReplacementAbilityClauses(
+  paragraph: string,
+  abilityId: string,
+): { eventClause: ClauseNode; replacementClause: ClauseNode; interceptedEvent?: InterceptedReplacementEvent } | null {
+  if (!/\bwould\b/i.test(paragraph) || !/\binstead\b/i.test(paragraph)) return null;
+
+  const eventBoundary =
+    paragraph.match(/\bIf (?:a |an |the |this |target |you |each |that )[^,]+ would [^,]+,\s*/i) ??
+    paragraph.match(/\bIf [^,]+ would [^,]+,\s*/i);
+  if (!eventBoundary || eventBoundary.index === undefined) return null;
+
+  const eventEnd = eventBoundary.index + eventBoundary[0].length;
+  const eventText = paragraph.slice(0, eventEnd).trim();
+  const replacementText = paragraph.slice(eventEnd).trim();
+  if (!replacementText || !/\binstead\b/i.test(replacementText)) return null;
+
+  const eventClause: ClauseNode = {
+    clauseId: `${abilityId}:replacement:event`,
+    role: "replacement_event",
+    text: eventText,
+    localStart: 0,
+    localEnd: eventEnd,
+  };
+  const replacementClause: ClauseNode = {
+    clauseId: `${abilityId}:replacement:effect`,
+    role: "replacement_effect",
+    text: replacementText,
+    localStart: eventEnd,
+    localEnd: paragraph.length,
+  };
+
+  let interceptedEvent: InterceptedReplacementEvent | undefined;
+  const graveyardPut = eventText.match(/\bIf (.+?) would be put into a graveyard(?: from anywhere)?/i);
+  if (graveyardPut) {
+    interceptedEvent = {
+      objectPhrase: graveyardPut[1]!.trim(),
+      movement: "put",
+      destinationZone: "graveyard",
+      evidenceText: graveyardPut[0],
+    };
+  } else {
+    const wouldDie = eventText.match(/\bIf (.+?) would die\b/i);
+    if (wouldDie) {
+      interceptedEvent = {
+        objectPhrase: wouldDie[1]!.trim(),
+        movement: "die",
+        evidenceText: wouldDie[0],
+      };
+    }
+  }
+
+  return { eventClause, replacementClause, interceptedEvent };
+}
+
+function extractReplacementExileInstead(input: {
+  oracleId: string;
+  oracleText: string;
+  ability: SegmentedAbility;
+  faceId: string;
+  eventClause: ClauseNode;
+  replacementClause: ClauseNode;
+  interceptedEvent?: InterceptedReplacementEvent;
+  actionIndexStart: number;
+  objectIdPrefix: string;
+}): { actions: OracleActionV1[]; interceptedObjectId?: string } {
+  const exileMatch = input.replacementClause.text.match(/\bexile it instead\b/i);
+  if (!exileMatch || exileMatch.index === undefined) return { actions: [] };
+
+  const interceptedObjectId = `${input.objectIdPrefix}:intercepted-object`;
+  const evidenceText = exileMatch[0];
+  const matchOffset = input.replacementClause.localStart + exileMatch.index;
+  const absStart = input.ability.paragraphStart + matchOffset;
+  const absEnd = absStart + evidenceText.length;
+
+  const action = buildNativeAction({
+    oracleId: input.oracleId,
+    oracleText: input.oracleText,
+    ability: input.ability,
+    faceId: input.faceId,
+    actionType: "exile",
+    evidenceText,
+    evidenceStart: absStart,
+    evidenceEnd: absEnd,
+    actionIndex: input.actionIndexStart,
+    textRole: "replacement_effect",
+    clauseId: input.replacementClause.clauseId,
+    destinationZones: ["exile"],
+    extensions: {
+      executionContext: "replacement_effect",
+      referentObjectId: interceptedObjectId,
+      replacementInterceptedObjectId: interceptedObjectId,
+      semanticOwner: "source_card",
+    },
+  });
+
+  return { actions: [action], interceptedObjectId };
 }
 
 function parseReplacementEffect(paragraph: string, abilityId: string): ReplacementEffectNode | null {
@@ -368,6 +518,9 @@ function extractPrimitivesFromClause(input: {
     while ((m = re.exec(input.clause.text)) !== null) {
       const evidenceText = m[0];
       const matchOffset = m.index ?? 0;
+      if (rule.actionType === "put_onto_battlefield" && /from among them/i.test(evidenceText)) {
+        continue;
+      }
       const startInParagraph = input.clause.localStart + matchOffset;
       const absStartFixed = input.ability.paragraphStart + startInParagraph;
       const absEnd = absStartFixed + evidenceText.length;
@@ -530,6 +683,81 @@ function extractSearchChain(input: {
   return { links, actions };
 }
 
+function extractLookRevealPutChain(input: {
+  oracleId: string;
+  oracleText: string;
+  ability: SegmentedAbility;
+  faceId: string;
+  clauses: ClauseNode[];
+  actionIndexStart: number;
+}): { links: LookRevealPutChainLink[]; actions: OracleActionV1[] } {
+  const objectId = `object-${input.oracleId}-${input.ability.abilityIndex}-looked`;
+  const links: LookRevealPutChainLink[] = [];
+  const actions: OracleActionV1[] = [];
+  let idx = input.actionIndexStart;
+  let referent: LookRevealReferentLink | undefined;
+
+  for (const clause of input.clauses) {
+    for (const antecedent of LOOK_REVEAL_ANTECEDENT_PATTERNS) {
+      const m = clause.text.match(antecedent.pattern);
+      if (!m) continue;
+      const startInParagraph = clause.localStart + (m.index ?? 0);
+      referent = {
+        objectId,
+        sourceZone: antecedent.sourceZone,
+        evidenceText: m[0],
+        absStart: input.ability.paragraphStart + startInParagraph,
+        absEnd: input.ability.paragraphStart + startInParagraph + m[0].length,
+      };
+      break;
+    }
+
+    const putMatch = clause.text.match(PUT_FROM_AMONG_THEM_ONTO_BF);
+    if (!putMatch || !referent) continue;
+
+    const startInParagraph = clause.localStart + (putMatch.index ?? 0);
+    const absStart = input.ability.paragraphStart + startInParagraph;
+    const absEnd = absStart + putMatch[0].length;
+    const optionalEffect = /^You may put/i.test(putMatch[0]);
+
+    links.push({
+      actionType: "put_onto_battlefield",
+      objectId: `${objectId}-bf`,
+      referentObjectId: referent.objectId,
+      sourceZone: referent.sourceZone,
+      evidenceText: putMatch[0],
+      absStart,
+      absEnd,
+      optionalEffect,
+    });
+
+    actions.push(
+      buildNativeAction({
+        oracleId: input.oracleId,
+        oracleText: input.oracleText,
+        ability: input.ability,
+        faceId: input.faceId,
+        actionType: "put_onto_battlefield",
+        evidenceText: putMatch[0],
+        evidenceStart: absStart,
+        evidenceEnd: absEnd,
+        actionIndex: idx++,
+        textRole: clause.role,
+        clauseId: clause.clauseId,
+        sourceZones: [referent.sourceZone],
+        destinationZones: ["battlefield"],
+        optionalEffect,
+        extensions: {
+          referentObjectId: referent.objectId,
+          executionContext: "immediate",
+        },
+      }),
+    );
+  }
+
+  return { links, actions };
+}
+
 function extractTransformTransitions(input: {
   ability: SegmentedAbility;
   oracleId: string;
@@ -611,6 +839,7 @@ export function extractClauseNativeActions(input: {
   const activatedAbilities: ActivatedAbilityNode[] = [];
   const replacementEffects: ReplacementEffectNode[] = [];
   const searchChains: SearchChainLink[][] = [];
+  const lookRevealPutChains: LookRevealPutChainLink[][] = [];
   const transformTransitions: TransformTransitionNode[] = [];
   let actionIndex = 0;
 
@@ -651,43 +880,46 @@ export function extractClauseNativeActions(input: {
         });
       }
 
-      const insteadIdx = ability.paragraphText.search(/\binstead\b/i);
-      const isReplacementAbility = insteadIdx > 0 && /\bwould\b/i.test(ability.paragraphText.slice(0, insteadIdx));
+      const replacementParsed = parseReplacementAbilityClauses(ability.paragraphText, `${abilityId}:replacement`);
+      let replacementActionsExtracted = 0;
 
-      if (isReplacementAbility) {
+      if (replacementParsed) {
         const replId = `${abilityId}:replacement`;
-        const eventClause: ClauseNode = {
-          clauseId: `${replId}:event`,
-          role: "replacement_event",
-          text: ability.paragraphText.slice(0, insteadIdx).trim(),
-          localStart: 0,
-          localEnd: insteadIdx,
-        };
-        const replacementClause: ClauseNode = {
-          clauseId: `${replId}:effect`,
-          role: "replacement_effect",
-          text: ability.paragraphText.slice(insteadIdx).trim(),
-          localStart: insteadIdx,
-          localEnd: ability.paragraphText.length,
-        };
-        const replActions = extractPrimitivesFromClause({
+        const { eventClause, replacementClause, interceptedEvent } = replacementParsed;
+        const interceptedObjectId = interceptedEvent
+          ? `${replId}:intercepted-object`
+          : undefined;
+        const replExtraction = extractReplacementExileInstead({
           oracleId: input.oracleId,
           oracleText: input.oracleText,
           ability,
           faceId: face.faceId,
-          clause: replacementClause,
+          eventClause,
+          replacementClause,
+          interceptedEvent,
           actionIndexStart: actionIndex,
           objectIdPrefix: replId,
-          extensions: { executionContext: "replacement_effect" },
         });
+        replacementActionsExtracted = replExtraction.actions.length;
         replacementEffects.push({
           eventClause,
           replacementClause,
-          replacementActionIds: replActions.map((a) => a.actionId),
+          replacementActionIds: replExtraction.actions.map((a) => a.actionId),
+          interceptedEvent,
+          replacementCue: "instead",
+          referentMap:
+            interceptedObjectId && replExtraction.actions.length > 0
+              ? {
+                  replacementObjectRef: interceptedObjectId,
+                  interceptedObjectRef: interceptedObjectId,
+                }
+              : undefined,
         });
-        actions.push(...replActions);
+        actions.push(...replExtraction.actions);
         actionIndex = actions.length;
       }
+
+      const isReplacementAbility = replacementActionsExtracted > 0;
 
       const isActivatedSplit = !!(abilityBlock.costRegion && abilityBlock.effectRegion);
 
@@ -772,6 +1004,20 @@ export function extractClauseNativeActions(input: {
       if (links.length > 0) {
         searchChains.push(links);
         actions.push(...chainActions);
+        actionIndex = actions.length;
+      }
+
+      const lookReveal = extractLookRevealPutChain({
+        oracleId: input.oracleId,
+        oracleText: input.oracleText,
+        ability,
+        faceId: face.faceId,
+        clauses: topClauses,
+        actionIndexStart: actionIndex,
+      });
+      if (lookReveal.links.length > 0) {
+        lookRevealPutChains.push(lookReveal.links);
+        actions.push(...lookReveal.actions);
         actionIndex = actions.length;
       }
 
@@ -883,6 +1129,7 @@ export function extractClauseNativeActions(input: {
     activatedAbilities,
     replacementEffects,
     searchChains,
+    lookRevealPutChains,
     transformTransitions,
     provenance: "clause_native",
   };
@@ -903,8 +1150,26 @@ function semanticActionKey(action: OracleActionV1): string {
 function overlayNativeMetadata(v1Action: OracleActionV1, nativeAction: OracleActionV1): OracleActionV1 {
   const nativeExt = nativeAction as OracleActionV1 & RC3ActionExtensions;
   const v1Ext = v1Action as OracleActionV1 & RC3ActionExtensions;
+  const preferNativeReview =
+    nativeAction.reviewStatus === "accepted" &&
+    (v1Action.reviewStatus === "needs_review" || nativeExt.executionContext === "replacement_effect");
   return {
     ...v1Action,
+    ...(preferNativeReview
+      ? {
+          reviewStatus: nativeAction.reviewStatus,
+          confidence: nativeAction.confidence,
+          extractionMethod: nativeAction.extractionMethod,
+          extractionSource: nativeExt.extractionSource ?? v1Ext.extractionSource,
+          executionContext: nativeExt.executionContext ?? v1Ext.executionContext,
+          referentObjectId: nativeExt.referentObjectId ?? v1Ext.referentObjectId,
+          replacementInterceptedObjectId:
+            nativeExt.replacementInterceptedObjectId ?? v1Ext.replacementInterceptedObjectId,
+          clauseId: nativeAction.clauseId ?? v1Action.clauseId,
+          textRole: nativeAction.textRole ?? v1Action.textRole,
+          destinationZones: nativeAction.destinationZones ?? v1Action.destinationZones,
+        }
+      : {}),
     optionalEffect: nativeAction.optionalityCertain ? nativeAction.optionalEffect : v1Action.optionalEffect,
     optional: nativeAction.optionalityCertain ? nativeAction.optional : v1Action.optional,
     optionalCost: nativeAction.optionalCost ?? v1Action.optionalCost,
@@ -976,7 +1241,13 @@ export function mergeClauseNativeWithV1(
 /** Select clause-native actions eligible for family-scoped promotion. */
 export function filterNativeActionsForPromotion(
   native: ClauseNativeExtractionResult,
-  families: Array<"granted_ability_quote" | "search_put_shuffle_chain" | "activated_post_colon_effect">,
+  families: Array<
+    | "granted_ability_quote"
+    | "search_put_shuffle_chain"
+    | "look_reveal_put_chain"
+    | "activated_post_colon_effect"
+    | "replacement_exile_instead"
+  >,
 ): OracleActionV1[] {
   const promoted: OracleActionV1[] = [];
   const seen = new Set<string>();
@@ -1010,6 +1281,20 @@ export function filterNativeActionsForPromotion(
     }
   }
 
+  if (families.includes("look_reveal_put_chain")) {
+    for (const chain of native.lookRevealPutChains ?? []) {
+      for (const link of chain) {
+        const action = native.actions.find(
+          (a) =>
+            a.actionType === link.actionType &&
+            Math.abs(a.evidenceStart - link.absStart) < 3 &&
+            /from among them/i.test(a.evidenceText),
+        );
+        if (action) add(action);
+      }
+    }
+  }
+
   if (families.includes("activated_post_colon_effect")) {
     for (const activated of native.activatedAbilities) {
       const effectClauseIds = new Set(
@@ -1026,6 +1311,16 @@ export function filterNativeActionsForPromotion(
         if (action.actionType === "transform") continue;
         if (action.actionType === "copy") continue;
         add(action);
+      }
+    }
+  }
+
+  if (families.includes("replacement_exile_instead")) {
+    for (const repl of native.replacementEffects) {
+      if (!repl.interceptedEvent || repl.replacementCue !== "instead") continue;
+      for (const actionId of repl.replacementActionIds) {
+        const action = native.actions.find((a) => a.actionId === actionId);
+        if (action?.actionType === "exile") add(action);
       }
     }
   }

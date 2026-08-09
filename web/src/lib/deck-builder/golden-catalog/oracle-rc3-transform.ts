@@ -30,7 +30,7 @@ import {
 import { isInsideTokenGlossaryRegion } from "./oracle-rc3-token-glossary";
 import type { SegmentedAbility } from "./oracle-action-schema";
 
-export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.37-rc3-granted-nested-complete";
+export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.38-rc3-look-reveal-put-chain";
 
 const PUT_INTO_HAND_RE =
   /\b(?:put (?:it|that card|one of them|one of those cards|two of those cards|three of those cards|four of those cards|five of those cards|up to [^.]+?) into (?:your |their )?hand|Put (?:that card|one of them|one of those cards|two of those cards|target card from [^.]+?) into (?:your |their |its owner's )?hand|reveal (?:it|that card)[^.]* and put (?:it|that card) into your hand)\b/i;
@@ -542,6 +542,16 @@ export function applyRC3Transforms(
       action.arguments.destinationZone = ["hand"];
       if (!action.arguments.sourceZone?.length) {
         action.arguments.sourceZone = ["library"];
+      }
+    }
+    if (action.actionType === "put_onto_battlefield" && !action.arguments.sourceZone?.length) {
+      const legacyAction = actions.find(
+        (a) =>
+          a.actionType === "put_onto_battlefield" &&
+          Math.abs(a.evidenceStart - action.provenance.actionSpan.cardStart) < 3,
+      );
+      if (legacyAction?.sourceZones?.length) {
+        action.arguments.sourceZone = legacyAction.sourceZones;
       }
     }
   }

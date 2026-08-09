@@ -77,4 +77,25 @@ function roleAt(text: string, evidence: string) {
   assert.equal(actions.filter((a) => a.actionType === "cast" && /cast Demilich from your graveyard/i.test(a.provenance.actionSpan.text)).length, 0);
 }
 
+{
+  const text =
+    "You may cast that card for as long as it remains exiled.";
+  assert.equal(accepted(text).filter((a) => a.actionType === "cast").length, 0);
+  assert.equal(roleAt(text, "You may cast that card for as long as it remains exiled"), "static_permission");
+}
+
+{
+  const text =
+    "{1}, Exile Glamorous Outlaw from your hand: Target land gains \"{T}: Add {U}\" until Glamorous Outlaw is cast from exile. You may cast Glamorous Outlaw for as long as it remains exiled.";
+  assert.equal(accepted(text).filter((a) => a.actionType === "cast").length, 0);
+  assert.equal(roleAt(text, "You may cast Glamorous Outlaw for as long as it remains exiled"), "static_permission");
+  assert.equal(roleAt(text, "until Glamorous Outlaw is cast from exile"), "effect");
+}
+
+{
+  const text = "You may cast that card.";
+  const actions = accepted(text);
+  assert.equal(actions.filter((a) => a.actionType === "cast").length, 1);
+}
+
 console.log("test-rc3-cast-policy-regressions: all passed");

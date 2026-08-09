@@ -1,0 +1,155 @@
+{
+  "generatedAt": "2026-08-09T15:04:50.442Z",
+  "checkpoint": "parser-provenance-reconciliation-v137",
+  "conclusion": "B_token_boundary_and_z1b_exist_only_in_working_tree_not_in_7050c75",
+  "summary": {
+    "parserVersionString": {
+      "c446b6b": "oracle-action-v1.36-rc3-granted-nested-dev",
+      "7050c75": "oracle-action-v1.37-rc3-granted-nested-complete",
+      "workingTree": "oracle-action-v1.38-rc3-look-reveal-put-chain"
+    },
+    "filesChanged_c446_to_7050": 5,
+    "filesChanged_7050_to_working": 10,
+    "filesIdentical_7050_to_working": 1,
+    "tokenBoundaryFreezeClaimedCommit": "7050c75abbf19a5db3174ec4c295431666bb1821",
+    "tokenBoundaryFreeze_blob_matches_7050_bytes": true,
+    "tokenBoundaryFreeze_blob_mismatches": []
+  },
+  "correction": {
+    "7050c75_authoritative_label": "oracle-action-v1.37-rc3-granted-nested-complete",
+    "tokenDefinitionBoundary": {
+      "status": "never_committed_before_v138",
+      "note": "Token-definition boundary parser deltas live in working tree after 7050c75; prior freeze mis-attributed granted-nested-complete bytes to token-definition-boundary label."
+    },
+    "v138Parent": "7050c75abbf19a5db3174ec4c295431666bb1821"
+  },
+  "blobComparisonRows": [
+    {
+      "file": "transform",
+      "repoPath": "web/src/lib/deck-builder/golden-catalog/oracle-rc3-transform.ts",
+      "c446b6b": "ff04c764df332d76900d3b3a059db9c456df78c40b2346026b98fc5861c35093",
+      "commit7050c75": "ce07d25e83b43e172d2f9957a5b83b4cae059d126a88b5776fbd0aa3f58ba248",
+      "workingTree": "c105443c1694aa7cbaae71a63b817945c00158af06dd377acdffa9042ec195ab",
+      "c446_to_7050": "changed",
+      "7050_to_working": "changed"
+    },
+    {
+      "file": "clauseNative",
+      "repoPath": "web/src/lib/deck-builder/golden-catalog/oracle-rc3-clause-native.ts",
+      "c446b6b": "b2be702bab310dd9f06773ce1e6bfa51ab4e3916280e6d84e40d7dd9ab327051",
+      "commit7050c75": "6b721f11abddf5a410b07bcc49cc8cadfc37f98e18a3628e11a4158691d9b305",
+      "workingTree": "629a6c88224959f20e4a931df22bc5b9fb35829bfae5f68e4baa7e56c081c6ed",
+      "c446_to_7050": "changed",
+      "7050_to_working": "changed"
+    },
+    {
+      "file": "contextRouter",
+      "repoPath": "web/src/lib/deck-builder/golden-catalog/oracle-rc3-semantic-context-router.ts",
+      "c446b6b": "dbb0ad1988c7d3e531426a4f72c385133307a71dc6a97b11f61516af0afb4578",
+      "commit7050c75": "dbb0ad1988c7d3e531426a4f72c385133307a71dc6a97b11f61516af0afb4578",
+      "workingTree": "8f0c6edbec8b47eeee29b88c93747a8922bc02edc1b6b661c3c1ae7a78523078",
+      "c446_to_7050": "identical",
+      "7050_to_working": "changed"
+    },
+    {
+      "file": "tokenGlossary",
+      "repoPath": "web/src/lib/deck-builder/golden-catalog/oracle-rc3-token-glossary.ts",
+      "c446b6b": null,
+      "commit7050c75": "ab8e6ddf50539e0ade645f7a8d358d6a6960b6bb8aa40743fe42537b42bbbe98",
+      "workingTree": "ab8e6ddf50539e0ade645f7a8d358d6a6960b6bb8aa40743fe42537b42bbbe98",
+      "c446_to_7050": "changed",
+      "7050_to_working": "identical"
+    },
+    {
+      "file": "grantedSpanDetector",
+      "repoPath": "web/src/lib/deck-builder/golden-catalog/oracle-rc3-granted-rules-span-detector.ts",
+      "c446b6b": "a1c6b52eecae3812818167d3a864bc55cb1d72fdf33d92bda64c5b9dd73bd3bf",
+      "commit7050c75": "a1c6b52eecae3812818167d3a864bc55cb1d72fdf33d92bda64c5b9dd73bd3bf",
+      "workingTree": "4d5248b8ecf0b07dfdc6b059494fe36e2f1fdcca68dcaa03137ba4adf27b7ba2",
+      "c446_to_7050": "identical",
+      "7050_to_working": "changed"
+    },
+    {
+      "file": "semanticBuilder",
+      "repoPath": "web/src/lib/deck-builder/golden-catalog/oracle-semantic-parse-builder.ts",
+      "c446b6b": "0ddb3c78f069547652fad2d19b7f6e78bd114cc035fec4200a763bb087ba231a",
+      "commit7050c75": "e3da635df4a2b6739316e210b2cdfd436c667aef462a106af9d78d1740d99cce",
+      "workingTree": "59c67f2348feff0e6ad999c2f77f5f5f73921127839a60734cfcf750fd9ef339",
+      "c446_to_7050": "changed",
+      "7050_to_working": "changed"
+    },
+    {
+      "file": "actionBuilder",
+      "repoPath": "web/src/lib/deck-builder/golden-catalog/oracle-rc3-action-builder.ts",
+      "c446b6b": "ff3bdb2d70c17df77c69d889089989b72276eb9301246c36e45199cc67bdb0a1",
+      "commit7050c75": "d732210b4a03bedf83c39048537b48f30fe3d6613cb5690090bfd9b1aad25dc4",
+      "workingTree": "5b9c9079331d7d87bc8b9bcc77547827258ad4a1ebbd4751ba6f44cae1c994cd",
+      "c446_to_7050": "changed",
+      "7050_to_working": "changed"
+    },
+    {
+      "file": "promotion",
+      "repoPath": "web/src/lib/deck-builder/golden-catalog/oracle-rc3-promotion.ts",
+      "c446b6b": "65968c862297f1fc8d482ad153ea06b46e12294e01cf3ab81ebc13d268069bc2",
+      "commit7050c75": "65968c862297f1fc8d482ad153ea06b46e12294e01cf3ab81ebc13d268069bc2",
+      "workingTree": "2b5cf9da307c270cb57109999fdb2e386172789d6545db53966e9a0122591459",
+      "c446_to_7050": "identical",
+      "7050_to_working": "changed"
+    },
+    {
+      "file": "scoringScope",
+      "repoPath": "web/src/lib/deck-builder/golden-catalog/oracle-rc3-scoring-scope.ts",
+      "c446b6b": null,
+      "commit7050c75": null,
+      "workingTree": "5ebc6cbd45f5be0a32121c27f6897d89451c5391913c5ebaeda2f1cbdfb68c11",
+      "c446_to_7050": "identical",
+      "7050_to_working": "changed"
+    },
+    {
+      "file": "unifiedMatcher",
+      "repoPath": "web/scripts/oracle-action-unified-matcher.ts",
+      "c446b6b": "c2545caac040f16c8768ae232b40cb28522b4f0b96f70bddd6d8d062743ecb02",
+      "commit7050c75": "c2545caac040f16c8768ae232b40cb28522b4f0b96f70bddd6d8d062743ecb02",
+      "workingTree": "fc470d8102eafe41eb37091b14c3fb2feb10d3568dcd452838cf9726d32308b6",
+      "c446_to_7050": "identical",
+      "7050_to_working": "changed"
+    },
+    {
+      "file": "semanticMatcher",
+      "repoPath": "web/scripts/oracle-action-semantic-matcher.ts",
+      "c446b6b": "4a3e278be000a5a998d70829d6a811736f5e840549358b594c105f9f60360181",
+      "commit7050c75": "4a3e278be000a5a998d70829d6a811736f5e840549358b594c105f9f60360181",
+      "workingTree": "8f173e68258b92563c1aebb19f3cc4cb58e02292f168213fed531aee869f8201",
+      "c446_to_7050": "identical",
+      "7050_to_working": "changed"
+    }
+  ],
+  "referenceFreezes": {
+    "grantedNestedComplete_workingParserBlobClosure": {
+      "transform": "56fbc09ef551fcf3d2a3b734cf3cbcbe1f4865cfb5bc2d41ef9c3867d5397b2c",
+      "clauseNative": "552776f37bf534b6558a600d2262e684fc91d41225cb2b2277608525f0e6cd57",
+      "actionBuilder": "b5f98208fa20ded1e71d7dbcfd4f89d1aa60ae246d55d39cd8f508f00cd1ad9a",
+      "optionality": "a6946b360b502d6d0ad2974f4dbad50bebac62ae331c425bffb3f152df1e5816",
+      "detector": "ecfa6ba15bd9447538536506180016c519413ca6154fb5bdd2fec7ae2e7d319e",
+      "classifier": "6cc272213f4100173168803e0ca648f4cf51ab1695c7564fee44a9205788cd75",
+      "contextRouter": "dbb0ad1988c7d3e531426a4f72c385133307a71dc6a97b11f61516af0afb4578",
+      "grantedExtraction": "9bed5894309d55c9dd2912bd89848af98f476b1d2f4ef7f14a7aed0d99dfdd14",
+      "abilityBlock": "ded6a94463a60fee407ca38c1380daaa96ec49baed50201ad556ee18087bae14",
+      "semanticMatcher": "75a1cfb23f7246aa835427981e9e07acd144e4d4f2d0ec8e9dcf36d407a222bf",
+      "unifiedMatcher": "2a54d451a3aeb593e7f62d287a2e47c9d69563eb20adad7bef274a6c93db5145",
+      "semanticDedupeHash": "552776f37bf534b6558a600d2262e684fc91d41225cb2b2277608525f0e6cd57"
+    },
+    "tokenDefinitionBoundary_blobs": {
+      "transform": "ce07d25e83b43e172d2f9957a5b83b4cae059d126a88b5776fbd0aa3f58ba248",
+      "clauseNative": "6b721f11abddf5a410b07bcc49cc8cadfc37f98e18a3628e11a4158691d9b305",
+      "contextRouter": "dbb0ad1988c7d3e531426a4f72c385133307a71dc6a97b11f61516af0afb4578",
+      "tokenGlossary": "ab8e6ddf50539e0ade645f7a8d358d6a6960b6bb8aa40743fe42537b42bbbe98",
+      "grantedSpanDetector": "a1c6b52eecae3812818167d3a864bc55cb1d72fdf33d92bda64c5b9dd73bd3bf",
+      "semanticBuilder": "e3da635df4a2b6739316e210b2cdfd436c667aef462a106af9d78d1740d99cce",
+      "actionBuilder": "d732210b4a03bedf83c39048537b48f30fe3d6613cb5690090bfd9b1aad25dc4",
+      "unifiedMatcher": "c2545caac040f16c8768ae232b40cb28522b4f0b96f70bddd6d8d062743ecb02",
+      "semanticMatcher": "4a3e278be000a5a998d70829d6a811736f5e840549358b594c105f9f60360181",
+      "scoringScope": "6484e81ae33719d72fae71663dec3ef226869c635345d62759f3027cdc0a2310"
+    }
+  }
+}

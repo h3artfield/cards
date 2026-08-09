@@ -1,0 +1,131 @@
+{
+  "generatedAt": "2026-08-09T15:31:05.628Z",
+  "checkpoint": "zone-fn-three-view-census-v138",
+  "parserVersion": "oracle-action-v1.38-rc3-look-reveal-put-chain",
+  "classifier": "census-rc3-remaining-fn.classifyFamily (zone_transitions family only)",
+  "views": {
+    "historical_raw_zone_gold": {
+      "definition": "Raw catalog gold, no policy migration overlay, current parser",
+      "zoneTransitionOpenLayer2Fns": 8,
+      "engineeringPriority": false,
+      "items": [
+        {
+          "caseId": "dev-opt-023",
+          "actionType": "exile",
+          "evidenceContains": "Exile target creature",
+          "family": "zone_transitions"
+        },
+        {
+          "caseId": "eval-0009",
+          "actionType": "exile",
+          "evidenceContains": "Exile",
+          "family": "zone_transitions"
+        },
+        {
+          "caseId": "eval-0082",
+          "actionType": "add_mana",
+          "evidenceContains": "Add one mana of any of the exiled cards' colors",
+          "family": "zone_transitions"
+        },
+        {
+          "caseId": "rc3-pos-v12-0015",
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield",
+          "family": "zone_transitions"
+        },
+        {
+          "caseId": "rc3-pos-v12-0107",
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield",
+          "family": "zone_transitions"
+        },
+        {
+          "caseId": "rc3-pos-v12-0108",
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield",
+          "family": "zone_transitions"
+        },
+        {
+          "caseId": "rc3-pos-v12-0110",
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put this card onto the battlefield",
+          "family": "zone_transitions"
+        },
+        {
+          "caseId": "rc3-pos-v12-0130",
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return target artifact or non-Aura enchantment card from your graveyard to the battlefield",
+          "family": "zone_transitions"
+        }
+      ]
+    },
+    "current_policy_pre_Z1b": {
+      "definition": "Current-policy gold overlay; Z1b parser recoveries removed (derived from post-Z1b + delta)",
+      "zoneTransitionOpenLayer2Fns": 4,
+      "engineeringPriority": false,
+      "items": [
+        {
+          "caseId": "dev-opt-023",
+          "actionType": "exile",
+          "evidenceContains": "Exile target creature",
+          "family": "zone_transitions"
+        },
+        {
+          "caseId": "eval-0009",
+          "actionType": "exile",
+          "evidenceContains": "Exile",
+          "family": "zone_transitions"
+        },
+        {
+          "caseId": "eval-0082",
+          "actionType": "add_mana",
+          "evidenceContains": "Add one mana of any of the exiled cards' colors",
+          "family": "zone_transitions"
+        },
+        {
+          "caseId": "rc3-pos-v12-0130",
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return target artifact or non-Aura enchantment card from your graveyard to the battlefield",
+          "family": "zone_transitions"
+        }
+      ],
+      "z1bRecoveredCaseIds": [
+        "rc3-pos-cat-0027",
+        "rc3-pos-v12-0098"
+      ]
+    },
+    "current_policy_post_Z1b": {
+      "definition": "Current-policy gold overlay + v1.38 parser — use for engineering priority",
+      "zoneTransitionOpenLayer2Fns": 4,
+      "engineeringPriority": true,
+      "items": [
+        {
+          "caseId": "dev-opt-023",
+          "actionType": "exile",
+          "evidenceContains": "Exile target creature",
+          "family": "zone_transitions"
+        },
+        {
+          "caseId": "eval-0009",
+          "actionType": "exile",
+          "evidenceContains": "Exile",
+          "family": "zone_transitions"
+        },
+        {
+          "caseId": "eval-0082",
+          "actionType": "add_mana",
+          "evidenceContains": "Add one mana of any of the exiled cards' colors",
+          "family": "zone_transitions"
+        },
+        {
+          "caseId": "rc3-pos-v12-0130",
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return target artifact or non-Aura enchantment card from your graveyard to the battlefield",
+          "family": "zone_transitions"
+        }
+      ]
+    }
+  },
+  "z1bActionDelta": [],
+  "note": "Engineering priority uses current_policy_post_Z1b.zoneTransitionOpenLayer2Fns only (combined FN denominator zone_transitions bucket)."
+}

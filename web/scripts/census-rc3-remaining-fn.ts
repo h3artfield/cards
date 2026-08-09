@@ -35,7 +35,15 @@ function classifyFamily(testCase: OracleActionEvalCaseV2, gold: OracleActionEval
   const ev = (gold.evidenceContains ?? "").toLowerCase();
   const text = testCase.oracleText.toLowerCase();
   const stratum = (testCase as { coverageStratum?: string }).coverageStratum ?? "";
+  const category = (testCase as { category?: string }).category ?? "";
 
+  if (
+    /would.*instead|if a source would|prevent.*damage/i.test(text) ||
+    /exile it instead/i.test(ev) ||
+    category.includes("replacement")
+  ) {
+    return "replacement_effects";
+  }
   if (/granted|enchanted creature has|equipped creature has|creatures you control have/i.test(text) || stratum.includes("granted")) {
     return "granted_semantics";
   }
@@ -44,7 +52,6 @@ function classifyFamily(testCase: OracleActionEvalCaseV2, gold: OracleActionEval
   }
   if (/choose one|choose two|choose up to|modal/i.test(text)) return "modal_choice";
   if (/search your library|shuffle/i.test(text) && /search|shuffle/i.test(ev)) return "search_shuffle_chains";
-  if (/would.*instead|if a source would|prevent.*damage/i.test(text)) return "replacement_effects";
   if (/\{[^}]+\}.*:/.test(text) && /:\s/.test(ev)) return "activated_effects";
   if (/\/\//.test(testCase.oracleText) || testCase.cardFace) return "mdfc_face_structure";
   if (/that card|that permanent|that creature|exiled with|encoded on/i.test(ev)) return "reference_resolution";

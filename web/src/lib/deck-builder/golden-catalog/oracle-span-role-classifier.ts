@@ -97,6 +97,11 @@ const STATIC_PERMISSION_PATTERNS: Array<{
     permissionType: "cast",
     persistentOnly: true,
   },
+  {
+    pattern: /\bYou may cast [A-Za-z][\w',-]*(?: [A-Za-z][\w',-]*)* for as long as it remains exiled\b/gi,
+    permissionType: "cast",
+    persistentOnly: true,
+  },
 ];
 
 const STATIC_RESTRICTION_PATTERN =

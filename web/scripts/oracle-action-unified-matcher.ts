@@ -4,6 +4,7 @@
 import { normalizeToPrimitive } from "../src/lib/deck-builder/golden-catalog/oracle-action-taxonomy";
 import type { OracleActionEvalCaseV2 } from "./audit-oracle-action-eval-cases";
 import { classifyUnmatchedAction, evidenceMatchesExtracted, type ExpectedPrimitiveAction } from "./oracle-action-eval-shared";
+import { isActionWithinCaseScope } from "./lib/rc3-case-scope-scoring";
 
 export type EmissionTier = "accepted" | "needs_review" | "all";
 
@@ -22,6 +23,9 @@ export interface ExtractedActionForMatch {
   optionalEffect?: boolean;
   optional?: boolean;
   optionalCost?: boolean;
+  cardNativeLayer2Eligible?: boolean;
+  cardStart?: number;
+  cardEnd?: number;
 }
 
 export interface GoldMatchResult {
@@ -173,6 +177,10 @@ export function countParserFalsePositives(
   let fp = 0;
   for (const idx of unmatchedActionIndices) {
     const action = actions[idx];
+    if (action.cardNativeLayer2Eligible === false) continue;
+    const cardStart = action.cardStart ?? action.evidenceStart;
+    const cardEnd = action.cardEnd ?? action.evidenceEnd;
+    if (!isActionWithinCaseScope(testCase, { cardStart, cardEnd })) continue;
     const category = classifyUnmatchedAction({
       testCase,
       primitive: action.primitive,

@@ -7,6 +7,7 @@ import type { SegmentedAbility } from "./oracle-action-schema";
 import type { PrimitiveActionType } from "./oracle-action-taxonomy";
 import { attachOptionalityToAction } from "./oracle-action-optionality";
 import type { RC3ActionExtensions } from "./oracle-rc3-extraction-metadata";
+import { ORACLE_ACTION_RC3_PARSER_VERSION } from "./oracle-rc3-transform";
 
 export function buildNativeAction(input: {
   oracleId: string;
@@ -88,7 +89,7 @@ export function buildNativeAction(input: {
     confidence: 0.92,
     reviewStatus: "accepted",
     extractionMethod: "deterministic",
-    parserVersion: "oracle-action-v1.37-rc3-granted-nested-complete",
+    parserVersion: ORACLE_ACTION_RC3_PARSER_VERSION,
     sourceZones: input.sourceZones,
     destinationZones: input.destinationZones,
     affectedObjects: ["card"],

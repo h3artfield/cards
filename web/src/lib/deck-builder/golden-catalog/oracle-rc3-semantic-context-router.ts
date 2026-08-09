@@ -10,6 +10,8 @@
  *       └─ card_native/other  → excluded from grant pipeline
  */
 import {
+  CREATE_TOKEN_WITH,
+  CREATE_TOKEN_WITH_QUOTE,
   detectGrantedRulesSpans,
   inferStructuralCue,
   type GrantedRulesSpan,
@@ -49,7 +51,10 @@ function isTokenDefinitionSpan(paragraph: string, span: GrantedRulesSpan): boole
   const before = paragraph.slice(Math.max(0, span.localStart - 120), span.localStart);
   const cue = span.structuralCue ?? inferStructuralCue(before);
   if (isTokenDefinitionStructuralCue(cue)) return true;
-  if (/\bCreate a \w+ artifact token with\s*["(\u201c]?\s*$/i.test(before)) return true;
+  if (CREATE_TOKEN_WITH_QUOTE.test(before)) return true;
+  if (span.typography === "parenthetical_rules" && CREATE_TOKEN_WITH.test(span.innerText.trim())) {
+    return true;
+  }
   if (/\b(?:A|The|This) \w+ token is an artifact with\s*["(\u201c]?\s*$/i.test(before)) return true;
   if (/\bThe token is an artifact with\s*["(\u201c]?\s*$/i.test(before)) return true;
   if (/^A \w+ token is an/i.test(span.innerText.trim())) return true;

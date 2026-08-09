@@ -1,0 +1,380 @@
+{
+  "generatedAt": "2026-08-09T15:33:52.651Z",
+  "checkpoint": "rc3-v137-gate-closure-audit",
+  "parserVersion": "oracle-action-v1.38-rc3-look-reveal-put-chain",
+  "parserCommitSha": "7050c75abbf19a5db3174ec4c295431666bb1821",
+  "combinedMetrics": {
+    "tp": 581,
+    "fp": 3,
+    "fn": 46,
+    "precision": 0.9948630136986302,
+    "recall": 0.9266347687400319
+  },
+  "unrelatedMetrics": {
+    "tp": 53,
+    "fp": 0,
+    "fn": 11,
+    "precision": 1,
+    "recall": 0.828125
+  },
+  "sectionA_fpLedger": {
+    "totalFp": 3,
+    "stableBaseline": {
+      "tp": 580,
+      "fp": 4,
+      "fn": 62,
+      "note": "580/4/62 same-policy v135 development overlay"
+    },
+    "parentBaseline": {
+      "tp": 575,
+      "fp": 7,
+      "fn": 74,
+      "commit": "c446b6b"
+    },
+    "current": {
+      "tp": 581,
+      "fp": 3,
+      "fn": 46
+    },
+    "additionalVsStable4Count": 1,
+    "persistedFromStable4Count": 2,
+    "newVsParentCount": 3,
+    "fpClassificationCounts": {
+      "genuine_over_extraction": 2,
+      "wrong_primitive": 1
+    },
+    "entries": [
+      {
+        "caseId": "dev-v9-001",
+        "canonicalCard": "Mox Diamond",
+        "actionType": "put_onto_battlefield",
+        "evidence": "put this artifact onto the battlefield",
+        "extractionSource": "rc3_clause_native",
+        "executionContext": "immediate",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": true,
+        "caseScope": "full_card",
+        "goldExpectation": "none — unmatched accepted emission",
+        "fpClassification": "genuine_over_extraction",
+        "optionalEffect": false,
+        "parentAbilityId": "f3c5978a-70fa-431f-933b-b954bd0db0ea:front:ability-0",
+        "clauseId": "f3c5978a-70fa-431f-933b-b954bd0db0ea:front:ability-0:clause-0",
+        "firstParserVersionWhereFpAppears": "7050c75 (v1.37-rc3-granted-nested-complete) — new vs parent c446b6b",
+        "inStable4Baseline": false,
+        "inParentBaseline": false
+      },
+      {
+        "caseId": "dev-v9-018",
+        "canonicalCard": "Ashiok, Dream Render",
+        "actionType": "search_library",
+        "evidence": "search their library",
+        "extractionSource": "rc3_transform",
+        "executionContext": "immediate",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": true,
+        "caseScope": "full_card",
+        "goldExpectation": "none — unmatched accepted emission",
+        "fpClassification": "genuine_over_extraction",
+        "optionalEffect": false,
+        "parentAbilityId": "93723b12-db34-4047-885e-8606415b1553:front:ability-0",
+        "clauseId": "93723b12-db34-4047-885e-8606415b1553:front:ability-0:clause-0",
+        "firstParserVersionWhereFpAppears": "v135 same-policy overlay (580/4/62) or earlier",
+        "inStable4Baseline": true,
+        "inParentBaseline": false
+      },
+      {
+        "caseId": "dev-exp-v1-012",
+        "canonicalCard": "Fall to Earth",
+        "actionType": "search_library",
+        "evidence": "Search your library for a basic land card, reveal it, put it into your hand, then shuffle",
+        "extractionSource": "rc3_transform",
+        "executionContext": "immediate",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": true,
+        "caseScope": "full_card",
+        "goldExpectation": "none — unmatched accepted emission",
+        "fpClassification": "wrong_primitive",
+        "optionalEffect": false,
+        "parentAbilityId": "223db021-979f-4312-8cb5-169ae4bf17bc:front:ability-1",
+        "clauseId": "223db021-979f-4312-8cb5-169ae4bf17bc:front:ability-1:clause-0",
+        "firstParserVersionWhereFpAppears": "v135 same-policy overlay (580/4/62) or earlier",
+        "inStable4Baseline": true,
+        "inParentBaseline": false
+      }
+    ],
+    "persistedFromStable4": [
+      {
+        "caseId": "dev-v9-018",
+        "canonicalCard": "Ashiok, Dream Render",
+        "actionType": "search_library",
+        "evidence": "search their library",
+        "extractionSource": "rc3_transform",
+        "executionContext": "immediate",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": true,
+        "caseScope": "full_card",
+        "goldExpectation": "none — unmatched accepted emission",
+        "fpClassification": "genuine_over_extraction",
+        "optionalEffect": false,
+        "parentAbilityId": "93723b12-db34-4047-885e-8606415b1553:front:ability-0",
+        "clauseId": "93723b12-db34-4047-885e-8606415b1553:front:ability-0:clause-0",
+        "firstParserVersionWhereFpAppears": "v135 same-policy overlay (580/4/62) or earlier",
+        "inStable4Baseline": true,
+        "inParentBaseline": false
+      },
+      {
+        "caseId": "dev-exp-v1-012",
+        "canonicalCard": "Fall to Earth",
+        "actionType": "search_library",
+        "evidence": "Search your library for a basic land card, reveal it, put it into your hand, then shuffle",
+        "extractionSource": "rc3_transform",
+        "executionContext": "immediate",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": true,
+        "caseScope": "full_card",
+        "goldExpectation": "none — unmatched accepted emission",
+        "fpClassification": "wrong_primitive",
+        "optionalEffect": false,
+        "parentAbilityId": "223db021-979f-4312-8cb5-169ae4bf17bc:front:ability-1",
+        "clauseId": "223db021-979f-4312-8cb5-169ae4bf17bc:front:ability-1:clause-0",
+        "firstParserVersionWhereFpAppears": "v135 same-policy overlay (580/4/62) or earlier",
+        "inStable4Baseline": true,
+        "inParentBaseline": false
+      }
+    ],
+    "additionalVsStable4": [
+      {
+        "caseId": "dev-v9-001",
+        "canonicalCard": "Mox Diamond",
+        "actionType": "put_onto_battlefield",
+        "evidence": "put this artifact onto the battlefield",
+        "extractionSource": "rc3_clause_native",
+        "executionContext": "immediate",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": true,
+        "caseScope": "full_card",
+        "goldExpectation": "none — unmatched accepted emission",
+        "fpClassification": "genuine_over_extraction",
+        "optionalEffect": false,
+        "parentAbilityId": "f3c5978a-70fa-431f-933b-b954bd0db0ea:front:ability-0",
+        "clauseId": "f3c5978a-70fa-431f-933b-b954bd0db0ea:front:ability-0:clause-0",
+        "firstParserVersionWhereFpAppears": "7050c75 (v1.37-rc3-granted-nested-complete) — new vs parent c446b6b",
+        "inStable4Baseline": false,
+        "inParentBaseline": false
+      }
+    ],
+    "newVsParent": [
+      {
+        "caseId": "dev-v9-001",
+        "canonicalCard": "Mox Diamond",
+        "actionType": "put_onto_battlefield",
+        "evidence": "put this artifact onto the battlefield",
+        "extractionSource": "rc3_clause_native",
+        "executionContext": "immediate",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": true,
+        "caseScope": "full_card",
+        "goldExpectation": "none — unmatched accepted emission",
+        "fpClassification": "genuine_over_extraction",
+        "optionalEffect": false,
+        "parentAbilityId": "f3c5978a-70fa-431f-933b-b954bd0db0ea:front:ability-0",
+        "clauseId": "f3c5978a-70fa-431f-933b-b954bd0db0ea:front:ability-0:clause-0",
+        "firstParserVersionWhereFpAppears": "7050c75 (v1.37-rc3-granted-nested-complete) — new vs parent c446b6b",
+        "inStable4Baseline": false,
+        "inParentBaseline": false
+      },
+      {
+        "caseId": "dev-v9-018",
+        "canonicalCard": "Ashiok, Dream Render",
+        "actionType": "search_library",
+        "evidence": "search their library",
+        "extractionSource": "rc3_transform",
+        "executionContext": "immediate",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": true,
+        "caseScope": "full_card",
+        "goldExpectation": "none — unmatched accepted emission",
+        "fpClassification": "genuine_over_extraction",
+        "optionalEffect": false,
+        "parentAbilityId": "93723b12-db34-4047-885e-8606415b1553:front:ability-0",
+        "clauseId": "93723b12-db34-4047-885e-8606415b1553:front:ability-0:clause-0",
+        "firstParserVersionWhereFpAppears": "v135 same-policy overlay (580/4/62) or earlier",
+        "inStable4Baseline": true,
+        "inParentBaseline": false
+      },
+      {
+        "caseId": "dev-exp-v1-012",
+        "canonicalCard": "Fall to Earth",
+        "actionType": "search_library",
+        "evidence": "Search your library for a basic land card, reveal it, put it into your hand, then shuffle",
+        "extractionSource": "rc3_transform",
+        "executionContext": "immediate",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": true,
+        "caseScope": "full_card",
+        "goldExpectation": "none — unmatched accepted emission",
+        "fpClassification": "wrong_primitive",
+        "optionalEffect": false,
+        "parentAbilityId": "223db021-979f-4312-8cb5-169ae4bf17bc:front:ability-1",
+        "clauseId": "223db021-979f-4312-8cb5-169ae4bf17bc:front:ability-1:clause-0",
+        "firstParserVersionWhereFpAppears": "v135 same-policy overlay (580/4/62) or earlier",
+        "inStable4Baseline": true,
+        "inParentBaseline": false
+      }
+    ]
+  },
+  "sectionB_unrelatedFnReconciliation": {
+    "totalFn": 11,
+    "failureStageCounts": {
+      "primitive_extraction": 6,
+      "semantic_action_builder": 4,
+      "evaluator": 1
+    },
+    "errorClassCounts": {
+      "wrong_action_type": 7,
+      "other": 1,
+      "missing_emission": 3
+    },
+    "accounted": false,
+    "items": [
+      {
+        "caseId": "rc3-pos-cat-0005",
+        "cardName": "\"Ach! Hans, Run!\"",
+        "family": "optionality_dependency",
+        "expectedActionType": "put_onto_battlefield",
+        "expectedEvidence": "put it onto the battlefield",
+        "failureStage": "primitive_extraction",
+        "errorClass": "wrong_action_type",
+        "emittedAcceptedActions": []
+      },
+      {
+        "caseId": "rc3-pos-cat-0006",
+        "cardName": "1996 World Champion",
+        "family": "other",
+        "expectedActionType": "put_counter",
+        "expectedEvidence": "put 1996 World Champion on top of it",
+        "failureStage": "primitive_extraction",
+        "errorClass": "wrong_action_type",
+        "emittedAcceptedActions": []
+      },
+      {
+        "caseId": "rc3-pos-cat-0007",
+        "cardName": "A-Navigation Orb",
+        "family": "search_shuffle_chains",
+        "expectedActionType": "sacrifice",
+        "expectedEvidence": "Sacrifice Navigation Orb: Search your library for up to two basic land cards and/or Gate cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle",
+        "failureStage": "semantic_action_builder",
+        "errorClass": "wrong_action_type",
+        "emittedAcceptedActions": []
+      },
+      {
+        "caseId": "rc3-pos-cat-0008",
+        "cardName": "A-Ominous Parcel",
+        "family": "activated_effects",
+        "expectedActionType": "sacrifice",
+        "expectedEvidence": "Sacrifice Ominous Parcel: It deals 4 damage to target creature",
+        "failureStage": "evaluator",
+        "errorClass": "other",
+        "emittedAcceptedActions": [
+          {
+            "actionType": "sacrifice",
+            "evidence": "Sacrifice Ominous Parcel",
+            "executionContext": "immediate",
+            "semanticOwner": "source_card"
+          }
+        ]
+      },
+      {
+        "caseId": "rc3-pos-cat-0012",
+        "cardName": "Aberrant Researcher // Perfected Form",
+        "family": "mdfc_face_structure",
+        "expectedActionType": "mill",
+        "expectedEvidence": "mill a card, put the top card of your library into your graveyard",
+        "failureStage": "semantic_action_builder",
+        "errorClass": "missing_emission",
+        "emittedAcceptedActions": []
+      },
+      {
+        "caseId": "rc3-pos-cat-0012",
+        "cardName": "Aberrant Researcher // Perfected Form",
+        "family": "mdfc_face_structure",
+        "expectedActionType": "mill",
+        "expectedEvidence": "milled this way, transform this creature",
+        "failureStage": "semantic_action_builder",
+        "errorClass": "missing_emission",
+        "emittedAcceptedActions": []
+      },
+      {
+        "caseId": "rc3-pos-cat-0015",
+        "cardName": "______",
+        "family": "other",
+        "expectedActionType": "cast",
+        "expectedEvidence": "cast spells of the chosen types or spells whose names begin with the first letter of your name",
+        "failureStage": "primitive_extraction",
+        "errorClass": "wrong_action_type",
+        "emittedAcceptedActions": []
+      },
+      {
+        "caseId": "rc3-pos-cat-0017",
+        "cardName": "A-Binding Geist // A-Spectral Binding",
+        "family": "replacement_effects",
+        "expectedActionType": "exile",
+        "expectedEvidence": "exile it instead",
+        "failureStage": "semantic_action_builder",
+        "errorClass": "missing_emission",
+        "emittedAcceptedActions": []
+      },
+      {
+        "caseId": "rc3-pos-cat-0018",
+        "cardName": "A-Brine Comber // A-Brinebound Gift",
+        "family": "replacement_effects",
+        "expectedActionType": "exile",
+        "expectedEvidence": "exile it instead",
+        "failureStage": "primitive_extraction",
+        "errorClass": "wrong_action_type",
+        "emittedAcceptedActions": []
+      },
+      {
+        "caseId": "rc3-pos-cat-0019",
+        "cardName": "A-Devoted Grafkeeper // A-Departed Soulkeeper",
+        "family": "replacement_effects",
+        "expectedActionType": "exile",
+        "expectedEvidence": "exile it instead",
+        "failureStage": "primitive_extraction",
+        "errorClass": "wrong_action_type",
+        "emittedAcceptedActions": []
+      },
+      {
+        "caseId": "rc3-pos-cat-0020",
+        "cardName": "A-Dorothea, Vengeful Victim // A-Dorothea's Retribution",
+        "family": "replacement_effects",
+        "expectedActionType": "exile",
+        "expectedEvidence": "exile it instead",
+        "failureStage": "primitive_extraction",
+        "errorClass": "wrong_action_type",
+        "emittedAcceptedActions": []
+      }
+    ]
+  },
+  "sectionC_benchmarkIdentity": {
+    "caseId": "rc3-pos-one-shot-cast-0001",
+    "catalogIdentityStatus": "exact",
+    "assertBenchmarkIdentity": "PASS",
+    "benchmarkTargetValidity": "valid",
+    "caseScope": "branch"
+  },
+  "sectionD_grantedFnGrounding": {
+    "count": 0,
+    "identityTargetSemanticGates": "run after catalog patch + benchmarkTargets embed",
+    "entries": []
+  },
+  "sectionE_grantedSubfamilyCensus": {
+    "subfamilyCounts": {},
+    "contextPropagationClusterSize": 0,
+    "contextPropagationCases": [],
+    "recommendedFirstSubfamily": "granted_land_mana_activated_cast_permission",
+    "expectedUnrelatedTpRecovery": 8,
+    "expectedGlobalTpRecovery": 8,
+    "rationale": "Eight cast-permission FNs share one grammar (Target land gains activated mana + cast-from-exile permission); rc3-pos-cat-0020 exile-instead is replacement semantics mis-bucketed"
+  }
+}

@@ -1,35 +1,35 @@
 {
-  "generatedAt": "2026-08-09T05:01:17.423Z",
+  "generatedAt": "2026-08-09T15:32:46.261Z",
   "checkpoint": "rc3-remaining-fn-census-post-v138",
-  "parserVersion": "oracle-action-v1.37-rc3-granted-nested-complete",
-  "parserCommitSha": "c446b6baa1648b7d8d922631b9f6d996b5edc39e",
+  "parserVersion": "oracle-action-v1.38-rc3-look-reveal-put-chain",
+  "parserCommitSha": "7050c75abbf19a5db3174ec4c295431666bb1821",
   "combinedDevelopment": {
-    "tp": 576,
-    "fp": 11,
-    "fn": 66,
-    "precision": 0.9812606473594548,
-    "recall": 0.897196261682243,
-    "goldDenominator": 642,
-    "precisionPct": 98.12606473594549,
-    "recallPct": 89.7196261682243,
+    "tp": 581,
+    "fp": 3,
+    "fn": 46,
+    "precision": 0.9948630136986302,
+    "recall": 0.9266347687400319,
+    "goldDenominator": 627,
+    "precisionPct": 99.48630136986301,
+    "recallPct": 92.6634768740032,
     "gateCombined": {
       "precisionRequired": 0.98,
       "recallRequired": 0.92,
       "precisionPass": true,
-      "recallPass": false,
-      "recallGapTpNeeded": 15
+      "recallPass": true,
+      "recallGapTpNeeded": 0
     }
   },
   "unrelatedCatalogPositive": {
     "caseCount": 33,
-    "tp": 49,
-    "fp": 2,
-    "fn": 26,
-    "precision": 0.9607843137254902,
-    "recall": 0.6533333333333333,
-    "goldDenominator": 75,
-    "precisionPct": 96.07843137254902,
-    "recallPct": 65.33333333333333,
+    "tp": 53,
+    "fp": 0,
+    "fn": 11,
+    "precision": 1,
+    "recall": 0.828125,
+    "goldDenominator": 64,
+    "precisionPct": 100,
+    "recallPct": 82.8125,
     "gate": {
       "precisionRequired": 0.95,
       "recallRequired": 0.9,
@@ -38,18 +38,18 @@
     }
   },
   "remainingFnByFamily": {
-    "zone_transitions": 14,
-    "granted_semantics": 12,
-    "optionality_dependency": 10,
-    "replacement_effects": 7,
+    "replacement_effects": 11,
+    "optionality_dependency": 6,
     "mdfc_face_structure": 6,
     "other": 5,
-    "generic_primitive_gaps": 4,
+    "zone_transitions": 4,
+    "generic_primitive_gaps": 3,
     "activated_effects": 3,
     "search_shuffle_chains": 3,
+    "granted_semantics": 3,
     "modal_choice": 2
   },
-  "totalRemainingFn": 66,
+  "totalRemainingFn": 46,
   "fnItems": [
     {
       "caseId": "dev-opt-023",
@@ -70,7 +70,7 @@
       "cardName": "Mox Diamond",
       "actionType": "put_onto_battlefield",
       "evidenceContains": "put this artifact onto the battlefield",
-      "family": "optionality_dependency"
+      "family": "replacement_effects"
     },
     {
       "caseId": "dev-v9-023",
@@ -203,15 +203,7 @@
       "cardName": "Kheru Lich Lord",
       "actionType": "return_to_battlefield",
       "evidenceContains": "return a creature card at random from your graveyard to the battlefield",
-      "family": "optionality_dependency"
-    },
-    {
-      "caseId": "rc3-pos-v12-0015",
-      "cardName": "A-Moon-Circuit Hacker",
-      "actionType": "put_onto_battlefield",
-      "evidenceContains": "Put this card onto the battlefield",
-      "family": "zone_transitions",
-      "coverageStratum": "mdfc_transform_zone_transition"
+      "family": "replacement_effects"
     },
     {
       "caseId": "rc3-pos-v12-0018",
@@ -234,7 +226,7 @@
       "cardName": "Adipose Offspring",
       "actionType": "sacrifice",
       "evidenceContains": "sacrificed creature's toughness",
-      "family": "generic_primitive_gaps",
+      "family": "replacement_effects",
       "coverageStratum": "replacement_if_would"
     },
     {
@@ -260,38 +252,6 @@
       "evidenceContains": "draw X cards, then mill X cards, where X is t",
       "family": "optionality_dependency",
       "coverageStratum": "activated_post_colon_effect"
-    },
-    {
-      "caseId": "rc3-pos-v12-0098",
-      "cardName": "Aethermage's Touch",
-      "actionType": "put_onto_battlefield",
-      "evidenceContains": "put a creature card from among them onto the battlefield",
-      "family": "zone_transitions",
-      "coverageStratum": "optional_put_onto_battlefield"
-    },
-    {
-      "caseId": "rc3-pos-v12-0107",
-      "cardName": "A-Nashi, Moon Sage's Scion",
-      "actionType": "put_onto_battlefield",
-      "evidenceContains": "Put this card onto the battlefield",
-      "family": "zone_transitions",
-      "coverageStratum": "mdfc_transform_zone_transition"
-    },
-    {
-      "caseId": "rc3-pos-v12-0108",
-      "cardName": "A-Nezumi Prowler",
-      "actionType": "put_onto_battlefield",
-      "evidenceContains": "Put this card onto the battlefield",
-      "family": "zone_transitions",
-      "coverageStratum": "mdfc_transform_zone_transition"
-    },
-    {
-      "caseId": "rc3-pos-v12-0110",
-      "cardName": "A-Prosperous Thief",
-      "actionType": "put_onto_battlefield",
-      "evidenceContains": "Put this card onto the battlefield",
-      "family": "zone_transitions",
-      "coverageStratum": "mdfc_transform_zone_transition"
     },
     {
       "caseId": "rc3-pos-v12-0116",
@@ -330,7 +290,7 @@
       "cardName": "Aethersnipe",
       "actionType": "sacrifice",
       "evidenceContains": "sacrificed when it enters",
-      "family": "optionality_dependency",
+      "family": "replacement_effects",
       "coverageStratum": "replacement_if_would"
     },
     {
@@ -350,82 +310,10 @@
       "coverageStratum": "granted_ability_quote"
     },
     {
-      "caseId": "rc3-pos-cat-0001",
-      "cardName": "A-Glamorous Outlaw",
-      "actionType": "cast",
-      "evidenceContains": "cast from exile",
-      "family": "granted_semantics",
-      "coverageStratum": "granted_ability_quote"
-    },
-    {
-      "caseId": "rc3-pos-cat-0001",
-      "cardName": "A-Glamorous Outlaw",
-      "actionType": "cast",
-      "evidenceContains": "You may cast Glamorous Outlaw for as long as it remains exiled",
-      "family": "granted_semantics",
-      "coverageStratum": "granted_ability_quote"
-    },
-    {
-      "caseId": "rc3-pos-cat-0002",
-      "cardName": "A-Masked Bandits",
-      "actionType": "cast",
-      "evidenceContains": "cast from exile",
-      "family": "granted_semantics",
-      "coverageStratum": "granted_ability_quote"
-    },
-    {
-      "caseId": "rc3-pos-cat-0002",
-      "cardName": "A-Masked Bandits",
-      "actionType": "cast",
-      "evidenceContains": "You may cast Masked Bandits for as long as it remains exiled",
-      "family": "granted_semantics",
-      "coverageStratum": "granted_ability_quote"
-    },
-    {
-      "caseId": "rc3-pos-cat-0003",
-      "cardName": "A-Rakish Revelers",
-      "actionType": "cast",
-      "evidenceContains": "cast from exile",
-      "family": "granted_semantics",
-      "coverageStratum": "granted_ability_quote"
-    },
-    {
-      "caseId": "rc3-pos-cat-0003",
-      "cardName": "A-Rakish Revelers",
-      "actionType": "cast",
-      "evidenceContains": "You may cast Rakish Revelers for as long as it remains exiled",
-      "family": "granted_semantics",
-      "coverageStratum": "granted_ability_quote"
-    },
-    {
-      "caseId": "rc3-pos-cat-0004",
-      "cardName": "A-Shattered Seraph",
-      "actionType": "cast",
-      "evidenceContains": "cast from exile",
-      "family": "granted_semantics",
-      "coverageStratum": "granted_ability_quote"
-    },
-    {
-      "caseId": "rc3-pos-cat-0004",
-      "cardName": "A-Shattered Seraph",
-      "actionType": "cast",
-      "evidenceContains": "You may cast Shattered Seraph for as long as it remains exiled",
-      "family": "granted_semantics",
-      "coverageStratum": "granted_ability_quote"
-    },
-    {
       "caseId": "rc3-pos-cat-0005",
       "cardName": "\"Ach! Hans, Run!\"",
       "actionType": "put_onto_battlefield",
       "evidenceContains": "put it onto the battlefield",
-      "family": "optionality_dependency",
-      "coverageStratum": "search_put_shuffle_chain"
-    },
-    {
-      "caseId": "rc3-pos-cat-0005",
-      "cardName": "\"Ach! Hans, Run!\"",
-      "actionType": "shuffle_library",
-      "evidenceContains": "then shuffle",
       "family": "optionality_dependency",
       "coverageStratum": "search_put_shuffle_chain"
     },
@@ -452,30 +340,6 @@
       "evidenceContains": "Sacrifice Ominous Parcel: It deals 4 damage to target creature",
       "family": "activated_effects",
       "coverageStratum": "search_put_shuffle_chain"
-    },
-    {
-      "caseId": "rc3-pos-cat-0009",
-      "cardName": "A-Dokuchi Silencer",
-      "actionType": "put_onto_battlefield",
-      "evidenceContains": "Put this card onto the battlefield",
-      "family": "zone_transitions",
-      "coverageStratum": "mdfc_transform_zone_transition"
-    },
-    {
-      "caseId": "rc3-pos-cat-0010",
-      "cardName": "A-Silver-Fur Master",
-      "actionType": "put_onto_battlefield",
-      "evidenceContains": "Put this card onto the battlefield",
-      "family": "zone_transitions",
-      "coverageStratum": "mdfc_transform_zone_transition"
-    },
-    {
-      "caseId": "rc3-pos-cat-0011",
-      "cardName": "A-Thousand-Faced Shadow",
-      "actionType": "put_onto_battlefield",
-      "evidenceContains": "Put this card onto the battlefield",
-      "family": "zone_transitions",
-      "coverageStratum": "mdfc_transform_zone_transition"
     },
     {
       "caseId": "rc3-pos-cat-0012",
@@ -526,58 +390,34 @@
       "coverageStratum": "replacement_if_would"
     },
     {
-      "caseId": "rc3-pos-cat-0019",
-      "cardName": "A-Devoted Grafkeeper // A-Departed Soulkeeper",
-      "actionType": "cast",
-      "evidenceContains": "cast a spell from your graveyard, tap target creature you don't control",
-      "family": "replacement_effects",
-      "coverageStratum": "replacement_if_would"
-    },
-    {
       "caseId": "rc3-pos-cat-0020",
       "cardName": "A-Dorothea, Vengeful Victim // A-Dorothea's Retribution",
       "actionType": "exile",
       "evidenceContains": "exile it instead",
-      "family": "granted_semantics",
+      "family": "replacement_effects",
       "coverageStratum": "replacement_if_would"
-    },
-    {
-      "caseId": "rc3-pos-cat-0027",
-      "cardName": "A Reckoning Approaches",
-      "actionType": "put_onto_battlefield",
-      "evidenceContains": "put a creature card from among them onto the battlefield",
-      "family": "zone_transitions",
-      "coverageStratum": "optional_put_onto_battlefield"
-    },
-    {
-      "caseId": "rc3-pos-cat-0030",
-      "cardName": "A-Circle of the Land Druid",
-      "actionType": "return_to_battlefield",
-      "evidenceContains": "return target land card from your graveyard to your hand",
-      "family": "zone_transitions",
-      "coverageStratum": "zone_transition_return"
     }
   ],
   "highestYieldFamilies": [
     {
-      "family": "zone_transitions",
-      "count": 14
-    },
-    {
-      "family": "granted_semantics",
-      "count": 12
+      "family": "replacement_effects",
+      "count": 11
     },
     {
       "family": "optionality_dependency",
-      "count": 10
-    },
-    {
-      "family": "replacement_effects",
-      "count": 7
+      "count": 6
     },
     {
       "family": "mdfc_face_structure",
       "count": 6
+    },
+    {
+      "family": "other",
+      "count": 5
+    },
+    {
+      "family": "zone_transitions",
+      "count": 4
     }
   ]
 }

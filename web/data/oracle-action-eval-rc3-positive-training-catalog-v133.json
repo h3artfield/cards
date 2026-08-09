@@ -1440,16 +1440,6 @@
           "evidenceContains": "Add {U}"
         },
         {
-          "actionType": "cast",
-          "evidenceContains": "cast from exile"
-        },
-        {
-          "actionType": "cast",
-          "evidenceContains": "You may cast Glamorous Outlaw for as long as it remains exiled",
-          "optional": true,
-          "optionalEffect": true
-        },
-        {
           "actionType": "deal_damage",
           "evidenceContains": "deals 2 damage to each opponent and you gain 2 life"
         },
@@ -1467,19 +1457,6 @@
           "role": "ramp",
           "fromPrimitiveActions": [
             "add_mana",
-            "cast",
-            "cast",
-            "deal_damage",
-            "gain_life",
-            "scry"
-          ]
-        },
-        {
-          "role": "recursion",
-          "fromPrimitiveActions": [
-            "add_mana",
-            "cast",
-            "cast",
             "deal_damage",
             "gain_life",
             "scry"
@@ -1489,8 +1466,6 @@
           "role": "removal",
           "fromPrimitiveActions": [
             "add_mana",
-            "cast",
-            "cast",
             "deal_damage",
             "gain_life",
             "scry"
@@ -1508,9 +1483,9 @@
       "evaluationLabelVersion": "eval-catalog-backed-v1",
       "taxonomyVersion": "three-layer-v1.4",
       "evaluationSetVersion": "rc3-positive-training-v130",
-      "goldReviewVersion": "rc3-benchmark-selector-v130",
-      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
-      "goldReviewer": "catalog-audit-agent",
+      "goldReviewVersion": "land-grant-permission-gold-v137",
+      "goldReviewedAt": "2026-08-09T12:00:00.000Z",
+      "goldReviewer": "rc3-v137-permission-policy-adjudication",
       "goldReviewStatus": "reviewed",
       "goldCompletenessStatus": "complete_within_scope",
       "identityStatus": "catalog_exact",
@@ -1519,7 +1494,30 @@
       "parserConsulted": false,
       "caseScope": "full_card",
       "scopeReason": "Complete primitive gold within full card oracle text.",
-      "certifiedEmptyLayer2": false
+      "certifiedEmptyLayer2": false,
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedLayer1Permissions": [
+        {
+          "permittedAction": "cast",
+          "objectScope": "specific_object",
+          "objectRef": "Glamorous Outlaw",
+          "sourceZone": "exile",
+          "duration": "while_condition",
+          "condition": "remains_exiled",
+          "evidenceContains": "You may cast Glamorous Outlaw for as long as it remains exiled"
+        }
+      ],
+      "expectedLayer1Conditions": [
+        {
+          "kind": "termination_condition",
+          "eventReference": "cast_from_exile",
+          "objectRef": "Glamorous Outlaw",
+          "evidenceContains": "until Glamorous Outlaw is cast from exile"
+        }
+      ],
+      "permissionPolicyClass": "future_specific_object_permission"
     },
     {
       "id": "rc3-pos-cat-0002",
@@ -1535,33 +1533,13 @@
         {
           "actionType": "add_mana",
           "evidenceContains": "Add {B}"
-        },
-        {
-          "actionType": "cast",
-          "evidenceContains": "cast from exile"
-        },
-        {
-          "actionType": "cast",
-          "evidenceContains": "You may cast Masked Bandits for as long as it remains exiled",
-          "optional": true,
-          "optionalEffect": true
         }
       ],
       "expectedRoles": [
         {
           "role": "ramp",
           "fromPrimitiveActions": [
-            "add_mana",
-            "cast",
-            "cast"
-          ]
-        },
-        {
-          "role": "recursion",
-          "fromPrimitiveActions": [
-            "add_mana",
-            "cast",
-            "cast"
+            "add_mana"
           ]
         }
       ],
@@ -1576,9 +1554,9 @@
       "evaluationLabelVersion": "eval-catalog-backed-v1",
       "taxonomyVersion": "three-layer-v1.4",
       "evaluationSetVersion": "rc3-positive-training-v130",
-      "goldReviewVersion": "rc3-benchmark-selector-v130",
-      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
-      "goldReviewer": "catalog-audit-agent",
+      "goldReviewVersion": "land-grant-permission-gold-v137",
+      "goldReviewedAt": "2026-08-09T12:00:00.000Z",
+      "goldReviewer": "rc3-v137-permission-policy-adjudication",
       "goldReviewStatus": "reviewed",
       "goldCompletenessStatus": "complete_within_scope",
       "identityStatus": "catalog_exact",
@@ -1587,7 +1565,30 @@
       "parserConsulted": false,
       "caseScope": "full_card",
       "scopeReason": "Complete primitive gold within full card oracle text.",
-      "certifiedEmptyLayer2": false
+      "certifiedEmptyLayer2": false,
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedLayer1Permissions": [
+        {
+          "permittedAction": "cast",
+          "objectScope": "specific_object",
+          "objectRef": "Masked Bandits",
+          "sourceZone": "exile",
+          "duration": "while_condition",
+          "condition": "remains_exiled",
+          "evidenceContains": "You may cast Masked Bandits for as long as it remains exiled"
+        }
+      ],
+      "expectedLayer1Conditions": [
+        {
+          "kind": "termination_condition",
+          "eventReference": "cast_from_exile",
+          "objectRef": "Masked Bandits",
+          "evidenceContains": "until Masked Bandits is cast from exile"
+        }
+      ],
+      "permissionPolicyClass": "future_specific_object_permission"
     },
     {
       "id": "rc3-pos-cat-0003",
@@ -1608,16 +1609,6 @@
         {
           "actionType": "create_token",
           "evidenceContains": "create a 1/1 green and white Citizen creature token"
-        },
-        {
-          "actionType": "cast",
-          "evidenceContains": "cast from exile"
-        },
-        {
-          "actionType": "cast",
-          "evidenceContains": "You may cast Rakish Revelers for as long as it remains exiled",
-          "optional": true,
-          "optionalEffect": true
         }
       ],
       "expectedRoles": [
@@ -1625,36 +1616,21 @@
           "role": "ramp",
           "fromPrimitiveActions": [
             "add_mana",
-            "create_token",
-            "cast",
-            "cast"
+            "create_token"
           ]
         },
         {
           "role": "enabler",
           "fromPrimitiveActions": [
             "add_mana",
-            "create_token",
-            "cast",
-            "cast"
+            "create_token"
           ]
         },
         {
           "role": "payoff",
           "fromPrimitiveActions": [
             "add_mana",
-            "create_token",
-            "cast",
-            "cast"
-          ]
-        },
-        {
-          "role": "recursion",
-          "fromPrimitiveActions": [
-            "add_mana",
-            "create_token",
-            "cast",
-            "cast"
+            "create_token"
           ]
         }
       ],
@@ -1669,9 +1645,9 @@
       "evaluationLabelVersion": "eval-catalog-backed-v1",
       "taxonomyVersion": "three-layer-v1.4",
       "evaluationSetVersion": "rc3-positive-training-v130",
-      "goldReviewVersion": "rc3-benchmark-selector-v130",
-      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
-      "goldReviewer": "catalog-audit-agent",
+      "goldReviewVersion": "land-grant-permission-gold-v137",
+      "goldReviewedAt": "2026-08-09T12:00:00.000Z",
+      "goldReviewer": "rc3-v137-permission-policy-adjudication",
       "goldReviewStatus": "reviewed",
       "goldCompletenessStatus": "complete_within_scope",
       "identityStatus": "catalog_exact",
@@ -1680,7 +1656,30 @@
       "parserConsulted": false,
       "caseScope": "full_card",
       "scopeReason": "Complete primitive gold within full card oracle text.",
-      "certifiedEmptyLayer2": false
+      "certifiedEmptyLayer2": false,
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedLayer1Permissions": [
+        {
+          "permittedAction": "cast",
+          "objectScope": "specific_object",
+          "objectRef": "Rakish Revelers",
+          "sourceZone": "exile",
+          "duration": "while_condition",
+          "condition": "remains_exiled",
+          "evidenceContains": "You may cast Rakish Revelers for as long as it remains exiled"
+        }
+      ],
+      "expectedLayer1Conditions": [
+        {
+          "kind": "termination_condition",
+          "eventReference": "cast_from_exile",
+          "objectRef": "Rakish Revelers",
+          "evidenceContains": "until Rakish Revelers is cast from exile"
+        }
+      ],
+      "permissionPolicyClass": "future_specific_object_permission"
     },
     {
       "id": "rc3-pos-cat-0004",
@@ -1699,16 +1698,6 @@
           "evidenceContains": "Add {W}"
         },
         {
-          "actionType": "cast",
-          "evidenceContains": "cast from exile"
-        },
-        {
-          "actionType": "cast",
-          "evidenceContains": "You may cast Shattered Seraph for as long as it remains exiled",
-          "optional": true,
-          "optionalEffect": true
-        },
-        {
           "actionType": "gain_life",
           "evidenceContains": "gain 3 life"
         }
@@ -1718,17 +1707,6 @@
           "role": "ramp",
           "fromPrimitiveActions": [
             "add_mana",
-            "cast",
-            "cast",
-            "gain_life"
-          ]
-        },
-        {
-          "role": "recursion",
-          "fromPrimitiveActions": [
-            "add_mana",
-            "cast",
-            "cast",
             "gain_life"
           ]
         }
@@ -1744,9 +1722,9 @@
       "evaluationLabelVersion": "eval-catalog-backed-v1",
       "taxonomyVersion": "three-layer-v1.4",
       "evaluationSetVersion": "rc3-positive-training-v130",
-      "goldReviewVersion": "rc3-benchmark-selector-v130",
-      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
-      "goldReviewer": "catalog-audit-agent",
+      "goldReviewVersion": "land-grant-permission-gold-v137",
+      "goldReviewedAt": "2026-08-09T12:00:00.000Z",
+      "goldReviewer": "rc3-v137-permission-policy-adjudication",
       "goldReviewStatus": "reviewed",
       "goldCompletenessStatus": "complete_within_scope",
       "identityStatus": "catalog_exact",
@@ -1755,7 +1733,30 @@
       "parserConsulted": false,
       "caseScope": "full_card",
       "scopeReason": "Complete primitive gold within full card oracle text.",
-      "certifiedEmptyLayer2": false
+      "certifiedEmptyLayer2": false,
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedLayer1Permissions": [
+        {
+          "permittedAction": "cast",
+          "objectScope": "specific_object",
+          "objectRef": "Shattered Seraph",
+          "sourceZone": "exile",
+          "duration": "while_condition",
+          "condition": "remains_exiled",
+          "evidenceContains": "You may cast Shattered Seraph for as long as it remains exiled"
+        }
+      ],
+      "expectedLayer1Conditions": [
+        {
+          "kind": "termination_condition",
+          "eventReference": "cast_from_exile",
+          "objectRef": "Shattered Seraph",
+          "evidenceContains": "until Shattered Seraph is cast from exile"
+        }
+      ],
+      "permissionPolicyClass": "future_specific_object_permission"
     },
     {
       "id": "rc3-pos-cat-0005",
@@ -2043,16 +2044,13 @@
       "oracleText": "Ninjutsu {1}{B} ({1}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nWhenever Dokuchi Silencer deals combat damage to a player, you may discard a card. When you do, destroy target creature or planeswalker that player controls.",
       "expectedStructure": {
         "minTriggeredAbilities": 1,
-        "optional": true
+        "optional": true,
+        "minActivatedAbilities": 1
       },
       "expectedPrimitiveActions": [
         {
           "actionType": "destroy",
           "evidenceContains": "destroy target creature or planeswalker that player controls"
-        },
-        {
-          "actionType": "put_onto_battlefield",
-          "evidenceContains": "Put this card onto the battlefield"
         },
         {
           "actionType": "discard",
@@ -2064,7 +2062,6 @@
           "role": "removal",
           "fromPrimitiveActions": [
             "destroy",
-            "put_onto_battlefield",
             "discard"
           ]
         }
@@ -2078,9 +2075,9 @@
       "evaluationLabelVersion": "eval-catalog-backed-v1",
       "taxonomyVersion": "three-layer-v1.4",
       "evaluationSetVersion": "rc3-positive-training-v130",
-      "goldReviewVersion": "rc3-benchmark-selector-v130",
-      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
-      "goldReviewer": "catalog-audit-agent",
+      "goldReviewVersion": "zone-ninjutsu-replacement-gold-v137",
+      "goldReviewedAt": "2026-08-09T13:00:00.000Z",
+      "goldReviewer": "rc3-v137-zone-replacement-policy-adjudication",
       "goldReviewStatus": "reviewed",
       "goldCompletenessStatus": "complete_within_scope",
       "identityStatus": "catalog_exact",
@@ -2089,7 +2086,34 @@
       "parserConsulted": false,
       "caseScope": "full_card",
       "scopeReason": "Complete primitive gold within full card oracle text.",
-      "certifiedEmptyLayer2": false
+      "certifiedEmptyLayer2": false,
+      "forbiddenPrimitiveActions": [
+        "put_onto_battlefield"
+      ],
+      "expectedMechanicContext": {
+        "mechanic": "ninjutsu",
+        "executionContext": "mechanic_definition",
+        "cardNativeLayer2Eligible": false,
+        "derivedMechanicBehaviors": {
+          "activatedCostIncludes": [
+            "Return an unblocked attacker you control to hand"
+          ],
+          "resolutionZoneTransition": {
+            "movementVerb": "put",
+            "sourceZone": "hand",
+            "destinationZone": "battlefield",
+            "stateModifiers": [
+              "tapped",
+              "attacking"
+            ]
+          }
+        },
+        "excludedReminderSpans": [
+          "Put this card onto the battlefield from your hand tapped and attacking",
+          "Return an unblocked attacker you control to hand"
+        ]
+      },
+      "permissionPolicyClass": "keyword_reminder_mechanic_definition"
     },
     {
       "id": "rc3-pos-cat-0010",
@@ -2097,12 +2121,7 @@
       "layout": "normal",
       "oracleId": "cc1f8468-473e-4fca-9745-3aca2db87e13",
       "oracleText": "Ninjutsu {U/B} ({U/B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nNinjutsu abilities you activate cost {1} less to activate.\nOther Ninja and Rogue creatures you control get +1/+1.",
-      "expectedPrimitiveActions": [
-        {
-          "actionType": "put_onto_battlefield",
-          "evidenceContains": "Put this card onto the battlefield"
-        }
-      ],
+      "expectedPrimitiveActions": [],
       "expectedRoles": [],
       "cardName": "A-Silver-Fur Master",
       "colorIdentity": [
@@ -2114,9 +2133,9 @@
       "evaluationLabelVersion": "eval-catalog-backed-v1",
       "taxonomyVersion": "three-layer-v1.4",
       "evaluationSetVersion": "rc3-positive-training-v130",
-      "goldReviewVersion": "rc3-benchmark-selector-v130",
-      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
-      "goldReviewer": "catalog-audit-agent",
+      "goldReviewVersion": "zone-ninjutsu-replacement-gold-v137",
+      "goldReviewedAt": "2026-08-09T13:00:00.000Z",
+      "goldReviewer": "rc3-v137-zone-replacement-policy-adjudication",
       "goldReviewStatus": "reviewed",
       "goldCompletenessStatus": "complete_within_scope",
       "identityStatus": "catalog_exact",
@@ -2125,7 +2144,37 @@
       "parserConsulted": false,
       "caseScope": "full_card",
       "scopeReason": "Complete primitive gold within full card oracle text.",
-      "certifiedEmptyLayer2": false
+      "certifiedEmptyLayer2": true,
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "forbiddenPrimitiveActions": [
+        "put_onto_battlefield"
+      ],
+      "expectedMechanicContext": {
+        "mechanic": "ninjutsu",
+        "executionContext": "mechanic_definition",
+        "cardNativeLayer2Eligible": false,
+        "derivedMechanicBehaviors": {
+          "activatedCostIncludes": [
+            "Return an unblocked attacker you control to hand"
+          ],
+          "resolutionZoneTransition": {
+            "movementVerb": "put",
+            "sourceZone": "hand",
+            "destinationZone": "battlefield",
+            "stateModifiers": [
+              "tapped",
+              "attacking"
+            ]
+          }
+        },
+        "excludedReminderSpans": [
+          "Put this card onto the battlefield from your hand tapped and attacking",
+          "Return an unblocked attacker you control to hand"
+        ]
+      },
+      "permissionPolicyClass": "keyword_reminder_mechanic_definition"
     },
     {
       "id": "rc3-pos-cat-0011",
@@ -2134,13 +2183,10 @@
       "oracleId": "c091f964-745e-4949-9593-e004eaad1fd2",
       "oracleText": "Ninjutsu {2}{U} ({2}{U}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nFlying\nWhen Thousand-Faced Shadow enters from your hand, if it's attacking, create a token that's a copy of another target attacking creature. The token enters tapped and attacking.",
       "expectedStructure": {
-        "minTriggeredAbilities": 1
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1
       },
       "expectedPrimitiveActions": [
-        {
-          "actionType": "put_onto_battlefield",
-          "evidenceContains": "Put this card onto the battlefield"
-        },
         {
           "actionType": "create_token",
           "evidenceContains": "create a token"
@@ -2150,14 +2196,12 @@
         {
           "role": "enabler",
           "fromPrimitiveActions": [
-            "put_onto_battlefield",
             "create_token"
           ]
         },
         {
           "role": "payoff",
           "fromPrimitiveActions": [
-            "put_onto_battlefield",
             "create_token"
           ]
         }
@@ -2171,9 +2215,9 @@
       "evaluationLabelVersion": "eval-catalog-backed-v1",
       "taxonomyVersion": "three-layer-v1.4",
       "evaluationSetVersion": "rc3-positive-training-v130",
-      "goldReviewVersion": "rc3-benchmark-selector-v130",
-      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
-      "goldReviewer": "catalog-audit-agent",
+      "goldReviewVersion": "zone-ninjutsu-replacement-gold-v137",
+      "goldReviewedAt": "2026-08-09T13:00:00.000Z",
+      "goldReviewer": "rc3-v137-zone-replacement-policy-adjudication",
       "goldReviewStatus": "reviewed",
       "goldCompletenessStatus": "complete_within_scope",
       "identityStatus": "catalog_exact",
@@ -2182,7 +2226,34 @@
       "parserConsulted": false,
       "caseScope": "full_card",
       "scopeReason": "Complete primitive gold within full card oracle text.",
-      "certifiedEmptyLayer2": false
+      "certifiedEmptyLayer2": false,
+      "forbiddenPrimitiveActions": [
+        "put_onto_battlefield"
+      ],
+      "expectedMechanicContext": {
+        "mechanic": "ninjutsu",
+        "executionContext": "mechanic_definition",
+        "cardNativeLayer2Eligible": false,
+        "derivedMechanicBehaviors": {
+          "activatedCostIncludes": [
+            "Return an unblocked attacker you control to hand"
+          ],
+          "resolutionZoneTransition": {
+            "movementVerb": "put",
+            "sourceZone": "hand",
+            "destinationZone": "battlefield",
+            "stateModifiers": [
+              "tapped",
+              "attacking"
+            ]
+          }
+        },
+        "excludedReminderSpans": [
+          "Put this card onto the battlefield from your hand tapped and attacking",
+          "Return an unblocked attacker you control to hand"
+        ]
+      },
+      "permissionPolicyClass": "keyword_reminder_mechanic_definition"
     },
     {
       "id": "rc3-pos-cat-0012",
@@ -2524,11 +2595,6 @@
           "cardFace": "back"
         },
         {
-          "actionType": "cast",
-          "evidenceContains": "cast a spell from your graveyard, tap target creature you don't control",
-          "cardFace": "front"
-        },
-        {
           "actionType": "mill",
           "evidenceContains": "mill four cards",
           "cardFace": "front"
@@ -2544,16 +2610,6 @@
           "role": "removal",
           "fromPrimitiveActions": [
             "exile",
-            "cast",
-            "mill",
-            "tap"
-          ]
-        },
-        {
-          "role": "recursion",
-          "fromPrimitiveActions": [
-            "exile",
-            "cast",
             "mill",
             "tap"
           ]
@@ -2569,9 +2625,9 @@
       "evaluationLabelVersion": "eval-catalog-backed-v1",
       "taxonomyVersion": "three-layer-v1.4",
       "evaluationSetVersion": "rc3-positive-training-v130",
-      "goldReviewVersion": "rc3-benchmark-selector-v130",
-      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
-      "goldReviewer": "catalog-audit-agent",
+      "goldReviewVersion": "zone-ninjutsu-replacement-gold-v137",
+      "goldReviewedAt": "2026-08-09T13:00:00.000Z",
+      "goldReviewer": "rc3-v137-zone-replacement-policy-adjudication",
       "goldReviewStatus": "reviewed",
       "goldCompletenessStatus": "complete_within_scope",
       "identityStatus": "catalog_exact",
@@ -2580,7 +2636,18 @@
       "parserConsulted": false,
       "caseScope": "full_card",
       "scopeReason": "Complete primitive gold within full card oracle text.",
-      "certifiedEmptyLayer2": false
+      "certifiedEmptyLayer2": false,
+      "forbiddenPrimitiveActions": [
+        "cast"
+      ],
+      "expectedLayer1Conditions": [
+        {
+          "kind": "future_event_reference",
+          "eventReference": "cast_spell_from_graveyard",
+          "evidenceContains": "Whenever you cast a spell from your graveyard"
+        }
+      ],
+      "permissionPolicyClass": "trigger_event_cast_reference"
     },
     {
       "id": "rc3-pos-cat-0020",
@@ -2705,19 +2772,32 @@
         {
           "actionType": "create_token",
           "evidenceContains": "Create two 1/1 green and white Citizen creature token"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals damage equal to twice the number of creatures you control to target creature or planeswalker"
         }
       ],
       "expectedRoles": [
         {
           "role": "enabler",
           "fromPrimitiveActions": [
-            "create_token"
+            "create_token",
+            "deal_damage"
           ]
         },
         {
           "role": "payoff",
           "fromPrimitiveActions": [
-            "create_token"
+            "create_token",
+            "deal_damage"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "create_token",
+            "deal_damage"
           ]
         }
       ],
@@ -2732,9 +2812,9 @@
       "evaluationLabelVersion": "eval-catalog-backed-v1",
       "taxonomyVersion": "three-layer-v1.4",
       "evaluationSetVersion": "rc3-positive-training-v130",
-      "goldReviewVersion": "rc3-benchmark-selector-v130",
-      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
-      "goldReviewer": "catalog-audit-agent",
+      "goldReviewVersion": "modal-full-card-gold-v137",
+      "goldReviewedAt": "2026-08-09T12:00:00.000Z",
+      "goldReviewer": "rc3-v137-cabaretti-scope-correction",
       "goldReviewStatus": "reviewed",
       "goldCompletenessStatus": "complete_within_scope",
       "identityStatus": "catalog_exact",
@@ -2742,7 +2822,7 @@
       "coverageStratum": "modal_each_option_action",
       "parserConsulted": false,
       "caseScope": "full_card",
-      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "scopeReason": "Complete primitive gold for all modal Layer-2 options within full_card scope.",
       "certifiedEmptyLayer2": false
     },
     {
@@ -3094,7 +3174,7 @@
       },
       "expectedPrimitiveActions": [
         {
-          "actionType": "return_to_battlefield",
+          "actionType": "return_to_hand",
           "evidenceContains": "return target land card from your graveyard to your hand"
         },
         {
@@ -3104,16 +3184,9 @@
       ],
       "expectedRoles": [
         {
-          "role": "recursion",
-          "fromPrimitiveActions": [
-            "return_to_battlefield",
-            "mill"
-          ]
-        },
-        {
           "role": "removal",
           "fromPrimitiveActions": [
-            "return_to_battlefield",
+            "return_to_hand",
             "mill"
           ]
         }
@@ -3127,9 +3200,9 @@
       "evaluationLabelVersion": "eval-catalog-backed-v1",
       "taxonomyVersion": "three-layer-v1.4",
       "evaluationSetVersion": "rc3-positive-training-v130",
-      "goldReviewVersion": "rc3-benchmark-selector-v130",
-      "goldReviewedAt": "2026-08-08T04:25:21.250Z",
-      "goldReviewer": "catalog-audit-agent",
+      "goldReviewVersion": "zone-ninjutsu-replacement-gold-v137",
+      "goldReviewedAt": "2026-08-09T13:00:00.000Z",
+      "goldReviewer": "rc3-v137-zone-replacement-policy-adjudication",
       "goldReviewStatus": "reviewed",
       "goldCompletenessStatus": "complete_within_scope",
       "identityStatus": "catalog_exact",
@@ -3138,7 +3211,8 @@
       "parserConsulted": false,
       "caseScope": "full_card",
       "scopeReason": "Complete primitive gold within full card oracle text.",
-      "certifiedEmptyLayer2": false
+      "certifiedEmptyLayer2": false,
+      "permissionPolicyClass": "gold_destination_zone_correction"
     },
     {
       "id": "rc3-pos-cat-0031",
@@ -3248,7 +3322,7 @@
       "category": "rc3-positive-one_shot_cast_resolution",
       "layout": "normal",
       "oracleId": "e1b6d0ab-4e11-43a2-8a7f-3fb51582ddf3",
-      "oracleText": "Whenever Demilich attacks, exile up to one target instant or sorcery card from your graveyard. Copy it. You may cast the copy.",
+      "oracleText": "This spell costs {U} less to cast for each instant and sorcery spell you've cast this turn.\nWhenever Demilich attacks, exile up to one target instant or sorcery card from your graveyard. Copy it. You may cast the copy.\nYou may cast Demilich from your graveyard by exiling four instant and/or sorcery cards from your graveyard in addition to paying its other costs.",
       "expectedPrimitiveActions": [
         {
           "actionType": "exile",
@@ -3267,15 +3341,63 @@
           "optionalEffect": true
         }
       ],
-      "cardName": "A-Demilich (one-shot cast branch)",
+      "cardName": "A-Demilich",
+      "goldenOracleTextHash": "14fcc568b2e6e8d434e220e4767bba6712d9e49cb8050e5dc589d9dd83e8e44f",
       "coverageStratum": "one_shot_cast_resolution",
       "spentV12Regression": false,
-      "caseScope": "ability",
-      "scopeReason": "Triggered attack ability — copy then optional cast the copy.",
+      "caseScope": "branch",
+      "scopeReason": "Triggered attack ability branch — exile, copy, optional cast the copy (scoped span into full canonical oracle).",
+      "branchSpan": {
+        "start": 92,
+        "end": 218,
+        "text": "Whenever Demilich attacks, exile up to one target instant or sorcery card from your graveyard. Copy it. You may cast the copy."
+      },
+      "benchmarkTargets": [
+        {
+          "expectedContext": "no_grant",
+          "fullRegionSpan": {
+            "start": 92,
+            "end": 218,
+            "text": "Whenever Demilich attacks, exile up to one target instant or sorcery card from your graveyard. Copy it. You may cast the copy."
+          },
+          "oracleTextHash": "14fcc568b2e6e8d434e220e4767bba6712d9e49cb8050e5dc589d9dd83e8e44f",
+          "adjudicationStatus": "parser_blind_adjudicated",
+          "semanticAdjudication": {
+            "context": "no_grant",
+            "recipient": "n/a",
+            "grantingVerb": "n/a",
+            "grantedComplement": "n/a",
+            "grantedAbilityTypes": [
+              "triggered"
+            ],
+            "semanticOwner": "source_card",
+            "layer1Structure": {
+              "abilityType": "triggered",
+              "grantingConstruction": "one_shot_cast_resolution_branch"
+            },
+            "layer2Gold": [
+              {
+                "actionType": "exile",
+                "evidenceContains": "exile up to one target"
+              },
+              {
+                "actionType": "copy",
+                "evidenceContains": "Copy it"
+              },
+              {
+                "actionType": "cast",
+                "evidenceContains": "cast the copy",
+                "optionalEffect": true
+              }
+            ],
+            "certifiedEmptyLayer2": false
+          }
+        }
+      ],
       "certifiedEmptyLayer2": false,
       "goldCompletenessStatus": "complete_within_scope",
       "parserConsulted": false
     }
   ],
-  "contentHash": "4db7c2bfab33c29999d0c8909d227ff25adc05eb7ea840dfac29f52d398dd9a5"
+  "contentHash": "734d452e528fdea1c7d9be6664d41c42ed232ea81671177956c31e59f45c3dde"
 }

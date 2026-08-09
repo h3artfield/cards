@@ -1,0 +1,68 @@
+{
+  "generatedAt": "2026-08-09T15:31:02.397Z",
+  "checkpoint": "look-reveal-put-v138-pre-replacement",
+  "parserVersion": "oracle-action-v1.38-rc3-look-reveal-put-chain",
+  "tag": "oracle-action-v1.38-rc3-look-reveal-put-chain",
+  "parentCheckpoint": "oracle-action-v1.37-rc3-granted-nested-complete",
+  "parentCommitSha": "7050c75abbf19a5db3174ec4c295431666bb1821",
+  "parserCommitSha": "PENDING_COMMIT",
+  "headBeforeCommit": "7050c75abbf19a5db3174ec4c295431666bb1821",
+  "parserScopeClean": false,
+  "parserScopePaths": [
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-transform.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-clause-native.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-promotion.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-action-builder.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-builder.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-granted-rules-span-detector.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-semantic-context-router.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-scoring-scope.ts",
+    "scripts/oracle-action-unified-matcher.ts",
+    "scripts/oracle-action-semantic-matcher.ts",
+    "scripts/lib/rc3-case-scope-scoring.ts"
+  ],
+  "blobs": {
+    "transform": "c105443c1694aa7cbaae71a63b817945c00158af06dd377acdffa9042ec195ab",
+    "clauseNative": "53305e91dae5f9f3688f268d0f42444a17935c51075f88e7fed0f6d4f9d0b553",
+    "actionBuilder": "5b9c9079331d7d87bc8b9bcc77547827258ad4a1ebbd4751ba6f44cae1c994cd",
+    "semanticBuilder": "59c67f2348feff0e6ad999c2f77f5f5f73921127839a60734cfcf750fd9ef339",
+    "promotion": "15682a0a1622937c37830421010b30f00cf33ccfbddcf7292354b96356946f71",
+    "referentResolution": "53305e91dae5f9f3688f268d0f42444a17935c51075f88e7fed0f6d4f9d0b553",
+    "grantedSpanDetector": "4d5248b8ecf0b07dfdc6b059494fe36e2f1fdcca68dcaa03137ba4adf27b7ba2",
+    "contextRouter": "8f0c6edbec8b47eeee29b88c93747a8922bc02edc1b6b661c3c1ae7a78523078",
+    "scoringScope": "5ebc6cbd45f5be0a32121c27f6897d89451c5391913c5ebaeda2f1cbdfb68c11",
+    "unifiedMatcher": "fc470d8102eafe41eb37091b14c3fb2feb10d3568dcd452838cf9726d32308b6",
+    "semanticMatcher": "8f173e68258b92563c1aebb19f3cc4cb58e02292f168213fed531aee869f8201"
+  },
+  "z1bAcceptance": {
+    "rc3_pos_cat_0027": {
+      "fnBefore": 1
+    },
+    "rc3_pos_v12_0098": {
+      "note": "incidental same-grammar recovery in spentV12 slice"
+    },
+    "newFp": 0
+  },
+  "scoringAtFreeze": {
+    "combined": {
+      "tp": 581,
+      "fp": 2,
+      "fn": 46,
+      "denominator": 627,
+      "recallPct": "92.6635",
+      "combinedGatePass": true
+    },
+    "unrelated": {
+      "tp": 53,
+      "fp": 0,
+      "fn": 11,
+      "denominator": 64,
+      "recallPct": "82.8125"
+    }
+  },
+  "includesUncommittedSince7050c75": [
+    "token-definition-boundary (span detector, context router, scoring scope)",
+    "look-reveal-put-chain (clause-native referent lineage + promotion family)",
+    "gold-policy overlays (Step-0, v12 Ninjutsu)"
+  ]
+}

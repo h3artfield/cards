@@ -4,6 +4,25 @@
  */
 import { detectQuoteSpans, type DetectedQuoteSpan } from "./oracle-rc3-quote-span-detector";
 
+/** Descriptor between "Create a" and "token with" — e.g. "colorless Clue artifact", "1/1 red Devil creature". */
+export const CREATE_TOKEN_DESCRIPTOR = "(?:[\\w/+'-]+(?:\\s+[\\w/+'-]+){0,12})";
+
+export const CREATE_TOKEN_WITH = new RegExp(`\\bCreate a ${CREATE_TOKEN_DESCRIPTOR} token with\\b`, "i");
+
+export const CREATE_TOKEN_WITH_QUOTE = new RegExp(
+  `\\bCreate a ${CREATE_TOKEN_DESCRIPTOR} token with\\s*["(\\u201c]?\\s*$`,
+  "i",
+);
+
+/** @deprecated use CREATE_TOKEN_WITH — artifact-only alias retained for imports */
+export const CREATE_ARTIFACT_TOKEN_DESCRIPTOR = CREATE_TOKEN_DESCRIPTOR;
+
+/** @deprecated use CREATE_TOKEN_WITH */
+export const CREATE_ARTIFACT_TOKEN_WITH = CREATE_TOKEN_WITH;
+
+/** @deprecated use CREATE_TOKEN_WITH_QUOTE */
+export const CREATE_ARTIFACT_TOKEN_WITH_QUOTE = CREATE_TOKEN_WITH_QUOTE;
+
 export type GrantedRulesTypography = "quoted" | "unquoted_complement" | "parenthetical_rules";
 
 export interface GrantedRulesSpan {
@@ -37,7 +56,7 @@ const GRANTED_TO_FROM_CUE: Array<{ pattern: RegExp; grantedTo: string }> = [
   { pattern: /\b(?:creature|token)(?: named [^."(\n]+)? with\s+/i, grantedTo: "that_token" },
   { pattern: /\b(?:A|The|This) \w+ token is an artifact with\s+/i, grantedTo: "this_token" },
   { pattern: /\bThe token is an artifact with\s+/i, grantedTo: "this_token" },
-  { pattern: /\bCreate a \w+ artifact token with\s+/i, grantedTo: "created_token" },
+  { pattern: CREATE_TOKEN_WITH, grantedTo: "created_token" },
 ];
 
 export function inferGrantedTo(before: string): string | undefined {
@@ -62,7 +81,7 @@ export function inferStructuralCue(before: string): string | undefined {
   if (/\b(?:creature|token)(?: named [^."(\n]+)? with\b/i.test(before)) return "token_with_ability";
   if (/\b(?:A|The|This) \w+ token is an artifact with\b/i.test(before)) return "token_definition_with";
   if (/\bThe token is an artifact with\b/i.test(before)) return "token_definition_with";
-  if (/\bCreate a \w+ artifact token with\b/i.test(before)) return "created_token_with";
+  if (CREATE_TOKEN_WITH.test(before)) return "created_token_with";
   if (/\b(?:Equipped|Enchanted) creature gets [^.\n]+ and has\b/i.test(before)) return "coordinated_equipment_enchanted_has";
   if (/\b(?:Lands|Creatures|Artifacts|Enchantments|Permanents|tokens) (?:you control )?have\b/i.test(before)) {
     return "permanents_have";
@@ -76,7 +95,7 @@ export function hasStructuralGrantingCue(paragraph: string, spanStart: number): 
   if (/\bYou get an emblem with\s*["(\u201c]?\s*$/i.test(before)) return false;
   if (/\b(?:A|The|This) \w+ token is an artifact with\s*["(\u201c]?\s*$/i.test(before)) return true;
   if (/\bThe token is an artifact with\s*["(\u201c]?\s*$/i.test(before)) return true;
-  if (/\bCreate a \w+ artifact token with\s*["(\u201c]?\s*$/i.test(before)) return true;
+  if (CREATE_TOKEN_WITH_QUOTE.test(before)) return true;
   if (/\b(?:and )?[Ii]t gains\s*["(\u201c]?\s*$/i.test(before)) return true;
   if (/\band gains\s*["(\u201c]?\s*$/i.test(before)) return true;
   if (/\b(?:Equipped|Enchanted) creature gets [^.\n(\u201c"]+ and has\s*["(\u201c]?\s*$/i.test(before)) return true;
@@ -135,7 +154,10 @@ function detectParentheticalGranted(paragraph: string): GrantedRulesSpan[] {
     if (paragraph[i] !== "(") continue;
     const inner = paragraph.slice(i + 1);
     if (/^A \w+ is an (?:artifact|creature|enchantment|land)/i.test(inner)) continue;
-    if (!/^(?:It|They|The token|This token) (?:has|have|is an)/i.test(inner)) continue;
+    const isCreateTokenDefinition = CREATE_TOKEN_WITH.test(inner);
+    if (!isCreateTokenDefinition && !/^(?:It|They|The token|This token) (?:has|have|is an)/i.test(inner)) {
+      continue;
+    }
     let depth = 1;
     let j = i + 1;
     for (; j < paragraph.length && depth > 0; j++) {
@@ -150,7 +172,7 @@ function detectParentheticalGranted(paragraph: string): GrantedRulesSpan[] {
       text,
       innerText,
       typography: "parenthetical_rules",
-      grantedTo: /token/i.test(innerText) ? "this_token" : "it",
+      grantedTo: isCreateTokenDefinition ? "created_token" : /token/i.test(innerText) ? "this_token" : "it",
       confidence: 0.88,
       structuralCue: "parenthetical_token_definition",
     });
