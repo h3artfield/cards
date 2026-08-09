@@ -47,6 +47,8 @@ function looksLikeAbilityRules(inner: string): boolean {
   if (/^(?:flying|haste|vigilance|trample|deathtouch|lifelink|hexproof|indestructible|defender|reach|first strike|double strike|menace|ward \d+)/i.test(t)) {
     return true;
   }
+  if (/^This token can't\b/i.test(t)) return true;
+  if (/^This creature can't\b/i.test(t)) return true;
   return inferBlockAbilityType(t) !== "unknown";
 }
 
@@ -55,13 +57,21 @@ function nestedQuotedAbility(inner: string): string | undefined {
   return match?.[1]?.trim();
 }
 
-function looksLikeReminder(inner: string, span?: GrantedRulesSpan): boolean {
+function looksLikeReminder(inner: string, span?: GrantedRulesSpan, before?: string): boolean {
   const t = inner.trim();
   if (span?.typography === "parenthetical_rules" && /is an artifact with/i.test(t)) {
     const quoted = nestedQuotedAbility(t);
     if (quoted && looksLikeAbilityRules(quoted)) return false;
   }
-  if (/^This (?:mana|ability|creature|token|artifact|enchantment|permanent)\b/i.test(t)) return true;
+  if (/^This (?:mana|ability|creature|token|artifact|enchantment|permanent)\b/i.test(t)) {
+    if (
+      span?.structuralCue === "token_has" ||
+      (before && /\b(?:[\w]+ )*tokens you control have\s*["(\u201c]?\s*$/i.test(before))
+    ) {
+      return false;
+    }
+    return true;
+  }
   if (/can't be spent to cast/i.test(t)) {
     if (/^\{[^}]+\}:/.test(t) || /\{T\}:/.test(t)) return false;
     if (/["\u201c][^"\u201d]*(?:\{T\}|Sacrifice|Add \{)/i.test(t)) return false;
@@ -87,7 +97,8 @@ function inferAbilityType(inner: string): ClassifiedGrantedRulesSpan["grantedAbi
 
 export function classifyGrantedRulesSpan(paragraph: string, span: GrantedRulesSpan): ClassifiedGrantedRulesSpan {
   const inner = span.innerText.trim();
-  const cue = span.structuralCue ?? inferStructuralCue(paragraph.slice(Math.max(0, span.localStart - 120), span.localStart));
+  const before = paragraph.slice(Math.max(0, span.localStart - 120), span.localStart);
+  const cue = span.structuralCue ?? inferStructuralCue(before);
   const grantingContext =
     span.typography !== "quoted" ? cue !== undefined : hasStructuralGrantingCue(paragraph, span.localStart);
 
@@ -96,7 +107,7 @@ export function classifyGrantedRulesSpan(paragraph: string, span: GrantedRulesSp
       ? (nestedQuotedAbility(inner) ?? inner)
       : inner;
 
-  if (looksLikeReminder(inner, span)) {
+  if (looksLikeReminder(inner, span, before)) {
     return {
       span,
       classification: "reminder_mechanic_text",

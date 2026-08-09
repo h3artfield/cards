@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-08-09T01:21:00.000Z",
+  "checkpoint": "rc3-granted-dev-pass-2-token-recipient",
+  "grammarFamily": "token_recipient",
+  "changeSummary": "Modifier-tolerant tokens-you-control have/gain; classifier excludes token_has quoted restrictions from reminder gate",
+  "isolatedDeltaFromPass1": {
+    "fixedCases": ["granted-exp-v136-024"],
+    "beforeEndToEnd": "24/0/2",
+    "afterEndToEnd": "25/0/1",
+    "remainingFailure": "granted-exp-v136-011 triggered-clause"
+  },
+  "regressionTriangle": {
+    "existingTokensGrant": "tokens you control have → granted_rules",
+    "newTokenItHas": "create token ... It has → token_definition",
+    "tokenTypeReminder": "A Food token is an artifact with → token_definition"
+  }
+}

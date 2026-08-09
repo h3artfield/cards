@@ -1,0 +1,25 @@
+{
+  "generatedAt": "2026-08-09T01:20:00.000Z",
+  "checkpoint": "rc3-granted-dev-pass-1-coordinated-predicate",
+  "tag": "rc3-granted-dev-pass-1",
+  "parentCommitSha": "78502042ee7e2c2461c326c3efdbffeda9a06e07",
+  "parserVersion": "oracle-action-v1.35-rc3-granted-dev",
+  "grammarFamily": "coordinated_predicate",
+  "changeSummary": "Recipient-bound coordinated predicate: recipient NP + gets predicateA + and + has/have + complement",
+  "blobsAtPass1": {
+    "spanDetector": "c72145686c213b57b15910885f5674ea1af21ea767b5b44e40df8a2fddfd8c24",
+    "contextRouter": "36d2bddb1fc5a227f3bb93e0d05be358ac9f93bc7f8d357dca69fbebc0d3eaad",
+    "clauseNative": "023f5fde6beeca752cf5d79b75603d0410750fa8bc48714175657515a6121d6e",
+    "transform": "4364680d91bfc3fe68eabd070b4a899a01aa669061b77739dbac1451c431afcc"
+  },
+  "v136DevelopmentDelta": {
+    "beforeRun1EndToEnd": "18/0/8",
+    "afterPass1EndToEnd": "24/0/2",
+    "recallBefore": "69.2%",
+    "recallAfter": "92.3%"
+  },
+  "precisionControlsAtPass1": {
+    "negativeControlGrantedFp": 0
+  },
+  "note": "Pass-1 isolated delta before token-recipient and triggered-clause passes"
+}

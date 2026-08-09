@@ -1,0 +1,66 @@
+{
+  "generatedAt": "2026-08-09T01:20:44.176Z",
+  "commit": "78502042ee7e",
+  "blobs": {
+    "spanDetector": "ecfa6ba15bd9447538536506180016c519413ca6154fb5bdd2fec7ae2e7d319e",
+    "contextRouter": "dbb0ad1988c7d3e531426a4f72c385133307a71dc6a97b11f61516af0afb4578"
+  },
+  "v136Development": {
+    "endToEnd": {
+      "tp": 26,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "precisionLabel": "100.0%",
+      "recall": 1,
+      "recallLabel": "100.0%"
+    },
+    "stage": {
+      "stageA0_candidateCoverage": {
+        "expectedRegions": 26,
+        "tp": 26,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "precisionLabel": "100.0%",
+        "recall": 1,
+        "recallLabel": "100.0%"
+      },
+      "stageA1_semanticContextRouter": {
+        "conditionalOnA0Hit": 26,
+        "tp": 26,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "precisionLabel": "100.0%",
+        "recall": 1,
+        "recallLabel": "100.0%"
+      },
+      "stageB_grantedRulesClassifier": {
+        "conditionalOnGrantedRulesRoute": 26,
+        "tp": 26,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "precisionLabel": "100.0%",
+        "recall": 1,
+        "recallLabel": "100.0%"
+      },
+      "failureStageCounts": {
+        "A0_no_candidate": 0,
+        "A1_wrong_context": 0,
+        "B_classifier_rejected": 0,
+        "success": 26
+      }
+    },
+    "remainingFailures": 0
+  },
+  "negativeControls": {
+    "grantedRegionFp": 0,
+    "pass": true
+  },
+  "invariants": {
+    "negativeControlGrantedFpZero": true,
+    "note": "Historical dev union not re-scored in this script — unchanged by policy"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-08-09T01:21:00.000Z",
+  "checkpoint": "rc3-granted-dev-pass-3-triggered-clause",
+  "grammarFamily": "triggered_clause_resolution_grant",
+  "changeSummary": "detectTriggeredResolutionGrants for grants after Whenever/When comma; lookbehind fix for creatures-you-control gain",
+  "isolatedDeltaFromPass2": {
+    "fixedCases": ["granted-exp-v136-011"],
+    "beforeEndToEnd": "25/0/1",
+    "afterEndToEnd": "26/0/0",
+    "recall": "100%"
+  },
+  "blobsAfterPass3": {
+    "spanDetector": "ecfa6ba15bd9447538536506180016c519413ca6154fb5bdd2fec7ae2e7d319e",
+    "contextRouter": "dbb0ad1988c7d3e531426a4f72c385133307a71dc6a97b11f61516af0afb4578",
+    "classifier": "updated-with-token-has-reminder-gate"
+  },
+  "nextAuthorizedWork": "Compulsory Rest Stage-C nested activated extraction"
+}

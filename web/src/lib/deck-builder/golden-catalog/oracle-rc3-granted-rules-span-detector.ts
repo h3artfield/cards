@@ -20,10 +20,14 @@ export interface GrantedRulesSpan {
 
 /** Recipient-bound granting verbs — no bare gain/with on primary card text. */
 const STRUCTURAL_GRANTING_PREFIX =
-  /\b(?:(?:Lands|Creatures|Artifacts|Enchantments|Slivers|Permanents|tokens) (?:you control )?have|All \w+(?:s)? have|(?:Enchanted|Equipped) (?:creature|land|artifact|permanent|\w+) has|(?:This|That|Each) token has|it has|Target (?:creature|land|permanent|\w+) gains|Creatures you control (?:perpetually )?gain|(?:creature|token)(?: named [^."(\n]+)? with)\s+/i;
+  /(?<![\w])(?:(?:[\w]+ )*tokens you control have|(?:[\w]+ )*tokens you control gain|(?:Lands|Creatures|Artifacts|Enchantments|Slivers|Permanents|tokens) (?:you control )?have|All \w+(?:s)? have|(?:Enchanted|Equipped) (?:creature|land|artifact|permanent|\w+) has|(?:This|That|Each) token has|it has|Target (?:creature|land|permanent|\w+) gains|Creatures you control (?:perpetually )?gain|(?:creature|token)(?: named [^."(\n]+)? with)\s+/i;
 
 const GRANTED_TO_FROM_CUE: Array<{ pattern: RegExp; grantedTo: string }> = [
+  { pattern: /\b(?:[\w]+ )*tokens you control have\s+/i, grantedTo: "tokens_you_control" },
+  { pattern: /\b(?:[\w]+ )*tokens you control gain\s+/i, grantedTo: "tokens_you_control" },
   { pattern: /\bCreatures you control (?:perpetually )?gain\s+/i, grantedTo: "creatures_you_control" },
+  { pattern: /\b(?:and )?[Ii]t gains\s+/i, grantedTo: "it" },
+  { pattern: /\band gains\s+/i, grantedTo: "it" },
   { pattern: /\bCreatures you control have\s+/i, grantedTo: "creatures_you_control" },
   { pattern: /\bTarget (?:creature|land|permanent|\w+) gains\s+/i, grantedTo: "target" },
   { pattern: /\bEnchanted creature has\s+/i, grantedTo: "enchanted_creature" },
@@ -46,15 +50,20 @@ export function inferGrantedTo(before: string): string | undefined {
 export function inferStructuralCue(before: string): string | undefined {
   if (/\bTarget \w+ gains\b/i.test(before)) return "target_gains";
   if (/\b(?:Enchanted|Equipped)/i.test(before)) return "enchanted_or_equipped_has";
+  if (/\b(?:[\w]+ )*tokens you control have\b/i.test(before)) return "token_has";
+  if (/\b(?:[\w]+ )*tokens you control gain\b/i.test(before)) return "tokens_gain";
   if (/\btoken has\b/i.test(before)) return "token_has";
   if (/\bit has\b/i.test(before)) return "it_has";
   if (/\bCreatures you control (?:perpetually )?gain\b/i.test(before)) return "creatures_gain";
+  if (/\b(?:and )?[Ii]t gains\b/i.test(before)) return "it_gains";
+  if (/\band gains\b/i.test(before)) return "and_gains";
   if (/\bCreatures you control have\b/i.test(before)) return "creatures_have";
   if (/\bAll \w+/i.test(before)) return "all_have";
   if (/\b(?:creature|token)(?: named [^."(\n]+)? with\b/i.test(before)) return "token_with_ability";
   if (/\b(?:A|The|This) \w+ token is an artifact with\b/i.test(before)) return "token_definition_with";
   if (/\bThe token is an artifact with\b/i.test(before)) return "token_definition_with";
   if (/\bCreate a \w+ artifact token with\b/i.test(before)) return "created_token_with";
+  if (/\b(?:Equipped|Enchanted) creature gets [^.\n]+ and has\b/i.test(before)) return "coordinated_equipment_enchanted_has";
   if (/\b(?:Lands|Creatures|Artifacts|Enchantments|Permanents|tokens) (?:you control )?have\b/i.test(before)) {
     return "permanents_have";
   }
@@ -68,6 +77,9 @@ export function hasStructuralGrantingCue(paragraph: string, spanStart: number): 
   if (/\b(?:A|The|This) \w+ token is an artifact with\s*["(\u201c]?\s*$/i.test(before)) return true;
   if (/\bThe token is an artifact with\s*["(\u201c]?\s*$/i.test(before)) return true;
   if (/\bCreate a \w+ artifact token with\s*["(\u201c]?\s*$/i.test(before)) return true;
+  if (/\b(?:and )?[Ii]t gains\s*["(\u201c]?\s*$/i.test(before)) return true;
+  if (/\band gains\s*["(\u201c]?\s*$/i.test(before)) return true;
+  if (/\b(?:Equipped|Enchanted) creature gets [^.\n(\u201c"]+ and has\s*["(\u201c]?\s*$/i.test(before)) return true;
   if (/\bis an artifact with\s*["(\u201c]?\s*$/i.test(before)) return false;
   if (/\bis a \w+ with\s*["(\u201c]?\s*$/i.test(before)) return false;
   return inferStructuralCue(before) !== undefined;
@@ -78,7 +90,10 @@ function isPrimaryAbilityClause(paragraph: string, matchIndex: number): boolean 
   const prefix = paragraph.slice(lineStart, matchIndex).trim();
   if (/^[+\−-]\d+:/.test(prefix)) return true;
   if (/^\{[^}]+\}(?:\{[^}]+\})*:/.test(prefix)) return true;
-  if (/^(?:When|Whenever|At the beginning of)/i.test(prefix)) return true;
+  if (/^(?:When|Whenever|At the beginning of)/i.test(prefix)) {
+    if (/,\s/.test(prefix)) return false;
+    return true;
+  }
   if (/^Flying\b/i.test(prefix)) return true;
   return false;
 }
@@ -144,6 +159,76 @@ function detectParentheticalGranted(paragraph: string): GrantedRulesSpan[] {
   return spans;
 }
 
+/** Coordinated predicate then grant — recipient NP + predicate A + coordinator + granting verb + complement. */
+function detectCoordinatedPredicateGrants(paragraph: string): GrantedRulesSpan[] {
+  const spans: GrantedRulesSpan[] = [];
+  const recipientNp = "(?:Equipped|Enchanted) creature";
+  const predicateA = "[^.\n]+?";
+  const coordinator = "and";
+  const grantingVerb = "(has|have)";
+  const re = new RegExp(
+    `\\b(${recipientNp})\\s+gets\\s+(${predicateA})\\s+${coordinator}\\s+${grantingVerb}\\s+`,
+    "gi",
+  );
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(paragraph)) !== null) {
+    const start = m.index;
+    const complementStart = m.index + m[0].length;
+    let end = complementStart;
+    if (paragraph[end] === '"' || paragraph[end] === "\u201c") {
+      const closeIdx = paragraph.indexOf('"', end + 1);
+      end = closeIdx >= 0 ? closeIdx + 1 : paragraph.length;
+    } else {
+      while (end < paragraph.length && paragraph[end] !== "." && paragraph[end] !== "\n") end++;
+    }
+    const text = paragraph.slice(start, end);
+    const innerText = paragraph.slice(complementStart, end).trim();
+    if (innerText.length < 2) continue;
+    spans.push({
+      localStart: start,
+      localEnd: end,
+      text,
+      innerText,
+      typography: "unquoted_complement",
+      grantedTo: /^Equipped/i.test(m[1]) ? "equipped_creature" : "enchanted_creature",
+      confidence: 0.86,
+      structuralCue: "coordinated_equipment_enchanted_has",
+    });
+  }
+  return spans;
+}
+
+/** Grant constructions appearing in the resolution clause after a triggered-ability header. */
+function detectTriggeredResolutionGrants(paragraph: string): GrantedRulesSpan[] {
+  const trimmed = paragraph.trim();
+  if (!/^(?:When|Whenever|At the beginning of)\b/i.test(trimmed)) return [];
+  const commaIdx = trimmed.indexOf(",");
+  if (commaIdx < 0) return [];
+
+  const spans: GrantedRulesSpan[] = [];
+  const effect = trimmed.slice(commaIdx + 1);
+  const grantRe =
+    /(?<![\w])((?:creatures you control|target (?:creature|player|permanent|\w+)) (?:perpetually )?(?:gain|gains|have|has)\s+[^.\n]+)/gi;
+  let m: RegExpExecArray | null;
+  while ((m = grantRe.exec(effect)) !== null) {
+    const localStart = paragraph.indexOf(m[1], commaIdx);
+    if (localStart < 0) continue;
+    const localEnd = localStart + m[1].length;
+    const innerText = m[1].replace(/^[^.]+\s+(gain|gains|have|has)\s+/i, "").trim();
+    spans.push({
+      localStart,
+      localEnd,
+      text: paragraph.slice(localStart, localEnd),
+      innerText,
+      typography: "unquoted_complement",
+      grantedTo: /^creatures you control/i.test(m[1]) ? "creatures_you_control" : "target",
+      confidence: 0.84,
+      structuralCue: /^creatures you control/i.test(m[1]) ? "creatures_gain" : "target_gains",
+    });
+  }
+  return spans;
+}
+
 function isSubsequentTokenGlossaryQuote(paragraph: string, spanStart: number): boolean {
   const parenStart = paragraph.lastIndexOf("(", spanStart);
   if (parenStart < 0) return false;
@@ -152,8 +237,28 @@ function isSubsequentTokenGlossaryQuote(paragraph: string, spanStart: number): b
   return /["\u201c][^"\u201d]+["\u201d]\s+A \w+ token is an/i.test(parenInner);
 }
 
+function isTokenGlossaryQuote(paragraph: string, spanStart: number): boolean {
+  if (isSubsequentTokenGlossaryQuote(paragraph, spanStart)) return true;
+  const before = paragraph.slice(Math.max(0, spanStart - 80), spanStart);
+  return /\bA \w+ token is an artifact with\s*["(\u201c]?\s*$/i.test(before);
+}
+
+function quoteSpanToTokenGlossary(span: DetectedQuoteSpan, paragraph: string): GrantedRulesSpan | null {
+  if (!isTokenGlossaryQuote(paragraph, span.localStart)) return null;
+  return {
+    localStart: span.localStart,
+    localEnd: span.localEnd,
+    text: span.text,
+    innerText: span.innerText,
+    typography: "quoted",
+    grantedTo: "created_token",
+    confidence: 0.92,
+    structuralCue: "token_definition_with",
+  };
+}
+
 function quoteSpanToGranted(span: DetectedQuoteSpan, paragraph: string): GrantedRulesSpan | null {
-  if (isSubsequentTokenGlossaryQuote(paragraph, span.localStart)) return null;
+  if (isTokenGlossaryQuote(paragraph, span.localStart)) return null;
   if (!hasStructuralGrantingCue(paragraph, span.localStart)) return null;
   const before = paragraph.slice(Math.max(0, span.localStart - 120), span.localStart);
   return {
@@ -171,8 +276,10 @@ function quoteSpanToGranted(span: DetectedQuoteSpan, paragraph: string): Granted
 /** Detect all candidate granted-rules spans (quoted + unquoted + parenthetical). */
 export function detectGrantedRulesSpans(paragraph: string, grantingClauseId?: string): GrantedRulesSpan[] {
   const quoted = detectQuoteSpans(paragraph)
-    .map((s) => quoteSpanToGranted(s, paragraph))
+    .map((s) => quoteSpanToGranted(s, paragraph) ?? quoteSpanToTokenGlossary(s, paragraph))
     .filter((s): s is GrantedRulesSpan => s !== null);
+  const coordinated = detectCoordinatedPredicateGrants(paragraph);
+  const triggeredResolution = detectTriggeredResolutionGrants(paragraph);
   const unquoted = detectUnquotedComplements(paragraph);
   const paren = detectParentheticalGranted(paragraph);
 
@@ -180,7 +287,7 @@ export function detectGrantedRulesSpans(paragraph: string, grantingClauseId?: st
   const overlaps = (a: GrantedRulesSpan, b: GrantedRulesSpan) =>
     a.localStart < b.localEnd && b.localStart < a.localEnd;
 
-  for (const span of [...quoted, ...unquoted, ...paren]) {
+  for (const span of [...coordinated, ...triggeredResolution, ...quoted, ...unquoted, ...paren]) {
     if (merged.some((m) => overlaps(m, span))) continue;
     merged.push({
       ...span,

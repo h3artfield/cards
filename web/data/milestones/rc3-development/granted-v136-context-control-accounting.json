@@ -1,0 +1,147 @@
+{
+  "generatedAt": "2026-08-09T01:13:53.955Z",
+  "checkpoint": "granted-v136-context-control-three-level-accounting",
+  "summary": "5/5 end-to-end semantic disposition PASS",
+  "rows": [
+    {
+      "caseId": "granted-exp-v136-025",
+      "cardName": "Cache Grab",
+      "semanticGoldContext": "token_definition",
+      "expectedSemanticOwner": "created_object",
+      "detectorLevel": {
+        "candidateExpected": true,
+        "candidateProduced": true,
+        "overlappingCandidateCount": 1,
+        "result": "PASS"
+      },
+      "routerLevel": {
+        "evaluated": true,
+        "conditionalOnCandidate": true,
+        "expectedRouterClass": "token_definition",
+        "actualRouterClass": "token_definition",
+        "result": "PASS"
+      },
+      "endToEndSemanticDisposition": {
+        "expectedGrantedRegionCount": 0,
+        "actualGrantedRulesClassifiedCount": 0,
+        "spuriousGrantedRulesCount": 0,
+        "finalSemanticDispositionCorrect": true,
+        "result": "PASS"
+      }
+    },
+    {
+      "caseId": "granted-exp-v136-026",
+      "cardName": "Endless Evil",
+      "semanticGoldContext": "source_owned_reference",
+      "expectedSemanticOwner": "source_card",
+      "detectorLevel": {
+        "candidateExpected": false,
+        "candidateProduced": false,
+        "overlappingCandidateCount": 0,
+        "result": "PASS"
+      },
+      "routerLevel": {
+        "evaluated": false,
+        "conditionalOnCandidate": false,
+        "expectedRouterClass": "card_native",
+        "actualRouterClass": null,
+        "result": "N/A"
+      },
+      "endToEndSemanticDisposition": {
+        "expectedGrantedRegionCount": 0,
+        "actualGrantedRulesClassifiedCount": 0,
+        "spuriousGrantedRulesCount": 0,
+        "finalSemanticDispositionCorrect": true,
+        "result": "PASS"
+      }
+    },
+    {
+      "caseId": "granted-exp-v136-027",
+      "cardName": "Incubator Drone",
+      "semanticGoldContext": "created_object_capability",
+      "expectedSemanticOwner": "created_object",
+      "detectorLevel": {
+        "candidateExpected": true,
+        "candidateProduced": true,
+        "overlappingCandidateCount": 1,
+        "result": "PASS"
+      },
+      "routerLevel": {
+        "evaluated": true,
+        "conditionalOnCandidate": true,
+        "expectedRouterClass": "token_definition",
+        "actualRouterClass": "token_definition",
+        "result": "PASS"
+      },
+      "endToEndSemanticDisposition": {
+        "expectedGrantedRegionCount": 0,
+        "actualGrantedRulesClassifiedCount": 0,
+        "spuriousGrantedRulesCount": 0,
+        "finalSemanticDispositionCorrect": true,
+        "result": "PASS"
+      },
+      "incubatorDiagnosis": {
+        "candidateSpan": "\"Sacrifice this token: Add {C}.\"",
+        "recipient": "It (newly created token)",
+        "grantingVerb": "has",
+        "complement": "Sacrifice this token: Add {C}.",
+        "semanticOwnerInferred": "created_object",
+        "actualRouterClass": "token_definition",
+        "structuralCue": "it_has",
+        "whyRouterChose": "create-token + It-has quote bound to newly_created_object → token_definition"
+      }
+    },
+    {
+      "caseId": "granted-exp-v136-028",
+      "cardName": "Welkin Tern",
+      "semanticGoldContext": "reminder_only",
+      "expectedSemanticOwner": "source_card",
+      "detectorLevel": {
+        "candidateExpected": false,
+        "candidateProduced": false,
+        "overlappingCandidateCount": 0,
+        "result": "PASS"
+      },
+      "routerLevel": {
+        "evaluated": false,
+        "conditionalOnCandidate": false,
+        "expectedRouterClass": "reminder_only",
+        "actualRouterClass": null,
+        "result": "N/A"
+      },
+      "endToEndSemanticDisposition": {
+        "expectedGrantedRegionCount": 0,
+        "actualGrantedRulesClassifiedCount": 0,
+        "spuriousGrantedRulesCount": 0,
+        "finalSemanticDispositionCorrect": true,
+        "result": "PASS"
+      }
+    },
+    {
+      "caseId": "granted-exp-v136-029",
+      "cardName": "High-Rise Sawjack",
+      "semanticGoldContext": "no_grant",
+      "expectedSemanticOwner": "source_card",
+      "detectorLevel": {
+        "candidateExpected": false,
+        "candidateProduced": false,
+        "overlappingCandidateCount": 0,
+        "result": "PASS"
+      },
+      "routerLevel": {
+        "evaluated": false,
+        "conditionalOnCandidate": false,
+        "expectedRouterClass": "other",
+        "actualRouterClass": null,
+        "result": "N/A"
+      },
+      "endToEndSemanticDisposition": {
+        "expectedGrantedRegionCount": 0,
+        "actualGrantedRulesClassifiedCount": 0,
+        "spuriousGrantedRulesCount": 0,
+        "finalSemanticDispositionCorrect": true,
+        "result": "PASS"
+      }
+    }
+  ]
+}
