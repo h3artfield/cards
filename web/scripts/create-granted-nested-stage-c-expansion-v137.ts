@@ -33,65 +33,82 @@ function findGrantingVerb(
   }
   const hasIdx = oracleText.indexOf(" has ", recipientEnd);
   const haveIdx = oracleText.indexOf(" have ", recipientEnd);
-  const verbIdx = hasIdx >= 0 ? hasIdx : haveIdx;
-  if (verbIdx < 0) return null;
-  const verb = oracleText.slice(verbIdx + 1, verbIdx + 4);
-  return { verb, verbStart: verbIdx + 1, complementStart: verbIdx + 5 };
+  if (hasIdx < 0 && haveIdx < 0) return null;
+  const useHas = hasIdx >= 0 && (haveIdx < 0 || hasIdx <= haveIdx);
+  const verbIdx = useHas ? hasIdx : haveIdx;
+  const verb = useHas ? "has" : "have";
+  return { verb, verbStart: verbIdx + 1, complementStart: verbIdx + (useHas ? 5 : 6) };
 }
 
 function extractTarget(oracleText: string, seed: NestedGrantSeed): MachineGroundedBenchmarkTarget | null {
-  const m = oracleText.match(seed.recipientPattern);
-  if (!m || m.index === undefined) return null;
-
-  const recipientStart = m.index;
-  const recipientLabel = m[0].trim();
-  const recipientEnd = recipientStart + recipientLabel.length;
-  const grant = findGrantingVerb(oracleText, recipientEnd);
-  if (!grant) return null;
-
-  let complementEnd = grant.complementStart;
-  while (complementEnd < oracleText.length && oracleText[complementEnd] !== "." && oracleText[complementEnd] !== "\n") {
-    complementEnd++;
+  const pattern = new RegExp(seed.recipientPattern.source, seed.recipientPattern.flags.includes("g") ? seed.recipientPattern.flags : `${seed.recipientPattern.flags}g`);
+  const candidateStarts: number[] = [];
+  for (const m of oracleText.matchAll(pattern)) {
+    if (m.index !== undefined) candidateStarts.push(m.index);
   }
+  if (candidateStarts.length === 0) return null;
 
-  const inner = oracleText.slice(grant.complementStart, complementEnd).trim();
+  for (const recipientStart of candidateStarts.length > 1 ? [...candidateStarts].reverse() : candidateStarts) {
+    const sliceMatch = oracleText.slice(recipientStart).match(seed.recipientPattern);
+    if (!sliceMatch) continue;
+    const label = sliceMatch[0].trim();
+    const recipientEnd = recipientStart + label.length;
+    const grant = findGrantingVerb(oracleText, recipientEnd);
+    if (!grant) continue;
 
-  return {
-    grammarFamily: seed.grammarFamily,
-    expectedContext: "genuine_granted",
-    recipientSpan: spanFromRange(oracleText, recipientStart, recipientEnd),
-    grantingVerbSpan: spanFromRange(oracleText, grant.verbStart, grant.verbStart + grant.verb.length),
-    grantedComplementSpan: spanFromRange(oracleText, grant.complementStart, complementEnd),
-    fullRegionSpan: spanFromRange(oracleText, recipientStart, complementEnd),
-    oracleTextHash: goldenOracleTextHash(oracleText),
-    adjudicationStatus: "parser_blind_adjudicated",
-    semanticAdjudication: {
-      context: "genuine_granted",
-      recipient: recipientLabel,
-      grantingVerb: grant.verb,
-      grantedComplement: inner,
+    let complementEnd = grant.complementStart;
+    while (complementEnd < oracleText.length && oracleText[complementEnd] !== "." && oracleText[complementEnd] !== "\n") {
+      complementEnd++;
+    }
+
+    const inner = oracleText.slice(grant.complementStart, complementEnd).trim();
+    const looksLikeGrant =
+      seed.grantKind === "static"
+        ? !/^"/.test(inner) || STATIC_KEYWORD_LIKE.test(inner)
+        : /^["\u201c]/.test(inner) || /^(When|Whenever|\{)/.test(inner.replace(/^["\u201c]/, ""));
+    if (!looksLikeGrant && candidateStarts.length > 1) continue;
+
+    return {
       grammarFamily: seed.grammarFamily,
-      grantedAbilityTypes: [seed.grantKind],
-      duration: "continuous",
-      semanticOwner: "granted_object",
-      layer1Structure: {
-        abilityType: seed.grantKind,
-        grantingConstruction: seed.grammarFamily,
-        ...(seed.costEvidence
-          ? {
-              costRegion: {
-                start: grant.complementStart,
-                end: grant.complementStart + seed.costEvidence.length,
-                text: seed.costEvidence,
-              },
-            }
-          : {}),
+      expectedContext: "genuine_granted",
+      recipientSpan: spanFromRange(oracleText, recipientStart, recipientEnd),
+      grantingVerbSpan: spanFromRange(oracleText, grant.verbStart, grant.verbStart + grant.verb.length),
+      grantedComplementSpan: spanFromRange(oracleText, grant.complementStart, complementEnd),
+      fullRegionSpan: spanFromRange(oracleText, recipientStart, complementEnd),
+      oracleTextHash: goldenOracleTextHash(oracleText),
+      adjudicationStatus: "parser_blind_adjudicated",
+      semanticAdjudication: {
+        context: "genuine_granted",
+        recipient: label,
+        grantingVerb: grant.verb,
+        grantedComplement: inner,
+        grammarFamily: seed.grammarFamily,
+        grantedAbilityTypes: [seed.grantKind],
+        duration: "continuous",
+        semanticOwner: "granted_object",
+        layer1Structure: {
+          abilityType: seed.grantKind,
+          grantingConstruction: seed.grammarFamily,
+          ...(seed.costEvidence
+            ? {
+                costRegion: {
+                  start: grant.complementStart,
+                  end: grant.complementStart + seed.costEvidence.length,
+                  text: seed.costEvidence,
+                },
+              }
+            : {}),
+        },
+        layer2Gold: seed.certifiedEmptyLayer2 ? [] : (seed.layer2Gold ?? []),
+        certifiedEmptyLayer2: seed.certifiedEmptyLayer2 ?? false,
       },
-      layer2Gold: seed.certifiedEmptyLayer2 ? [] : (seed.layer2Gold ?? []),
-      certifiedEmptyLayer2: seed.certifiedEmptyLayer2 ?? false,
-    },
-  };
+    };
+  }
+  return null;
 }
+
+const STATIC_KEYWORD_LIKE =
+  /^(?:")?(?:flying|first strike|double strike|trample|lifelink|deathtouch|hexproof|indestructible|haste|reach|vigilance|menace|shroud|hexproof and can't be blocked)/i;
 
 async function main() {
   const catalog = await loadGoldenCatalogIndex();

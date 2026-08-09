@@ -15,6 +15,7 @@ import {
 } from "./lib/benchmark-identity";
 import {
   assertAllBenchmarkSemanticAdjudications,
+  buildSemanticAdjudication,
   validateSemanticRoles,
 } from "./lib/benchmark-semantic-adjudication";
 import {
@@ -66,7 +67,10 @@ async function main() {
     const card = catalog.byOracleId.get(c.oracleId);
     if (!card) throw new Error(`Catalog miss for ${c.id} ${c.oracleId}`);
     const oracleText = combinedGoldenOracleText(card);
-    const benchmarkTargets = c.benchmarkTargets;
+    const benchmarkTargets = c.benchmarkTargets.map((t) => ({
+      ...t,
+      semanticAdjudication: buildSemanticAdjudication(t, oracleText),
+    }));
 
     for (const t of benchmarkTargets) {
       semanticRows.push(validateSemanticRoles(`${c.id}:region`, t, oracleText));

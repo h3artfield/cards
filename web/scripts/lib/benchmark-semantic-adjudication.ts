@@ -68,10 +68,19 @@ function extractLayer2FromComplement(
       layer2Gold.push({ actionType: "gain_life", evidenceContains: effectNeedle.match(/you gain \d+ life/i)![0] });
     }
     if (/draw a card/i.test(effectNeedle)) {
-      layer2Gold.push({ actionType: "draw", evidenceContains: "draw a card" });
+      layer2Gold.push({
+        actionType: "draw",
+        evidenceContains: (/you may draw a card/i.test(effectNeedle) ? "you may draw a card" : "draw a card"),
+      });
     }
     if (/Add \{/i.test(effectNeedle)) {
       layer2Gold.push({ actionType: "add_mana", evidenceContains: effectNeedle.match(/Add \{[^}]+\}/i)![0] });
+    }
+    if (/Add one mana/i.test(effectNeedle)) {
+      layer2Gold.push({ actionType: "add_mana", evidenceContains: effectNeedle.match(/Add one mana[^.]*/i)![0] });
+    }
+    if (/tap or untap target/i.test(effectNeedle)) {
+      layer2Gold.push({ actionType: "tap", evidenceContains: "tap or untap target permanent" });
     }
     return { abilityTypes, layer2Gold, triggerRegion };
   }
@@ -88,6 +97,18 @@ function extractLayer2FromComplement(
     }
     if (/Add \{/i.test(effectText)) {
       layer2Gold.push({ actionType: "add_mana", evidenceContains: effectText.match(/Add \{[^}]+\}/i)![0] });
+    }
+    if (/Add one mana/i.test(effectText)) {
+      layer2Gold.push({ actionType: "add_mana", evidenceContains: effectText.match(/Add one mana[^.]*/i)![0] });
+    }
+    if (/deals \d+ damage/i.test(effectText)) {
+      layer2Gold.push({ actionType: "deal_damage", evidenceContains: effectText.match(/deals \d+ damage[^.]*/i)![0] });
+    }
+    if (/Untap this/i.test(effectText)) {
+      layer2Gold.push({ actionType: "untap", evidenceContains: effectText.match(/Untap this \w+/i)![0] });
+    }
+    if (/Put a [+-]/i.test(effectText)) {
+      layer2Gold.push({ actionType: "put_counter", evidenceContains: effectText.match(/Put a [+-][^"]+/i)![0] });
     }
     if (/Sacrifice this (?:token|creature|artifact)/i.test(effectText)) {
       layer2Gold.push({ actionType: "sacrifice", evidenceContains: effectText.match(/Sacrifice this \w+/i)![0] });
