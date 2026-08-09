@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-08-09T16:10:00.000Z",
+  "checkpoint": "unrelated-slice-attribution-v139",
+  "baselines": {
+    "acceptedOlderPolicy": { "tp": 52, "fp": 0, "fn": 12, "note": "Pre-v1.38 accepted scoring conversation baseline" },
+    "immutableV138Tag": { "tp": 53, "fp": 0, "fn": 11, "commitSha": "ac4e161a18915d89b7dfb0f93eebd316b63cf74a" },
+    "postReplacementV139": { "tp": 57, "fp": 0, "fn": 7 }
+  },
+  "attribution": {
+    "acceptedOlder_to_v138": {
+      "tpDelta": 1,
+      "fnDelta": -1,
+      "cause": "rc3-pos-cat-0027",
+      "cardName": "A Reckoning Approaches",
+      "parserPass": "Z1b look_reveal_put_chain (v1.38)",
+      "mechanism": "Clause-native promotion of optional put-from-among-them with library referent lineage",
+      "replacementPassInvolvement": false
+    },
+    "v138_to_v139": {
+      "tpDelta": 4,
+      "fnDelta": -4,
+      "causes": [
+        "rc3-pos-cat-0017",
+        "rc3-pos-cat-0018",
+        "rc3-pos-cat-0019",
+        "rc3-pos-cat-0020"
+      ],
+      "parserPass": "replacement_exile_instead promotion (v1.39)",
+      "mechanism": "Comma-boundary replacement event split + structural it-referent exile L2",
+      "incidentalUnrelatedRecovery": false
+    }
+  },
+  "verificationNotes": {
+    "7050c75ParentParserRescore": {
+      "unrelatedTp": 51,
+      "unrelatedFn": 13,
+      "note": "7050c75 parser bytes score 51/0/13 on current gold overlay; v1.38 bundles Z1b + token-boundary + gold overlays yielding 53/0/11"
+    },
+    "replacementDeltaClean": "53→57 is exactly four replacement catalog cases; no fifth unrelated TP from replacement overlay"
+  }
+}

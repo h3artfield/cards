@@ -1,0 +1,97 @@
+{
+  "generatedAt": "2026-08-09T16:11:36.368Z",
+  "checkpoint": "replacement-exile-instead-v139",
+  "parserVersion": "oracle-action-v1.39-rc3-replacement-exile-instead",
+  "tag": "oracle-action-v1.39-rc3-replacement-exile-instead",
+  "parentCheckpoint": "oracle-action-v1.38-rc3-look-reveal-put-chain",
+  "parentCommitSha": "ac4e161a18915d89b7dfb0f93eebd316b63cf74a",
+  "parserCommitSha": "ac4e161a18915d89b7dfb0f93eebd316b63cf74a",
+  "parserScopeClean": false,
+  "parserScopePaths": [
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-transform.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-clause-native.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-promotion.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-action-builder.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-builder.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-granted-rules-span-detector.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-semantic-context-router.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-scoring-scope.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-extraction-metadata.ts",
+    "scripts/oracle-action-unified-matcher.ts",
+    "scripts/oracle-action-semantic-matcher.ts",
+    "scripts/lib/rc3-case-scope-scoring.ts"
+  ],
+  "blobs": {
+    "transform": "24a3d1f1e113c95a951aa247850affd259c56c92b6049516ce29d1e3459e8229",
+    "clauseNative": "3df0674d7bdf2af464d10630620cde744a83534c105dabac1bf12e4952032d1d",
+    "replacementParser": "3df0674d7bdf2af464d10630620cde744a83534c105dabac1bf12e4952032d1d",
+    "actionBuilder": "5b9c9079331d7d87bc8b9bcc77547827258ad4a1ebbd4751ba6f44cae1c994cd",
+    "semanticBuilder": "59c67f2348feff0e6ad999c2f77f5f5f73921127839a60734cfcf750fd9ef339",
+    "promotion": "eafc8a35808668904947d8097437fd5395655ea5cadd534baff7668e419e3b1b",
+    "referentResolution": "3df0674d7bdf2af464d10630620cde744a83534c105dabac1bf12e4952032d1d",
+    "extractionMetadata": "92164f88283a94ca7ee3d19280d5b9226cdf34b06d4bd032df09a157e39bc12e",
+    "grantedSpanDetector": "4d5248b8ecf0b07dfdc6b059494fe36e2f1fdcca68dcaa03137ba4adf27b7ba2",
+    "contextRouter": "5a14dee8f16ba4a8f913397992c1cb26a0cdc7b2ff154c99113a2014ac6509f3",
+    "scoringScope": "5ebc6cbd45f5be0a32121c27f6897d89451c5391913c5ebaeda2f1cbdfb68c11",
+    "unifiedMatcher": "5f01b382b3f5e3ef83aa9f9b1dd8ad6f520d1d825f0bbdbf7d9aa7f040777ea4",
+    "semanticMatcher": "04b359506615d3b51bf9b4733f85c6f49a08374a782edca93701c043e1d4ed33"
+  },
+  "replacementAcceptance": {
+    "rc3-pos-cat-0017": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    "rc3-pos-cat-0018": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    "rc3-pos-cat-0019": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    "rc3-pos-cat-0020": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    }
+  },
+  "deltaVsParentV138": {
+    "combined": {
+      "tpDelta": 6,
+      "fpDelta": 1,
+      "fnDelta": -6,
+      "note": "Measured vs tagged v1.38 baseline 581/2/46"
+    },
+    "unrelated": {
+      "tpDelta": 4,
+      "fpDelta": 0,
+      "fnDelta": -4,
+      "note": "53→57 on unrelated catalog positive slice"
+    }
+  },
+  "scoringAtFreeze": {
+    "combined": {
+      "tp": 587,
+      "fp": 3,
+      "fn": 40,
+      "denominator": 627,
+      "precisionPct": "99.4915",
+      "recallPct": "93.6204",
+      "combinedGatePass": true
+    },
+    "unrelated": {
+      "tp": 57,
+      "fp": 0,
+      "fn": 7,
+      "denominator": 64,
+      "precisionPct": "100.0000",
+      "recallPct": "89.0625"
+    }
+  },
+  "regressionProtectedFamilies": [
+    "replacement_exile_instead"
+  ]
+}

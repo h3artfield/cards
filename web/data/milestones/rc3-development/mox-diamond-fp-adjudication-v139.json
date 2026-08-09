@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-08-09T16:10:00.000Z",
+  "checkpoint": "mox-diamond-fp-adjudication-v139",
+  "caseId": "dev-v9-001",
+  "canonicalCard": "Mox Diamond",
+  "oracleText": "If this artifact would enter, you may discard a land card instead. If you do, put this artifact onto the battlefield. If you don't, put it into its owner's graveyard.\n{T}: Add one mana of any color.",
+  "caseScope": "full_card",
+  "emittedPrimitive": "put_onto_battlefield",
+  "evidence": "put this artifact onto the battlefield",
+  "clauseRole": "effect (ability-0; within would-enter replacement paragraph)",
+  "extractionSource": "rc3_clause_native",
+  "executionContext": "immediate",
+  "semanticOwner": "source_card",
+  "optionalEffectEmitted": false,
+  "expectedGold": [
+    {
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put this artifact onto the battlefield",
+      "optionalEffect": true,
+      "sourceZone": "hand"
+    },
+    { "actionType": "add_mana", "evidenceContains": "Add one mana of any color" },
+    {
+      "actionType": "discard",
+      "evidenceContains": "you may discard a land card instead",
+      "optionalEffect": true
+    }
+  ],
+  "classification": "optionality_dependency_issue",
+  "replacementPassInvolvement": "indirect — shared comma-boundary replacement clause infrastructure in clause-native, not exile-instead family",
+  "firstVisibleAt": "7050c75 (v1.37) clause-native put promotion; persists at ac4e161 (v1.38); unchanged by v1.39 exile-instead promotion",
+  "combinedFpImpact": {
+    "v138TaggedBaselineFp": 2,
+    "v139PostReplacementFp": 3,
+    "moxIsThirdFp": true,
+    "note": "Mox put emission fails gold optionalEffect match → simultaneous FP+FN on same primitive; not introduced by exile-instead semantics"
+  },
+  "recommendedDisposition": "Defer fix to dedicated would-enter/optional-consequent pass; do not regress exile-instead family; suppress or wire optionalEffect on If-you-do consequent puts in future pass"
+}

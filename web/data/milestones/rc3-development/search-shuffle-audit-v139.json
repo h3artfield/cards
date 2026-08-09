@@ -1,0 +1,490 @@
+{
+  "generatedAt": "2026-08-09T16:05:14.957Z",
+  "checkpoint": "search-shuffle-audit-v139",
+  "cases": {
+    "rc3-pos-cat-0005": {
+      "caseId": "rc3-pos-cat-0005",
+      "cardName": "\"Ach! Hans, Run!\"",
+      "oracleText": "At the beginning of your upkeep, you may say \"Ach! Hans, run! It's the . . .\" and the name of a creature card. If you do, search your library for a card with that name, put it onto the battlefield, then shuffle. That creature gains haste. Exile it at the beginning of the next end step.",
+      "caseScope": "full_card",
+      "coverageStratum": "search_put_shuffle_chain",
+      "metrics": {
+        "caseId": "rc3-pos-cat-0005",
+        "accepted": {
+          "tp": 2,
+          "fp": 0,
+          "fn": 1
+        }
+      },
+      "expectedGold": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "search your library for a card with that name, put it onto the battlefield, then shuffle"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put it onto the battlefield"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "emittedAccepted": [
+        {
+          "actionType": "search_library",
+          "evidence": "search your library for",
+          "faceId": "front",
+          "clauseId": "a2c5ee76-6084-413c-bb70-45490d818374:front:ability-0:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "v1_legacy"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidence": "then shuffle",
+          "faceId": "front",
+          "clauseId": "a2c5ee76-6084-413c-bb70-45490d818374:front:ability-0:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "rc3_clause_native"
+        }
+      ],
+      "falsePositives": [],
+      "unmatchedGold": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put it onto the battlefield"
+        }
+      ],
+      "matchDetail": [
+        {
+          "expected": "search_library",
+          "evidenceContains": "search your library for a card with that name, put it onto the battlefield, then shuffle",
+          "matched": true
+        },
+        {
+          "expected": "put_onto_battlefield",
+          "evidenceContains": "put it onto the battlefield",
+          "matched": false
+        },
+        {
+          "expected": "shuffle_library",
+          "evidenceContains": "then shuffle",
+          "matched": true
+        }
+      ]
+    },
+    "rc3-pos-cat-0007": {
+      "caseId": "rc3-pos-cat-0007",
+      "cardName": "A-Navigation Orb",
+      "oracleText": "{1}, {T}, Sacrifice Navigation Orb: Search your library for up to two basic land cards and/or Gate cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle.",
+      "caseScope": "full_card",
+      "coverageStratum": "search_put_shuffle_chain",
+      "metrics": {
+        "caseId": "rc3-pos-cat-0007",
+        "accepted": {
+          "tp": 3,
+          "fp": 0,
+          "fn": 1
+        }
+      },
+      "expectedGold": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for up to two basic land cards and/or Gate cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put one onto the battlefield"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice Navigation Orb: Search your library for up to two basic land cards and/or Gate cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "emittedAccepted": [
+        {
+          "actionType": "search_library",
+          "evidence": "Search your library for",
+          "faceId": "front",
+          "clauseId": "3c49df27-b725-4578-a059-f7f4cee5f853:front:ability-0:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "v1_legacy"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidence": "put one onto the battlefield",
+          "faceId": "front",
+          "clauseId": "3c49df27-b725-4578-a059-f7f4cee5f853:front:ability-0:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "v1_legacy"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidence": "then shuffle",
+          "faceId": "front",
+          "clauseId": "3c49df27-b725-4578-a059-f7f4cee5f853:front:ability-0:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "v1_legacy"
+        }
+      ],
+      "falsePositives": [],
+      "unmatchedGold": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice Navigation Orb: Search your library for up to two basic land cards and/or Gate cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle"
+        }
+      ],
+      "matchDetail": [
+        {
+          "expected": "search_library",
+          "evidenceContains": "Search your library for up to two basic land cards and/or Gate cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle",
+          "matched": true
+        },
+        {
+          "expected": "put_onto_battlefield",
+          "evidenceContains": "put one onto the battlefield",
+          "matched": true
+        },
+        {
+          "expected": "sacrifice",
+          "evidenceContains": "Sacrifice Navigation Orb: Search your library for up to two basic land cards and/or Gate cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle",
+          "matched": false
+        },
+        {
+          "expected": "shuffle_library",
+          "evidenceContains": "then shuffle",
+          "matched": true
+        }
+      ]
+    },
+    "dev-v9-018": {
+      "caseId": "dev-v9-018",
+      "cardName": "Ashiok, Dream Render",
+      "oracleText": "Spells and abilities your opponents control can't cause their controller to search their library.\n−1: Target player mills four cards. Then exile each opponent's graveyard.",
+      "caseScope": "full_card",
+      "metrics": {
+        "caseId": "dev-v9-018",
+        "accepted": {
+          "tp": 2,
+          "fp": 1,
+          "fn": 0
+        }
+      },
+      "expectedGold": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills four cards"
+        },
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile each opponent's graveyard"
+        }
+      ],
+      "emittedAccepted": [
+        {
+          "actionType": "mill",
+          "evidence": "Target player mills four cards",
+          "faceId": "front",
+          "clauseId": "93723b12-db34-4047-885e-8606415b1553:front:ability-1:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "v1_legacy"
+        },
+        {
+          "actionType": "exile",
+          "evidence": "exile each opponent's",
+          "faceId": "front",
+          "clauseId": "93723b12-db34-4047-885e-8606415b1553:front:ability-1:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "v1_legacy"
+        },
+        {
+          "actionType": "search_library",
+          "evidence": "search their library",
+          "faceId": "front",
+          "clauseId": "93723b12-db34-4047-885e-8606415b1553:front:ability-0:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "rc3_transform"
+        }
+      ],
+      "falsePositives": [
+        {
+          "actionType": "search_library",
+          "evidence": "search their library",
+          "faceId": "front",
+          "clauseId": "93723b12-db34-4047-885e-8606415b1553:front:ability-0:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "rc3_transform"
+        }
+      ],
+      "unmatchedGold": [],
+      "matchDetail": [
+        {
+          "expected": "mill",
+          "evidenceContains": "mills four cards",
+          "matched": true
+        },
+        {
+          "expected": "exile",
+          "evidenceContains": "exile each opponent's graveyard",
+          "matched": true
+        }
+      ]
+    },
+    "dev-exp-v1-012": {
+      "caseId": "dev-exp-v1-012",
+      "cardName": "Fall to Earth",
+      "oracleText": "Exile target creature. Each player gains 3 life.\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+      "caseScope": "full_card",
+      "metrics": {
+        "caseId": "dev-exp-v1-012",
+        "accepted": {
+          "tp": 0,
+          "fp": 1,
+          "fn": 2
+        }
+      },
+      "expectedGold": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target creature with flying"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gains 4 life"
+        }
+      ],
+      "emittedAccepted": [
+        {
+          "actionType": "exile",
+          "evidence": "Exile target creature",
+          "faceId": "front",
+          "clauseId": "223db021-979f-4312-8cb5-169ae4bf17bc:front:ability-0:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "v1_legacy"
+        },
+        {
+          "actionType": "gain_life",
+          "evidence": "gains 3 life",
+          "faceId": "front",
+          "clauseId": "223db021-979f-4312-8cb5-169ae4bf17bc:front:ability-0:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "v1_legacy"
+        },
+        {
+          "actionType": "search_library",
+          "evidence": "Search your library for a basic land card, reveal it, put it into your hand, then shuffle",
+          "faceId": "front",
+          "clauseId": "223db021-979f-4312-8cb5-169ae4bf17bc:front:ability-1:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "rc3_transform"
+        },
+        {
+          "actionType": "put_into_hand",
+          "evidence": "put it into your hand",
+          "faceId": "front",
+          "clauseId": "223db021-979f-4312-8cb5-169ae4bf17bc:front:ability-1:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "rc3_transform",
+          "sourceZone": [
+            "library"
+          ],
+          "destinationZone": [
+            "hand"
+          ]
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidence": "then shuffle",
+          "faceId": "front",
+          "clauseId": "223db021-979f-4312-8cb5-169ae4bf17bc:front:ability-1:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "rc3_transform"
+        }
+      ],
+      "falsePositives": [
+        {
+          "actionType": "exile",
+          "evidence": "Exile target creature",
+          "faceId": "front",
+          "clauseId": "223db021-979f-4312-8cb5-169ae4bf17bc:front:ability-0:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "v1_legacy"
+        },
+        {
+          "actionType": "gain_life",
+          "evidence": "gains 3 life",
+          "faceId": "front",
+          "clauseId": "223db021-979f-4312-8cb5-169ae4bf17bc:front:ability-0:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "v1_legacy"
+        },
+        {
+          "actionType": "search_library",
+          "evidence": "Search your library for a basic land card, reveal it, put it into your hand, then shuffle",
+          "faceId": "front",
+          "clauseId": "223db021-979f-4312-8cb5-169ae4bf17bc:front:ability-1:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "rc3_transform"
+        },
+        {
+          "actionType": "put_into_hand",
+          "evidence": "put it into your hand",
+          "faceId": "front",
+          "clauseId": "223db021-979f-4312-8cb5-169ae4bf17bc:front:ability-1:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "rc3_transform",
+          "sourceZone": [
+            "library"
+          ],
+          "destinationZone": [
+            "hand"
+          ]
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidence": "then shuffle",
+          "faceId": "front",
+          "clauseId": "223db021-979f-4312-8cb5-169ae4bf17bc:front:ability-1:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "rc3_transform"
+        }
+      ],
+      "unmatchedGold": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target creature with flying"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "gains 4 life"
+        }
+      ],
+      "matchDetail": [
+        {
+          "expected": "destroy",
+          "evidenceContains": "Destroy target creature with flying",
+          "matched": false
+        },
+        {
+          "expected": "gain_life",
+          "evidenceContains": "gains 4 life",
+          "matched": false
+        }
+      ]
+    },
+    "dev-v9-001": {
+      "caseId": "dev-v9-001",
+      "cardName": "Mox Diamond",
+      "oracleText": "If this artifact would enter, you may discard a land card instead. If you do, put this artifact onto the battlefield. If you don't, put it into its owner's graveyard.\n{T}: Add one mana of any color.",
+      "caseScope": "full_card",
+      "metrics": {
+        "caseId": "dev-v9-001",
+        "accepted": {
+          "tp": 2,
+          "fp": 1,
+          "fn": 1
+        }
+      },
+      "expectedGold": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put this artifact onto the battlefield"
+        },
+        {
+          "actionType": "add_mana",
+          "evidenceContains": "Add one mana of any color"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "you may discard a land card instead"
+        }
+      ],
+      "emittedAccepted": [
+        {
+          "actionType": "discard",
+          "evidence": "you may discard a land card instead",
+          "faceId": "front",
+          "clauseId": "f3c5978a-70fa-431f-933b-b954bd0db0ea:front:ability-0:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "v1_legacy"
+        },
+        {
+          "actionType": "add_mana",
+          "evidence": "Add one mana of any color",
+          "faceId": "front",
+          "clauseId": "f3c5978a-70fa-431f-933b-b954bd0db0ea:front:ability-1:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "v1_legacy"
+        },
+        {
+          "actionType": "put_onto_battlefield",
+          "evidence": "put this artifact onto the battlefield",
+          "faceId": "front",
+          "clauseId": "f3c5978a-70fa-431f-933b-b954bd0db0ea:front:ability-0:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "rc3_clause_native"
+        }
+      ],
+      "falsePositives": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidence": "put this artifact onto the battlefield",
+          "faceId": "front",
+          "clauseId": "f3c5978a-70fa-431f-933b-b954bd0db0ea:front:ability-0:clause-0",
+          "reviewStatus": "accepted",
+          "executionContext": "immediate",
+          "extractionSource": "rc3_clause_native"
+        }
+      ],
+      "unmatchedGold": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "put this artifact onto the battlefield"
+        }
+      ],
+      "matchDetail": [
+        {
+          "expected": "put_onto_battlefield",
+          "evidenceContains": "put this artifact onto the battlefield",
+          "matched": false
+        },
+        {
+          "expected": "add_mana",
+          "evidenceContains": "Add one mana of any color",
+          "matched": true
+        },
+        {
+          "expected": "discard",
+          "evidenceContains": "you may discard a land card instead",
+          "matched": true
+        }
+      ]
+    }
+  }
+}

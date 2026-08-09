@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-08-09T15:32:46.261Z",
+  "generatedAt": "2026-08-09T16:11:43.619Z",
   "checkpoint": "rc3-remaining-fn-census-post-v138",
-  "parserVersion": "oracle-action-v1.38-rc3-look-reveal-put-chain",
-  "parserCommitSha": "7050c75abbf19a5db3174ec4c295431666bb1821",
+  "parserVersion": "oracle-action-v1.39-rc3-replacement-exile-instead",
+  "parserCommitSha": "ac4e161a18915d89b7dfb0f93eebd316b63cf74a",
   "combinedDevelopment": {
-    "tp": 581,
+    "tp": 587,
     "fp": 3,
-    "fn": 46,
-    "precision": 0.9948630136986302,
-    "recall": 0.9266347687400319,
+    "fn": 40,
+    "precision": 0.9949152542372881,
+    "recall": 0.9362041467304625,
     "goldDenominator": 627,
-    "precisionPct": 99.48630136986301,
-    "recallPct": 92.6634768740032,
+    "precisionPct": 99.49152542372882,
+    "recallPct": 93.62041467304624,
     "gateCombined": {
       "precisionRequired": 0.98,
       "recallRequired": 0.92,
@@ -22,14 +22,14 @@
   },
   "unrelatedCatalogPositive": {
     "caseCount": 33,
-    "tp": 53,
+    "tp": 57,
     "fp": 0,
-    "fn": 11,
+    "fn": 7,
     "precision": 1,
-    "recall": 0.828125,
+    "recall": 0.890625,
     "goldDenominator": 64,
     "precisionPct": 100,
-    "recallPct": 82.8125,
+    "recallPct": 89.0625,
     "gate": {
       "precisionRequired": 0.95,
       "recallRequired": 0.9,
@@ -38,9 +38,9 @@
     }
   },
   "remainingFnByFamily": {
-    "replacement_effects": 11,
     "optionality_dependency": 6,
     "mdfc_face_structure": 6,
+    "replacement_effects": 5,
     "other": 5,
     "zone_transitions": 4,
     "generic_primitive_gaps": 3,
@@ -49,7 +49,7 @@
     "granted_semantics": 3,
     "modal_choice": 2
   },
-  "totalRemainingFn": 46,
+  "totalRemainingFn": 40,
   "fnItems": [
     {
       "caseId": "dev-opt-023",
@@ -80,25 +80,11 @@
       "family": "generic_primitive_gaps"
     },
     {
-      "caseId": "dev-v9-031",
-      "cardName": "Rest in Peace",
-      "actionType": "exile",
-      "evidenceContains": "exile it instead",
-      "family": "replacement_effects"
-    },
-    {
       "caseId": "eval-0009",
       "cardName": "Path to Exile",
       "actionType": "exile",
       "evidenceContains": "Exile",
       "family": "zone_transitions"
-    },
-    {
-      "caseId": "eval-0031",
-      "cardName": "Rest in Peace",
-      "actionType": "exile",
-      "evidenceContains": "exile it instead",
-      "family": "replacement_effects"
     },
     {
       "caseId": "eval-0059",
@@ -364,45 +350,9 @@
       "evidenceContains": "cast spells of the chosen types or spells whose names begin with the first letter of your name",
       "family": "other",
       "coverageStratum": "activated_post_colon_effect"
-    },
-    {
-      "caseId": "rc3-pos-cat-0017",
-      "cardName": "A-Binding Geist // A-Spectral Binding",
-      "actionType": "exile",
-      "evidenceContains": "exile it instead",
-      "family": "replacement_effects",
-      "coverageStratum": "replacement_if_would"
-    },
-    {
-      "caseId": "rc3-pos-cat-0018",
-      "cardName": "A-Brine Comber // A-Brinebound Gift",
-      "actionType": "exile",
-      "evidenceContains": "exile it instead",
-      "family": "replacement_effects",
-      "coverageStratum": "replacement_if_would"
-    },
-    {
-      "caseId": "rc3-pos-cat-0019",
-      "cardName": "A-Devoted Grafkeeper // A-Departed Soulkeeper",
-      "actionType": "exile",
-      "evidenceContains": "exile it instead",
-      "family": "replacement_effects",
-      "coverageStratum": "replacement_if_would"
-    },
-    {
-      "caseId": "rc3-pos-cat-0020",
-      "cardName": "A-Dorothea, Vengeful Victim // A-Dorothea's Retribution",
-      "actionType": "exile",
-      "evidenceContains": "exile it instead",
-      "family": "replacement_effects",
-      "coverageStratum": "replacement_if_would"
     }
   ],
   "highestYieldFamilies": [
-    {
-      "family": "replacement_effects",
-      "count": 11
-    },
     {
       "family": "optionality_dependency",
       "count": 6
@@ -410,6 +360,10 @@
     {
       "family": "mdfc_face_structure",
       "count": 6
+    },
+    {
+      "family": "replacement_effects",
+      "count": 5
     },
     {
       "family": "other",

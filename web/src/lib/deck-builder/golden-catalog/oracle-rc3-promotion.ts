@@ -13,6 +13,7 @@ export const DEFAULT_RC3_PROMOTED_FAMILIES: PromotedNativeFamily[] = [
   "search_put_shuffle_chain",
   "look_reveal_put_chain",
   "activated_post_colon_effect",
+  "replacement_exile_instead",
 ];
 
 let promotedFamilies: PromotedNativeFamily[] = [...DEFAULT_RC3_PROMOTED_FAMILIES];

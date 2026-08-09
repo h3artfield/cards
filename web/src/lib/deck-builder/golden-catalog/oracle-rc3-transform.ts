@@ -30,7 +30,7 @@ import {
 import { isInsideTokenGlossaryRegion } from "./oracle-rc3-token-glossary";
 import type { SegmentedAbility } from "./oracle-action-schema";
 
-export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.38-rc3-look-reveal-put-chain";
+export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.39-rc3-replacement-exile-instead";
 
 const PUT_INTO_HAND_RE =
   /\b(?:put (?:it|that card|one of them|one of those cards|two of those cards|three of those cards|four of those cards|five of those cards|up to [^.]+?) into (?:your |their )?hand|Put (?:that card|one of them|one of those cards|two of those cards|target card from [^.]+?) into (?:your |their |its owner's )?hand|reveal (?:it|that card)[^.]* and put (?:it|that card) into your hand)\b/i;
