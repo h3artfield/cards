@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-08-09T02:04:49.031Z",
+  "generatedAt": "2026-08-09T02:06:02.724Z",
   "checkpoint": "oracle-action-v1.35-rc3-granted-region-complete",
   "tag": "oracle-action-v1.35-rc3-granted-region-complete",
   "parentPass1Tag": "rc3-granted-dev-pass-1",
-  "commit": "fc243525c24d174f730bc9c7fbe8c91b2fdfa11a",
+  "commit": "96f4143561808dadd3403394634bd21e968e05e4",
   "grammarPasses": {
     "pass1": "rc3-granted-dev-pass-1 — coordinated predicate",
     "pass2": "rc3-granted-dev-pass-2 — token recipient",
@@ -57,8 +57,8 @@
     "explanation": "End-to-end counts all 26 gold regions. Stage-B classifier evaluates each unique physical granted_rules route once; duplicate gold membership (Compulsory Rest) bypasses a second classifier invocation while both regions pass end-to-end."
   },
   "precisionControls": {
-    "generatedAt": "2026-08-09T02:04:49.030Z",
-    "commit": "fc243525c24d",
+    "generatedAt": "2026-08-09T02:06:02.723Z",
+    "commit": "96f414356180",
     "blobs": {
       "spanDetector": "ecfa6ba15bd9447538536506180016c519413ca6154fb5bdd2fec7ae2e7d319e",
       "classifier": "6cc272213f4100173168803e0ca648f4cf51ab1695c7564fee44a9205788cd75",
