@@ -30,7 +30,7 @@ import {
 import { isInsideTokenGlossaryRegion } from "./oracle-rc3-token-glossary";
 import type { SegmentedAbility } from "./oracle-action-schema";
 
-export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.39-rc3-replacement-exile-instead";
+export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.40-rc3-semantic-integrity";
 
 const PUT_INTO_HAND_RE =
   /\b(?:put (?:it|that card|one of them|one of those cards|two of those cards|three of those cards|four of those cards|five of those cards|up to [^.]+?) into (?:your |their )?hand|Put (?:that card|one of them|one of those cards|two of those cards|target card from [^.]+?) into (?:your |their |its owner's )?hand|reveal (?:it|that card)[^.]* and put (?:it|that card) into your hand)\b/i;
@@ -535,7 +535,9 @@ export function applyRC3Transforms(
     clauseNativeStats,
   };
 
-  const semanticParse = buildOracleSemanticParse(legacyPayload, input.oracleText);
+  const semanticParse = buildOracleSemanticParse(legacyPayload, input.oracleText, {
+    grantedAbilities: clauseNative.grantedAbilities,
+  });
   for (const action of semanticParse.actions) {
     action.parserVersion = ORACLE_ACTION_RC3_PARSER_VERSION;
     if (action.actionType === "put_into_hand" && !action.arguments.destinationZone?.length) {

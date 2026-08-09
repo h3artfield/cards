@@ -12,6 +12,8 @@ export { ORACLE_ACTION_RC3_PARSER_VERSION } from "./oracle-action-parser-rc3";
 export {
   stableAbilityId,
   stableOptionId,
+  stableGrantedAbilityId,
+  stableGrantedClauseId,
   optionOrdinalKey,
   hashOracleText,
 } from "./oracle-semantic-parse-schema";

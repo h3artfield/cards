@@ -196,3 +196,13 @@ export function stableOptionId(parentAbilityId: string, ordinal: number): string
 export function optionOrdinalKey(ordinal: number): string {
   return `opt-${ordinal}`;
 }
+
+/** Stable granted nested ability id under a modal option or segment parent. */
+export function stableGrantedAbilityId(hostAbilityId: string, grantedLocalStart: number): string {
+  return `${hostAbilityId}.granted-${grantedLocalStart}`;
+}
+
+/** Stable clause id under a granted nested ability. */
+export function stableGrantedClauseId(grantedAbilityId: string, clauseIndex: number): string {
+  return `${grantedAbilityId}:clause-${clauseIndex}`;
+}

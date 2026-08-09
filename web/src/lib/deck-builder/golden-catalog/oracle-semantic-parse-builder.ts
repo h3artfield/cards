@@ -4,6 +4,7 @@
 import type { SegmentedAbility } from "./oracle-action-schema";
 import type { OracleActionV1, OracleActionV1Result } from "./oracle-action-parser-v1";
 import type { RC3ActionExtensions } from "./oracle-rc3-extraction-metadata";
+import type { GrantedAbilityNode } from "./oracle-rc3-clause-native";
 import { resolveActionScoringScope } from "./oracle-rc3-scoring-scope";
 import { ORACLE_ACTION_PARSER_VERSION } from "./oracle-action-schema";
 import {
@@ -28,6 +29,8 @@ import {
   hashOracleText,
   optionOrdinalKey,
   stableAbilityId,
+  stableGrantedAbilityId,
+  stableGrantedClauseId,
   stableOptionId,
 } from "./oracle-semantic-parse-schema";
 import { segmentCardFaces } from "./oracle-ability-segmentation";
@@ -205,6 +208,174 @@ function buildFallbackAbilities(input: {
   return out;
 }
 
+function parseSegmentRef(id: string): { oracleId: string; faceId: string; segmentIdx: number } | null {
+  const m = id.match(/^([0-9a-f-]+):(front|back):(\d+)$/i);
+  if (!m) return null;
+  return { oracleId: m[1]!, faceId: m[2] as "front" | "back", segmentIdx: Number(m[3]) };
+}
+
+function parseGrantedRef(
+  id: string,
+): { oracleId: string; faceId: string; segmentIdx: number; grantedLocalStart: number } | null {
+  const m = id.match(/^([0-9a-f-]+):(front|back):(\d+):granted:(\d+)$/i);
+  if (!m) return null;
+  return {
+    oracleId: m[1]!,
+    faceId: m[2] as "front" | "back",
+    segmentIdx: Number(m[3]),
+    grantedLocalStart: Number(m[4]),
+  };
+}
+
+function findModalOptionForSegment(
+  abilities: SemanticAbility[],
+  segmentIdx: number,
+): { parentAbilityId: string; option: NonNullable<SemanticAbility["options"]>[number] } | undefined {
+  for (const ability of abilities) {
+    if (!ability.options?.length) continue;
+    const option = ability.options.find((o) => o.segmentAbilityIndex === segmentIdx);
+    if (option) return { parentAbilityId: ability.abilityId, option };
+  }
+  return undefined;
+}
+
+function toSemanticGrantedAbilityType(raw: string): SemanticAbility["abilityType"] {
+  if (raw === "triggered") return "triggered";
+  if (raw === "activated") return "activated";
+  if (raw === "replacement") return "replacement";
+  return "static";
+}
+
+type GrantedIdentityMaps = {
+  grantedAbilities: SemanticAbility[];
+  nativeGrantedIdToStable: Map<string, string>;
+  nativeClauseIdToStable: Map<string, string>;
+};
+
+function buildGrantedSemanticAbilities(input: {
+  grantedNodes: GrantedAbilityNode[];
+  abilities: SemanticAbility[];
+  segmented: SegmentedAbility[];
+}): GrantedIdentityMaps {
+  const nativeGrantedIdToStable = new Map<string, string>();
+  const nativeClauseIdToStable = new Map<string, string>();
+  const grantedAbilities: SemanticAbility[] = [];
+  const seenStable = new Set<string>();
+
+  for (const node of input.grantedNodes) {
+    const grantedRef = parseGrantedRef(
+      node.nestedAbilityBlock.clauses[0]?.clauseId.replace(/:clause-\d+$/, "") ??
+        `${node.grantingClauseId}:granted:${node.quotedSpan.start}`,
+    );
+    if (!grantedRef) continue;
+
+    const nativeGrantedId = `${node.grantingClauseId}:granted:${node.quotedSpan.start}`;
+    const segmentRef = parseSegmentRef(node.grantingClauseId);
+    if (!segmentRef) continue;
+
+    const modalHost = findModalOptionForSegment(input.abilities, segmentRef.segmentIdx);
+    const hostAbilityId = modalHost?.option.optionId ?? stableAbilityId(
+      segmentRef.oracleId,
+      segmentRef.faceId,
+      segmentRef.segmentIdx,
+    );
+    const stableGrantedId = stableGrantedAbilityId(hostAbilityId, grantedRef.grantedLocalStart);
+    if (seenStable.has(stableGrantedId)) continue;
+    seenStable.add(stableGrantedId);
+    nativeGrantedIdToStable.set(nativeGrantedId, stableGrantedId);
+
+    const stableClauseIds = node.nestedAbilityBlock.clauses.map((clause, idx) => {
+      const stableClauseId = stableGrantedClauseId(stableGrantedId, idx);
+      nativeClauseIdToStable.set(clause.clauseId, stableClauseId);
+      return stableClauseId;
+    });
+
+    const hostSegment = input.segmented.find(
+      (seg) => seg.cardFaceId === segmentRef.faceId && seg.abilityIndex === segmentRef.segmentIdx,
+    );
+    const quoteStart = (hostSegment?.paragraphStart ?? 0) + node.quotedSpan.start;
+    const quoteEnd = (hostSegment?.paragraphStart ?? 0) + node.quotedSpan.end;
+
+    grantedAbilities.push({
+      abilityId: stableGrantedId,
+      segmentAbilityIndex: segmentRef.segmentIdx,
+      faceId: segmentRef.faceId,
+      abilityType: toSemanticGrantedAbilityType(node.nestedAbilityBlock.abilityType),
+      abilitySpan: toEvidenceSpan(node.quotedSpan.text, quoteStart, quoteEnd),
+      clauseIds: stableClauseIds,
+    });
+  }
+
+  return { grantedAbilities, nativeGrantedIdToStable, nativeClauseIdToStable };
+}
+
+function resolveGrantedEffectClauseId(
+  grantedAbility: SemanticAbility,
+  action: OracleActionV1,
+  nativeClauseIdToStable: Map<string, string>,
+): string | undefined {
+  if (action.clauseId && nativeClauseIdToStable.has(action.clauseId)) {
+    return nativeClauseIdToStable.get(action.clauseId);
+  }
+  if (action.clauseId?.includes(":granted:")) {
+    const nativeGrantedClause = action.clauseId;
+    if (nativeClauseIdToStable.has(nativeGrantedClause)) {
+      return nativeClauseIdToStable.get(nativeGrantedClause);
+    }
+  }
+  if (grantedAbility.clauseIds.length === 0) return undefined;
+  if (!action.clauseId) {
+    return grantedAbility.clauseIds[grantedAbility.clauseIds.length - 1];
+  }
+  if (
+    !action.clauseId.includes(":granted:") &&
+    !action.clauseId.includes(".granted-")
+  ) {
+    return grantedAbility.clauseIds[grantedAbility.clauseIds.length - 1];
+  }
+  return grantedAbility.clauseIds[grantedAbility.clauseIds.length - 1];
+}
+
+function resolveGrantedActionIdentity(
+  action: OracleActionV1,
+  ext: RC3ActionExtensions,
+  abilities: SemanticAbility[],
+  grantedMaps: GrantedIdentityMaps,
+): { parentAbilityId?: string; semanticClauseId?: string; stableModalOptionId?: undefined } {
+  if (ext.grantedAbilityId && grantedMaps.nativeGrantedIdToStable.has(ext.grantedAbilityId)) {
+    const parentAbilityId = grantedMaps.nativeGrantedIdToStable.get(ext.grantedAbilityId)!;
+    const grantedAbility = abilities.find((a) => a.abilityId === parentAbilityId);
+    return {
+      parentAbilityId,
+      semanticClauseId: grantedAbility
+        ? resolveGrantedEffectClauseId(grantedAbility, action, grantedMaps.nativeClauseIdToStable)
+        : undefined,
+      stableModalOptionId: undefined,
+    };
+  }
+
+  if (ext.executionContext !== "granted_ability" && !action.clauseId?.includes(":granted:")) {
+    return {};
+  }
+
+  for (const stableGrantedId of grantedMaps.nativeGrantedIdToStable.values()) {
+    const grantedAbility = abilities.find((a) => a.abilityId === stableGrantedId);
+    if (!grantedAbility) continue;
+    if (
+      action.evidenceStart >= grantedAbility.abilitySpan.cardStart &&
+      action.evidenceEnd <= grantedAbility.abilitySpan.cardEnd
+    ) {
+      return {
+        parentAbilityId: stableGrantedId,
+        semanticClauseId: resolveGrantedEffectClauseId(grantedAbility, action, grantedMaps.nativeClauseIdToStable),
+        stableModalOptionId: undefined,
+      };
+    }
+  }
+
+  return {};
+}
+
 function resolveParentAbilityId(
   action: OracleActionV1,
   abilities: SemanticAbility[],
@@ -233,6 +404,8 @@ function resolveParentAbilityId(
     );
     if (loyalty) return loyalty.abilityId;
   }
+  const modalHost = findModalOptionForSegment(abilities, action.abilityIndex);
+  if (modalHost) return modalHost.parentAbilityId;
   return stableAbilityId(oracleId, action.faceId, action.abilityIndex);
 }
 
@@ -272,6 +445,7 @@ function resolveStableModalOptionId(
 export function buildOracleSemanticParse(
   result: Omit<OracleActionV1Result, "semanticParse">,
   oracleText: string,
+  options?: { grantedAbilities?: GrantedAbilityNode[] },
 ): OracleSemanticParse {
   const faces = segmentCardFaces(oracleText);
   const abilities: SemanticAbility[] = [];
@@ -311,11 +485,41 @@ export function buildOracleSemanticParse(
     abilities.push(...buildFallbackAbilities({ oracleId: result.oracleId, segmented, coveredIds }));
   }
 
+  const grantedMaps = buildGrantedSemanticAbilities({
+    grantedNodes: options?.grantedAbilities ?? [],
+    abilities,
+    segmented: result.abilities,
+  });
+  for (const grantedAbility of grantedMaps.grantedAbilities) {
+    abilities.push(grantedAbility);
+  }
+
   const objects: SemanticObjectRef[] = [];
   const actions: SemanticAction[] = result.actions.map((action) => {
-    const parentAbilityId = resolveParentAbilityId(action, abilities, result.oracleId);
-    const stableModalOptionId = resolveStableModalOptionId(action, abilities);
-    const semanticClauseId = resolveSemanticClauseId(action, abilities, parentAbilityId, stableModalOptionId);
+    const ext = action as OracleActionV1 & RC3ActionExtensions;
+    let parentAbilityId = resolveParentAbilityId(action, abilities, result.oracleId);
+    let stableModalOptionId = resolveStableModalOptionId(action, abilities);
+    let semanticClauseId = resolveSemanticClauseId(action, abilities, parentAbilityId, stableModalOptionId);
+
+    const grantedIdentity = resolveGrantedActionIdentity(action, ext, abilities, grantedMaps);
+    if (grantedIdentity.parentAbilityId) {
+      parentAbilityId = grantedIdentity.parentAbilityId;
+      stableModalOptionId = grantedIdentity.stableModalOptionId;
+      const grantedAbility = abilities.find((a) => a.abilityId === parentAbilityId);
+      semanticClauseId =
+        grantedIdentity.semanticClauseId ??
+        (grantedAbility
+          ? resolveGrantedEffectClauseId(grantedAbility, action, grantedMaps.nativeClauseIdToStable)
+          : semanticClauseId);
+    } else {
+      const modalHost = findModalOptionForSegment(abilities, action.abilityIndex);
+      if (modalHost) {
+        stableModalOptionId = stableModalOptionId ?? modalHost.option.optionId;
+        if (!semanticClauseId && modalHost.option.clauseIds[0]) {
+          semanticClauseId = modalHost.option.clauseIds[0];
+        }
+      }
+    }
     const containerText =
       abilities
         .flatMap((a) => a.options ?? [])
