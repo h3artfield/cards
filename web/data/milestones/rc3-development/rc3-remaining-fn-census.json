@@ -1,0 +1,583 @@
+{
+  "generatedAt": "2026-08-09T05:01:17.423Z",
+  "checkpoint": "rc3-remaining-fn-census-post-v138",
+  "parserVersion": "oracle-action-v1.37-rc3-granted-nested-complete",
+  "parserCommitSha": "c446b6baa1648b7d8d922631b9f6d996b5edc39e",
+  "combinedDevelopment": {
+    "tp": 576,
+    "fp": 11,
+    "fn": 66,
+    "precision": 0.9812606473594548,
+    "recall": 0.897196261682243,
+    "goldDenominator": 642,
+    "precisionPct": 98.12606473594549,
+    "recallPct": 89.7196261682243,
+    "gateCombined": {
+      "precisionRequired": 0.98,
+      "recallRequired": 0.92,
+      "precisionPass": true,
+      "recallPass": false,
+      "recallGapTpNeeded": 15
+    }
+  },
+  "unrelatedCatalogPositive": {
+    "caseCount": 33,
+    "tp": 49,
+    "fp": 2,
+    "fn": 26,
+    "precision": 0.9607843137254902,
+    "recall": 0.6533333333333333,
+    "goldDenominator": 75,
+    "precisionPct": 96.07843137254902,
+    "recallPct": 65.33333333333333,
+    "gate": {
+      "precisionRequired": 0.95,
+      "recallRequired": 0.9,
+      "precisionPass": true,
+      "recallPass": false
+    }
+  },
+  "remainingFnByFamily": {
+    "zone_transitions": 14,
+    "granted_semantics": 12,
+    "optionality_dependency": 10,
+    "replacement_effects": 7,
+    "mdfc_face_structure": 6,
+    "other": 5,
+    "generic_primitive_gaps": 4,
+    "activated_effects": 3,
+    "search_shuffle_chains": 3,
+    "modal_choice": 2
+  },
+  "totalRemainingFn": 66,
+  "fnItems": [
+    {
+      "caseId": "dev-opt-023",
+      "cardName": "Path to Exile",
+      "actionType": "exile",
+      "evidenceContains": "Exile target creature",
+      "family": "zone_transitions"
+    },
+    {
+      "caseId": "dev-opt-032",
+      "cardName": "Faithless Looting",
+      "actionType": "cast",
+      "evidenceContains": "You may cast this card from your graveyard for its flashback cost",
+      "family": "optionality_dependency"
+    },
+    {
+      "caseId": "dev-v9-001",
+      "cardName": "Mox Diamond",
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put this artifact onto the battlefield",
+      "family": "optionality_dependency"
+    },
+    {
+      "caseId": "dev-v9-023",
+      "cardName": "Howling Mine",
+      "actionType": "draw",
+      "evidenceContains": "draws an additional card",
+      "family": "generic_primitive_gaps"
+    },
+    {
+      "caseId": "dev-v9-031",
+      "cardName": "Rest in Peace",
+      "actionType": "exile",
+      "evidenceContains": "exile it instead",
+      "family": "replacement_effects"
+    },
+    {
+      "caseId": "eval-0009",
+      "cardName": "Path to Exile",
+      "actionType": "exile",
+      "evidenceContains": "Exile",
+      "family": "zone_transitions"
+    },
+    {
+      "caseId": "eval-0031",
+      "cardName": "Rest in Peace",
+      "actionType": "exile",
+      "evidenceContains": "exile it instead",
+      "family": "replacement_effects"
+    },
+    {
+      "caseId": "eval-0059",
+      "cardName": "Fable of the Mirror-Breaker // Reflection of Kiki-Jiki",
+      "actionType": "exile",
+      "evidenceContains": "Exile this Saga",
+      "family": "optionality_dependency"
+    },
+    {
+      "caseId": "eval-0082",
+      "cardName": "Pit of Offerings",
+      "actionType": "add_mana",
+      "evidenceContains": "Add one mana of any of the exiled cards' colors",
+      "family": "zone_transitions"
+    },
+    {
+      "caseId": "eval-0174",
+      "cardName": "Eliminate the Competition",
+      "actionType": "destroy",
+      "evidenceContains": "Destroy X target creatures",
+      "family": "generic_primitive_gaps"
+    },
+    {
+      "caseId": "eval-0191",
+      "cardName": "Inspiring Easel",
+      "actionType": "copy",
+      "evidenceContains": "copy",
+      "family": "other"
+    },
+    {
+      "caseId": "eval-0257",
+      "cardName": "Dusk // Dawn",
+      "actionType": "cast",
+      "evidenceContains": "Cast this spell only from your graveyard",
+      "family": "mdfc_face_structure"
+    },
+    {
+      "caseId": "eval-0259",
+      "cardName": "Discovery // Dispersal",
+      "actionType": "return_to_hand",
+      "evidenceContains": "returns a nonland permanent",
+      "family": "mdfc_face_structure"
+    },
+    {
+      "caseId": "eval-0260",
+      "cardName": "Embereth Shieldbreaker // Battle Display",
+      "actionType": "cast",
+      "evidenceContains": "You may cast the creature later from exile",
+      "family": "optionality_dependency"
+    },
+    {
+      "caseId": "eval-0261",
+      "cardName": "Edgewall Inn",
+      "actionType": "sacrifice",
+      "evidenceContains": "Sacrifice this land: Return target card that has an Adventure from your graveyard to your hand",
+      "family": "activated_effects"
+    },
+    {
+      "caseId": "eval-0264",
+      "cardName": "Glassworks // Shattered Yard",
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 4 damage",
+      "family": "mdfc_face_structure"
+    },
+    {
+      "caseId": "eval-0282",
+      "cardName": "Oft-Nabbed Goat",
+      "actionType": "draw",
+      "evidenceContains": "Draw a card",
+      "family": "mdfc_face_structure"
+    },
+    {
+      "caseId": "dev-exp-v1-008",
+      "cardName": "Cogwork Assembler",
+      "actionType": "copy",
+      "evidenceContains": "copy of target artifact",
+      "family": "other"
+    },
+    {
+      "caseId": "dev-exp-v1-012",
+      "cardName": "Fall to Earth",
+      "actionType": "destroy",
+      "evidenceContains": "Destroy target creature with flying",
+      "family": "generic_primitive_gaps"
+    },
+    {
+      "caseId": "dev-exp-v1-012",
+      "cardName": "Fall to Earth",
+      "actionType": "gain_life",
+      "evidenceContains": "gains 4 life",
+      "family": "other"
+    },
+    {
+      "caseId": "dev-exp-v3-017",
+      "cardName": "Minion Reflector",
+      "actionType": "create_token",
+      "evidenceContains": "create a token that's a copy of that creature",
+      "family": "optionality_dependency"
+    },
+    {
+      "caseId": "dev-exp-v3-022",
+      "cardName": "Kheru Lich Lord",
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "return a creature card at random from your graveyard to the battlefield",
+      "family": "optionality_dependency"
+    },
+    {
+      "caseId": "rc3-pos-v12-0015",
+      "cardName": "A-Moon-Circuit Hacker",
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "family": "zone_transitions",
+      "coverageStratum": "mdfc_transform_zone_transition"
+    },
+    {
+      "caseId": "rc3-pos-v12-0018",
+      "cardName": "Acquire",
+      "actionType": "shuffle_library",
+      "evidenceContains": "shuffles",
+      "family": "search_shuffle_chains",
+      "coverageStratum": "search_put_shuffle_chain"
+    },
+    {
+      "caseId": "rc3-pos-v12-0033",
+      "cardName": "A-Urza, Powerstone Prodigy",
+      "actionType": "discard",
+      "evidenceContains": "discard one or more artifact cards, create a tapped Powerstone token",
+      "family": "granted_semantics",
+      "coverageStratum": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-v12-0051",
+      "cardName": "Adipose Offspring",
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrificed creature's toughness",
+      "family": "generic_primitive_gaps",
+      "coverageStratum": "replacement_if_would"
+    },
+    {
+      "caseId": "rc3-pos-v12-0071",
+      "cardName": "Aether Shockwave",
+      "actionType": "tap",
+      "evidenceContains": "Tap all Spirits",
+      "family": "modal_choice",
+      "coverageStratum": "modal_each_option_action"
+    },
+    {
+      "caseId": "rc3-pos-v12-0071",
+      "cardName": "Aether Shockwave",
+      "actionType": "tap",
+      "evidenceContains": "Tap all non-Spirit creatures",
+      "family": "modal_choice",
+      "coverageStratum": "modal_each_option_action"
+    },
+    {
+      "caseId": "rc3-pos-v12-0093",
+      "cardName": "Altar of the Wretched // Wretched Bonemass",
+      "actionType": "draw",
+      "evidenceContains": "draw X cards, then mill X cards, where X is t",
+      "family": "optionality_dependency",
+      "coverageStratum": "activated_post_colon_effect"
+    },
+    {
+      "caseId": "rc3-pos-v12-0098",
+      "cardName": "Aethermage's Touch",
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put a creature card from among them onto the battlefield",
+      "family": "zone_transitions",
+      "coverageStratum": "optional_put_onto_battlefield"
+    },
+    {
+      "caseId": "rc3-pos-v12-0107",
+      "cardName": "A-Nashi, Moon Sage's Scion",
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "family": "zone_transitions",
+      "coverageStratum": "mdfc_transform_zone_transition"
+    },
+    {
+      "caseId": "rc3-pos-v12-0108",
+      "cardName": "A-Nezumi Prowler",
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "family": "zone_transitions",
+      "coverageStratum": "mdfc_transform_zone_transition"
+    },
+    {
+      "caseId": "rc3-pos-v12-0110",
+      "cardName": "A-Prosperous Thief",
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "family": "zone_transitions",
+      "coverageStratum": "mdfc_transform_zone_transition"
+    },
+    {
+      "caseId": "rc3-pos-v12-0116",
+      "cardName": "Acolyte's Reward",
+      "actionType": "deal_damage",
+      "evidenceContains": "deals that much damage to any target",
+      "family": "replacement_effects",
+      "coverageStratum": "replacement_if_would"
+    },
+    {
+      "caseId": "rc3-pos-v12-0126",
+      "cardName": "Alabaster Host Intercessor",
+      "actionType": "discard",
+      "evidenceContains": "Discard this card: Search your library for a Plains card, reveal it, put it into your hand, then shuffle",
+      "family": "search_shuffle_chains",
+      "coverageStratum": "search_put_shuffle_chain"
+    },
+    {
+      "caseId": "rc3-pos-v12-0130",
+      "cardName": "Abuelo's Awakening",
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "Return target artifact or non-Aura enchantment card from your graveyard to the battlefield",
+      "family": "zone_transitions",
+      "coverageStratum": "zone_transition_return"
+    },
+    {
+      "caseId": "rc3-pos-v12-0135",
+      "cardName": "Advanced Stitchwing",
+      "actionType": "discard",
+      "evidenceContains": "Discard two cards: Return this card from your graveyard to the battlefield tapped",
+      "family": "activated_effects",
+      "coverageStratum": "activated_post_colon_effect"
+    },
+    {
+      "caseId": "rc3-pos-v12-0144",
+      "cardName": "Aethersnipe",
+      "actionType": "sacrifice",
+      "evidenceContains": "sacrificed when it enters",
+      "family": "optionality_dependency",
+      "coverageStratum": "replacement_if_would"
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "cardName": "Antique Collector",
+      "actionType": "create_token",
+      "evidenceContains": "Create a colorless Clue artifact token",
+      "family": "granted_semantics",
+      "coverageStratum": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "cardName": "Antique Collector",
+      "actionType": "shuffle_into_library",
+      "evidenceContains": "shuffle it into its owner's library",
+      "family": "granted_semantics",
+      "coverageStratum": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0001",
+      "cardName": "A-Glamorous Outlaw",
+      "actionType": "cast",
+      "evidenceContains": "cast from exile",
+      "family": "granted_semantics",
+      "coverageStratum": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0001",
+      "cardName": "A-Glamorous Outlaw",
+      "actionType": "cast",
+      "evidenceContains": "You may cast Glamorous Outlaw for as long as it remains exiled",
+      "family": "granted_semantics",
+      "coverageStratum": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0002",
+      "cardName": "A-Masked Bandits",
+      "actionType": "cast",
+      "evidenceContains": "cast from exile",
+      "family": "granted_semantics",
+      "coverageStratum": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0002",
+      "cardName": "A-Masked Bandits",
+      "actionType": "cast",
+      "evidenceContains": "You may cast Masked Bandits for as long as it remains exiled",
+      "family": "granted_semantics",
+      "coverageStratum": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0003",
+      "cardName": "A-Rakish Revelers",
+      "actionType": "cast",
+      "evidenceContains": "cast from exile",
+      "family": "granted_semantics",
+      "coverageStratum": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0003",
+      "cardName": "A-Rakish Revelers",
+      "actionType": "cast",
+      "evidenceContains": "You may cast Rakish Revelers for as long as it remains exiled",
+      "family": "granted_semantics",
+      "coverageStratum": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0004",
+      "cardName": "A-Shattered Seraph",
+      "actionType": "cast",
+      "evidenceContains": "cast from exile",
+      "family": "granted_semantics",
+      "coverageStratum": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0004",
+      "cardName": "A-Shattered Seraph",
+      "actionType": "cast",
+      "evidenceContains": "You may cast Shattered Seraph for as long as it remains exiled",
+      "family": "granted_semantics",
+      "coverageStratum": "granted_ability_quote"
+    },
+    {
+      "caseId": "rc3-pos-cat-0005",
+      "cardName": "\"Ach! Hans, Run!\"",
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put it onto the battlefield",
+      "family": "optionality_dependency",
+      "coverageStratum": "search_put_shuffle_chain"
+    },
+    {
+      "caseId": "rc3-pos-cat-0005",
+      "cardName": "\"Ach! Hans, Run!\"",
+      "actionType": "shuffle_library",
+      "evidenceContains": "then shuffle",
+      "family": "optionality_dependency",
+      "coverageStratum": "search_put_shuffle_chain"
+    },
+    {
+      "caseId": "rc3-pos-cat-0006",
+      "cardName": "1996 World Champion",
+      "actionType": "put_counter",
+      "evidenceContains": "put 1996 World Champion on top of it",
+      "family": "other",
+      "coverageStratum": "search_put_shuffle_chain"
+    },
+    {
+      "caseId": "rc3-pos-cat-0007",
+      "cardName": "A-Navigation Orb",
+      "actionType": "sacrifice",
+      "evidenceContains": "Sacrifice Navigation Orb: Search your library for up to two basic land cards and/or Gate cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle",
+      "family": "search_shuffle_chains",
+      "coverageStratum": "search_put_shuffle_chain"
+    },
+    {
+      "caseId": "rc3-pos-cat-0008",
+      "cardName": "A-Ominous Parcel",
+      "actionType": "sacrifice",
+      "evidenceContains": "Sacrifice Ominous Parcel: It deals 4 damage to target creature",
+      "family": "activated_effects",
+      "coverageStratum": "search_put_shuffle_chain"
+    },
+    {
+      "caseId": "rc3-pos-cat-0009",
+      "cardName": "A-Dokuchi Silencer",
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "family": "zone_transitions",
+      "coverageStratum": "mdfc_transform_zone_transition"
+    },
+    {
+      "caseId": "rc3-pos-cat-0010",
+      "cardName": "A-Silver-Fur Master",
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "family": "zone_transitions",
+      "coverageStratum": "mdfc_transform_zone_transition"
+    },
+    {
+      "caseId": "rc3-pos-cat-0011",
+      "cardName": "A-Thousand-Faced Shadow",
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "Put this card onto the battlefield",
+      "family": "zone_transitions",
+      "coverageStratum": "mdfc_transform_zone_transition"
+    },
+    {
+      "caseId": "rc3-pos-cat-0012",
+      "cardName": "Aberrant Researcher // Perfected Form",
+      "actionType": "mill",
+      "evidenceContains": "mill a card, put the top card of your library into your graveyard",
+      "family": "mdfc_face_structure",
+      "coverageStratum": "mdfc_transform_zone_transition"
+    },
+    {
+      "caseId": "rc3-pos-cat-0012",
+      "cardName": "Aberrant Researcher // Perfected Form",
+      "actionType": "mill",
+      "evidenceContains": "milled this way, transform this creature",
+      "family": "mdfc_face_structure",
+      "coverageStratum": "mdfc_transform_zone_transition"
+    },
+    {
+      "caseId": "rc3-pos-cat-0015",
+      "cardName": "______",
+      "actionType": "cast",
+      "evidenceContains": "cast spells of the chosen types or spells whose names begin with the first letter of your name",
+      "family": "other",
+      "coverageStratum": "activated_post_colon_effect"
+    },
+    {
+      "caseId": "rc3-pos-cat-0017",
+      "cardName": "A-Binding Geist // A-Spectral Binding",
+      "actionType": "exile",
+      "evidenceContains": "exile it instead",
+      "family": "replacement_effects",
+      "coverageStratum": "replacement_if_would"
+    },
+    {
+      "caseId": "rc3-pos-cat-0018",
+      "cardName": "A-Brine Comber // A-Brinebound Gift",
+      "actionType": "exile",
+      "evidenceContains": "exile it instead",
+      "family": "replacement_effects",
+      "coverageStratum": "replacement_if_would"
+    },
+    {
+      "caseId": "rc3-pos-cat-0019",
+      "cardName": "A-Devoted Grafkeeper // A-Departed Soulkeeper",
+      "actionType": "exile",
+      "evidenceContains": "exile it instead",
+      "family": "replacement_effects",
+      "coverageStratum": "replacement_if_would"
+    },
+    {
+      "caseId": "rc3-pos-cat-0019",
+      "cardName": "A-Devoted Grafkeeper // A-Departed Soulkeeper",
+      "actionType": "cast",
+      "evidenceContains": "cast a spell from your graveyard, tap target creature you don't control",
+      "family": "replacement_effects",
+      "coverageStratum": "replacement_if_would"
+    },
+    {
+      "caseId": "rc3-pos-cat-0020",
+      "cardName": "A-Dorothea, Vengeful Victim // A-Dorothea's Retribution",
+      "actionType": "exile",
+      "evidenceContains": "exile it instead",
+      "family": "granted_semantics",
+      "coverageStratum": "replacement_if_would"
+    },
+    {
+      "caseId": "rc3-pos-cat-0027",
+      "cardName": "A Reckoning Approaches",
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put a creature card from among them onto the battlefield",
+      "family": "zone_transitions",
+      "coverageStratum": "optional_put_onto_battlefield"
+    },
+    {
+      "caseId": "rc3-pos-cat-0030",
+      "cardName": "A-Circle of the Land Druid",
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "return target land card from your graveyard to your hand",
+      "family": "zone_transitions",
+      "coverageStratum": "zone_transition_return"
+    }
+  ],
+  "highestYieldFamilies": [
+    {
+      "family": "zone_transitions",
+      "count": 14
+    },
+    {
+      "family": "granted_semantics",
+      "count": 12
+    },
+    {
+      "family": "optionality_dependency",
+      "count": 10
+    },
+    {
+      "family": "replacement_effects",
+      "count": 7
+    },
+    {
+      "family": "mdfc_face_structure",
+      "count": 6
+    }
+  ]
+}

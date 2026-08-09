@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-08-09T05:06:10.928Z",
+  "parentMetrics": {
+    "tp": 575,
+    "fp": 7,
+    "fn": 74,
+    "precision": 0.9879725085910653,
+    "recall": 0.8859784283513097
+  },
+  "currentMetrics": {
+    "tp": 576,
+    "fp": 11,
+    "fn": 66,
+    "precision": 0.9812606473594548,
+    "recall": 0.897196261682243
+  },
+  "expectedFlipCount": 4,
+  "observedFlipCount": 2,
+  "flips": [
+    {
+      "caseId": "dev-exp-v3-017",
+      "cardName": "Minion Reflector",
+      "actionType": "create_token",
+      "evidenceContains": "create a token that's a copy of that creature",
+      "matched": false,
+      "optionalEffect": true,
+      "oracleSnippet": "Whenever a nontoken creature you control enters, you may pay {2}. If you do, create a token that's a copy of that creatu"
+    },
+    {
+      "caseId": "dev-exp-v3-022",
+      "cardName": "Kheru Lich Lord",
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "return a creature card at random from your graveyard to the battlefield",
+      "matched": false,
+      "optionalEffect": true,
+      "oracleSnippet": "At the beginning of your upkeep, you may pay {2}{B}. If you do, return a creature card at random from your graveyard to "
+    }
+  ]
+}

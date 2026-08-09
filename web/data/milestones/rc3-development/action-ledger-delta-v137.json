@@ -1,0 +1,108 @@
+{
+  "parentMetrics": {
+    "tp": 575,
+    "fp": 7,
+    "fn": 74,
+    "precision": 0.9879725085910653,
+    "recall": 0.8859784283513097
+  },
+  "currentMetrics": {
+    "tp": 576,
+    "fp": 11,
+    "fn": 66,
+    "precision": 0.9812606473594548,
+    "recall": 0.897196261682243
+  },
+  "tpToFn": [
+    {
+      "caseId": "dev-exp-v3-017",
+      "cardName": "Minion Reflector",
+      "actionType": "create_token",
+      "evidenceContains": "create a token that's a copy of that creature",
+      "matched": false,
+      "optionalEffect": true,
+      "oracleSnippet": "Whenever a nontoken creature you control enters, you may pay {2}. If you do, create a token that's a copy of that creatu"
+    },
+    {
+      "caseId": "dev-exp-v3-022",
+      "cardName": "Kheru Lich Lord",
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "return a creature card at random from your graveyard to the battlefield",
+      "matched": false,
+      "optionalEffect": true,
+      "oracleSnippet": "At the beginning of your upkeep, you may pay {2}{B}. If you do, return a creature card at random from your graveyard to "
+    }
+  ],
+  "fnToTp": [
+    {
+      "caseId": "dev-cond-007",
+      "cardName": "Keldon Raider",
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "optionalEffect": false,
+      "oracleSnippet": "When this creature enters, you may discard a card. If you do, draw a card."
+    },
+    {
+      "caseId": "eval-0009",
+      "cardName": "Path to Exile",
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put that card onto the battlefield",
+      "matched": true,
+      "optionalEffect": true,
+      "oracleSnippet": "Exile target creature. Its controller may search their library for a basic land card, put that card onto the battlefield"
+    },
+    {
+      "caseId": "eval-0012",
+      "cardName": "Solemn Simulacrum",
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put that card onto the battlefield",
+      "matched": true,
+      "optionalEffect": true,
+      "oracleSnippet": "When this creature enters, you may search your library for a basic land card, put that card onto the battlefield tapped,"
+    },
+    {
+      "caseId": "eval-0047",
+      "cardName": "Curious Obsession",
+      "actionType": "draw",
+      "evidenceContains": "you may draw a card",
+      "matched": true,
+      "optionalEffect": true,
+      "oracleSnippet": "Enchant creature Enchanted creature gets +1/+1 and has \"Whenever this creature deals combat damage to a player, you may "
+    },
+    {
+      "caseId": "eval-0059",
+      "cardName": "Fable of the Mirror-Breaker // Reflection of Kiki-Jiki",
+      "actionType": "draw",
+      "evidenceContains": "draw that many cards",
+      "matched": true,
+      "optionalEffect": false,
+      "oracleSnippet": "(As this Saga enters and after your draw step, add a lore counter.) I — Create a 2/2 red Goblin Shaman creature token wi"
+    },
+    {
+      "caseId": "eval-0099",
+      "cardName": "Keldon Raider",
+      "actionType": "draw",
+      "evidenceContains": "draw a card",
+      "matched": true,
+      "optionalEffect": false,
+      "oracleSnippet": "When this creature enters, you may discard a card. If you do, draw a card."
+    },
+    {
+      "caseId": "eval-0161",
+      "cardName": "Joiner Adept",
+      "actionType": "add_mana",
+      "evidenceContains": "Add one mana of any color",
+      "matched": true,
+      "oracleSnippet": "Lands you control have \"{T}: Add one mana of any color.\""
+    },
+    {
+      "caseId": "rc3-pos-v12-0077",
+      "cardName": "Ajani Resolute",
+      "actionType": "put_counter",
+      "evidenceContains": "put a +1/+1 counter on this token",
+      "matched": true,
+      "oracleSnippet": "Whenever you gain life, put a loyalty counter on Ajani. 0: You gain 1 life. −4: Create a 2/2 white Cat Soldier creature "
+    }
+  ]
+}

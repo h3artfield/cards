@@ -68,9 +68,11 @@ function extractLayer2FromComplement(
       layer2Gold.push({ actionType: "gain_life", evidenceContains: effectNeedle.match(/you gain \d+ life/i)![0] });
     }
     if (/draw a card/i.test(effectNeedle)) {
+      const optionalDraw = /you may draw a card/i.test(effectNeedle);
       layer2Gold.push({
         actionType: "draw",
-        evidenceContains: (/you may draw a card/i.test(effectNeedle) ? "you may draw a card" : "draw a card"),
+        evidenceContains: "draw a card",
+        ...(optionalDraw ? { optionalEffect: true } : {}),
       });
     }
     if (/Add \{/i.test(effectNeedle)) {

@@ -1,0 +1,1016 @@
+{
+  "generatedAt": "2026-08-09T05:16:16.364Z",
+  "checkpoint": "rc3-v137-development-closure",
+  "provenance": {
+    "parentCommit": "c446b6baa1648b7d8d922631b9f6d996b5edc39e",
+    "workingTreeHead": "c446b6baa1648b7d8d922631b9f6d996b5edc39e",
+    "workingParserVersion": "oracle-action-v1.37-rc3-granted-nested-complete",
+    "workingParserBlobClosure": {
+      "oracle-rc3-transform.ts": "56fbc09ef551fcf3d2a3b734cf3cbcbe1f4865cfb5bc2d41ef9c3867d5397b2c",
+      "oracle-rc3-clause-native.ts": "552776f37bf534b6558a600d2262e684fc91d41225cb2b2277608525f0e6cd57",
+      "oracle-rc3-action-builder.ts": "b5f98208fa20ded1e71d7dbcfd4f89d1aa60ae246d55d39cd8f508f00cd1ad9a",
+      "oracle-action-optionality.ts": "a6946b360b502d6d0ad2974f4dbad50bebac62ae331c425bffb3f152df1e5816",
+      "oracle-action-parser-v1.ts": "659fd631a43786165d4593e7c1ca58ffaa7515ba89db5298b7812c5d63a19b6a",
+      "oracle-rc3-extraction-metadata.ts": "13f0405b4b4f076a8cb1cd475f987e7bd8ab794f2fd5889cf5d77bd0bbd7da0c",
+      "oracle-semantic-parse-builder.ts": "460a2073e844efcdb5bebbedeca488af9e8786e2e41fc35aea0e6c80f39aa8cb",
+      "oracle-semantic-parse-schema.ts": "a47cd6f8f0b24e80004c504069b854ead22955b6161a9fc28a358e79fdb509c6",
+      "oracle-rc3-token-glossary.ts": "ab8e6ddf50539e0ade645f7a8d358d6a6960b6bb8aa40743fe42537b42bbbe98",
+      "oracle-rc3-granted-rules-span-detector.ts": "ecfa6ba15bd9447538536506180016c519413ca6154fb5bdd2fec7ae2e7d319e",
+      "oracle-rc3-granted-rules-classifier.ts": "6cc272213f4100173168803e0ca648f4cf51ab1695c7564fee44a9205788cd75",
+      "oracle-rc3-semantic-context-router.ts": "dbb0ad1988c7d3e531426a4f72c385133307a71dc6a97b11f61516af0afb4578",
+      "oracle-granted-ability-extraction.ts": "9bed5894309d55c9dd2912bd89848af98f476b1d2f4ef7f14a7aed0d99dfdd14",
+      "oracle-rc3-ability-block.ts": "ded6a94463a60fee407ca38c1380daaa96ec49baed50201ad556ee18087bae14"
+    },
+    "parserScopeClean": false,
+    "parserScopeDirtyStatus": "M web/src/lib/deck-builder/golden-catalog/oracle-action-optionality.ts\n M web/src/lib/deck-builder/golden-catalog/oracle-action-parser-v1.ts\n M web/src/lib/deck-builder/golden-catalog/oracle-rc3-action-builder.ts\n M web/src/lib/deck-builder/golden-catalog/oracle-rc3-clause-native.ts\n M web/src/lib/deck-builder/golden-catalog/oracle-rc3-extraction-metadata.ts\n M web/src/lib/deck-builder/golden-catalog/oracle-rc3-transform.ts\n M web/src/lib/deck-builder/golden-catalog/oracle-semantic-parse-builder.ts\n M web/src/lib/deck-builder/golden-catalog/oracle-semantic-parse-schema.ts\n?? web/src/lib/deck-builder/golden-catalog/oracle-rc3-token-glossary.ts",
+    "tagImmutable": false,
+    "note": "Tag oracle-action-v1.37-rc3-granted-nested-complete must move to post-commit SHA after parser scope is clean"
+  },
+  "combinedDevelopment": {
+    "previousSamePolicy": {
+      "tp": 575,
+      "fp": 7,
+      "fn": 74
+    },
+    "current": {
+      "tp": 576,
+      "fp": 11,
+      "fn": 66
+    },
+    "delta": {
+      "tp": 1,
+      "fn": -8
+    },
+    "goldDenominator": 642,
+    "precisionPct": 98.12606473594549,
+    "recallPct": 89.7196261682243
+  },
+  "unrelatedCatalogPositive": {
+    "tp": 49,
+    "fp": 2,
+    "fn": 26,
+    "precision": 0.9607843137254902,
+    "recall": 0.6533333333333333,
+    "goldDenominator": 75,
+    "precisionPct": 96.07843137254902,
+    "recallPct": 65.33333333333333,
+    "gateRecallRequiredPct": 90,
+    "tpNeededForGate": 19
+  },
+  "snakeUmbraAdjudication": {
+    "caseId": "granted-nested-v138-007",
+    "cardName": "Snake Umbra",
+    "adjudication": "evaluator_gold_metadata_mismatch_resolved",
+    "classification": "Sixth Sense pattern — semantics match; gold evidence span corrected",
+    "parser": {
+      "actionType": "draw",
+      "evidenceText": "draw a card",
+      "optionalEffect": true
+    },
+    "goldBefore": {
+      "evidenceContains": "draw a card",
+      "optionalEffect": true
+    },
+    "goldAfter": {
+      "evidenceContains": "draw a card",
+      "optionalEffect": true
+    },
+    "optionalityCue": "you may",
+    "matcherRejectionBefore": "evidenceContains you may draw a card does not align with action span draw a card",
+    "matcherHitAfterCorrection": true,
+    "uniqueL2ResultAfterCorrection": "FN",
+    "correctedV138UniqueL2": {
+      "tp": 7,
+      "fp": 0,
+      "fn": 1,
+      "recallPct": 87.5
+    }
+  },
+  "optionalityTpToFnAudit": {
+    "reportedPolicyBaseline": {
+      "tp": 580,
+      "fp": 4,
+      "fn": 62
+    },
+    "committedParentBaseline": {
+      "tp": 575,
+      "fp": 7,
+      "fn": 74,
+      "precision": 0.9879725085910653,
+      "recall": 0.8859784283513097
+    },
+    "current": {
+      "tp": 576,
+      "fp": 11,
+      "fn": 66,
+      "precision": 0.9812606473594548,
+      "recall": 0.897196261682243,
+      "goldDenominator": 642
+    },
+    "netDeltaFromCommittedParent": {
+      "tp": 1,
+      "fp": 4,
+      "fn": -8
+    },
+    "reportedPolicyTpToFnCount": 4,
+    "committedParentTpToFnCount": 2,
+    "fnToTpRecoveries": [
+      {
+        "caseId": "dev-cond-007",
+        "cardName": "Keldon Raider",
+        "actionType": "draw",
+        "evidenceContains": "draw a card",
+        "matched": true,
+        "optionalEffect": false,
+        "oracleSnippet": "When this creature enters, you may discard a card. If you do, draw a card."
+      },
+      {
+        "caseId": "eval-0009",
+        "cardName": "Path to Exile",
+        "actionType": "put_onto_battlefield",
+        "evidenceContains": "put that card onto the battlefield",
+        "matched": true,
+        "optionalEffect": true,
+        "oracleSnippet": "Exile target creature. Its controller may search their library for a basic land card, put that card onto the battlefield"
+      },
+      {
+        "caseId": "eval-0012",
+        "cardName": "Solemn Simulacrum",
+        "actionType": "put_onto_battlefield",
+        "evidenceContains": "put that card onto the battlefield",
+        "matched": true,
+        "optionalEffect": true,
+        "oracleSnippet": "When this creature enters, you may search your library for a basic land card, put that card onto the battlefield tapped,"
+      },
+      {
+        "caseId": "eval-0047",
+        "cardName": "Curious Obsession",
+        "actionType": "draw",
+        "evidenceContains": "you may draw a card",
+        "matched": true,
+        "optionalEffect": true,
+        "oracleSnippet": "Enchant creature Enchanted creature gets +1/+1 and has \"Whenever this creature deals combat damage to a player, you may "
+      },
+      {
+        "caseId": "eval-0059",
+        "cardName": "Fable of the Mirror-Breaker // Reflection of Kiki-Jiki",
+        "actionType": "draw",
+        "evidenceContains": "draw that many cards",
+        "matched": true,
+        "optionalEffect": false,
+        "oracleSnippet": "(As this Saga enters and after your draw step, add a lore counter.) I — Create a 2/2 red Goblin Shaman creature token wi"
+      },
+      {
+        "caseId": "eval-0099",
+        "cardName": "Keldon Raider",
+        "actionType": "draw",
+        "evidenceContains": "draw a card",
+        "matched": true,
+        "optionalEffect": false,
+        "oracleSnippet": "When this creature enters, you may discard a card. If you do, draw a card."
+      },
+      {
+        "caseId": "eval-0161",
+        "cardName": "Joiner Adept",
+        "actionType": "add_mana",
+        "evidenceContains": "Add one mana of any color",
+        "matched": true,
+        "oracleSnippet": "Lands you control have \"{T}: Add one mana of any color.\""
+      },
+      {
+        "caseId": "rc3-pos-v12-0077",
+        "cardName": "Ajani Resolute",
+        "actionType": "put_counter",
+        "evidenceContains": "put a +1/+1 counter on this token",
+        "matched": true,
+        "oracleSnippet": "Whenever you gain life, put a loyalty counter on Ajani. 0: You gain 1 life. −4: Create a 2/2 white Cat Soldier creature "
+      }
+    ],
+    "flips": [
+      {
+        "caseId": "dev-exp-v3-017",
+        "cardName": "Minion Reflector",
+        "actionType": "create_token",
+        "oracleClause": "Whenever a nontoken creature you control enters, you may pay {2}. If you do, create a token that's a copy of that creatu",
+        "goldSemantics": {
+          "evidenceContains": "create a token that's a copy of that creature",
+          "optionalEffect": true
+        },
+        "currentParserEmissions": [
+          {
+            "actionType": "create_token",
+            "evidenceText": "create a token that's a copy of that creature, except it has haste and \"At the beginning of the end step, sacrifice this permanent",
+            "optionalEffect": false
+          }
+        ],
+        "failureStage": "optional_effect_mismatch",
+        "whyOldMatched": "prior parser treated optional cost window or clause-level may as satisfying optionalEffect gold",
+        "whyCurrentMisses": "optional_effect_mismatch",
+        "classification": "expected_dependency_semantics_fix"
+      },
+      {
+        "caseId": "dev-exp-v3-022",
+        "cardName": "Kheru Lich Lord",
+        "actionType": "return_to_battlefield",
+        "oracleClause": "At the beginning of your upkeep, you may pay {2}{B}. If you do, return a creature card at random from your graveyard to ",
+        "goldSemantics": {
+          "evidenceContains": "return a creature card at random from your graveyard to the battlefield",
+          "optionalEffect": true
+        },
+        "currentParserEmissions": [
+          {
+            "actionType": "return_to_battlefield",
+            "evidenceText": "return a creature card at random from your graveyard to the battlefield",
+            "optionalEffect": false
+          }
+        ],
+        "failureStage": "optional_effect_mismatch",
+        "whyOldMatched": "prior parser treated optional cost window or clause-level may as satisfying optionalEffect gold",
+        "whyCurrentMisses": "optional_effect_mismatch",
+        "classification": "expected_dependency_semantics_fix"
+      }
+    ]
+  },
+  "unrelatedBenchmarkHealth": {
+    "caseCount": 33,
+    "goldActionCount": 75,
+    "catalogIdentity": "PASS_WITH_SCOPED_BRANCH_EXCEPTION",
+    "catalogIdentityFailures": [
+      {
+        "caseId": "rc3-pos-one-shot-cast-0001",
+        "intendedName": "A-Demilich (one-shot cast branch)",
+        "oracleId": "e1b6d0ab-4e11-43a2-8a7f-3fb51582ddf3",
+        "catalogName": "A-Demilich",
+        "catalogOracleText": "This spell costs {U} less to cast for each instant and sorcery spell you've cast this turn.\nWhenever Demilich attacks, exile up to one target instant or sorcery card from your graveyard. Copy it. You may cast the copy.\nYou may cast Demilich from your graveyard by exiling four instant and/or sorcery cards from your graveyard in addition to paying its other costs.",
+        "storedOracleText": "Whenever Demilich attacks, exile up to one target instant or sorcery card from your graveyard. Copy it. You may cast the copy.",
+        "catalogOracleTextHash": "14fcc568b2e6e8d434e220e4767bba6712d9e49cb8050e5dc589d9dd83e8e44f",
+        "storedOracleTextHash": "7cf6a729ea56da804a6db0ba89a5eeda171c8d17ba4250933580cbdaaef36fcd",
+        "catalogIdentityStatus": "name_mismatch",
+        "layout": "normal",
+        "catalogLayout": "normal"
+      }
+    ],
+    "scopedBranchNote": "rc3-pos-one-shot-cast-0001 stores branch oracle text under card name — expected name_mismatch for one-shot scope",
+    "benchmarkTargetValidity": "PASS (primitive-action catalog — no machine-grounded benchmarkTargets; selectionRule is scope label only)",
+    "semanticAdjudication": "PASS (no benchmarkTargets — primitive-action gold only)",
+    "allCasesExplicitScope": true,
+    "allCasesExplicitCompleteness": true,
+    "cases": [
+      {
+        "caseId": "rc3-pos-cat-0001",
+        "cardName": "A-Glamorous Outlaw",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "granted_ability_quote",
+        "goldActionCount": 6,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0002",
+        "cardName": "A-Masked Bandits",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "granted_ability_quote",
+        "goldActionCount": 3,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0003",
+        "cardName": "A-Rakish Revelers",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "granted_ability_quote",
+        "goldActionCount": 4,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0004",
+        "cardName": "A-Shattered Seraph",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "granted_ability_quote",
+        "goldActionCount": 4,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0005",
+        "cardName": "\"Ach! Hans, Run!\"",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "search_put_shuffle_chain",
+        "goldActionCount": 3,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0006",
+        "cardName": "1996 World Champion",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "search_put_shuffle_chain",
+        "goldActionCount": 4,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0007",
+        "cardName": "A-Navigation Orb",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "search_put_shuffle_chain",
+        "goldActionCount": 4,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0008",
+        "cardName": "A-Ominous Parcel",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "search_put_shuffle_chain",
+        "goldActionCount": 5,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0009",
+        "cardName": "A-Dokuchi Silencer",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "mdfc_transform_zone_transition",
+        "goldActionCount": 3,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0010",
+        "cardName": "A-Silver-Fur Master",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "mdfc_transform_zone_transition",
+        "goldActionCount": 1,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0011",
+        "cardName": "A-Thousand-Faced Shadow",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "mdfc_transform_zone_transition",
+        "goldActionCount": 2,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0012",
+        "cardName": "Aberrant Researcher // Perfected Form",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "mdfc_transform_zone_transition",
+        "goldActionCount": 2,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0013",
+        "cardName": "_____",
+        "caseScope": "structure_only",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "activated_post_colon_effect",
+        "goldActionCount": 0,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0014",
+        "cardName": "_____ _____ _____ Trespasser",
+        "caseScope": "structure_only",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "activated_post_colon_effect",
+        "goldActionCount": 0,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0015",
+        "cardName": "______",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "activated_post_colon_effect",
+        "goldActionCount": 2,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0016",
+        "cardName": "+2 Mace",
+        "caseScope": "structure_only",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "activated_post_colon_effect",
+        "goldActionCount": 0,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0017",
+        "cardName": "A-Binding Geist // A-Spectral Binding",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "replacement_if_would",
+        "goldActionCount": 1,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0018",
+        "cardName": "A-Brine Comber // A-Brinebound Gift",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "replacement_if_would",
+        "goldActionCount": 2,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0019",
+        "cardName": "A-Devoted Grafkeeper // A-Departed Soulkeeper",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "replacement_if_would",
+        "goldActionCount": 4,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0020",
+        "cardName": "A-Dorothea, Vengeful Victim // A-Dorothea's Retribution",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "replacement_if_would",
+        "goldActionCount": 3,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0021",
+        "cardName": "A-Baleful Beholder",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "modal_each_option_action",
+        "goldActionCount": 1,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0022",
+        "cardName": "A-Cabaretti Charm",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "modal_each_option_action",
+        "goldActionCount": 1,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0023",
+        "cardName": "A-Dawnbringer Cleric",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "modal_each_option_action",
+        "goldActionCount": 3,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0024",
+        "cardName": "_____ _____ Rocketship",
+        "caseScope": "structure_only",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "compound_second_clause",
+        "goldActionCount": 0,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0025",
+        "cardName": "_____ Balls of Fire",
+        "caseScope": "structure_only",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "compound_second_clause",
+        "goldActionCount": 0,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0026",
+        "cardName": "_____ Bird Gets the Worm",
+        "caseScope": "structure_only",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "compound_second_clause",
+        "goldActionCount": 0,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0027",
+        "cardName": "A Reckoning Approaches",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "optional_put_onto_battlefield",
+        "goldActionCount": 1,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0028",
+        "cardName": "A-Harald Unites the Elves",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "optional_put_onto_battlefield",
+        "goldActionCount": 3,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0029",
+        "cardName": "A-Sorin, Imperious Bloodlord",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "optional_put_onto_battlefield",
+        "goldActionCount": 5,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0030",
+        "cardName": "A-Circle of the Land Druid",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "zone_transition_return",
+        "goldActionCount": 2,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0031",
+        "cardName": "A-Graveyard Shift",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "zone_transition_return",
+        "goldActionCount": 1,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-cat-0032",
+        "cardName": "A-Return Upon the Tide",
+        "caseScope": "full_card",
+        "goldCompletenessStatus": "complete_within_scope",
+        "taxonomyVersion": "three-layer-v1.4",
+        "coverageStratum": "zone_transition_return",
+        "goldActionCount": 2,
+        "hasBenchmarkTargets": false
+      },
+      {
+        "caseId": "rc3-pos-one-shot-cast-0001",
+        "cardName": "A-Demilich (one-shot cast branch)",
+        "caseScope": "ability",
+        "goldCompletenessStatus": "complete_within_scope",
+        "coverageStratum": "one_shot_cast_resolution",
+        "goldActionCount": 3,
+        "hasBenchmarkTargets": false
+      }
+    ]
+  },
+  "unrelatedFnCensus": {
+    "familyTable": [
+      {
+        "family": "granted_semantics",
+        "unrelatedFnCount": 9,
+        "globalFnCount": 12,
+        "percentOfUnrelatedBacklog": 34.61538461538461
+      },
+      {
+        "family": "zone_transitions",
+        "unrelatedFnCount": 5,
+        "globalFnCount": 14,
+        "percentOfUnrelatedBacklog": 19.230769230769234
+      },
+      {
+        "family": "replacement_effects",
+        "unrelatedFnCount": 4,
+        "globalFnCount": 7,
+        "percentOfUnrelatedBacklog": 15.384615384615385
+      },
+      {
+        "family": "optionality_dependency",
+        "unrelatedFnCount": 2,
+        "globalFnCount": 10,
+        "percentOfUnrelatedBacklog": 7.6923076923076925
+      },
+      {
+        "family": "other",
+        "unrelatedFnCount": 2,
+        "globalFnCount": 5,
+        "percentOfUnrelatedBacklog": 7.6923076923076925
+      },
+      {
+        "family": "mdfc_face_structure",
+        "unrelatedFnCount": 2,
+        "globalFnCount": 6,
+        "percentOfUnrelatedBacklog": 7.6923076923076925
+      },
+      {
+        "family": "search_shuffle_chains",
+        "unrelatedFnCount": 1,
+        "globalFnCount": 3,
+        "percentOfUnrelatedBacklog": 3.8461538461538463
+      },
+      {
+        "family": "activated_effects",
+        "unrelatedFnCount": 1,
+        "globalFnCount": 3,
+        "percentOfUnrelatedBacklog": 3.8461538461538463
+      }
+    ],
+    "unrelatedStageCounts": {
+      "wrong_action_type": 20,
+      "other": 1,
+      "missing_emission": 5
+    },
+    "unrelatedFnItems": [
+      {
+        "caseId": "rc3-pos-cat-0001",
+        "cardName": "A-Glamorous Outlaw",
+        "actionType": "cast",
+        "evidenceContains": "cast from exile",
+        "family": "granted_semantics",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-granted_ability_quote",
+        "coverageStratum": "granted_ability_quote"
+      },
+      {
+        "caseId": "rc3-pos-cat-0001",
+        "cardName": "A-Glamorous Outlaw",
+        "actionType": "cast",
+        "evidenceContains": "You may cast Glamorous Outlaw for as long as it remains exiled",
+        "family": "granted_semantics",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-granted_ability_quote",
+        "coverageStratum": "granted_ability_quote"
+      },
+      {
+        "caseId": "rc3-pos-cat-0002",
+        "cardName": "A-Masked Bandits",
+        "actionType": "cast",
+        "evidenceContains": "cast from exile",
+        "family": "granted_semantics",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-granted_ability_quote",
+        "coverageStratum": "granted_ability_quote"
+      },
+      {
+        "caseId": "rc3-pos-cat-0002",
+        "cardName": "A-Masked Bandits",
+        "actionType": "cast",
+        "evidenceContains": "You may cast Masked Bandits for as long as it remains exiled",
+        "family": "granted_semantics",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-granted_ability_quote",
+        "coverageStratum": "granted_ability_quote"
+      },
+      {
+        "caseId": "rc3-pos-cat-0003",
+        "cardName": "A-Rakish Revelers",
+        "actionType": "cast",
+        "evidenceContains": "cast from exile",
+        "family": "granted_semantics",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-granted_ability_quote",
+        "coverageStratum": "granted_ability_quote"
+      },
+      {
+        "caseId": "rc3-pos-cat-0003",
+        "cardName": "A-Rakish Revelers",
+        "actionType": "cast",
+        "evidenceContains": "You may cast Rakish Revelers for as long as it remains exiled",
+        "family": "granted_semantics",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-granted_ability_quote",
+        "coverageStratum": "granted_ability_quote"
+      },
+      {
+        "caseId": "rc3-pos-cat-0004",
+        "cardName": "A-Shattered Seraph",
+        "actionType": "cast",
+        "evidenceContains": "cast from exile",
+        "family": "granted_semantics",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-granted_ability_quote",
+        "coverageStratum": "granted_ability_quote"
+      },
+      {
+        "caseId": "rc3-pos-cat-0004",
+        "cardName": "A-Shattered Seraph",
+        "actionType": "cast",
+        "evidenceContains": "You may cast Shattered Seraph for as long as it remains exiled",
+        "family": "granted_semantics",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-granted_ability_quote",
+        "coverageStratum": "granted_ability_quote"
+      },
+      {
+        "caseId": "rc3-pos-cat-0005",
+        "cardName": "\"Ach! Hans, Run!\"",
+        "actionType": "put_onto_battlefield",
+        "evidenceContains": "put it onto the battlefield",
+        "family": "optionality_dependency",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-search_put_shuffle_chain",
+        "coverageStratum": "search_put_shuffle_chain"
+      },
+      {
+        "caseId": "rc3-pos-cat-0005",
+        "cardName": "\"Ach! Hans, Run!\"",
+        "actionType": "shuffle_library",
+        "evidenceContains": "then shuffle",
+        "family": "optionality_dependency",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-search_put_shuffle_chain",
+        "coverageStratum": "search_put_shuffle_chain"
+      },
+      {
+        "caseId": "rc3-pos-cat-0006",
+        "cardName": "1996 World Champion",
+        "actionType": "put_counter",
+        "evidenceContains": "put 1996 World Champion on top of it",
+        "family": "other",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-search_put_shuffle_chain",
+        "coverageStratum": "search_put_shuffle_chain"
+      },
+      {
+        "caseId": "rc3-pos-cat-0007",
+        "cardName": "A-Navigation Orb",
+        "actionType": "sacrifice",
+        "evidenceContains": "Sacrifice Navigation Orb: Search your library for up to two basic land cards and/or Gate cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle",
+        "family": "search_shuffle_chains",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-search_put_shuffle_chain",
+        "coverageStratum": "search_put_shuffle_chain"
+      },
+      {
+        "caseId": "rc3-pos-cat-0008",
+        "cardName": "A-Ominous Parcel",
+        "actionType": "sacrifice",
+        "evidenceContains": "Sacrifice Ominous Parcel: It deals 4 damage to target creature",
+        "family": "activated_effects",
+        "failureStage": "other",
+        "abilityType": "rc3-positive-search_put_shuffle_chain",
+        "coverageStratum": "search_put_shuffle_chain"
+      },
+      {
+        "caseId": "rc3-pos-cat-0009",
+        "cardName": "A-Dokuchi Silencer",
+        "actionType": "put_onto_battlefield",
+        "evidenceContains": "Put this card onto the battlefield",
+        "family": "zone_transitions",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-mdfc_transform_zone_transition",
+        "coverageStratum": "mdfc_transform_zone_transition"
+      },
+      {
+        "caseId": "rc3-pos-cat-0010",
+        "cardName": "A-Silver-Fur Master",
+        "actionType": "put_onto_battlefield",
+        "evidenceContains": "Put this card onto the battlefield",
+        "family": "zone_transitions",
+        "failureStage": "missing_emission",
+        "abilityType": "rc3-positive-mdfc_transform_zone_transition",
+        "coverageStratum": "mdfc_transform_zone_transition"
+      },
+      {
+        "caseId": "rc3-pos-cat-0011",
+        "cardName": "A-Thousand-Faced Shadow",
+        "actionType": "put_onto_battlefield",
+        "evidenceContains": "Put this card onto the battlefield",
+        "family": "zone_transitions",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-mdfc_transform_zone_transition",
+        "coverageStratum": "mdfc_transform_zone_transition"
+      },
+      {
+        "caseId": "rc3-pos-cat-0012",
+        "cardName": "Aberrant Researcher // Perfected Form",
+        "actionType": "mill",
+        "evidenceContains": "mill a card, put the top card of your library into your graveyard",
+        "family": "mdfc_face_structure",
+        "failureStage": "missing_emission",
+        "abilityType": "rc3-positive-mdfc_transform_zone_transition",
+        "coverageStratum": "mdfc_transform_zone_transition"
+      },
+      {
+        "caseId": "rc3-pos-cat-0012",
+        "cardName": "Aberrant Researcher // Perfected Form",
+        "actionType": "mill",
+        "evidenceContains": "milled this way, transform this creature",
+        "family": "mdfc_face_structure",
+        "failureStage": "missing_emission",
+        "abilityType": "rc3-positive-mdfc_transform_zone_transition",
+        "coverageStratum": "mdfc_transform_zone_transition"
+      },
+      {
+        "caseId": "rc3-pos-cat-0015",
+        "cardName": "______",
+        "actionType": "cast",
+        "evidenceContains": "cast spells of the chosen types or spells whose names begin with the first letter of your name",
+        "family": "other",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-activated_post_colon_effect",
+        "coverageStratum": "activated_post_colon_effect"
+      },
+      {
+        "caseId": "rc3-pos-cat-0017",
+        "cardName": "A-Binding Geist // A-Spectral Binding",
+        "actionType": "exile",
+        "evidenceContains": "exile it instead",
+        "family": "replacement_effects",
+        "failureStage": "missing_emission",
+        "abilityType": "rc3-positive-replacement_if_would",
+        "coverageStratum": "replacement_if_would"
+      },
+      {
+        "caseId": "rc3-pos-cat-0018",
+        "cardName": "A-Brine Comber // A-Brinebound Gift",
+        "actionType": "exile",
+        "evidenceContains": "exile it instead",
+        "family": "replacement_effects",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-replacement_if_would",
+        "coverageStratum": "replacement_if_would"
+      },
+      {
+        "caseId": "rc3-pos-cat-0019",
+        "cardName": "A-Devoted Grafkeeper // A-Departed Soulkeeper",
+        "actionType": "exile",
+        "evidenceContains": "exile it instead",
+        "family": "replacement_effects",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-replacement_if_would",
+        "coverageStratum": "replacement_if_would"
+      },
+      {
+        "caseId": "rc3-pos-cat-0019",
+        "cardName": "A-Devoted Grafkeeper // A-Departed Soulkeeper",
+        "actionType": "cast",
+        "evidenceContains": "cast a spell from your graveyard, tap target creature you don't control",
+        "family": "replacement_effects",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-replacement_if_would",
+        "coverageStratum": "replacement_if_would"
+      },
+      {
+        "caseId": "rc3-pos-cat-0020",
+        "cardName": "A-Dorothea, Vengeful Victim // A-Dorothea's Retribution",
+        "actionType": "exile",
+        "evidenceContains": "exile it instead",
+        "family": "granted_semantics",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-replacement_if_would",
+        "coverageStratum": "replacement_if_would"
+      },
+      {
+        "caseId": "rc3-pos-cat-0027",
+        "cardName": "A Reckoning Approaches",
+        "actionType": "put_onto_battlefield",
+        "evidenceContains": "put a creature card from among them onto the battlefield",
+        "family": "zone_transitions",
+        "failureStage": "missing_emission",
+        "abilityType": "rc3-positive-optional_put_onto_battlefield",
+        "coverageStratum": "optional_put_onto_battlefield"
+      },
+      {
+        "caseId": "rc3-pos-cat-0030",
+        "cardName": "A-Circle of the Land Druid",
+        "actionType": "return_to_battlefield",
+        "evidenceContains": "return target land card from your graveyard to your hand",
+        "family": "zone_transitions",
+        "failureStage": "wrong_action_type",
+        "abilityType": "rc3-positive-zone_transition_return",
+        "coverageStratum": "zone_transition_return"
+      }
+    ],
+    "totalUnrelatedFn": 26
+  },
+  "priorityMatrix": [
+    {
+      "rank": 1,
+      "family": "granted_semantics",
+      "unrelatedFns": 9,
+      "globalFns": 12,
+      "expectedRecoverable": 7,
+      "fpRisk": "low",
+      "architecturalLeverage": "medium",
+      "recommendedOrder": 1
+    },
+    {
+      "rank": 2,
+      "family": "zone_transitions",
+      "unrelatedFns": 5,
+      "globalFns": 14,
+      "expectedRecoverable": 4,
+      "fpRisk": "medium",
+      "architecturalLeverage": "high",
+      "recommendedOrder": 2
+    },
+    {
+      "rank": 3,
+      "family": "replacement_effects",
+      "unrelatedFns": 4,
+      "globalFns": 7,
+      "expectedRecoverable": 3,
+      "fpRisk": "high",
+      "architecturalLeverage": "medium",
+      "recommendedOrder": 3
+    },
+    {
+      "rank": 4,
+      "family": "optionality_dependency",
+      "unrelatedFns": 2,
+      "globalFns": 10,
+      "expectedRecoverable": 2,
+      "fpRisk": "low",
+      "architecturalLeverage": "medium",
+      "recommendedOrder": 4
+    },
+    {
+      "rank": 6,
+      "family": "mdfc_face_structure",
+      "unrelatedFns": 2,
+      "globalFns": 6,
+      "expectedRecoverable": 2,
+      "fpRisk": "medium",
+      "architecturalLeverage": "medium",
+      "recommendedOrder": 5
+    },
+    {
+      "rank": 5,
+      "family": "other",
+      "unrelatedFns": 2,
+      "globalFns": 5,
+      "expectedRecoverable": 2,
+      "fpRisk": "medium",
+      "architecturalLeverage": "low",
+      "recommendedOrder": 6
+    },
+    {
+      "rank": 8,
+      "family": "activated_effects",
+      "unrelatedFns": 1,
+      "globalFns": 3,
+      "expectedRecoverable": 1,
+      "fpRisk": "low",
+      "architecturalLeverage": "low",
+      "recommendedOrder": 7
+    },
+    {
+      "rank": 7,
+      "family": "search_shuffle_chains",
+      "unrelatedFns": 1,
+      "globalFns": 3,
+      "expectedRecoverable": 1,
+      "fpRisk": "medium",
+      "architecturalLeverage": "medium",
+      "recommendedOrder": 8
+    }
+  ],
+  "recommendedNextFamily": "granted_semantics",
+  "v138PackBookkeeping": {
+    "caseCount": 10,
+    "caseIds": [
+      "granted-nested-v138-001",
+      "granted-nested-v138-002",
+      "granted-nested-v138-003",
+      "granted-nested-v138-005",
+      "granted-nested-v138-006",
+      "granted-nested-v138-007",
+      "granted-nested-v138-008",
+      "granted-nested-v138-009",
+      "granted-nested-v138-010",
+      "granted-nested-v138-011"
+    ],
+    "skippedIds": [
+      "granted-nested-v138-004",
+      "granted-nested-v138-012"
+    ],
+    "retiredFromManifest": [],
+    "note": "Identifier range 001–011 contains gap at 004; 012 never selected"
+  },
+  "grantedSemanticsStatus": "CLOSED — regression-protected; no further granted benchmark expansion authorized",
+  "v13Authorization": "NOT AUTHORIZED"
+}

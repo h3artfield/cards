@@ -18,6 +18,9 @@ export interface RC3ActionExtensions {
   grantedTo?: string;
   referentObjectId?: string;
   activatedEffectRegion?: boolean;
+  choiceGroupId?: string;
+  choiceAlternativeIndex?: number;
+  choiceMutuallyExclusive?: boolean;
 }
 
 export type RC3OracleActionV1 = import("./oracle-action-parser-v1").OracleActionV1 & RC3ActionExtensions;
@@ -30,6 +33,24 @@ export function tagExtractionSource<T extends RC3ActionExtensions>(
 }
 
 export function tagGrantedContext<T extends RC3ActionExtensions>(input: {
+  action: T;
+  grantingClauseId: string;
+  grantedAbilityId: string;
+  grantedTo?: string;
+}): T {
+  return {
+    ...input.action,
+    extractionSource: input.action.extractionSource ?? "rc3_clause_native",
+    executionContext: "granted_ability",
+    grantingClauseId: input.grantingClauseId,
+    grantedAbilityId: input.grantedAbilityId,
+    grantedTo: input.grantedTo,
+    abilityOrigin: "granted",
+    grantedByAbilityId: input.grantingClauseId,
+  };
+}
+
+export function tagTokenDefinitionContext<T extends RC3ActionExtensions>(input: {
   action: T;
   grantingClauseId: string;
   grantedAbilityId: string;

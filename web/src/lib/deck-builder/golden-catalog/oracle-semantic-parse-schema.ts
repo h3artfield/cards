@@ -147,6 +147,9 @@ export interface SemanticAction {
   provenance: SemanticActionProvenance;
   optionalEffect?: boolean;
   optionalCost?: boolean;
+  choiceGroupId?: string;
+  choiceAlternativeIndex?: number;
+  choiceMutuallyExclusive?: boolean;
   reviewStatus: "accepted" | "needs_review" | "overridden";
   parserVersion: string;
 }

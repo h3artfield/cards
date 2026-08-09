@@ -5,10 +5,12 @@ import { createHash } from "node:crypto";
 import type { OracleActionV1 } from "./oracle-action-parser-v1";
 import type { SegmentedAbility } from "./oracle-action-schema";
 import type { PrimitiveActionType } from "./oracle-action-taxonomy";
+import { attachOptionalityToAction } from "./oracle-action-optionality";
 import type { RC3ActionExtensions } from "./oracle-rc3-extraction-metadata";
 
 export function buildNativeAction(input: {
   oracleId: string;
+  oracleText: string;
   ability: SegmentedAbility;
   faceId: string;
   actionType: PrimitiveActionType;
@@ -20,13 +22,45 @@ export function buildNativeAction(input: {
   clauseId?: string;
   sourceZones?: string[];
   destinationZones?: string[];
+  optionalEffect?: boolean;
+  siblingActions?: Array<{
+    actionId: string;
+    evidenceStart: number;
+    evidenceEnd: number;
+    evidenceText: string;
+    abilityIndex: number;
+    abilityType: OracleActionV1["abilityType"];
+  }>;
   extensions?: RC3ActionExtensions;
 }): OracleActionV1 & RC3ActionExtensions {
+  const actionId = createHash("sha256")
+    .update(`${input.oracleId}:${input.actionType}:${input.evidenceStart}:${input.evidenceText}`)
+    .digest("hex")
+    .slice(0, 24);
+
+  const attach =
+    input.optionalEffect !== undefined
+      ? {
+          optionalEffect: input.optionalEffect,
+          optionalCost: false,
+          optionalityCertain: input.optionalEffect,
+        }
+      : attachOptionalityToAction({
+          action: {
+            actionId,
+            evidenceStart: input.evidenceStart,
+            evidenceEnd: input.evidenceEnd,
+            evidenceText: input.evidenceText,
+            abilityIndex: input.ability.abilityIndex,
+            abilityType: input.ability.abilityType as OracleActionV1["abilityType"],
+          },
+          ability: input.ability,
+          oracleText: input.oracleText,
+          siblingActions: input.siblingActions ?? [],
+        });
+
   return {
-    actionId: createHash("sha256")
-      .update(`${input.oracleId}:${input.actionType}:${input.evidenceStart}:${input.evidenceText}`)
-      .digest("hex")
-      .slice(0, 24),
+    actionId,
     oracleId: input.oracleId,
     faceId: input.faceId,
     faceIndex: 0,
@@ -42,12 +76,19 @@ export function buildNativeAction(input: {
     cardEvidenceEnd: input.evidenceEnd,
     faceEvidenceStart: input.evidenceStart - input.ability.paragraphStart,
     faceEvidenceEnd: input.evidenceEnd - input.ability.paragraphStart,
-    optional: false,
-    optionalEffect: /\bYou may\b/i.test(input.evidenceText),
+    optional: attach.optionalEffect,
+    optionalEffect: attach.optionalEffect,
+    optionalCost: attach.optionalCost || undefined,
+    optionalityEvidenceText: attach.optionalityEvidenceText,
+    optionalityEvidenceStart: attach.optionalityEvidenceStart,
+    optionalityEvidenceEnd: attach.optionalityEvidenceEnd,
+    optionalityScopeId: attach.optionalityScopeId,
+    optionalityController: attach.optionalityController,
+    optionalityCertain: attach.optionalityCertain,
     confidence: 0.92,
     reviewStatus: "accepted",
     extractionMethod: "deterministic",
-    parserVersion: "oracle-action-v1.34-rc3-ast-dev",
+    parserVersion: "oracle-action-v1.37-rc3-granted-nested-complete",
     sourceZones: input.sourceZones,
     destinationZones: input.destinationZones,
     affectedObjects: ["card"],

@@ -24,6 +24,7 @@ import {
 } from "./oracle-granted-ability-extraction";
 import { parseAbilityBlock } from "./oracle-rc3-ability-block";
 import { buildNativeAction } from "./oracle-rc3-action-builder";
+import { wireConditionsToActions } from "./oracle-action-optionality";
 import { tagExtractionSource, type RC3ActionExtensions } from "./oracle-rc3-extraction-metadata";
 
 export interface ClauseNode {
@@ -123,7 +124,20 @@ const PRIMITIVE_PATTERNS: Array<{
     actionType: "add_mana",
     destinationZones: ["mana_pool"],
   },
-  { pattern: /\bUntap target [^.]+\./i, actionType: "untap" },
+  {
+    pattern: /\bAdd one mana of any color\.?/i,
+    actionType: "add_mana",
+    destinationZones: ["mana_pool"],
+  },
+  { pattern: /\bUntap target [^.]+\.?/i, actionType: "untap" },
+  { pattern: /\bUntap this \w+\.?/i, actionType: "untap" },
+  { pattern: /\btap target [^.]+\.?/i, actionType: "tap", sourceZones: ["battlefield"] },
+  {
+    pattern: /\bPut a [-−+]?\d+\/[-−+]?\d+ counter on [^.]+\.?/i,
+    actionType: "put_counter",
+    destinationZones: ["battlefield"],
+  },
+  { pattern: /\bdeals? \d+ damage(?: to (?:any target|target [\w ]+|each [\w ]+))?\.?/i, actionType: "deal_damage" },
 ];
 
 function actionId(seed: string): string {
@@ -240,8 +254,89 @@ function parseGrantedAbility(ctx: GrantedQuoteContext, parentAbilityId: string):
   };
 }
 
+function extractTapOrUntapChoice(input: {
+  oracleId: string;
+  oracleText: string;
+  ability: SegmentedAbility;
+  faceId: string;
+  clause: ClauseNode;
+  actionIndexStart: number;
+  objectIdPrefix: string;
+  extensions?: RC3ActionExtensions;
+}): OracleActionV1[] {
+  const tapOrUntap = input.clause.text.match(/\b(?:you may )?tap or untap (target [^.]+?)\.?$/i);
+  if (!tapOrUntap) return [];
+
+  const targetPhrase = tapOrUntap[1]!.trim();
+  const tapNeedle = `tap ${targetPhrase}`;
+  const untapNeedle = `untap ${targetPhrase}`;
+  const tapOffset = input.clause.text.toLowerCase().indexOf(tapNeedle.toLowerCase());
+  const untapOffset = input.clause.text.toLowerCase().indexOf(untapNeedle.toLowerCase());
+  if (tapOffset < 0 || untapOffset < 0) return [];
+
+  const optionalEffect = /\byou may\b/i.test(input.clause.text);
+  const choiceGroupId = `${input.objectIdPrefix}:tap-or-untap`;
+  const choiceExtensions = {
+    ...input.extensions,
+    choiceGroupId,
+    choiceMutuallyExclusive: true,
+  };
+
+  let idx = input.actionIndexStart;
+  const mk = (actionType: "tap" | "untap", needle: string, offset: number, alternativeIndex: number) => {
+    const absStart = input.ability.paragraphStart + input.clause.localStart + offset;
+    const evidenceText = input.clause.text.slice(offset, offset + needle.length);
+    return buildNativeAction({
+      oracleId: input.oracleId,
+      oracleText: input.oracleText,
+      ability: input.ability,
+      faceId: input.faceId,
+      actionType,
+      evidenceText,
+      evidenceStart: absStart,
+      evidenceEnd: absStart + evidenceText.length,
+      actionIndex: idx++,
+      textRole: input.clause.role,
+      clauseId: input.clause.clauseId,
+      optionalEffect,
+      extensions: { ...choiceExtensions, choiceAlternativeIndex: alternativeIndex },
+    });
+  };
+
+  return [mk("tap", tapNeedle, tapOffset, 0), mk("untap", untapNeedle, untapOffset, 1)];
+}
+
+function postProcessClauseNativeOptionality(input: {
+  actions: OracleActionV1[];
+  abilities: SegmentedAbility[];
+}): OracleActionV1[] {
+  const byAbility = new Map<string, OracleActionV1[]>();
+  for (const action of input.actions) {
+    const key = `${action.faceId}:${action.abilityIndex}`;
+    const list = byAbility.get(key) ?? [];
+    list.push(action);
+    byAbility.set(key, list);
+  }
+
+  const result: OracleActionV1[] = [];
+  for (const [key, group] of byAbility) {
+    const [faceId, abilityIndexStr] = key.split(":");
+    const ability = input.abilities.find(
+      (a) => a.cardFaceId === faceId && a.abilityIndex === Number.parseInt(abilityIndexStr, 10),
+    );
+    if (!ability) {
+      result.push(...group);
+      continue;
+    }
+    result.push(...wireConditionsToActions({ actions: group, ability }));
+  }
+
+  return result.sort((a, b) => a.evidenceStart - b.evidenceStart || a.actionIndex - b.actionIndex);
+}
+
 function extractPrimitivesFromClause(input: {
   oracleId: string;
+  oracleText: string;
   ability: SegmentedAbility;
   faceId: string;
   clause: ClauseNode;
@@ -250,6 +345,11 @@ function extractPrimitivesFromClause(input: {
   suppressCast?: boolean;
   extensions?: RC3ActionExtensions;
 }): OracleActionV1[] {
+  const choiceActions = extractTapOrUntapChoice(input);
+  if (choiceActions.length > 0) {
+    return choiceActions;
+  }
+
   const actions: OracleActionV1[] = [];
   let idx = input.actionIndexStart;
 
@@ -305,6 +405,7 @@ function extractPrimitivesFromClause(input: {
       actions.push({
         ...buildNativeAction({
           oracleId: input.oracleId,
+          oracleText: input.oracleText,
           ability: input.ability,
           faceId: input.faceId,
           actionType,
@@ -326,6 +427,7 @@ function extractPrimitivesFromClause(input: {
 
 function extractSearchChain(input: {
   oracleId: string;
+  oracleText: string;
   ability: SegmentedAbility;
   faceId: string;
   clauses: ClauseNode[];
@@ -407,6 +509,7 @@ function extractSearchChain(input: {
       actions.push(
         buildNativeAction({
           oracleId: input.oracleId,
+          oracleText: input.oracleText,
           ability: input.ability,
           faceId: input.faceId,
           actionType,
@@ -503,6 +606,7 @@ export function extractClauseNativeActions(input: {
   const targetFaces = input.cardFace ? faces.filter((f) => f.faceId === input.cardFace) : faces;
 
   const actions: OracleActionV1[] = [];
+  const segmentedAbilities: SegmentedAbility[] = [];
   const grantedAbilities: GrantedAbilityNode[] = [];
   const activatedAbilities: ActivatedAbilityNode[] = [];
   const replacementEffects: ReplacementEffectNode[] = [];
@@ -513,6 +617,7 @@ export function extractClauseNativeActions(input: {
   for (const face of targetFaces) {
     const abilities = segmentAbilities(input.oracleId, face.faceId, face.text, face.start);
     for (const ability of abilities) {
+      segmentedAbilities.push(ability);
       const abilityId = `${input.oracleId}:${face.faceId}:${ability.abilityIndex}`;
       const parentId = abilityId;
 
@@ -567,6 +672,7 @@ export function extractClauseNativeActions(input: {
         };
         const replActions = extractPrimitivesFromClause({
           oracleId: input.oracleId,
+          oracleText: input.oracleText,
           ability,
           faceId: face.faceId,
           clause: replacementClause,
@@ -601,6 +707,7 @@ export function extractClauseNativeActions(input: {
           actions.push(
             ...extractPrimitivesFromClause({
               oracleId: input.oracleId,
+              oracleText: input.oracleText,
               ability,
               faceId: face.faceId,
               clause,
@@ -618,6 +725,7 @@ export function extractClauseNativeActions(input: {
           actions.push(
             ...extractPrimitivesFromClause({
               oracleId: input.oracleId,
+              oracleText: input.oracleText,
               ability,
               faceId: face.faceId,
               clause,
@@ -637,6 +745,7 @@ export function extractClauseNativeActions(input: {
           actions.push(
             ...extractPrimitivesFromClause({
               oracleId: input.oracleId,
+              oracleText: input.oracleText,
               ability,
               faceId: face.faceId,
               clause,
@@ -654,6 +763,7 @@ export function extractClauseNativeActions(input: {
       if (!isReplacementAbility) {
       const { links, actions: chainActions } = extractSearchChain({
         oracleId: input.oracleId,
+        oracleText: input.oracleText,
         ability,
         faceId: face.faceId,
         clauses: topClauses,
@@ -742,6 +852,7 @@ export function extractClauseNativeActions(input: {
           actions.push(
             ...extractPrimitivesFromClause({
               oracleId: input.oracleId,
+              oracleText: input.oracleText,
               ability: nestedAbility,
               faceId: face.faceId,
               clause: {
@@ -764,7 +875,10 @@ export function extractClauseNativeActions(input: {
   }
 
   return {
-    actions: dedupeActions(actions),
+    actions: postProcessClauseNativeOptionality({
+      actions: dedupeActions(actions),
+      abilities: segmentedAbilities,
+    }),
     grantedAbilities,
     activatedAbilities,
     replacementEffects,
@@ -784,6 +898,31 @@ function semanticActionKey(action: OracleActionV1): string {
     (action.destinationZones ?? []).join(","),
     action.evidenceText.trim().slice(0, 32),
   ].join("|");
+}
+
+function overlayNativeMetadata(v1Action: OracleActionV1, nativeAction: OracleActionV1): OracleActionV1 {
+  const nativeExt = nativeAction as OracleActionV1 & RC3ActionExtensions;
+  const v1Ext = v1Action as OracleActionV1 & RC3ActionExtensions;
+  return {
+    ...v1Action,
+    optionalEffect: nativeAction.optionalityCertain ? nativeAction.optionalEffect : v1Action.optionalEffect,
+    optional: nativeAction.optionalityCertain ? nativeAction.optional : v1Action.optional,
+    optionalCost: nativeAction.optionalCost ?? v1Action.optionalCost,
+    optionalityEvidenceText: nativeAction.optionalityEvidenceText ?? v1Action.optionalityEvidenceText,
+    optionalityEvidenceStart: nativeAction.optionalityEvidenceStart ?? v1Action.optionalityEvidenceStart,
+    optionalityEvidenceEnd: nativeAction.optionalityEvidenceEnd ?? v1Action.optionalityEvidenceEnd,
+    optionalityScopeId: nativeAction.optionalityScopeId ?? v1Action.optionalityScopeId,
+    optionalityController: nativeAction.optionalityController ?? v1Action.optionalityController,
+    optionalityCertain: nativeAction.optionalityCertain ?? v1Action.optionalityCertain,
+    conditionType: nativeAction.conditionType ?? v1Action.conditionType,
+    conditionText: nativeAction.conditionText ?? v1Action.conditionText,
+    conditionEvidenceStart: nativeAction.conditionEvidenceStart ?? v1Action.conditionEvidenceStart,
+    conditionEvidenceEnd: nativeAction.conditionEvidenceEnd ?? v1Action.conditionEvidenceEnd,
+    dependsOnActionIds: nativeAction.dependsOnActionIds ?? v1Action.dependsOnActionIds,
+    choiceGroupId: nativeExt.choiceGroupId ?? v1Ext.choiceGroupId,
+    choiceAlternativeIndex: nativeExt.choiceAlternativeIndex ?? v1Ext.choiceAlternativeIndex,
+    choiceMutuallyExclusive: nativeExt.choiceMutuallyExclusive ?? v1Ext.choiceMutuallyExclusive,
+  };
 }
 
 /** Merge clause-native actions with V1 baseline — semantic dedupe, native supplements gaps. */
@@ -810,10 +949,18 @@ export function mergeClauseNativeWithV1(
     }
   }
 
+  const overlaidV1 = v1Actions.map((v1Action) => {
+    const nativeMatch = native.actions.find(
+      (nativeAction) =>
+        positionKey(nativeAction) === positionKey(v1Action) ||
+        semanticActionKey(nativeAction) === semanticActionKey(v1Action),
+    );
+    return nativeMatch ? overlayNativeMetadata(v1Action, nativeMatch) : v1Action;
+  });
   const nativeOnly = native.actions.filter(
     (n) => !v1Keys.has(positionKey(n)) && !v1Semantic.has(semanticActionKey(n)),
   );
-  const merged = dedupeActions([...v1Actions, ...nativeOnly]);
+  const merged = dedupeActions([...overlaidV1, ...nativeOnly]);
 
   return {
     actions: merged.map((a, i) => ({ ...a, actionIndex: i })),

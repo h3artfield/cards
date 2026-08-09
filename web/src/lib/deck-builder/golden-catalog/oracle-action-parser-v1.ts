@@ -515,6 +515,17 @@ function applyOptionalityPostProcess(
 
     enriched = wireConditionsToActions({ actions: enriched, ability });
     enriched = attachPlayerMayPayScopes({ actions: enriched, ability });
+    for (const action of enriched) {
+      if (
+        action.optionalityCertain &&
+        action.optionalityEvidenceText &&
+        !action.optionalCost &&
+        /\bmay\b/i.test(action.optionalityEvidenceText)
+      ) {
+        action.optionalEffect = true;
+        action.optional = true;
+      }
+    }
 
     for (const action of enriched) {
       let reviewStatus = action.reviewStatus;
@@ -1088,10 +1099,8 @@ function acceptAction(input: {
     ? "replacement"
     : input.rule.abilityType ?? toV1AbilityType(classified);
   const zones = inferZones(evidenceText);
-  const permissionWindow = input.ability.paragraphText.slice(Math.max(0, localStart - 24), localStart);
   let optionalEffect =
     input.rule.optional === true ||
-    /\b(?:you|they|that player|its controller) may\b/i.test(permissionWindow) ||
     /\b(?:you|they) may\b/i.test(evidenceText);
   const quantityConstraint = extractQuantityConstraint(evidenceText);
   const targetConstraint = parseTargetConstraint(evidenceText);
@@ -1135,10 +1144,6 @@ function acceptAction(input: {
   ) {
     optionalEffect = true;
   }
-  const ifYouDoDrawIdx = input.ability.paragraphText.search(/\bIf you do,\s/i);
-  if (resolvedActionType === "draw" && ifYouDoDrawIdx >= 0 && localStart > ifYouDoDrawIdx) {
-    optionalEffect = true;
-  }
 
   let reviewStatus = assignReviewStatus({
     abilityType,
@@ -1168,6 +1173,12 @@ function acceptAction(input: {
   const ifYouDoIdx = input.ability.paragraphText.search(/\bIf you do,\s/i);
   if (ifYouDoIdx >= 0 && localStart > ifYouDoIdx && confidence >= 0.82) {
     reviewStatus = "accepted";
+  }
+  if (
+    input.clause?.dependency.kind === "if_you_do" ||
+    input.clause?.dependency.kind === "when_you_do"
+  ) {
+    optionalEffect = false;
   }
 
   return {
@@ -1844,6 +1855,15 @@ export function extractOracleActionsV1(input: {
 
   const grammarSyncedActions = withOptionality.map((a) => {
     const ability = abilities.find((ab) => ab.abilityIndex === a.abilityIndex && ab.cardFaceId === a.faceId);
+    if (
+      a.optionalityCertain ||
+      a.conditionType === "if_you_do" ||
+      a.conditionType === "when_you_do" ||
+      a.clauseDependencyKind === "if_you_do" ||
+      a.clauseDependencyKind === "when_you_do"
+    ) {
+      return a;
+    }
     const grammarOptional = inferOptionalEffectFromGrammar({
       abilityParagraph: ability?.paragraphText ?? a.evidenceText,
       actionEvidenceText: a.evidenceText,

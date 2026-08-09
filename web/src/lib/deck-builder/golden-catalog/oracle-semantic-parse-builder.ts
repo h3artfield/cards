@@ -3,6 +3,7 @@
  */
 import type { SegmentedAbility } from "./oracle-action-schema";
 import type { OracleActionV1, OracleActionV1Result } from "./oracle-action-parser-v1";
+import type { RC3ActionExtensions } from "./oracle-rc3-extraction-metadata";
 import { ORACLE_ACTION_PARSER_VERSION } from "./oracle-action-schema";
 import {
   buildLoyaltyAbilities,
@@ -369,6 +370,9 @@ export function buildOracleSemanticParse(
       provenance,
       optionalEffect: action.optionalEffect,
       optionalCost: action.optionalCost,
+      choiceGroupId: (action as OracleActionV1 & RC3ActionExtensions).choiceGroupId,
+      choiceAlternativeIndex: (action as OracleActionV1 & RC3ActionExtensions).choiceAlternativeIndex,
+      choiceMutuallyExclusive: (action as OracleActionV1 & RC3ActionExtensions).choiceMutuallyExclusive,
       reviewStatus: action.reviewStatus,
       parserVersion: ORACLE_ACTION_PARSER_VERSION,
     };

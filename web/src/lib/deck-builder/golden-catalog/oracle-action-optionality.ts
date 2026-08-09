@@ -38,7 +38,7 @@ export interface MayScope {
 }
 
 const MAY_CONTROLLER_PATTERN =
-  /\b(You|An opponent|That player|Each player|Its controller) may\b/gi;
+  /\b(You|An opponent|That player|Target player|Each player|Its controller) may\b/gi;
 
 /** Only "may pay" is an optional cost by default; sacrifice/discard are effects unless additional-cost context. */
 function isOptionalCostAfterMay(paragraph: string, afterMayLocal: string): boolean {
@@ -60,7 +60,7 @@ function mapController(raw: string): OptionalityController {
   const lower = raw.toLowerCase();
   if (lower === "you") return "you";
   if (lower === "an opponent") return "opponent";
-  if (lower === "that player") return "target_player";
+  if (lower === "that player" || lower === "target player") return "target_player";
   if (lower === "each player") return "each_player";
   return "object_controller";
 }

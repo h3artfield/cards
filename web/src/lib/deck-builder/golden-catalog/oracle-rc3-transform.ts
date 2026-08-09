@@ -30,7 +30,7 @@ import {
 import { isInsideTokenGlossaryRegion } from "./oracle-rc3-token-glossary";
 import type { SegmentedAbility } from "./oracle-action-schema";
 
-export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.36-rc3-granted-nested-dev";
+export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.37-rc3-granted-nested-complete";
 
 const PUT_INTO_HAND_RE =
   /\b(?:put (?:it|that card|one of them|one of those cards|two of those cards|three of those cards|four of those cards|five of those cards|up to [^.]+?) into (?:your |their )?hand|Put (?:that card|one of them|one of those cards|two of those cards|target card from [^.]+?) into (?:your |their |its owner's )?hand|reveal (?:it|that card)[^.]* and put (?:it|that card) into your hand)\b/i;
@@ -504,6 +504,19 @@ export function applyRC3Transforms(
       )
     ) {
       nativeForMerge.push(grantedAction);
+    }
+  }
+  for (const nativeAction of clauseNative.actions) {
+    const ext = nativeAction as RC3ActionExtensions;
+    if (
+      !ext.choiceGroupId &&
+      !(nativeAction as OracleActionV1 & { dependsOnActionIds?: string[] }).dependsOnActionIds?.length
+    ) {
+      continue;
+    }
+    const key = `${nativeAction.actionType}:${nativeAction.evidenceStart}:${nativeAction.evidenceText.slice(0, 20)}`;
+    if (!nativeForMerge.some((a) => `${a.actionType}:${a.evidenceStart}:${a.evidenceText.slice(0, 20)}` === key)) {
+      nativeForMerge.push(nativeAction);
     }
   }
   const merged = mergeClauseNativeWithV1(actions, { ...clauseNative, actions: nativeForMerge });
