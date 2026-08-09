@@ -1,0 +1,63 @@
+{
+  "migrationVersion": "activated-cost-fall-to-earth-gold-migration-v139",
+  "frozenAt": "2026-08-09T16:30:00.000Z",
+  "parserConsulted": false,
+  "reviewer": "rc3-v139-activated-cost-gold-adjudication",
+  "rule": "Activated costs are Layer 1 only — sacrifice/tap/mana in costRegion must not appear as Layer-2 primitive gold. Stale benchmark rows corrected to canonical oracle semantics.",
+  "policyDistinction": {
+    "activated_cost_layer1": "{costs}, Sacrifice X: effect → sacrifice/tap/mana payment is ActivatedAbility.cost (Layer 1), not Layer-2 primitive",
+    "activated_effect_layer2": "Post-colon effect region → search_library, put, shuffle, etc. remain Layer-2",
+    "forbidden_cost_primitive": "forbiddenPrimitiveActions includes sacrifice when removed from L2 gold for cost-span cases"
+  },
+  "records": [
+    {
+      "caseId": "rc3-pos-cat-0007",
+      "cardName": "A-Navigation Orb",
+      "removeLayer2Actions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice Navigation Orb"
+        }
+      ],
+      "expectedStructurePatch": {
+        "minActivatedAbilities": 1
+      },
+      "policyClass": "activated_cost_layer1_only",
+      "policyReason": "Sacrifice Navigation Orb is activated cost (pre-colon costRegion), not Layer-2 effect primitive. Parser correctly emits search/put/shuffle only."
+    },
+    {
+      "caseId": "dev-exp-v1-012",
+      "cardName": "Fall to Earth",
+      "replaceLayer2Actions": [
+        {
+          "fromActionType": "destroy",
+          "fromEvidenceContains": "Destroy target creature with flying",
+          "toActionType": "exile",
+          "toEvidenceContains": "Exile target creature"
+        },
+        {
+          "fromActionType": "gain_life",
+          "fromEvidenceContains": "gains 4 life",
+          "toActionType": "gain_life",
+          "toEvidenceContains": "gains 3 life"
+        }
+      ],
+      "addLayer2Actions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for a basic land card, reveal it, put it into your hand, then shuffle"
+        },
+        {
+          "actionType": "put_into_hand",
+          "evidenceContains": "put it into your hand"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "policyClass": "canonical_oracle_semantics",
+      "policyReason": "Historical benchmark gold referenced wrong card text (destroy flying / gains 4). Canonical oracle is exile + each player gains 3 life; landcycling tutor chain is valid Layer-2."
+    }
+  ]
+}

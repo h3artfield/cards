@@ -45,10 +45,16 @@ export type Layer1ConditionModel = {
   evidenceContains: string;
 };
 
+export type Layer2Addition = {
+  actionType: string;
+  evidenceContains: string;
+};
+
 export type GoldMigrationRecord = {
   caseId: string;
   removeLayer2Actions?: Layer2Removal[];
   replaceLayer2Actions?: Layer2Replacement[];
+  addLayer2Actions?: Layer2Addition[];
   /** @deprecated use removeLayer2Actions */
   removeCastEvidence?: string;
   layer1Permission?: Layer1PermissionModel | Layer1PermissionModel[];
@@ -75,12 +81,17 @@ const ZONE_NINJUTSU_REPLACEMENT_MIGRATION_PATH = resolve(
   "data/milestones/rc3-development/zone-ninjutsu-replacement-gold-migration-v137.json",
 );
 
+const ACTIVATED_COST_FALL_TO_EARTH_MIGRATION_PATH = resolve(
+  "data/milestones/rc3-development/activated-cost-fall-to-earth-gold-migration-v139.json",
+);
+
 const MIGRATION_PATHS = [
   DEFAULT_PATH,
   SHUFFLE_MIGRATION_PATH,
   TOKEN_DEFINITION_MIGRATION_PATH,
   LAND_GRANT_PERMISSION_MIGRATION_PATH,
   ZONE_NINJUTSU_REPLACEMENT_MIGRATION_PATH,
+  ACTIVATED_COST_FALL_TO_EARTH_MIGRATION_PATH,
 ];
 
 function normalizeRecord(record: GoldMigrationRecord): Layer2Removal[] {
@@ -150,6 +161,7 @@ export function applyGoldMigrationV135<T extends OracleActionEvalCaseV2>(
 
     const removals = caseRecords.flatMap((record) => normalizeRecord(record));
     const replacements = caseRecords.flatMap((record) => record.replaceLayer2Actions ?? []);
+    const additions = caseRecords.flatMap((record) => record.addLayer2Actions ?? []);
     let expectedPrimitiveActions = testCase.expectedPrimitiveActions;
     if (removals.length) {
       expectedPrimitiveActions = expectedPrimitiveActions.filter(
@@ -166,6 +178,24 @@ export function applyGoldMigrationV135<T extends OracleActionEvalCaseV2>(
           evidenceContains: replacement.toEvidenceContains ?? g.evidenceContains,
         };
       });
+    }
+    if (additions.length) {
+      for (const addition of additions) {
+        const exists = expectedPrimitiveActions.some(
+          (g) =>
+            g.actionType === addition.actionType &&
+            (g.evidenceContains ?? "").toLowerCase().includes(addition.evidenceContains.toLowerCase().slice(0, 20)),
+        );
+        if (!exists) {
+          expectedPrimitiveActions = [
+            ...expectedPrimitiveActions,
+            {
+              actionType: addition.actionType as (typeof expectedPrimitiveActions)[number]["actionType"],
+              evidenceContains: addition.evidenceContains,
+            },
+          ];
+        }
+      }
     }
 
     const forbidden = new Set(testCase.forbiddenPrimitiveActions ?? []);
