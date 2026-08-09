@@ -1,0 +1,63 @@
+{
+  "generatedAt": "2026-08-09T00:00:00.000Z",
+  "checkpoint": "oracle-action-v1.36-rc3-granted-nested-dev",
+  "parentCheckpoint": "oracle-action-v1.35-rc3-granted-region-complete",
+  "summary": "Stage-C nested-grant repair introduces partial granted-native behavior via unconditional grantedStructural merge. Full granted_ability_quote family promotion remains deferred.",
+  "executionMatrix": {
+    "regionDiscovery": {
+      "legacyDefault": true,
+      "clauseNative": false,
+      "featureGated": false,
+      "implementation": "oracle-rc3-granted-rules-span-detector + buildGrantedRulesRegions",
+      "status": "unchanged from v1.35 region-complete"
+    },
+    "contextRouting": {
+      "default": true,
+      "implementation": "oracle-rc3-semantic-context-router",
+      "status": "unchanged"
+    },
+    "classification": {
+      "default": true,
+      "implementation": "oracle-rc3-granted-rules-classifier",
+      "status": "unchanged"
+    },
+    "nestedAbilityParsing": {
+      "clauseNative": true,
+      "featureGated": false,
+      "path": "granted quote inner text → findGrantedQuoteContexts → parseAbilityBlock → ordinary activated/triggered clause path",
+      "status": "live in development default (Stage-C repair)"
+    },
+    "nestedSemanticActionMerge": {
+      "grantedStructuralUnconditional": "accepted default output",
+      "granted_ability_quoteFamilyPromotion": "NOT in DEFAULT_RC3_PROMOTED_FAMILIES",
+      "implementation": "oracle-rc3-transform.ts merges executionContext=granted_ability from clause-native regardless of getRC3PromotedFamilies()",
+      "status": "partial promotion — structural merge is live; family gate is not"
+    },
+    "dedupe": {
+      "clauseNativeSpanDedupe": "granted_ability wins over immediate at same span (dedupeActions in clause-native)",
+      "mergeDedupe": "mergeClauseNativeWithV1 semantic key dedupe; native supplements v1 gaps",
+      "v1Suppression": "shouldSuppressAction suppresses v1 L2 inside granted quotes",
+      "status": "live in development default"
+    }
+  },
+  "alreadyLiveInDevelopmentDefault": [
+    "Nested granted quote → AbilityBlock → costRegion/effectRegion segmentation",
+    "clause-native primitive extraction inside grants with executionContext=granted_ability",
+    "Unconditional grantedStructural merge into accepted semantic output",
+    "Host-level clauseInsideGrantedQuote skip for spurious immediate L2",
+    "v1 transform L2 suppression inside granted quotes"
+  ],
+  "futureGrantedNativePromotionWouldStillChange": [
+    "Formal promotion of granted_ability_quote via getRC3PromotedFamilies() — policy consolidation, not new extraction path",
+    "Any remaining shadow-only or experimental granted-quote flags (if reintroduced)",
+    "Region discovery migration from legacy detector to clause-native quote discovery (not live)",
+    "Broader grant semantics beyond nested AbilityBlock (replacement/MDFC — explicitly WAIT)",
+    "Production default toggle separate from development DEFAULT_RC3_PROMOTED_FAMILIES"
+  ],
+  "explicitlyNotAuthorized": {
+    "grantedNativePromotion": "WAIT",
+    "replacementMdfc": "WAIT",
+    "v13": "NOT AUTHORIZED",
+    "v137Tuning": "WAIT FOR FIRST-RUN FORENSICS"
+  }
+}
