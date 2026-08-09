@@ -1,0 +1,610 @@
+{
+  "generatedAt": "2026-08-09T02:04:48.879Z",
+  "checkpoint": "granted-v136-stage-b-denominator-reconciliation",
+  "summary": {
+    "goldRegions": 26,
+    "endToEndSuccess": 26,
+    "a1GrantedGoldRegions": 26,
+    "stageBEligibleGoldRegions": 26,
+    "stageBRequiresClassifierAdjudication": 25,
+    "stageBBypassGoldRegions": 1,
+    "stageBUniqueClassifierEvaluations": 25,
+    "instrumentationStageB": {
+      "conditionalOnGrantedRulesRoute": 26,
+      "tp": 26,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "precisionLabel": "100.0%",
+      "recall": 1,
+      "recallLabel": "100.0%"
+    },
+    "stageB_TP_FP_FN": {
+      "tp": 25,
+      "fp": 0,
+      "fn": 0,
+      "bypass": 1
+    },
+    "explanation": "End-to-end counts all 26 gold regions. Stage-B classifier evaluates each unique physical granted_rules route once; duplicate gold membership (Compulsory Rest) bypasses a second classifier invocation while both regions pass end-to-end."
+  },
+  "duplicateRouteMembership": [
+    {
+      "routeKey": "020225db-5623-49c2-8cdf-1ec2a05b8b0a:front:2:82-130",
+      "regionKeys": [
+        "granted-exp-v136-007:region0",
+        "granted-exp-v136-007:region1"
+      ]
+    }
+  ],
+  "bypassRows": [
+    {
+      "caseId": "granted-exp-v136-007",
+      "cardName": "Compulsory Rest",
+      "regionKey": "granted-exp-v136-007:region1",
+      "goldRegionSpan": {
+        "start": 59,
+        "end": 128,
+        "text": "Enchanted creature has \"{2}, Sacrifice this creature: You gain 2 life"
+      },
+      "grammarFamily": "enchanted_has",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": false,
+      "stageBResultOrBypass": "BYPASS",
+      "stageBBypassReason": "duplicate gold membership — shares granted_rules route 020225db-5623-49c2-8cdf-1ec2a05b8b0a:front:2:82-130 with granted-exp-v136-007:region0; classifier evaluated once for physical route",
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "020225db-5623-49c2-8cdf-1ec2a05b8b0a:front:2:82-130",
+      "routeTypography": "quoted",
+      "routeClassification": "granted_rules_ability"
+    }
+  ],
+  "rows": [
+    {
+      "caseId": "granted-exp-v136-001",
+      "cardName": "Behemoth Sledge",
+      "regionKey": "granted-exp-v136-001:region0",
+      "goldRegionSpan": {
+        "start": 0,
+        "end": 57,
+        "text": "Equipped creature gets +2/+2 and has trample and lifelink"
+      },
+      "grammarFamily": "equipment_has",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "00573e77-8ff6-4acb-8683-8827d965288f:front:0:0-57",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-002",
+      "cardName": "Giant's Amulet",
+      "regionKey": "granted-exp-v136-002:region0",
+      "goldRegionSpan": {
+        "start": 140,
+        "end": 229,
+        "text": "Equipped creature gets +0/+1 and has \"This creature has hexproof as long as it's untapped"
+      },
+      "grammarFamily": "equipment_has",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "016a6ec3-f4f6-4b47-9931-e0b14a25bd5e:front:1:140-231",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-003",
+      "cardName": "Sword of Light and Shadow",
+      "regionKey": "granted-exp-v136-003:region0",
+      "goldRegionSpan": {
+        "start": 0,
+        "end": 73,
+        "text": "Equipped creature gets +2/+2 and has protection from white and from black"
+      },
+      "grammarFamily": "equipment_has",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "01c8a554-45a6-46ca-b40a-af0fd4529e40:front:0:0-73",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-004",
+      "cardName": "Zephyr Boots",
+      "regionKey": "granted-exp-v136-004:region0",
+      "goldRegionSpan": {
+        "start": 0,
+        "end": 28,
+        "text": "Equipped creature has flying"
+      },
+      "grammarFamily": "equipment_has",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "02f3b9c3-f611-4f05-ab3e-b296916efdad:front:0:22-28",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-005",
+      "cardName": "Dragon Fangs",
+      "regionKey": "granted-exp-v136-005:region0",
+      "goldRegionSpan": {
+        "start": 17,
+        "end": 62,
+        "text": "Enchanted creature gets +1/+1 and has trample"
+      },
+      "grammarFamily": "enchanted_has",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "0131d2ac-d677-45fd-9729-a5428139cb5b:front:1:17-62",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-006",
+      "cardName": "Leafcrown Dryad",
+      "regionKey": "granted-exp-v136-006:region0",
+      "goldRegionSpan": {
+        "start": 157,
+        "end": 200,
+        "text": "Enchanted creature gets +2/+2 and has reach"
+      },
+      "grammarFamily": "enchanted_has",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "01914751-af8e-4aea-a254-6fa4f9fd3457:front:2:157-200",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-007",
+      "cardName": "Compulsory Rest",
+      "regionKey": "granted-exp-v136-007:region0",
+      "goldRegionSpan": {
+        "start": 17,
+        "end": 128,
+        "text": "Enchanted creature can't attack or block.\nEnchanted creature has \"{2}, Sacrifice this creature: You gain 2 life"
+      },
+      "grammarFamily": "enchanted_has",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "020225db-5623-49c2-8cdf-1ec2a05b8b0a:front:2:82-130",
+      "routeTypography": "quoted",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-007",
+      "cardName": "Compulsory Rest",
+      "regionKey": "granted-exp-v136-007:region1",
+      "goldRegionSpan": {
+        "start": 59,
+        "end": 128,
+        "text": "Enchanted creature has \"{2}, Sacrifice this creature: You gain 2 life"
+      },
+      "grammarFamily": "enchanted_has",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": false,
+      "stageBResultOrBypass": "BYPASS",
+      "stageBBypassReason": "duplicate gold membership — shares granted_rules route 020225db-5623-49c2-8cdf-1ec2a05b8b0a:front:2:82-130 with granted-exp-v136-007:region0; classifier evaluated once for physical route",
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "020225db-5623-49c2-8cdf-1ec2a05b8b0a:front:2:82-130",
+      "routeTypography": "quoted",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-008",
+      "cardName": "Strength of Lunacy",
+      "regionKey": "granted-exp-v136-008:region0",
+      "goldRegionSpan": {
+        "start": 17,
+        "end": 76,
+        "text": "Enchanted creature gets +2/+1 and has protection from white"
+      },
+      "grammarFamily": "enchanted_has",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "02a95ea7-cfb9-497c-a004-3e783856d79c:front:1:17-76",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-009",
+      "cardName": "Bond of Discipline",
+      "regionKey": "granted-exp-v136-009:region0",
+      "goldRegionSpan": {
+        "start": 42,
+        "end": 95,
+        "text": "Creatures you control gain lifelink until end of turn"
+      },
+      "grammarFamily": "creatures_gain",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "00e9957a-5684-4a07-954e-8161925fefe4:front:0:69-95",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-010",
+      "cardName": "Viashino Lashclaw",
+      "regionKey": "granted-exp-v136-010:region0",
+      "goldRegionSpan": {
+        "start": 21,
+        "end": 71,
+        "text": "Creatures you control gain haste until end of turn"
+      },
+      "grammarFamily": "creatures_gain",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "02358f98-99d5-45a3-b7e3-f2cbf08fa52c:front:0:48-71",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-011",
+      "cardName": "Sage of the Inward Eye",
+      "regionKey": "granted-exp-v136-011:region0",
+      "goldRegionSpan": {
+        "start": 46,
+        "end": 99,
+        "text": "creatures you control gain lifelink until end of turn"
+      },
+      "grammarFamily": "creatures_gain",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "02c741d0-99d3-48e5-9846-0fea5a0a29fe:front:1:46-99",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-012",
+      "cardName": "Venom Connoisseur",
+      "regionKey": "granted-exp-v136-012:region0",
+      "goldRegionSpan": {
+        "start": 175,
+        "end": 230,
+        "text": "creatures you control gain deathtouch until end of turn"
+      },
+      "grammarFamily": "creatures_gain",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "03ebc100-68ac-4d53-adc2-d537212f7d31:front:0:202-230",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-013",
+      "cardName": "Brawn",
+      "regionKey": "granted-exp-v136-013:region0",
+      "goldRegionSpan": {
+        "start": 76,
+        "end": 110,
+        "text": "creatures you control have trample"
+      },
+      "grammarFamily": "creatures_have",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "00876e98-d062-4a12-85e6-86a2b20cf867:front:1:103-110",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-014",
+      "cardName": "Furnace Oriflamme",
+      "regionKey": "granted-exp-v136-014:region0",
+      "goldRegionSpan": {
+        "start": 63,
+        "end": 95,
+        "text": "creatures you control have haste"
+      },
+      "grammarFamily": "creatures_have",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "00c31b71-9bd3-4ac6-9efe-c05d56d18b91:front:1:90-95",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-014",
+      "cardName": "Furnace Oriflamme",
+      "regionKey": "granted-exp-v136-014:region1",
+      "goldRegionSpan": {
+        "start": 130,
+        "end": 164,
+        "text": "creatures you control have trample"
+      },
+      "grammarFamily": "creatures_have",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "00c31b71-9bd3-4ac6-9efe-c05d56d18b91:front:2:157-164",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-015",
+      "cardName": "Aggressive Mammoth",
+      "regionKey": "granted-exp-v136-015:region0",
+      "goldRegionSpan": {
+        "start": 106,
+        "end": 140,
+        "text": "creatures you control have trample"
+      },
+      "grammarFamily": "creatures_have",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "032b5fc4-5aca-41b6-9bf6-2c1ed0018968:front:1:133-140",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-016",
+      "cardName": "Rage Reflection",
+      "regionKey": "granted-exp-v136-016:region0",
+      "goldRegionSpan": {
+        "start": 0,
+        "end": 40,
+        "text": "Creatures you control have double strike"
+      },
+      "grammarFamily": "creatures_have",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "03fb26b1-6d9c-455b-9b2f-a052a9222db7:front:0:27-40",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-017",
+      "cardName": "Granger Guildmage",
+      "regionKey": "granted-exp-v136-017:region0",
+      "goldRegionSpan": {
+        "start": 84,
+        "end": 136,
+        "text": "Target creature gains first strike until end of turn"
+      },
+      "grammarFamily": "target_gains",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "0230fdda-d916-457e-9dfd-61783fcf4652:front:1:106-136",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-018",
+      "cardName": "Gollum, Silent Slinker // Meager Meal",
+      "regionKey": "granted-exp-v136-018:region0",
+      "goldRegionSpan": {
+        "start": 126,
+        "end": 152,
+        "text": "Target player gains 2 life"
+      },
+      "grammarFamily": "target_gains",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "0296d57e-e5b9-456f-bb21-eb584adefb4c:back:0:146-152",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-019",
+      "cardName": "Donate",
+      "regionKey": "granted-exp-v136-019:region0",
+      "goldRegionSpan": {
+        "start": 0,
+        "end": 59,
+        "text": "Target player gains control of target permanent you control"
+      },
+      "grammarFamily": "target_gains",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "049d1fb2-cce7-40e7-a633-e84cf9782d89:front:0:20-59",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-020",
+      "cardName": "Pale Wayfarer",
+      "regionKey": "granted-exp-v136-020:region0",
+      "goldRegionSpan": {
+        "start": 16,
+        "end": 108,
+        "text": "Target creature gains protection from the color of its controller's choice until end of turn"
+      },
+      "grammarFamily": "target_gains",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "06b8acf2-3f2f-4e8f-9584-8d2ffa18a496:front:0:38-108",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-021",
+      "cardName": "Starry-Eyed Skyrider",
+      "regionKey": "granted-exp-v136-021:region0",
+      "goldRegionSpan": {
+        "start": 117,
+        "end": 147,
+        "text": "tokens you control have flying"
+      },
+      "grammarFamily": "token_has",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "04e615e6-4088-4170-904c-f2d4bcebed59:front:2:141-147",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-022",
+      "cardName": "Jaheira, Friend of the Forest",
+      "regionKey": "granted-exp-v136-022:region0",
+      "goldRegionSpan": {
+        "start": 0,
+        "end": 37,
+        "text": "Tokens you control have \"{T}: Add {G}"
+      },
+      "grammarFamily": "token_has",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "0aeeb0d7-15a3-4722-ad67-8fc7fe89220d:front:0:24-39",
+      "routeTypography": "quoted",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-023",
+      "cardName": "Eternal Skylord",
+      "regionKey": "granted-exp-v136-023:region0",
+      "goldRegionSpan": {
+        "start": 203,
+        "end": 233,
+        "text": "tokens you control have flying"
+      },
+      "grammarFamily": "token_has",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "324a30cc-bddd-463c-9f28-c94c93a26780:front:1:227-233",
+      "routeTypography": "unquoted_complement",
+      "routeClassification": "granted_rules_ability"
+    },
+    {
+      "caseId": "granted-exp-v136-024",
+      "cardName": "Zurgo, Thunder's Decree",
+      "regionKey": "granted-exp-v136-024:region0",
+      "goldRegionSpan": {
+        "start": 194,
+        "end": 249,
+        "text": "tokens you control have \"This token can't be sacrificed"
+      },
+      "grammarFamily": "token_has",
+      "a0Result": "PASS",
+      "a1Result": "PASS",
+      "stageBEligibility": "eligible",
+      "stageBRequiresClassifierAdjudication": true,
+      "stageBResultOrBypass": "PASS",
+      "stageBBypassReason": null,
+      "endToEndResult": "PASS",
+      "matchedRouteKey": "393d0bf8-5f2e-4eaa-91a1-9132429a7371:front:1:218-251",
+      "routeTypography": "quoted",
+      "routeClassification": "granted_rules_ability"
+    }
+  ]
+}

@@ -1,9 +1,12 @@
 {
-  "generatedAt": "2026-08-09T01:20:44.176Z",
-  "commit": "78502042ee7e",
+  "generatedAt": "2026-08-09T02:04:49.030Z",
+  "commit": "fc243525c24d",
   "blobs": {
     "spanDetector": "ecfa6ba15bd9447538536506180016c519413ca6154fb5bdd2fec7ae2e7d319e",
-    "contextRouter": "dbb0ad1988c7d3e531426a4f72c385133307a71dc6a97b11f61516af0afb4578"
+    "classifier": "6cc272213f4100173168803e0ca648f4cf51ab1695c7564fee44a9205788cd75",
+    "contextRouter": "dbb0ad1988c7d3e531426a4f72c385133307a71dc6a97b11f61516af0afb4578",
+    "clauseNative": "9a78670ff63614fec311569dce5168669915afb31e2215a8b65d7707581d8416",
+    "transform": "538dfbe9c2fbe3bbfc0262d9379c4846e9cd23a6c9bad8bef471d35351eb01a5"
   },
   "v136Development": {
     "endToEnd": {
@@ -59,8 +62,29 @@
     "grantedRegionFp": 0,
     "pass": true
   },
+  "v135ValidRegression": {
+    "metrics": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "pass": true
+  },
+  "historicalDevUnion": {
+    "expected": "580/4/62",
+    "note": "Policy baseline unchanged — not re-scored in precision gate (v136 region work is isolated)",
+    "unchanged": true
+  },
   "invariants": {
-    "negativeControlGrantedFpZero": true,
-    "note": "Historical dev union not re-scored in this script — unchanged by policy"
+    "semanticInvalidActionCount": 0,
+    "semanticValidatorViolationCount": 0,
+    "activatedCostLayer2Leakage": 0,
+    "permissionLeakage": 0,
+    "tokenDefinitionCardNativeLeakage": 0,
+    "tokenCopyPrimitiveLeakage": 0,
+    "allZero": true,
+    "negativeControlGrantedFpZero": true
   }
 }

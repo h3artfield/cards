@@ -1,0 +1,43 @@
+{
+  "generatedAt": "2026-08-09T02:04:50.966Z",
+  "checkpoint": "granted-v136-stage-c-unique",
+  "uniqueStageCGold": 2,
+  "tp": 2,
+  "fp": 0,
+  "fn": 0,
+  "precision": 1,
+  "precisionLabel": "100.0%",
+  "recall": 1,
+  "recallLabel": "100.0%",
+  "rows": [
+    {
+      "caseId": "granted-exp-v136-007",
+      "cardName": "Compulsory Rest",
+      "actionType": "gain_life",
+      "evidenceContains": "You gain 2 life",
+      "result": "TP",
+      "emitted": [
+        {
+          "text": "You gain 2 life",
+          "executionContext": "granted_ability",
+          "semanticOwner": "granted_object"
+        }
+      ]
+    },
+    {
+      "caseId": "granted-exp-v136-022",
+      "cardName": "Jaheira, Friend of the Forest",
+      "actionType": "add_mana",
+      "evidenceContains": "Add {G}",
+      "result": "TP",
+      "emitted": [
+        {
+          "text": "Add {G}",
+          "executionContext": "granted_ability",
+          "semanticOwner": "granted_object"
+        }
+      ]
+    }
+  ],
+  "nestedGrantedAbsoluteSpanValid": true
+}

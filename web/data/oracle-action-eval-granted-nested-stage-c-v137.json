@@ -1,0 +1,780 @@
+{
+  "generatedAt": "2026-08-09T02:04:17.079Z",
+  "setVersion": "granted-nested-stage-c-v137",
+  "parserExecutionCount": 0,
+  "note": "Stage-C nested-grant development expansion — parser-blind gold, not transfer holdout",
+  "caseCount": 10,
+  "contentHash": "a7163cd643d51bf4ff482cf4c0d0261fb61dbd24e728f404dca514d77693be08",
+  "cases": [
+    {
+      "id": "granted-nested-v137-001",
+      "category": "nested-grant-activated-gain-life",
+      "layout": "normal",
+      "oracleId": "0870e9f8-9e02-4997-9554-41a4e8eec4cb",
+      "oracleText": "Enchant creature\nEnchanted creature has \"{1}{W}, {T}: You gain 3 life.\"",
+      "cardName": "Ephara's Radiance",
+      "expectedPrimitiveActions": [],
+      "expectedStructure": {},
+      "expectedRoles": [],
+      "coverageStratum": "granted_nested_stage_c_v137",
+      "expansionLabel": "positive_granted_region",
+      "grammarFamily": "enchanted_has",
+      "expectedContext": "genuine_granted",
+      "benchmarkTargets": [
+        {
+          "grammarFamily": "enchanted_has",
+          "expectedContext": "genuine_granted",
+          "recipientSpan": {
+            "start": 17,
+            "end": 35,
+            "text": "Enchanted creature"
+          },
+          "grantingVerbSpan": {
+            "start": 36,
+            "end": 39,
+            "text": "has"
+          },
+          "grantedComplementSpan": {
+            "start": 40,
+            "end": 69,
+            "text": "\"{1}{W}, {T}: You gain 3 life"
+          },
+          "fullRegionSpan": {
+            "start": 17,
+            "end": 69,
+            "text": "Enchanted creature has \"{1}{W}, {T}: You gain 3 life"
+          },
+          "oracleTextHash": "c765ee97961de93ee226d8fce7fb493104f3a5f90792c3681384e7af63ec1c9d",
+          "adjudicationStatus": "parser_blind_adjudicated",
+          "semanticAdjudication": {
+            "context": "genuine_granted",
+            "recipient": "Enchanted creature",
+            "grantingVerb": "has",
+            "grantedComplement": "\"{1}{W}, {T}: You gain 3 life",
+            "grammarFamily": "enchanted_has",
+            "grantedAbilityTypes": [
+              "activated"
+            ],
+            "duration": "continuous",
+            "semanticOwner": "granted_object",
+            "layer1Structure": {
+              "abilityType": "activated",
+              "grantingConstruction": "enchanted_has",
+              "costRegion": {
+                "start": 40,
+                "end": 51,
+                "text": "{1}{W}, {T}"
+              }
+            },
+            "layer2Gold": [
+              {
+                "actionType": "gain_life",
+                "evidenceContains": "You gain 3 life"
+              }
+            ],
+            "certifiedEmptyLayer2": false
+          }
+        }
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "c765ee97961de93ee226d8fce7fb493104f3a5f90792c3681384e7af63ec1c9d",
+      "evaluationLabelVersion": "granted-nested-stage-c-v137",
+      "taxonomyVersion": "benchmark-validation-split-v1.1-semantic-gold",
+      "reviewer": "granted-nested-v137-catalog-select",
+      "caseScope": "full_card",
+      "selectionRule": "Enchanted creature has \"{1}{W}, {T}: You gain 3 life",
+      "adjudicationStatus": "parser_blind_adjudicated"
+    },
+    {
+      "id": "granted-nested-v137-002",
+      "category": "nested-grant-activated-damage",
+      "layout": "normal",
+      "oracleId": "269a2b53-52d7-4032-ba62-7b7742e7a159",
+      "oracleText": "Enchant creature\nEnchanted creature has \"{T}: This creature deals 1 damage to any target.\"\n{1}{U}: Return this Aura to its owner's hand.",
+      "cardName": "Hypervolt Grasp",
+      "expectedPrimitiveActions": [],
+      "expectedStructure": {},
+      "expectedRoles": [],
+      "coverageStratum": "granted_nested_stage_c_v137",
+      "expansionLabel": "positive_granted_region",
+      "grammarFamily": "enchanted_has",
+      "expectedContext": "genuine_granted",
+      "benchmarkTargets": [
+        {
+          "grammarFamily": "enchanted_has",
+          "expectedContext": "genuine_granted",
+          "recipientSpan": {
+            "start": 17,
+            "end": 35,
+            "text": "Enchanted creature"
+          },
+          "grantingVerbSpan": {
+            "start": 36,
+            "end": 39,
+            "text": "has"
+          },
+          "grantedComplementSpan": {
+            "start": 40,
+            "end": 88,
+            "text": "\"{T}: This creature deals 1 damage to any target"
+          },
+          "fullRegionSpan": {
+            "start": 17,
+            "end": 88,
+            "text": "Enchanted creature has \"{T}: This creature deals 1 damage to any target"
+          },
+          "oracleTextHash": "1f73a01e1f41051ecae18c662c5f8f1381e19a3c3105f64c794ab1b7e99d43c4",
+          "adjudicationStatus": "parser_blind_adjudicated",
+          "semanticAdjudication": {
+            "context": "genuine_granted",
+            "recipient": "Enchanted creature",
+            "grantingVerb": "has",
+            "grantedComplement": "\"{T}: This creature deals 1 damage to any target",
+            "grammarFamily": "enchanted_has",
+            "grantedAbilityTypes": [
+              "activated"
+            ],
+            "duration": "continuous",
+            "semanticOwner": "granted_object",
+            "layer1Structure": {
+              "abilityType": "activated",
+              "grantingConstruction": "enchanted_has",
+              "costRegion": {
+                "start": 40,
+                "end": 43,
+                "text": "{T}"
+              }
+            },
+            "layer2Gold": [
+              {
+                "actionType": "deal_damage",
+                "evidenceContains": "deals 1 damage"
+              }
+            ],
+            "certifiedEmptyLayer2": false
+          }
+        }
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "1f73a01e1f41051ecae18c662c5f8f1381e19a3c3105f64c794ab1b7e99d43c4",
+      "evaluationLabelVersion": "granted-nested-stage-c-v137",
+      "taxonomyVersion": "benchmark-validation-split-v1.1-semantic-gold",
+      "reviewer": "granted-nested-v137-catalog-select",
+      "caseScope": "full_card",
+      "selectionRule": "Enchanted creature has \"{T}: This creature deals 1 damage to any target",
+      "adjudicationStatus": "parser_blind_adjudicated"
+    },
+    {
+      "id": "granted-nested-v137-003",
+      "category": "nested-grant-creatures-have-mana",
+      "layout": "normal",
+      "oracleId": "043f869d-b11c-4c0d-9591-2bf0df7bde55",
+      "oracleText": "Creatures you control have \"{T}: Add one mana of any color.\"",
+      "cardName": "Cryptolith Rite",
+      "expectedPrimitiveActions": [],
+      "expectedStructure": {},
+      "expectedRoles": [],
+      "coverageStratum": "granted_nested_stage_c_v137",
+      "expansionLabel": "positive_granted_region",
+      "grammarFamily": "creatures_have",
+      "expectedContext": "genuine_granted",
+      "benchmarkTargets": [
+        {
+          "grammarFamily": "creatures_have",
+          "expectedContext": "genuine_granted",
+          "recipientSpan": {
+            "start": 0,
+            "end": 21,
+            "text": "Creatures you control"
+          },
+          "grantingVerbSpan": {
+            "start": 22,
+            "end": 25,
+            "text": "hav"
+          },
+          "grantedComplementSpan": {
+            "start": 26,
+            "end": 58,
+            "text": " \"{T}: Add one mana of any color"
+          },
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 58,
+            "text": "Creatures you control have \"{T}: Add one mana of any color"
+          },
+          "oracleTextHash": "71cbe0ced115f917e667459c9fca6e2a5ba126109bd051690b607a4bfd2eb3dd",
+          "adjudicationStatus": "parser_blind_adjudicated",
+          "semanticAdjudication": {
+            "context": "genuine_granted",
+            "recipient": "Creatures you control",
+            "grantingVerb": "hav",
+            "grantedComplement": "\"{T}: Add one mana of any color",
+            "grammarFamily": "creatures_have",
+            "grantedAbilityTypes": [
+              "activated"
+            ],
+            "duration": "continuous",
+            "semanticOwner": "granted_object",
+            "layer1Structure": {
+              "abilityType": "activated",
+              "grantingConstruction": "creatures_have",
+              "costRegion": {
+                "start": 26,
+                "end": 29,
+                "text": "{T}"
+              }
+            },
+            "layer2Gold": [
+              {
+                "actionType": "add_mana",
+                "evidenceContains": "Add one mana of any color"
+              }
+            ],
+            "certifiedEmptyLayer2": false
+          }
+        }
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "71cbe0ced115f917e667459c9fca6e2a5ba126109bd051690b607a4bfd2eb3dd",
+      "evaluationLabelVersion": "granted-nested-stage-c-v137",
+      "taxonomyVersion": "benchmark-validation-split-v1.1-semantic-gold",
+      "reviewer": "granted-nested-v137-catalog-select",
+      "caseScope": "full_card",
+      "selectionRule": "Creatures you control have \"{T}: Add one mana of any color",
+      "adjudicationStatus": "parser_blind_adjudicated"
+    },
+    {
+      "id": "granted-nested-v137-004",
+      "category": "nested-grant-activated-discard-untap",
+      "layout": "normal",
+      "oracleId": "154e865f-1aab-4d72-9e84-44e5316bbf3c",
+      "oracleText": "Enchant creature\nEnchanted creature doesn't untap during its controller's untap step.\nEnchanted creature has \"{1}, Discard a card: Untap this creature.\"",
+      "cardName": "Immobilizing Ink",
+      "expectedPrimitiveActions": [],
+      "expectedStructure": {},
+      "expectedRoles": [],
+      "coverageStratum": "granted_nested_stage_c_v137",
+      "expansionLabel": "positive_granted_region",
+      "grammarFamily": "enchanted_has",
+      "expectedContext": "genuine_granted",
+      "benchmarkTargets": [
+        {
+          "grammarFamily": "enchanted_has",
+          "expectedContext": "genuine_granted",
+          "recipientSpan": {
+            "start": 17,
+            "end": 35,
+            "text": "Enchanted creature"
+          },
+          "grantingVerbSpan": {
+            "start": 105,
+            "end": 108,
+            "text": "has"
+          },
+          "grantedComplementSpan": {
+            "start": 109,
+            "end": 150,
+            "text": "\"{1}, Discard a card: Untap this creature"
+          },
+          "fullRegionSpan": {
+            "start": 17,
+            "end": 150,
+            "text": "Enchanted creature doesn't untap during its controller's untap step.\nEnchanted creature has \"{1}, Discard a card: Untap this creature"
+          },
+          "oracleTextHash": "726e0081d48470428a68c58ad62d347c62f7cd4ef25cdfe17e0dba8a005f3522",
+          "adjudicationStatus": "parser_blind_adjudicated",
+          "semanticAdjudication": {
+            "context": "genuine_granted",
+            "recipient": "Enchanted creature",
+            "grantingVerb": "has",
+            "grantedComplement": "\"{1}, Discard a card: Untap this creature",
+            "grammarFamily": "enchanted_has",
+            "grantedAbilityTypes": [
+              "activated"
+            ],
+            "duration": "continuous",
+            "semanticOwner": "granted_object",
+            "layer1Structure": {
+              "abilityType": "activated",
+              "grantingConstruction": "enchanted_has",
+              "costRegion": {
+                "start": 109,
+                "end": 128,
+                "text": "{1}, Discard a card"
+              }
+            },
+            "layer2Gold": [
+              {
+                "actionType": "untap",
+                "evidenceContains": "Untap this creature"
+              }
+            ],
+            "certifiedEmptyLayer2": false
+          }
+        }
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "726e0081d48470428a68c58ad62d347c62f7cd4ef25cdfe17e0dba8a005f3522",
+      "evaluationLabelVersion": "granted-nested-stage-c-v137",
+      "taxonomyVersion": "benchmark-validation-split-v1.1-semantic-gold",
+      "reviewer": "granted-nested-v137-catalog-select",
+      "caseScope": "full_card",
+      "selectionRule": "Enchanted creature doesn't untap during its controller's untap step.\nEnchanted creature has \"{1}, Discard a card: Untap this creature",
+      "adjudicationStatus": "parser_blind_adjudicated"
+    },
+    {
+      "id": "granted-nested-v137-005",
+      "category": "nested-grant-triggered-draw",
+      "layout": "normal",
+      "oracleId": "25d35e3e-ece8-4c94-9dbc-d076a52fca0d",
+      "oracleText": "Enchant creature\nEnchanted creature has \"Whenever this creature deals combat damage to a player, you may draw a card.\"",
+      "cardName": "Sixth Sense",
+      "expectedPrimitiveActions": [],
+      "expectedStructure": {},
+      "expectedRoles": [],
+      "coverageStratum": "granted_nested_stage_c_v137",
+      "expansionLabel": "positive_granted_region",
+      "grammarFamily": "enchanted_has",
+      "expectedContext": "genuine_granted",
+      "benchmarkTargets": [
+        {
+          "grammarFamily": "enchanted_has",
+          "expectedContext": "genuine_granted",
+          "recipientSpan": {
+            "start": 17,
+            "end": 35,
+            "text": "Enchanted creature"
+          },
+          "grantingVerbSpan": {
+            "start": 36,
+            "end": 39,
+            "text": "has"
+          },
+          "grantedComplementSpan": {
+            "start": 40,
+            "end": 116,
+            "text": "\"Whenever this creature deals combat damage to a player, you may draw a card"
+          },
+          "fullRegionSpan": {
+            "start": 17,
+            "end": 116,
+            "text": "Enchanted creature has \"Whenever this creature deals combat damage to a player, you may draw a card"
+          },
+          "oracleTextHash": "2e2b7d6d36579a95f36337c6a42041467d5fab5c7d9b8d511672494897bb1ef3",
+          "adjudicationStatus": "parser_blind_adjudicated",
+          "semanticAdjudication": {
+            "context": "genuine_granted",
+            "recipient": "Enchanted creature",
+            "grantingVerb": "has",
+            "grantedComplement": "\"Whenever this creature deals combat damage to a player, you may draw a card",
+            "grammarFamily": "enchanted_has",
+            "grantedAbilityTypes": [
+              "triggered"
+            ],
+            "duration": "continuous",
+            "semanticOwner": "granted_object",
+            "layer1Structure": {
+              "abilityType": "triggered",
+              "grantingConstruction": "enchanted_has"
+            },
+            "layer2Gold": [
+              {
+                "actionType": "draw",
+                "evidenceContains": "you may draw a card"
+              }
+            ],
+            "certifiedEmptyLayer2": false
+          }
+        }
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "2e2b7d6d36579a95f36337c6a42041467d5fab5c7d9b8d511672494897bb1ef3",
+      "evaluationLabelVersion": "granted-nested-stage-c-v137",
+      "taxonomyVersion": "benchmark-validation-split-v1.1-semantic-gold",
+      "reviewer": "granted-nested-v137-catalog-select",
+      "caseScope": "full_card",
+      "selectionRule": "Enchanted creature has \"Whenever this creature deals combat damage to a player, you may draw a card",
+      "adjudicationStatus": "parser_blind_adjudicated"
+    },
+    {
+      "id": "granted-nested-v137-006",
+      "category": "nested-grant-triggered-tap",
+      "layout": "normal",
+      "oracleId": "02d25219-888d-4032-9e9e-8c6f879a9084",
+      "oracleText": "Enchant creature\nEnchanted creature has \"Whenever this creature attacks, you may tap or untap target permanent.\"",
+      "cardName": "Ghostly Touch",
+      "expectedPrimitiveActions": [],
+      "expectedStructure": {},
+      "expectedRoles": [],
+      "coverageStratum": "granted_nested_stage_c_v137",
+      "expansionLabel": "positive_granted_region",
+      "grammarFamily": "enchanted_has",
+      "expectedContext": "genuine_granted",
+      "benchmarkTargets": [
+        {
+          "grammarFamily": "enchanted_has",
+          "expectedContext": "genuine_granted",
+          "recipientSpan": {
+            "start": 17,
+            "end": 35,
+            "text": "Enchanted creature"
+          },
+          "grantingVerbSpan": {
+            "start": 36,
+            "end": 39,
+            "text": "has"
+          },
+          "grantedComplementSpan": {
+            "start": 40,
+            "end": 110,
+            "text": "\"Whenever this creature attacks, you may tap or untap target permanent"
+          },
+          "fullRegionSpan": {
+            "start": 17,
+            "end": 110,
+            "text": "Enchanted creature has \"Whenever this creature attacks, you may tap or untap target permanent"
+          },
+          "oracleTextHash": "e8427669dfc3a7694a05a32db24512cfe0c9be76004c1d38ba2256978d74a5de",
+          "adjudicationStatus": "parser_blind_adjudicated",
+          "semanticAdjudication": {
+            "context": "genuine_granted",
+            "recipient": "Enchanted creature",
+            "grantingVerb": "has",
+            "grantedComplement": "\"Whenever this creature attacks, you may tap or untap target permanent",
+            "grammarFamily": "enchanted_has",
+            "grantedAbilityTypes": [
+              "triggered"
+            ],
+            "duration": "continuous",
+            "semanticOwner": "granted_object",
+            "layer1Structure": {
+              "abilityType": "triggered",
+              "grantingConstruction": "enchanted_has"
+            },
+            "layer2Gold": [
+              {
+                "actionType": "tap",
+                "evidenceContains": "tap or untap target permanent"
+              }
+            ],
+            "certifiedEmptyLayer2": false
+          }
+        }
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "e8427669dfc3a7694a05a32db24512cfe0c9be76004c1d38ba2256978d74a5de",
+      "evaluationLabelVersion": "granted-nested-stage-c-v137",
+      "taxonomyVersion": "benchmark-validation-split-v1.1-semantic-gold",
+      "reviewer": "granted-nested-v137-catalog-select",
+      "caseScope": "full_card",
+      "selectionRule": "Enchanted creature has \"Whenever this creature attacks, you may tap or untap target permanent",
+      "adjudicationStatus": "parser_blind_adjudicated"
+    },
+    {
+      "id": "granted-nested-v137-007",
+      "category": "nested-grant-activated-damage",
+      "layout": "normal",
+      "oracleId": "0edc8ad3-2920-4b25-8a86-98ce216111d1",
+      "oracleText": "Equipped creature has \"{T}: This creature deals 1 damage to target player or planeswalker. If this creature is a Wizard, it deals 2 damage instead.\"\nEquip {3}",
+      "cardName": "Sorcerer's Wand",
+      "expectedPrimitiveActions": [],
+      "expectedStructure": {},
+      "expectedRoles": [],
+      "coverageStratum": "granted_nested_stage_c_v137",
+      "expansionLabel": "positive_granted_region",
+      "grammarFamily": "equipment_has",
+      "expectedContext": "genuine_granted",
+      "benchmarkTargets": [
+        {
+          "grammarFamily": "equipment_has",
+          "expectedContext": "genuine_granted",
+          "recipientSpan": {
+            "start": 0,
+            "end": 17,
+            "text": "Equipped creature"
+          },
+          "grantingVerbSpan": {
+            "start": 18,
+            "end": 21,
+            "text": "has"
+          },
+          "grantedComplementSpan": {
+            "start": 22,
+            "end": 89,
+            "text": "\"{T}: This creature deals 1 damage to target player or planeswalker"
+          },
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 89,
+            "text": "Equipped creature has \"{T}: This creature deals 1 damage to target player or planeswalker"
+          },
+          "oracleTextHash": "6389846d37fae6cc3d815f3f0360122410ea01495218015696cb050f58c4b081",
+          "adjudicationStatus": "parser_blind_adjudicated",
+          "semanticAdjudication": {
+            "context": "genuine_granted",
+            "recipient": "Equipped creature",
+            "grantingVerb": "has",
+            "grantedComplement": "\"{T}: This creature deals 1 damage to target player or planeswalker",
+            "grammarFamily": "equipment_has",
+            "grantedAbilityTypes": [
+              "activated"
+            ],
+            "duration": "continuous",
+            "semanticOwner": "granted_object",
+            "layer1Structure": {
+              "abilityType": "activated",
+              "grantingConstruction": "equipment_has",
+              "costRegion": {
+                "start": 22,
+                "end": 25,
+                "text": "{T}"
+              }
+            },
+            "layer2Gold": [
+              {
+                "actionType": "deal_damage",
+                "evidenceContains": "deals 1 damage"
+              }
+            ],
+            "certifiedEmptyLayer2": false
+          }
+        }
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "6389846d37fae6cc3d815f3f0360122410ea01495218015696cb050f58c4b081",
+      "evaluationLabelVersion": "granted-nested-stage-c-v137",
+      "taxonomyVersion": "benchmark-validation-split-v1.1-semantic-gold",
+      "reviewer": "granted-nested-v137-catalog-select",
+      "caseScope": "full_card",
+      "selectionRule": "Equipped creature has \"{T}: This creature deals 1 damage to target player or planeswalker",
+      "adjudicationStatus": "parser_blind_adjudicated"
+    },
+    {
+      "id": "granted-nested-v137-008",
+      "category": "nested-grant-activated-counter",
+      "layout": "normal",
+      "oracleId": "1c55af05-7fbe-4078-9463-689b21c0d3e4",
+      "oracleText": "Enchant creature\nEnchanted creature has \"{B}, {T}: Put a -1/-1 counter on target creature.\"",
+      "cardName": "Sadistic Obsession",
+      "expectedPrimitiveActions": [],
+      "expectedStructure": {},
+      "expectedRoles": [],
+      "coverageStratum": "granted_nested_stage_c_v137",
+      "expansionLabel": "positive_granted_region",
+      "grammarFamily": "enchanted_has",
+      "expectedContext": "genuine_granted",
+      "benchmarkTargets": [
+        {
+          "grammarFamily": "enchanted_has",
+          "expectedContext": "genuine_granted",
+          "recipientSpan": {
+            "start": 17,
+            "end": 35,
+            "text": "Enchanted creature"
+          },
+          "grantingVerbSpan": {
+            "start": 36,
+            "end": 39,
+            "text": "has"
+          },
+          "grantedComplementSpan": {
+            "start": 40,
+            "end": 89,
+            "text": "\"{B}, {T}: Put a -1/-1 counter on target creature"
+          },
+          "fullRegionSpan": {
+            "start": 17,
+            "end": 89,
+            "text": "Enchanted creature has \"{B}, {T}: Put a -1/-1 counter on target creature"
+          },
+          "oracleTextHash": "a6037ec0e4fffb28bf8cd4e59559183720aed12c189b65e48a589d5bc2e15282",
+          "adjudicationStatus": "parser_blind_adjudicated",
+          "semanticAdjudication": {
+            "context": "genuine_granted",
+            "recipient": "Enchanted creature",
+            "grantingVerb": "has",
+            "grantedComplement": "\"{B}, {T}: Put a -1/-1 counter on target creature",
+            "grammarFamily": "enchanted_has",
+            "grantedAbilityTypes": [
+              "activated"
+            ],
+            "duration": "continuous",
+            "semanticOwner": "granted_object",
+            "layer1Structure": {
+              "abilityType": "activated",
+              "grantingConstruction": "enchanted_has",
+              "costRegion": {
+                "start": 40,
+                "end": 48,
+                "text": "{B}, {T}"
+              }
+            },
+            "layer2Gold": [
+              {
+                "actionType": "put_counter",
+                "evidenceContains": "Put a -1/-1 counter"
+              }
+            ],
+            "certifiedEmptyLayer2": false
+          }
+        }
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "a6037ec0e4fffb28bf8cd4e59559183720aed12c189b65e48a589d5bc2e15282",
+      "evaluationLabelVersion": "granted-nested-stage-c-v137",
+      "taxonomyVersion": "benchmark-validation-split-v1.1-semantic-gold",
+      "reviewer": "granted-nested-v137-catalog-select",
+      "caseScope": "full_card",
+      "selectionRule": "Enchanted creature has \"{B}, {T}: Put a -1/-1 counter on target creature",
+      "adjudicationStatus": "parser_blind_adjudicated"
+    },
+    {
+      "id": "granted-nested-v137-009",
+      "category": "nested-grant-static-only",
+      "layout": "normal",
+      "oracleId": "538fa2e0-d225-4232-b243-38868b695e26",
+      "oracleText": "Enchant creature\nEnchanted creature has hexproof and can't be blocked by more than one creature.",
+      "cardName": "Alpha Authority",
+      "expectedPrimitiveActions": [],
+      "expectedStructure": {},
+      "expectedRoles": [],
+      "coverageStratum": "granted_nested_stage_c_v137",
+      "expansionLabel": "positive_granted_region",
+      "grammarFamily": "enchanted_has",
+      "expectedContext": "genuine_granted",
+      "benchmarkTargets": [
+        {
+          "grammarFamily": "enchanted_has",
+          "expectedContext": "genuine_granted",
+          "recipientSpan": {
+            "start": 17,
+            "end": 35,
+            "text": "Enchanted creature"
+          },
+          "grantingVerbSpan": {
+            "start": 36,
+            "end": 39,
+            "text": "has"
+          },
+          "grantedComplementSpan": {
+            "start": 40,
+            "end": 95,
+            "text": "hexproof and can't be blocked by more than one creature"
+          },
+          "fullRegionSpan": {
+            "start": 17,
+            "end": 95,
+            "text": "Enchanted creature has hexproof and can't be blocked by more than one creature"
+          },
+          "oracleTextHash": "9efd8d11644bad66b8767ad997af7e152d888ce2e38efa57152ed1d0ac42e9e2",
+          "adjudicationStatus": "parser_blind_adjudicated",
+          "semanticAdjudication": {
+            "context": "genuine_granted",
+            "recipient": "Enchanted creature",
+            "grantingVerb": "has",
+            "grantedComplement": "hexproof and can't be blocked by more than one creature",
+            "grammarFamily": "enchanted_has",
+            "grantedAbilityTypes": [
+              "static"
+            ],
+            "duration": "continuous",
+            "semanticOwner": "granted_object",
+            "layer1Structure": {
+              "abilityType": "static",
+              "grantingConstruction": "enchanted_has"
+            },
+            "layer2Gold": [],
+            "certifiedEmptyLayer2": true
+          }
+        }
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "9efd8d11644bad66b8767ad997af7e152d888ce2e38efa57152ed1d0ac42e9e2",
+      "evaluationLabelVersion": "granted-nested-stage-c-v137",
+      "taxonomyVersion": "benchmark-validation-split-v1.1-semantic-gold",
+      "reviewer": "granted-nested-v137-catalog-select",
+      "caseScope": "full_card",
+      "selectionRule": "Enchanted creature has hexproof and can't be blocked by more than one creature",
+      "adjudicationStatus": "parser_blind_adjudicated"
+    },
+    {
+      "id": "granted-nested-v137-010",
+      "category": "nested-grant-activated-sacrifice-damage",
+      "layout": "normal",
+      "oracleId": "9d4372f0-eedf-4897-9f03-f96fb14ac4a6",
+      "oracleText": "Enchant creature you control\nEnchanted creature has \"{T}: This creature deals 1 damage to any target.\"\nSacrifice this Aura: It deals 1 damage to any target.",
+      "cardName": "Fire Whip",
+      "expectedPrimitiveActions": [],
+      "expectedStructure": {},
+      "expectedRoles": [],
+      "coverageStratum": "granted_nested_stage_c_v137",
+      "expansionLabel": "positive_granted_region",
+      "grammarFamily": "enchanted_has",
+      "expectedContext": "genuine_granted",
+      "benchmarkTargets": [
+        {
+          "grammarFamily": "enchanted_has",
+          "expectedContext": "genuine_granted",
+          "recipientSpan": {
+            "start": 29,
+            "end": 47,
+            "text": "Enchanted creature"
+          },
+          "grantingVerbSpan": {
+            "start": 48,
+            "end": 51,
+            "text": "has"
+          },
+          "grantedComplementSpan": {
+            "start": 52,
+            "end": 100,
+            "text": "\"{T}: This creature deals 1 damage to any target"
+          },
+          "fullRegionSpan": {
+            "start": 29,
+            "end": 100,
+            "text": "Enchanted creature has \"{T}: This creature deals 1 damage to any target"
+          },
+          "oracleTextHash": "b3ba9c1d6f91fc76b9723980bef602cec4f52926f62f6bf381d290973f880d19",
+          "adjudicationStatus": "parser_blind_adjudicated",
+          "semanticAdjudication": {
+            "context": "genuine_granted",
+            "recipient": "Enchanted creature",
+            "grantingVerb": "has",
+            "grantedComplement": "\"{T}: This creature deals 1 damage to any target",
+            "grammarFamily": "enchanted_has",
+            "grantedAbilityTypes": [
+              "activated"
+            ],
+            "duration": "continuous",
+            "semanticOwner": "granted_object",
+            "layer1Structure": {
+              "abilityType": "activated",
+              "grantingConstruction": "enchanted_has",
+              "costRegion": {
+                "start": 52,
+                "end": 55,
+                "text": "{T}"
+              }
+            },
+            "layer2Gold": [
+              {
+                "actionType": "deal_damage",
+                "evidenceContains": "deals 1 damage"
+              }
+            ],
+            "certifiedEmptyLayer2": false
+          }
+        }
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "b3ba9c1d6f91fc76b9723980bef602cec4f52926f62f6bf381d290973f880d19",
+      "evaluationLabelVersion": "granted-nested-stage-c-v137",
+      "taxonomyVersion": "benchmark-validation-split-v1.1-semantic-gold",
+      "reviewer": "granted-nested-v137-catalog-select",
+      "caseScope": "full_card",
+      "selectionRule": "Enchanted creature has \"{T}: This creature deals 1 damage to any target",
+      "adjudicationStatus": "parser_blind_adjudicated"
+    }
+  ]
+}

@@ -1,0 +1,171 @@
+{
+  "generatedAt": "2026-08-09T01:55:00.126Z",
+  "checkpoint": "compulsory-rest-stage-c-trace",
+  "caseId": "granted-exp-v136-007",
+  "cardName": "Compulsory Rest",
+  "goldEvidence": "You gain 2 life",
+  "pipeline": {
+    "grantedRegionDetected": true,
+    "contextRoutedCorrectly": true,
+    "grantedAbilityClassified": true,
+    "nestedAbilityBlockCreated": true,
+    "activatedColonSegmented": true,
+    "costRegionCreated": true,
+    "effectRegionCreated": true,
+    "effectClauseRoles": [
+      "effect"
+    ],
+    "gainLifeCandidateCreated": true,
+    "semanticActionCreated": true,
+    "evaluatorMatch": true
+  },
+  "costSemantics": {
+    "text": "{2}, Sacrifice this creature",
+    "cardLevelStart": 83,
+    "cardLevelEnd": 111
+  },
+  "effectSemantics": {
+    "text": "You gain 2 life.",
+    "cardLevelStart": 113,
+    "cardLevelEnd": 129
+  },
+  "nativeGrantedAbilities": [
+    {
+      "grantingClauseId": "020225db-5623-49c2-8cdf-1ec2a05b8b0a:front:2",
+      "quotedSpan": {
+        "start": 23,
+        "end": 71,
+        "text": "\"{2}, Sacrifice this creature: You gain 2 life.\""
+      },
+      "nestedAbilityBlock": {
+        "abilityType": "activated",
+        "clauses": [
+          {
+            "clauseId": "020225db-5623-49c2-8cdf-1ec2a05b8b0a:front:2:granted:23:effect:0",
+            "role": "effect",
+            "text": "You gain 2 life.",
+            "localStart": 30,
+            "localEnd": 46
+          }
+        ]
+      }
+    }
+  ],
+  "nativeActivatedAbilities": [
+    {
+      "costRegion": {
+        "text": "{2}, Sacrifice this creature",
+        "start": 83,
+        "end": 111
+      },
+      "colonPosition": 111,
+      "effectRegion": {
+        "text": "You gain 2 life.",
+        "start": 113,
+        "end": 129
+      },
+      "effectClauses": [
+        {
+          "clauseId": "020225db-5623-49c2-8cdf-1ec2a05b8b0a:front:2:granted:23:effect:0",
+          "role": "effect",
+          "text": "You gain 2 life.",
+          "localStart": 30,
+          "localEnd": 46
+        }
+      ]
+    }
+  ],
+  "regionDiagnosis": {
+    "failingStage": "success",
+    "overlappingCandidates": [
+      {
+        "abilityId": "020225db-5623-49c2-8cdf-1ec2a05b8b0a:front:2",
+        "cardStart": 82,
+        "cardEnd": 130,
+        "localStart": 23,
+        "localEnd": 71,
+        "text": "\"{2}, Sacrifice this creature: You gain 2 life.\"",
+        "innerText": "{2}, Sacrifice this creature: You gain 2 life.",
+        "typography": "quoted",
+        "structuralCue": "enchanted_or_equipped_has"
+      }
+    ],
+    "overlappingRouted": [
+      {
+        "abilityId": "020225db-5623-49c2-8cdf-1ec2a05b8b0a:front:2",
+        "cardStart": 82,
+        "cardEnd": 130,
+        "localStart": 23,
+        "localEnd": 71,
+        "text": "\"{2}, Sacrifice this creature: You gain 2 life.\"",
+        "innerText": "{2}, Sacrifice this creature: You gain 2 life.",
+        "typography": "quoted",
+        "structuralCue": "enchanted_or_equipped_has",
+        "contextKind": "granted_rules",
+        "classification": "granted_rules_ability"
+      }
+    ],
+    "bestRoute": {
+      "abilityId": "020225db-5623-49c2-8cdf-1ec2a05b8b0a:front:2",
+      "cardStart": 82,
+      "cardEnd": 130,
+      "localStart": 23,
+      "localEnd": 71,
+      "text": "\"{2}, Sacrifice this creature: You gain 2 life.\"",
+      "innerText": "{2}, Sacrifice this creature: You gain 2 life.",
+      "typography": "quoted",
+      "structuralCue": "enchanted_or_equipped_has",
+      "contextKind": "granted_rules",
+      "classification": "granted_rules_ability"
+    }
+  },
+  "grantedContexts": [
+    {
+      "grantedAbilityId": "020225db-5623-49c2-8cdf-1ec2a05b8b0a:front:2:granted:23",
+      "innerText": "{2}, Sacrifice this creature: You gain 2 life.",
+      "quoteLocalStart": 23,
+      "quoteLocalEnd": 71,
+      "cardLevelQuoteStart": 82,
+      "cardLevelQuoteEnd": 130,
+      "grantedAbilityType": "activated"
+    }
+  ],
+  "abilityBlocks": [
+    {
+      "abilityId": "020225db-5623-49c2-8cdf-1ec2a05b8b0a:front:2:granted:23",
+      "abilityType": "activated",
+      "costRegion": {
+        "text": "{2}, Sacrifice this creature",
+        "cardLevelStart": 83,
+        "cardLevelEnd": 111
+      },
+      "effectRegion": {
+        "text": "You gain 2 life.",
+        "cardLevelStart": 113,
+        "cardLevelEnd": 129
+      },
+      "clauseCount": 1,
+      "clauses": [
+        {
+          "clauseId": "020225db-5623-49c2-8cdf-1ec2a05b8b0a:front:2:granted:23:effect:0",
+          "role": "effect",
+          "text": "You gain 2 life.",
+          "localStart": 30,
+          "localEnd": 46,
+          "cardLevelStart": 113,
+          "cardLevelEnd": 129
+        }
+      ]
+    }
+  ],
+  "emittedGainLifeActions": [
+    {
+      "reviewStatus": "accepted",
+      "actionType": "gain_life",
+      "executionContext": "granted_ability",
+      "evidenceText": "You gain 2 life",
+      "semanticOwner": "granted_object"
+    }
+  ],
+  "nestedGrantedAbsoluteSpanValid": false
+}

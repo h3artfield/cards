@@ -17,12 +17,14 @@ import {
 } from "./oracle-span-role-classifier";
 import {
   findGrantedQuoteContexts,
+  grantedContextExtensions,
+  isInsideGrantedQuote,
   validateGrantedProvenance,
   type GrantedQuoteContext,
 } from "./oracle-granted-ability-extraction";
 import { parseAbilityBlock } from "./oracle-rc3-ability-block";
 import { buildNativeAction } from "./oracle-rc3-action-builder";
-import { tagExtractionSource, tagGrantedContext, type RC3ActionExtensions } from "./oracle-rc3-extraction-metadata";
+import { tagExtractionSource, type RC3ActionExtensions } from "./oracle-rc3-extraction-metadata";
 
 export interface ClauseNode {
   clauseId: string;
@@ -112,10 +114,27 @@ const PRIMITIVE_PATTERNS: Array<{
   { pattern: /\b[Pp]ut [^.]+ onto the battlefield\b/i, actionType: "put_onto_battlefield", destinationZones: ["battlefield"] },
   { pattern: /\b[Cc]ounter target [^.]+\b/i, actionType: "counter" },
   { pattern: /\b[Tt]ransform\b/i, actionType: "transform" },
+  {
+    pattern: /\b(?:You |Target player |Each player )?gain(?:s)? \d+ life\b/i,
+    actionType: "gain_life",
+  },
+  {
+    pattern: /\bAdd \{[WUBRGC](?:\/\{[WUBRGC])*\}/i,
+    actionType: "add_mana",
+    destinationZones: ["mana_pool"],
+  },
+  { pattern: /\bUntap target [^.]+\./i, actionType: "untap" },
 ];
 
 function actionId(seed: string): string {
   return createHash("sha256").update(seed).digest("hex").slice(0, 24);
+}
+
+function clauseInsideGrantedQuote(paragraph: string, clause: ClauseNode): boolean {
+  return (
+    isInsideGrantedQuote(paragraph, clause.localStart) ||
+    isInsideGrantedQuote(paragraph, Math.max(0, clause.localEnd - 1))
+  );
 }
 
 function parseActivatedAbility(paragraph: string, abilityId: string): ActivatedAbilityNode | null {
@@ -268,6 +287,15 @@ function extractPrimitivesFromClause(input: {
         if (isPersistentZoneCastPermission(evidenceText)) continue;
       }
 
+      if (rule.actionType === "copy") {
+        const windowStart = Math.max(0, startInParagraph - 24);
+        const window = input.ability.paragraphText.slice(
+          windowStart,
+          startInParagraph + evidenceText.length + 8,
+        );
+        if (/\btoken that'?s a copy of\b/i.test(window)) continue;
+      }
+
       let actionType = rule.actionType;
       if (rule.actionType !== "search_library") {
         const handClass = classifyHandZonePrimitive(evidenceText);
@@ -293,64 +321,6 @@ function extractPrimitivesFromClause(input: {
       });
     }
   }
-  return actions;
-}
-
-const GRANTED_ACTIVATED_COST_PATTERNS: Array<{ pattern: RegExp; actionType: PrimitiveActionType }> = [
-  { pattern: /\b[Ss]acrifice this (?:token|artifact|creature|permanent)\b[^.]*/i, actionType: "sacrifice" },
-  { pattern: /\b[Dd]iscard [^.]+/i, actionType: "discard" },
-  { pattern: /\b[Ee]xile [^.]+/i, actionType: "exile" },
-];
-
-function extractGrantedActivatedCostPrimitives(input: {
-  oracleId: string;
-  ability: SegmentedAbility;
-  faceId: string;
-  ctx: GrantedQuoteContext;
-  actionIndexStart: number;
-  grantingClauseId: string;
-}): OracleActionV1[] {
-  const activated = parseActivatedAbility(input.ctx.innerText, input.ctx.grantedAbilityId);
-  if (!activated) return [];
-
-  const nestedAbility: SegmentedAbility = {
-    ...input.ability,
-    paragraphText: input.ctx.innerText,
-    paragraphStart: input.ability.paragraphStart + input.ctx.innerLocalStart,
-    abilityType: "activated",
-  };
-
-  const grantedExtensions = tagGrantedContext({
-    action: { extractionSource: "rc3_clause_native" },
-    grantingClauseId: input.grantingClauseId,
-    grantedAbilityId: input.ctx.grantedAbilityId,
-  });
-
-  const actions: OracleActionV1[] = [];
-  let idx = input.actionIndexStart;
-  const costBase = nestedAbility.paragraphStart + activated.costRegion.start;
-
-  for (const { pattern, actionType } of GRANTED_ACTIVATED_COST_PATTERNS) {
-    const m = activated.costRegion.text.match(pattern);
-    if (!m) continue;
-    const matchOffset = m.index ?? 0;
-    actions.push(
-      buildNativeAction({
-        oracleId: input.oracleId,
-        ability: nestedAbility,
-        faceId: input.faceId,
-        actionType,
-        evidenceText: m[0],
-        evidenceStart: costBase + matchOffset,
-        evidenceEnd: costBase + matchOffset + m[0].length,
-        actionIndex: idx++,
-        textRole: "cost",
-        clauseId: `${input.ctx.grantedAbilityId}:cost`,
-        extensions: grantedExtensions,
-      }),
-    );
-  }
-
   return actions;
 }
 
@@ -504,13 +474,21 @@ function extractTransformTransitions(input: {
 function dedupeActions(actions: OracleActionV1[]): OracleActionV1[] {
   const kept: OracleActionV1[] = [];
   for (const action of actions) {
-    const dupe = kept.some(
+    const ext = action as OracleActionV1 & RC3ActionExtensions;
+    const dupeIdx = kept.findIndex(
       (k) =>
         k.actionType === action.actionType &&
         Math.abs(k.evidenceStart - action.evidenceStart) < 6 &&
         k.evidenceText.slice(0, 20) === action.evidenceText.slice(0, 20),
     );
-    if (!dupe) kept.push(action);
+    if (dupeIdx >= 0) {
+      const existing = kept[dupeIdx] as OracleActionV1 & RC3ActionExtensions;
+      if (ext.executionContext === "granted_ability" && existing.executionContext !== "granted_ability") {
+        kept[dupeIdx] = action;
+      }
+      continue;
+    }
+    kept.push(action);
   }
   return kept;
 }
@@ -617,6 +595,7 @@ export function extractClauseNativeActions(input: {
 
       if (isActivatedSplit && !isReplacementAbility) {
         for (const clause of topClauses) {
+          if (clauseInsideGrantedQuote(ability.paragraphText, clause)) continue;
           if (clause.localStart < abilityBlock.effectRegion!.localStart) continue;
           if (clause.role !== "effect" && clause.role !== "replacement_effect") continue;
           actions.push(
@@ -634,6 +613,7 @@ export function extractClauseNativeActions(input: {
         }
       } else if (abilityBlock.effectRegion && !isReplacementAbility) {
         for (const clause of topClauses) {
+          if (clauseInsideGrantedQuote(ability.paragraphText, clause)) continue;
           if (clause.role !== "effect" && clause.role !== "replacement_effect") continue;
           actions.push(
             ...extractPrimitivesFromClause({
@@ -650,6 +630,7 @@ export function extractClauseNativeActions(input: {
         }
       } else if (!isReplacementAbility) {
         for (const clause of topClauses) {
+          if (clauseInsideGrantedQuote(ability.paragraphText, clause)) continue;
           if (clause.role === "cost" || clause.role === "trigger_event" || clause.role === "replacement_event") {
             continue;
           }
@@ -688,10 +669,11 @@ export function extractClauseNativeActions(input: {
         const grantedNode = parseGrantedAbility(ctx, parentId);
         grantedAbilities.push(grantedNode);
 
+        const nestedParagraphStart = ability.paragraphStart + ctx.innerLocalStart;
         const nestedBlock = parseAbilityBlock({
           abilityId: ctx.grantedAbilityId,
           paragraphText: ctx.innerText,
-          paragraphStart: ability.paragraphStart + ctx.innerLocalStart,
+          paragraphStart: nestedParagraphStart,
           hostAbilityType: ability.abilityType,
         });
         grantedNode.nestedAbilityBlock.clauses = nestedBlock.clauses.map((c) => ({
@@ -706,7 +688,7 @@ export function extractClauseNativeActions(input: {
         const nestedAbility: SegmentedAbility = {
           ...ability,
           paragraphText: ctx.innerText,
-          paragraphStart: ability.paragraphStart + ctx.innerLocalStart,
+          paragraphStart: nestedParagraphStart,
           abilityType:
             nestedBlock.abilityType === "triggered"
               ? "triggered"
@@ -715,30 +697,45 @@ export function extractClauseNativeActions(input: {
                 : ability.abilityType,
         };
 
-        for (const clause of nestedBlock.clauses) {
-          if (clause.role === "trigger_event" || clause.role === "replacement_event") {
-            continue;
-          }
-          const grantedExtensions = tagGrantedContext({
-            action: { extractionSource: "rc3_clause_native" },
-            grantingClauseId: parentId,
-            grantedAbilityId: ctx.grantedAbilityId,
-          });
+        const isNestedActivated = !!(nestedBlock.costRegion && nestedBlock.effectRegion);
+        const grantedExtensions = {
+          ...grantedContextExtensions(ctx),
+          ...(isNestedActivated ? { activatedEffectRegion: true as const } : {}),
+        };
 
-          if (clause.role === "cost") {
-            if (nestedBlock.abilityType === "activated") {
-              actions.push(
-                ...extractGrantedActivatedCostPrimitives({
-                  oracleId: input.oracleId,
-                  ability,
-                  faceId: face.faceId,
-                  ctx,
-                  actionIndexStart: actionIndex,
-                  grantingClauseId: parentId,
-                }),
-              );
-              actionIndex = actions.length;
-            }
+        if (isNestedActivated) {
+          activatedAbilities.push({
+            costRegion: {
+              text: nestedBlock.costRegion!.text,
+              start: nestedParagraphStart + nestedBlock.costRegion!.localStart,
+              end: nestedParagraphStart + nestedBlock.costRegion!.localEnd,
+            },
+            colonPosition: nestedParagraphStart + nestedBlock.costRegion!.localEnd,
+            effectRegion: {
+              text: nestedBlock.effectRegion!.text,
+              start: nestedParagraphStart + nestedBlock.effectRegion!.localStart,
+              end: nestedParagraphStart + nestedBlock.effectRegion!.localEnd,
+            },
+            effectClauses: nestedBlock.clauses.map((c) => ({
+              clauseId: c.clauseId,
+              role: c.role,
+              text: c.text,
+              localStart: c.localStart,
+              localEnd: c.localEnd,
+            })),
+          });
+        }
+
+        const nestedClauses: ClauseNode[] = isNestedActivated
+          ? nestedBlock.clauses.filter(
+              (c) =>
+                c.localStart >= nestedBlock.effectRegion!.localStart &&
+                (c.role === "effect" || c.role === "replacement_effect"),
+            )
+          : nestedBlock.clauses;
+
+        for (const clause of nestedClauses) {
+          if (clause.role === "trigger_event" || clause.role === "replacement_event" || clause.role === "cost") {
             continue;
           }
 

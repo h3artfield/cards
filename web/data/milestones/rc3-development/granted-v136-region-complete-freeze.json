@@ -1,0 +1,150 @@
+{
+  "generatedAt": "2026-08-09T02:04:49.031Z",
+  "checkpoint": "oracle-action-v1.35-rc3-granted-region-complete",
+  "tag": "oracle-action-v1.35-rc3-granted-region-complete",
+  "parentPass1Tag": "rc3-granted-dev-pass-1",
+  "commit": "fc243525c24d174f730bc9c7fbe8c91b2fdfa11a",
+  "grammarPasses": {
+    "pass1": "rc3-granted-dev-pass-1 — coordinated predicate",
+    "pass2": "rc3-granted-dev-pass-2 — token recipient",
+    "pass3": "rc3-granted-dev-pass-3 — triggered resolution"
+  },
+  "blobs": {
+    "detector": "ecfa6ba15bd9447538536506180016c519413ca6154fb5bdd2fec7ae2e7d319e",
+    "classifier": "6cc272213f4100173168803e0ca648f4cf51ab1695c7564fee44a9205788cd75",
+    "contextRouter": "dbb0ad1988c7d3e531426a4f72c385133307a71dc6a97b11f61516af0afb4578",
+    "clauseNative": "9a78670ff63614fec311569dce5168669915afb31e2215a8b65d7707581d8416",
+    "transform": "538dfbe9c2fbe3bbfc0262d9379c4846e9cd23a6c9bad8bef471d35351eb01a5",
+    "grantedExtraction": "9bed5894309d55c9dd2912bd89848af98f476b1d2f4ef7f14a7aed0d99dfdd14"
+  },
+  "frozenRegressionResults": {
+    "v136SpentDevRegionEndToEnd": "26/0/0",
+    "v135ValidGrantedRegressions": "no regression",
+    "negativeControls": "0 granted FP",
+    "contextControls": "5/5",
+    "historicalDevUnion": "580/4/62 unchanged",
+    "semanticInvalidActionCount": 0,
+    "semanticValidatorViolationCount": 0,
+    "activatedCostLayer2Leakage": 0,
+    "permissionLeakage": 0,
+    "tokenDefinitionCardNativeLeakage": 0,
+    "tokenCopyPrimitiveLeakage": 0
+  },
+  "stageBReconciliation": {
+    "goldRegions": 26,
+    "endToEndSuccess": 26,
+    "a1GrantedGoldRegions": 26,
+    "stageBEligibleGoldRegions": 26,
+    "stageBRequiresClassifierAdjudication": 25,
+    "stageBBypassGoldRegions": 1,
+    "stageBUniqueClassifierEvaluations": 25,
+    "instrumentationStageB": {
+      "conditionalOnGrantedRulesRoute": 26,
+      "tp": 26,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "precisionLabel": "100.0%",
+      "recall": 1,
+      "recallLabel": "100.0%"
+    },
+    "stageB_TP_FP_FN": {
+      "tp": 25,
+      "fp": 0,
+      "fn": 0,
+      "bypass": 1
+    },
+    "explanation": "End-to-end counts all 26 gold regions. Stage-B classifier evaluates each unique physical granted_rules route once; duplicate gold membership (Compulsory Rest) bypasses a second classifier invocation while both regions pass end-to-end."
+  },
+  "precisionControls": {
+    "generatedAt": "2026-08-09T02:04:49.030Z",
+    "commit": "fc243525c24d",
+    "blobs": {
+      "spanDetector": "ecfa6ba15bd9447538536506180016c519413ca6154fb5bdd2fec7ae2e7d319e",
+      "classifier": "6cc272213f4100173168803e0ca648f4cf51ab1695c7564fee44a9205788cd75",
+      "contextRouter": "dbb0ad1988c7d3e531426a4f72c385133307a71dc6a97b11f61516af0afb4578",
+      "clauseNative": "9a78670ff63614fec311569dce5168669915afb31e2215a8b65d7707581d8416",
+      "transform": "538dfbe9c2fbe3bbfc0262d9379c4846e9cd23a6c9bad8bef471d35351eb01a5"
+    },
+    "v136Development": {
+      "endToEnd": {
+        "tp": 26,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "precisionLabel": "100.0%",
+        "recall": 1,
+        "recallLabel": "100.0%"
+      },
+      "stage": {
+        "stageA0_candidateCoverage": {
+          "expectedRegions": 26,
+          "tp": 26,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "precisionLabel": "100.0%",
+          "recall": 1,
+          "recallLabel": "100.0%"
+        },
+        "stageA1_semanticContextRouter": {
+          "conditionalOnA0Hit": 26,
+          "tp": 26,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "precisionLabel": "100.0%",
+          "recall": 1,
+          "recallLabel": "100.0%"
+        },
+        "stageB_grantedRulesClassifier": {
+          "conditionalOnGrantedRulesRoute": 26,
+          "tp": 26,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "precisionLabel": "100.0%",
+          "recall": 1,
+          "recallLabel": "100.0%"
+        },
+        "failureStageCounts": {
+          "A0_no_candidate": 0,
+          "A1_wrong_context": 0,
+          "B_classifier_rejected": 0,
+          "success": 26
+        }
+      },
+      "remainingFailures": 0
+    },
+    "negativeControls": {
+      "grantedRegionFp": 0,
+      "pass": true
+    },
+    "v135ValidRegression": {
+      "metrics": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1,
+        "recall": 1
+      },
+      "pass": true
+    },
+    "historicalDevUnion": {
+      "expected": "580/4/62",
+      "note": "Policy baseline unchanged — not re-scored in precision gate (v136 region work is isolated)",
+      "unchanged": true
+    },
+    "invariants": {
+      "semanticInvalidActionCount": 0,
+      "semanticValidatorViolationCount": 0,
+      "activatedCostLayer2Leakage": 0,
+      "permissionLeakage": 0,
+      "tokenDefinitionCardNativeLeakage": 0,
+      "tokenCopyPrimitiveLeakage": 0,
+      "allZero": true,
+      "negativeControlGrantedFpZero": true
+    }
+  },
+  "nextAuthorizedWork": "Compulsory Rest Stage-C nested activated extraction"
+}
