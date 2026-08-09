@@ -1,0 +1,136 @@
+{
+  "freezeLabel": "rc3-candidate-v140",
+  "status": "CANDIDATE_FROZEN",
+  "frozenAt": "2026-08-09T17:09:25.285Z",
+  "parserVersion": "oracle-action-v1.40-rc3-semantic-integrity",
+  "tag": "oracle-action-v1.40-rc3-semantic-integrity",
+  "parentCheckpoint": "oracle-action-v1.39-rc3-replacement-exile-instead",
+  "parentCommitSha": "31c2bbfe87c9af7ee8af7e9fe53a8fc6f00009ee",
+  "goldOverlayCommitSha": "37df6de95ffabebf8ac64bf0f8eed180aa87aa61",
+  "parserCommitSha": "e6b2f0390223db5e25624ba2fbeb0e6b0e1839b7",
+  "parserScopePaths": [
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-transform.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-clause-native.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-promotion.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-action-builder.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-builder.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-schema.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-rc3.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-granted-rules-span-detector.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-semantic-context-router.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-scoring-scope.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-extraction-metadata.ts",
+    "scripts/oracle-action-unified-matcher.ts",
+    "scripts/oracle-action-semantic-matcher.ts",
+    "scripts/lib/rc3-case-scope-scoring.ts"
+  ],
+  "parserBlobs": {
+    "oracle-rc3-transform.ts": "1474931b22a27483d69e6a0761ad29a29d84f43159245145d879581074884f5a",
+    "oracle-rc3-clause-native.ts": "3df0674d7bdf2af464d10630620cde744a83534c105dabac1bf12e4952032d1d",
+    "oracle-rc3-promotion.ts": "eafc8a35808668904947d8097437fd5395655ea5cadd534baff7668e419e3b1b",
+    "oracle-rc3-action-builder.ts": "5b9c9079331d7d87bc8b9bcc77547827258ad4a1ebbd4751ba6f44cae1c994cd",
+    "oracle-semantic-parse-builder.ts": "9223cf1c3782a35d768aaa88fa5a88427f5c804ebfa62ea98c4138d3b0a1da31",
+    "oracle-semantic-parse-schema.ts": "8883ac9a218825bfb1b2b7cb135e5d4175bcc2fcc82fbb8b1258f408d37fb8a5",
+    "oracle-semantic-parse-rc3.ts": "d71a54df3c0dbf590966810d863b48f910033141f0bc442e5c6da672dedf3088",
+    "oracle-rc3-granted-rules-span-detector.ts": "4d5248b8ecf0b07dfdc6b059494fe36e2f1fdcca68dcaa03137ba4adf27b7ba2",
+    "oracle-rc3-semantic-context-router.ts": "5a14dee8f16ba4a8f913397992c1cb26a0cdc7b2ff154c99113a2014ac6509f3",
+    "oracle-rc3-scoring-scope.ts": "5ebc6cbd45f5be0a32121c27f6897d89451c5391913c5ebaeda2f1cbdfb68c11",
+    "oracle-rc3-extraction-metadata.ts": "92164f88283a94ca7ee3d19280d5b9226cdf34b06d4bd032df09a157e39bc12e",
+    "oracle-action-unified-matcher.ts": "5f01b382b3f5e3ef83aa9f9b1dd8ad6f520d1d825f0bbdbf7d9aa7f040777ea4",
+    "oracle-action-semantic-matcher.ts": "04b359506615d3b51bf9b4733f85c6f49a08374a782edca93701c043e1d4ed33",
+    "rc3-case-scope-scoring.ts": "6484e81ae33719d72fae71663dec3ef226869c635345d62759f3027cdc0a2310"
+  },
+  "parserBlobClosureHash": "28184b88b8b7daac9e8d45174d91f91f38a626f2134458fcf0eb63dd3d1ebe9e",
+  "taxonomyVersion": "three-layer-v1.4",
+  "taxonomyV14Hashes": {
+    "data/oracle-action-eval-development-v26-v14.json": "b5aa3aa3871e3e738c8a3e61ca8a788335b6f080ae295c4c92b1b86af84cf4a3",
+    "data/oracle-action-eval-development-generalization-expansion-v2-v14.json": "d0bac48f1a48cb0d72b81b5c6390069731866e0b6096a8d90c6c63de90a22e0e",
+    "data/oracle-action-eval-development-generalization-expansion-v3-v14.json": "6369c385500dc8967d42fd5b1a6e32838887d72cc816411599e384302f805be3",
+    "data/oracle-action-eval-development-generalization-expansion-v5-v14.json": "8f7c8534051b3fbaa489515fcbee84855e51dc3bf9f94756db5e4b6c0225ff7e",
+    "data/oracle-action-eval-rc3-positive-training-catalog-v133.json": "ec6f38256f288108ca47479a8dce37b94a91dd06ef0214f9ea6dbc765dc6e0c3"
+  },
+  "combinedBenchmarkHash": "e5af49d555c3dfaf42a5b63e67f45ea16c12cbc931271d739786b1679d8af588",
+  "unrelatedSliceHash": "ec6f38256f288108ca47479a8dce37b94a91dd06ef0214f9ea6dbc765dc6e0c3",
+  "goldMigrationOverlay": {
+    "paths": [
+      "data/milestones/rc3-development/persistent-permission-gold-migration-v135.json",
+      "data/milestones/rc3-development/granted-shuffle-gold-migration-v135.json",
+      "data/milestones/rc3-development/token-definition-gold-migration-v135.json",
+      "data/milestones/rc3-development/land-grant-permission-gold-migration-v137.json",
+      "data/milestones/rc3-development/zone-ninjutsu-replacement-gold-migration-v137.json",
+      "data/milestones/rc3-development/activated-cost-fall-to-earth-gold-migration-v139.json"
+    ],
+    "hashes": {
+      "data/milestones/rc3-development/persistent-permission-gold-migration-v135.json": "cd4c3cbebbdb8cc74d73b90be025660c75dc39503a68c82827f85b53ba4740f6",
+      "data/milestones/rc3-development/granted-shuffle-gold-migration-v135.json": "824b30604fef9bfefb891181edc7fb2729834e1faf7384dec137b3f3684606e2",
+      "data/milestones/rc3-development/token-definition-gold-migration-v135.json": "0da7bda1877dab61253e6fdaa21556c8260fb17f45f43aa4492f8cee3576117f",
+      "data/milestones/rc3-development/land-grant-permission-gold-migration-v137.json": "a360941bab92ffb3fa887c008a5bb77e516bdf834db25efd0bfa93f10c154ab1",
+      "data/milestones/rc3-development/zone-ninjutsu-replacement-gold-migration-v137.json": "1c2c83551d765d546756eda8eb9078328b9063da9db6fd4b1298669b0c5216f2",
+      "data/milestones/rc3-development/activated-cost-fall-to-earth-gold-migration-v139.json": "4a35cab53b14e451cdb41fd36b517ec06f086b78f19fe90a4074efea7be354fe"
+    },
+    "recordCount": 23,
+    "overlayCommitSha": "37df6de95ffabebf8ac64bf0f8eed180aa87aa61"
+  },
+  "evaluators": {
+    "semanticMatcher": "04b359506615d3b51bf9b4733f85c6f49a08374a782edca93701c043e1d4ed33",
+    "unifiedMatcher": "5f01b382b3f5e3ef83aa9f9b1dd8ad6f520d1d825f0bbdbf7d9aa7f040777ea4",
+    "devGateScript": "3a3f5c681266be2605ec62ad84f007e87f28e0fa860ca0b9091fcf98471b5260"
+  },
+  "DEFAULT_RC3_PROMOTED_FAMILIES": [
+    "search_put_shuffle_chain",
+    "look_reveal_put_chain",
+    "activated_post_colon_effect",
+    "replacement_exile_instead"
+  ],
+  "authoritativeDevelopment": {
+    "scoringPath": "live_full_semantic_matcher_with_gold_migration_overlay",
+    "combined": {
+      "tp": 592,
+      "fp": 2,
+      "fn": 37,
+      "precision": 0.9966329966329966,
+      "recall": 0.9411764705882353
+    },
+    "unrelatedCatalogPositive": {
+      "tp": 57,
+      "fp": 0,
+      "fn": 6,
+      "precision": 1,
+      "recall": 0.9047619047619048
+    }
+  },
+  "gates": {
+    "combinedDevelopment": {
+      "pass": true
+    },
+    "unrelatedCatalogPositive": {
+      "pass": true
+    }
+  },
+  "candidateInvariants": {
+    "semanticInvalidActionCount": 0,
+    "semanticValidatorViolationCount": 0,
+    "activatedCostLayer2Leakage": 0,
+    "permissionLeakage": 0,
+    "triggerEventActionLeakage": 0,
+    "tokenDefinitionCardNativeLeakage": 0,
+    "tokenCopyPrimitiveLeakage": 0,
+    "crossFaceSemanticLeakage": 0,
+    "allRequiredZero": true
+  },
+  "integrityRepair": {
+    "family": "granted_nested_semantic_identity",
+    "rootCause": "clause-native granted IDs used segment index format; semantic builder emitted ability-N parents and segment clauseIds not registered on granted SemanticAbility nodes",
+    "generalizedFix": "buildGrantedSemanticAbilities + resolveGrantedActionIdentity in oracle-semantic-parse-builder.ts",
+    "scoringDelta": "none — lineage-only repair"
+  },
+  "parserTuning": "STOP — no further development optimization before v13",
+  "v13": {
+    "sealed": true,
+    "parserExecutionCount": 0,
+    "validationHash": "9e20260619de3eff9f8be5b579d635bf8756fcefc22efa87d198f98aa079911f",
+    "authorized": false,
+    "note": "Execute once after immutable candidate freeze"
+  },
+  "manifestContentHash": "ae3a16602f7370f00aca87f314a8709003a40873164e242a99e55b7ac8dea0fd"
+}
