@@ -1,0 +1,210 @@
+{
+  "generatedAt": "2026-08-10T06:37:29.968Z",
+  "priorDevelopmentGoldHash": "eae3767e192f202752cc9424e2a9b05636d76a7bfda0768dfa1f1954e57c3945",
+  "preScrubDevelopmentGoldHash": "7e61053ad44b271fb24ddfb09f91418958a03fc5a6312c206de0b2a5b4512ecf",
+  "scrubRecords": 4,
+  "corrections": [
+    {
+      "caseId": "eval-0194",
+      "cardName": "Search the Premises",
+      "censusFamily": "invalid_reminder_gold",
+      "policyRule": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "oldGold": {
+        "actionType": "create_token",
+        "evidenceContains": "Create a Clue token"
+      },
+      "correctedGold": null,
+      "reminderSpan": {
+        "start": 77,
+        "end": 96
+      },
+      "semanticOwner": "source_card",
+      "executionContext": "reminder",
+      "clauseRole": "mechanic_reminder",
+      "migrationReason": "RC6 v1.6 reminder_card_native_gold — invalid card-native L2 in mechanic/reminder span"
+    },
+    {
+      "caseId": "eval-0285",
+      "cardName": "Forensic Gadgeteer",
+      "censusFamily": "invalid_reminder_gold",
+      "policyRule": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "oldGold": {
+        "actionType": "create_token",
+        "evidenceContains": "Create a Clue token"
+      },
+      "correctedGold": null,
+      "reminderSpan": {
+        "start": 51,
+        "end": 70
+      },
+      "semanticOwner": "source_card",
+      "executionContext": "reminder",
+      "clauseRole": "mechanic_reminder",
+      "migrationReason": "RC6 v1.6 reminder_card_native_gold — invalid card-native L2 in mechanic/reminder span"
+    },
+    {
+      "caseId": "rc3-pos-v12-0146",
+      "cardName": "Angelic Sleuth",
+      "censusFamily": "invalid_reminder_gold",
+      "policyRule": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "oldGold": {
+        "actionType": "create_token",
+        "evidenceContains": "Create a Clue artifact token"
+      },
+      "correctedGold": null,
+      "reminderSpan": {
+        "start": 110,
+        "end": 138
+      },
+      "semanticOwner": "source_card",
+      "executionContext": "reminder",
+      "clauseRole": "mechanic_reminder",
+      "migrationReason": "RC6 v1.6 reminder_card_native_gold — invalid card-native L2 in mechanic/reminder span"
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "cardName": "Antique Collector",
+      "censusFamily": "invalid_reminder_gold",
+      "policyRule": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "oldGold": {
+        "actionType": "create_token",
+        "evidenceContains": "Create a colorless Clue artifact token"
+      },
+      "correctedGold": null,
+      "reminderSpan": {
+        "start": 255,
+        "end": 293
+      },
+      "semanticOwner": "source_card",
+      "executionContext": "reminder",
+      "clauseRole": "mechanic_reminder",
+      "migrationReason": "RC6 v1.6 reminder_card_native_gold — invalid card-native L2 in mechanic/reminder span"
+    }
+  ],
+  "violations": [
+    {
+      "code": "reminder_card_native_gold",
+      "metric": "reminderCardNativeGold",
+      "caseId": "eval-0194",
+      "cardName": "Search the Premises",
+      "actionType": "create_token",
+      "evidenceContains": "Create a Clue token",
+      "policyFamily": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "semanticJustification": {
+        "actionType": "create_token",
+        "evidenceContains": "Create a Clue token",
+        "evidenceSpan": {
+          "start": 77,
+          "end": 96
+        },
+        "clauseRole": "mechanic_reminder",
+        "abilityType": "triggered",
+        "executionContext": "reminder",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": false,
+        "inCostRegion": false,
+        "inReminderSpan": true,
+        "inTypeLineMechanicReminder": false,
+        "inCreatedObjectDefinition": false,
+        "inGrantedQuotedAbility": false,
+        "inTriggerEventHeader": false,
+        "inReplacementEvent": false
+      }
+    },
+    {
+      "code": "reminder_card_native_gold",
+      "metric": "reminderCardNativeGold",
+      "caseId": "eval-0285",
+      "cardName": "Forensic Gadgeteer",
+      "actionType": "create_token",
+      "evidenceContains": "Create a Clue token",
+      "policyFamily": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "semanticJustification": {
+        "actionType": "create_token",
+        "evidenceContains": "Create a Clue token",
+        "evidenceSpan": {
+          "start": 51,
+          "end": 70
+        },
+        "clauseRole": "mechanic_reminder",
+        "abilityType": "triggered",
+        "executionContext": "reminder",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": false,
+        "inCostRegion": false,
+        "inReminderSpan": true,
+        "inTypeLineMechanicReminder": false,
+        "inCreatedObjectDefinition": false,
+        "inGrantedQuotedAbility": false,
+        "inTriggerEventHeader": false,
+        "inReplacementEvent": false
+      }
+    },
+    {
+      "code": "reminder_card_native_gold",
+      "metric": "reminderCardNativeGold",
+      "caseId": "rc3-pos-v12-0146",
+      "cardName": "Angelic Sleuth",
+      "actionType": "create_token",
+      "evidenceContains": "Create a Clue artifact token",
+      "policyFamily": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "semanticJustification": {
+        "actionType": "create_token",
+        "evidenceContains": "Create a Clue artifact token",
+        "evidenceSpan": {
+          "start": 110,
+          "end": 138
+        },
+        "clauseRole": "mechanic_reminder",
+        "abilityType": "triggered",
+        "executionContext": "reminder",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": false,
+        "inCostRegion": false,
+        "inReminderSpan": true,
+        "inTypeLineMechanicReminder": false,
+        "inCreatedObjectDefinition": false,
+        "inGrantedQuotedAbility": false,
+        "inTriggerEventHeader": false,
+        "inReplacementEvent": false
+      }
+    },
+    {
+      "code": "reminder_card_native_gold",
+      "metric": "reminderCardNativeGold",
+      "caseId": "rc3-pos-v12-0148",
+      "cardName": "Antique Collector",
+      "actionType": "create_token",
+      "evidenceContains": "Create a colorless Clue artifact token",
+      "policyFamily": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "semanticJustification": {
+        "actionType": "create_token",
+        "evidenceContains": "Create a colorless Clue artifact token",
+        "evidenceSpan": {
+          "start": 255,
+          "end": 293
+        },
+        "clauseRole": "mechanic_reminder",
+        "abilityType": "triggered",
+        "executionContext": "reminder",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": false,
+        "inCostRegion": false,
+        "inReminderSpan": true,
+        "inTypeLineMechanicReminder": false,
+        "inCreatedObjectDefinition": false,
+        "inGrantedQuotedAbility": false,
+        "inTriggerEventHeader": false,
+        "inReplacementEvent": false
+      }
+    }
+  ]
+}

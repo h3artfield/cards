@@ -1,0 +1,73 @@
+{
+  "artifactType": "Rc6ExecutedParserSourceSnapshot",
+  "version": "rc6-executed-parser-source-snapshot-v1",
+  "generatedAt": "2026-08-10T15:28:33.129Z",
+  "purpose": "Content-addressed preservation of RC6 v16-executed parser scope bytes",
+  "parserVersion": "oracle-action-v1.41-rc6-reminder-grant-promotion",
+  "executedParserBlobClosureHash": "832b601cfe332b25b38df359935cef96148dfd69bf729a08dfac47bbebb3d113",
+  "executedGoldPolicyValidatorHash": "d83e85406341d5df39ddfe77a9c1c4ab6339b3a36f4f213d07160d31ca0ec008",
+  "recordedParserCommitSha": "3541911617893f81f0e3fcc3de46654fd01c0563",
+  "actualHeadAtRemediation": "3541911617893f81f0e3fcc3de46654fd01c0563",
+  "workingTreeClean": false,
+  "workingTreeStatusLineCount": 354,
+  "provenanceFailure": {
+    "freezeManifestClaimedCommit": "3541911617893f81f0e3fcc3de46654fd01c0563",
+    "actualParserAtFreeze": "uncommitted working-tree bytes",
+    "note": "parserCommitSha metadata is non-authoritative; parserBlobClosureHash binds execution."
+  },
+  "fileHashes": {
+    "executedAtV16": {
+      "src/lib/deck-builder/golden-catalog/oracle-action-parser-v1.ts": "4683b9288a0176c84ff963fe050d0d1dc801e86383eb89bfc46959196f815174",
+      "src/lib/deck-builder/golden-catalog/oracle-rc3-transform.ts": "2a08564b63abf13bcf0a45e3f40c6baaa40d818310c9f6189493bea31e81157f",
+      "src/lib/deck-builder/golden-catalog/oracle-rc3-clause-native.ts": "7a573bea7926d7d2f02c01b5641ad45a248bdfff9af0876eeaa655602034c30d",
+      "src/lib/deck-builder/golden-catalog/oracle-rc3-ability-block.ts": "971970e192fcdf4f6bd4ed372ca4e5f7e67f516a43d6b75d8fd501e88ba003c7",
+      "src/lib/deck-builder/golden-catalog/oracle-rc3-granted-rules-span-detector.ts": "633f36abfab783ea047528f183ff824c66d69b455c04a350e7be156d13a38c20",
+      "src/lib/deck-builder/golden-catalog/oracle-span-role-classifier.ts": "3807c738b81e367f951c9a4c5d484975e1c9f03b7b8a4a06088abd9b613d19b0",
+      "src/lib/deck-builder/golden-catalog/oracle-compound-clause-segmentation.ts": "c44c44b5d4c03d3aaa5d8b6a12fe38c620d8b5a79512d8ebc3ab9241d7f9236f",
+      "src/lib/deck-builder/golden-catalog/oracle-modal-option-parse.ts": "6221892af5432b16163a01cc744d460a732e7561090e3cba542839cb41809617",
+      "src/lib/deck-builder/golden-catalog/oracle-action-structural-blocks.ts": "f0c37244d0cc68b7247a2b8fc4bfd051133e552a62fc3e6a48e948b51f70597f",
+      "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-rc3.ts": "d71a54df3c0dbf590966810d863b48f910033141f0bc442e5c6da672dedf3088",
+      "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-builder.ts": "ac2e6b280bca38e4dff931b25adbf3d155dbcc2298544efca4a5d0801c84bca4",
+      "src/lib/deck-builder/golden-catalog/oracle-ability-segmentation.ts": "9381b09acce555b1819c154758bd99d99342258a2b93cc346edf042a291d8008",
+      "scripts/oracle-action-semantic-matcher.ts": "04b359506615d3b51bf9b4733f85c6f49a08374a782edca93701c043e1d4ed33",
+      "scripts/oracle-action-unified-matcher.ts": "b6de494e7133ed88e095cd83ff8301efec97a3deb9831ea988e3fecb094ea5c5",
+      "scripts/lib/gold-policy-validator-v1.ts": "d83e85406341d5df39ddfe77a9c1c4ab6339b3a36f4f213d07160d31ca0ec008",
+      "scripts/lib/rc5-regression-scoring-v1.ts": "67d570cceec42534d532b7117fd67d124489a21e6f2187f0f2a52764009b31c7",
+      "scripts/lib/reminder-derived-leakage-v1.ts": "dce8d6e4b7567789d9958afc062c03b7595108028254da40d0bd10c3d64c32d9"
+    },
+    "workingTreeNow": {
+      "src/lib/deck-builder/golden-catalog/oracle-action-parser-v1.ts": "4683b9288a0176c84ff963fe050d0d1dc801e86383eb89bfc46959196f815174",
+      "src/lib/deck-builder/golden-catalog/oracle-rc3-transform.ts": "2a08564b63abf13bcf0a45e3f40c6baaa40d818310c9f6189493bea31e81157f",
+      "src/lib/deck-builder/golden-catalog/oracle-rc3-clause-native.ts": "7a573bea7926d7d2f02c01b5641ad45a248bdfff9af0876eeaa655602034c30d",
+      "src/lib/deck-builder/golden-catalog/oracle-rc3-ability-block.ts": "971970e192fcdf4f6bd4ed372ca4e5f7e67f516a43d6b75d8fd501e88ba003c7",
+      "src/lib/deck-builder/golden-catalog/oracle-rc3-granted-rules-span-detector.ts": "633f36abfab783ea047528f183ff824c66d69b455c04a350e7be156d13a38c20",
+      "src/lib/deck-builder/golden-catalog/oracle-span-role-classifier.ts": "3807c738b81e367f951c9a4c5d484975e1c9f03b7b8a4a06088abd9b613d19b0",
+      "src/lib/deck-builder/golden-catalog/oracle-compound-clause-segmentation.ts": "c44c44b5d4c03d3aaa5d8b6a12fe38c620d8b5a79512d8ebc3ab9241d7f9236f",
+      "src/lib/deck-builder/golden-catalog/oracle-modal-option-parse.ts": "6221892af5432b16163a01cc744d460a732e7561090e3cba542839cb41809617",
+      "src/lib/deck-builder/golden-catalog/oracle-action-structural-blocks.ts": "f0c37244d0cc68b7247a2b8fc4bfd051133e552a62fc3e6a48e948b51f70597f",
+      "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-rc3.ts": "d71a54df3c0dbf590966810d863b48f910033141f0bc442e5c6da672dedf3088",
+      "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-builder.ts": "ac2e6b280bca38e4dff931b25adbf3d155dbcc2298544efca4a5d0801c84bca4",
+      "src/lib/deck-builder/golden-catalog/oracle-ability-segmentation.ts": "9381b09acce555b1819c154758bd99d99342258a2b93cc346edf042a291d8008",
+      "scripts/oracle-action-semantic-matcher.ts": "04b359506615d3b51bf9b4733f85c6f49a08374a782edca93701c043e1d4ed33",
+      "scripts/oracle-action-unified-matcher.ts": "b6de494e7133ed88e095cd83ff8301efec97a3deb9831ea988e3fecb094ea5c5",
+      "scripts/lib/gold-policy-validator-v1.ts": "65f2f4a02d350c9a1f9871f0d408112cde932a849e7d2dad2e36941bb8442ce2",
+      "scripts/lib/rc5-regression-scoring-v1.ts": "67d570cceec42534d532b7117fd67d124489a21e6f2187f0f2a52764009b31c7",
+      "scripts/lib/reminder-derived-leakage-v1.ts": "dce8d6e4b7567789d9958afc062c03b7595108028254da40d0bd10c3d64c32d9"
+    }
+  },
+  "driftFromExecuted": {
+    "scripts/lib/gold-policy-validator-v1.ts": {
+      "executed": "d83e85406341d5df39ddfe77a9c1c4ab6339b3a36f4f213d07160d31ca0ec008",
+      "workingTreeNow": "65f2f4a02d350c9a1f9871f0d408112cde932a849e7d2dad2e36941bb8442ce2"
+    }
+  },
+  "closureVerification": {
+    "workingTreeClosure": "3e25b7374c70a082f501f25c02ba0dde0d9902d8c193f55cdb97f5e2a13bb61c",
+    "executedClosure": "832b601cfe332b25b38df359935cef96148dfd69bf729a08dfac47bbebb3d113",
+    "expected": "832b601cfe332b25b38df359935cef96148dfd69bf729a08dfac47bbebb3d113",
+    "executedClosureMatch": true,
+    "workingTreeClosureMatch": false
+  },
+  "snapshotDirectory": "data/milestones/rc6-development/rc6-executed-parser-source-snapshot-v1",
+  "note": "Snapshot copies working-tree parser files; gold-policy-validator drift is post-RC6 v1.7 policy work — executed hash pinned in manifest."
+}

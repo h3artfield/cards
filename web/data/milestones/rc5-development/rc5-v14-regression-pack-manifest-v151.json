@@ -1,0 +1,172 @@
+{
+  "manifestVersion": "rc5-v14-regression-pack-v151",
+  "frozenAt": "2026-08-10T02:45:54.379Z",
+  "parserExecutionCount": 0,
+  "packPath": "data/oracle-action-eval-rc5-v14-regression-v151.json",
+  "contentHash": "1a0b911060057f5bc7669d612fc5681d90fd6cd1207fd44dda96a6562a8efb7e",
+  "priorManifestVersion": "rc5-v14-regression-pack-v150",
+  "priorContentHash": "551d4a54c8d110829be24e2a5e1cd8dd3757708776d572bc1e6bac2a699b7480",
+  "forensicRef": "data/milestones/validation-v14-certification/validation-v14-forensic-adjudication-v2.json",
+  "adjudicationRef": "data/milestones/validation-v14-certification/validation-v14-policy-adjudication-v2.json",
+  "accounting": {
+    "sourceGenuineParserFnCount": 19,
+    "sourceGenuineParserFpCount": 3,
+    "invalidGoldFnExcluded": 25,
+    "missingGoldFpExcluded": 8,
+    "invalidGoldTargetsImported": 0,
+    "duplicateTargets": 0,
+    "unclassifiedTargets": 0,
+    "integrityAssertions": 3,
+    "leakageAssertions": 22,
+    "contrastAssertions": 0,
+    "postCorrectionActionTargetCount": 19,
+    "parserBlindGoldCorrectionsApplied": 2,
+    "invalidGoldFnReclassifiedInPack": 2
+  },
+  "parserBlindGoldCorrections": [
+    {
+      "sourceV14CaseId": "vh14-0046",
+      "priorTargetId": "bddfd9f887f0f6dd",
+      "reason": "invalid_gold_token_copy_not_primitive_copy",
+      "action": "remove_action_scoring_case",
+      "preserveSemantics": "create_token + tokenCopyOf — not primitive copy",
+      "removedCaseId": "rc5-action-0046"
+    },
+    {
+      "sourceV14CaseId": "vh14-0114",
+      "priorTargetId": "4aa183675774c1b3",
+      "reason": "invalid_gold_draw_in_trigger_header",
+      "action": "replace_scoring_targets",
+      "preserveSemantics": "draw remains L1 trigger event reference only",
+      "replacementTargetIds": [
+        "rc5-goldcorr-0114-lose-life",
+        "rc5-goldcorr-0114-gain-life"
+      ]
+    }
+  ],
+  "developmentOrder": [
+    {
+      "family": "granted_nested_actions",
+      "priority": 1,
+      "actionTargetIds": [
+        "f4fde08c6ec84ae2",
+        "63d29808ffb99cd2",
+        "38bb937842c566fa",
+        "86ba7cc866e93467"
+      ],
+      "fpTargetIds": []
+    },
+    {
+      "family": "replacement_effect_parsing",
+      "priority": 2,
+      "actionTargetIds": [
+        "cb5d7333e424d5e4",
+        "98ec65ada6d190e3"
+      ],
+      "fpTargetIds": []
+    },
+    {
+      "family": "modal_families",
+      "priority": 3,
+      "actionTargetIds": [
+        "819e85297f7bc7e8",
+        "992391c6d1983f2b",
+        "ffa7a21ac48886db"
+      ],
+      "fpTargetIds": []
+    },
+    {
+      "family": "triggered_families",
+      "priority": 4,
+      "actionTargetIds": [
+        "32966575178070e5",
+        "rc5-goldcorr-0114-lose-life",
+        "rc5-goldcorr-0114-gain-life"
+      ],
+      "fpTargetIds": []
+    },
+    {
+      "family": "saga_planeswalker",
+      "priority": 5,
+      "actionTargetIds": [
+        "5d1ab7495d8ec114"
+      ],
+      "fpTargetIds": [
+        "vh14-0169|sacrifice|Sacrifice this token: Add three mana of any one color|4",
+        "vh14-0172|put_onto_battlefield|Put target creature card from a graveyard onto the battlefield|3"
+      ]
+    },
+    {
+      "family": "scattered_one_offs",
+      "priority": 6,
+      "actionTargetIds": [
+        "7727916729ff4c1d",
+        "1efd8bfd77430e7c",
+        "6e26bd9701b88e99",
+        "762aabd9d83f077a",
+        "fd424af544945e7b",
+        "284f6d08ebd2487d"
+      ],
+      "fpTargetIds": [
+        "vh14-0052|put_counter|put that many +1/+1 counters on Arcee.|1"
+      ]
+    }
+  ],
+  "actionScoringCaseIds": [
+    "vh14-0003",
+    "vh14-0009",
+    "vh14-0011",
+    "vh14-0022",
+    "vh14-0083",
+    "vh14-0087",
+    "vh14-0089",
+    "vh14-0094",
+    "vh14-0098",
+    "vh14-0105",
+    "vh14-0114",
+    "vh14-0131",
+    "vh14-0133",
+    "vh14-0137",
+    "vh14-0156",
+    "vh14-0171",
+    "vh14-0209"
+  ],
+  "fpScoringCaseIds": [
+    "vh14-0052",
+    "vh14-0169",
+    "vh14-0172"
+  ],
+  "integrityCaseIds": [
+    "vh14-0052",
+    "vh14-0087",
+    "vh14-0195"
+  ],
+  "leakageCaseIds": [
+    "vh14-0016",
+    "vh14-0050",
+    "vh14-0051",
+    "vh14-0052",
+    "vh14-0058",
+    "vh14-0059",
+    "vh14-0071",
+    "vh14-0073",
+    "vh14-0075",
+    "vh14-0076",
+    "vh14-0082",
+    "vh14-0097",
+    "vh14-0111",
+    "vh14-0122",
+    "vh14-0129",
+    "vh14-0131",
+    "vh14-0138",
+    "vh14-0144",
+    "vh14-0191",
+    "vh14-0193",
+    "vh14-0195",
+    "vh14-0212"
+  ],
+  "excludedInvalidGoldFnCount": 25,
+  "excludedMissingGoldFpCount": 8,
+  "note": "RC5 development regression pack v151 — gold-corrected spent v14 ledger. v15 sealed until RC5 candidate freeze.",
+  "manifestHash": "2c8edefb4b4cdf180b6eed518acb319368aca6fabfe5f628cffe3a0b424abd71"
+}

@@ -1,0 +1,12 @@
+{
+  "preservedRescorePath": "data/milestones/rc6-development/rc5-certified-dev-rescore-v150-preserved-pre-rc6-gold-scrub.json",
+  "priorDevelopmentGoldHash": "eae3767e192f202752cc9424e2a9b05636d76a7bfda0768dfa1f1954e57c3945",
+  "preScrubDevelopmentGoldHash": "7e61053ad44b271fb24ddfb09f91418958a03fc5a6312c206de0b2a5b4512ecf",
+  "correctedDevelopmentGoldHash": "153969334c2ef126ea0dd413fa6a3ebd1781ba827359d488d2ce650ca6304341",
+  "preScrubReminderViolations": 4,
+  "postScrubViolations": 0,
+  "postScrubPass": true,
+  "removedGoldCount": 4,
+  "scrubPath": "data/milestones/rc6-development/rc6-development-gold-policy-scrub-v1.json",
+  "correctionsPath": "data/milestones/rc6-development/rc6-development-gold-policy-scrub-corrections-v1.json"
+}

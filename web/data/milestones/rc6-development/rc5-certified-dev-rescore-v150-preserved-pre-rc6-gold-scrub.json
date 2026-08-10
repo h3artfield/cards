@@ -1,0 +1,507 @@
+{
+  "generatedAt": "2026-08-10T06:16:25.452Z",
+  "parserVersion": "oracle-action-v1.41-rc6-reminder-grant-promotion",
+  "goldPolicyValidatorVersion": "gold-policy-validator-v1.6",
+  "developmentGoldHash": "eae3767e192f202752cc9424e2a9b05636d76a7bfda0768dfa1f1954e57c3945",
+  "goldPolicyValidatorDev": {
+    "pass": false,
+    "violations": 4,
+    "census": {
+      "goldPolicyViolations": 0,
+      "invalidLayer2CostGold": 0,
+      "triggerReferenceActionGold": 0,
+      "invalidPermissionActionGold": 0,
+      "reminderCardNativeGold": 4,
+      "createdObjectOwnershipViolations": 0,
+      "invalidReplacementGold": 0,
+      "duplicateSemanticGold": 0,
+      "invalidEvidenceSpan": 0,
+      "scopeCompletenessViolations": 0
+    },
+    "perPolicyFamily": {
+      "reminder_mechanic_definition": 4
+    }
+  },
+  "combinedDevelopment": {
+    "caseCount": 431,
+    "accepted": {
+      "tp": 575,
+      "fp": 1,
+      "fn": 27,
+      "precision": 0.9982638888888888,
+      "recall": 0.9551495016611296
+    },
+    "gate": {
+      "pass": true,
+      "threshold": {
+        "precision": 0.98,
+        "recall": 0.92
+      }
+    }
+  },
+  "unrelatedCatalogPositive": {
+    "caseCount": 33,
+    "accepted": {
+      "tp": 57,
+      "fp": 0,
+      "fn": 4,
+      "precision": 1,
+      "recall": 0.9344262295081968
+    },
+    "gate": {
+      "pass": true,
+      "threshold": {
+        "precision": 0.95,
+        "recall": 0.9
+      }
+    },
+    "note": "Certified unrelated-catalog generalization gate — distinct from v14 spent regression-pack recall"
+  },
+  "v14SpentRegressionPack": {
+    "actionScore": {
+      "tp": 10,
+      "fp": 0,
+      "fn": 9,
+      "precision": 1,
+      "recall": 0.5263157894736842
+    },
+    "fpScore": {
+      "rows": [
+        {
+          "caseId": "rc5-fp-0052",
+          "sourceV14CaseId": "vh14-0052",
+          "cardName": "Arcee, Sharpshooter // Arcee, Acrobatic Coupe",
+          "rc5Family": "scattered_one_offs",
+          "falsePositiveTarget": {
+            "gateFpId": "vh14-0052|put_counter|put that many +1/+1 counters on Arcee.|1",
+            "observedAction": "put_counter",
+            "observedEvidence": "put that many +1/+1 counters on Arcee.",
+            "adjudicationVerdict": "genuine_parser_fp",
+            "policyReason": "Emission not covered by oracle policy for missing gold.",
+            "rc5Family": "scattered_one_offs",
+            "coverageStratum": "challenge_mdfc_face_provenance"
+          },
+          "fp": 1,
+          "pass": false,
+          "emitted": [
+            {
+              "actionType": "cast",
+              "evidence": "You may cast this "
+            },
+            {
+              "actionType": "put_counter",
+              "evidence": "put that many +1/+1 counters on Arcee."
+            }
+          ]
+        },
+        {
+          "caseId": "rc5-fp-0169",
+          "sourceV14CaseId": "vh14-0169",
+          "cardName": "Arzakon",
+          "rc5Family": "saga_planeswalker",
+          "falsePositiveTarget": {
+            "gateFpId": "vh14-0169|sacrifice|Sacrifice this token: Add three mana of any one color|4",
+            "observedAction": "sacrifice",
+            "observedEvidence": "Sacrifice this token: Add three mana of any one color",
+            "adjudicationVerdict": "genuine_parser_fp",
+            "policyReason": "Emission not covered by oracle policy for missing gold.",
+            "rc5Family": "saga_planeswalker",
+            "coverageStratum": "broad_saga_planeswalker"
+          },
+          "fp": 0,
+          "pass": true,
+          "emitted": [
+            {
+              "actionType": "deal_damage",
+              "evidence": "deals 3 damage"
+            },
+            {
+              "actionType": "create_token",
+              "evidence": "Create a Black Lotus token"
+            },
+            {
+              "actionType": "shuffle_into_library",
+              "evidence": "shuffles their hand and graveyard into their library"
+            },
+            {
+              "actionType": "draw",
+              "evidence": "draws seven cards"
+            }
+          ]
+        },
+        {
+          "caseId": "rc5-fp-0172",
+          "sourceV14CaseId": "vh14-0172",
+          "cardName": "Ashiok, Sculptor of Fears",
+          "rc5Family": "saga_planeswalker",
+          "falsePositiveTarget": {
+            "gateFpId": "vh14-0172|put_onto_battlefield|Put target creature card from a graveyard onto the battlefield|3",
+            "observedAction": "put_onto_battlefield",
+            "observedEvidence": "Put target creature card from a graveyard onto the battlefield",
+            "adjudicationVerdict": "genuine_parser_fp",
+            "policyReason": "Emission not covered by oracle policy for missing gold.",
+            "rc5Family": "saga_planeswalker",
+            "coverageStratum": "broad_saga_planeswalker"
+          },
+          "fp": 1,
+          "pass": false,
+          "emitted": [
+            {
+              "actionType": "draw",
+              "evidence": "Draw a card"
+            },
+            {
+              "actionType": "mill",
+              "evidence": "Each player mills two cards"
+            },
+            {
+              "actionType": "return_to_battlefield",
+              "evidence": "Put target creature card from a graveyard onto the battlefield"
+            },
+            {
+              "actionType": "put_onto_battlefield",
+              "evidence": "Put target creature card from a graveyard onto the battlefield"
+            }
+          ]
+        }
+      ],
+      "fp": 2,
+      "passCount": 1
+    },
+    "integrity": {
+      "rows": [
+        {
+          "assertionId": "rc5-integrity-0052",
+          "sourceV14CaseId": "vh14-0052",
+          "pass": true,
+          "idViolations": 0,
+          "provenanceViolations": 0
+        },
+        {
+          "assertionId": "rc5-integrity-0087",
+          "sourceV14CaseId": "vh14-0087",
+          "pass": true,
+          "idViolations": 0,
+          "provenanceViolations": 0
+        },
+        {
+          "assertionId": "rc5-integrity-0195",
+          "sourceV14CaseId": "vh14-0195",
+          "pass": true,
+          "idViolations": 0,
+          "provenanceViolations": 0
+        }
+      ],
+      "passCount": 3,
+      "idViolations": 0,
+      "provenanceViolations": 0
+    },
+    "leakage": {
+      "rows": [
+        {
+          "assertionId": "rc5-leakage-0016",
+          "sourceV14CaseId": "vh14-0016",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0050",
+          "sourceV14CaseId": "vh14-0050",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0051",
+          "sourceV14CaseId": "vh14-0051",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0052",
+          "sourceV14CaseId": "vh14-0052",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0058",
+          "sourceV14CaseId": "vh14-0058",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0059",
+          "sourceV14CaseId": "vh14-0059",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0071",
+          "sourceV14CaseId": "vh14-0071",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0073",
+          "sourceV14CaseId": "vh14-0073",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0075",
+          "sourceV14CaseId": "vh14-0075",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0076",
+          "sourceV14CaseId": "vh14-0076",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0082",
+          "sourceV14CaseId": "vh14-0082",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0097",
+          "sourceV14CaseId": "vh14-0097",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0111",
+          "sourceV14CaseId": "vh14-0111",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0122",
+          "sourceV14CaseId": "vh14-0122",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0129",
+          "sourceV14CaseId": "vh14-0129",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0131",
+          "sourceV14CaseId": "vh14-0131",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0138",
+          "sourceV14CaseId": "vh14-0138",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0144",
+          "sourceV14CaseId": "vh14-0144",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0191",
+          "sourceV14CaseId": "vh14-0191",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0193",
+          "sourceV14CaseId": "vh14-0193",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0195",
+          "sourceV14CaseId": "vh14-0195",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc5-leakage-0212",
+          "sourceV14CaseId": "vh14-0212",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        }
+      ],
+      "passCount": 22,
+      "structuralLeak": 0,
+      "forbiddenHitCount": 0
+    },
+    "recoveredGenuineFn": [
+      {
+        "sourceV14CaseId": "vh14-0083",
+        "cardName": "Ambassador of Evendo",
+        "tp": 1
+      },
+      {
+        "sourceV14CaseId": "vh14-0087",
+        "cardName": "Assemble from Parts",
+        "tp": 2
+      },
+      {
+        "sourceV14CaseId": "vh14-0089",
+        "cardName": "Bail Out",
+        "tp": 1
+      },
+      {
+        "sourceV14CaseId": "vh14-0094",
+        "cardName": "Alchemax Slayer-Bots",
+        "tp": 1
+      },
+      {
+        "sourceV14CaseId": "vh14-0098",
+        "cardName": "Ambling Stormshell",
+        "tp": 1
+      },
+      {
+        "sourceV14CaseId": "vh14-0133",
+        "cardName": "Auditore Ambush",
+        "tp": 1
+      },
+      {
+        "sourceV14CaseId": "vh14-0137",
+        "cardName": "Avengers Disassembled",
+        "tp": 1
+      }
+    ],
+    "remainingKnownGenuineFn": [
+      {
+        "sourceV14CaseId": "vh14-0003",
+        "cardName": "Aboshan, Cephalid Emperor",
+        "fn": 1,
+        "targets": [
+          "tap"
+        ]
+      },
+      {
+        "sourceV14CaseId": "vh14-0009",
+        "cardName": "Adagia, Windswept Bastion",
+        "fn": 1,
+        "targets": [
+          "copy"
+        ]
+      },
+      {
+        "sourceV14CaseId": "vh14-0011",
+        "cardName": "Advanced Reconstruction",
+        "fn": 1,
+        "targets": [
+          "mill"
+        ]
+      },
+      {
+        "sourceV14CaseId": "vh14-0022",
+        "cardName": "Aether Searcher",
+        "fn": 1,
+        "targets": [
+          "shuffle_library"
+        ]
+      },
+      {
+        "sourceV14CaseId": "vh14-0105",
+        "cardName": "A-Krydle of Baldur's Gate",
+        "fn": 1,
+        "targets": [
+          "mill"
+        ]
+      },
+      {
+        "sourceV14CaseId": "vh14-0131",
+        "cardName": "Arcane Endeavor",
+        "fn": 1,
+        "targets": [
+          "draw"
+        ]
+      },
+      {
+        "sourceV14CaseId": "vh14-0156",
+        "cardName": "Abdel Adrian, Gorion's Ward",
+        "fn": 1,
+        "targets": [
+          "exile"
+        ]
+      },
+      {
+        "sourceV14CaseId": "vh14-0171",
+        "cardName": "Ashiok, Nightmare Weaver",
+        "fn": 1,
+        "targets": [
+          "put_onto_battlefield"
+        ]
+      },
+      {
+        "sourceV14CaseId": "vh14-0209",
+        "cardName": "Aberrant Return",
+        "fn": 1,
+        "targets": [
+          "put_onto_battlefield"
+        ]
+      }
+    ],
+    "fixedGenuineFp": [
+      {
+        "sourceV14CaseId": "vh14-0169",
+        "cardName": "Arzakon"
+      }
+    ],
+    "remainingGenuineFp": [
+      {
+        "sourceV14CaseId": "vh14-0052",
+        "cardName": "Arcee, Sharpshooter // Arcee, Acrobatic Coupe",
+        "observedAction": "put_counter"
+      },
+      {
+        "sourceV14CaseId": "vh14-0172",
+        "cardName": "Ashiok, Sculptor of Fears",
+        "observedAction": "put_onto_battlefield"
+      }
+    ],
+    "regressionPackPath": "data/oracle-action-eval-rc5-v14-regression-v151.json",
+    "note": "Adjudicated v14 FN/FP ledger on spent material (v151 gold-corrected) — informational, not a gate"
+  },
+  "policyInvariants": {
+    "semanticInvalid": 0,
+    "idViolations": 0,
+    "provenanceViolations": 0,
+    "activatedCostLayer2Leakage": 0,
+    "permissionLeakage": 0,
+    "triggerEventActionLeakage": 0,
+    "reminderLeakage": 0,
+    "tokenOwnershipLeakage": 0,
+    "crossFaceLeakage": 0,
+    "acceptedReminderDerivedLayer2Count": 0
+  },
+  "invariantsPass": true,
+  "pass1Closed": false,
+  "rc5CandidateReady": false
+}

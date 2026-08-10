@@ -1,0 +1,98 @@
+{
+  "registryVersion": "gold-policy-registry-v1",
+  "policyVersion": "semantic-gold-policy-v1.4",
+  "frozenAt": "2026-08-09T20:00:00.000Z",
+  "taxonomyVersion": "three-layer-v1.4",
+  "parserBlind": true,
+  "allowedInputs": [
+    "canonicalOracleText",
+    "cardFaceIdentity",
+    "caseScope",
+    "benchmarkTargets",
+    "goldActions",
+    "goldStructuralAnnotations",
+    "taxonomyVersion"
+  ],
+  "forbiddenInputs": [
+    "parserOutput",
+    "tpFpFn",
+    "parserEvidenceSpans",
+    "rc4Behavior",
+    "matcherResults"
+  ],
+  "policyFamilies": [
+    {
+      "id": "activated_additional_cost_layer1",
+      "metric": "invalidLayer2CostGold",
+      "summary": "Cost-region sacrifice/discard/tap/exile/pay → Layer 1 only, forbidden as L2 gold"
+    },
+    {
+      "id": "trigger_event_reference",
+      "metric": "triggerReferenceActionGold",
+      "summary": "Whenever/When trigger headers — referenced action is not automatically L2"
+    },
+    {
+      "id": "condition_reference",
+      "metric": "goldPolicyViolations",
+      "summary": "Conditional clauses — no L2 from condition itself"
+    },
+    {
+      "id": "cast_play_permission_layer1",
+      "metric": "invalidPermissionActionGold",
+      "summary": "Future/static/duration cast permissions → Layer 1 only"
+    },
+    {
+      "id": "reminder_mechanic_definition",
+      "metric": "reminderCardNativeGold",
+      "summary": "Reminder/mechanic parentheticals — not card-native L2"
+    },
+    {
+      "id": "created_object_ownership",
+      "metric": "createdObjectOwnershipViolations",
+      "summary": "Token/created-object inline abilities → created_object owner"
+    },
+    {
+      "id": "replacement_structure",
+      "metric": "invalidReplacementGold",
+      "summary": "Replacement event structural; only replacement effect is L2"
+    },
+    {
+      "id": "primitive_distinction",
+      "metric": "goldPolicyViolations",
+      "summary": "draw≠put_into_hand, return≠put, search≠library movement, etc."
+    },
+    {
+      "id": "duplicate_semantic_gold",
+      "metric": "duplicateSemanticGold",
+      "summary": "No duplicate actionType+evidence within scope"
+    },
+    {
+      "id": "invalid_evidence_span",
+      "metric": "invalidEvidenceSpan",
+      "summary": "Gold evidence must exist verbatim in oracle text within scope"
+    },
+    {
+      "id": "scope_completeness",
+      "metric": "scopeCompletenessViolations",
+      "summary": "Declared scope must be internally consistent with gold completeness"
+    },
+    {
+      "id": "type_line_mechanic_reminder",
+      "metric": "reminderCardNativeGold",
+      "summary": "Type-line ETB mechanic reminders — not card-native L2"
+    }
+  ],
+  "sealingAssertions": {
+    "goldPolicyViolations": 0,
+    "invalidLayer2CostGold": 0,
+    "triggerReferenceActionGold": 0,
+    "invalidPermissionActionGold": 0,
+    "reminderCardNativeGold": 0,
+    "createdObjectOwnershipViolations": 0,
+    "invalidReplacementGold": 0,
+    "duplicateSemanticGold": 0,
+    "invalidEvidenceSpan": 0,
+    "scopeCompletenessViolations": 0
+  },
+  "contentHash": ""
+}

@@ -1,0 +1,64 @@
+{
+  "migrationVersion": "rc6-development-gold-policy-scrub-v1",
+  "generatedAt": "2026-08-10T06:37:29.968Z",
+  "parserBlind": true,
+  "parserConsulted": false,
+  "policyVersion": "semantic-gold-policy-v1.6",
+  "validatorVersion": "gold-policy-validator-v1.6",
+  "priorMigrationCount": 44,
+  "priorDevelopmentGoldHash": "eae3767e192f202752cc9424e2a9b05636d76a7bfda0768dfa1f1954e57c3945",
+  "preScrubDevelopmentGoldHash": "7e61053ad44b271fb24ddfb09f91418958a03fc5a6312c206de0b2a5b4512ecf",
+  "preScrubViolationCount": 4,
+  "preScrubCensus": {
+    "invalid_reminder_gold": 4
+  },
+  "rule": "Parser-blind RC6 scrub — removes reminder_card_native_gold only under Gold Policy Validator v1.6.",
+  "recordCount": 4,
+  "correctionCount": 4,
+  "records": [
+    {
+      "caseId": "eval-0194",
+      "removeLayer2Actions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a Clue token"
+        }
+      ],
+      "policyClass": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2."
+    },
+    {
+      "caseId": "eval-0285",
+      "removeLayer2Actions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a Clue token"
+        }
+      ],
+      "policyClass": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2."
+    },
+    {
+      "caseId": "rc3-pos-v12-0146",
+      "removeLayer2Actions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a Clue artifact token"
+        }
+      ],
+      "policyClass": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2."
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "removeLayer2Actions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a colorless Clue artifact token"
+        }
+      ],
+      "policyClass": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2."
+    }
+  ]
+}
