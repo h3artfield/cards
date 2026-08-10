@@ -1,0 +1,234 @@
+{
+  "freezeLabel": "rc7-candidate-v152",
+  "status": "CANDIDATE_FROZEN",
+  "frozenAt": "2026-08-10T16:41:31.618Z",
+  "supersedes": "data/milestones/rc6-development/rc6-candidate-v151-freeze-manifest.json",
+  "parserVersion": "oracle-action-v1.42-rc7-possessive-hand-discard-replacement-graveyard",
+  "parserCommitSha": "a0525b7f90d533a978c07e63b54db5b245aa3474",
+  "parserScopePaths": [
+    "src/lib/deck-builder/golden-catalog/oracle-action-parser-v1.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-transform.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-clause-native.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-ability-block.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-granted-rules-span-detector.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-span-role-classifier.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-compound-clause-segmentation.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-modal-option-parse.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-action-structural-blocks.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-rc3.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-builder.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-ability-segmentation.ts",
+    "scripts/oracle-action-semantic-matcher.ts",
+    "scripts/oracle-action-unified-matcher.ts",
+    "scripts/lib/gold-policy-validator-v1.ts",
+    "scripts/lib/rc5-regression-scoring-v1.ts",
+    "scripts/lib/reminder-derived-leakage-v1.ts"
+  ],
+  "parserBlobClosureHash": "e9b674aa26960dfed75ceb97885217e068c871a5683899a2017634acdbbe1c0d",
+  "goldPolicy": {
+    "stackVersion": "gold-policy-stack-v1",
+    "policyVersion": "semantic-gold-policy-v1.7",
+    "validatorVersion": "gold-policy-validator-v1.7",
+    "validatorHash": "0e181361b3df6f71762745b2fe0db4f99609c4d181307b016db987dbfb12aa66",
+    "policyRegistryHash": "542fa497aca56a052fa374ebf59179b6fae61b737f503df98dfe5553cc3bb13d",
+    "stackCompositeHash": "bff641dc3be90e053e243c6c30da8f05e22450eeba10edf0d0cbdec87398062a",
+    "stackFileHashes": {
+      "stackVersion": "gold-policy-stack-v1",
+      "policyVersion": "semantic-gold-policy-v1.7",
+      "validatorVersion": "gold-policy-validator-v1.7",
+      "validatorSourceHash": "0e181361b3df6f71762745b2fe0db4f99609c4d181307b016db987dbfb12aa66",
+      "policyRegistryHash": "dd83f64c6809842263316d2b76ccb1c347c32bd9a69f6eafdc90660be418c931",
+      "validatorFileHash": "35ccac75312f30e374a761b18551baa403e50c3ac74c05fd37caabc9276fdddc",
+      "semanticEnrichmentFileHash": "422609af7060f92665f60753de1899bfca8259c6ee6fec35030e66b105f659cb",
+      "spanRoleClassifierFileHash": "3807c738b81e367f951c9a4c5d484975e1c9f03b7b8a4a06088abd9b613d19b0",
+      "policyAdjudicationFileHash": "d802692f04935134d12f0e08327f86855010fc2a126c92d7da310afc78a859c7",
+      "runnerConfigFileHash": "82ee9c5ad5a3e1b7415dde94c9bca4b646d824189b42a8b111d0ed3483b9e03f",
+      "stackCompositeHash": "bff641dc3be90e053e243c6c30da8f05e22450eeba10edf0d0cbdec87398062a"
+    }
+  },
+  "developmentGold": {
+    "priorCertifiedHash": "427c8eae4072b0014b1f7c4082c698b8b8a09874d52fbc53e07e8b7fff1b2c65",
+    "correctedCertifiedHash": "24c9f59d47199c70c86e5a814111f60dab0317f2d3b6ebde9d9ff4fbab313137",
+    "rc6GoldPolicyScrubOverlayPath": "data/milestones/rc6-development/rc6-development-gold-policy-scrub-v1.json",
+    "rc7GoldPolicyScrubOverlayPath": "data/milestones/rc7-development/rc7-development-gold-policy-scrub-v1.json",
+    "rc7GoldPolicyScrubOverlayHash": "a8214c85a42d6014a8b78f872a17f33e1ab1b7f192e3c303c4c7f9c065ede8cc",
+    "rc7GoldPolicyCorrectionReportPath": "data/milestones/rc7-development/rc7-development-gold-policy-correction-report-v1.json",
+    "rc7GoldPolicyCorrectionReportHash": "123130d6326eaf8f1c38887b130de3f12b99533268df765cf434feda9771f90d"
+  },
+  "goldMigrationOverlay": {
+    "paths": [
+      "data/milestones/rc3-development/persistent-permission-gold-migration-v135.json",
+      "data/milestones/rc3-development/granted-shuffle-gold-migration-v135.json",
+      "data/milestones/rc3-development/token-definition-gold-migration-v135.json",
+      "data/milestones/rc3-development/land-grant-permission-gold-migration-v137.json",
+      "data/milestones/rc3-development/zone-ninjutsu-replacement-gold-migration-v137.json",
+      "data/milestones/rc3-development/activated-cost-fall-to-earth-gold-migration-v139.json",
+      "data/milestones/rc4-development/rc4-development-gold-policy-scrub-v1.json",
+      "data/milestones/rc6-development/rc6-development-gold-policy-scrub-v1.json",
+      "data/milestones/rc7-development/rc7-development-gold-policy-scrub-v1.json"
+    ],
+    "hashes": {
+      "data/milestones/rc3-development/persistent-permission-gold-migration-v135.json": "33773e5bae3e919f2f03bb5214cf0873880b74a3094372d409b61524f1a6fd01",
+      "data/milestones/rc3-development/granted-shuffle-gold-migration-v135.json": "cca18b0bed7142de5dcdc52ea64d3b4f4d7bda0c0d7269b2858dac764611a1ec",
+      "data/milestones/rc3-development/token-definition-gold-migration-v135.json": "d1259b607110792fb7e4282b51deba299093d6eab2b00fc9fd27341089b5ce02",
+      "data/milestones/rc3-development/land-grant-permission-gold-migration-v137.json": "88e98723cde85d68087894afcb13f0cef4b0adafc6d9164d478917ef36f8f359",
+      "data/milestones/rc3-development/zone-ninjutsu-replacement-gold-migration-v137.json": "ebe1ce0fe0a0590a8763ab34f85fbb9b5378e4a4406bfcb2cf79ddb394ddb8f4",
+      "data/milestones/rc3-development/activated-cost-fall-to-earth-gold-migration-v139.json": "00098e49604bfaa5debdf26a0b2094d8fe02f645ecb96401586ad392193afe37",
+      "data/milestones/rc4-development/rc4-development-gold-policy-scrub-v1.json": "de4f6d638690323f3417dc0fb821cb70928e51e706b6c94498afbb851aceaf29",
+      "data/milestones/rc6-development/rc6-development-gold-policy-scrub-v1.json": "b19945d736834792f03ab2b64025679a33223caa17796509e87f5d414e74cc05",
+      "data/milestones/rc7-development/rc7-development-gold-policy-scrub-v1.json": "a8214c85a42d6014a8b78f872a17f33e1ab1b7f192e3c303c4c7f9c065ede8cc"
+    },
+    "recordCount": 49
+  },
+  "evaluators": {
+    "semanticMatcher": "04b359506615d3b51bf9b4733f85c6f49a08374a782edca93701c043e1d4ed33",
+    "unifiedMatcher": "b6de494e7133ed88e095cd83ff8301efec97a3deb9831ea988e3fecb094ea5c5",
+    "goldPolicyValidator": "35ccac75312f30e374a761b18551baa403e50c3ac74c05fd37caabc9276fdddc",
+    "rc5RegressionScoring": "e4011280a5b42d9150973c36c91152f23db47ba48c3f71c8c4d0579ec826b9ab",
+    "reminderDerivedLeakage": "c6bf9fa75274e3f8f5ca85e78532fbd1f667f168749f8e709dafc4a5b9850fcc"
+  },
+  "invariantMatrix": {
+    "semanticInvalid": 0,
+    "idViolations": 0,
+    "provenanceViolations": 0,
+    "activatedCostLayer2Leakage": 0,
+    "permissionLeakage": 0,
+    "triggerEventActionLeakage": 0,
+    "reminderLeakage": 0,
+    "tokenOwnershipLeakage": 0,
+    "crossFaceLeakage": 0,
+    "acceptedReminderDerivedLayer2Count": 0,
+    "forbiddenEmissionCount": 0,
+    "invariantsPass": true
+  },
+  "regressionPack": {
+    "path": "data/oracle-action-eval-rc5-v14-regression-v151.json",
+    "hash": "b318ae20d3353ddf48d2028012db4774b4fbce9045b3409c6a02d1f6c1d4a6c4",
+    "manifestPath": "data/milestones/rc5-development/rc5-v14-regression-pack-manifest-v151.json",
+    "manifestHash": "2c8edefb4b4cdf180b6eed518acb319368aca6fabfe5f628cffe3a0b424abd71",
+    "contentHash": "1a0b911060057f5bc7669d612fc5681d90fd6cd1207fd44dda96a6562a8efb7e",
+    "version": "rc5-v14-regression-v151"
+  },
+  "certifiedDevelopmentGates": {
+    "combined": {
+      "caseCount": 431,
+      "accepted": {
+        "tp": 571,
+        "fp": 1,
+        "fn": 23,
+        "precision": 0.9982517482517482,
+        "recall": 0.9612794612794613
+      },
+      "gate": {
+        "pass": true,
+        "threshold": {
+          "precision": 0.98,
+          "recall": 0.92
+        }
+      }
+    },
+    "unrelated": {
+      "caseCount": 33,
+      "accepted": {
+        "tp": 57,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1,
+        "recall": 0.9344262295081968
+      },
+      "gate": {
+        "pass": true,
+        "threshold": {
+          "precision": 0.95,
+          "recall": 0.9
+        }
+      }
+    },
+    "goldPolicyValidatorDev": {
+      "pass": true,
+      "violations": 0,
+      "census": {
+        "goldPolicyViolations": 0,
+        "invalidLayer2CostGold": 0,
+        "triggerReferenceActionGold": 0,
+        "invalidPermissionActionGold": 0,
+        "reminderCardNativeGold": 0,
+        "createdObjectOwnershipViolations": 0,
+        "invalidReplacementGold": 0,
+        "duplicateSemanticGold": 0,
+        "invalidEvidenceSpan": 0,
+        "scopeCompletenessViolations": 0
+      },
+      "perPolicyFamily": {}
+    },
+    "policyInvariants": {
+      "semanticInvalid": 0,
+      "idViolations": 0,
+      "provenanceViolations": 0,
+      "activatedCostLayer2Leakage": 0,
+      "permissionLeakage": 0,
+      "triggerEventActionLeakage": 0,
+      "reminderLeakage": 0,
+      "tokenOwnershipLeakage": 0,
+      "crossFaceLeakage": 0,
+      "acceptedReminderDerivedLayer2Count": 0
+    },
+    "invariantsPass": true
+  },
+  "rc7WorkAuthorization": {
+    "rc7_1_player_possessive_discard_your_hand": {
+      "status": "IMPLEMENTED",
+      "targets": {
+        "v15": [
+          "vh15-0064"
+        ],
+        "v16": [
+          "vh16-0047"
+        ]
+      },
+      "goldActionTargetCount": {
+        "v15": 1,
+        "v16": 2,
+        "totalScoredTargets": 3
+      }
+    },
+    "rc7_2_replacement_consequence_exile_instead": {
+      "status": "IMPLEMENTED",
+      "sharedRootCause": "possessive_graveyard_intercept_extension",
+      "targets": {
+        "v16": [
+          "vh16-0027",
+          "vh16-0038"
+        ]
+      }
+    },
+    "deferredFamilies": [
+      "granted_compound_primitive_extraction",
+      "granted_nested_activated_mana",
+      "granted_subability_not_materialized",
+      "granted_variable_draw_not_materialized",
+      "library_top_manipulation_split",
+      "compound_then_chain_exile",
+      "additional_cost_discard_gerund",
+      "third_person_discard_referent"
+    ]
+  },
+  "v17": {
+    "canonicalCertPath": "data/milestones/validation-v17-certification/validation-v17-gold-policy-certificate-v2.json",
+    "currentBenchmarkHashPrefix": "24765bdc",
+    "layer2Denominator": 265,
+    "parserExecutionCount": 0,
+    "authorizedAfterFreeze": true,
+    "note": "Single blind execution only after RC7 freeze + candidate-bound preflight green"
+  },
+  "provenanceGuard": {
+    "required": true,
+    "assertCleanWorkingTreeForParserScope": true,
+    "parserBlobClosureReproducibleFromHead": true
+  },
+  "blind": {
+    "touch": false
+  },
+  "manifestContentHash": "d0939f76671384c1db0995d522a7d3bf1bf2437b2ff5d9f3c4a266339f006d8c",
+  "developmentGoldHash": "24c9f59d47199c70c86e5a814111f60dab0317f2d3b6ebde9d9ff4fbab313137"
+}
