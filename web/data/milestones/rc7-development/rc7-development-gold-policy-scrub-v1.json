@@ -1,0 +1,63 @@
+{
+  "migrationVersion": "rc7-development-gold-policy-scrub-v1",
+  "generatedAt": "2026-08-10T16:10:17.447Z",
+  "parserBlind": true,
+  "parserConsulted": false,
+  "policyVersion": "semantic-gold-policy-v1.7",
+  "validatorVersion": "gold-policy-validator-v1.7",
+  "priorMigrationCount": 48,
+  "preScrubDevelopmentGoldHash": "153969334c2ef126ea0dd413fa6a3ebd1781ba827359d488d2ce650ca6304341",
+  "preScrubViolationCount": 4,
+  "preScrubCensus": {
+    "invalid_trigger_reference_gold": 4
+  },
+  "rule": "Parser-blind RC7 scrub — removes trigger_reference_action_gold only under Gold Policy Validator v1.7.",
+  "recordCount": 4,
+  "correctionCount": 4,
+  "records": [
+    {
+      "caseId": "dev-v9-020",
+      "removeLayer2Actions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "is creature enters, exile up to one other target creature. That creature's c"
+        }
+      ],
+      "policyClass": "trigger_event_reference",
+      "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect."
+    },
+    {
+      "caseId": "eval-0203",
+      "removeLayer2Actions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "this Class enters, draw two cards, then discard tw"
+        }
+      ],
+      "policyClass": "trigger_event_reference",
+      "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect."
+    },
+    {
+      "caseId": "eval-0204",
+      "removeLayer2Actions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Whenever you cast an instant or sorcery spell, create a 1/1 blue and red Otter creature token"
+        }
+      ],
+      "policyClass": "trigger_event_reference",
+      "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect."
+    },
+    {
+      "caseId": "eval-0272",
+      "removeLayer2Actions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "dies, draw a card"
+        }
+      ],
+      "policyClass": "trigger_event_reference",
+      "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect."
+    }
+  ]
+}

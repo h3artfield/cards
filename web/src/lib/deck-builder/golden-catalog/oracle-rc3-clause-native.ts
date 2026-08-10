@@ -10,6 +10,7 @@ import { classifyHandZonePrimitive, type PrimitiveActionType } from "./oracle-ac
 import {
   classifyTextRoleAt,
   compoundClauseSpansWithRoles,
+  findReminderSpans,
   isOneShotCastPermission,
   isPersistentZoneCastPermission,
   primitiveAllowedAtRole,
@@ -22,6 +23,12 @@ import {
   validateGrantedProvenance,
   type GrantedQuoteContext,
 } from "./oracle-granted-ability-extraction";
+import {
+  isConditionalLibraryShuffleReminder,
+  isSpuriousConditionalSearchEvidence,
+  SEARCH_LIBRARY_AND_OR_GRAVEYARD_FOR,
+  SEARCH_LIBRARY_FOR,
+} from "./oracle-modal-option-parse";
 import { parseAbilityBlock } from "./oracle-rc3-ability-block";
 import { buildNativeAction } from "./oracle-rc3-action-builder";
 import { wireConditionsToActions } from "./oracle-action-optionality";
@@ -125,6 +132,8 @@ const PRIMITIVE_PATTERNS: Array<{
   sourceZones?: string[];
   destinationZones?: string[];
 }> = [
+  { pattern: SEARCH_LIBRARY_AND_OR_GRAVEYARD_FOR, actionType: "search_library", sourceZones: ["library", "graveyard"], destinationZones: ["hand"] },
+  { pattern: SEARCH_LIBRARY_FOR, actionType: "search_library", sourceZones: ["library"], destinationZones: ["hand", "battlefield", "library"] },
   { pattern: /\b[Ss]earch (?:your |their )?library[^.—\n]*/i, actionType: "search_library", sourceZones: ["library"] },
   {
     pattern:
@@ -135,6 +144,8 @@ const PRIMITIVE_PATTERNS: Array<{
   },
   { pattern: /\b(?:then )?[Ss]huffle(?: your library)?(?![\w ]+ into\b)/i, actionType: "shuffle_library" },
   { pattern: /\b[Dd]raw (?:a |one |two |three |four |five |seven |that many |up to \w+ )?cards?\b/, actionType: "draw", destinationZones: ["hand"] },
+  { pattern: /\byou may cast a copy of its spell\b/i, actionType: "cast" },
+  { pattern: /\bYou may cast (?:it|that card|the copy)(?: without paying[^.]*)?\b/i, actionType: "cast" },
   { pattern: /\b[Dd]iscard [^.]+/i, actionType: "discard" },
   { pattern: /\b[Ss]acrifice [^.]+/i, actionType: "sacrifice" },
   { pattern: /\b[Cc]reate [^.]*tokens?\b/i, actionType: "create_token" },
@@ -163,7 +174,22 @@ const PRIMITIVE_PATTERNS: Array<{
   { pattern: /\bUntap this \w+\.?/i, actionType: "untap" },
   { pattern: /\btap target [^.]+\.?/i, actionType: "tap", sourceZones: ["battlefield"] },
   {
-    pattern: /\bPut a [-−+]?\d+\/[-−+]?\d+ counter on [^.]+\.?/i,
+    pattern: /\bPut (?:a |one |two |three |four |five |\d+ )[-−+]?\/?[-−+]?\d*\/?[-−+]?\d* counters? on [^.]+\.?/i,
+    actionType: "put_counter",
+    destinationZones: ["battlefield"],
+  },
+  {
+    pattern: /\bput (?:a |one )?[-−+]?\d+\/[-−+]?\d+ counter on [^.]+\.?/i,
+    actionType: "put_counter",
+    destinationZones: ["battlefield"],
+  },
+  {
+    pattern: /\bPut (?:a |one )?[-−+]?\d+\/[-−+]?\d+ counter on (?:it|target [^.]+)(?: for each [^.]+)?\.?/i,
+    actionType: "put_counter",
+    destinationZones: ["battlefield"],
+  },
+  {
+    pattern: /\bput (?:that many|\d+) [-−+]?\/?[-−+]?\d*\/?[-−+]?\d* counters? on [^.]+\.?/i,
     actionType: "put_counter",
     destinationZones: ["battlefield"],
   },
@@ -268,6 +294,11 @@ function parseReplacementAbilityClauses(
     paragraph.match(/\bIf [^,]+ would [^,]+,\s*/i);
   if (!eventBoundary || eventBoundary.index === undefined) return null;
 
+  const matchStart = eventBoundary.index;
+  if (findReminderSpans(paragraph).some((r) => matchStart >= r.localStart && matchStart < r.localEnd)) {
+    return null;
+  }
+
   const eventEnd = eventBoundary.index + eventBoundary[0].length;
   const eventText = paragraph.slice(0, eventEnd).trim();
   const replacementText = paragraph.slice(eventEnd).trim();
@@ -289,7 +320,9 @@ function parseReplacementAbilityClauses(
   };
 
   let interceptedEvent: InterceptedReplacementEvent | undefined;
-  const graveyardPut = eventText.match(/\bIf (.+?) would be put into a graveyard(?: from anywhere)?/i);
+  const graveyardPut = eventText.match(
+    /\bIf (.+?) would be put into (?:a |the |their |your )graveyard(?: from anywhere)?/i,
+  );
   if (graveyardPut) {
     interceptedEvent = {
       objectPhrase: graveyardPut[1]!.trim(),
@@ -549,6 +582,14 @@ function extractPrimitivesFromClause(input: {
         if (/\btoken that'?s a copy of\b/i.test(window)) continue;
       }
 
+      if (rule.actionType === "search_library" && isSpuriousConditionalSearchEvidence(evidenceText)) {
+        continue;
+      }
+
+      if (rule.actionType === "search_library" && !/\bsearch(?:es|ed|ing)? (?:your |their )?library/i.test(evidenceText)) {
+        continue;
+      }
+
       let actionType = rule.actionType;
       if (rule.actionType !== "search_library") {
         const handClass = classifyHandZonePrimitive(evidenceText);
@@ -599,6 +640,7 @@ function extractSearchChain(input: {
 
   for (const clause of input.clauses) {
     if (clause.role !== "effect" && clause.role !== "replacement_effect") continue;
+    if (isConditionalLibraryShuffleReminder(clause.text)) continue;
 
     for (const rule of PRIMITIVE_PATTERNS) {
       if (!["search_library", "put_into_hand", "shuffle_library"].includes(rule.actionType)) continue;
@@ -618,6 +660,7 @@ function extractSearchChain(input: {
       } else {
         m = clause.text.match(rule.pattern);
         if (!m) continue;
+        if (rule.actionType === "search_library" && isSpuriousConditionalSearchEvidence(m[0])) continue;
       }
 
       const startInParagraph = clause.localStart + (m.index ?? 0);
@@ -855,6 +898,7 @@ export function extractClauseNativeActions(input: {
         paragraphText: ability.paragraphText,
         paragraphStart: ability.paragraphStart,
         hostAbilityType: ability.abilityType,
+        modalOptionId: ability.modalOptionId,
       });
 
       if (abilityBlock.costRegion && abilityBlock.effectRegion) {
@@ -987,6 +1031,30 @@ export function extractClauseNativeActions(input: {
             }),
           );
           actionIndex = actions.length;
+        }
+      }
+
+      if (/\bconnives?\b/i.test(ability.paragraphText)) {
+        const conniveCounter = ability.paragraphText.match(/\bput a \+1\/\+1 counter on this creature\b/i);
+        if (conniveCounter) {
+          const evidenceText = conniveCounter[0];
+          const localStart = ability.paragraphText.indexOf(evidenceText);
+          actions.push(
+            buildNativeAction({
+              oracleId: input.oracleId,
+              oracleText: input.oracleText,
+              ability,
+              faceId: face.faceId,
+              actionType: "put_counter",
+              evidenceText,
+              evidenceStart: ability.paragraphStart + localStart,
+              evidenceEnd: ability.paragraphStart + localStart + evidenceText.length,
+              actionIndex: actionIndex++,
+              textRole: "effect",
+              clauseId: `${abilityId}:connive-counter`,
+              extensions: { executionContext: "immediate" },
+            }),
+          );
         }
       }
 

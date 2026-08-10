@@ -9,6 +9,8 @@ import { classifyHandZonePrimitive, type PrimitiveActionType } from "./oracle-ac
 import {
   classifyTextRoleAt,
   compoundClauseSpansWithRoles,
+  isEvidenceInReminderSpan,
+  isOneShotCastPermission,
   isPersistentZoneCastPermission,
   primitiveAllowedAtRole,
 } from "./oracle-span-role-classifier";
@@ -30,7 +32,7 @@ import {
 import { isInsideTokenGlossaryRegion } from "./oracle-rc3-token-glossary";
 import type { SegmentedAbility } from "./oracle-action-schema";
 
-export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.40-rc3-semantic-integrity";
+export const ORACLE_ACTION_RC3_PARSER_VERSION = "oracle-action-v1.42-rc7-possessive-hand-discard-replacement-graveyard";
 
 const PUT_INTO_HAND_RE =
   /\b(?:put (?:it|that card|one of them|one of those cards|two of those cards|three of those cards|four of those cards|five of those cards|up to [^.]+?) into (?:your |their )?hand|Put (?:that card|one of them|one of those cards|two of those cards|target card from [^.]+?) into (?:your |their |its owner's )?hand|reveal (?:it|that card)[^.]* and put (?:it|that card) into your hand)\b/i;
@@ -64,10 +66,19 @@ function reclassifyHandZone(action: OracleActionV1): OracleActionV1 {
 }
 
 function isInCostRegion(ability: SegmentedAbility, localStart: number): boolean {
-  const colonIdx = ability.paragraphText.indexOf(":");
-  if (colonIdx < 0) return false;
-  if (!/\{[^}]+\}/.test(ability.paragraphText.slice(0, colonIdx))) return false;
-  return localStart < colonIdx;
+  const text = ability.paragraphText;
+  const searchFrom = Math.max(0, localStart - 80);
+  const searchTo = Math.min(text.length, localStart + 60);
+  const window = text.slice(searchFrom, searchTo);
+  const colonInWindow = window.indexOf(":");
+  if (colonInWindow < 0) return false;
+  const absColon = searchFrom + colonInWindow;
+  if (localStart >= absColon) return false;
+  const costChunk = text.slice(Math.max(0, absColon - 80), absColon);
+  if (!/\{[^}]+\}|\{T\}/.test(costChunk)) return false;
+  const between = text.slice(localStart, absColon);
+  if (/\.\s+[A-Z(]/.test(between)) return false;
+  return true;
 }
 
 function shouldSuppressAction(action: OracleActionV1, ability: SegmentedAbility): boolean {
@@ -88,6 +99,12 @@ function shouldSuppressAction(action: OracleActionV1, ability: SegmentedAbility)
   if (role === "cost" && ["sacrifice", "discard", "tap", "exile"].includes(action.actionType)) {
     return true;
   }
+  if (
+    isInCostRegion(ability, localStart) &&
+    ["sacrifice", "discard", "tap", "exile"].includes(action.actionType)
+  ) {
+    return true;
+  }
   if (role === "trigger_event" && action.actionType === "cast") {
     return true;
   }
@@ -98,6 +115,19 @@ function shouldSuppressAction(action: OracleActionV1, ability: SegmentedAbility)
     return true;
   }
   if (role === "reminder_text" || role === "mechanic_reminder") {
+    return true;
+  }
+  if (
+    isEvidenceInReminderSpan(ability.paragraphText, localStart, localEnd)
+  ) {
+    return true;
+  }
+  if (
+    /^\S+ \(When this (?:permanent|creature|artifact|enchantment|land|battle) enters,/i.test(
+      ability.paragraphText.trim(),
+    ) &&
+    ["exile", "draw", "sacrifice", "discard"].includes(action.actionType)
+  ) {
     return true;
   }
   if (isInCostRegion(ability, localStart) && !primitiveAllowedAtRole(role, action.actionType as PrimitiveActionType)) {
@@ -158,10 +188,16 @@ function extractSearchChainActions(input: {
   const added: OracleActionV1[] = [];
   let idx = input.nextIndex;
 
+  const inReminder = (match: RegExpMatchArray) => {
+    const localStart = (match.index ?? 0);
+    const localEnd = localStart + match[0].length;
+    return isEvidenceInReminderSpan(text, localStart, localEnd);
+  };
+
   const hasSearch = input.existing.some((a) => a.actionType === "search_library");
   if (!hasSearch) {
     const m = text.match(SEARCH_LIB_RE);
-    if (m) {
+    if (m && !inReminder(m)) {
       added.push(
         synthesizeFromMatch({
           oracleId: input.oracleId,
@@ -177,7 +213,7 @@ function extractSearchChainActions(input: {
 
   if (PUT_INTO_HAND_RE.test(text) && !input.existing.some((a) => a.actionType === "put_into_hand")) {
     const m = text.match(PUT_INTO_HAND_RE);
-    if (m) {
+    if (m && !inReminder(m)) {
       added.push(
         synthesizeFromMatch({
           oracleId: input.oracleId,
@@ -193,7 +229,7 @@ function extractSearchChainActions(input: {
 
   if (SHUFFLE_LIB_RE.test(text) && !input.existing.some((a) => a.actionType === "shuffle_library")) {
     const m = text.match(SHUFFLE_LIB_RE);
-    if (m && /search/i.test(text)) {
+    if (m && /search/i.test(text) && !inReminder(m)) {
       added.push(
         synthesizeFromMatch({
           oracleId: input.oracleId,
@@ -208,6 +244,21 @@ function extractSearchChainActions(input: {
   }
 
   return added;
+}
+
+function filterReminderDerivedActions(
+  actions: OracleActionV1[],
+  abilities: SegmentedAbility[],
+): OracleActionV1[] {
+  return actions.filter((action) => {
+    const ability = abilities.find(
+      (a) => a.abilityIndex === action.abilityIndex && a.cardFaceId === action.faceId,
+    );
+    if (!ability) return true;
+    const localStart = action.evidenceStart - ability.paragraphStart;
+    const localEnd = action.evidenceEnd - ability.paragraphStart;
+    return !isEvidenceInReminderSpan(ability.paragraphText, localStart, localEnd);
+  });
 }
 
 const ADD_MANA_RE = /\bAdd \{[WUBRGC](?:\/\{[WUBRGC])*\}/i;
@@ -280,9 +331,18 @@ function extractActivatedEffectClause(input: {
   existing: OracleActionV1[];
   nextIndex: number;
 }): OracleActionV1[] {
-  const colonIdx = input.ability.paragraphText.indexOf(":");
-  if (colonIdx < 0 || !/\{[^}]+\}/.test(input.ability.paragraphText.slice(0, colonIdx))) return [];
-  const effectText = input.ability.paragraphText.slice(colonIdx + 1);
+  const paragraph = input.ability.paragraphText;
+  let colonIdx = -1;
+  for (let i = 0; i < paragraph.length; i++) {
+    if (paragraph[i] !== ":") continue;
+    if (isEvidenceInReminderSpan(paragraph, i, i + 1)) continue;
+    const before = paragraph.slice(Math.max(0, i - 80), i);
+    if (!/\{[^}]+\}/.test(before)) continue;
+    colonIdx = i;
+    break;
+  }
+  if (colonIdx < 0) return [];
+  const effectText = paragraph.slice(colonIdx + 1);
   const effectStart = input.ability.paragraphStart + colonIdx + 1;
   const added: OracleActionV1[] = [];
   let idx = input.nextIndex;
@@ -296,6 +356,9 @@ function extractActivatedEffectClause(input: {
     else if (/sacrifice/i.test(m[0])) actionType = "sacrifice";
 
     const absStart = effectStart + (m.index ?? 0);
+    const localStart = absStart - input.ability.paragraphStart;
+    const localEnd = localStart + m[0].length;
+    if (isEvidenceInReminderSpan(paragraph, localStart, localEnd)) continue;
     if (input.existing.some((a) => a.actionType === actionType && Math.abs(a.evidenceStart - absStart) < 5)) {
       continue;
     }
@@ -336,6 +399,9 @@ function extractCompoundSecondClause(input: {
       if (DRAW_RE.test(m[0])) actionType = "draw";
       else if (PUT_INTO_HAND_RE.test(m[0])) actionType = "put_into_hand";
       const absStart = input.ability.paragraphStart + offset + (m.index ?? 0);
+      const localStart = absStart - input.ability.paragraphStart;
+      const localEnd = localStart + m[0].length;
+      if (isEvidenceInReminderSpan(input.ability.paragraphText, localStart, localEnd)) continue;
       if (input.existing.some((a) => Math.abs(a.evidenceStart - absStart) < 5)) continue;
       added.push(
         synthesizeFromMatch({
@@ -512,6 +578,29 @@ export function applyRC3Transforms(
       !ext.choiceGroupId &&
       !(nativeAction as OracleActionV1 & { dependsOnActionIds?: string[] }).dependsOnActionIds?.length
     ) {
+      if (nativeAction.actionType === "put_counter") {
+        const key = `${nativeAction.actionType}:${nativeAction.evidenceStart}:${nativeAction.evidenceText.slice(0, 20)}`;
+        if (!nativeForMerge.some((a) => `${a.actionType}:${a.evidenceStart}:${a.evidenceText.slice(0, 20)}` === key)) {
+          nativeForMerge.push(nativeAction);
+        }
+      } else if (nativeAction.actionType === "cast") {
+        const ability = abilities.find(
+          (a) => a.abilityIndex === nativeAction.abilityIndex && a.cardFaceId === nativeAction.faceId,
+        );
+        if (
+          ability &&
+          isOneShotCastPermission(
+            ability.paragraphText,
+            nativeAction.evidenceStart - ability.paragraphStart,
+            nativeAction.evidenceText,
+          )
+        ) {
+          const key = `${nativeAction.actionType}:${nativeAction.evidenceStart}:${nativeAction.evidenceText.slice(0, 20)}`;
+          if (!nativeForMerge.some((a) => `${a.actionType}:${a.evidenceStart}:${a.evidenceText.slice(0, 20)}` === key)) {
+            nativeForMerge.push(nativeAction);
+          }
+        }
+      }
       continue;
     }
     const key = `${nativeAction.actionType}:${nativeAction.evidenceStart}:${nativeAction.evidenceText.slice(0, 20)}`;
@@ -520,7 +609,10 @@ export function applyRC3Transforms(
     }
   }
   const merged = mergeClauseNativeWithV1(actions, { ...clauseNative, actions: nativeForMerge });
-  actions = merged.actions.map((a) => ({ ...a, parserVersion: ORACLE_ACTION_RC3_PARSER_VERSION }));
+  actions = filterReminderDerivedActions(
+    merged.actions.map((a) => ({ ...a, parserVersion: ORACLE_ACTION_RC3_PARSER_VERSION })),
+    abilities,
+  );
   actions = tagActionsBySemanticContext(actions, abilities);
   const clauseNativeStats = {
     ...merged.stats,

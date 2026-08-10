@@ -1,0 +1,209 @@
+{
+  "generatedAt": "2026-08-10T16:10:17.447Z",
+  "preScrubDevelopmentGoldHash": "153969334c2ef126ea0dd413fa6a3ebd1781ba827359d488d2ce650ca6304341",
+  "scrubRecords": 4,
+  "corrections": [
+    {
+      "caseId": "dev-v9-020",
+      "cardName": "Solitude",
+      "censusFamily": "invalid_trigger_reference_gold",
+      "policyRule": "trigger_event_reference",
+      "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+      "oldGold": {
+        "actionType": "exile",
+        "evidenceContains": "is creature enters, exile up to one other target creature. That creature's c"
+      },
+      "correctedGold": null,
+      "reminderSpan": {
+        "start": 22,
+        "end": 98
+      },
+      "semanticOwner": "source_card",
+      "executionContext": "trigger_reference",
+      "clauseRole": "trigger_event",
+      "migrationReason": "RC7 v1.7 trigger_event_reference — invalid trigger-reference L2 in dev gold"
+    },
+    {
+      "caseId": "eval-0203",
+      "cardName": "Sorcerer Class",
+      "censusFamily": "invalid_trigger_reference_gold",
+      "policyRule": "trigger_event_reference",
+      "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+      "oldGold": {
+        "actionType": "draw",
+        "evidenceContains": "this Class enters, draw two cards, then discard tw"
+      },
+      "correctedGold": null,
+      "reminderSpan": {
+        "start": 60,
+        "end": 110
+      },
+      "semanticOwner": "source_card",
+      "executionContext": "trigger_reference",
+      "clauseRole": "trigger_event",
+      "migrationReason": "RC7 v1.7 trigger_event_reference — invalid trigger-reference L2 in dev gold"
+    },
+    {
+      "caseId": "eval-0204",
+      "cardName": "Stormchaser's Talent",
+      "censusFamily": "invalid_trigger_reference_gold",
+      "policyRule": "trigger_event_reference",
+      "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+      "oldGold": {
+        "actionType": "create_token",
+        "evidenceContains": "create a 1/1 blue and red Otter creature token"
+      },
+      "correctedGold": null,
+      "reminderSpan": {
+        "start": 79,
+        "end": 125
+      },
+      "semanticOwner": "source_card",
+      "executionContext": "immediate",
+      "clauseRole": "effect",
+      "migrationReason": "RC7 v1.7 trigger_event_reference — invalid trigger-reference L2 in dev gold"
+    },
+    {
+      "caseId": "eval-0272",
+      "cardName": "Wolfkin Outcast // Wedding Crasher",
+      "censusFamily": "invalid_trigger_reference_gold",
+      "policyRule": "trigger_event_reference",
+      "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+      "oldGold": {
+        "actionType": "draw",
+        "evidenceContains": "dies, draw a card"
+      },
+      "correctedGold": null,
+      "reminderSpan": {
+        "start": 225,
+        "end": 242
+      },
+      "semanticOwner": "source_card",
+      "executionContext": "trigger_reference",
+      "clauseRole": "trigger_event",
+      "migrationReason": "RC7 v1.7 trigger_event_reference — invalid trigger-reference L2 in dev gold"
+    }
+  ],
+  "violations": [
+    {
+      "code": "trigger_reference_action_gold",
+      "metric": "triggerReferenceActionGold",
+      "caseId": "dev-v9-020",
+      "cardName": "Solitude",
+      "actionType": "exile",
+      "evidenceContains": "is creature enters, exile up to one other target creature. That creature's c",
+      "policyFamily": "trigger_event_reference",
+      "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+      "semanticJustification": {
+        "actionType": "exile",
+        "evidenceContains": "is creature enters, exile up to one other target creature. That creature's c",
+        "evidenceSpan": {
+          "start": 22,
+          "end": 98
+        },
+        "clauseRole": "trigger_event",
+        "abilityType": "triggered",
+        "executionContext": "trigger_reference",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": false,
+        "inCostRegion": false,
+        "inReminderSpan": false,
+        "inTypeLineMechanicReminder": false,
+        "inCreatedObjectDefinition": false,
+        "inGrantedQuotedAbility": false,
+        "inTriggerEventHeader": true,
+        "inReplacementEvent": false
+      }
+    },
+    {
+      "code": "trigger_reference_action_gold",
+      "metric": "triggerReferenceActionGold",
+      "caseId": "eval-0203",
+      "cardName": "Sorcerer Class",
+      "actionType": "draw",
+      "evidenceContains": "this Class enters, draw two cards, then discard tw",
+      "policyFamily": "trigger_event_reference",
+      "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+      "semanticJustification": {
+        "actionType": "draw",
+        "evidenceContains": "this Class enters, draw two cards, then discard tw",
+        "evidenceSpan": {
+          "start": 60,
+          "end": 110
+        },
+        "clauseRole": "trigger_event",
+        "abilityType": "triggered",
+        "executionContext": "trigger_reference",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": false,
+        "inCostRegion": false,
+        "inReminderSpan": false,
+        "inTypeLineMechanicReminder": false,
+        "inCreatedObjectDefinition": false,
+        "inGrantedQuotedAbility": false,
+        "inTriggerEventHeader": true,
+        "inReplacementEvent": false
+      }
+    },
+    {
+      "code": "trigger_reference_action_gold",
+      "metric": "triggerReferenceActionGold",
+      "caseId": "eval-0204",
+      "cardName": "Stormchaser's Talent",
+      "actionType": "create_token",
+      "evidenceContains": "Whenever you cast an instant or sorcery spell, create a 1/1 blue and red Otter creature token",
+      "policyFamily": "trigger_event_reference",
+      "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+      "semanticJustification": {
+        "actionType": "create_token",
+        "evidenceContains": "Whenever you cast an instant or sorcery spell, create a 1/1 blue and red Otter creature token",
+        "evidenceSpan": {
+          "start": 277,
+          "end": 370
+        },
+        "clauseRole": "trigger_event",
+        "abilityType": "triggered",
+        "executionContext": "trigger_reference",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": false,
+        "inCostRegion": false,
+        "inReminderSpan": false,
+        "inTypeLineMechanicReminder": false,
+        "inCreatedObjectDefinition": false,
+        "inGrantedQuotedAbility": false,
+        "inTriggerEventHeader": true,
+        "inReplacementEvent": false
+      }
+    },
+    {
+      "code": "trigger_reference_action_gold",
+      "metric": "triggerReferenceActionGold",
+      "caseId": "eval-0272",
+      "cardName": "Wolfkin Outcast // Wedding Crasher",
+      "actionType": "draw",
+      "evidenceContains": "dies, draw a card",
+      "policyFamily": "trigger_event_reference",
+      "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+      "semanticJustification": {
+        "actionType": "draw",
+        "evidenceContains": "dies, draw a card",
+        "evidenceSpan": {
+          "start": 225,
+          "end": 242
+        },
+        "clauseRole": "trigger_event",
+        "abilityType": "triggered",
+        "executionContext": "trigger_reference",
+        "semanticOwner": "source_card",
+        "cardNativeLayer2Eligible": false,
+        "inCostRegion": false,
+        "inReminderSpan": false,
+        "inTypeLineMechanicReminder": false,
+        "inCreatedObjectDefinition": false,
+        "inGrantedQuotedAbility": false,
+        "inTriggerEventHeader": true,
+        "inReplacementEvent": false
+      }
+    }
+  ]
+}

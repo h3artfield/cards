@@ -1,0 +1,11 @@
+{
+  "preservedRescorePath": "data/milestones/rc7-development/rc6-certified-dev-rescore-v151-preserved-pre-rc7-gold-scrub.json",
+  "preScrubDevelopmentGoldHash": "153969334c2ef126ea0dd413fa6a3ebd1781ba827359d488d2ce650ca6304341",
+  "correctedDevelopmentGoldHash": "caf47df68f9d0ee015efb150cae481f83f5ebb3a82ce11a233d8a6f17fb2a186",
+  "preScrubTriggerViolations": 4,
+  "postScrubViolations": 0,
+  "postScrubPass": true,
+  "removedGoldCount": 4,
+  "scrubPath": "data/milestones/rc7-development/rc7-development-gold-policy-scrub-v1.json",
+  "correctionsPath": "data/milestones/rc7-development/rc7-development-gold-policy-scrub-corrections-v1.json"
+}

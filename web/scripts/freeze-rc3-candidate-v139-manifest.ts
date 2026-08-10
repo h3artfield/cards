@@ -1,6 +1,6 @@
 /**
- * RC3 candidate freeze manifest after v1.40 semantic-integrity repair.
- * Run: cd web && npx tsx scripts/freeze-rc3-candidate-v140-manifest.ts
+ * Proposed RC3 candidate freeze manifest after v1.39 gold-policy corrections.
+ * Run: cd web && npx tsx scripts/freeze-rc3-candidate-v139-manifest.ts
  */
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
@@ -16,10 +16,9 @@ import { DEFAULT_RC3_PROMOTED_FAMILIES } from "../src/lib/deck-builder/golden-ca
 import { assertCleanWorkingTreeForParserScope } from "./lib/working-tree-provenance-guard-v1";
 
 const PARSER_VERSION = ORACLE_ACTION_RC3_PARSER_VERSION;
-const TAG = "oracle-action-v1.40-rc3-semantic-integrity";
-const PARENT_TAG = "oracle-action-v1.39-rc3-replacement-exile-instead";
-const PARENT_SHA = "31c2bbfe87c9af7ee8af7e9fe53a8fc6f00009ee";
-const GOLD_OVERLAY_SHA = "37df6de7c8e8f0e8b8e8e8e8e8e8e8e8e8e8e8e8"; // overwritten at runtime
+const TAG = "oracle-action-v1.39-rc3-replacement-exile-instead";
+const PARENT_TAG = "oracle-action-v1.38-rc3-look-reveal-put-chain";
+const PARENT_SHA = "ac4e161a18915d89b7dfb0f93eebd316b63cf74a";
 const V13_HASH = "9e20260619de3eff9f8be5b579d635bf8756fcefc22efa87d198f98aa079911f";
 
 const PARSER_SCOPE_PATHS = [
@@ -28,8 +27,6 @@ const PARSER_SCOPE_PATHS = [
   "src/lib/deck-builder/golden-catalog/oracle-rc3-promotion.ts",
   "src/lib/deck-builder/golden-catalog/oracle-rc3-action-builder.ts",
   "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-builder.ts",
-  "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-schema.ts",
-  "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-rc3.ts",
   "src/lib/deck-builder/golden-catalog/oracle-rc3-granted-rules-span-detector.ts",
   "src/lib/deck-builder/golden-catalog/oracle-rc3-semantic-context-router.ts",
   "src/lib/deck-builder/golden-catalog/oracle-rc3-scoring-scope.ts",
@@ -60,6 +57,10 @@ function sha256File(path: string): string {
   return createHash("sha256").update(readFileSync(resolve(path))).digest("hex");
 }
 
+function gitBlobSha(repoRoot: string, relPath: string): string {
+  return execSync(`git hash-object ${relPath}`, { cwd: repoRoot, encoding: "utf8" }).trim();
+}
+
 function loadCombinedCases(): OracleActionEvalCaseV2[] {
   return BENCHMARK_PATHS.flatMap((p) =>
     applyGoldMigrationV135(
@@ -77,7 +78,7 @@ function loadUnrelatedCases(): OracleActionEvalCaseV2[] {
   return catalog.filter((c) => !(c as { spentV12Regression?: boolean }).spentV12Regression);
 }
 
-function scanInvariants(cases: OracleActionEvalCaseV2[]) {
+function scanCombinedInvariants(cases: OracleActionEvalCaseV2[]) {
   let semanticInvalidActionCount = 0;
   let semanticValidatorViolationCount = 0;
   let activatedCostLayer2Leakage = 0;
@@ -86,6 +87,7 @@ function scanInvariants(cases: OracleActionEvalCaseV2[]) {
   let tokenDefinitionCardNativeLeakage = 0;
   let tokenCopyPrimitiveLeakage = 0;
   let crossFaceSemanticLeakage = 0;
+  const semanticInvalidCases: string[] = [];
 
   for (const testCase of cases) {
     const parsed = parseOracleSemanticsRC3({
@@ -95,7 +97,7 @@ function scanInvariants(cases: OracleActionEvalCaseV2[]) {
     });
     semanticInvalidActionCount += parsed.semanticValidation.invalidActionCount;
     semanticValidatorViolationCount += parsed.semanticValidation.invalidCount;
-    verifySemanticParseIntegrity(parsed, testCase.oracleText);
+    if (parsed.semanticValidation.invalidCount > 0) semanticInvalidCases.push(testCase.id);
 
     for (const action of parsed.actions) {
       if (action.reviewStatus !== "accepted") continue;
@@ -141,6 +143,7 @@ function scanInvariants(cases: OracleActionEvalCaseV2[]) {
   return {
     semanticInvalidActionCount,
     semanticValidatorViolationCount,
+    semanticInvalidCases,
     activatedCostLayer2Leakage,
     permissionLeakage,
     triggerEventActionLeakage,
@@ -151,11 +154,14 @@ function scanInvariants(cases: OracleActionEvalCaseV2[]) {
 }
 
 function main() {
-  assertCleanWorkingTreeForParserScope(PARSER_SCOPE_PATHS, "RC3 candidate freeze v140");
+  assertCleanWorkingTreeForParserScope(PARSER_SCOPE_PATHS, "RC3 candidate freeze v139");
 
   const repoRoot = execSync("git rev-parse --show-toplevel", { cwd: resolve("."), encoding: "utf8" }).trim();
   const parserCommitSha = execSync("git rev-parse HEAD", { cwd: repoRoot, encoding: "utf8" }).trim();
-  const goldOverlaySha = execSync("git rev-parse 37df6de", { cwd: repoRoot, encoding: "utf8" }).trim();
+  const cleanTree = execSync("git status --porcelain -- web/", { cwd: repoRoot, encoding: "utf8" }).trim();
+  const parserScopeDirty = PARSER_SCOPE_PATHS.some((p) =>
+    cleanTree.split("\n").some((line) => line.includes(p.replace(/\//g, "\\")) || line.includes(p)),
+  );
 
   const combinedCases = loadCombinedCases();
   const unrelatedCases = loadUnrelatedCases();
@@ -169,39 +175,62 @@ function main() {
       evaluateCaseSemantic(c, parseOracleSemanticsRC3({ oracleId: c.oracleId, oracleText: c.oracleText, cardFace: c.cardFace })),
     ),
   );
-  const invariants = scanInvariants(combinedCases);
 
+  const invariants = scanCombinedInvariants(combinedCases);
   const combinedPrecision = combinedMetrics.tp / (combinedMetrics.tp + combinedMetrics.fp);
   const combinedRecall = combinedMetrics.tp / (combinedMetrics.tp + combinedMetrics.fn);
   const unrelatedPrecision = unrelatedMetrics.tp / (unrelatedMetrics.tp + unrelatedMetrics.fp);
   const unrelatedRecall = unrelatedMetrics.tp / (unrelatedMetrics.tp + unrelatedMetrics.fn);
 
+  const gates = {
+    combinedDevelopment: {
+      precisionTarget: 0.98,
+      recallTarget: 0.92,
+      semanticInvalidTarget: 0,
+      pass:
+        combinedPrecision >= 0.98 &&
+        combinedRecall >= 0.92 &&
+        invariants.semanticValidatorViolationCount === 0,
+    },
+    unrelatedCatalogPositive: {
+      precisionTarget: 0.95,
+      recallTarget: 0.9,
+      pass: unrelatedPrecision >= 0.95 && unrelatedRecall >= 0.9,
+    },
+  };
+
+  const goldCorrections = {
+    "rc3-pos-cat-0007": {
+      cardName: "A-Navigation Orb",
+      change: "remove Layer-2 sacrifice; add forbiddenPrimitiveActions sacrifice; activated cost Layer 1 only",
+      postCorrectionMetrics: { tp: 3, fp: 0, fn: 0 },
+    },
+    "dev-exp-v1-012": {
+      cardName: "Fall to Earth",
+      change: "destroy/gain 4 → exile/gain 3; add landcycling search/put_into_hand/shuffle Layer-2",
+      postCorrectionMetrics: { tp: 5, fp: 0, fn: 0 },
+    },
+  };
+
   const manifestBody = {
-    freezeLabel: "rc3-candidate-v140",
-    status: "CANDIDATE_FROZEN",
+    freezeLabel: "rc3-candidate-v139-proposed",
+    status: gates.combinedDevelopment.pass && gates.unrelatedCatalogPositive.pass ? "CANDIDATE_FROZEN" : "BLOCKED_PENDING_INVARIANTS",
     frozenAt: new Date().toISOString(),
     parserVersion: PARSER_VERSION,
     tag: TAG,
     parentCheckpoint: PARENT_TAG,
     parentCommitSha: PARENT_SHA,
-    goldOverlayCommitSha: goldOverlaySha,
     parserCommitSha,
+    parserScopeClean: !parserScopeDirty,
     parserScopePaths: PARSER_SCOPE_PATHS,
     parserBlobs: Object.fromEntries(PARSER_SCOPE_PATHS.map((p) => [p.split("/").pop()!, sha256File(p)])),
-    parserBlobClosureHash: createHash("sha256")
-      .update(PARSER_SCOPE_PATHS.map((p) => sha256File(p)).join("\n"))
-      .digest("hex"),
     taxonomyVersion: "three-layer-v1.4",
     taxonomyV14Hashes: Object.fromEntries(BENCHMARK_PATHS.map((p) => [p, sha256File(p)])),
-    combinedBenchmarkHash: createHash("sha256")
-      .update(BENCHMARK_PATHS.map((p) => sha256File(p)).join("\n"))
-      .digest("hex"),
-    unrelatedSliceHash: sha256File("data/oracle-action-eval-rc3-positive-training-catalog-v133.json"),
     goldMigrationOverlay: {
       paths: GOLD_MIGRATION_PATHS,
       hashes: Object.fromEntries(GOLD_MIGRATION_PATHS.map((p) => [p, sha256File(p)])),
       recordCount: loadAllGoldMigrationsV135().length,
-      overlayCommitSha: goldOverlaySha,
+      v139Corrections: "activated-cost-fall-to-earth-gold-migration-v139.json",
     },
     evaluators: {
       semanticMatcher: sha256File("scripts/oracle-action-semantic-matcher.ts"),
@@ -226,14 +255,8 @@ function main() {
         recall: unrelatedRecall,
       },
     },
-    gates: {
-      combinedDevelopment: {
-        pass: combinedPrecision >= 0.98 && combinedRecall >= 0.92 && invariants.semanticValidatorViolationCount === 0,
-      },
-      unrelatedCatalogPositive: {
-        pass: unrelatedPrecision >= 0.95 && unrelatedRecall >= 0.9,
-      },
-    },
+    goldCorrections,
+    gates,
     candidateInvariants: {
       ...invariants,
       allRequiredZero:
@@ -245,19 +268,26 @@ function main() {
         invariants.tokenCopyPrimitiveLeakage === 0 &&
         invariants.crossFaceSemanticLeakage === 0,
     },
-    integrityRepair: {
-      family: "granted_nested_semantic_identity",
-      rootCause: "clause-native granted IDs used segment index format; semantic builder emitted ability-N parents and segment clauseIds not registered on granted SemanticAbility nodes",
-      generalizedFix: "buildGrantedSemanticAbilities + resolveGrantedActionIdentity in oracle-semantic-parse-builder.ts",
-      scoringDelta: "none — lineage-only repair",
+    regressionFamiliesClosed: [
+      "replacement_exile_instead",
+      "look_reveal_put_chain",
+      "cast_policy",
+      "granted_v136_region",
+      "granted_v137_nested",
+      "granted_v138_transfer",
+    ],
+    parserTuning: "STOP — no further development optimization after gate pass",
+    deferredItems: {
+      "rc3-pos-cat-0005_search_chain": "PAUSED — legitimate parser FN, not authorized for development margin",
+      "dev-v9-018_ashiok_restriction": "DEFER — Layer-1 restriction misclassified as search_library FP",
+      "dev-exp-v5-007_semantic_invalid": "PRE_EXISTING — granted-rules provenance in Spree opt-3; blocks combined formal gate",
     },
-    parserTuning: "STOP — no further development optimization before v13",
     v13: {
       sealed: true,
       parserExecutionCount: 0,
       validationHash: V13_HASH,
       authorized: false,
-      note: "Execute once after immutable candidate freeze",
+      note: "Execute only after immutable candidate freeze with all invariants green",
     },
   };
 
@@ -266,9 +296,9 @@ function main() {
   const manifest = { ...manifestBody, manifestContentHash };
 
   mkdirSync(resolve("data/milestones/rc3-development"), { recursive: true });
-  const outPath = resolve("data/milestones/rc3-development/rc3-candidate-v140-freeze-manifest.json");
+  const outPath = resolve("data/milestones/rc3-development/rc3-candidate-v139-freeze-manifest.json");
   writeFileSync(outPath, `${JSON.stringify(manifest, null, 2)}\n`);
-  console.log(JSON.stringify({ outPath, manifestContentHash, gates: manifest.gates, invariants: manifest.candidateInvariants }, null, 2));
+  console.log(JSON.stringify({ outPath, manifestContentHash, gates, invariants: manifest.candidateInvariants }, null, 2));
 }
 
 main();

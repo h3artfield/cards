@@ -55,6 +55,7 @@ export type GoldMigrationRecord = {
   removeLayer2Actions?: Layer2Removal[];
   replaceLayer2Actions?: Layer2Replacement[];
   addLayer2Actions?: Layer2Addition[];
+  addForbiddenPrimitiveActions?: string[];
   /** @deprecated use removeLayer2Actions */
   removeCastEvidence?: string;
   layer1Permission?: Layer1PermissionModel | Layer1PermissionModel[];
@@ -85,6 +86,18 @@ const ACTIVATED_COST_FALL_TO_EARTH_MIGRATION_PATH = resolve(
   "data/milestones/rc3-development/activated-cost-fall-to-earth-gold-migration-v139.json",
 );
 
+const RC4_DEVELOPMENT_GOLD_POLICY_SCRUB_PATH = resolve(
+  "data/milestones/rc4-development/rc4-development-gold-policy-scrub-v1.json",
+);
+
+const RC6_DEVELOPMENT_GOLD_POLICY_SCRUB_PATH = resolve(
+  "data/milestones/rc6-development/rc6-development-gold-policy-scrub-v1.json",
+);
+
+const RC7_DEVELOPMENT_GOLD_POLICY_SCRUB_PATH = resolve(
+  "data/milestones/rc7-development/rc7-development-gold-policy-scrub-v1.json",
+);
+
 const MIGRATION_PATHS = [
   DEFAULT_PATH,
   SHUFFLE_MIGRATION_PATH,
@@ -92,6 +105,9 @@ const MIGRATION_PATHS = [
   LAND_GRANT_PERMISSION_MIGRATION_PATH,
   ZONE_NINJUTSU_REPLACEMENT_MIGRATION_PATH,
   ACTIVATED_COST_FALL_TO_EARTH_MIGRATION_PATH,
+  RC4_DEVELOPMENT_GOLD_POLICY_SCRUB_PATH,
+  RC6_DEVELOPMENT_GOLD_POLICY_SCRUB_PATH,
+  RC7_DEVELOPMENT_GOLD_POLICY_SCRUB_PATH,
 ];
 
 function normalizeRecord(record: GoldMigrationRecord): Layer2Removal[] {
@@ -144,13 +160,86 @@ function asArray<T>(value: T | T[] | undefined): T[] {
   return Array.isArray(value) ? value : [value];
 }
 
-export function applyGoldMigrationV135<T extends OracleActionEvalCaseV2>(
+function applyGoldMigrationRecordToCase<T extends OracleActionEvalCaseV2>(
+  testCase: T,
+  record: GoldMigrationRecord,
+): T {
+  const removals = normalizeRecord(record);
+  const replacements = record.replaceLayer2Actions ?? [];
+  const additions = record.addLayer2Actions ?? [];
+
+  let expectedPrimitiveActions = testCase.expectedPrimitiveActions;
+  if (removals.length) {
+    expectedPrimitiveActions = expectedPrimitiveActions.filter(
+      (g) => !removals.some((removal) => shouldRemoveGold(g, removal)),
+    );
+  }
+  if (replacements.length) {
+    expectedPrimitiveActions = expectedPrimitiveActions.map((g) => {
+      const replacement = replacements.find((candidate) => shouldReplaceGold(g, candidate));
+      if (!replacement) return g;
+      return {
+        ...g,
+        actionType: replacement.toActionType as typeof g.actionType,
+        evidenceContains: replacement.toEvidenceContains ?? g.evidenceContains,
+      };
+    });
+  }
+  if (additions.length) {
+    for (const addition of additions) {
+      const exists = expectedPrimitiveActions.some(
+        (g) =>
+          g.actionType === addition.actionType &&
+          (g.evidenceContains ?? "").toLowerCase().includes(addition.evidenceContains.toLowerCase().slice(0, 20)),
+      );
+      if (!exists) {
+        expectedPrimitiveActions = [
+          ...expectedPrimitiveActions,
+          {
+            actionType: addition.actionType as (typeof expectedPrimitiveActions)[number]["actionType"],
+            evidenceContains: addition.evidenceContains,
+          },
+        ];
+      }
+    }
+  }
+
+  const forbidden = new Set(testCase.forbiddenPrimitiveActions ?? []);
+  for (const removal of removals) forbidden.add(removal.actionType);
+  for (const primitive of record.addForbiddenPrimitiveActions ?? []) forbidden.add(primitive);
+
+  const layer1Permissions = [...(testCase.expectedLayer1Permissions ?? []), ...asArray(record.layer1Permission)];
+  const layer1Conditions = [...(testCase.expectedLayer1Conditions ?? []), ...asArray(record.layer1Condition)];
+  const structurePatch = { ...(testCase.expectedStructure ?? {}), ...(record.expectedStructurePatch ?? {}) };
+  const positiveActions = expectedPrimitiveActions.filter((g) => !g.negative);
+
+  return {
+    ...testCase,
+    expectedPrimitiveActions,
+    ...(Object.keys(structurePatch).length ? { expectedStructure: structurePatch } : {}),
+    ...(forbidden.size ? { forbiddenPrimitiveActions: [...forbidden] } : {}),
+    ...(layer1Permissions.length ? { expectedLayer1Permissions: layer1Permissions } : {}),
+    ...(layer1Conditions.length ? { expectedLayer1Conditions: layer1Conditions } : {}),
+    ...(record.expectedMechanicContext
+      ? { expectedMechanicContext: record.expectedMechanicContext }
+      : testCase.expectedMechanicContext
+        ? { expectedMechanicContext: testCase.expectedMechanicContext }
+        : {}),
+    ...(record.policyClass
+      ? { permissionPolicyClass: record.policyClass }
+      : testCase.permissionPolicyClass
+        ? { permissionPolicyClass: testCase.permissionPolicyClass }
+        : {}),
+    certifiedEmptyLayer2: positiveActions.length === 0,
+  };
+}
+
+function applyGoldMigrationEnvelopeV135<T extends OracleActionEvalCaseV2>(
   cases: T[],
-  migration?: GoldMigrationEnvelope,
+  envelope: GoldMigrationEnvelope,
 ): T[] {
-  const records = migration?.records ?? loadAllGoldMigrationsV135();
   const recordsByCase = new Map<string, GoldMigrationRecord[]>();
-  for (const record of records) {
+  for (const record of envelope.records) {
     const existing = recordsByCase.get(record.caseId) ?? [];
     existing.push(record);
     recordsByCase.set(record.caseId, existing);
@@ -158,71 +247,36 @@ export function applyGoldMigrationV135<T extends OracleActionEvalCaseV2>(
   return cases.map((testCase) => {
     const caseRecords = recordsByCase.get(testCase.id);
     if (!caseRecords?.length) return testCase;
+    return caseRecords.reduce(
+      (current, migrationRecord) => applyGoldMigrationRecordToCase(current, migrationRecord),
+      testCase,
+    );
+  });
+}
 
-    const removals = caseRecords.flatMap((record) => normalizeRecord(record));
-    const replacements = caseRecords.flatMap((record) => record.replaceLayer2Actions ?? []);
-    const additions = caseRecords.flatMap((record) => record.addLayer2Actions ?? []);
-    let expectedPrimitiveActions = testCase.expectedPrimitiveActions;
-    if (removals.length) {
-      expectedPrimitiveActions = expectedPrimitiveActions.filter(
-        (g) => !removals.some((removal) => shouldRemoveGold(g, removal)),
-      );
-    }
-    if (replacements.length) {
-      expectedPrimitiveActions = expectedPrimitiveActions.map((g) => {
-        const replacement = replacements.find((candidate) => shouldReplaceGold(g, candidate));
-        if (!replacement) return g;
-        return {
-          ...g,
-          actionType: replacement.toActionType as typeof g.actionType,
-          evidenceContains: replacement.toEvidenceContains ?? g.evidenceContains,
-        };
-      });
-    }
-    if (additions.length) {
-      for (const addition of additions) {
-        const exists = expectedPrimitiveActions.some(
-          (g) =>
-            g.actionType === addition.actionType &&
-            (g.evidenceContains ?? "").toLowerCase().includes(addition.evidenceContains.toLowerCase().slice(0, 20)),
-        );
-        if (!exists) {
-          expectedPrimitiveActions = [
-            ...expectedPrimitiveActions,
-            {
-              actionType: addition.actionType as (typeof expectedPrimitiveActions)[number]["actionType"],
-              evidenceContains: addition.evidenceContains,
-            },
-          ];
-        }
+function loadAllGoldMigrationEnvelopesV135(): GoldMigrationEnvelope[] {
+  const envelopes: GoldMigrationEnvelope[] = [];
+  for (const path of MIGRATION_PATHS) {
+    try {
+      envelopes.push(loadGoldMigrationV135(path));
+    } catch {
+      if (path === DEFAULT_PATH) {
+        envelopes.push(loadGoldMigrationV135(LEGACY_PATH));
       }
     }
+  }
+  return envelopes;
+}
 
-    const forbidden = new Set(testCase.forbiddenPrimitiveActions ?? []);
-    for (const removal of removals) forbidden.add(removal.actionType);
-
-    const layer1Permissions = caseRecords.flatMap((record) => asArray(record.layer1Permission));
-    const layer1Conditions = caseRecords.flatMap((record) => asArray(record.layer1Condition));
-    const policyClass = caseRecords.find((record) => record.policyClass)?.policyClass;
-    const mechanicContext = caseRecords.find((record) => record.expectedMechanicContext)?.expectedMechanicContext;
-    const structurePatch = caseRecords.reduce<Partial<ExpectedStructure>>(
-      (merged, record) => ({ ...merged, ...(record.expectedStructurePatch ?? {}) }),
-      {},
-    );
-    const positiveActions = expectedPrimitiveActions.filter((g) => !g.negative);
-
-    return {
-      ...testCase,
-      expectedPrimitiveActions,
-      ...(Object.keys(structurePatch).length
-        ? { expectedStructure: { ...(testCase.expectedStructure ?? {}), ...structurePatch } }
-        : {}),
-      ...(forbidden.size ? { forbiddenPrimitiveActions: [...forbidden] } : {}),
-      ...(layer1Permissions.length ? { expectedLayer1Permissions: layer1Permissions } : {}),
-      ...(layer1Conditions.length ? { expectedLayer1Conditions: layer1Conditions } : {}),
-      ...(mechanicContext ? { expectedMechanicContext: mechanicContext } : {}),
-      ...(policyClass ? { permissionPolicyClass: policyClass } : {}),
-      certifiedEmptyLayer2: positiveActions.length === 0,
-    };
-  });
+export function applyGoldMigrationV135<T extends OracleActionEvalCaseV2>(
+  cases: T[],
+  migration?: GoldMigrationEnvelope,
+): T[] {
+  if (migration) {
+    return applyGoldMigrationEnvelopeV135(cases, migration);
+  }
+  return loadAllGoldMigrationEnvelopesV135().reduce(
+    (acc, envelope) => applyGoldMigrationEnvelopeV135(acc, envelope),
+    cases,
+  );
 }

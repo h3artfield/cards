@@ -34,7 +34,21 @@ import {
   applyStructuralBlockInvariants,
 } from "./oracle-action-structural-blocks";
 import { buildOracleSemanticParse } from "./oracle-semantic-parse-builder";
-import { inferOptionalEffectFromGrammar } from "./oracle-action-argument-extraction";
+import {
+  inferOptionalEffectFromGrammar,
+  parseAdditionalCostFromLine,
+  parseSpreeChoose,
+  toEvidenceSpan,
+} from "./oracle-action-argument-extraction";
+import {
+  isImperativeBeforeOptionalMayInModalOption,
+  isModalOptionAbility,
+  isSpuriousConditionalSearchEvidence,
+  normalizeModalOptionBody,
+  SEARCH_LIBRARY_AND_OR_GRAVEYARD_FOR,
+  SEARCH_LIBRARY_FOR,
+  TUTOR_THEN_SHUFFLE,
+} from "./oracle-modal-option-parse";
 import type { OracleSemanticParse } from "./oracle-semantic-parse-schema";
 import {
   parseVariableQuantityFields,
@@ -48,6 +62,7 @@ import {
   extractStaticPermissions,
   findQuotedAbilitySpans,
   findReminderSpans,
+  isEvidenceInReminderSpan,
   isInsideQuotedGrantedAbility,
   isOneShotCastPermission,
   isPersistentZoneCastPermission,
@@ -237,12 +252,13 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: /\bplay an additional land\b/i, actionType: "play", sourceZones: ["hand"], requiresPermissionVerb: true },
   { pattern: CAST_SPELLS_FROM, actionType: "cast", sourceZones: ["graveyard", "exile"], requiresPermissionVerb: true },
   { pattern: PLAY_LANDS, actionType: "play", sourceZones: ["hand", "graveyard"], requiresPermissionVerb: true },
-  { pattern: /\bput (?:a |one )?card from your hand on top of your library\b/i, actionType: "search_library", sourceZones: ["hand"], destinationZones: ["library"] },
   { pattern: /\bYou may play (?!(?:lands and cast|lands and spells))[\w ]+/i, actionType: "play", requiresPermissionVerb: true },
   { pattern: /\bDraw (?:a |one |two |three |four |five |seven |that many |up to \w+ )?cards?\b/, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bAdd (?:two|three|four) mana in any combination of colors\b/i, actionType: "add_mana", destinationZones: ["mana_pool"] },
   { pattern: /\bAdd \{[^}]+\}(?:\{[^}]+\})*/i, actionType: "add_mana", abilityType: "activated", destinationZones: ["mana_pool"] },
   { pattern: /\bAdd (?:one mana of any color|three mana of any one color|\{C\}{1,2}|\{[WUBRG]\})/i, actionType: "add_mana", destinationZones: ["mana_pool"] },
+  { pattern: SEARCH_LIBRARY_AND_OR_GRAVEYARD_FOR, actionType: "search_library", sourceZones: ["library", "graveyard"], destinationZones: ["hand"] },
+  { pattern: SEARCH_LIBRARY_FOR, actionType: "search_library", sourceZones: ["library"], destinationZones: ["hand", "battlefield", "library"] },
   { pattern: /\bsearch (?:your )?library and\/or graveyard for\b/i, actionType: "search_library", sourceZones: ["library", "graveyard"], destinationZones: ["hand"] },
   { pattern: /\bsearch (?:your |their )?library for\b/i, actionType: "search_library", sourceZones: ["library"], destinationZones: ["hand", "battlefield", "library"] },
   { pattern: /\bDestroy all [\w ]+/i, actionType: "destroy", sourceZones: ["battlefield"], affectedObjects: ["permanent"] },
@@ -284,7 +300,7 @@ const ACTION_PATTERNS: ActionPattern[] = [
   { pattern: PLAY_PERMISSION, actionType: "play", sourceZones: ["graveyard", "exile", "hand"], requiresPermissionVerb: true },
   { pattern: /\bMill (?:target )?(?:player|cards|\d+|up to \w+ cards)/i, actionType: "mill", sourceZones: ["library"], destinationZones: ["graveyard"] },
   { pattern: /\bmills? (?:one|two|three|four|five|six|seven|eight|nine|ten|half|fourteen|\d+|up to \w+) [\w ]*/i, actionType: "mill", sourceZones: ["library"], destinationZones: ["graveyard"] },
-  { pattern: /\b(?:discard|discards) (?:a |one |two |three |their |up to \w+ )?(?:[\w ]*cards?|their hand)\b/i, actionType: "discard", sourceZones: ["hand"], destinationZones: ["graveyard"] },
+  { pattern: /\b(?:discard|discards) (?:(?:your|their|his or her) hand|(?:a |one |two |three |up to \w+ )?[\w ]*cards?)\b/i, actionType: "discard", sourceZones: ["hand"], destinationZones: ["graveyard"] },
   { pattern: /\bdraw that many cards\b/i, actionType: "draw", destinationZones: ["hand"], affectedObjects: ["card"] },
   { pattern: /\bdeals? damage equal to (?:its power|[^.]+)/i, actionType: "deal_damage", affectedObjects: ["player", "permanent"] },
   { pattern: /\bdeals? \d+ damage(?: to (?:any target|target [\w ]+|each [\w ]+))?/i, actionType: "deal_damage", affectedObjects: ["player", "permanent"] },
@@ -534,17 +550,25 @@ function applyOptionalityPostProcess(
       );
 
       if (paragraphHasMay && !action.optionalityCertain && !action.conditionType) {
-        const mayIdx = ability.paragraphText.search(/\bYou may\b/i);
-        const actionLocalStart = action.evidenceStart - ability.paragraphStart;
-        const imperativeBeforeOptionalMay = mayIdx >= 0 && actionLocalStart >= 0 && actionLocalStart < mayIdx;
-        if (!imperativeBeforeOptionalMay) {
-          const governed = enriched.some(
-            (o) =>
-              o.actionId !== action.actionId &&
-              (o.optionalEffect || o.optionalCost) &&
-              o.evidenceStart <= action.evidenceStart,
+        const ifYouDoIdxForMay = ability.paragraphText.search(/\bIf you do,\s/i);
+        const actionLocalStartForMay = action.evidenceStart - ability.paragraphStart;
+        const inEstablishedIfYouDoBranchForMay =
+          ifYouDoIdxForMay >= 0 && actionLocalStartForMay > ifYouDoIdxForMay;
+        if (!inEstablishedIfYouDoBranchForMay) {
+          const mayIdx = ability.paragraphText.search(
+            /\b(?:Its controller|You|Target player|That player|An opponent) may\b/i,
           );
-          if (!governed) reviewStatus = "needs_review";
+          const imperativeBeforeOptionalMay =
+            mayIdx >= 0 && actionLocalStartForMay >= 0 && actionLocalStartForMay < mayIdx;
+          if (!imperativeBeforeOptionalMay) {
+            const governed = enriched.some(
+              (o) =>
+                o.actionId !== action.actionId &&
+                (o.optionalEffect || o.optionalCost) &&
+                o.evidenceStart <= action.evidenceStart,
+            );
+            if (!governed) reviewStatus = "needs_review";
+          }
         }
       }
       if (
@@ -558,10 +582,32 @@ function applyOptionalityPostProcess(
         }
       }
       if ((action.optionalEffect || action.optionalCost) && !action.optionalityCertain) {
-        reviewStatus = "needs_review";
+        const ifYouDoIdx = ability.paragraphText.search(/\bIf you do,\s/i);
+        const actionLocalStart = action.evidenceStart - ability.paragraphStart;
+        const inEstablishedIfYouDoBranch = ifYouDoIdx >= 0 && actionLocalStart > ifYouDoIdx;
+        if (
+          !inEstablishedIfYouDoBranch &&
+          !(
+            ability.modalOptionId &&
+            isImperativeBeforeOptionalMayInModalOption({
+              paragraphText: ability.paragraphText,
+              evidenceLocalStart: actionLocalStart,
+            })
+          )
+        ) {
+          reviewStatus = "needs_review";
+        }
       }
       if (action.conditionType && !action.conditionText) {
         reviewStatus = "needs_review";
+      }
+
+      if (reviewStatus === "accepted") {
+        const actionLocalStart = action.evidenceStart - ability.paragraphStart;
+        const actionLocalEnd = actionLocalStart + action.evidenceText.length;
+        if (isEvidenceInReminderSpan(ability.paragraphText, actionLocalStart, actionLocalEnd)) {
+          reviewStatus = "needs_review";
+        }
       }
 
       const mergedConditions = action.conditions ?? [];
@@ -631,6 +677,12 @@ function actionInDistinctThenClause(paragraph: string, _evidenceText: string, lo
   return true;
 }
 
+/** Completed imperative immediately before ", then …" in the same run-on sentence. */
+function actionCompletesBeforeCommaThen(paragraph: string, localStart: number, evidenceText: string): boolean {
+  const localEnd = localStart + evidenceText.length;
+  return /^,\s*then\b/i.test(paragraph.slice(localEnd));
+}
+
 function compoundClauseSpans(paragraph: string): Array<{ localStart: number; text: string }> {
   const spans = new Map<string, { localStart: number; text: string }>();
   const add = (localStart: number, text: string) => {
@@ -685,19 +737,25 @@ function canPromoteToAccepted(input: {
     return input.confidence >= 0.88 && /\b(?:graveyard|exile)\b/i.test(input.paragraph);
   }
 
-  const tutorThenShuffle = /\bsearch (?:your )?library for\b[\s\S]*\bthen shuffle\b/i.test(input.paragraph);
+  const tutorThenShuffle = TUTOR_THEN_SHUFFLE.test(input.paragraph);
   const benignThen =
     tutorThenShuffle ||
     /\bthen draw that many cards\b/i.test(input.paragraph) ||
     /\bthen draw\b/i.test(input.paragraph) ||
     /\bthen put\b/i.test(input.paragraph) ||
     /\bthen that player shuffles\b/i.test(input.paragraph) ||
-    /\bthen shuffle\b/i.test(input.paragraph);
+    /\bthen shuffle\b/i.test(input.paragraph) ||
+    /\bthen investigate\b/i.test(input.paragraph);
   const compoundThen = /\bthen\b/i.test(input.paragraph) && !benignThen;
   const localStart =
     input.evidenceLocalStart ??
     input.paragraph.toLowerCase().indexOf(input.evidenceText.toLowerCase().trim());
-  if (compoundThen && localStart >= 0 && !actionInDistinctThenClause(input.paragraph, input.evidenceText, localStart)) {
+  if (
+    compoundThen &&
+    localStart >= 0 &&
+    !actionInDistinctThenClause(input.paragraph, input.evidenceText, localStart) &&
+    !actionCompletesBeforeCommaThen(input.paragraph, localStart, input.evidenceText)
+  ) {
     return false;
   }
 
@@ -756,6 +814,18 @@ function assignReviewStatus(input: {
   if (input.abilityType === "replacement" && !input.replacementInsteadEffect) return "needs_review";
   if (input.variableQuantity && variableQuantityNeedsReview(input.variableQuantity)) return "needs_review";
 
+  const evidenceLocalStart = input.evidenceLocalStart ?? input.paragraph.indexOf(input.evidenceText);
+  if (
+    evidenceLocalStart >= 0 &&
+    isEvidenceInReminderSpan(
+      input.paragraph,
+      evidenceLocalStart,
+      evidenceLocalStart + input.evidenceText.length,
+    )
+  ) {
+    return "needs_review";
+  }
+
   const isMultiface = input.faces && input.faces.length > 1 && input.face;
   if (isMultiface) {
     const start = input.cardEvidenceStart ?? 0;
@@ -773,11 +843,12 @@ function assignReviewStatus(input: {
 
   if (input.confidence < 0.82) return "needs_review";
   const tutorCompound =
-    /\bsearch (?:your |their )?library for\b/i.test(input.paragraph) &&
+    SEARCH_LIBRARY_FOR.test(input.paragraph) &&
     /\bput [\w ]+ onto the battlefield\b/i.test(input.paragraph);
   const benignCompoundParagraph =
     tutorCompound ||
     /\bthen draw that many cards\b/i.test(input.paragraph) ||
+    /\bthen investigate\b/i.test(input.paragraph) ||
     /\bIf you do,\s/i.test(input.paragraph) ||
     /\bExile this Saga, then return\b/i.test(input.paragraph) ||
     /\bexiles? all [\w ]+ cards from (?:their |your )?graveyard, then\b/i.test(input.paragraph) ||
@@ -791,7 +862,8 @@ function assignReviewStatus(input: {
     /\bthen\b/i.test(input.paragraph) &&
     !benignCompoundParagraph &&
     input.evidenceLocalStart !== undefined &&
-    !actionInDistinctThenClause(input.paragraph, input.evidenceText, input.evidenceLocalStart)
+    !actionInDistinctThenClause(input.paragraph, input.evidenceText, input.evidenceLocalStart) &&
+    !actionCompletesBeforeCommaThen(input.paragraph, input.evidenceLocalStart, input.evidenceText)
   ) {
     return "needs_review";
   }
@@ -1013,6 +1085,9 @@ function acceptAction(input: {
   if (matchIsAlternativeCostClause(input.ability.paragraphText, localStart, input.rule.actionType)) {
     return null;
   }
+  if (input.rule.actionType === "search_library" && isSpuriousConditionalSearchEvidence(evidenceText)) {
+    return null;
+  }
 
   const textRole: TextRole = input.replacementInsteadEffect
     ? "replacement_effect"
@@ -1115,9 +1190,7 @@ function acceptAction(input: {
   ) {
     confidence = 0.9;
   }
-  const tutorThenShuffle = /\bsearch (?:your )?library for\b[\s\S]*\bthen shuffle\b/i.test(
-    input.ability.paragraphText,
-  );
+  const tutorThenShuffle = TUTOR_THEN_SHUFFLE.test(input.ability.paragraphText);
   const distinctThenClause = actionInDistinctThenClause(
     input.ability.paragraphText,
     evidenceText,
@@ -1130,8 +1203,10 @@ function acceptAction(input: {
     !/\bthen put\b/i.test(input.ability.paragraphText) &&
     !/\bthen shuffle\b/i.test(input.ability.paragraphText) &&
     !/\bthen that player shuffles\b/i.test(input.ability.paragraphText) &&
+    !/\bthen investigate\b/i.test(input.ability.paragraphText) &&
     !tutorThenShuffle &&
-    !distinctThenClause
+    !distinctThenClause &&
+    !actionCompletesBeforeCommaThen(input.ability.paragraphText, localStart, evidenceText)
   ) {
     confidence = 0.8;
   }
@@ -1167,6 +1242,16 @@ function acceptAction(input: {
     localStart < 8 &&
     /\bDestroy target creature\b/i.test(evidenceText) &&
     /\bsearch (?:your )?library and\/or graveyard\b/i.test(input.ability.paragraphText)
+  ) {
+    reviewStatus = "accepted";
+  }
+  if (
+    input.ability.modalOptionId &&
+    isImperativeBeforeOptionalMayInModalOption({
+      paragraphText: input.ability.paragraphText,
+      evidenceLocalStart: localStart,
+    }) &&
+    ["destroy", "return_to_hand", "deal_damage", "exile", "counter"].includes(resolvedActionType)
   ) {
     reviewStatus = "accepted";
   }
@@ -1363,7 +1448,7 @@ function matchIsSpuriousCastPermission(paragraph: string, localStart: number, ev
 }
 
 function matchIsAlternativeCostClause(paragraph: string, localStart: number, actionType: PrimitiveActionType): boolean {
-  if (actionType !== "exile" && actionType !== "sacrifice") return false;
+  if (!["exile", "sacrifice", "discard", "tap"].includes(actionType)) return false;
   const context = paragraph.slice(Math.max(0, localStart - 20), localStart + 120);
   if (/\brather than pay\b/i.test(context)) return true;
   if (/\bas an additional cost\b/i.test(context)) return true;
@@ -1727,8 +1812,11 @@ export function extractOracleActionsV1(input: {
     const abilityMatches: OracleActionV1[] = [];
 
     const parentAbilityId = `${input.oracleId}:${ability.cardFaceId}:${ability.abilityIndex}`;
+    const optionBody = isModalOptionAbility(ability) ? normalizeModalOptionBody(ability.paragraphText) : undefined;
+    const clauseParagraph = optionBody?.bodyText ?? ability.paragraphText;
+    const clauseOffset = optionBody?.bodyLocalStart ?? 0;
 
-    for (const span of compoundClauseSpansWithRoles(ability.paragraphText, parentAbilityId)) {
+    for (const span of compoundClauseSpansWithRoles(clauseParagraph, parentAbilityId)) {
       for (const rule of ACTION_PATTERNS) {
         for (const { match, index } of iterPatternMatches(span.text, rule.pattern)) {
           const action = acceptAction({
@@ -1740,7 +1828,7 @@ export function extractOracleActionsV1(input: {
             match,
             rule,
             actionIndex,
-            evidenceOffsetInParagraph: span.localStart + index,
+            evidenceOffsetInParagraph: clauseOffset + span.localStart + index,
             clause: span.clause,
           });
           if (!action) continue;
