@@ -1,5 +1,5 @@
 /**
- * Working-tree provenance guards — HARD STOP on dirty parser scope at freeze/execution.
+ * Working-tree provenance guards — HARD STOP on dirty repository at freeze/execution.
  */
 import { createHash } from "node:crypto";
 import { execSync } from "node:child_process";
@@ -12,6 +12,14 @@ export type WorkingTreeGuardResult = {
   headCommitSha: string;
   statusLines: string[];
   dirtyParserScopePaths: string[];
+  dirtyReasons: string[];
+};
+
+export type RepositoryGuardResult = {
+  clean: boolean;
+  repoRoot: string;
+  headCommitSha: string;
+  statusLines: string[];
   dirtyReasons: string[];
 };
 
@@ -28,42 +36,49 @@ export function sha256FileFromDisk(path: string): string {
   return createHash("sha256").update(readFileSync(resolve(path))).digest("hex");
 }
 
-/** HARD STOP unless working tree clean and parser scope matches committed bytes. */
-export function assertCleanWorkingTreeForParserScope(
-  parserScopePaths: readonly string[],
-  label: string,
-): WorkingTreeGuardResult {
+/** HARD STOP unless entire repository working tree is clean (official holdout requirement). */
+export function assertCleanRepositoryForHoldoutExecution(label: string): RepositoryGuardResult {
   const repoRoot = execSync("git rev-parse --show-toplevel", { cwd: resolve("."), encoding: "utf8" }).trim();
   const headCommitSha = execSync("git rev-parse HEAD", { cwd: repoRoot, encoding: "utf8" }).trim();
   const statusRaw = execSync("git status --porcelain", { cwd: repoRoot, encoding: "utf8" }).trim();
   const statusLines = statusRaw ? statusRaw.split("\n") : [];
-
-  const dirtyParserScopePaths: string[] = [];
   const dirtyReasons: string[] = [];
 
   if (statusLines.length > 0) {
-    dirtyReasons.push(`${label}: working tree is not clean (${statusLines.length} changed/untracked entries)`);
+    dirtyReasons.push(
+      `${label}: repository is not clean (${statusLines.length} changed/untracked/staged entries) — ` +
+        "official holdout execution requires empty git status --porcelain",
+    );
   }
 
-  for (const scopePath of parserScopePaths) {
-    const repoRelative = `web/${scopePath}`.replace(/\\/g, "/");
-    const hits = statusLines.filter((line) => {
-      const path = line.slice(3).trim().replace(/\\/g, "/");
-      return path === repoRelative || path.endsWith(`/${scopePath}`);
-    });
-    if (hits.length > 0) {
-      dirtyParserScopePaths.push(scopePath);
-      dirtyReasons.push(`${label}: parser scope path dirty — ${scopePath} (${hits.join("; ")})`);
-    }
+  const stagedRaw = execSync("git diff --cached --name-only", { cwd: repoRoot, encoding: "utf8" }).trim();
+  if (stagedRaw.length > 0) {
+    dirtyReasons.push(`${label}: staged files present (${stagedRaw.split("\n").length})`);
   }
 
   const clean = dirtyReasons.length === 0;
   if (!clean) {
     throw new Error(
       `HARD STOP — ${label}\n${dirtyReasons.join("\n")}\n` +
-        "Commit or stash all parser-scope changes before candidate freeze or holdout execution.",
+        "Use a fresh clean worktree/checkout at the frozen candidate commit before holdout execution.",
     );
   }
 
-  return { clean, repoRoot, headCommitSha, statusLines, dirtyParserScopePaths, dirtyReasons };
+  return { clean, repoRoot, headCommitSha, statusLines, dirtyReasons };
+}
+
+/** @deprecated Prefer assertCleanRepositoryForHoldoutExecution for holdouts. */
+export function assertCleanWorkingTreeForParserScope(
+  parserScopePaths: readonly string[],
+  label: string,
+): WorkingTreeGuardResult {
+  const repository = assertCleanRepositoryForHoldoutExecution(label);
+  return {
+    clean: repository.clean,
+    repoRoot: repository.repoRoot,
+    headCommitSha: repository.headCommitSha,
+    statusLines: repository.statusLines,
+    dirtyParserScopePaths: [],
+    dirtyReasons: repository.dirtyReasons,
+  };
 }

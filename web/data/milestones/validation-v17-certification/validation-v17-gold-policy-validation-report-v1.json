@@ -1,0 +1,38 @@
+{
+  "validatorVersion": "gold-policy-validator-v1.6",
+  "policyVersion": "semantic-gold-policy-v1.6",
+  "validatorHash": "a4f08f1c2efdf4a0986d078490dc7ed781c17dcf6f2ffe2a8535af70b88b9009",
+  "benchmarkHash": "25b020fcefd8653f9383bac50fde869cb2fa8f09ed8d6403df867f92a9f4c2a4",
+  "benchmarkPath": "data/oracle-action-eval-validation-v17.json",
+  "caseCount": 225,
+  "goldActionCount": 274,
+  "violations": [],
+  "caseResults": [],
+  "census": {
+    "goldPolicyViolations": 0,
+    "invalidLayer2CostGold": 0,
+    "triggerReferenceActionGold": 0,
+    "invalidPermissionActionGold": 0,
+    "reminderCardNativeGold": 0,
+    "createdObjectOwnershipViolations": 0,
+    "invalidReplacementGold": 0,
+    "duplicateSemanticGold": 0,
+    "invalidEvidenceSpan": 0,
+    "scopeCompletenessViolations": 0
+  },
+  "perPolicyFamily": {},
+  "pass": true,
+  "policyStack": {
+    "stackVersion": "gold-policy-stack-v1",
+    "policyVersion": "semantic-gold-policy-v1.6",
+    "validatorVersion": "gold-policy-validator-v1.6",
+    "validatorSourceHash": "1f5aae027d82302cee9c3f726b720cf7e1b1257ba227b1672b0a07cf88ff1341",
+    "policyRegistryHash": "dd83f64c6809842263316d2b76ccb1c347c32bd9a69f6eafdc90660be418c931",
+    "validatorFileHash": "d83e85406341d5df39ddfe77a9c1c4ab6339b3a36f4f213d07160d31ca0ec008",
+    "semanticEnrichmentFileHash": "23432dc76c1c315ba9bf5ab889e0c4c153631aa35d868bf065919cd9b713c65b",
+    "spanRoleClassifierFileHash": "3807c738b81e367f951c9a4c5d484975e1c9f03b7b8a4a06088abd9b613d19b0",
+    "policyAdjudicationFileHash": "b03c363ba01a1bec14551eaf867f085796ee007f86dfe79dfd15177a3692db98",
+    "runnerConfigFileHash": "a34bee294c608abf86ac17c26c19f104bbd69c3f128561a6eb3d382955ef1261",
+    "stackCompositeHash": "3e2642a0e7eaedc70e8055bc3b3fb64cc8b2b62dbaa0aaeb2c90049d69d0d5e7"
+  }
+}

@@ -1,7 +1,7 @@
 /**
- * Run validation_set_v15 exactly once against frozen RC5 candidate v150.
+ * Run validation_set_v17 exactly once against frozen RC7 candidate v152.
  * Mechanical preflight → single execution → immutable record preservation.
- * Run: cd web && npx tsx scripts/run-validation-v15-rc5-once.ts
+ * Run: cd web && npx tsx scripts/run-validation-v17-rc7-once.ts
  */
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
@@ -28,19 +28,19 @@ import { validateBenchmarkGoldPolicy } from "./lib/gold-policy-validator-v1";
 import { runGoldPolicyPreflight } from "./lib/gold-policy-preflight-v1";
 import { assertHoldoutExecutionEnvironment } from "./lib/holdout-execution-provenance-v1";
 
-const RC5_CANDIDATE_MANIFEST_PATH =
-  "data/milestones/rc5-development/rc5-candidate-v150-freeze-manifest.json";
-const EXPECTED_RC5_MANIFEST_HASH = "14e4d616086bbc6edc35fc7ad7f8d69637c907b21d2af45036ca54feffd759ca";
-const V15_CERT_PATH =
-  "data/milestones/validation-v15-certification/validation-v15-gold-policy-certificate-v2.json";
-const EXPECTED_V15_CERT_CANDIDATE_HASH = "14e4d616086bbc6edc35fc7ad7f8d69637c907b21d2af45036ca54feffd759ca";
-const EXPECTED_V15_STACK_COMPOSITE = "aaf59085974d7c18e2aeef36145f7e22a87e37083c7572466fcb808f9831edc3";
-const V15_FREEZE_MANIFEST_PATH =
-  "data/milestones/validation-v15-certification/validation-v15-freeze-manifest-v150.json";
-const DATASET_PATH = "data/oracle-action-eval-validation-v15.json";
-const EXPECTED_V15_HASH = "300929da9a640b93d3ad5bb0abce92a3c0614a1399b18248c1319bbaf4d7ef17";
+const RC7_CANDIDATE_MANIFEST_PATH =
+  "data/milestones/rc7-development/rc7-candidate-v152-freeze-manifest.json";
+const EXPECTED_RC7_MANIFEST_HASH = "d0939f76671384c1db0995d522a7d3bf1bf2437b2ff5d9f3c4a266339f006d8c";
+const EXPECTED_PARSER_BLOB_CLOSURE = "e9b674aa26960dfed75ceb97885217e068c871a5683899a2017634acdbbe1c0d";
+const V17_CERT_PATH =
+  "data/milestones/validation-v17-certification/validation-v17-gold-policy-certificate-v3.json";
+const EXPECTED_V17_STACK_COMPOSITE = "bff641dc3be90e053e243c6c30da8f05e22450eeba10edf0d0cbdec87398062a";
+const V17_FREEZE_MANIFEST_PATH =
+  "data/milestones/validation-v17-certification/validation-v17-freeze-manifest-v152.json";
+const DATASET_PATH = "data/oracle-action-eval-validation-v17.json";
+const EXPECTED_V17_HASH = "24765bdc4a07553bbe31851970e383127d2f9adef2cf61641aed9185d3eb459a";
 const EXPECTED_CASE_COUNT = 225;
-const OUT_DIR = "data/milestones/validation-v15-certification";
+const OUT_DIR = "data/milestones/validation-v17-certification";
 
 const DEV_BENCHMARK_PATHS = [
   "data/oracle-action-eval-development-v26-v14.json",
@@ -391,32 +391,33 @@ function bucketForStratum(stratum: string): string {
   return "other";
 }
 
-function main() {
-  assertHoldoutExecutionEnvironment({
-    label: "validation v15 holdout execution",
-    candidateManifestPath: RC5_CANDIDATE_MANIFEST_PATH,
-  });
+function architecturalFamilyForCase(testCase: OracleActionEvalCaseV2): string {
+  const stratum = testCase.coverageStratum ?? testCase.category ?? "";
+  if (stratum.includes("granted_nested")) return "granted_nested";
+  if (stratum.includes("replacement")) return "replacement";
+  if (stratum.includes("modal")) return "modal";
+  if (stratum.includes("saga_planeswalker")) return "saga_planeswalker";
+  if (stratum.includes("triggered")) return "triggered";
+  if (stratum.includes("immediate_cast") || stratum.includes("cast_vs_permission")) return "cast_play";
+  if (stratum.includes("compound")) return "conditional_sequential";
+  return "other";
+}
 
-  if (existsSync(resolve(OUT_DIR, "validation-v15-rc5-execution-1-raw.json"))) {
-    throw new Error("Validation v15 execution artifact already exists — single-run already consumed");
+function main() {
+  const provenance = assertHoldoutExecutionEnvironment({
+    label: "validation v17 holdout execution",
+    candidateManifestPath: RC7_CANDIDATE_MANIFEST_PATH,
+    expectedManifestContentHash: EXPECTED_RC7_MANIFEST_HASH,
+    expectedParserBlobClosureHash: EXPECTED_PARSER_BLOB_CLOSURE,
+  });
+  const head = provenance.headCommitSha;
+  const rc7Manifest = provenance.manifest;
+
+  if (existsSync(resolve(OUT_DIR, "validation-v17-rc7-execution-1-raw.json"))) {
+    throw new Error("Validation v17 execution artifact already exists — single-run already consumed");
   }
 
-  const repoRoot = execSync("git rev-parse --show-toplevel", { cwd: resolve("."), encoding: "utf8" }).trim();
-  const head = execSync("git rev-parse HEAD", { cwd: repoRoot, encoding: "utf8" }).trim();
-
-  const rc5Manifest = JSON.parse(readFileSync(RC5_CANDIDATE_MANIFEST_PATH, "utf8")) as {
-    manifestContentHash: string;
-    status: string;
-    parserVersion: string;
-    parserCommitSha: string;
-    parserScopePaths: string[];
-    parserBlobClosureHash: string;
-    evaluators: Record<string, string>;
-    developmentGold: { certifiedHash: string };
-    goldPolicy: { stackCompositeHash: string };
-  };
-
-  const v15Cert = JSON.parse(readFileSync(V15_CERT_PATH, "utf8")) as {
+  const v17Cert = JSON.parse(readFileSync(V17_CERT_PATH, "utf8")) as {
     benchmarkHash: string;
     violations: number;
     parserExecutionCount: number;
@@ -426,9 +427,9 @@ function main() {
     candidateBinding?: { candidateManifestHash: string };
   };
 
-  const v15Freeze = JSON.parse(readFileSync(V15_FREEZE_MANIFEST_PATH, "utf8")) as {
+  const v17Freeze = JSON.parse(readFileSync(V17_FREEZE_MANIFEST_PATH, "utf8")) as {
     parserExecutionCount: number;
-    validationV15: { contentHash: string; caseCount: number };
+    validationV17: { contentHash: string; caseCount: number };
     overlapGuarantees: Record<string, number>;
   };
 
@@ -441,7 +442,7 @@ function main() {
     goldPolicyCertification?: Record<string, unknown>;
   };
 
-  const parserScopeChecks = rc5Manifest.parserScopePaths.map((relPath) => {
+  const parserScopeChecks = rc7Manifest.parserScopePaths.map((relPath) => {
     const actual = sha256File(relPath);
     return { path: relPath, actual };
   });
@@ -450,12 +451,13 @@ function main() {
     .digest("hex");
 
   const evaluatorChecks = Object.fromEntries(
-    Object.entries(rc5Manifest.evaluators).map(([key, expected]) => {
+    Object.entries(rc7Manifest.evaluators).map(([key, expected]) => {
       const pathMap: Record<string, string> = {
         semanticMatcher: "scripts/oracle-action-semantic-matcher.ts",
         unifiedMatcher: "scripts/oracle-action-unified-matcher.ts",
         goldPolicyValidator: "scripts/lib/gold-policy-validator-v1.ts",
         rc5RegressionScoring: "scripts/lib/rc5-regression-scoring-v1.ts",
+        reminderDerivedLeakage: "scripts/lib/reminder-derived-leakage-v1.ts",
       };
       const path = pathMap[key];
       const actual = path ? sha256File(path) : "UNKNOWN";
@@ -463,14 +465,14 @@ function main() {
     }),
   );
 
-  const v15GoldPolicyLive = validateBenchmarkGoldPolicy({
+  const v17GoldPolicyLive = validateBenchmarkGoldPolicy({
     cases: envelope.cases,
     benchmarkHash: envelope.contentHash,
     benchmarkPath: DATASET_PATH,
   });
 
   const goldPolicyPreflight = runGoldPolicyPreflight({
-    certificatePath: V15_CERT_PATH,
+    certificatePath: V17_CERT_PATH,
     benchmarkPath: DATASET_PATH,
     cases: envelope.cases,
     benchmarkHash: envelope.contentHash,
@@ -478,81 +480,84 @@ function main() {
 
   const devOracleIds = loadDevelopmentOracleIds();
   const overlap = envelope.cases.map((c) => c.oracleId).filter((id) => devOracleIds.has(id));
-  const v15CertHash = sha256File(V15_CERT_PATH);
+  const v17CertHash = sha256File(V17_CERT_PATH);
 
   const preflight = {
-    rc5CandidateManifestHashExpected: EXPECTED_RC5_MANIFEST_HASH,
-    rc5CandidateManifestHashActual: rc5Manifest.manifestContentHash,
-    rc5CandidateManifestHashMatch: rc5Manifest.manifestContentHash === EXPECTED_RC5_MANIFEST_HASH,
-    rc5CandidateStatus: rc5Manifest.status,
-    v15Certificate: {
-      path: V15_CERT_PATH,
-      sequence: v15Cert.certificateSequence ?? null,
-      candidateManifestHashExpected: EXPECTED_V15_CERT_CANDIDATE_HASH,
-      candidateManifestHashActual: v15Cert.candidateBinding?.candidateManifestHash ?? null,
+    rc7CandidateManifestHashActual: rc7Manifest.manifestContentHash,
+    rc7CandidateStatus: rc7Manifest.status,
+    v17Certificate: {
+      path: V17_CERT_PATH,
+      sequence: v17Cert.certificateSequence ?? null,
+      candidateManifestHashActual: v17Cert.candidateBinding?.candidateManifestHash ?? null,
       candidateManifestHashMatch:
-        v15Cert.candidateBinding?.candidateManifestHash === EXPECTED_V15_CERT_CANDIDATE_HASH,
+        v17Cert.candidateBinding?.candidateManifestHash === rc7Manifest.manifestContentHash,
+      certificateHash: v17CertHash,
     },
-    v15Benchmark: {
-      hashExpected: EXPECTED_V15_HASH,
+    v17Benchmark: {
+      hashExpected: EXPECTED_V17_HASH,
       hashActual: envelope.contentHash,
-      hashMatch: envelope.contentHash === EXPECTED_V15_HASH,
-      certificateBenchmarkHash: v15Cert.benchmarkHash,
-      certificateBenchmarkHashMatch: v15Cert.benchmarkHash === EXPECTED_V15_HASH,
-      certificateHash: v15CertHash,
-      certificateGreen: v15Cert.violations === 0 && v15Cert.benchmarkStatus === "sealed_policy_certified",
-      goldPolicyViolationsCertified: v15Cert.violations,
-      goldPolicyViolationsLiveAudit: v15GoldPolicyLive.violations.length,
+      hashMatch: envelope.contentHash === EXPECTED_V17_HASH,
+      certificateBenchmarkHash: v17Cert.benchmarkHash,
+      certificateBenchmarkHashMatch: v17Cert.benchmarkHash === EXPECTED_V17_HASH,
+      certificateGreen: v17Cert.violations === 0 && v17Cert.benchmarkStatus === "sealed_policy_certified",
+      goldPolicyViolationsCertified: v17Cert.violations,
+      goldPolicyViolationsLiveAudit: v17GoldPolicyLive.violations.length,
       goldPolicyPreflightPass: goldPolicyPreflight.pass,
       goldPolicyPreflightHardStopReasons: goldPolicyPreflight.hardStopReasons,
-      policyStackCompositeHashExpected: EXPECTED_V15_STACK_COMPOSITE,
-      policyStackCompositeHashCertified: v15Cert.policyStack.stackCompositeHash,
+      policyStackCompositeHashExpected: EXPECTED_V17_STACK_COMPOSITE,
+      policyStackCompositeHashCertified: v17Cert.policyStack.stackCompositeHash,
       policyStackCompositeHashLive: goldPolicyPreflight.liveStack.stackCompositeHash,
       policyStackCompositeHashMatch:
-        v15Cert.policyStack.stackCompositeHash === EXPECTED_V15_STACK_COMPOSITE &&
-        goldPolicyPreflight.liveStack.stackCompositeHash === EXPECTED_V15_STACK_COMPOSITE,
+        v17Cert.policyStack.stackCompositeHash === EXPECTED_V17_STACK_COMPOSITE &&
+        goldPolicyPreflight.liveStack.stackCompositeHash === EXPECTED_V17_STACK_COMPOSITE,
       policyStackMismatches: goldPolicyPreflight.stackVerification.mismatches,
       parserExecutionCount: envelope.parserExecutionCount,
+      layer2Denominator: envelope.cases.reduce(
+        (n, c) => n + c.expectedPrimitiveActions.filter((g) => !g.negative).length,
+        0,
+      ),
     },
-    parserVersionExpected: rc5Manifest.parserVersion,
+    parserVersionExpected: rc7Manifest.parserVersion,
     parserVersionActual: ORACLE_ACTION_RC3_PARSER_VERSION,
-    parserVersionMatch: ORACLE_ACTION_RC3_PARSER_VERSION === rc5Manifest.parserVersion,
-    parserCommitExpected: rc5Manifest.parserCommitSha,
-    parserCommitActual: head,
-    parserCommitMatch: head === rc5Manifest.parserCommitSha,
-    parserBlobClosureExpected: rc5Manifest.parserBlobClosureHash,
+    parserVersionMatch: ORACLE_ACTION_RC3_PARSER_VERSION === rc7Manifest.parserVersion,
+    parserSourceCommitExpected: rc7Manifest.parserCommitSha,
+    executionHeadCommitSha: head,
+    parserScopeUnchangedSinceCandidate: provenance.parserScopeUnchangedSinceCandidate,
+    repositoryClean: provenance.repository.clean,
+    holdoutProvenanceGuard: "holdout-execution-provenance-v1",
+    parserBlobClosureExpected: rc7Manifest.parserBlobClosureHash,
     parserBlobClosureActual,
-    parserBlobClosureMatch: parserBlobClosureActual === rc5Manifest.parserBlobClosureHash,
+    parserBlobClosureMatch: parserBlobClosureActual === rc7Manifest.parserBlobClosureHash,
     evaluatorChecks,
     evaluatorsMatch: Object.values(evaluatorChecks).every((c) => c.match),
     developmentValidationOracleIdOverlap: overlap.length,
     caseCount: envelope.cases.length,
     expectedCaseCount: EXPECTED_CASE_COUNT,
-    overlapGuarantees: v15Freeze.overlapGuarantees,
+    overlapGuarantees: v17Freeze.overlapGuarantees,
     forbiddenEmissionPolicy: "HARD_FAIL — forbiddenEmissionCount > 0 fails validation regardless of precision/recall",
   };
 
   const preflightPass =
-    preflight.rc5CandidateManifestHashMatch &&
-    rc5Manifest.status === "CANDIDATE_FROZEN" &&
-    preflight.v15Certificate.candidateManifestHashMatch === true &&
-    preflight.v15Benchmark.hashMatch &&
-    preflight.v15Benchmark.certificateBenchmarkHashMatch === true &&
-    preflight.v15Benchmark.policyStackCompositeHashMatch === true &&
-    preflight.v15Benchmark.certificateGreen &&
-    preflight.v15Benchmark.goldPolicyViolationsCertified === 0 &&
+    rc7Manifest.status === "CANDIDATE_FROZEN" &&
+    preflight.v17Certificate.candidateManifestHashMatch === true &&
+    preflight.v17Benchmark.hashMatch &&
+    preflight.v17Benchmark.certificateBenchmarkHashMatch === true &&
+    preflight.v17Benchmark.policyStackCompositeHashMatch === true &&
+    preflight.v17Benchmark.certificateGreen &&
+    preflight.v17Benchmark.goldPolicyViolationsCertified === 0 &&
     goldPolicyPreflight.pass &&
-    preflight.v15Benchmark.parserExecutionCount === 0 &&
+    preflight.v17Benchmark.parserExecutionCount === 0 &&
     preflight.parserVersionMatch &&
     preflight.parserBlobClosureMatch &&
+    preflight.parserScopeUnchangedSinceCandidate &&
     preflight.evaluatorsMatch &&
     envelope.sealed &&
     envelope.cases.length === EXPECTED_CASE_COUNT &&
     overlap.length === 0 &&
-    v15Freeze.parserExecutionCount === 0;
+    v17Freeze.parserExecutionCount === 0;
 
   console.log(JSON.stringify({ phase: "preflight", preflight, pass: preflightPass }, null, 2));
-  if (!preflightPass) throw new Error("Preflight failed — HARD STOP, aborting v15 execution");
+  if (!preflightPass) throw new Error("Preflight failed — HARD STOP, aborting v17 execution");
 
   const executedAt = new Date().toISOString();
   const rawCases = envelope.cases.map((testCase) => {
@@ -573,11 +578,11 @@ function main() {
 
   const rawArtifact = {
     generatedAt: executedAt,
-    parserVersion: rc5Manifest.parserVersion,
+    parserVersion: rc7Manifest.parserVersion,
     parserCommit: head,
-    rc5CandidateManifestHash: rc5Manifest.manifestContentHash,
-    v15CertificateHash: v15CertHash,
-    validationSet: "validation_set_v15",
+    rc7CandidateManifestHash: rc7Manifest.manifestContentHash,
+    v17CertificateHash: v17CertHash,
+    validationSet: "validation_set_v17",
     contentHash: envelope.contentHash,
     caseCount: envelope.cases.length,
     parserExecutionCount: 1,
@@ -591,7 +596,7 @@ function main() {
     })),
   };
 
-  const rawPath = resolve(OUT_DIR, "validation-v15-rc5-execution-1-raw.json");
+  const rawPath = resolve(OUT_DIR, "validation-v17-rc7-execution-1-raw.json");
   writeFileSync(rawPath, `${JSON.stringify(rawArtifact, null, 2)}\n`, "utf8");
 
   const parses = rawCases.map((r) => r.parse);
@@ -605,13 +610,16 @@ function main() {
   const goldDenominator = countGoldDenominator(envelope.cases);
   const missLedger = buildMissLedger(envelope.cases, parses);
 
+  const byArchitecturalFamily: Record<string, { tp: number; fp: number; fn: number; caseCount: number }> = {};
   const byStratum: Record<string, { tp: number; fp: number; fn: number; caseCount: number }> = {};
   const byBucket: Record<string, { tp: number; fp: number; fn: number; caseCount: number }> = {};
   for (let i = 0; i < envelope.cases.length; i++) {
     const testCase = envelope.cases[i];
     const stratum = testCase.coverageStratum ?? "unknown";
     const bucket = bucketForStratum(stratum);
+    const family = architecturalFamilyForCase(testCase);
     for (const [key, store] of [
+      [family, byArchitecturalFamily],
       [stratum, byStratum],
       [bucket, byBucket],
     ] as const) {
@@ -654,16 +662,16 @@ function main() {
 
   const aggregate = {
     generatedAt: executedAt,
-    parserVersion: rc5Manifest.parserVersion,
+    parserVersion: rc7Manifest.parserVersion,
     parserCommit: head,
-    rc5CandidateManifestHash: rc5Manifest.manifestContentHash,
-    v15CertificateHash: v15CertHash,
-    validationSet: "validation_set_v15",
+    rc7CandidateManifestHash: rc7Manifest.manifestContentHash,
+    v17CertificateHash: v17CertHash,
+    validationSet: "validation_set_v17",
     contentHash: envelope.contentHash,
     caseCount: envelope.cases.length,
     goldDenominator,
     parserExecutionCount: 1,
-    rawArtifactRef: "validation-v15-rc5-execution-1-raw.json",
+    rawArtifactRef: "validation-v17-rc7-execution-1-raw.json",
     preflight,
     accepted,
     invariants: {
@@ -682,6 +690,12 @@ function main() {
     },
     forbiddenEmissionLedger: invariants.forbiddenEmissionLedger,
     acceptedReminderDerivedLayer2Ledger: invariants.acceptedReminderDerivedLayer2Ledger,
+    byArchitecturalFamily: Object.fromEntries(
+      Object.entries(byArchitecturalFamily).map(([k, v]) => [
+        k,
+        { ...v, precision: v.tp + v.fp > 0 ? v.tp / (v.tp + v.fp) : 1, recall: v.tp + v.fn > 0 ? v.tp / (v.tp + v.fn) : 1 },
+      ]),
+    ),
     byStratum: Object.fromEntries(
       Object.entries(byStratum).map(([k, v]) => [
         k,
@@ -697,10 +711,10 @@ function main() {
     missLedger,
     gates,
     validationPass,
-    note: "Official first-run validation v15 against RC5 candidate v150 — FRESH VALIDATION MATERIAL",
+    note: "Official first-run validation v17 against RC7 candidate v152 — FRESH VALIDATION HOLDOUT",
   };
 
-  const aggregatePath = resolve(OUT_DIR, "validation-v15-rc5-execution-1-aggregate.json");
+  const aggregatePath = resolve(OUT_DIR, "validation-v17-rc7-execution-1-aggregate.json");
   writeFileSync(aggregatePath, `${JSON.stringify(aggregate, null, 2)}\n`, "utf8");
 
   const rawHash = sha256File(rawPath);
@@ -708,11 +722,11 @@ function main() {
 
   const executionRecord = {
     recordType: "ValidationExecution",
-    candidateLabel: "rc5-candidate-v150",
+    candidateLabel: "rc7-candidate-v152",
     candidateParserCommit: head,
-    rc5CandidateManifestHash: rc5Manifest.manifestContentHash,
-    v15CertificateHash: v15CertHash,
-    dataset: "validation_set_v15",
+    rc7CandidateManifestHash: rc7Manifest.manifestContentHash,
+    v17CertificateHash: v17CertHash,
+    dataset: "validation_set_v17",
     datasetHash: envelope.contentHash,
     datasetPath: DATASET_PATH,
     executionNumber: 1,
@@ -725,9 +739,9 @@ function main() {
       Object.entries(evaluatorChecks).map(([k, v]) => [k, v.actual]),
     ),
     rawOutputHash: rawHash,
-    rawOutputRef: "validation-v15-rc5-execution-1-raw.json",
+    rawOutputRef: "validation-v17-rc7-execution-1-raw.json",
     aggregateHash,
-    aggregateRef: "validation-v15-rc5-execution-1-aggregate.json",
+    aggregateRef: "validation-v17-rc7-execution-1-aggregate.json",
     result: {
       goldDenominator,
       accepted: aggregate.accepted,
@@ -736,7 +750,7 @@ function main() {
     },
   };
 
-  const recordPath = resolve(OUT_DIR, "validation-v15-rc5-execution-record.json");
+  const recordPath = resolve(OUT_DIR, "validation-v17-rc7-execution-record.json");
   writeFileSync(recordPath, `${JSON.stringify(executionRecord, null, 2)}\n`, "utf8");
   const executionRecordHash = sha256File(recordPath);
 
@@ -747,10 +761,10 @@ function main() {
     spent: true,
     holdoutStatus: "spent_for_validation",
     executedAt,
-    parserVersion: rc5Manifest.parserVersion,
+    parserVersion: rc7Manifest.parserVersion,
     parserCommit: head,
-    rc5CandidateManifestHash: rc5Manifest.manifestContentHash,
-    aggregateRef: "validation-v15-rc5-execution-1-aggregate.json",
+    rc7CandidateManifestHash: rc7Manifest.manifestContentHash,
+    aggregateRef: "validation-v17-rc7-execution-1-aggregate.json",
     executionRecordHash,
     validationPass,
   };
@@ -759,24 +773,27 @@ function main() {
     executed: true,
     executedAt,
     parserExecutionCount: 1,
-    certificateHashAtExecution: v15CertHash,
+    certificateHashAtExecution: v17CertHash,
     validationPass,
-    note: "Single authorized execution against RC5 candidate — preserve artifacts before diagnosis",
+    note: "Single authorized execution against RC7 candidate — preserve artifacts before diagnosis",
   };
   writeFileSync(DATASET_PATH, `${JSON.stringify(envelope, null, 2)}\n`, "utf8");
 
-  v15Freeze.parserExecutionCount = 1;
-  (v15Freeze as { holdoutStatus?: string }).holdoutStatus = "spent_for_validation";
-  (v15Freeze as { execution?: Record<string, unknown> }).execution = {
+  v17Freeze.parserExecutionCount = 1;
+  (v17Freeze as { holdoutStatus?: string }).holdoutStatus = "spent_for_validation";
+  (v17Freeze as { execution?: Record<string, unknown> }).execution = {
     executedAt,
     parserExecutionCount: 1,
-    rc5CandidateManifestHash: rc5Manifest.manifestContentHash,
+    rc7CandidateManifestHash: rc7Manifest.manifestContentHash,
     rawOutputHash: rawHash,
     aggregateHash,
     executionRecordHash,
     validationPass,
   };
-  writeFileSync(V15_FREEZE_MANIFEST_PATH, `${JSON.stringify(v15Freeze, null, 2)}\n`, "utf8");
+  if (v17Freeze.validationV17) {
+    v17Freeze.validationV17.contentHash = envelope.contentHash;
+  }
+  writeFileSync(V17_FREEZE_MANIFEST_PATH, `${JSON.stringify(v17Freeze, null, 2)}\n`, "utf8");
 
   console.log(
     JSON.stringify(

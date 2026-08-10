@@ -1,0 +1,82 @@
+{
+  "manifestVersion": "validation-v17-freeze-manifest-v151",
+  "frozenAt": "2026-08-10T07:30:45.199Z",
+  "status": "SEALED",
+  "parserExecutionCount": 0,
+  "parserConsulted": false,
+  "policyStack": {
+    "stackVersion": "gold-policy-stack-v1",
+    "policyVersion": "semantic-gold-policy-v1.6",
+    "validatorVersion": "gold-policy-validator-v1.6",
+    "validatorSourceHash": "1f5aae027d82302cee9c3f726b720cf7e1b1257ba227b1672b0a07cf88ff1341",
+    "policyRegistryHash": "dd83f64c6809842263316d2b76ccb1c347c32bd9a69f6eafdc90660be418c931",
+    "validatorFileHash": "d83e85406341d5df39ddfe77a9c1c4ab6339b3a36f4f213d07160d31ca0ec008",
+    "semanticEnrichmentFileHash": "23432dc76c1c315ba9bf5ab889e0c4c153631aa35d868bf065919cd9b713c65b",
+    "spanRoleClassifierFileHash": "3807c738b81e367f951c9a4c5d484975e1c9f03b7b8a4a06088abd9b613d19b0",
+    "policyAdjudicationFileHash": "b03c363ba01a1bec14551eaf867f085796ee007f86dfe79dfd15177a3692db98",
+    "runnerConfigFileHash": "a34bee294c608abf86ac17c26c19f104bbd69c3f128561a6eb3d382955ef1261",
+    "stackCompositeHash": "3e2642a0e7eaedc70e8055bc3b3fb64cc8b2b62dbaa0aaeb2c90049d69d0d5e7"
+  },
+  "validationV17": {
+    "canonicalPath": "data/oracle-action-eval-validation-v17.json",
+    "contentHash": "25b020fcefd8653f9383bac50fde869cb2fa8f09ed8d6403df867f92a9f4c2a4",
+    "prePolicyContentHash": "d59a876cde92e09d6287a236be1741a9b3749183bb253f1a45e20673269e45ea",
+    "prePolicyImmutablePath": "C:/Users/h3art/PycharmProjects/cards/web/data/milestones/validation-v17-certification/validation-v17-prepolicy-d59a876cde92e09d.json",
+    "certifiedImmutablePath": "C:/Users/h3art/PycharmProjects/cards/web/data/milestones/validation-v17-certification/validation-v17-certified-25b020fcefd8653f.json",
+    "caseCount": 225,
+    "prePolicyLayer2GoldPrimitiveCount": 340,
+    "layer2GoldPrimitiveCount": 274,
+    "goldDenominator": 274,
+    "stratumCounts": {
+      "challenge_granted_nested_actions": 20,
+      "challenge_replacement": 12,
+      "broad_saga_planeswalker": 12,
+      "challenge_modal_option_lineage": 14,
+      "broad_triggered": 18,
+      "challenge_activated_cost_vs_effect": 12,
+      "challenge_immediate_cast_vs_permission": 12,
+      "challenge_counter_quantity": 10,
+      "challenge_mdfc_face_provenance": 8,
+      "challenge_library_movement_vs_search": 10,
+      "challenge_zone_recursion": 8,
+      "broad_activated": 12,
+      "broad_modal": 12,
+      "broad_compound": 8,
+      "broad_variable_quantity": 8,
+      "policy_static_permission": 6,
+      "policy_reminder_heavy": 6,
+      "policy_trigger_condition": 6,
+      "broad_supplement": 31
+    },
+    "bucketCounts": {
+      "challenge": 106,
+      "broad": 101,
+      "policy": 18
+    },
+    "rc5FamilyCounts": {
+      "granted_nested_actions": 20,
+      "replacement_effect_parsing": 12,
+      "saga_planeswalker": 12,
+      "modal_triggered": 14,
+      "triggered_compound": 18,
+      "immediate_cast_grammar": 12,
+      "library_movement_distinction": 10
+    },
+    "taxonomyVersion": "three-layer-v1.4",
+    "taxonomyHash": "91e93a91315f605e3255c12c6af9b4e8529714e6127f8655dc956ffd8a9199e8",
+    "sealed": true
+  },
+  "overlapGuarantees": {
+    "development": 0,
+    "v12": 0,
+    "v13": 0,
+    "v14": 0,
+    "v15": 0,
+    "v16": 0,
+    "blind": 0,
+    "rc3PositiveTraining": 0,
+    "rc3PolicyGuardrail": 0
+  },
+  "note": "Fresh validation v17 — parser-blind architectural strata. parserExecutionCount=0; no parser contact.",
+  "contentHash": "d231d98fff0f27e771ec36564350a53abc18a81d1bd22b2e9afcb50060a1313f"
+}

@@ -1,0 +1,770 @@
+{
+  "preservedHash": "25b020fcefd8653f9383bac50fde869cb2fa8f09ed8d6403df867f92a9f4c2a4",
+  "newHash": "24765bdc4a07553bbe31851970e383127d2f9adef2cf61641aed9185d3eb459a",
+  "benchmarkBytesUnchanged": false,
+  "removedGoldCount": 9,
+  "removedViolations": [
+    {
+      "caseId": "vh17-0067",
+      "cardName": "Ajani's Last Stand",
+      "actionType": "discard",
+      "evidenceContains": "discard this card, if you control a Plains, create a 4/4 white Avatar creature token with flying",
+      "violations": [
+        {
+          "code": "trigger_reference_action_gold",
+          "policyFamily": "trigger_event_reference",
+          "reason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect."
+        }
+      ]
+    },
+    {
+      "caseId": "vh17-0072",
+      "cardName": "Akim, the Soaring Wind",
+      "actionType": "create_token",
+      "evidenceContains": "create one or more token",
+      "violations": [
+        {
+          "code": "trigger_reference_action_gold",
+          "policyFamily": "trigger_event_reference",
+          "reason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect."
+        }
+      ]
+    },
+    {
+      "caseId": "vh17-0100",
+      "cardName": "Arcane Bombardment",
+      "actionType": "cast",
+      "evidenceContains": "cast your first instant or sorcery spell each turn, exile an instant or sorcery card at random from your graveyard",
+      "violations": [
+        {
+          "code": "trigger_reference_action_gold",
+          "policyFamily": "trigger_event_reference",
+          "reason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect."
+        }
+      ]
+    },
+    {
+      "caseId": "vh17-0153",
+      "cardName": "Catch of the Day",
+      "actionType": "scry",
+      "evidenceContains": "Scry 2",
+      "violations": [
+        {
+          "code": "trigger_reference_action_gold",
+          "policyFamily": "trigger_event_reference",
+          "reason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect."
+        }
+      ]
+    },
+    {
+      "caseId": "vh17-0153",
+      "cardName": "Catch of the Day",
+      "actionType": "tap",
+      "evidenceContains": "tap target creature an opponent controls",
+      "violations": [
+        {
+          "code": "trigger_reference_action_gold",
+          "policyFamily": "trigger_event_reference",
+          "reason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect."
+        }
+      ]
+    },
+    {
+      "caseId": "vh17-0171",
+      "cardName": "Alandra, Sky Dreamer",
+      "actionType": "draw",
+      "evidenceContains": "draw your second card each turn, create a 2/2",
+      "violations": [
+        {
+          "code": "trigger_reference_action_gold",
+          "policyFamily": "trigger_event_reference",
+          "reason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect."
+        }
+      ]
+    },
+    {
+      "caseId": "vh17-0171",
+      "cardName": "Alandra, Sky Dreamer",
+      "actionType": "draw",
+      "evidenceContains": "draw your fifth card each turn, Alandra and D",
+      "violations": [
+        {
+          "code": "trigger_reference_action_gold",
+          "policyFamily": "trigger_event_reference",
+          "reason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect."
+        }
+      ]
+    },
+    {
+      "caseId": "vh17-0191",
+      "cardName": "Alphinaud Leveilleur",
+      "actionType": "cast",
+      "evidenceContains": "cast your second spell each turn, draw a card",
+      "violations": [
+        {
+          "code": "trigger_reference_action_gold",
+          "policyFamily": "trigger_event_reference",
+          "reason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect."
+        }
+      ]
+    },
+    {
+      "caseId": "vh17-0194",
+      "cardName": "Anax and Cymede",
+      "actionType": "cast",
+      "evidenceContains": "cast a spell that targets Anax and Cymede, creatures you control get +1/+1 and gain trample until end of turn",
+      "violations": [
+        {
+          "code": "trigger_reference_action_gold",
+          "policyFamily": "trigger_event_reference",
+          "reason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect."
+        }
+      ]
+    }
+  ],
+  "layer2GoldBefore": 274,
+  "layer2GoldAfter": 265,
+  "preValidation": {
+    "validatorVersion": "gold-policy-validator-v1.7",
+    "policyVersion": "semantic-gold-policy-v1.7",
+    "validatorHash": "93bda63023d61da5c3f97be3ec2e3d79c55ad00fa6f8c82d5bc4b88c72424d6d",
+    "benchmarkHash": "25b020fcefd8653f9383bac50fde869cb2fa8f09ed8d6403df867f92a9f4c2a4",
+    "benchmarkPath": "data/oracle-action-eval-validation-v17.json",
+    "caseCount": 225,
+    "goldActionCount": 274,
+    "violations": [
+      {
+        "code": "trigger_reference_action_gold",
+        "metric": "triggerReferenceActionGold",
+        "caseId": "vh17-0067",
+        "cardName": "Ajani's Last Stand",
+        "actionType": "discard",
+        "evidenceContains": "discard this card, if you control a Plains, create a 4/4 white Avatar creature token with flying",
+        "policyFamily": "trigger_event_reference",
+        "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+        "semanticJustification": {
+          "actionType": "discard",
+          "evidenceContains": "discard this card, if you control a Plains, create a 4/4 white Avatar creature token with flying",
+          "evidenceSpan": {
+            "start": 214,
+            "end": 310
+          },
+          "clauseRole": "trigger_event",
+          "abilityType": "triggered",
+          "executionContext": "trigger_reference",
+          "semanticOwner": "source_card",
+          "cardNativeLayer2Eligible": false,
+          "inCostRegion": false,
+          "inReminderSpan": false,
+          "inTypeLineMechanicReminder": false,
+          "inCreatedObjectDefinition": false,
+          "inGrantedQuotedAbility": false,
+          "inTriggerEventHeader": true,
+          "inReplacementEvent": false
+        }
+      },
+      {
+        "code": "trigger_reference_action_gold",
+        "metric": "triggerReferenceActionGold",
+        "caseId": "vh17-0072",
+        "cardName": "Akim, the Soaring Wind",
+        "actionType": "create_token",
+        "evidenceContains": "create one or more token",
+        "policyFamily": "trigger_event_reference",
+        "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+        "semanticJustification": {
+          "actionType": "create_token",
+          "evidenceContains": "create one or more token",
+          "evidenceSpan": {
+            "start": 20,
+            "end": 44
+          },
+          "clauseRole": "trigger_event",
+          "abilityType": "triggered",
+          "executionContext": "immediate",
+          "semanticOwner": "source_card",
+          "cardNativeLayer2Eligible": true,
+          "inCostRegion": false,
+          "inReminderSpan": false,
+          "inTypeLineMechanicReminder": false,
+          "inCreatedObjectDefinition": false,
+          "inGrantedQuotedAbility": false,
+          "inTriggerEventHeader": false,
+          "inReplacementEvent": false
+        }
+      },
+      {
+        "code": "trigger_reference_action_gold",
+        "metric": "triggerReferenceActionGold",
+        "caseId": "vh17-0100",
+        "cardName": "Arcane Bombardment",
+        "actionType": "cast",
+        "evidenceContains": "cast your first instant or sorcery spell each turn, exile an instant or sorcery card at random from your graveyard",
+        "policyFamily": "trigger_event_reference",
+        "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+        "semanticJustification": {
+          "actionType": "cast",
+          "evidenceContains": "cast your first instant or sorcery spell each turn, exile an instant or sorcery card at random from your graveyard",
+          "evidenceSpan": {
+            "start": 13,
+            "end": 127
+          },
+          "clauseRole": "trigger_event",
+          "abilityType": "triggered",
+          "executionContext": "trigger_reference",
+          "semanticOwner": "source_card",
+          "cardNativeLayer2Eligible": false,
+          "inCostRegion": false,
+          "inReminderSpan": false,
+          "inTypeLineMechanicReminder": false,
+          "inCreatedObjectDefinition": false,
+          "inGrantedQuotedAbility": false,
+          "inTriggerEventHeader": true,
+          "inReplacementEvent": false
+        }
+      },
+      {
+        "code": "trigger_reference_action_gold",
+        "metric": "triggerReferenceActionGold",
+        "caseId": "vh17-0153",
+        "cardName": "Catch of the Day",
+        "actionType": "scry",
+        "evidenceContains": "Scry 2",
+        "policyFamily": "trigger_event_reference",
+        "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+        "semanticJustification": {
+          "actionType": "scry",
+          "evidenceContains": "Scry 2",
+          "evidenceSpan": {
+            "start": 161,
+            "end": 167
+          },
+          "clauseRole": "effect",
+          "abilityType": "triggered",
+          "executionContext": "trigger_reference",
+          "semanticOwner": "source_card",
+          "cardNativeLayer2Eligible": false,
+          "inCostRegion": false,
+          "inReminderSpan": false,
+          "inTypeLineMechanicReminder": false,
+          "inCreatedObjectDefinition": false,
+          "inGrantedQuotedAbility": false,
+          "inTriggerEventHeader": true,
+          "inReplacementEvent": false
+        }
+      },
+      {
+        "code": "trigger_reference_action_gold",
+        "metric": "triggerReferenceActionGold",
+        "caseId": "vh17-0153",
+        "cardName": "Catch of the Day",
+        "actionType": "tap",
+        "evidenceContains": "tap target creature an opponent controls",
+        "policyFamily": "trigger_event_reference",
+        "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+        "semanticJustification": {
+          "actionType": "tap",
+          "evidenceContains": "tap target creature an opponent controls",
+          "evidenceSpan": {
+            "start": 215,
+            "end": 255
+          },
+          "clauseRole": "effect",
+          "abilityType": "triggered",
+          "executionContext": "trigger_reference",
+          "semanticOwner": "source_card",
+          "cardNativeLayer2Eligible": false,
+          "inCostRegion": false,
+          "inReminderSpan": false,
+          "inTypeLineMechanicReminder": false,
+          "inCreatedObjectDefinition": false,
+          "inGrantedQuotedAbility": false,
+          "inTriggerEventHeader": true,
+          "inReplacementEvent": false
+        }
+      },
+      {
+        "code": "trigger_reference_action_gold",
+        "metric": "triggerReferenceActionGold",
+        "caseId": "vh17-0171",
+        "cardName": "Alandra, Sky Dreamer",
+        "actionType": "draw",
+        "evidenceContains": "draw your second card each turn, create a 2/2",
+        "policyFamily": "trigger_event_reference",
+        "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+        "semanticJustification": {
+          "actionType": "draw",
+          "evidenceContains": "draw your second card each turn, create a 2/2",
+          "evidenceSpan": {
+            "start": 13,
+            "end": 58
+          },
+          "clauseRole": "trigger_event",
+          "abilityType": "triggered",
+          "executionContext": "trigger_reference",
+          "semanticOwner": "source_card",
+          "cardNativeLayer2Eligible": false,
+          "inCostRegion": false,
+          "inReminderSpan": false,
+          "inTypeLineMechanicReminder": false,
+          "inCreatedObjectDefinition": false,
+          "inGrantedQuotedAbility": false,
+          "inTriggerEventHeader": true,
+          "inReplacementEvent": false
+        }
+      },
+      {
+        "code": "trigger_reference_action_gold",
+        "metric": "triggerReferenceActionGold",
+        "caseId": "vh17-0171",
+        "cardName": "Alandra, Sky Dreamer",
+        "actionType": "draw",
+        "evidenceContains": "draw your fifth card each turn, Alandra and D",
+        "policyFamily": "trigger_event_reference",
+        "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+        "semanticJustification": {
+          "actionType": "draw",
+          "evidenceContains": "draw your fifth card each turn, Alandra and D",
+          "evidenceSpan": {
+            "start": 111,
+            "end": 156
+          },
+          "clauseRole": "trigger_event",
+          "abilityType": "triggered",
+          "executionContext": "trigger_reference",
+          "semanticOwner": "source_card",
+          "cardNativeLayer2Eligible": false,
+          "inCostRegion": false,
+          "inReminderSpan": false,
+          "inTypeLineMechanicReminder": false,
+          "inCreatedObjectDefinition": false,
+          "inGrantedQuotedAbility": false,
+          "inTriggerEventHeader": true,
+          "inReplacementEvent": false
+        }
+      },
+      {
+        "code": "trigger_reference_action_gold",
+        "metric": "triggerReferenceActionGold",
+        "caseId": "vh17-0191",
+        "cardName": "Alphinaud Leveilleur",
+        "actionType": "cast",
+        "evidenceContains": "cast your second spell each turn, draw a card",
+        "policyFamily": "trigger_event_reference",
+        "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+        "semanticJustification": {
+          "actionType": "cast",
+          "evidenceContains": "cast your second spell each turn, draw a card",
+          "evidenceSpan": {
+            "start": 186,
+            "end": 231
+          },
+          "clauseRole": "effect",
+          "abilityType": "spell_effect",
+          "executionContext": "trigger_reference",
+          "semanticOwner": "source_card",
+          "cardNativeLayer2Eligible": false,
+          "inCostRegion": false,
+          "inReminderSpan": false,
+          "inTypeLineMechanicReminder": false,
+          "inCreatedObjectDefinition": false,
+          "inGrantedQuotedAbility": false,
+          "inTriggerEventHeader": true,
+          "inReplacementEvent": false
+        }
+      },
+      {
+        "code": "trigger_reference_action_gold",
+        "metric": "triggerReferenceActionGold",
+        "caseId": "vh17-0194",
+        "cardName": "Anax and Cymede",
+        "actionType": "cast",
+        "evidenceContains": "cast a spell that targets Anax and Cymede, creatures you control get +1/+1 and gain trample until end of turn",
+        "policyFamily": "trigger_event_reference",
+        "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+        "semanticJustification": {
+          "actionType": "cast",
+          "evidenceContains": "cast a spell that targets Anax and Cymede, creatures you control get +1/+1 and gain trample until end of turn",
+          "evidenceSpan": {
+            "start": 46,
+            "end": 155
+          },
+          "clauseRole": "effect",
+          "abilityType": "spell_effect",
+          "executionContext": "trigger_reference",
+          "semanticOwner": "source_card",
+          "cardNativeLayer2Eligible": false,
+          "inCostRegion": false,
+          "inReminderSpan": false,
+          "inTypeLineMechanicReminder": false,
+          "inCreatedObjectDefinition": false,
+          "inGrantedQuotedAbility": false,
+          "inTriggerEventHeader": true,
+          "inReplacementEvent": false
+        }
+      }
+    ],
+    "caseResults": [
+      {
+        "caseId": "vh17-0067",
+        "cardName": "Ajani's Last Stand",
+        "violationCount": 1,
+        "violations": [
+          {
+            "code": "trigger_reference_action_gold",
+            "metric": "triggerReferenceActionGold",
+            "caseId": "vh17-0067",
+            "cardName": "Ajani's Last Stand",
+            "actionType": "discard",
+            "evidenceContains": "discard this card, if you control a Plains, create a 4/4 white Avatar creature token with flying",
+            "policyFamily": "trigger_event_reference",
+            "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+            "semanticJustification": {
+              "actionType": "discard",
+              "evidenceContains": "discard this card, if you control a Plains, create a 4/4 white Avatar creature token with flying",
+              "evidenceSpan": {
+                "start": 214,
+                "end": 310
+              },
+              "clauseRole": "trigger_event",
+              "abilityType": "triggered",
+              "executionContext": "trigger_reference",
+              "semanticOwner": "source_card",
+              "cardNativeLayer2Eligible": false,
+              "inCostRegion": false,
+              "inReminderSpan": false,
+              "inTypeLineMechanicReminder": false,
+              "inCreatedObjectDefinition": false,
+              "inGrantedQuotedAbility": false,
+              "inTriggerEventHeader": true,
+              "inReplacementEvent": false
+            }
+          }
+        ]
+      },
+      {
+        "caseId": "vh17-0072",
+        "cardName": "Akim, the Soaring Wind",
+        "violationCount": 1,
+        "violations": [
+          {
+            "code": "trigger_reference_action_gold",
+            "metric": "triggerReferenceActionGold",
+            "caseId": "vh17-0072",
+            "cardName": "Akim, the Soaring Wind",
+            "actionType": "create_token",
+            "evidenceContains": "create one or more token",
+            "policyFamily": "trigger_event_reference",
+            "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+            "semanticJustification": {
+              "actionType": "create_token",
+              "evidenceContains": "create one or more token",
+              "evidenceSpan": {
+                "start": 20,
+                "end": 44
+              },
+              "clauseRole": "trigger_event",
+              "abilityType": "triggered",
+              "executionContext": "immediate",
+              "semanticOwner": "source_card",
+              "cardNativeLayer2Eligible": true,
+              "inCostRegion": false,
+              "inReminderSpan": false,
+              "inTypeLineMechanicReminder": false,
+              "inCreatedObjectDefinition": false,
+              "inGrantedQuotedAbility": false,
+              "inTriggerEventHeader": false,
+              "inReplacementEvent": false
+            }
+          }
+        ]
+      },
+      {
+        "caseId": "vh17-0100",
+        "cardName": "Arcane Bombardment",
+        "violationCount": 1,
+        "violations": [
+          {
+            "code": "trigger_reference_action_gold",
+            "metric": "triggerReferenceActionGold",
+            "caseId": "vh17-0100",
+            "cardName": "Arcane Bombardment",
+            "actionType": "cast",
+            "evidenceContains": "cast your first instant or sorcery spell each turn, exile an instant or sorcery card at random from your graveyard",
+            "policyFamily": "trigger_event_reference",
+            "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+            "semanticJustification": {
+              "actionType": "cast",
+              "evidenceContains": "cast your first instant or sorcery spell each turn, exile an instant or sorcery card at random from your graveyard",
+              "evidenceSpan": {
+                "start": 13,
+                "end": 127
+              },
+              "clauseRole": "trigger_event",
+              "abilityType": "triggered",
+              "executionContext": "trigger_reference",
+              "semanticOwner": "source_card",
+              "cardNativeLayer2Eligible": false,
+              "inCostRegion": false,
+              "inReminderSpan": false,
+              "inTypeLineMechanicReminder": false,
+              "inCreatedObjectDefinition": false,
+              "inGrantedQuotedAbility": false,
+              "inTriggerEventHeader": true,
+              "inReplacementEvent": false
+            }
+          }
+        ]
+      },
+      {
+        "caseId": "vh17-0153",
+        "cardName": "Catch of the Day",
+        "violationCount": 2,
+        "violations": [
+          {
+            "code": "trigger_reference_action_gold",
+            "metric": "triggerReferenceActionGold",
+            "caseId": "vh17-0153",
+            "cardName": "Catch of the Day",
+            "actionType": "scry",
+            "evidenceContains": "Scry 2",
+            "policyFamily": "trigger_event_reference",
+            "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+            "semanticJustification": {
+              "actionType": "scry",
+              "evidenceContains": "Scry 2",
+              "evidenceSpan": {
+                "start": 161,
+                "end": 167
+              },
+              "clauseRole": "effect",
+              "abilityType": "triggered",
+              "executionContext": "trigger_reference",
+              "semanticOwner": "source_card",
+              "cardNativeLayer2Eligible": false,
+              "inCostRegion": false,
+              "inReminderSpan": false,
+              "inTypeLineMechanicReminder": false,
+              "inCreatedObjectDefinition": false,
+              "inGrantedQuotedAbility": false,
+              "inTriggerEventHeader": true,
+              "inReplacementEvent": false
+            }
+          },
+          {
+            "code": "trigger_reference_action_gold",
+            "metric": "triggerReferenceActionGold",
+            "caseId": "vh17-0153",
+            "cardName": "Catch of the Day",
+            "actionType": "tap",
+            "evidenceContains": "tap target creature an opponent controls",
+            "policyFamily": "trigger_event_reference",
+            "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+            "semanticJustification": {
+              "actionType": "tap",
+              "evidenceContains": "tap target creature an opponent controls",
+              "evidenceSpan": {
+                "start": 215,
+                "end": 255
+              },
+              "clauseRole": "effect",
+              "abilityType": "triggered",
+              "executionContext": "trigger_reference",
+              "semanticOwner": "source_card",
+              "cardNativeLayer2Eligible": false,
+              "inCostRegion": false,
+              "inReminderSpan": false,
+              "inTypeLineMechanicReminder": false,
+              "inCreatedObjectDefinition": false,
+              "inGrantedQuotedAbility": false,
+              "inTriggerEventHeader": true,
+              "inReplacementEvent": false
+            }
+          }
+        ]
+      },
+      {
+        "caseId": "vh17-0171",
+        "cardName": "Alandra, Sky Dreamer",
+        "violationCount": 2,
+        "violations": [
+          {
+            "code": "trigger_reference_action_gold",
+            "metric": "triggerReferenceActionGold",
+            "caseId": "vh17-0171",
+            "cardName": "Alandra, Sky Dreamer",
+            "actionType": "draw",
+            "evidenceContains": "draw your second card each turn, create a 2/2",
+            "policyFamily": "trigger_event_reference",
+            "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+            "semanticJustification": {
+              "actionType": "draw",
+              "evidenceContains": "draw your second card each turn, create a 2/2",
+              "evidenceSpan": {
+                "start": 13,
+                "end": 58
+              },
+              "clauseRole": "trigger_event",
+              "abilityType": "triggered",
+              "executionContext": "trigger_reference",
+              "semanticOwner": "source_card",
+              "cardNativeLayer2Eligible": false,
+              "inCostRegion": false,
+              "inReminderSpan": false,
+              "inTypeLineMechanicReminder": false,
+              "inCreatedObjectDefinition": false,
+              "inGrantedQuotedAbility": false,
+              "inTriggerEventHeader": true,
+              "inReplacementEvent": false
+            }
+          },
+          {
+            "code": "trigger_reference_action_gold",
+            "metric": "triggerReferenceActionGold",
+            "caseId": "vh17-0171",
+            "cardName": "Alandra, Sky Dreamer",
+            "actionType": "draw",
+            "evidenceContains": "draw your fifth card each turn, Alandra and D",
+            "policyFamily": "trigger_event_reference",
+            "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+            "semanticJustification": {
+              "actionType": "draw",
+              "evidenceContains": "draw your fifth card each turn, Alandra and D",
+              "evidenceSpan": {
+                "start": 111,
+                "end": 156
+              },
+              "clauseRole": "trigger_event",
+              "abilityType": "triggered",
+              "executionContext": "trigger_reference",
+              "semanticOwner": "source_card",
+              "cardNativeLayer2Eligible": false,
+              "inCostRegion": false,
+              "inReminderSpan": false,
+              "inTypeLineMechanicReminder": false,
+              "inCreatedObjectDefinition": false,
+              "inGrantedQuotedAbility": false,
+              "inTriggerEventHeader": true,
+              "inReplacementEvent": false
+            }
+          }
+        ]
+      },
+      {
+        "caseId": "vh17-0191",
+        "cardName": "Alphinaud Leveilleur",
+        "violationCount": 1,
+        "violations": [
+          {
+            "code": "trigger_reference_action_gold",
+            "metric": "triggerReferenceActionGold",
+            "caseId": "vh17-0191",
+            "cardName": "Alphinaud Leveilleur",
+            "actionType": "cast",
+            "evidenceContains": "cast your second spell each turn, draw a card",
+            "policyFamily": "trigger_event_reference",
+            "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+            "semanticJustification": {
+              "actionType": "cast",
+              "evidenceContains": "cast your second spell each turn, draw a card",
+              "evidenceSpan": {
+                "start": 186,
+                "end": 231
+              },
+              "clauseRole": "effect",
+              "abilityType": "spell_effect",
+              "executionContext": "trigger_reference",
+              "semanticOwner": "source_card",
+              "cardNativeLayer2Eligible": false,
+              "inCostRegion": false,
+              "inReminderSpan": false,
+              "inTypeLineMechanicReminder": false,
+              "inCreatedObjectDefinition": false,
+              "inGrantedQuotedAbility": false,
+              "inTriggerEventHeader": true,
+              "inReplacementEvent": false
+            }
+          }
+        ]
+      },
+      {
+        "caseId": "vh17-0194",
+        "cardName": "Anax and Cymede",
+        "violationCount": 1,
+        "violations": [
+          {
+            "code": "trigger_reference_action_gold",
+            "metric": "triggerReferenceActionGold",
+            "caseId": "vh17-0194",
+            "cardName": "Anax and Cymede",
+            "actionType": "cast",
+            "evidenceContains": "cast a spell that targets Anax and Cymede, creatures you control get +1/+1 and gain trample until end of turn",
+            "policyFamily": "trigger_event_reference",
+            "policyReason": "Action evidence lies in trigger-event/condition reference — Layer-1 only, not resolving effect.",
+            "semanticJustification": {
+              "actionType": "cast",
+              "evidenceContains": "cast a spell that targets Anax and Cymede, creatures you control get +1/+1 and gain trample until end of turn",
+              "evidenceSpan": {
+                "start": 46,
+                "end": 155
+              },
+              "clauseRole": "effect",
+              "abilityType": "spell_effect",
+              "executionContext": "trigger_reference",
+              "semanticOwner": "source_card",
+              "cardNativeLayer2Eligible": false,
+              "inCostRegion": false,
+              "inReminderSpan": false,
+              "inTypeLineMechanicReminder": false,
+              "inCreatedObjectDefinition": false,
+              "inGrantedQuotedAbility": false,
+              "inTriggerEventHeader": true,
+              "inReplacementEvent": false
+            }
+          }
+        ]
+      }
+    ],
+    "census": {
+      "goldPolicyViolations": 0,
+      "invalidLayer2CostGold": 0,
+      "triggerReferenceActionGold": 9,
+      "invalidPermissionActionGold": 0,
+      "reminderCardNativeGold": 0,
+      "createdObjectOwnershipViolations": 0,
+      "invalidReplacementGold": 0,
+      "duplicateSemanticGold": 0,
+      "invalidEvidenceSpan": 0,
+      "scopeCompletenessViolations": 0
+    },
+    "perPolicyFamily": {
+      "trigger_event_reference": 9
+    },
+    "pass": false
+  },
+  "postValidation": {
+    "validatorVersion": "gold-policy-validator-v1.7",
+    "policyVersion": "semantic-gold-policy-v1.7",
+    "validatorHash": "93bda63023d61da5c3f97be3ec2e3d79c55ad00fa6f8c82d5bc4b88c72424d6d",
+    "benchmarkHash": "24765bdc4a07553bbe31851970e383127d2f9adef2cf61641aed9185d3eb459a",
+    "benchmarkPath": "data/oracle-action-eval-validation-v17.json",
+    "caseCount": 225,
+    "goldActionCount": 265,
+    "violations": [],
+    "caseResults": [],
+    "census": {
+      "goldPolicyViolations": 0,
+      "invalidLayer2CostGold": 0,
+      "triggerReferenceActionGold": 0,
+      "invalidPermissionActionGold": 0,
+      "reminderCardNativeGold": 0,
+      "createdObjectOwnershipViolations": 0,
+      "invalidReplacementGold": 0,
+      "duplicateSemanticGold": 0,
+      "invalidEvidenceSpan": 0,
+      "scopeCompletenessViolations": 0
+    },
+    "perPolicyFamily": {},
+    "pass": true
+  }
+}

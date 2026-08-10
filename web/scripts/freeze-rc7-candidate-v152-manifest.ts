@@ -9,7 +9,7 @@ import { execSync } from "node:child_process";
 import { ORACLE_ACTION_RC3_PARSER_VERSION } from "../src/lib/deck-builder/golden-catalog/oracle-semantic-parse-rc3";
 import { applyGoldMigrationV135, loadAllGoldMigrationsV135 } from "./lib/rc3-gold-migration-v135";
 import { PARSER_BLOB_SCOPE_PATHS } from "./lib/parser-scope-paths-v1";
-import { assertCleanWorkingTreeForParserScope } from "./lib/working-tree-provenance-guard-v1";
+import { assertCleanRepositoryForHoldoutExecution } from "./lib/working-tree-provenance-guard-v1";
 import {
   computeGoldPolicyStackHashes,
   GOLD_POLICY_STACK_VERSION,
@@ -61,7 +61,7 @@ function developmentGoldHash(): string {
 }
 
 function main() {
-  assertCleanWorkingTreeForParserScope(PARSER_SCOPE_PATHS, "RC7 candidate freeze");
+  assertCleanRepositoryForHoldoutExecution("RC7 candidate freeze");
 
   const rescore = JSON.parse(readFileSync(resolve(RESCORE_PATH), "utf8"));
   if (!rescore.rc7CandidateReady) {

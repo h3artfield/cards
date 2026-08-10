@@ -23,8 +23,7 @@ import {
 } from "./oracle-action-semantic-matcher";
 import { countParserFalsePositives, type EmissionTier } from "./oracle-action-unified-matcher";
 import { classifyUnmatchedAction, evidenceMatchesExtracted } from "./oracle-action-eval-shared";
-import { PARSER_BLOB_SCOPE_PATHS } from "./lib/parser-scope-paths-v1";
-import { assertCleanWorkingTreeForParserScope } from "./lib/working-tree-provenance-guard-v1";
+import { assertHoldoutExecutionEnvironment } from "./lib/holdout-execution-provenance-v1";
 
 const CANDIDATE_MANIFEST_PATH = "data/milestones/rc3-development/rc3-candidate-v140-freeze-manifest.json";
 const BENCHMARK_MANIFEST_PATH = "data/milestones/rc3-benchmark-selection/rc3-benchmark-selection-manifest-v130.json";
@@ -344,7 +343,10 @@ function loadDevelopmentOracleIds(): Set<string> {
 }
 
 function main() {
-  assertCleanWorkingTreeForParserScope(PARSER_BLOB_SCOPE_PATHS, "validation v13 holdout execution");
+  assertHoldoutExecutionEnvironment({
+    label: "validation v13 holdout execution",
+    candidateManifestPath: CANDIDATE_MANIFEST_PATH,
+  });
 
   const repoRoot = execSync("git rev-parse --show-toplevel", { cwd: resolve("."), encoding: "utf8" }).trim();
   const head = execSync("git rev-parse HEAD", { cwd: repoRoot, encoding: "utf8" }).trim();

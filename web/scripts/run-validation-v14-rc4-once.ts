@@ -25,8 +25,7 @@ import { isForbiddenPolicyLeak } from "./lib/rc3-case-scope-scoring";
 import { countActivatedCostLayer2Leakage } from "./lib/activated-cost-leakage";
 import { validateBenchmarkGoldPolicy } from "./lib/gold-policy-validator-v1";
 import { runGoldPolicyPreflight } from "./lib/gold-policy-preflight-v1";
-import { PARSER_BLOB_SCOPE_PATHS } from "./lib/parser-scope-paths-v1";
-import { assertCleanWorkingTreeForParserScope } from "./lib/working-tree-provenance-guard-v1";
+import { assertHoldoutExecutionEnvironment } from "./lib/holdout-execution-provenance-v1";
 
 const RC4_CANDIDATE_MANIFEST_PATH = "data/milestones/rc4-development/rc4-candidate-v140-freeze-manifest.json";
 const DEV_GOLD_CERT_PATH = "data/milestones/rc4-development/rc4-development-gold-policy-certificate-v1.json";
@@ -372,7 +371,10 @@ function bucketForStratum(stratum: string): string {
 }
 
 function main() {
-  assertCleanWorkingTreeForParserScope(PARSER_BLOB_SCOPE_PATHS, "validation v14 holdout execution");
+  assertHoldoutExecutionEnvironment({
+    label: "validation v14 holdout execution",
+    candidateManifestPath: RC4_CANDIDATE_MANIFEST_PATH,
+  });
 
   if (existsSync(resolve(OUT_DIR, "validation-v14-rc4-execution-1-raw.json"))) {
     throw new Error("Validation v14 execution artifact already exists — single-run already consumed");

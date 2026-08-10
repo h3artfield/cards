@@ -1,0 +1,34 @@
+{
+  "prePolicyHash": "d59a876cde92e09d6287a236be1741a9b3749183bb253f1a45e20673269e45ea",
+  "certifiedHash": "25b020fcefd8653f9383bac50fde869cb2fa8f09ed8d6403df867f92a9f4c2a4",
+  "prePolicyL2": 340,
+  "certifiedL2": 274,
+  "removedInvalidGold": 66,
+  "validation": {
+    "validatorVersion": "gold-policy-validator-v1.6",
+    "policyVersion": "semantic-gold-policy-v1.6",
+    "validatorHash": "a4f08f1c2efdf4a0986d078490dc7ed781c17dcf6f2ffe2a8535af70b88b9009",
+    "benchmarkHash": "25b020fcefd8653f9383bac50fde869cb2fa8f09ed8d6403df867f92a9f4c2a4",
+    "benchmarkPath": "data/oracle-action-eval-validation-v17.json",
+    "caseCount": 225,
+    "goldActionCount": 274,
+    "violations": [],
+    "caseResults": [],
+    "census": {
+      "goldPolicyViolations": 0,
+      "invalidLayer2CostGold": 0,
+      "triggerReferenceActionGold": 0,
+      "invalidPermissionActionGold": 0,
+      "reminderCardNativeGold": 0,
+      "createdObjectOwnershipViolations": 0,
+      "invalidReplacementGold": 0,
+      "duplicateSemanticGold": 0,
+      "invalidEvidenceSpan": 0,
+      "scopeCompletenessViolations": 0
+    },
+    "perPolicyFamily": {},
+    "pass": true
+  },
+  "prepolicyImmutablePath": "C:\\Users\\h3art\\PycharmProjects\\cards\\web\\data\\milestones\\validation-v17-certification\\validation-v17-prepolicy-d59a876cde92e09d.json",
+  "certifiedImmutablePath": "C:\\Users\\h3art\\PycharmProjects\\cards\\web\\data\\milestones\\validation-v17-certification\\validation-v17-certified-25b020fcefd8653f.json"
+}

@@ -1,0 +1,21 @@
+{
+  "pinnedAt": "2026-08-10T15:16:38.159Z",
+  "policyStack": {
+    "stackVersion": "gold-policy-stack-v1",
+    "policyVersion": "semantic-gold-policy-v1.7",
+    "validatorVersion": "gold-policy-validator-v1.7",
+    "validatorSourceHash": "0e181361b3df6f71762745b2fe0db4f99609c4d181307b016db987dbfb12aa66",
+    "policyRegistryHash": "dd83f64c6809842263316d2b76ccb1c347c32bd9a69f6eafdc90660be418c931",
+    "validatorFileHash": "65f2f4a02d350c9a1f9871f0d408112cde932a849e7d2dad2e36941bb8442ce2",
+    "semanticEnrichmentFileHash": "3142e715f44657d98e219101312d5edbc2a0f2a2ca43b71cae7e9250502972d6",
+    "spanRoleClassifierFileHash": "3807c738b81e367f951c9a4c5d484975e1c9f03b7b8a4a06088abd9b613d19b0",
+    "policyAdjudicationFileHash": "b03c363ba01a1bec14551eaf867f085796ee007f86dfe79dfd15177a3692db98",
+    "runnerConfigFileHash": "a34bee294c608abf86ac17c26c19f104bbd69c3f128561a6eb3d382955ef1261",
+    "stackCompositeHash": "fde13de0f9c703b84695d24370db2941a906ba0e37e2179a093a9ad92aca94a8"
+  },
+  "certificateFile": "validation-v17-gold-policy-certificate-v2.json",
+  "supersedes": "validation-v17-gold-policy-stack-pin-v1.json",
+  "benchmarkBytesUnchanged": false,
+  "benchmarkContentHash": "24765bdc4a07553bbe31851970e383127d2f9adef2cf61641aed9185d3eb459a",
+  "layer2Denominator": 265
+}
