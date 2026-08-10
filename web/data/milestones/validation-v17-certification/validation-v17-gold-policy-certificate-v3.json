@@ -1,0 +1,56 @@
+{
+  "certificateVersion": "gold-policy-validation-certificate-v3",
+  "certificateSequence": 3,
+  "certifiedAt": "2026-08-10T17:32:48.707Z",
+  "benchmarkPath": "data/oracle-action-eval-validation-v17.json",
+  "benchmarkHash": "24765bdc4a07553bbe31851970e383127d2f9adef2cf61641aed9185d3eb459a",
+  "benchmarkContentHash": "24765bdc4a07553bbe31851970e383127d2f9adef2cf61641aed9185d3eb459a",
+  "benchmarkStatus": "sealed_policy_certified",
+  "candidateBinding": {
+    "candidateLabel": "rc7-candidate-v152",
+    "candidateManifestPath": "data/milestones/rc7-development/rc7-candidate-v152-freeze-manifest.json",
+    "candidateManifestHash": "d0939f76671384c1db0995d522a7d3bf1bf2437b2ff5d9f3c4a266339f006d8c",
+    "parserVersion": "oracle-action-v1.42-rc7-possessive-hand-discard-replacement-graveyard"
+  },
+  "policyVersion": "semantic-gold-policy-v1.7",
+  "validatorVersion": "gold-policy-validator-v1.7",
+  "validatorHash": "0e181361b3df6f71762745b2fe0db4f99609c4d181307b016db987dbfb12aa66",
+  "policyRegistryHash": "dd83f64c6809842263316d2b76ccb1c347c32bd9a69f6eafdc90660be418c931",
+  "policyStack": {
+    "stackVersion": "gold-policy-stack-v1",
+    "policyVersion": "semantic-gold-policy-v1.7",
+    "validatorVersion": "gold-policy-validator-v1.7",
+    "validatorSourceHash": "0e181361b3df6f71762745b2fe0db4f99609c4d181307b016db987dbfb12aa66",
+    "policyRegistryHash": "dd83f64c6809842263316d2b76ccb1c347c32bd9a69f6eafdc90660be418c931",
+    "validatorFileHash": "35ccac75312f30e374a761b18551baa403e50c3ac74c05fd37caabc9276fdddc",
+    "semanticEnrichmentFileHash": "422609af7060f92665f60753de1899bfca8259c6ee6fec35030e66b105f659cb",
+    "spanRoleClassifierFileHash": "3807c738b81e367f951c9a4c5d484975e1c9f03b7b8a4a06088abd9b613d19b0",
+    "policyAdjudicationFileHash": "d802692f04935134d12f0e08327f86855010fc2a126c92d7da310afc78a859c7",
+    "runnerConfigFileHash": "82ee9c5ad5a3e1b7415dde94c9bca4b646d824189b42a8b111d0ed3483b9e03f",
+    "stackCompositeHash": "bff641dc3be90e053e243c6c30da8f05e22450eeba10edf0d0cbdec87398062a"
+  },
+  "parserExecutionCount": 0,
+  "violations": 0,
+  "census": {
+    "goldPolicyViolations": 0,
+    "invalidLayer2CostGold": 0,
+    "triggerReferenceActionGold": 0,
+    "invalidPermissionActionGold": 0,
+    "reminderCardNativeGold": 0,
+    "createdObjectOwnershipViolations": 0,
+    "invalidReplacementGold": 0,
+    "duplicateSemanticGold": 0,
+    "invalidEvidenceSpan": 0,
+    "scopeCompletenessViolations": 0
+  },
+  "perPolicyFamily": {},
+  "layer2Denominator": 265,
+  "immutableCertifiedArtifactPath": "data/milestones/validation-v17-certification/validation-v17-certified-24765bdc4a07553b.json",
+  "immutableCertifiedArtifactHash": "6d8b20d27be638005943a48019031966ed6e9db7fd7f782ee0d54da3b8acab4d",
+  "priorCertificatePreserved": "data/milestones/validation-v17-certification/validation-v17-gold-policy-certificate-v2.json",
+  "note": "RC7-candidate-bound v17 certificate — supersedes v2 for execution binding; v2 preserved.",
+  "supersedes": {
+    "certificateFile": "validation-v17-gold-policy-certificate-v2.json",
+    "benchmarkHash": "24765bdc4a07553bbe31851970e383127d2f9adef2cf61641aed9185d3eb459a"
+  }
+}
