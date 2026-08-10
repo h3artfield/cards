@@ -35,6 +35,17 @@ import {
 } from "./oracle-semantic-parse-schema";
 import { segmentCardFaces } from "./oracle-ability-segmentation";
 
+/** Synthetic segment index for inline modal containers embedded in triggered/static paragraphs. */
+export const INLINE_MODAL_CONTAINER_INDEX_BASE = 10_000;
+
+export function inlineModalContainerIndex(chooseCardStart: number): number {
+  return INLINE_MODAL_CONTAINER_INDEX_BASE + chooseCardStart;
+}
+
+function dedicatedModalHeaderSegment(seg: SegmentedAbility | undefined): boolean {
+  return !!seg && /^Choose (?:one|two|three|\d+|any number)/i.test(seg.paragraphText.trim());
+}
+
 function findSegmentForSpan(
   abilities: SegmentedAbility[],
   faceId: string,
@@ -75,46 +86,21 @@ function buildModalSemanticAbilities(input: {
           a.paragraphText.includes(group.chooseConstraints.slice(0, 20))
         : false,
     );
+    const headerIsDedicatedModal = dedicatedModalHeaderSegment(headerSeg);
     const headerIndex = headerSeg?.abilityIndex ?? group.headerAbilityIndex ?? 0;
-    const parentAbilityId = stableAbilityId(input.oracleId, input.faceId, headerIndex);
     const isSpree = /^Spree\b/i.test(group.chooseConstraints ?? "");
     const choose = group.chooseConstraints
       ? { ...parseSpreeChoose(group.chooseConstraints), rawText: group.chooseConstraints }
       : undefined;
 
-    if (headerSeg) {
-      out.push({
-        abilityId: parentAbilityId,
-        segmentAbilityIndex: headerIndex,
-        faceId: input.faceId,
-        abilityType: "modal",
-        mechanic: isSpree ? "spree" : "none",
-        choose: choose
-          ? {
-              ...choose,
-              evidence: toEvidenceSpan(
-                headerSeg.paragraphText,
-                headerSeg.paragraphStart,
-                headerSeg.paragraphEnd,
-              ),
-            }
-          : undefined,
-        abilitySpan: toEvidenceSpan(
-          headerSeg.paragraphText,
-          headerSeg.paragraphStart,
-          headerSeg.paragraphEnd,
-        ),
-        clauseIds: [],
-      });
-    }
-
+    const provisionalParentId = stableAbilityId(input.oracleId, input.faceId, headerIndex);
     const options = group.options.map((opt, idx) => {
       const ordinal = idx + 1;
       const seg =
         findSegmentForSpan(input.segmented, input.faceId, opt.startOffset, opt.endOffset) ??
         findSegmentContainingPoint(input.segmented, input.faceId, opt.startOffset + 1);
       const segmentAbilityIndex = seg?.abilityIndex ?? headerIndex + ordinal;
-      const optionId = stableOptionId(parentAbilityId, ordinal);
+      const optionId = stableOptionId(provisionalParentId, ordinal);
       const additionalCost = parseAdditionalCostFromLine(opt.fullOptionText, opt.startOffset);
       return {
         optionId,
@@ -125,37 +111,53 @@ function buildModalSemanticAbilities(input: {
         clauseIds: [`${optionId}:clause-0`],
       };
     });
+    if (options.length === 0) continue;
 
-    const container = out.find((a) => a.abilityId === parentAbilityId);
-    if (container) {
-      container.options = options;
-    } else if (options.length > 0) {
-      out.push({
-        abilityId: parentAbilityId,
-        segmentAbilityIndex: headerIndex,
-        faceId: input.faceId,
-        abilityType: "modal",
-        mechanic: isSpree ? "spree" : "none",
-        choose: choose
-          ? {
-              ...choose,
-              evidence: toEvidenceSpan(
-                group.chooseConstraints ?? "",
-                options[0]?.optionSpan.cardStart ?? input.faceStart,
-                (options[0]?.optionSpan.cardStart ?? input.faceStart) +
-                  (group.chooseConstraints?.length ?? 0),
-              ),
-            }
-          : undefined,
-        options,
-        abilitySpan: toEvidenceSpan(
-          group.chooseConstraints ?? options.map((o) => o.optionSpan.text).join("\n"),
-          options[0]?.optionSpan.cardStart ?? input.faceStart,
-          options[options.length - 1]?.optionSpan.cardEnd ?? input.faceStart,
-        ),
-        clauseIds: [],
-      });
+    const chooseCardStart = (() => {
+      const chooseMatch = group.chooseConstraints?.match(/choose (?:one|two|three|\d+|any number)/i);
+      if (!chooseMatch) return options[0]!.optionSpan.cardStart;
+      const faceSlice = input.faceText.slice(0, Math.max(0, options[0]!.optionSpan.cardStart - input.faceStart));
+      const rel = faceSlice.lastIndexOf(chooseMatch[0]);
+      return rel >= 0 ? input.faceStart + rel : options[0]!.optionSpan.cardStart;
+    })();
+
+    const containerAbilityIndex = headerIsDedicatedModal
+      ? headerIndex
+      : inlineModalContainerIndex(chooseCardStart);
+    const parentAbilityId = stableAbilityId(input.oracleId, input.faceId, containerAbilityIndex);
+
+    for (const opt of options) {
+      opt.optionId = stableOptionId(parentAbilityId, opt.ordinal);
+      opt.clauseIds = [`${opt.optionId}:clause-0`];
     }
+
+    const chooseEnd = chooseCardStart + (group.chooseConstraints?.length ?? 0);
+    const modalSpanStart = headerIsDedicatedModal && headerSeg ? headerSeg.paragraphStart : chooseCardStart;
+    const modalSpanText =
+      headerIsDedicatedModal && headerSeg
+        ? headerSeg.paragraphText
+        : `${group.chooseConstraints ?? "Choose one"}\n${options.map((o) => o.optionSpan.text).join("\n")}`;
+
+    out.push({
+      abilityId: parentAbilityId,
+      segmentAbilityIndex: containerAbilityIndex,
+      faceId: input.faceId,
+      abilityType: "modal",
+      mechanic: isSpree ? "spree" : "none",
+      choose: choose
+        ? {
+            ...choose,
+            evidence: toEvidenceSpan(group.chooseConstraints ?? "", chooseCardStart, chooseEnd),
+          }
+        : undefined,
+      options,
+      abilitySpan: toEvidenceSpan(
+        modalSpanText,
+        modalSpanStart,
+        options[options.length - 1]!.optionSpan.cardEnd,
+      ),
+      clauseIds: [],
+    });
   }
   return out;
 }
@@ -187,13 +189,17 @@ function buildFallbackAbilities(input: {
   oracleId: string;
   segmented: SegmentedAbility[];
   coveredIds: Set<string>;
+  existingAbilities: SemanticAbility[];
 }): SemanticAbility[] {
   const out: SemanticAbility[] = [];
   for (const seg of input.segmented) {
     const id = stableAbilityId(input.oracleId, seg.cardFaceId, seg.abilityIndex);
-    if (input.coveredIds.has(id)) continue;
+    const segSpan = { cardStart: seg.paragraphStart, cardEnd: seg.paragraphEnd };
+    const fullyCovered = input.existingAbilities.some((ability) => spanContains(ability.abilitySpan, segSpan));
+    if (fullyCovered || input.coveredIds.has(id)) continue;
     if (/^Spree\b/i.test(seg.paragraphText.trim())) continue;
     if (/^\+(?:\s*\{[^}]+\})+\s*—/.test(seg.paragraphText.trim())) continue;
+    if (seg.abilityIndex >= INLINE_MODAL_CONTAINER_INDEX_BASE) continue;
     out.push({
       abilityId: id,
       segmentAbilityIndex: seg.abilityIndex,
@@ -263,13 +269,9 @@ function buildGrantedSemanticAbilities(input: {
   const seenStable = new Set<string>();
 
   for (const node of input.grantedNodes) {
-    const grantedRef = parseGrantedRef(
-      node.nestedAbilityBlock.clauses[0]?.clauseId.replace(/:clause-\d+$/, "") ??
-        `${node.grantingClauseId}:granted:${node.quotedSpan.start}`,
-    );
-    if (!grantedRef) continue;
-
     const nativeGrantedId = `${node.grantingClauseId}:granted:${node.quotedSpan.start}`;
+    const grantedRef = parseGrantedRef(nativeGrantedId);
+    if (!grantedRef) continue;
     const segmentRef = parseSegmentRef(node.grantingClauseId);
     if (!segmentRef) continue;
 
@@ -376,20 +378,59 @@ function resolveGrantedActionIdentity(
   return {};
 }
 
+function findSmallestOwningAbilityId(
+  action: OracleActionV1,
+  abilities: SemanticAbility[],
+): string | undefined {
+  const span = { cardStart: action.evidenceStart, cardEnd: action.evidenceEnd };
+  let best: { id: string; size: number } | undefined;
+
+  for (const ability of abilities) {
+    for (const opt of ability.options ?? []) {
+      if (!spanContains(opt.optionSpan, span)) continue;
+      const size = opt.optionSpan.cardEnd - opt.optionSpan.cardStart;
+      if (!best || size < best.size) best = { id: ability.abilityId, size };
+    }
+    if (spanContains(ability.abilitySpan, span)) {
+      const size = ability.abilitySpan.cardEnd - ability.abilitySpan.cardStart;
+      if (!best || size < best.size) best = { id: ability.abilityId, size };
+    }
+  }
+  return best?.id;
+}
+
+function actionContainedInAbilityTree(
+  action: OracleActionV1,
+  abilities: SemanticAbility[],
+  parentAbilityId: string,
+): boolean {
+  const span = { cardStart: action.evidenceStart, cardEnd: action.evidenceEnd };
+  const parent = abilities.find((a) => a.abilityId === parentAbilityId);
+  if (!parent) return false;
+  if (action.modalOptionId) {
+    const opt = parent.options?.find((o) => o.optionId === action.modalOptionId);
+    if (opt && spanContains(opt.optionSpan, span)) return true;
+  }
+  return spanContains(parent.abilitySpan, span);
+}
+
 function resolveParentAbilityId(
   action: OracleActionV1,
   abilities: SemanticAbility[],
   oracleId: string,
 ): string {
+  const bySpan = findSmallestOwningAbilityId(action, abilities);
+  if (bySpan) return bySpan;
+
   if (action.modalOptionId) {
     const parent = abilities.find((a) =>
       a.options?.some((o) => o.optionId.endsWith(`.${action.modalOptionId}`) || o.optionId.includes(action.modalOptionId!)),
     );
-    if (parent) return parent.abilityId;
+    if (parent && actionContainedInAbilityTree(action, abilities, parent.abilityId)) return parent.abilityId;
     const byOrdinal = abilities.find((a) =>
       a.options?.some((o) => optionOrdinalKey(o.ordinal) === action.modalOptionId),
     );
-    if (byOrdinal) return byOrdinal.abilityId;
+    if (byOrdinal && actionContainedInAbilityTree(action, abilities, byOrdinal.abilityId)) return byOrdinal.abilityId;
   }
   if (action.loyaltyCost) {
     const bySpan = abilities.find(
@@ -402,10 +443,12 @@ function resolveParentAbilityId(
     const loyalty = abilities.find(
       (a) => a.abilityType === "loyalty" && a.loyaltyCost === action.loyaltyCost,
     );
-    if (loyalty) return loyalty.abilityId;
+    if (loyalty && actionContainedInAbilityTree(action, abilities, loyalty.abilityId)) return loyalty.abilityId;
   }
   const modalHost = findModalOptionForSegment(abilities, action.abilityIndex);
-  if (modalHost) return modalHost.parentAbilityId;
+  if (modalHost && actionContainedInAbilityTree(action, abilities, modalHost.parentAbilityId)) {
+    return modalHost.parentAbilityId;
+  }
   return stableAbilityId(oracleId, action.faceId, action.abilityIndex);
 }
 
@@ -438,17 +481,42 @@ function realignParentAbilityBySpan(
   abilities: SemanticAbility[],
   parentAbilityId: string,
 ): string {
-  const span = { cardStart: action.evidenceStart, cardEnd: action.evidenceEnd };
-  const current = abilities.find((a) => a.abilityId === parentAbilityId);
-  if (current?.abilitySpan && spanContains(current.abilitySpan, span)) return parentAbilityId;
+  return findSmallestOwningAbilityId(action, abilities) ?? parentAbilityId;
+}
 
-  for (const ability of abilities) {
-    if (spanContains(ability.abilitySpan, span)) return ability.abilityId;
-    for (const opt of ability.options ?? []) {
-      if (spanContains(opt.optionSpan, span)) return ability.abilityId;
+function owningSpanForAction(
+  action: SemanticAction,
+  abilities: SemanticAbility[],
+): { cardStart: number; cardEnd: number } | undefined {
+  if (action.modalOptionId) {
+    for (const ability of abilities) {
+      const opt = ability.options?.find((o) => o.optionId === action.modalOptionId);
+      if (opt) return opt.optionSpan;
     }
   }
-  return parentAbilityId;
+  const parent = abilities.find((a) => a.abilityId === action.parentAbilityId);
+  return parent?.abilitySpan;
+}
+
+function enforceAcceptedActionContainment(
+  actions: SemanticAction[],
+  abilities: SemanticAbility[],
+  diagnostics: SemanticDiagnostic[],
+): SemanticAction[] {
+  return actions.map((action) => {
+    if (action.reviewStatus !== "accepted") return action;
+    const owner = owningSpanForAction(action, abilities);
+    const span = action.provenance.actionSpan;
+    if (owner && spanContains(owner, span)) return action;
+    diagnostics.push({
+      code: "accepted_action_outside_owner_span",
+      message: `Action ${action.actionId} demoted — evidence span not contained in owning ability/option span`,
+      severity: "info",
+      actionId: action.actionId,
+      abilityId: action.parentAbilityId,
+    });
+    return { ...action, reviewStatus: "needs_review" as const };
+  });
 }
 
 function resolveSemanticClauseId(
@@ -544,7 +612,7 @@ export function buildOracleSemanticParse(
       }
     }
 
-    abilities.push(...buildFallbackAbilities({ oracleId: result.oracleId, segmented, coveredIds }));
+    abilities.push(...buildFallbackAbilities({ oracleId: result.oracleId, segmented, coveredIds, existingAbilities: abilities }));
   }
 
   const grantedMaps = buildGrantedSemanticAbilities({
@@ -658,12 +726,14 @@ export function buildOracleSemanticParse(
     };
   });
 
+  const containedActions = enforceAcceptedActionContainment(actions, abilities, diagnostics);
+
   return {
     oracleId: result.oracleId,
     oracleTextHash: hashOracleText(oracleText),
     parserVersion: ORACLE_ACTION_PARSER_VERSION,
     abilities,
-    actions,
+    actions: containedActions,
     objects,
     diagnostics,
   };

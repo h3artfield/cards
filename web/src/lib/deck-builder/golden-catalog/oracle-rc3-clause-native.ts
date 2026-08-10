@@ -1088,6 +1088,7 @@ export function extractClauseNativeActions(input: {
         actions.push(...lookReveal.actions);
         actionIndex = actions.length;
       }
+      }
 
       for (const ctx of findGrantedQuoteContexts(ability.paragraphText, parentId)) {
         const grantedNode = parseGrantedAbility(ctx, parentId);
@@ -1183,7 +1184,6 @@ export function extractClauseNativeActions(input: {
           );
           actionIndex = actions.length;
         }
-      }
       }
     }
   }

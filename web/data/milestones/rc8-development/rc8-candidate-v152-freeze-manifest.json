@@ -1,0 +1,87 @@
+{
+  "freezeLabel": "rc8-candidate-v152",
+  "status": "CANDIDATE_FROZEN",
+  "frozenAt": "2026-08-10T20:05:48.547Z",
+  "supersedes": "data/milestones/rc7-development/rc7-candidate-v152-freeze-manifest.json",
+  "parserVersion": "oracle-action-v1.44-rc8-ownership-grant-family",
+  "parserCommitSha": "8dc445c4d49af0189a2a92cf8f9f2ef172756d7b",
+  "parserScopePaths": [
+    "src/lib/deck-builder/golden-catalog/oracle-action-parser-v1.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-transform.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-clause-native.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-ability-block.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-granted-rules-span-detector.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-span-role-classifier.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-compound-clause-segmentation.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-modal-option-parse.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-action-structural-blocks.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-rc3.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-builder.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-ability-segmentation.ts",
+    "scripts/oracle-action-semantic-matcher.ts",
+    "scripts/oracle-action-unified-matcher.ts",
+    "scripts/lib/gold-policy-validator-v1.ts",
+    "scripts/lib/rc5-regression-scoring-v1.ts",
+    "scripts/lib/reminder-derived-leakage-v1.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-integrity.ts",
+    "scripts/test-rc8-action-ownership-regressions.ts"
+  ],
+  "parserBlobClosureHash": "e5c2f7054cda29cb512a0d6be133661f85ce9eee444d6b60884ecc4739df32b3",
+  "goldPolicy": {
+    "stackVersion": "gold-policy-stack-v1",
+    "policyVersion": "semantic-gold-policy-v1.7",
+    "validatorVersion": "gold-policy-validator-v1.7",
+    "validatorHash": "0e181361b3df6f71762745b2fe0db4f99609c4d181307b016db987dbfb12aa66",
+    "stackCompositeHash": "bff641dc3be90e053e243c6c30da8f05e22450eeba10edf0d0cbdec87398062a",
+    "stackFileHashes": {
+      "stackVersion": "gold-policy-stack-v1",
+      "policyVersion": "semantic-gold-policy-v1.7",
+      "validatorVersion": "gold-policy-validator-v1.7",
+      "validatorSourceHash": "0e181361b3df6f71762745b2fe0db4f99609c4d181307b016db987dbfb12aa66",
+      "policyRegistryHash": "dd83f64c6809842263316d2b76ccb1c347c32bd9a69f6eafdc90660be418c931",
+      "validatorFileHash": "35ccac75312f30e374a761b18551baa403e50c3ac74c05fd37caabc9276fdddc",
+      "semanticEnrichmentFileHash": "422609af7060f92665f60753de1899bfca8259c6ee6fec35030e66b105f659cb",
+      "spanRoleClassifierFileHash": "3807c738b81e367f951c9a4c5d484975e1c9f03b7b8a4a06088abd9b613d19b0",
+      "policyAdjudicationFileHash": "d802692f04935134d12f0e08327f86855010fc2a126c92d7da310afc78a859c7",
+      "runnerConfigFileHash": "82ee9c5ad5a3e1b7415dde94c9bca4b646d824189b42a8b111d0ed3483b9e03f",
+      "stackCompositeHash": "bff641dc3be90e053e243c6c30da8f05e22450eeba10edf0d0cbdec87398062a"
+    },
+    "inheritedFromRc7": "bff641dc3be90e053e243c6c30da8f05e22450eeba10edf0d0cbdec87398062a"
+  },
+  "developmentGold": {
+    "certifiedHash": "24c9f59d47199c70c86e5a814111f60dab0317f2d3b6ebde9d9ff4fbab313137",
+    "rescorePath": "data/milestones/rc8-development/rc8-certified-dev-rescore-v152.json"
+  },
+  "invariantMatrix": {
+    "semanticInvalid": 0,
+    "validatorViolations": 0,
+    "idViolations": 0,
+    "provenanceViolations": 0,
+    "acceptedActionOutsideOwnerSpanCount": 0,
+    "acceptedReminderDerivedLayer2Count": 0,
+    "forbiddenEmissionCount": 0
+  },
+  "rc8WorkDelivered": {
+    "rc8_0": "modal_trigger_action_ownership_containment",
+    "rc8_1": "generalized_grant_recipient_grammar_and_subability_materialization",
+    "deferred": [
+      "immediate_cast_grammar_vh17_0020",
+      "referent_resolution",
+      "replacement_long_tail"
+    ]
+  },
+  "regressionArtifacts": {
+    "data/milestones/rc8-development/rc8-grant-matrix-v17-v1.json": "01a496c14a9cf54a4bb6cdb88ae704f9b80b58fffdb926999f84d33a23b3e952",
+    "data/milestones/rc8-development/rc8-v1-legacy-containment-audit-v1.json": "9a86760e1d0cb1828f4735e2d2c2b385300e1e9f8dbb89a5c992c83ddca91c1a",
+    "data/milestones/rc8-development/validation-v17-spent-rc8-diagnostic-v1.json": "ab67448d57739d842cb4cfdce2faa9367bf1283772b3bfe2efeecd5ca2150327",
+    "data/milestones/rc8-development/rc8-certified-dev-rescore-v152.json": "3a68804754a5d76dd299ab464e3ba9a524ed4e210e5dfbb7441b486af09aecf4"
+  },
+  "v18Status": "SEALED_DARK",
+  "blindStatus": "DO_NOT_TOUCH",
+  "officialV17": {
+    "tp": 232,
+    "fp": 7,
+    "fn": 33,
+    "verdict": "FAIL_SPENT_PRESERVED"
+  }
+}

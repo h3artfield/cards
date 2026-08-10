@@ -187,9 +187,13 @@ export function buildModalOptions(
       continue;
     }
     if (a.modalOptionId) {
-      let group = groups.find((g) => g.chooseConstraints?.startsWith("Choose"));
+      let group = groups.find((g) => g.chooseConstraints?.startsWith("Choose") || /^choose /i.test(g.chooseConstraints ?? ""));
       if (!group) {
-        group = { chooseConstraints: "Choose one", options: [] };
+        const localBefore = faceText.slice(0, Math.max(0, a.paragraphStart - faceStartOffset));
+        const inlineChoose =
+          localBefore.match(/((?:choose|Choose)\s+(?:one|two|three|\d+|any number)[^.•\n]*?)\s*[—–-]?\s*$/i)?.[1]?.trim() ??
+          localBefore.match(/((?:choose|Choose)\s+(?:one|two|three|\d+|any number)[^.•\n]*?)\s*[—–-]\s*$/i)?.[1]?.trim();
+        group = { chooseConstraints: inlineChoose ?? "Choose one", options: [] };
         groups.push(group);
       }
       group.options.push({

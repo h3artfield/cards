@@ -1,0 +1,222 @@
+{
+  "artifactType": "Rc8GrantMatrix",
+  "version": "rc8-grant-matrix-v17-v1",
+  "uniqueCaseCount": 7,
+  "fnRowCount": 9,
+  "familySummary": {
+    "grant_span_detection": 0,
+    "subability_materialization": 0,
+    "granted_primitive_extraction": 1,
+    "immediate_cast_grammar": 1,
+    "recovered": 5
+  },
+  "ledgerBookkeeping": {
+    "evaluator_evidence_mismatch_row": "vh17-0094 (Beluna Grandsquall // Seek Thrills)",
+    "evaluator_evidence_mismatch_disposition": "evaluator_defect (FN) — parser draw emission vs gold span mismatch on MDFC face",
+    "genuine_parser_fp_row": "vh17-0042 (Chandra, Hope's Beacon add_mana)",
+    "vh17_0049_role": "structural_invariant_defect (semanticInvalid/validatorViolation/provenanceViolation) — NOT genuine_parser FP; sacrifice span ownership under RC8-0",
+    "categoryMutualExclusivity": "genuine_parser census counts parser-debt FN/FP only; evaluator_defect and structural_invariant rows are separate dispositions"
+  },
+  "matrix": [
+    {
+      "caseId": "vh17-0002",
+      "cardName": "Deadly Poison Sampler",
+      "fullGrantClause": "gains \"Whenever this creature deals combat damage to a player, destroy target creature that player controls.\"",
+      "recipientPhrase": "target creature gains",
+      "grantedText": "Whenever this creature deals combat damage to a player, destroy target creature that player controls.",
+      "quoteTypography": "quoted",
+      "duration": "until end of turn",
+      "detectedGrantSpan": true,
+      "subabilityCreated": true,
+      "nestedAbilityType": "triggered",
+      "expectedPrimitives": [
+        "destroy"
+      ],
+      "currentAstGrantedIds": [
+        "fe7aafbf-fd19-44f9-b82f-032ae74e8b6f:front:ability-0.granted-78"
+      ],
+      "currentAcceptedGrantedActions": [
+        {
+          "type": "destroy",
+          "evidence": "destroy target creature that player controls"
+        }
+      ],
+      "primaryFailureStage": "recovered",
+      "exactFailingFunction": "extractPrimitivesFromClause (granted nested)",
+      "rc8FamilyGeneralized": true
+    },
+    {
+      "caseId": "vh17-0005",
+      "cardName": "Dictation Quillograph",
+      "fullGrantClause": "gains \"Whenever this creature deals combat damage to a player, you may draw a card. If you do, discard a card.\"",
+      "recipientPhrase": "target creature gains",
+      "grantedText": "Whenever this creature deals combat damage to a player, you may draw a card. If you do, discard a card.",
+      "quoteTypography": "quoted",
+      "duration": "until end of turn",
+      "detectedGrantSpan": true,
+      "subabilityCreated": true,
+      "nestedAbilityType": "triggered",
+      "expectedPrimitives": [
+        "draw",
+        "discard"
+      ],
+      "currentAstGrantedIds": [
+        "87e1e5a5-6970-4025-a068-2f53b038dec6:front:ability-0.granted-78"
+      ],
+      "currentAcceptedGrantedActions": [
+        {
+          "type": "discard",
+          "evidence": "discard a card"
+        },
+        {
+          "type": "draw",
+          "evidence": "draw a card"
+        }
+      ],
+      "primaryFailureStage": "recovered",
+      "exactFailingFunction": "extractPrimitivesFromClause (granted nested)",
+      "rc8FamilyGeneralized": true
+    },
+    {
+      "caseId": "vh17-0006",
+      "cardName": "Dionus, Elvish Archdruid",
+      "fullGrantClause": "have \"Whenever this creature becomes tapped during your turn, untap it and put a +1/+1 counter on it. This ability trigg",
+      "recipientPhrase": "Elves you control have",
+      "grantedText": "Whenever this creature becomes tapped during your turn, untap it and put a +1/+1 counter on it. This ability triggers on",
+      "quoteTypography": "quoted",
+      "duration": null,
+      "detectedGrantSpan": true,
+      "subabilityCreated": true,
+      "nestedAbilityType": "triggered",
+      "expectedPrimitives": [
+        "put_counter"
+      ],
+      "currentAstGrantedIds": [
+        "d5e5cf55-eb9e-4f01-9056-791215411b27:front:ability-0.granted-23"
+      ],
+      "currentAcceptedGrantedActions": [
+        {
+          "type": "put_counter",
+          "evidence": "put a +1/+1 counter on it."
+        }
+      ],
+      "primaryFailureStage": "recovered",
+      "exactFailingFunction": "extractPrimitivesFromClause (granted nested)",
+      "rc8FamilyGeneralized": true
+    },
+    {
+      "caseId": "vh17-0007",
+      "cardName": "Distracted Botanist",
+      "fullGrantClause": "gain \"When this permanent enters, you draw a card and gain 1 life.\"",
+      "recipientPhrase": "permanent cards in your graveyard perpetually gain",
+      "grantedText": "When this permanent enters, you draw a card and gain 1 life.",
+      "quoteTypography": "quoted",
+      "duration": "perpetually",
+      "detectedGrantSpan": true,
+      "subabilityCreated": true,
+      "nestedAbilityType": "triggered",
+      "expectedPrimitives": [
+        "draw",
+        "gain_life"
+      ],
+      "currentAstGrantedIds": [
+        "c32fb920-81e9-4020-8a05-cf028df2a7af:front:ability-2.granted-76"
+      ],
+      "currentAcceptedGrantedActions": [
+        {
+          "type": "draw",
+          "evidence": "draw a card"
+        },
+        {
+          "type": "gain_life",
+          "evidence": "gain 1 life"
+        }
+      ],
+      "primaryFailureStage": "granted_primitive_extraction",
+      "exactFailingFunction": "extractPrimitivesFromClause (granted nested)",
+      "rc8FamilyGeneralized": true
+    },
+    {
+      "caseId": "vh17-0009",
+      "cardName": "Down in the Valley",
+      "fullGrantClause": "gains \"Landfall — Whenever a land you control enters, create a 1/1 green Elf creature token.\"",
+      "recipientPhrase": "This Saga gains",
+      "grantedText": "Landfall — Whenever a land you control enters, create a 1/1 green Elf creature token.",
+      "quoteTypography": "quoted",
+      "duration": "until end of turn",
+      "detectedGrantSpan": true,
+      "subabilityCreated": true,
+      "nestedAbilityType": "static",
+      "expectedPrimitives": [
+        "create_token"
+      ],
+      "currentAstGrantedIds": [
+        "e3491542-569e-48a8-b625-fa7c4aa2792a:front:ability-2.granted-21"
+      ],
+      "currentAcceptedGrantedActions": [
+        {
+          "type": "create_token",
+          "evidence": "create a 1/1 green Elf creature token"
+        }
+      ],
+      "primaryFailureStage": "recovered",
+      "exactFailingFunction": "extractPrimitivesFromClause (granted nested)",
+      "rc8FamilyGeneralized": true
+    },
+    {
+      "caseId": "vh17-0015",
+      "cardName": "Elemental Expressionist",
+      "fullGrantClause": "gains \"If this creature would leave the battlefield, exile it instead of putting it anywhere else\"",
+      "recipientPhrase": "",
+      "grantedText": "If this creature would leave the battlefield, exile it instead of putting it anywhere else",
+      "quoteTypography": "quoted",
+      "duration": "Until end of turn",
+      "detectedGrantSpan": true,
+      "subabilityCreated": true,
+      "nestedAbilityType": "static",
+      "expectedPrimitives": [
+        "exile",
+        "create_token"
+      ],
+      "currentAstGrantedIds": [
+        "dfc45c58-821c-42f3-ab48-05b912748bdf:front:ability-0.granted-131",
+        "dfc45c58-821c-42f3-ab48-05b912748bdf:front:ability-0.granted-228"
+      ],
+      "currentAcceptedGrantedActions": [
+        {
+          "type": "exile",
+          "evidence": "exile it instead"
+        },
+        {
+          "type": "create_token",
+          "evidence": "create a 4/4 blue and red Elemental creature token"
+        }
+      ],
+      "primaryFailureStage": "recovered",
+      "exactFailingFunction": "extractPrimitivesFromClause (granted nested)",
+      "rc8FamilyGeneralized": true
+    },
+    {
+      "caseId": "vh17-0020",
+      "cardName": "Etrata, Deadly Fugitive",
+      "fullGrantClause": "have \"{2}{U}{B}: Turn this creature face up. If you can't, exile it, then you may cast the exiled card without paying it",
+      "recipientPhrase": "Face-down creatures you control have",
+      "grantedText": "{2}{U}{B}: Turn this creature face up. If you can't, exile it, then you may cast the exiled card without paying its mana",
+      "quoteTypography": "quoted",
+      "duration": null,
+      "detectedGrantSpan": true,
+      "subabilityCreated": true,
+      "nestedAbilityType": "activated",
+      "expectedPrimitives": [
+        "cast"
+      ],
+      "currentAstGrantedIds": [
+        "87957d09-7e22-40fe-8770-ff66d1934a38:front:ability-1.granted-37"
+      ],
+      "currentAcceptedGrantedActions": [],
+      "primaryFailureStage": "immediate_cast_grammar",
+      "exactFailingFunction": "extractPrimitivesFromClause (cast referent: the exiled card)",
+      "rc8FamilyGeneralized": false
+    }
+  ]
+}

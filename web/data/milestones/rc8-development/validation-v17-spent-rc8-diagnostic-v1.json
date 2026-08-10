@@ -1,0 +1,52 @@
+{
+  "artifactType": "ValidationSpentDiagnostic",
+  "version": "validation-v17-spent-rc8-diagnostic-v1",
+  "parserVersion": "oracle-action-v1.44-rc8-ownership-grant-family",
+  "officialV17Preserved": {
+    "tp": 232,
+    "fp": 7,
+    "fn": 33,
+    "verdict": "FAIL/SPENT"
+  },
+  "rc8DiagnosticAccepted": {
+    "tp": 240,
+    "fp": 7,
+    "fn": 25,
+    "precision": 0.97165991902834,
+    "recall": 0.9056603773584906
+  },
+  "invariants": {
+    "semanticInvalid": 0,
+    "validatorViolations": 0,
+    "idViolations": 0,
+    "provenanceViolations": 0,
+    "acceptedActionOutsideOwnerSpanCount": 0,
+    "acceptedReminderDerivedLayer2Count": 0,
+    "forbiddenEmissionCount": 0,
+    "allGreen": true
+  },
+  "genuineSurface": {
+    "recoveredGenuineFn": [
+      "vh17-0002",
+      "vh17-0005",
+      "vh17-0006",
+      "vh17-0007",
+      "vh17-0009",
+      "vh17-0015"
+    ],
+    "remainingGenuineFn": [
+      "vh17-0020",
+      "vh17-0025",
+      "vh17-0028",
+      "vh17-0029",
+      "vh17-0039",
+      "vh17-0062",
+      "vh17-0115",
+      "vh17-0132",
+      "vh17-0134"
+    ],
+    "genuineFpCaseId": "vh17-0042",
+    "genuineFpStatus": "resolved_or_demoted"
+  },
+  "note": "Diagnostic only — not a release gate. Official v17 232/7/33 remains preserved."
+}

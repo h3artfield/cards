@@ -1,0 +1,9 @@
+{
+  "artifactType": "V1LegacyContainmentAudit",
+  "version": "rc8-v1-legacy-containment-audit-v1",
+  "corpusCaseCount": 431,
+  "acceptedActionOutsideOwnerSpanCount": 0,
+  "acceptedV1LegacyOutsideOwnerCount": 0,
+  "violations": [],
+  "pass": true
+}

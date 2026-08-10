@@ -6,7 +6,10 @@ import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { parseOracleSemanticsRC3, ORACLE_ACTION_RC3_PARSER_VERSION } from "../src/lib/deck-builder/golden-catalog/oracle-semantic-parse-rc3";
-import { verifySemanticParseIntegrity } from "../src/lib/deck-builder/golden-catalog/oracle-semantic-integrity";
+import {
+  countAcceptedActionOutsideOwnerSpan,
+  verifySemanticParseIntegrity,
+} from "../src/lib/deck-builder/golden-catalog/oracle-semantic-integrity";
 import { applyGoldMigrationV135 } from "./lib/rc3-gold-migration-v135";
 import { evaluateCaseSemantic, sumSemanticMetrics } from "./oracle-action-semantic-matcher";
 import type { OracleActionEvalCaseV2 } from "./audit-oracle-action-eval-cases";
@@ -24,8 +27,8 @@ const DEV_PATHS = [
   "data/oracle-action-eval-rc3-positive-training-catalog-v133.json",
 ];
 
-const OUT_DIR = "data/milestones/rc7-development";
-const OUT_PATH = `${OUT_DIR}/rc7-certified-dev-rescore-v152.json`;
+const OUT_DIR = "data/milestones/rc8-development";
+const OUT_PATH = `${OUT_DIR}/rc8-certified-dev-rescore-v152.json`;
 
 function loadCases(path: string): OracleActionEvalCaseV2[] {
   return applyGoldMigrationV135(
@@ -52,6 +55,7 @@ function scanPolicyInvariants(cases: OracleActionEvalCaseV2[]) {
   let idViolations = 0;
   let provenanceViolations = 0;
   let acceptedReminderDerivedLayer2Count = 0;
+  let acceptedActionOutsideOwnerSpanCount = 0;
 
   for (const testCase of cases) {
     const parsed = parseOracleSemanticsRC3({
@@ -95,6 +99,7 @@ function scanPolicyInvariants(cases: OracleActionEvalCaseV2[]) {
     acceptedReminderDerivedLayer2Count += scanAcceptedReminderDerivedLayer2([
       { oracleText: testCase.oracleText, actions: parsed.actions },
     ]).acceptedReminderDerivedLayer2Count;
+    acceptedActionOutsideOwnerSpanCount += countAcceptedActionOutsideOwnerSpan(parsed);
   }
 
   return {
@@ -108,6 +113,7 @@ function scanPolicyInvariants(cases: OracleActionEvalCaseV2[]) {
     tokenOwnershipLeakage,
     crossFaceLeakage,
     acceptedReminderDerivedLayer2Count,
+    acceptedActionOutsideOwnerSpanCount,
   };
 }
 
@@ -142,7 +148,18 @@ function main() {
     policyInvariants.reminderLeakage === 0 &&
     policyInvariants.tokenOwnershipLeakage === 0 &&
     policyInvariants.crossFaceLeakage === 0 &&
-    policyInvariants.acceptedReminderDerivedLayer2Count === 0;
+    policyInvariants.acceptedReminderDerivedLayer2Count === 0 &&
+    policyInvariants.acceptedActionOutsideOwnerSpanCount === 0;
+
+  const candidateReady =
+    goldPolicyValidation.pass &&
+    combined.accepted.precision >= 0.98 &&
+    combined.accepted.recall >= 0.92 &&
+    unrelated.accepted.precision >= 0.95 &&
+    unrelated.accepted.recall >= 0.9 &&
+    invariantsPass &&
+    v14SpentRegression.leakage.passCount === v14SpentRegression.leakage.rows.length &&
+    v14SpentRegression.integrity.passCount === v14SpentRegression.integrity.rows.length;
 
   const report = {
     generatedAt: new Date().toISOString(),
@@ -174,15 +191,8 @@ function main() {
     v14SpentRegressionPack: v14SpentRegression,
     policyInvariants,
     invariantsPass,
-    rc7CandidateReady:
-      goldPolicyValidation.pass &&
-      combined.accepted.precision >= 0.98 &&
-      combined.accepted.recall >= 0.92 &&
-      unrelated.accepted.precision >= 0.95 &&
-      unrelated.accepted.recall >= 0.9 &&
-      invariantsPass &&
-      v14SpentRegression.leakage.passCount === v14SpentRegression.leakage.rows.length &&
-      v14SpentRegression.integrity.passCount === v14SpentRegression.integrity.rows.length,
+    rc8CandidateReady: candidateReady,
+    rc7CandidateReady: candidateReady,
     rc7WorkAuthorization: {
       rc7_1: "player_possessive_discard_your_hand",
       rc7_2: "replacement_consequence_exile_instead",

@@ -194,3 +194,14 @@ export function verifySemanticParseIntegrity(parse: OracleSemanticParse, oracleT
     provenanceViolations,
   };
 }
+
+/** Count accepted actions whose evidence span is not contained in the owning ability/option span. */
+export function countAcceptedActionOutsideOwnerSpan(parse: OracleSemanticParse): number {
+  let count = 0;
+  for (const action of parse.actions.filter((a) => a.reviewStatus === "accepted")) {
+    const owner = owningSpan(action, parse.abilities);
+    const span = action.provenance.actionSpan;
+    if (!owner || !spanContainedIn(owner, span)) count++;
+  }
+  return count;
+}

@@ -39,7 +39,7 @@ export interface GrantedRulesSpan {
 
 /** Recipient-bound granting verbs — no bare gain/with on primary card text. */
 const STRUCTURAL_GRANTING_PREFIX =
-  /(?<![\w])(?:(?:[\w]+ )*tokens you control have|(?:[\w]+ )*tokens you control gain|(?:[\w]+ )*(?:Lands|Creatures|Artifacts|Enchantments|Slivers|Permanents|tokens) (?:you control |you own )?have|All \w+(?:s)? have|(?:Enchanted|Equipped) (?:creature|land|artifact|permanent|\w+) has|(?:This|That|Each) token has|it has|[Tt]arget (?:creature|land|permanent|\w+)(?: you control)?(?: card)?(?: in [^."(\u201c\n]+)?(?: perpetually )?\s+gains|(?:a |an |the |random )(?:[\w]+ )*card in (?:your|their|its owner's) [\w ]+ perpetually gains|Creatures you control (?:perpetually )?gain|(?:creature|token)(?: named [^."(\n]+)? with)\s+/i;
+  /(?<![\w])(?:(?:[\w]+ )*tokens you control have|(?:[\w]+ )*tokens you control gain|(?:[\w-]+ )+you control have|(?:[\w-]+ )+you own have|(?:[\w]+ )*(?:Lands|Creatures|Artifacts|Enchantments|Slivers|Permanents|tokens) (?:you control |you own )?have|All \w+(?:s)? have|(?:Enchanted|Equipped) (?:creature|land|artifact|permanent|\w+) has|(?:This|That) [\w]+ gains|(?:This|That) [\w]+ has|(?:This|That) Saga gains|(?:permanent )?cards in (?:your|their|its owner's) [\w ]+ perpetually gains?|(?:This|That|Each) token has|it has|[Tt]arget (?:creature|land|permanent|\w+)(?: you control)?(?: card)?(?: in [^."(\u201c\n]+)?(?: perpetually )?\s+gains|(?:a |an |the |random )(?:[\w]+ )*card in (?:your|their|its owner's) [\w ]+ perpetually gains|Creatures you control (?:perpetually )?gain|(?:creature|token)(?: named [^."(\n]+)? with)\s+/i;
 
 const GRANTED_TO_FROM_CUE: Array<{ pattern: RegExp; grantedTo: string }> = [
   { pattern: /\b(?:[\w]+ )*tokens you control have\s+/i, grantedTo: "tokens_you_control" },
@@ -48,6 +48,10 @@ const GRANTED_TO_FROM_CUE: Array<{ pattern: RegExp; grantedTo: string }> = [
   { pattern: /\b(?:and )?[Ii]t gains\s+/i, grantedTo: "it" },
   { pattern: /\band gains\s+/i, grantedTo: "it" },
   { pattern: /\bCreatures you control have\s+/i, grantedTo: "creatures_you_control" },
+  { pattern: /\b(?:[\w-]+ )+you control have\s+/i, grantedTo: "objects_you_control" },
+  { pattern: /\b(?:[\w-]+ )+you own have\s+/i, grantedTo: "objects_you_own" },
+  { pattern: /\b(?:permanent )?cards in (?:your|their|its owner's) [\w ]+ perpetually gains?\s+/i, grantedTo: "cards_in_zone" },
+  { pattern: /\b(?:This|That) [\w]+ gains\s+/i, grantedTo: "it" },
   { pattern: /\b(?:[\w]+ )*creatures you own have\s+/i, grantedTo: "creatures_you_own" },
   { pattern: /\bCreatures you own have\s+/i, grantedTo: "creatures_you_own" },
   {
@@ -97,6 +101,12 @@ export function inferStructuralCue(before: string): string | undefined {
   if (/\b(?:and )?[Ii]t gains\b/i.test(before)) return "it_gains";
   if (/\band gains\b/i.test(before)) return "and_gains";
   if (/\bCreatures you control have\b/i.test(before)) return "creatures_have";
+  if (/\b(?:[\w-]+ )+you control have\b/i.test(before)) return "objects_you_control_have";
+  if (/\b(?:[\w-]+ )+you own have\b/i.test(before)) return "objects_you_own_have";
+  if (/\b(?:permanent )?cards in (?:your|their|its owner's) [\w ]+ perpetually gains?\b/i.test(before)) {
+    return "cards_in_zone_perpetually_gains";
+  }
+  if (/\b(?:This|That) [\w]+ gains\b/i.test(before)) return "object_gains";
   if (/\b(?:[\w]+ )*creatures you own have\b/i.test(before)) return "creatures_you_own_have";
   if (/\bAll \w+/i.test(before)) return "all_have";
   if (/\b(?:creature|token)(?: named [^."(\n]+)? with\b/i.test(before)) return "token_with_ability";
@@ -251,13 +261,16 @@ function detectTriggeredResolutionGrants(paragraph: string): GrantedRulesSpan[] 
   const spans: GrantedRulesSpan[] = [];
   const effect = trimmed.slice(commaIdx + 1);
   const grantRe =
-    /(?<![\w])((?:(?:creatures you control|target (?:creature|player|permanent|\w+)(?: you control)?(?: card)?(?: in [^."(\n]+)?)|(?:(?:a |an |the |random )(?:[\w]+ )*card in (?:your|their|its owner's) [\w ]+)) (?:perpetually )?(?:gain|gains|have|has)\s+[^.\n]+)/gi;
+    /(?<![\w])((?:(?:creatures you control|(?:[\w-]+ )+you control have|target (?:creature|player|permanent|\w+)(?: you control)?(?: card)?(?: in [^."(\n]+)?)|(?:(?:permanent )?cards in (?:your|their|its owner's) [\w ]+)|(?:(?:a |an |the |random )(?:[\w]+ )*card in (?:your|their|its owner's) [\w ]+)) (?:perpetually )?(?:gain|gains|have|has)\s+[^.\n]+)/gi;
   let m: RegExpExecArray | null;
   while ((m = grantRe.exec(effect)) !== null) {
     const localStart = paragraph.indexOf(m[1], commaIdx);
     if (localStart < 0) continue;
     const localEnd = localStart + m[1].length;
+    const matchedText = paragraph.slice(localStart, localEnd);
+    if (/["\u201c]/.test(matchedText)) continue;
     const innerText = m[1].replace(/^[^.]+\s+(gain|gains|have|has)\s+/i, "").trim();
+    if (innerText.startsWith('"') || innerText.startsWith("\u201c")) continue;
     spans.push({
       localStart,
       localEnd,
