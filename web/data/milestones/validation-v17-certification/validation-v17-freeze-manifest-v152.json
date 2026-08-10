@@ -2,7 +2,7 @@
   "manifestVersion": "validation-v17-freeze-manifest-v152",
   "frozenAt": "2026-08-10T16:41:31.618Z",
   "status": "SEALED",
-  "parserExecutionCount": 0,
+  "parserExecutionCount": 1,
   "parserConsulted": false,
   "supersedes": "data/milestones/validation-v17-certification/validation-v17-freeze-manifest-v151.json",
   "rc7CandidateBinding": {
@@ -79,5 +79,15 @@
     "path": "data/milestones/validation-v17-certification/validation-v17-gold-policy-certificate-v3.json",
     "requiredCandidateManifestHash": "d0939f76671384c1db0995d522a7d3bf1bf2437b2ff5d9f3c4a266339f006d8c"
   },
-  "note": "Fresh validation v17 v1.7 gold — RC7-candidate-bound; parserExecutionCount=0 until official execution."
+  "note": "Fresh validation v17 v1.7 gold — RC7-candidate-bound; parserExecutionCount=0 until official execution.",
+  "holdoutStatus": "spent_for_validation",
+  "execution": {
+    "executedAt": "2026-08-10T17:42:03.821Z",
+    "parserExecutionCount": 1,
+    "rc7CandidateManifestHash": "d0939f76671384c1db0995d522a7d3bf1bf2437b2ff5d9f3c4a266339f006d8c",
+    "rawOutputHash": "34e5cd7661b30a05c914496947685e8f9a6d21d80f77cae690bc152193ff2666",
+    "aggregateHash": "c23fcc7723da9ca56dfa6f40c7185a59d84c40a7801fc022782b1047d0f3d3b1",
+    "executionRecordHash": "f64f40232bcfaf11098503bc2b9146a69c1b16873c11edd6a58b8940cf3a5106",
+    "validationPass": false
+  }
 }

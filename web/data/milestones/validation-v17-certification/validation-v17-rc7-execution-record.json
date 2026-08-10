@@ -1,0 +1,52 @@
+{
+  "recordType": "ValidationExecution",
+  "candidateLabel": "rc7-candidate-v152",
+  "candidateParserCommit": "8430385bd2f0b531d3aa9228983d5a9182f747df",
+  "rc7CandidateManifestHash": "d0939f76671384c1db0995d522a7d3bf1bf2437b2ff5d9f3c4a266339f006d8c",
+  "v17CertificateHash": "3edbbff91cb6d5486817285a1a80757aec0f003e2f2b0366caca743b3940d6b6",
+  "dataset": "validation_set_v17",
+  "datasetHash": "24765bdc4a07553bbe31851970e383127d2f9adef2cf61641aed9185d3eb459a",
+  "datasetPath": "data/oracle-action-eval-validation-v17.json",
+  "executionNumber": 1,
+  "parserExecutionCountBefore": 0,
+  "parserExecutionCountAfter": 1,
+  "timestamp": "2026-08-10T17:42:03.821Z",
+  "holdoutStatus": "spent_for_validation",
+  "taxonomyVersion": "three-layer-v1.4",
+  "evaluatorHashes": {
+    "semanticMatcher": "04b359506615d3b51bf9b4733f85c6f49a08374a782edca93701c043e1d4ed33",
+    "unifiedMatcher": "b6de494e7133ed88e095cd83ff8301efec97a3deb9831ea988e3fecb094ea5c5",
+    "goldPolicyValidator": "35ccac75312f30e374a761b18551baa403e50c3ac74c05fd37caabc9276fdddc",
+    "rc5RegressionScoring": "e4011280a5b42d9150973c36c91152f23db47ba48c3f71c8c4d0579ec826b9ab",
+    "reminderDerivedLeakage": "c6bf9fa75274e3f8f5ca85e78532fbd1f667f168749f8e709dafc4a5b9850fcc"
+  },
+  "rawOutputHash": "34e5cd7661b30a05c914496947685e8f9a6d21d80f77cae690bc152193ff2666",
+  "rawOutputRef": "validation-v17-rc7-execution-1-raw.json",
+  "aggregateHash": "c23fcc7723da9ca56dfa6f40c7185a59d84c40a7801fc022782b1047d0f3d3b1",
+  "aggregateRef": "validation-v17-rc7-execution-1-aggregate.json",
+  "result": {
+    "goldDenominator": 265,
+    "accepted": {
+      "tp": 232,
+      "fp": 7,
+      "fn": 33,
+      "precision": 0.9707112970711297,
+      "recall": 0.8754716981132076
+    },
+    "invariants": {
+      "semanticInvalid": 1,
+      "validatorViolations": 1,
+      "idViolations": 0,
+      "provenanceViolations": 1,
+      "activatedCostLeakage": 0,
+      "permissionLeakage": 0,
+      "triggerEventLeakage": 0,
+      "reminderLeakage": 0,
+      "tokenOwnershipLeakage": 0,
+      "crossFaceLeakage": 0,
+      "forbiddenEmissionCount": 0,
+      "acceptedReminderDerivedLayer2Count": 0
+    },
+    "validationPass": false
+  }
+}

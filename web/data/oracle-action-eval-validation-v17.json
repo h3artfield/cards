@@ -18407,9 +18407,9 @@
     }
   ],
   "sealed": true,
-  "parserExecutionCount": 0,
+  "parserExecutionCount": 1,
   "parserConsulted": false,
-  "holdoutStatus": "active",
+  "holdoutStatus": "spent_for_validation",
   "benchmarkStatus": "policy_corrected_pending_certification",
   "usableForParserEvaluation": true,
   "goldCertification": {
@@ -18451,11 +18451,31 @@
       "immediate_cast_grammar": 12,
       "library_movement_distinction": 10
     },
-    "parserExecutionCount": 0,
+    "parserExecutionCount": 1,
     "parserConsulted": false,
     "prePolicyLayer2GoldPrimitiveCount": 340,
     "prePolicyImmutablePath": "C:/Users/h3art/PycharmProjects/cards/web/data/milestones/validation-v17-certification/validation-v17-prepolicy-d59a876cde92e09d.json",
     "priorCertifiedHash": "25b020fcefd8653f9383bac50fde869cb2fa8f09ed8d6403df867f92a9f4c2a4",
     "priorCertificate": "validation-v17-gold-policy-certificate-v1.json"
+  },
+  "validationHoldout": {
+    "parserExecutionCount": 1,
+    "spent": true,
+    "holdoutStatus": "spent_for_validation",
+    "executedAt": "2026-08-10T17:42:03.821Z",
+    "parserVersion": "oracle-action-v1.42-rc7-possessive-hand-discard-replacement-graveyard",
+    "parserCommit": "8430385bd2f0b531d3aa9228983d5a9182f747df",
+    "rc7CandidateManifestHash": "d0939f76671384c1db0995d522a7d3bf1bf2437b2ff5d9f3c4a266339f006d8c",
+    "aggregateRef": "validation-v17-rc7-execution-1-aggregate.json",
+    "executionRecordHash": "f64f40232bcfaf11098503bc2b9146a69c1b16873c11edd6a58b8940cf3a5106",
+    "validationPass": false
+  },
+  "goldPolicyCertification": {
+    "executed": true,
+    "executedAt": "2026-08-10T17:42:03.821Z",
+    "parserExecutionCount": 1,
+    "certificateHashAtExecution": "3edbbff91cb6d5486817285a1a80757aec0f003e2f2b0366caca743b3940d6b6",
+    "validationPass": false,
+    "note": "Single authorized execution against RC7 candidate — preserve artifacts before diagnosis"
   }
 }
