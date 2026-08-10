@@ -1,0 +1,204 @@
+{
+  "generatedAt": "2026-08-09T21:29:26.655Z",
+  "scoringPath": "applyGoldMigrationV135(positive-training-catalog-v133) + live semantic matcher",
+  "goldMigrationOverlayPaths": [
+    "data/milestones/rc3-development/persistent-permission-gold-migration-v135.json",
+    "data/milestones/rc3-development/granted-shuffle-gold-migration-v135.json",
+    "data/milestones/rc3-development/token-definition-gold-migration-v135.json",
+    "data/milestones/rc3-development/land-grant-permission-gold-migration-v137.json",
+    "data/milestones/rc3-development/zone-ninjutsu-replacement-gold-migration-v137.json",
+    "data/milestones/rc3-development/activated-cost-fall-to-earth-gold-migration-v139.json"
+  ],
+  "denominator": {
+    "caseCount": 33,
+    "note": "positive catalog excluding spentV12Regression"
+  },
+  "previousAccepted": {
+    "tp": 57,
+    "fp": 0,
+    "fn": 6,
+    "recall": 0.9047619047619048,
+    "caseCount": 33
+  },
+  "current": {
+    "tp": 56,
+    "fp": 0,
+    "fn": 7,
+    "precision": 1,
+    "recall": 0.8888888888888888
+  },
+  "delta": {
+    "tp": -1,
+    "fp": 0,
+    "fn": 1,
+    "recall": -0.015873015873015928
+  },
+  "gatePass": false,
+  "actionLevelFns": [
+    {
+      "caseId": "rc3-pos-cat-0005",
+      "cardName": "\"Ach! Hans, Run!\"",
+      "expectedAction": "put_onto_battlefield",
+      "goldEvidence": "put it onto the battlefield",
+      "emittedAccepted": [
+        {
+          "actionType": "search_library",
+          "evidence": "search your library for"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidence": "then shuffle"
+        }
+      ]
+    },
+    {
+      "caseId": "rc3-pos-cat-0006",
+      "cardName": "1996 World Champion",
+      "expectedAction": "put_counter",
+      "goldEvidence": "put 1996 World Champion on top of it",
+      "emittedAccepted": [
+        {
+          "actionType": "search_library",
+          "evidence": "search your library for"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidence": "Shuffle your library"
+        },
+        {
+          "actionType": "discard",
+          "evidence": "Discard your hand to search your library for 1996 World Cham"
+        }
+      ]
+    },
+    {
+      "caseId": "rc3-pos-cat-0008",
+      "cardName": "A-Ominous Parcel",
+      "expectedAction": "sacrifice",
+      "goldEvidence": "Sacrifice Ominous Parcel: Search your library for a basic land card, reveal it, put it into your hand, then shuffle",
+      "emittedAccepted": [
+        {
+          "actionType": "search_library",
+          "evidence": "Search your library for"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidence": "then shuffle"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidence": "deals 4 damage to target creature"
+        },
+        {
+          "actionType": "put_into_hand",
+          "evidence": "put it into your hand"
+        }
+      ]
+    },
+    {
+      "caseId": "rc3-pos-cat-0008",
+      "cardName": "A-Ominous Parcel",
+      "expectedAction": "sacrifice",
+      "goldEvidence": "Sacrifice Ominous Parcel: It deals 4 damage to target creature",
+      "emittedAccepted": [
+        {
+          "actionType": "search_library",
+          "evidence": "Search your library for"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidence": "then shuffle"
+        },
+        {
+          "actionType": "deal_damage",
+          "evidence": "deals 4 damage to target creature"
+        },
+        {
+          "actionType": "put_into_hand",
+          "evidence": "put it into your hand"
+        }
+      ]
+    },
+    {
+      "caseId": "rc3-pos-cat-0012",
+      "cardName": "Aberrant Researcher // Perfected Form",
+      "expectedAction": "mill",
+      "goldEvidence": "mill a card, put the top card of your library into your graveyard",
+      "emittedAccepted": []
+    },
+    {
+      "caseId": "rc3-pos-cat-0012",
+      "cardName": "Aberrant Researcher // Perfected Form",
+      "expectedAction": "mill",
+      "goldEvidence": "milled this way, transform this creature",
+      "emittedAccepted": []
+    },
+    {
+      "caseId": "rc3-pos-cat-0015",
+      "cardName": "______",
+      "expectedAction": "cast",
+      "goldEvidence": "cast spells of the chosen types or spells whose names begin with the first letter of your name",
+      "emittedAccepted": [
+        {
+          "actionType": "add_mana",
+          "evidence": "Add {C}"
+        },
+        {
+          "actionType": "add_mana",
+          "evidence": "Add one mana of any color"
+        }
+      ]
+    }
+  ],
+  "actionLevelFps": [
+    {
+      "caseId": "rc3-pos-cat-0008",
+      "cardName": "A-Ominous Parcel",
+      "observedAction": "put_into_hand",
+      "observedEvidence": "put it into your hand"
+    },
+    {
+      "caseId": "rc3-pos-cat-0015",
+      "cardName": "______",
+      "observedAction": "add_mana",
+      "observedEvidence": "Add one mana of any color"
+    },
+    {
+      "caseId": "rc3-pos-cat-0018",
+      "cardName": "A-Brine Comber // A-Brinebound Gift",
+      "observedAction": "create_token",
+      "observedEvidence": "create a 1/1 white Spirit creature token"
+    },
+    {
+      "caseId": "rc3-pos-cat-0020",
+      "cardName": "A-Dorothea, Vengeful Victim // A-Dorothea's Retribution",
+      "observedAction": "create_token",
+      "observedEvidence": "create a 4/4 white Spirit creature token"
+    },
+    {
+      "caseId": "rc3-pos-cat-0025",
+      "cardName": "_____ Balls of Fire",
+      "observedAction": "deal_damage",
+      "observedEvidence": "deals damage equal to the number of o's in name stickers on this enchantment to any target"
+    },
+    {
+      "caseId": "rc3-pos-cat-0029",
+      "cardName": "A-Sorin, Imperious Bloodlord",
+      "observedAction": "gain_life",
+      "observedEvidence": "gain 3 life"
+    },
+    {
+      "caseId": "rc3-pos-cat-0029",
+      "cardName": "A-Sorin, Imperious Bloodlord",
+      "observedAction": "sacrifice",
+      "observedEvidence": "sacrifice a Vampire"
+    },
+    {
+      "caseId": "rc3-pos-cat-0029",
+      "cardName": "A-Sorin, Imperious Bloodlord",
+      "observedAction": "put_onto_battlefield",
+      "observedEvidence": "put a Vampire creature card with mana value 6 or less from your hand onto the battlefield"
+    }
+  ],
+  "diagnosis": "New FN(s) — likely RC4 parser change regressed an unrelated catalog target; see actionLevelFns."
+}

@@ -1,0 +1,266 @@
+[
+  {
+    "id": "rc3-pos-cat-0001",
+    "card": "A-Glamorous Outlaw",
+    "tp": 4,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 4
+  },
+  {
+    "id": "rc3-pos-cat-0002",
+    "card": "A-Masked Bandits",
+    "tp": 1,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 1
+  },
+  {
+    "id": "rc3-pos-cat-0003",
+    "card": "A-Rakish Revelers",
+    "tp": 2,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 2
+  },
+  {
+    "id": "rc3-pos-cat-0004",
+    "card": "A-Shattered Seraph",
+    "tp": 2,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 2
+  },
+  {
+    "id": "rc3-pos-cat-0005",
+    "card": "\"Ach! Hans, Run!\"",
+    "tp": 2,
+    "fp": 0,
+    "fn": 1,
+    "goldCount": 3
+  },
+  {
+    "id": "rc3-pos-cat-0006",
+    "card": "1996 World Champion",
+    "tp": 3,
+    "fp": 0,
+    "fn": 1,
+    "goldCount": 4
+  },
+  {
+    "id": "rc3-pos-cat-0007",
+    "card": "A-Navigation Orb",
+    "tp": 3,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 3
+  },
+  {
+    "id": "rc3-pos-cat-0008",
+    "card": "A-Ominous Parcel",
+    "tp": 3,
+    "fp": 0,
+    "fn": 2,
+    "goldCount": 5
+  },
+  {
+    "id": "rc3-pos-cat-0009",
+    "card": "A-Dokuchi Silencer",
+    "tp": 2,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 2
+  },
+  {
+    "id": "rc3-pos-cat-0010",
+    "card": "A-Silver-Fur Master",
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 0
+  },
+  {
+    "id": "rc3-pos-cat-0011",
+    "card": "A-Thousand-Faced Shadow",
+    "tp": 1,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 1
+  },
+  {
+    "id": "rc3-pos-cat-0012",
+    "card": "Aberrant Researcher // Perfected Form",
+    "tp": 0,
+    "fp": 0,
+    "fn": 2,
+    "goldCount": 2
+  },
+  {
+    "id": "rc3-pos-cat-0013",
+    "card": "_____",
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 0
+  },
+  {
+    "id": "rc3-pos-cat-0014",
+    "card": "_____ _____ _____ Trespasser",
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 0
+  },
+  {
+    "id": "rc3-pos-cat-0015",
+    "card": "______",
+    "tp": 1,
+    "fp": 0,
+    "fn": 1,
+    "goldCount": 2
+  },
+  {
+    "id": "rc3-pos-cat-0016",
+    "card": "+2 Mace",
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 0
+  },
+  {
+    "id": "rc3-pos-cat-0017",
+    "card": "A-Binding Geist // A-Spectral Binding",
+    "tp": 1,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 1
+  },
+  {
+    "id": "rc3-pos-cat-0018",
+    "card": "A-Brine Comber // A-Brinebound Gift",
+    "tp": 2,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 2
+  },
+  {
+    "id": "rc3-pos-cat-0019",
+    "card": "A-Devoted Grafkeeper // A-Departed Soulkeeper",
+    "tp": 3,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 3
+  },
+  {
+    "id": "rc3-pos-cat-0020",
+    "card": "A-Dorothea, Vengeful Victim // A-Dorothea's Retribution",
+    "tp": 3,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 3
+  },
+  {
+    "id": "rc3-pos-cat-0021",
+    "card": "A-Baleful Beholder",
+    "tp": 1,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 1
+  },
+  {
+    "id": "rc3-pos-cat-0022",
+    "card": "A-Cabaretti Charm",
+    "tp": 2,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 2
+  },
+  {
+    "id": "rc3-pos-cat-0023",
+    "card": "A-Dawnbringer Cleric",
+    "tp": 3,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 3
+  },
+  {
+    "id": "rc3-pos-cat-0024",
+    "card": "_____ _____ Rocketship",
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 0
+  },
+  {
+    "id": "rc3-pos-cat-0025",
+    "card": "_____ Balls of Fire",
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 0
+  },
+  {
+    "id": "rc3-pos-cat-0026",
+    "card": "_____ Bird Gets the Worm",
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 0
+  },
+  {
+    "id": "rc3-pos-cat-0027",
+    "card": "A Reckoning Approaches",
+    "tp": 1,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 1
+  },
+  {
+    "id": "rc3-pos-cat-0028",
+    "card": "A-Harald Unites the Elves",
+    "tp": 3,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 3
+  },
+  {
+    "id": "rc3-pos-cat-0029",
+    "card": "A-Sorin, Imperious Bloodlord",
+    "tp": 5,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 5
+  },
+  {
+    "id": "rc3-pos-cat-0030",
+    "card": "A-Circle of the Land Druid",
+    "tp": 2,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 2
+  },
+  {
+    "id": "rc3-pos-cat-0031",
+    "card": "A-Graveyard Shift",
+    "tp": 1,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 1
+  },
+  {
+    "id": "rc3-pos-cat-0032",
+    "card": "A-Return Upon the Tide",
+    "tp": 2,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 2
+  },
+  {
+    "id": "rc3-pos-one-shot-cast-0001",
+    "card": "A-Demilich",
+    "tp": 3,
+    "fp": 0,
+    "fn": 0,
+    "goldCount": 3
+  }
+]

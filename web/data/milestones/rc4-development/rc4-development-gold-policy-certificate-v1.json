@@ -1,0 +1,39 @@
+{
+  "certificateVersion": "development-gold-policy-validation-certificate-v1",
+  "certifiedAt": "2026-08-10T00:59:59.181Z",
+  "benchmarkStatus": "current_policy_certified",
+  "developmentGoldHash": "eae3767e192f202752cc9424e2a9b05636d76a7bfda0768dfa1f1954e57c3945",
+  "sourcePaths": [
+    "data/oracle-action-eval-development-v26-v14.json",
+    "data/oracle-action-eval-development-generalization-expansion-v2-v14.json",
+    "data/oracle-action-eval-development-generalization-expansion-v3-v14.json",
+    "data/oracle-action-eval-development-generalization-expansion-v5-v14.json",
+    "data/oracle-action-eval-rc3-positive-training-catalog-v133.json"
+  ],
+  "migrationOverlay": {
+    "scrubPath": "data/milestones/rc4-development/rc4-development-gold-policy-scrub-v1.json",
+    "scrubOverlayHash": "ee26a606d4b23871164d949e47c35dfe41603fd698209d49b9be6879578840df",
+    "correctionsPath": "data/milestones/rc4-development/rc4-development-gold-policy-scrub-corrections-v1.json",
+    "correctionsHash": "5e8a66141e92a0b2ea0dbd6e8b16b88bcf42334feeb37a32bb2e5675d7980068",
+    "preScrubViolationCount": 33
+  },
+  "policyVersion": "semantic-gold-policy-v1.4",
+  "validatorVersion": "gold-policy-validator-v1.4",
+  "validatorHash": "2c6e17de856003351823bc0ed6969108d965088e4455dbb65f873e79a94cda79",
+  "policyRegistryHash": "dd83f64c6809842263316d2b76ccb1c347c32bd9a69f6eafdc90660be418c931",
+  "violations": 0,
+  "census": {
+    "goldPolicyViolations": 0,
+    "invalidLayer2CostGold": 0,
+    "triggerReferenceActionGold": 0,
+    "invalidPermissionActionGold": 0,
+    "reminderCardNativeGold": 0,
+    "createdObjectOwnershipViolations": 0,
+    "invalidReplacementGold": 0,
+    "duplicateSemanticGold": 0,
+    "invalidEvidenceSpan": 0,
+    "scopeCompletenessViolations": 0
+  },
+  "perPolicyFamily": {},
+  "note": "Certified development truth for RC4 — raw benchmark files preserved; overlay applied at scoring time."
+}

@@ -1,0 +1,233 @@
+{
+  "generatedAt": "2026-08-09T21:46:06.531Z",
+  "validatorVersion": "gold-policy-validator-v1.4",
+  "policyVersion": "semantic-gold-policy-v1.4",
+  "expectedBehavior": {
+    "rawV13": "flags known cost/cast/trigger/reminder violations",
+    "correctedV13V2": "zero corresponding policy violations in corruption families",
+    "developmentGold": "zero corresponding policy violations in corruption families"
+  },
+  "corruptionFamilies": [
+    "activated_additional_cost_layer1",
+    "cast_play_permission_layer1",
+    "trigger_event_reference",
+    "reminder_mechanic_definition",
+    "condition_reference"
+  ],
+  "results": {
+    "rawV13": {
+      "label": "raw_validation_v13",
+      "pass": false,
+      "violationCount": 113,
+      "census": {
+        "goldPolicyViolations": 0,
+        "invalidLayer2CostGold": 48,
+        "triggerReferenceActionGold": 0,
+        "invalidPermissionActionGold": 42,
+        "reminderCardNativeGold": 23,
+        "createdObjectOwnershipViolations": 0,
+        "invalidReplacementGold": 0,
+        "duplicateSemanticGold": 0,
+        "invalidEvidenceSpan": 0,
+        "scopeCompletenessViolations": 0
+      },
+      "perPolicyFamily": {
+        "cast_play_permission_layer1": 84,
+        "activated_additional_cost_layer1": 96,
+        "reminder_mechanic_definition": 46
+      },
+      "sampleViolations": [
+        {
+          "caseId": "vh13-0002",
+          "actionType": "cast",
+          "code": "invalid_permission_action_gold",
+          "policyFamily": "cast_play_permission_layer1",
+          "evidenceContains": "cast a spell, if mana from a Treasure was spent to cast it, "
+        },
+        {
+          "caseId": "vh13-0002",
+          "actionType": "sacrifice",
+          "code": "invalid_layer2_cost_gold",
+          "policyFamily": "activated_additional_cost_layer1",
+          "evidenceContains": "Sacrifice this artifact: Add two mana of any one color"
+        },
+        {
+          "caseId": "vh13-0003",
+          "actionType": "sacrifice",
+          "code": "invalid_layer2_cost_gold",
+          "policyFamily": "activated_additional_cost_layer1",
+          "evidenceContains": "Sacrifice this token: Draw a card"
+        },
+        {
+          "caseId": "vh13-0005",
+          "actionType": "draw",
+          "code": "reminder_card_native_gold",
+          "policyFamily": "reminder_mechanic_definition",
+          "evidenceContains": "Draw a card"
+        },
+        {
+          "caseId": "vh13-0005",
+          "actionType": "sacrifice",
+          "code": "invalid_layer2_cost_gold",
+          "policyFamily": "activated_additional_cost_layer1",
+          "evidenceContains": "Sacrifice this token: Draw a card"
+        },
+        {
+          "caseId": "vh13-0005",
+          "actionType": "sacrifice",
+          "code": "reminder_card_native_gold",
+          "policyFamily": "reminder_mechanic_definition",
+          "evidenceContains": "Sacrifice this token: Draw a card"
+        },
+        {
+          "caseId": "vh13-0005",
+          "actionType": "discard",
+          "code": "invalid_layer2_cost_gold",
+          "policyFamily": "activated_additional_cost_layer1",
+          "evidenceContains": "Discard a card, Sacrifice this token: Draw a card"
+        },
+        {
+          "caseId": "vh13-0005",
+          "actionType": "discard",
+          "code": "reminder_card_native_gold",
+          "policyFamily": "reminder_mechanic_definition",
+          "evidenceContains": "Discard a card, Sacrifice this token: Draw a card"
+        }
+      ],
+      "corruptionFamilyCheck": {
+        "pass": false,
+        "count": 113,
+        "families": {
+          "activated_additional_cost_layer1": 48,
+          "cast_play_permission_layer1": 42,
+          "trigger_event_reference": 0,
+          "reminder_mechanic_definition": 23,
+          "condition_reference": 0
+        }
+      }
+    },
+    "correctedV13V2": {
+      "label": "policy_corrected_v13_v2",
+      "pass": false,
+      "violationCount": 31,
+      "census": {
+        "goldPolicyViolations": 0,
+        "invalidLayer2CostGold": 7,
+        "triggerReferenceActionGold": 0,
+        "invalidPermissionActionGold": 12,
+        "reminderCardNativeGold": 7,
+        "createdObjectOwnershipViolations": 0,
+        "invalidReplacementGold": 0,
+        "duplicateSemanticGold": 0,
+        "invalidEvidenceSpan": 0,
+        "scopeCompletenessViolations": 5
+      },
+      "perPolicyFamily": {
+        "cast_play_permission_layer1": 24,
+        "reminder_mechanic_definition": 14,
+        "scope_completeness": 10,
+        "activated_additional_cost_layer1": 14
+      },
+      "sampleViolations": [
+        {
+          "caseId": "vh13-0002",
+          "actionType": "cast",
+          "code": "invalid_permission_action_gold",
+          "policyFamily": "cast_play_permission_layer1",
+          "evidenceContains": "cast a spell, if mana from a Treasure was spent to cast it, "
+        },
+        {
+          "caseId": "vh13-0005",
+          "actionType": "draw",
+          "code": "reminder_card_native_gold",
+          "policyFamily": "reminder_mechanic_definition",
+          "evidenceContains": "Draw a card"
+        },
+        {
+          "caseId": "vh13-0012",
+          "actionType": "*",
+          "code": "scope_completeness_violation",
+          "policyFamily": "scope_completeness",
+          "evidenceContains": ""
+        },
+        {
+          "caseId": "vh13-0016",
+          "actionType": "search_library",
+          "code": "reminder_card_native_gold",
+          "policyFamily": "reminder_mechanic_definition",
+          "evidenceContains": "Search your library for a basic land card, reveal it, put it"
+        },
+        {
+          "caseId": "vh13-0016",
+          "actionType": "discard",
+          "code": "invalid_layer2_cost_gold",
+          "policyFamily": "activated_additional_cost_layer1",
+          "evidenceContains": "discard a card"
+        },
+        {
+          "caseId": "vh13-0016",
+          "actionType": "shuffle_library",
+          "code": "reminder_card_native_gold",
+          "policyFamily": "reminder_mechanic_definition",
+          "evidenceContains": "then shuffle"
+        },
+        {
+          "caseId": "vh13-0018",
+          "actionType": "discard",
+          "code": "invalid_layer2_cost_gold",
+          "policyFamily": "activated_additional_cost_layer1",
+          "evidenceContains": "Discard this card: Search your library for a basic land card"
+        },
+        {
+          "caseId": "vh13-0024",
+          "actionType": "search_library",
+          "code": "reminder_card_native_gold",
+          "policyFamily": "reminder_mechanic_definition",
+          "evidenceContains": "Search your library for a basic land card, reveal it, put it"
+        }
+      ],
+      "corruptionFamilyCheck": {
+        "pass": false,
+        "count": 26,
+        "families": {
+          "activated_additional_cost_layer1": 7,
+          "cast_play_permission_layer1": 12,
+          "trigger_event_reference": 0,
+          "reminder_mechanic_definition": 7,
+          "condition_reference": 0
+        }
+      }
+    },
+    "developmentGold": {
+      "label": "rc3_development_with_migration_overlay",
+      "pass": true,
+      "violationCount": 0,
+      "census": {
+        "goldPolicyViolations": 0,
+        "invalidLayer2CostGold": 0,
+        "triggerReferenceActionGold": 0,
+        "invalidPermissionActionGold": 0,
+        "reminderCardNativeGold": 0,
+        "createdObjectOwnershipViolations": 0,
+        "invalidReplacementGold": 0,
+        "duplicateSemanticGold": 0,
+        "invalidEvidenceSpan": 0,
+        "scopeCompletenessViolations": 0
+      },
+      "perPolicyFamily": {},
+      "sampleViolations": [],
+      "corruptionFamilyCheck": {
+        "pass": true,
+        "count": 0,
+        "families": {
+          "activated_additional_cost_layer1": 0,
+          "cast_play_permission_layer1": 0,
+          "trigger_event_reference": 0,
+          "reminder_mechanic_definition": 0,
+          "condition_reference": 0
+        }
+      }
+    }
+  },
+  "calibrationPass": false
+}

@@ -1,0 +1,318 @@
+{
+  "migrationVersion": "rc4-development-gold-policy-scrub-v1",
+  "generatedAt": "2026-08-09T21:39:58.541Z",
+  "parserBlind": true,
+  "parserConsulted": false,
+  "policyVersion": "semantic-gold-policy-v1.4",
+  "validatorVersion": "gold-policy-validator-v1.4",
+  "priorMigrationCount": 26,
+  "rule": "Parser-blind semantic policy scrub — removes or relabels all Gold Policy Validator violations in current-policy development corpus.",
+  "preScrubViolationCount": 33,
+  "preScrubCensus": {
+    "invalid_cost_gold": 15,
+    "invalid_trigger_event_gold": 0,
+    "invalid_permission_gold": 7,
+    "invalid_reminder_gold": 10,
+    "invalid_created_object_gold": 0,
+    "invalid_replacement_gold": 0,
+    "scope_completeness": 0,
+    "primitive_distinction": 0,
+    "duplicate_semantic": 1,
+    "invalid_evidence_span": 0,
+    "other": 0
+  },
+  "recordCount": 18,
+  "correctionCount": 33,
+  "records": [
+    {
+      "caseId": "dev-opt-032",
+      "removeLayer2Actions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast this card from your graveyard for its flashback cost"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "cast_play_permission_layer1",
+      "policyReason": "Persistent/static zone cast permission — Layer-1 only.",
+      "layer1Permission": {
+        "permittedAction": "cast",
+        "evidenceContains": "You may cast this card from your graveyard for its flashback cost",
+        "duration": "continuous",
+        "objectScope": "object_class"
+      }
+    },
+    {
+      "caseId": "eval-0123",
+      "removeLayer2Actions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "you may cast this spell without paying its mana cost"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "cast_play_permission_layer1",
+      "policyReason": "Generic 'cast this spell' in reminder/kicker — Layer-1 cost context.",
+      "layer1Permission": {
+        "permittedAction": "cast",
+        "evidenceContains": "you may cast this spell without paying its mana cost",
+        "duration": "continuous",
+        "objectScope": "object_class"
+      }
+    },
+    {
+      "caseId": "eval-0150",
+      "removeLayer2Actions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast it without paying its mana cost"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "cast_play_permission_layer1",
+      "policyReason": "Suspend/permission cast line — not imperative resolution cast.",
+      "layer1Permission": {
+        "permittedAction": "cast",
+        "evidenceContains": "You may cast it without paying its mana cost",
+        "duration": "continuous",
+        "objectScope": "object_class"
+      }
+    },
+    {
+      "caseId": "eval-0151",
+      "removeLayer2Actions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Each opponent sacrifices"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "activated_additional_cost_layer1",
+      "policyReason": "Additional/casualty spell cost is Layer-1 only — not Layer-2 sacrifice/discard."
+    },
+    {
+      "caseId": "eval-0194",
+      "removeLayer2Actions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2."
+    },
+    {
+      "caseId": "eval-0257",
+      "removeLayer2Actions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "Cast this spell only from your graveyard"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "cast_play_permission_layer1",
+      "policyReason": "Generic 'cast this spell' in reminder/kicker — Layer-1 cost context.",
+      "layer1Permission": {
+        "permittedAction": "cast",
+        "evidenceContains": "Cast this spell only from your graveyard",
+        "duration": "continuous",
+        "objectScope": "object_class"
+      }
+    },
+    {
+      "caseId": "eval-0260",
+      "removeLayer2Actions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast the creature later from exile"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "cast_play_permission_layer1",
+      "policyReason": "Deferred exile cast permission — Layer-1 permission.",
+      "layer1Permission": {
+        "permittedAction": "cast",
+        "evidenceContains": "You may cast the creature later from exile",
+        "duration": "continuous",
+        "objectScope": "object_class"
+      }
+    },
+    {
+      "caseId": "eval-0261",
+      "removeLayer2Actions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this land: Return target card that has an Adventure from your graveyard to your hand"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "activated_additional_cost_layer1",
+      "policyReason": "Payment primitive in activated/additional cost region is Layer 1 only."
+    },
+    {
+      "caseId": "eval-0265",
+      "removeLayer2Actions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "create two 2/2 green Wolf creature tokens"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "duplicate_semantic_gold",
+      "policyReason": "Duplicate actionType+evidence within case."
+    },
+    {
+      "caseId": "eval-0285",
+      "removeLayer2Actions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2."
+    },
+    {
+      "caseId": "dev-exp-v1-012",
+      "removeLayer2Actions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for a basic land card, reveal it, put it into your hand, then shuffle"
+        },
+        {
+          "actionType": "put_into_hand",
+          "evidenceContains": "put it into your hand"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2."
+    },
+    {
+      "caseId": "rc3-pos-v12-0033",
+      "removeLayer2Actions": [
+        {
+          "actionType": "discard",
+          "evidenceContains": "discard a card"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "discard one or more artifact cards, create a tapped Powerstone token"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "activated_additional_cost_layer1",
+      "policyReason": "Sacrifice/discard label inside Whenever-trigger clause — trigger event, not L2 primitive."
+    },
+    {
+      "caseId": "rc3-pos-v12-0051",
+      "removeLayer2Actions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast this spell by sacrificing a creature and paying the emerge cost reduced by that creature's mana value"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrificed creature's toughness"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "cast_play_permission_layer1",
+      "policyReason": "Generic 'cast this spell' in reminder/kicker — Layer-1 cost context.",
+      "layer1Permission": {
+        "permittedAction": "cast",
+        "evidenceContains": "You may cast this spell by sacrificing a creature and paying the emerge cost reduced by that creature's mana value",
+        "duration": "continuous",
+        "objectScope": "object_class"
+      }
+    },
+    {
+      "caseId": "rc3-pos-v12-0125",
+      "removeLayer2Actions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice this enchantment: Prevent all combat damage a creature of your choice would deal this turn"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "activated_additional_cost_layer1",
+      "policyReason": "Pre-colon activated cost (Sacrifice/Discard payment) is Layer-1 only."
+    },
+    {
+      "caseId": "rc3-pos-v12-0126",
+      "removeLayer2Actions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "Search your library for a Plains card, reveal it, put it into your hand, then shuffle"
+        },
+        {
+          "actionType": "discard",
+          "evidenceContains": "Discard this card: Search your library for a Plains card, reveal it, put it into your hand, then shuffle"
+        },
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "then shuffle"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2."
+    },
+    {
+      "caseId": "rc3-pos-v12-0135",
+      "removeLayer2Actions": [
+        {
+          "actionType": "discard",
+          "evidenceContains": "Discard two cards: Return this card from your graveyard to the battlefield tapped"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "activated_additional_cost_layer1",
+      "policyReason": "Payment primitive in activated/additional cost region is Layer 1 only."
+    },
+    {
+      "caseId": "rc3-pos-v12-0144",
+      "removeLayer2Actions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast this spell for its evoke cost"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "sacrificed when it enters"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "cast_play_permission_layer1",
+      "policyReason": "Generic 'cast this spell' in reminder/kicker — Layer-1 cost context.",
+      "layer1Permission": {
+        "permittedAction": "cast",
+        "evidenceContains": "You may cast this spell for its evoke cost",
+        "duration": "continuous",
+        "objectScope": "object_class"
+      }
+    },
+    {
+      "caseId": "rc3-pos-cat-0008",
+      "removeLayer2Actions": [
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice Ominous Parcel: Search your library for a basic land card, reveal it, put it into your hand, then shuffle"
+        },
+        {
+          "actionType": "sacrifice",
+          "evidenceContains": "Sacrifice Ominous Parcel: It deals 4 damage to target creature"
+        }
+      ],
+      "addLayer2Actions": [],
+      "policyClass": "activated_additional_cost_layer1",
+      "policyReason": "Payment primitive in activated/additional cost region is Layer 1 only."
+    }
+  ]
+}

@@ -1,0 +1,596 @@
+{
+  "generatedAt": "2026-08-09T21:39:58.543Z",
+  "census": {
+    "invalid_cost_gold": 15,
+    "invalid_trigger_event_gold": 0,
+    "invalid_permission_gold": 7,
+    "invalid_reminder_gold": 10,
+    "invalid_created_object_gold": 0,
+    "invalid_replacement_gold": 0,
+    "scope_completeness": 0,
+    "primitive_distinction": 0,
+    "duplicate_semantic": 1,
+    "invalid_evidence_span": 0,
+    "other": 0
+  },
+  "corrections": [
+    {
+      "caseId": "dev-opt-032",
+      "cardName": "Faithless Looting",
+      "censusFamily": "invalid_permission_gold",
+      "policyRule": "cast_play_permission_layer1",
+      "policyReason": "Persistent/static zone cast permission — Layer-1 only.",
+      "oldGold": {
+        "actionType": "cast",
+        "evidenceContains": "You may cast this card from your graveyard for its flashback cost",
+        "optional": true,
+        "optionalEffect": true
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 58,
+        "end": 123
+      },
+      "migrationReason": "Cast/play permission — Layer-1 only; moved to expectedLayer1Permissions"
+    },
+    {
+      "caseId": "dev-opt-032",
+      "cardName": "Faithless Looting",
+      "censusFamily": "invalid_reminder_gold",
+      "policyRule": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "oldGold": {
+        "actionType": "cast",
+        "evidenceContains": "You may cast this card from your graveyard for its flashback cost",
+        "optional": true,
+        "optionalEffect": true
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 58,
+        "end": 123
+      },
+      "migrationReason": "Reminder/mechanic definition — not card-native Layer-2"
+    },
+    {
+      "caseId": "eval-0123",
+      "cardName": "Submerge",
+      "censusFamily": "invalid_permission_gold",
+      "policyRule": "cast_play_permission_layer1",
+      "policyReason": "Generic 'cast this spell' in reminder/kicker — Layer-1 cost context.",
+      "oldGold": {
+        "actionType": "cast",
+        "evidenceContains": "you may cast this spell without paying its mana cost",
+        "optional": true,
+        "optionalEffect": true
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 60,
+        "end": 112
+      },
+      "migrationReason": "Cast/play permission — Layer-1 only; moved to expectedLayer1Permissions"
+    },
+    {
+      "caseId": "eval-0150",
+      "cardName": "Rashmi, Eternities Crafter",
+      "censusFamily": "invalid_permission_gold",
+      "policyRule": "cast_play_permission_layer1",
+      "policyReason": "Suspend/permission cast line — not imperative resolution cast.",
+      "oldGold": {
+        "actionType": "cast",
+        "evidenceContains": "You may cast it without paying its mana cost",
+        "optionalEffect": true
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 83,
+        "end": 127
+      },
+      "migrationReason": "Cast/play permission — Layer-1 only; moved to expectedLayer1Permissions"
+    },
+    {
+      "caseId": "eval-0151",
+      "cardName": "Goremand",
+      "censusFamily": "invalid_cost_gold",
+      "policyRule": "activated_additional_cost_layer1",
+      "policyReason": "Additional/casualty spell cost is Layer-1 only — not Layer-2 sacrifice/discard.",
+      "oldGold": {
+        "actionType": "sacrifice",
+        "evidenceContains": "Each opponent sacrifices"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 198,
+        "end": 222
+      },
+      "migrationReason": "Payment primitive in cost region — Layer 1 only; forbiddenPrimitiveActions will include cost primitive"
+    },
+    {
+      "caseId": "eval-0194",
+      "cardName": "Search the Premises",
+      "censusFamily": "invalid_reminder_gold",
+      "policyRule": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "oldGold": {
+        "actionType": "draw",
+        "evidenceContains": "draw a card"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 148,
+        "end": 159
+      },
+      "migrationReason": "Reminder/mechanic definition — not card-native Layer-2"
+    },
+    {
+      "caseId": "eval-0257",
+      "cardName": "Dusk // Dawn",
+      "censusFamily": "invalid_permission_gold",
+      "policyRule": "cast_play_permission_layer1",
+      "policyReason": "Generic 'cast this spell' in reminder/kicker — Layer-1 cost context.",
+      "oldGold": {
+        "actionType": "cast",
+        "evidenceContains": "Cast this spell only from your graveyard",
+        "cardFace": "back"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 61,
+        "end": 101
+      },
+      "migrationReason": "Cast/play permission — Layer-1 only; moved to expectedLayer1Permissions"
+    },
+    {
+      "caseId": "eval-0257",
+      "cardName": "Dusk // Dawn",
+      "censusFamily": "invalid_reminder_gold",
+      "policyRule": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "oldGold": {
+        "actionType": "cast",
+        "evidenceContains": "Cast this spell only from your graveyard",
+        "cardFace": "back"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 61,
+        "end": 101
+      },
+      "migrationReason": "Reminder/mechanic definition — not card-native Layer-2"
+    },
+    {
+      "caseId": "eval-0260",
+      "cardName": "Embereth Shieldbreaker // Battle Display",
+      "censusFamily": "invalid_permission_gold",
+      "policyRule": "cast_play_permission_layer1",
+      "policyReason": "Deferred exile cast permission — Layer-1 permission.",
+      "oldGold": {
+        "actionType": "cast",
+        "evidenceContains": "You may cast the creature later from exile",
+        "optional": true,
+        "optionalEffect": true
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 48,
+        "end": 90
+      },
+      "migrationReason": "Cast/play permission — Layer-1 only; moved to expectedLayer1Permissions"
+    },
+    {
+      "caseId": "eval-0261",
+      "cardName": "Edgewall Inn",
+      "censusFamily": "invalid_cost_gold",
+      "policyRule": "activated_additional_cost_layer1",
+      "policyReason": "Payment primitive in activated/additional cost region is Layer 1 only.",
+      "oldGold": {
+        "actionType": "sacrifice",
+        "evidenceContains": "Sacrifice this land: Return target card that has an Adventure from your graveyard to your hand"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 111,
+        "end": 205
+      },
+      "migrationReason": "Payment primitive in cost region — Layer 1 only; forbiddenPrimitiveActions will include cost primitive"
+    },
+    {
+      "caseId": "eval-0261",
+      "cardName": "Edgewall Inn",
+      "censusFamily": "invalid_cost_gold",
+      "policyRule": "activated_additional_cost_layer1",
+      "policyReason": "Pre-colon activated cost (Sacrifice/Discard payment) is Layer-1 only.",
+      "oldGold": {
+        "actionType": "sacrifice",
+        "evidenceContains": "Sacrifice this land: Return target card that has an Adventure from your graveyard to your hand"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 111,
+        "end": 205
+      },
+      "migrationReason": "Payment primitive in cost region — Layer 1 only; forbiddenPrimitiveActions will include cost primitive"
+    },
+    {
+      "caseId": "eval-0265",
+      "cardName": "Tovolar's Huntmaster // Tovolar's Packleader",
+      "censusFamily": "duplicate_semantic",
+      "policyRule": "duplicate_semantic_gold",
+      "policyReason": "Duplicate actionType+evidence within case.",
+      "oldGold": {
+        "actionType": "create_token",
+        "evidenceContains": "create two 2/2 green Wolf creature tokens",
+        "cardFace": "front"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 27,
+        "end": 68
+      },
+      "migrationReason": "Duplicate semantic gold entry removed"
+    },
+    {
+      "caseId": "eval-0285",
+      "cardName": "Forensic Gadgeteer",
+      "censusFamily": "invalid_reminder_gold",
+      "policyRule": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "oldGold": {
+        "actionType": "draw",
+        "evidenceContains": "draw a card",
+        "cardFace": "front"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 122,
+        "end": 133
+      },
+      "migrationReason": "Reminder/mechanic definition — not card-native Layer-2"
+    },
+    {
+      "caseId": "dev-exp-v1-012",
+      "cardName": "Fall to Earth",
+      "censusFamily": "invalid_reminder_gold",
+      "policyRule": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "oldGold": {
+        "actionType": "search_library",
+        "evidenceContains": "Search your library for a basic land card, reveal it, put it into your hand, then shuffle"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 96,
+        "end": 185
+      },
+      "migrationReason": "Reminder/mechanic definition — not card-native Layer-2"
+    },
+    {
+      "caseId": "dev-exp-v1-012",
+      "cardName": "Fall to Earth",
+      "censusFamily": "invalid_reminder_gold",
+      "policyRule": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "oldGold": {
+        "actionType": "put_into_hand",
+        "evidenceContains": "put it into your hand"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 150,
+        "end": 171
+      },
+      "migrationReason": "Reminder/mechanic definition — not card-native Layer-2"
+    },
+    {
+      "caseId": "dev-exp-v1-012",
+      "cardName": "Fall to Earth",
+      "censusFamily": "invalid_reminder_gold",
+      "policyRule": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "oldGold": {
+        "actionType": "shuffle_library",
+        "evidenceContains": "then shuffle"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 173,
+        "end": 185
+      },
+      "migrationReason": "Reminder/mechanic definition — not card-native Layer-2"
+    },
+    {
+      "caseId": "rc3-pos-v12-0033",
+      "cardName": "A-Urza, Powerstone Prodigy",
+      "censusFamily": "invalid_cost_gold",
+      "policyRule": "activated_additional_cost_layer1",
+      "policyReason": "Sacrifice/discard label inside Whenever-trigger clause — trigger event, not L2 primitive.",
+      "oldGold": {
+        "actionType": "discard",
+        "evidenceContains": "discard a card"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 28,
+        "end": 42
+      },
+      "migrationReason": "Payment primitive in cost region — Layer 1 only; forbiddenPrimitiveActions will include cost primitive"
+    },
+    {
+      "caseId": "rc3-pos-v12-0033",
+      "cardName": "A-Urza, Powerstone Prodigy",
+      "censusFamily": "invalid_cost_gold",
+      "policyRule": "activated_additional_cost_layer1",
+      "policyReason": "Sacrifice/discard label inside Whenever-trigger clause — trigger event, not L2 primitive.",
+      "oldGold": {
+        "actionType": "discard",
+        "evidenceContains": "discard one or more artifact cards, create a tapped Powerstone token"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 57,
+        "end": 125
+      },
+      "migrationReason": "Payment primitive in cost region — Layer 1 only; forbiddenPrimitiveActions will include cost primitive"
+    },
+    {
+      "caseId": "rc3-pos-v12-0051",
+      "cardName": "Adipose Offspring",
+      "censusFamily": "invalid_permission_gold",
+      "policyRule": "cast_play_permission_layer1",
+      "policyReason": "Generic 'cast this spell' in reminder/kicker — Layer-1 cost context.",
+      "oldGold": {
+        "actionType": "cast",
+        "evidenceContains": "You may cast this spell by sacrificing a creature and paying the emerge cost reduced by that creature's mana value",
+        "optional": true,
+        "optionalEffect": true
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 15,
+        "end": 129
+      },
+      "migrationReason": "Cast/play permission — Layer-1 only; moved to expectedLayer1Permissions"
+    },
+    {
+      "caseId": "rc3-pos-v12-0051",
+      "cardName": "Adipose Offspring",
+      "censusFamily": "invalid_cost_gold",
+      "policyRule": "activated_additional_cost_layer1",
+      "policyReason": "Past-tense/condition reference to sacrifice/discard — not imperative Layer-2.",
+      "oldGold": {
+        "actionType": "sacrifice",
+        "evidenceContains": "sacrificed creature's toughness"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 290,
+        "end": 321
+      },
+      "migrationReason": "Payment primitive in cost region — Layer 1 only; forbiddenPrimitiveActions will include cost primitive"
+    },
+    {
+      "caseId": "rc3-pos-v12-0125",
+      "cardName": "Ajani's Aid",
+      "censusFamily": "invalid_cost_gold",
+      "policyRule": "activated_additional_cost_layer1",
+      "policyReason": "Pre-colon activated cost (Sacrifice/Discard payment) is Layer-1 only.",
+      "oldGold": {
+        "actionType": "sacrifice",
+        "evidenceContains": "Sacrifice this enchantment: Prevent all combat damage a creature of your choice would deal this turn"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 202,
+        "end": 302
+      },
+      "migrationReason": "Payment primitive in cost region — Layer 1 only; forbiddenPrimitiveActions will include cost primitive"
+    },
+    {
+      "caseId": "rc3-pos-v12-0126",
+      "cardName": "Alabaster Host Intercessor",
+      "censusFamily": "invalid_reminder_gold",
+      "policyRule": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "oldGold": {
+        "actionType": "search_library",
+        "evidenceContains": "Search your library for a Plains card, reveal it, put it into your hand, then shuffle"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 157,
+        "end": 242
+      },
+      "migrationReason": "Reminder/mechanic definition — not card-native Layer-2"
+    },
+    {
+      "caseId": "rc3-pos-v12-0126",
+      "cardName": "Alabaster Host Intercessor",
+      "censusFamily": "invalid_cost_gold",
+      "policyRule": "activated_additional_cost_layer1",
+      "policyReason": "Landcycling discard payment is Layer-1 activated cost, not Layer-2 primitive.",
+      "oldGold": {
+        "actionType": "discard",
+        "evidenceContains": "Discard this card: Search your library for a Plains card, reveal it, put it into your hand, then shuffle"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 138,
+        "end": 242
+      },
+      "migrationReason": "Payment primitive in cost region — Layer 1 only; forbiddenPrimitiveActions will include cost primitive"
+    },
+    {
+      "caseId": "rc3-pos-v12-0126",
+      "cardName": "Alabaster Host Intercessor",
+      "censusFamily": "invalid_reminder_gold",
+      "policyRule": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "oldGold": {
+        "actionType": "discard",
+        "evidenceContains": "Discard this card: Search your library for a Plains card, reveal it, put it into your hand, then shuffle"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 138,
+        "end": 242
+      },
+      "migrationReason": "Reminder/mechanic definition — not card-native Layer-2"
+    },
+    {
+      "caseId": "rc3-pos-v12-0126",
+      "cardName": "Alabaster Host Intercessor",
+      "censusFamily": "invalid_reminder_gold",
+      "policyRule": "reminder_mechanic_definition",
+      "policyReason": "Reminder/mechanic span — not card-native Layer-2.",
+      "oldGold": {
+        "actionType": "shuffle_library",
+        "evidenceContains": "then shuffle"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 230,
+        "end": 242
+      },
+      "migrationReason": "Reminder/mechanic definition — not card-native Layer-2"
+    },
+    {
+      "caseId": "rc3-pos-v12-0135",
+      "cardName": "Advanced Stitchwing",
+      "censusFamily": "invalid_cost_gold",
+      "policyRule": "activated_additional_cost_layer1",
+      "policyReason": "Payment primitive in activated/additional cost region is Layer 1 only.",
+      "oldGold": {
+        "actionType": "discard",
+        "evidenceContains": "Discard two cards: Return this card from your graveyard to the battlefield tapped"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 15,
+        "end": 96
+      },
+      "migrationReason": "Payment primitive in cost region — Layer 1 only; forbiddenPrimitiveActions will include cost primitive"
+    },
+    {
+      "caseId": "rc3-pos-v12-0135",
+      "cardName": "Advanced Stitchwing",
+      "censusFamily": "invalid_cost_gold",
+      "policyRule": "activated_additional_cost_layer1",
+      "policyReason": "Pre-colon activated cost (Sacrifice/Discard payment) is Layer-1 only.",
+      "oldGold": {
+        "actionType": "discard",
+        "evidenceContains": "Discard two cards: Return this card from your graveyard to the battlefield tapped"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 15,
+        "end": 96
+      },
+      "migrationReason": "Payment primitive in cost region — Layer 1 only; forbiddenPrimitiveActions will include cost primitive"
+    },
+    {
+      "caseId": "rc3-pos-v12-0144",
+      "cardName": "Aethersnipe",
+      "censusFamily": "invalid_permission_gold",
+      "policyRule": "cast_play_permission_layer1",
+      "policyReason": "Generic 'cast this spell' in reminder/kicker — Layer-1 cost context.",
+      "oldGold": {
+        "actionType": "cast",
+        "evidenceContains": "You may cast this spell for its evoke cost",
+        "optional": true,
+        "optionalEffect": true
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 97,
+        "end": 139
+      },
+      "migrationReason": "Cast/play permission — Layer-1 only; moved to expectedLayer1Permissions"
+    },
+    {
+      "caseId": "rc3-pos-v12-0144",
+      "cardName": "Aethersnipe",
+      "censusFamily": "invalid_cost_gold",
+      "policyRule": "activated_additional_cost_layer1",
+      "policyReason": "Past-tense/condition reference to sacrifice/discard — not imperative Layer-2.",
+      "oldGold": {
+        "actionType": "sacrifice",
+        "evidenceContains": "sacrificed when it enters"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 157,
+        "end": 182
+      },
+      "migrationReason": "Payment primitive in cost region — Layer 1 only; forbiddenPrimitiveActions will include cost primitive"
+    },
+    {
+      "caseId": "rc3-pos-cat-0008",
+      "cardName": "A-Ominous Parcel",
+      "censusFamily": "invalid_cost_gold",
+      "policyRule": "activated_additional_cost_layer1",
+      "policyReason": "Payment primitive in activated/additional cost region is Layer 1 only.",
+      "oldGold": {
+        "actionType": "sacrifice",
+        "evidenceContains": "Sacrifice Ominous Parcel: Search your library for a basic land card, reveal it, put it into your hand, then shuffle"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 10,
+        "end": 125
+      },
+      "migrationReason": "Payment primitive in cost region — Layer 1 only; forbiddenPrimitiveActions will include cost primitive"
+    },
+    {
+      "caseId": "rc3-pos-cat-0008",
+      "cardName": "A-Ominous Parcel",
+      "censusFamily": "invalid_cost_gold",
+      "policyRule": "activated_additional_cost_layer1",
+      "policyReason": "Pre-colon activated cost (Sacrifice/Discard payment) is Layer-1 only.",
+      "oldGold": {
+        "actionType": "sacrifice",
+        "evidenceContains": "Sacrifice Ominous Parcel: Search your library for a basic land card, reveal it, put it into your hand, then shuffle"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 10,
+        "end": 125
+      },
+      "migrationReason": "Payment primitive in cost region — Layer 1 only; forbiddenPrimitiveActions will include cost primitive"
+    },
+    {
+      "caseId": "rc3-pos-cat-0008",
+      "cardName": "A-Ominous Parcel",
+      "censusFamily": "invalid_cost_gold",
+      "policyRule": "activated_additional_cost_layer1",
+      "policyReason": "Payment primitive in activated/additional cost region is Layer 1 only.",
+      "oldGold": {
+        "actionType": "sacrifice",
+        "evidenceContains": "Sacrifice Ominous Parcel: Search your library for a basic land card, reveal it, put it into your hand, then shuffle"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 137,
+        "end": 199
+      },
+      "migrationReason": "Payment primitive in cost region — Layer 1 only; forbiddenPrimitiveActions will include cost primitive"
+    },
+    {
+      "caseId": "rc3-pos-cat-0008",
+      "cardName": "A-Ominous Parcel",
+      "censusFamily": "invalid_cost_gold",
+      "policyRule": "activated_additional_cost_layer1",
+      "policyReason": "Pre-colon activated cost (Sacrifice/Discard payment) is Layer-1 only.",
+      "oldGold": {
+        "actionType": "sacrifice",
+        "evidenceContains": "Sacrifice Ominous Parcel: Search your library for a basic land card, reveal it, put it into your hand, then shuffle"
+      },
+      "correctedGold": null,
+      "evidenceSpan": {
+        "start": 137,
+        "end": 199
+      },
+      "migrationReason": "Payment primitive in cost region — Layer 1 only; forbiddenPrimitiveActions will include cost primitive"
+    }
+  ]
+}

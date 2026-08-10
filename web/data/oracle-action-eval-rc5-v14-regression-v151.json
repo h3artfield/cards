@@ -1,0 +1,4038 @@
+{
+  "setClassification": "rc5_v14_regression_pack_v151",
+  "evaluationSetVersion": "rc5-v14-regression-v151",
+  "adjudicationRef": "data/milestones/validation-v14-certification/validation-v14-policy-adjudication-v2.json",
+  "forensicRef": "data/milestones/validation-v14-certification/validation-v14-forensic-adjudication-v2.json",
+  "actionScoringCases": [
+    {
+      "id": "rc5-action-0003",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "d4d44264-b276-4bd7-8fbe-6af292b08773",
+      "oracleText": "Tap an untapped Octopus you control: Tap target permanent.\n{U}{U}{U}: Tap all creatures without flying.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "tap",
+          "evidenceContains": "Tap all creatures without flying"
+        }
+      ],
+      "expectedRoles": [],
+      "cardName": "Aboshan, Cephalid Emperor",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f83b367f98e9e1c80f8d51b2ffd34069dafb7f5247dccd674e525e5daee3cb06",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.578Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_activated_cost_vs_effect",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 103,
+            "text": "Tap an untapped Octopus you control: Tap target permanent.\n{U}{U}{U}: Tap all creatures without flying."
+          },
+          "oracleTextHash": "f83b367f98e9e1c80f8d51b2ffd34069dafb7f5247dccd674e525e5daee3cb06",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0003",
+      "scoringTargets": [
+        {
+          "targetId": "7727916729ff4c1d",
+          "actionType": "tap",
+          "evidenceContains": "Tap all creatures without flying",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "scattered_one_offs",
+          "coverageStratum": "challenge_activated_cost_vs_effect"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0009",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "70d35dbd-1d91-4a2a-a643-6870d168f4f5",
+      "oracleText": "This land enters tapped.\n{T}: Add {W}.\nStation (Tap another creature you control: Put charge counters equal to its power on this Planet. Station only as a sorcery.)\n12+ | {3}{W}, {T}: Create a token that's a copy of target artifact or enchantment you control, except it's legendary. Activate only as a sorcery.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy of target"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "copy"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "copy"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "copy"
+          ]
+        }
+      ],
+      "cardName": "Adagia, Windswept Bastion",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "5c5b073aca231aec6be183708d6c102d1adfcd770d1cdaa4ffbb9778ee5b8dac",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.580Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_activated_cost_vs_effect",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "This land enters tapped.\n{T}: Add {W}.\nStation (Tap another creature you control: Put charge counters equal to its power"
+          },
+          "oracleTextHash": "5c5b073aca231aec6be183708d6c102d1adfcd770d1cdaa4ffbb9778ee5b8dac",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0009",
+      "scoringTargets": [
+        {
+          "targetId": "1efd8bfd77430e7c",
+          "actionType": "copy",
+          "evidenceContains": "copy of target",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "scattered_one_offs",
+          "coverageStratum": "challenge_activated_cost_vs_effect"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0011",
+      "category": "rc5-v14-action_scoring",
+      "layout": "class",
+      "oracleId": "f00bc101-8082-4459-b987-f0c4b7a12344",
+      "oracleText": "(Gain the next level as a sorcery to add its ability.)\nAt the beginning of your first main phase, mill a card, then exile a card from your graveyard at random. You may play the exiled card this turn.\n{1}{R}: Level 2\nWhenever one or more cards leave your graveyard, this Class deals 2 damage to each opponent.\n{1}{R}: Level 3\nSpells you cast from anywhere other than your hand cost {2} less to cast.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "mill a card, then exile a card from your graveyard at random"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "cast",
+            "deal_damage",
+            "mill"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "cast",
+            "deal_damage",
+            "mill"
+          ]
+        }
+      ],
+      "cardName": "Advanced Reconstruction",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "8024995fe161b09e5ae282e368e4df3a287215543f0632171089f8533913bbe0",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.584Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_activated_cost_vs_effect",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "(Gain the next level as a sorcery to add its ability.)\nAt the beginning of your first main phase, mill a card, then exil"
+          },
+          "oracleTextHash": "8024995fe161b09e5ae282e368e4df3a287215543f0632171089f8533913bbe0",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0011",
+      "scoringTargets": [
+        {
+          "targetId": "6e26bd9701b88e99",
+          "actionType": "mill",
+          "evidenceContains": "mill a card, then exile a card from your graveyard at random",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "scattered_one_offs",
+          "coverageStratum": "challenge_activated_cost_vs_effect"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0022",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "80ea63fd-691a-45ba-a4bf-862e5ec2922d",
+      "oracleText": "Reveal this card as you draft it. Reveal the next card you draft and note its name.\nWhen this creature enters, you may search your hand and/or library for a card with a name noted as you drafted cards named Aether Searcher. You may cast it without paying its mana cost. If you searched your library this way, shuffle.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "shuffle"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "cast",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "cardName": "Aether Searcher",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "4aa1d50b77c283c584c1510819aa94f37b7c2688cd9e98d1c4b06a0515cdcada",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.588Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_immediate_cast_vs_permission",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Reveal this card as you draft it. Reveal the next card you draft and note its name.\nWhen this creature enters, you may s"
+          },
+          "oracleTextHash": "4aa1d50b77c283c584c1510819aa94f37b7c2688cd9e98d1c4b06a0515cdcada",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0022",
+      "scoringTargets": [
+        {
+          "targetId": "762aabd9d83f077a",
+          "actionType": "shuffle_library",
+          "evidenceContains": "shuffle",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "scattered_one_offs",
+          "coverageStratum": "challenge_immediate_cast_vs_permission"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0083",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "061e7077-115b-4a37-b574-8fd4757d4bce",
+      "oracleText": "Landfall — Whenever a land you control enters, a random land card in your library perpetually gains \"Whenever this land becomes tapped, draw a card.\"",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "cardName": "Ambassador of Evendo",
+      "colorIdentity": [
+        "G",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "d695409ed195f5444b471a0568413f05615ee3776e26ad933b69d0f2562ca457",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.603Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_granted_nested_actions",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Landfall — Whenever a land you control enters, a random land card in your library perpetually gains \"Whenever this land "
+          },
+          "oracleTextHash": "d695409ed195f5444b471a0568413f05615ee3776e26ad933b69d0f2562ca457",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0083",
+      "scoringTargets": [
+        {
+          "targetId": "f4fde08c6ec84ae2",
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "granted_nested_actions",
+          "coverageStratum": "challenge_granted_nested_actions"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0087",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "13c97cb2-fc77-4d4b-8cfb-747f4d448151",
+      "oracleText": "Target creature card in your graveyard perpetually gains \"{1}{B}{B}, Exile this card from your graveyard: Shuffle it into its owner's library. Create a token that's a copy of it, except it's a 4/4 black Zombie in addition to its other types. Activate only as a sorcery.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a token"
+        },
+        {
+          "actionType": "shuffle_into_library",
+          "evidenceContains": "Shuffle it into its owner's library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token",
+            "shuffle_into_library"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token",
+            "shuffle_into_library"
+          ]
+        }
+      ],
+      "cardName": "Assemble from Parts",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ce8c4f48bf4490b7020147d6587dba6f607f6b420649440497191ed1dc8f6adf",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.604Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_granted_nested_actions",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Target creature card in your graveyard perpetually gains \"{1}{B}{B}, Exile this card from your graveyard: Shuffle it int"
+          },
+          "oracleTextHash": "ce8c4f48bf4490b7020147d6587dba6f607f6b420649440497191ed1dc8f6adf",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0087",
+      "scoringTargets": [
+        {
+          "targetId": "63d29808ffb99cd2",
+          "actionType": "create_token",
+          "evidenceContains": "Create a token",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "granted_nested_actions",
+          "coverageStratum": "challenge_granted_nested_actions"
+        },
+        {
+          "targetId": "38bb937842c566fa",
+          "actionType": "shuffle_into_library",
+          "evidenceContains": "Shuffle it into its owner's library",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "granted_nested_actions",
+          "coverageStratum": "challenge_granted_nested_actions"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0089",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "37e4b9fe-e90a-4c65-8ad7-8db603230a89",
+      "oracleText": "Until end of turn, target creature you control gains \"When this creature dies, return it to the battlefield tapped under its owner's control. It deals 1 damage to each opponent.\"\nOverload {2}{B}{B}",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 1 damage to each opponent"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "deal_damage"
+          ]
+        }
+      ],
+      "cardName": "Bail Out",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3cfc5ed7df1eaea87239869f2764968cb05e19094b8f239861f063598fec8cf1",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.605Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_granted_nested_actions",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Until end of turn, target creature you control gains \"When this creature dies, return it to the battlefield tapped under"
+          },
+          "oracleTextHash": "3cfc5ed7df1eaea87239869f2764968cb05e19094b8f239861f063598fec8cf1",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0089",
+      "scoringTargets": [
+        {
+          "targetId": "86ba7cc866e93467",
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 1 damage to each opponent",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "granted_nested_actions",
+          "coverageStratum": "challenge_granted_nested_actions"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0094",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "cdc7356c-9621-4420-9fda-c8b91df0ec7c",
+      "oracleText": "When this creature enters, tap target creature an opponent controls and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "tap",
+          "evidenceContains": "tap target creature an opponent controls and put a stun counter on it"
+        }
+      ],
+      "expectedRoles": [],
+      "cardName": "Alchemax Slayer-Bots",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "62d7b888f46bc8ec6bd3e42cda7ba335853a5c7806983eebda3ae65daa5247b8",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.605Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_replacement",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "When this creature enters, tap target creature an opponent controls and put a stun counter on it. (If a permanent with a"
+          },
+          "oracleTextHash": "62d7b888f46bc8ec6bd3e42cda7ba335853a5c7806983eebda3ae65daa5247b8",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0094",
+      "scoringTargets": [
+        {
+          "targetId": "cb5d7333e424d5e4",
+          "actionType": "tap",
+          "evidenceContains": "tap target creature an opponent controls and put a stun counter on it",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "replacement_effect_parsing",
+          "coverageStratum": "challenge_replacement"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0098",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "75070eaf-c931-46e5-9aa1-b849e33580c6",
+      "oracleText": "Ward {2}\nWhenever this creature attacks, put three stun counters on it and draw three cards. (If a permanent with a stun counter would become untapped, remove one from it instead.)\nWhenever you cast a Turtle spell, untap this creature.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw three cards"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "cast"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "draw",
+            "cast"
+          ]
+        }
+      ],
+      "cardName": "Ambling Stormshell",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "2b6b329df51411278a90d93d04baa640657c56094a2f7385a7f2cad1e183c233",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.605Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_replacement",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Ward {2}\nWhenever this creature attacks, put three stun counters on it and draw three cards. (If a permanent with a stun"
+          },
+          "oracleTextHash": "2b6b329df51411278a90d93d04baa640657c56094a2f7385a7f2cad1e183c233",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0098",
+      "scoringTargets": [
+        {
+          "targetId": "98ec65ada6d190e3",
+          "actionType": "draw",
+          "evidenceContains": "draw three cards",
+          "policyClass": "triggered_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "replacement_effect_parsing",
+          "coverageStratum": "challenge_replacement"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0105",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "23e68343-f5fa-4dab-95ba-edd701ee4ecd",
+      "oracleText": "Whenever Krydle of Baldur's Gate deals combat damage to a player, that player loses 1 life and mills a card, then you gain 1 life and scry 1.\nWhenever you attack, target creature can't be blocked this turn.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills a card, then you gain 1 life and scry 1"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "gain_life",
+            "lose_life",
+            "mill",
+            "scry"
+          ]
+        }
+      ],
+      "cardName": "A-Krydle of Baldur's Gate",
+      "colorIdentity": [
+        "B",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "c68b673dad426097dfae2043ef5265d11081be87a820bac3a36fc54e9e07c0e4",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.606Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_triggered",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Whenever Krydle of Baldur's Gate deals combat damage to a player, that player loses 1 life and mills a card, then you ga"
+          },
+          "oracleTextHash": "c68b673dad426097dfae2043ef5265d11081be87a820bac3a36fc54e9e07c0e4",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0105",
+      "scoringTargets": [
+        {
+          "targetId": "32966575178070e5",
+          "actionType": "mill",
+          "evidenceContains": "mills a card, then you gain 1 life and scry 1",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "triggered_families",
+          "coverageStratum": "broad_triggered"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0114",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "b191888b-a8b5-4544-a42d-98a7440b4528",
+      "oracleText": "Vigilance\nWhenever you draw a card, target opponent loses 1 life and you gain 1 life.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "target opponent loses 1 life"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "you gain 1 life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "gain_life",
+            "lose_life"
+          ]
+        }
+      ],
+      "cardName": "A-Queza, Augur of Agonies",
+      "colorIdentity": [
+        "B",
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ee30f36e336b10ad33c3f320c0b71396c588233947b9a75a17744667660ab81c",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.607Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_triggered",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 85,
+            "text": "Vigilance\nWhenever you draw a card, target opponent loses 1 life and you gain 1 life."
+          },
+          "oracleTextHash": "ee30f36e336b10ad33c3f320c0b71396c588233947b9a75a17744667660ab81c",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0114",
+      "scoringTargets": [
+        {
+          "targetId": "rc5-goldcorr-0114-lose-life",
+          "actionType": "lose_life",
+          "evidenceContains": "target opponent loses 1 life",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "triggered_families",
+          "coverageStratum": "broad_triggered"
+        },
+        {
+          "targetId": "rc5-goldcorr-0114-gain-life",
+          "actionType": "gain_life",
+          "evidenceContains": "you gain 1 life",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "triggered_families",
+          "coverageStratum": "broad_triggered"
+        }
+      ],
+      "spentV14Regression": true,
+      "goldCorrectionApplied": "invalid_gold_draw_in_trigger_header",
+      "goldCorrectionAt": "2026-08-10T02:45:54.375Z"
+    },
+    {
+      "id": "rc5-action-0131",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "901ee0e3-1011-40e1-815a-09246112e8dc",
+      "oracleText": "Roll two d8 and choose one result. Draw cards equal to that result. Then you may cast an instant or sorcery spell with mana value less than or equal to the other result from your hand without paying its mana cost.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw cards equal to that result"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "cast"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "draw",
+            "cast"
+          ]
+        }
+      ],
+      "cardName": "Arcane Endeavor",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3cd7131637edbf4d8fc87778abd68e2259223aa41dc851e1ab0dc650a76394ac",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.608Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_modal",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Roll two d8 and choose one result. Draw cards equal to that result. Then you may cast an instant or sorcery spell with m"
+          },
+          "oracleTextHash": "3cd7131637edbf4d8fc87778abd68e2259223aa41dc851e1ab0dc650a76394ac",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0131",
+      "scoringTargets": [
+        {
+          "targetId": "819e85297f7bc7e8",
+          "actionType": "draw",
+          "evidenceContains": "Draw cards equal to that result",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "modal_families",
+          "coverageStratum": "broad_modal"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0133",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "72075231-e3b3-46cc-b994-2d95b24cf904",
+      "oracleText": "Choose one or both —\n• Return target creature to its owner's hand.\n• Target player searches their library and/or graveyard for a card named Ezio, Blade of Vengeance, reveals it, and puts it into their hand. If they search their library this way, they shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "searches their library and/or graveyard for a card named Ezio, Blade of Vengeance, reveals it, and puts it into their hand"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "search_library",
+            "return_to_hand",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "cardName": "Auditore Ambush",
+      "colorIdentity": [
+        "B",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "5bc2eb0af1b079c91ce8d753e7c8fb169a52dd001f80e91ba61360e24aa48167",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.609Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_modal",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Choose one or both —\n• Return target creature to its owner's hand.\n• Target player searches their library and/or graveya"
+          },
+          "oracleTextHash": "5bc2eb0af1b079c91ce8d753e7c8fb169a52dd001f80e91ba61360e24aa48167",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0133",
+      "scoringTargets": [
+        {
+          "targetId": "992391c6d1983f2b",
+          "actionType": "search_library",
+          "evidenceContains": "searches their library and/or graveyard for a card named Ezio, Blade of Vengeance, reveals it, and puts it into their hand",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "modal_families",
+          "coverageStratum": "broad_modal"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0137",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "34493cf5-7586-48ef-806d-57273b2ab034",
+      "oracleText": "Choose one or both —\n• Avengers Disassembled deals 3 damage to each creature.\n• Destroy target land. Its controller may search their library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target land"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "destroy",
+            "put_onto_battlefield",
+            "deal_damage",
+            "shuffle_library"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "search_library",
+            "destroy",
+            "put_onto_battlefield",
+            "deal_damage",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "cardName": "Avengers Disassembled",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "127d34eaffaae01c6342621cdfcffc28cc221087ea5dad7bb5392aaf01b7a9e9",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.610Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_modal",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Choose one or both —\n• Avengers Disassembled deals 3 damage to each creature.\n• Destroy target land. Its controller may "
+          },
+          "oracleTextHash": "127d34eaffaae01c6342621cdfcffc28cc221087ea5dad7bb5392aaf01b7a9e9",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0137",
+      "scoringTargets": [
+        {
+          "targetId": "ffa7a21ac48886db",
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target land",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "modal_families",
+          "coverageStratum": "broad_modal"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0156",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "cab092f9-b7ff-43b9-935f-310869a4daf8",
+      "oracleText": "When Abdel Adrian enters, exile any number of other nonland permanents you control until Abdel Adrian leaves the battlefield. Create a 1/1 white Soldier creature token for each permanent exiled this way.\nChoose a Background (You can have a Background as a second commander.)",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile any number of other nonland permanents you control until Abdel Adrian leaves the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "create_token"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "exile",
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "exile",
+            "create_token"
+          ]
+        }
+      ],
+      "cardName": "Abdel Adrian, Gorion's Ward",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "58716b0a6cf085bf9b85ed64adc46ca20f1a30862c3226acbbcaf663fd0f17c5",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.612Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_variable_quantity",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "When Abdel Adrian enters, exile any number of other nonland permanents you control until Abdel Adrian leaves the battlef"
+          },
+          "oracleTextHash": "58716b0a6cf085bf9b85ed64adc46ca20f1a30862c3226acbbcaf663fd0f17c5",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0156",
+      "scoringTargets": [
+        {
+          "targetId": "fd424af544945e7b",
+          "actionType": "exile",
+          "evidenceContains": "exile any number of other nonland permanents you control until Abdel Adrian leaves the battlefield",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "scattered_one_offs",
+          "coverageStratum": "broad_variable_quantity"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0171",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "b6f52260-9ad5-4024-acf9-d77f3c08c872",
+      "oracleText": "+2: Exile the top three cards of target opponent's library.\n−X: Put a creature card with mana value X exiled with Ashiok onto the battlefield under your control. That creature is a Nightmare in addition to its other types.\n−10: Exile all cards from all opponents' hands and graveyards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put a creature card with mana value X exiled with Ashiok onto the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "exile",
+            "put_onto_battlefield"
+          ]
+        }
+      ],
+      "cardName": "Ashiok, Nightmare Weaver",
+      "colorIdentity": [
+        "B",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "b2badf19003705ea12ddeb7a8e8a380ce804485b9789a5836458dc245cdd8d75",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.614Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_saga_planeswalker",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "+2: Exile the top three cards of target opponent's library.\n−X: Put a creature card with mana value X exiled with Ashiok"
+          },
+          "oracleTextHash": "b2badf19003705ea12ddeb7a8e8a380ce804485b9789a5836458dc245cdd8d75",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0171",
+      "scoringTargets": [
+        {
+          "targetId": "5d1ab7495d8ec114",
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put a creature card with mana value X exiled with Ashiok onto the battlefield",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "saga_planeswalker",
+          "coverageStratum": "broad_saga_planeswalker"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0209",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "3a92b235-196b-4f46-9d20-06f4d3653d36",
+      "oracleText": "Put one, two, or three target creature cards from graveyards onto the battlefield under your control. Each of them enters with an additional -1/-1 counter on it.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put one, two, or three target creature cards from graveyards onto the battlefield"
+        }
+      ],
+      "expectedRoles": [],
+      "cardName": "Aberrant Return",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "5501213f95aefc55a5500a7ddeee6b1e2dbf17e1096ebbc225b663486ca74d87",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.617Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_supplement",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Put one, two, or three target creature cards from graveyards onto the battlefield under your control. Each of them enter"
+          },
+          "oracleTextHash": "5501213f95aefc55a5500a7ddeee6b1e2dbf17e1096ebbc225b663486ca74d87",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0209",
+      "scoringTargets": [
+        {
+          "targetId": "284f6d08ebd2487d",
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put one, two, or three target creature cards from graveyards onto the battlefield",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "scattered_one_offs",
+          "coverageStratum": "broad_supplement"
+        }
+      ],
+      "spentV14Regression": true
+    }
+  ],
+  "fpScoringCases": [
+    {
+      "id": "rc5-fp-0052",
+      "category": "rc5-v14-fp_scoring",
+      "layout": "transform",
+      "oracleId": "9fba3097-d53f-4ea4-b5d2-8adddaa09524",
+      "oracleText": "More Than Meets the Eye {R}{W} (You may cast this card converted for {R}{W}.)\nFirst strike\n{1}, Remove one or more +1/+1 counters from Arcee: It deals that much damage to target creature. Convert Arcee.\n//\nLiving metal (During your turn, this Vehicle is also a creature.)\nWhenever you cast a spell that targets one or more creatures or Vehicles you control, put that many +1/+1 counters on Arcee. Convert Arcee.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast this card converted for {R}{W}",
+          "cardFace": "front",
+          "optional": true,
+          "optionalEffect": true,
+          "semanticJustification": {
+            "clauseRole": "effect",
+            "abilityType": "spell_effect",
+            "executionContext": "permission",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": false,
+            "evidenceSpan": {
+              "start": 32,
+              "end": 75
+            },
+            "optionalEffect": true
+          }
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast a spell that targets one or more creatures or Vehicles you control, put that many +1/+1 counters on Arcee",
+          "cardFace": "back",
+          "semanticJustification": {
+            "clauseRole": "trigger_event",
+            "abilityType": "triggered",
+            "executionContext": "trigger_reference",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": false,
+            "evidenceSpan": {
+              "start": 285,
+              "end": 395
+            }
+          }
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "cast",
+            "cast"
+          ]
+        }
+      ],
+      "cardName": "Arcee, Sharpshooter // Arcee, Acrobatic Coupe",
+      "colorIdentity": [
+        "R",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f257b536251031509a5014dabc50f8f86b4305aff68c3c0e817b65cdf2d1006e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.598Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_mdfc_face_provenance",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "More Than Meets the Eye {R}{W} (You may cast this card converted for {R}{W}.)\nFirst strike\n{1}, Remove one or more +1/+1"
+          },
+          "oracleTextHash": "f257b536251031509a5014dabc50f8f86b4305aff68c3c0e817b65cdf2d1006e",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0052",
+      "falsePositiveTarget": {
+        "gateFpId": "vh14-0052|put_counter|put that many +1/+1 counters on Arcee.|1",
+        "observedAction": "put_counter",
+        "observedEvidence": "put that many +1/+1 counters on Arcee.",
+        "adjudicationVerdict": "genuine_parser_fp",
+        "policyReason": "Emission not covered by oracle policy for missing gold.",
+        "rc5Family": "scattered_one_offs",
+        "coverageStratum": "challenge_mdfc_face_provenance"
+      },
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-fp-0169",
+      "category": "rc5-v14-fp_scoring",
+      "layout": "normal",
+      "oracleId": "a95d29b9-c30b-4e63-afcb-dec7ed522c5a",
+      "oracleText": "+2: Arzakon deals 3 damage to any other target.\n−3: Create a Black Lotus token. (It's a {0} artifact with \"{T}, Sacrifice this token: Add three mana of any one color.\")\n−7: Each player shuffles their hand and graveyard into their library, then draws seven cards.\nArzakon can be your commander.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw",
+          "semanticJustification": {
+            "clauseRole": "effect",
+            "abilityType": "loyalty",
+            "executionContext": "immediate",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": true,
+            "evidenceSpan": {
+              "start": 244,
+              "end": 248
+            }
+          }
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a Black Lotus token",
+          "semanticJustification": {
+            "clauseRole": "effect",
+            "abilityType": "loyalty",
+            "executionContext": "immediate",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": true,
+            "evidenceSpan": {
+              "start": 52,
+              "end": 78
+            }
+          }
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 3 damage to any other target",
+          "semanticJustification": {
+            "clauseRole": "effect",
+            "abilityType": "loyalty",
+            "executionContext": "immediate",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": true,
+            "evidenceSpan": {
+              "start": 12,
+              "end": 46
+            }
+          }
+        },
+        {
+          "actionType": "shuffle_into_library",
+          "evidenceContains": "shuffles their hand and graveyard into their library",
+          "semanticJustification": {
+            "clauseRole": "effect",
+            "abilityType": "loyalty",
+            "executionContext": "immediate",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": true,
+            "evidenceSpan": {
+              "start": 185,
+              "end": 237
+            }
+          }
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token",
+            "sacrifice",
+            "deal_damage",
+            "shuffle_into_library"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token",
+            "sacrifice",
+            "deal_damage",
+            "shuffle_into_library"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token",
+            "sacrifice",
+            "deal_damage",
+            "shuffle_into_library"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token",
+            "sacrifice",
+            "deal_damage",
+            "shuffle_into_library"
+          ]
+        }
+      ],
+      "cardName": "Arzakon",
+      "colorIdentity": [
+        "B",
+        "G",
+        "R",
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "932854232519c4183c67b349f9ef0634f5cb1a74b7196554c9a4abb67878f72b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.614Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_saga_planeswalker",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "+2: Arzakon deals 3 damage to any other target.\n−3: Create a Black Lotus token. (It's a {0} artifact with \"{T}, Sacrific"
+          },
+          "oracleTextHash": "932854232519c4183c67b349f9ef0634f5cb1a74b7196554c9a4abb67878f72b",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0169",
+      "falsePositiveTarget": {
+        "gateFpId": "vh14-0169|sacrifice|Sacrifice this token: Add three mana of any one color|4",
+        "observedAction": "sacrifice",
+        "observedEvidence": "Sacrifice this token: Add three mana of any one color",
+        "adjudicationVerdict": "genuine_parser_fp",
+        "policyReason": "Emission not covered by oracle policy for missing gold.",
+        "rc5Family": "saga_planeswalker",
+        "coverageStratum": "broad_saga_planeswalker"
+      },
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-fp-0172",
+      "category": "rc5-v14-fp_scoring",
+      "layout": "normal",
+      "oracleId": "ce79bbd2-edf0-4d5e-9aaf-717ec3960c48",
+      "oracleText": "+2: Draw a card. Each player mills two cards.\n−5: Put target creature card from a graveyard onto the battlefield under your control.\n−11: Gain control of all creatures target opponent controls.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card",
+          "semanticJustification": {
+            "clauseRole": "effect",
+            "abilityType": "loyalty",
+            "executionContext": "immediate",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": true,
+            "evidenceSpan": {
+              "start": 4,
+              "end": 15
+            }
+          }
+        },
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Put target creature card from a graveyard onto the battlefield",
+          "semanticJustification": {
+            "clauseRole": "effect",
+            "abilityType": "loyalty",
+            "executionContext": "immediate",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": true,
+            "evidenceSpan": {
+              "start": 50,
+              "end": 112
+            }
+          }
+        },
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills two cards",
+          "semanticJustification": {
+            "clauseRole": "effect",
+            "abilityType": "loyalty",
+            "executionContext": "immediate",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": true,
+            "evidenceSpan": {
+              "start": 29,
+              "end": 44
+            }
+          }
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "return_to_battlefield",
+            "mill"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "draw",
+            "return_to_battlefield",
+            "mill"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "draw",
+            "return_to_battlefield",
+            "mill"
+          ]
+        }
+      ],
+      "cardName": "Ashiok, Sculptor of Fears",
+      "colorIdentity": [
+        "B",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "29be69e6af82f24a03d4adb6cae2d418eca5f358ef79d4426eca7afaba3a4d92",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.614Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_saga_planeswalker",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "+2: Draw a card. Each player mills two cards.\n−5: Put target creature card from a graveyard onto the battlefield under y"
+          },
+          "oracleTextHash": "29be69e6af82f24a03d4adb6cae2d418eca5f358ef79d4426eca7afaba3a4d92",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0172",
+      "falsePositiveTarget": {
+        "gateFpId": "vh14-0172|put_onto_battlefield|Put target creature card from a graveyard onto the battlefield|3",
+        "observedAction": "put_onto_battlefield",
+        "observedEvidence": "Put target creature card from a graveyard onto the battlefield",
+        "adjudicationVerdict": "genuine_parser_fp",
+        "policyReason": "Emission not covered by oracle policy for missing gold.",
+        "rc5Family": "saga_planeswalker",
+        "coverageStratum": "broad_saga_planeswalker"
+      },
+      "spentV14Regression": true
+    }
+  ],
+  "integrityAssertions": [
+    {
+      "assertionId": "rc5-integrity-0052",
+      "sourceV14CaseId": "vh14-0052",
+      "oracleId": "9fba3097-d53f-4ea4-b5d2-8adddaa09524",
+      "oracleText": "More Than Meets the Eye {R}{W} (You may cast this card converted for {R}{W}.)\nFirst strike\n{1}, Remove one or more +1/+1 counters from Arcee: It deals that much damage to target creature. Convert Arcee.\n//\nLiving metal (During your turn, this Vehicle is also a creature.)\nWhenever you cast a spell that targets one or more creatures or Vehicles you control, put that many +1/+1 counters on Arcee. Convert Arcee.",
+      "cardName": "Arcee, Sharpshooter // Arcee, Acrobatic Coupe",
+      "assertionType": "integrity",
+      "required": {
+        "idViolations": 0,
+        "provenanceViolations": 0
+      }
+    },
+    {
+      "assertionId": "rc5-integrity-0087",
+      "sourceV14CaseId": "vh14-0087",
+      "oracleId": "13c97cb2-fc77-4d4b-8cfb-747f4d448151",
+      "oracleText": "Target creature card in your graveyard perpetually gains \"{1}{B}{B}, Exile this card from your graveyard: Shuffle it into its owner's library. Create a token that's a copy of it, except it's a 4/4 black Zombie in addition to its other types. Activate only as a sorcery.\"",
+      "cardName": "Assemble from Parts",
+      "assertionType": "integrity",
+      "required": {
+        "idViolations": 0,
+        "provenanceViolations": 0
+      }
+    },
+    {
+      "assertionId": "rc5-integrity-0195",
+      "sourceV14CaseId": "vh14-0195",
+      "oracleId": "bedcb58e-7958-4364-8783-790ab52f92ea",
+      "oracleText": "Landfall — Whenever a land you control enters, mill two cards.\n{B/G}: Level 2\nWhenever a land you control enters, creature cards in your graveyard perpetually get +1/+1.\n{4}{B/G}{B/G}: Level 3\nYou may play lands and cast creature spells from your graveyard. If you cast a spell this way, that creature enters with a finality counter on it.",
+      "cardName": "Advanced Floral Invocations",
+      "assertionType": "integrity",
+      "required": {
+        "idViolations": 0,
+        "provenanceViolations": 0
+      }
+    }
+  ],
+  "leakageAssertions": [
+    {
+      "assertionId": "rc5-leakage-0016",
+      "sourceV14CaseId": "vh14-0016",
+      "oracleId": "3e0e3676-e634-4e64-bdfd-4aaa5885461f",
+      "oracleText": "Exile the top four cards of your library in a face-down pile, then exile the top four cards of your library in a face-up pile. An opponent chooses one of those piles. Put that pile into your graveyard. Look at the cards in the other pile. You may cast a spell from among them without paying its mana cost. Put the rest into your hand.",
+      "cardName": "Abstract Performance",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast a spell from among them without paying its mana cost",
+          "policyClass": "cast_play_permission_layer1"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0050",
+      "sourceV14CaseId": "vh14-0050",
+      "oracleId": "b5c8e24a-f4d7-42dc-8117-905ad0bad888",
+      "oracleText": "Teamwork 4 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 4 or more.)\nChoose one. If this spell was cast using teamwork, choose both instead.\n• Target player creates a 6/5 blue Leviathan creature token with hexproof.\n• Return one or two target nonland permanents to their owners' hands.",
+      "cardName": "Atlantis Attacks",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast using teamwork, choose both instead",
+          "policyClass": "cast_trigger_condition_reference"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0051",
+      "sourceV14CaseId": "vh14-0051",
+      "oracleId": "a78b063a-7f74-465a-9670-34f927f4bfe9",
+      "oracleText": "Whenever you cast your first instant or sorcery spell each turn, this creature gets +2/+0 until end of turn.\n//\nPut target instant or sorcery card from your graveyard on top of your library. (Then exile this card. You may cast the creature later from exile.)",
+      "cardName": "Aquatic Alchemist // Bubble Up",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast your first instant or sorcery spell each turn, this creature gets +2/+0 until end of turn",
+          "policyClass": "cast_trigger_condition_reference"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0052",
+      "sourceV14CaseId": "vh14-0052",
+      "oracleId": "9fba3097-d53f-4ea4-b5d2-8adddaa09524",
+      "oracleText": "More Than Meets the Eye {R}{W} (You may cast this card converted for {R}{W}.)\nFirst strike\n{1}, Remove one or more +1/+1 counters from Arcee: It deals that much damage to target creature. Convert Arcee.\n//\nLiving metal (During your turn, this Vehicle is also a creature.)\nWhenever you cast a spell that targets one or more creatures or Vehicles you control, put that many +1/+1 counters on Arcee. Convert Arcee.",
+      "cardName": "Arcee, Sharpshooter // Arcee, Acrobatic Coupe",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast a spell that targets one or more creatures or Vehicles you control, put that many +1/+1 counters on Arcee",
+          "policyClass": "cast_trigger_condition_reference"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0058",
+      "sourceV14CaseId": "vh14-0058",
+      "oracleId": "a0593a5b-6f76-4eb3-a1b1-9794d2d36c92",
+      "oracleText": "Target creature gets +1/+1 and gains double strike until end of turn.\nFuse (You may cast one or both halves of this card from your hand.)\n//\nAll creatures able to block target creature this turn do so.\nFuse (You may cast one or both halves of this card from your hand.)",
+      "cardName": "Armed // Dangerous",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast one or both halves of this card from your hand",
+          "policyClass": "cast_play_permission_layer1"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0059",
+      "sourceV14CaseId": "vh14-0059",
+      "oracleId": "31fc5d8b-94bc-4688-8a84-f15800e717a8",
+      "oracleText": "Whenever this creature enters or transforms into Ashling, Rekindled, you may discard a card. If you do, draw a card.\nAt the beginning of your first main phase, you may pay {U}. If you do, transform Ashling.\n//\nWhenever this creature transforms into Ashling, Rimebound and at the beginning of your first main phase, add two mana of any one color. Spend this mana only to cast spells with mana value 4 or greater.\nAt the beginning of your first main phase, you may pay {R}. If you do, transform Ashling.",
+      "cardName": "Ashling, Rekindled // Ashling, Rimebound",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast spells with mana value 4 or greater",
+          "policyClass": "cast_trigger_condition_reference"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0071",
+      "sourceV14CaseId": "vh14-0071",
+      "oracleId": "f4437cb3-85f7-49b5-bb41-6a948549d987",
+      "oracleText": "When this enchantment enters, return target creature card from your graveyard to your hand.\nWhenever a creature card leaves your graveyard, amass Goblins 1.\n{1}{B}: Goblins and Orcs you control gain menace until end of turn.",
+      "cardName": "Along the Crooked Way",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "return target creature card from your graveyard to your hand",
+          "policyClass": "wrong_primitive_label"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0073",
+      "sourceV14CaseId": "vh14-0073",
+      "oracleId": "82b9ad93-df75-4417-9746-798db8fe6ba0",
+      "oracleText": "When this creature enters, you may return target sorcery card from your graveyard to your hand.",
+      "cardName": "Anarchist",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "return target sorcery card from your graveyard to your hand",
+          "policyClass": "wrong_primitive_label"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0075",
+      "sourceV14CaseId": "vh14-0075",
+      "oracleId": "a45bb088-16fd-4d91-8fd6-3c52f1c24748",
+      "oracleText": "When you cast this spell while you control your commander, copy this spell. You may choose a new target for the copy.\nReturn target permanent card from your graveyard to your hand.",
+      "cardName": "Ancestral Communion",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return target permanent card from your graveyard to your hand",
+          "policyClass": "wrong_primitive_label"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0076",
+      "sourceV14CaseId": "vh14-0076",
+      "oracleId": "9b6a74fb-c48f-4d85-b4b3-96eb80b9efc7",
+      "oracleText": "Flying\nAt the beginning of your upkeep, return target Spirit card from your graveyard to your hand.",
+      "cardName": "Angel of Flight Alabaster",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "return target Spirit card from your graveyard to your hand",
+          "policyClass": "wrong_primitive_label"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0082",
+      "sourceV14CaseId": "vh14-0082",
+      "oracleId": "1e048c15-50d6-4313-880a-e04348952a51",
+      "oracleText": "{T}: Draw a card, then exile a card from your hand and put a number of time counters on it equal to its mana value. It gains \"When the last time counter is removed from this card, if it's exiled, you may cast it without paying its mana cost. If you cast a creature spell this way, it gains haste until end of turn.\" Then remove a time counter from each other card you own in exile.",
+      "cardName": "Alaundo the Seer",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast a creature spell this way, it gains haste until end of turn",
+          "policyClass": "cast_trigger_condition_reference"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0097",
+      "sourceV14CaseId": "vh14-0097",
+      "oracleId": "278e51fe-3cd9-4c82-bd81-2164771f8611",
+      "oracleText": "Flash\nIf an opponent would draw two or more cards, instead you and that player each draw a card.",
+      "cardName": "Alms Collector",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw two or more cards, instead you and that",
+          "policyClass": "replacement_event_reference"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0111",
+      "sourceV14CaseId": "vh14-0111",
+      "oracleId": "4f16c8ea-84f6-4706-8b3d-5848aba1b9bb",
+      "oracleText": "Flash\nWhenever an opponent draws a card except the first one they draw in each of their draw steps, Orcish Bowmasters deals 1 damage to any target. Then amass Orcs 1.",
+      "cardName": "A-Orcish Bowmasters",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw in each of their draw steps, Orcish Bowm",
+          "policyClass": "trigger_event_reference"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0122",
+      "sourceV14CaseId": "vh14-0122",
+      "oracleId": "e3eb6f90-ccfc-41e7-bff6-0b378226bc7e",
+      "oracleText": "{T}: Add {C}.\n{T}: Add one mana of any color. Spend this mana only to cast a creature spell.\n{6}, {T}: Create a 1/1 colorless Shapeshifter creature token with changeling. (It's every creature type.)",
+      "cardName": "Abundant Countryside",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast a creature spell",
+          "policyClass": "cast_trigger_condition_reference"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0129",
+      "sourceV14CaseId": "vh14-0129",
+      "oracleId": "c4edcdc0-91de-410c-95dd-219efcef692a",
+      "oracleText": "Whenever you cast a spell with a squirrel in its art, you get {A} (an acorn counter).\nWhenever a Squirrel you control enters or dies, you get {A}.\n{2}{B}, Pay X {A}: Target creature gets -X/-X until end of turn.\n{G}, Pay X {A}: Target creature gets +X/+X until end of turn.",
+      "cardName": "Acornelia, Fashionable Filcher",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast a spell with a squirrel in its art, you get {A} (an acorn counter)",
+          "policyClass": "cast_trigger_condition_reference"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0131",
+      "sourceV14CaseId": "vh14-0131",
+      "oracleId": "901ee0e3-1011-40e1-815a-09246112e8dc",
+      "oracleText": "Roll two d8 and choose one result. Draw cards equal to that result. Then you may cast an instant or sorcery spell with mana value less than or equal to the other result from your hand without paying its mana cost.",
+      "cardName": "Arcane Endeavor",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "you may cast an instant or sorcery spell with mana value less than or equal to the other result from your hand without paying its mana cost",
+          "policyClass": "cast_trigger_condition_reference"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0138",
+      "sourceV14CaseId": "vh14-0138",
+      "oracleId": "905e4bd1-f5f2-4691-b13f-ce2628d26a38",
+      "oracleText": "Flying\nWhenever this Vehicle enters or attacks, choose one —\n• You may put a Hero creature card from your hand onto the battlefield.\n• Return target Hero creature card from your graveyard to your hand.\nCrew 3",
+      "cardName": "Avengers Quinjet",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Return target Hero creature card from your graveyard to your hand",
+          "policyClass": "wrong_primitive_label"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0144",
+      "sourceV14CaseId": "vh14-0144",
+      "oracleId": "5c4ce9e6-a8c2-4d34-a188-c0595004ab3b",
+      "oracleText": "You may pay {R}{G} rather than pay this spell's mana cost. Spend only mana produced by Treasures to cast it this way.",
+      "cardName": "A-Security Rhox",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast it this way",
+          "policyClass": "cast_trigger_condition_reference"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0191",
+      "sourceV14CaseId": "vh14-0191",
+      "oracleId": "1d15c566-d96d-454d-a4fe-eea8e6aed415",
+      "oracleText": "Flying\nWhenever you cast a creature spell without flying, conjure a duplicate of it into your hand. The duplicate perpetually gains flying. This ability triggers only once each turn.",
+      "cardName": "Ace Flockbringer",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast a creature spell without flying, conjure a duplicate of it into your hand",
+          "policyClass": "cast_trigger_condition_reference"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0193",
+      "sourceV14CaseId": "vh14-0193",
+      "oracleId": "a6657fcf-f08c-4b03-8ec8-cb0b194eb553",
+      "oracleText": "Whenever you cast an instant or sorcery spell, if this artifact has fewer than three charge counters on it, put a charge counter on it.\nRemove three charge counters from this artifact: When you next cast an instant or sorcery spell this turn, copy it and you may choose new targets for the copy.",
+      "cardName": "Adaptive Training Post",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast an instant or sorcery spell this turn, copy it and you may choose new targets for the copy",
+          "policyClass": "cast_trigger_condition_reference"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0195",
+      "sourceV14CaseId": "vh14-0195",
+      "oracleId": "bedcb58e-7958-4364-8783-790ab52f92ea",
+      "oracleText": "Landfall — Whenever a land you control enters, mill two cards.\n{B/G}: Level 2\nWhenever a land you control enters, creature cards in your graveyard perpetually get +1/+1.\n{4}{B/G}{B/G}: Level 3\nYou may play lands and cast creature spells from your graveyard. If you cast a spell this way, that creature enters with a finality counter on it.",
+      "cardName": "Advanced Floral Invocations",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast creature spells from your graveyard",
+          "policyClass": "cast_play_permission_layer1"
+        },
+        {
+          "actionType": "play",
+          "evidenceContains": "You may play lands",
+          "policyClass": "cast_play_permission_layer1"
+        }
+      ]
+    },
+    {
+      "assertionId": "rc5-leakage-0212",
+      "sourceV14CaseId": "vh14-0212",
+      "oracleId": "d6d7faa8-ecc9-408b-9c46-a0f62c74f567",
+      "oracleText": "You may discard a Plains card rather than pay this spell's mana cost.\nDestroy target artifact or enchantment.",
+      "cardName": "Abolish",
+      "assertionType": "leakage",
+      "forbiddenEmissions": [
+        {
+          "actionType": "discard",
+          "evidenceContains": "discard a Plains card rather than pay this spell's mana cost",
+          "policyClass": "alternative_additional_cost_layer1"
+        }
+      ]
+    }
+  ],
+  "developmentOrder": [
+    {
+      "family": "granted_nested_actions",
+      "priority": 1,
+      "actionTargetIds": [
+        "f4fde08c6ec84ae2",
+        "63d29808ffb99cd2",
+        "38bb937842c566fa",
+        "86ba7cc866e93467"
+      ],
+      "fpTargetIds": []
+    },
+    {
+      "family": "replacement_effect_parsing",
+      "priority": 2,
+      "actionTargetIds": [
+        "cb5d7333e424d5e4",
+        "98ec65ada6d190e3"
+      ],
+      "fpTargetIds": []
+    },
+    {
+      "family": "modal_families",
+      "priority": 3,
+      "actionTargetIds": [
+        "819e85297f7bc7e8",
+        "992391c6d1983f2b",
+        "ffa7a21ac48886db"
+      ],
+      "fpTargetIds": []
+    },
+    {
+      "family": "triggered_families",
+      "priority": 4,
+      "actionTargetIds": [
+        "32966575178070e5",
+        "rc5-goldcorr-0114-lose-life",
+        "rc5-goldcorr-0114-gain-life"
+      ],
+      "fpTargetIds": []
+    },
+    {
+      "family": "saga_planeswalker",
+      "priority": 5,
+      "actionTargetIds": [
+        "5d1ab7495d8ec114"
+      ],
+      "fpTargetIds": [
+        "vh14-0169|sacrifice|Sacrifice this token: Add three mana of any one color|4",
+        "vh14-0172|put_onto_battlefield|Put target creature card from a graveyard onto the battlefield|3"
+      ]
+    },
+    {
+      "family": "scattered_one_offs",
+      "priority": 6,
+      "actionTargetIds": [
+        "7727916729ff4c1d",
+        "1efd8bfd77430e7c",
+        "6e26bd9701b88e99",
+        "762aabd9d83f077a",
+        "fd424af544945e7b",
+        "284f6d08ebd2487d"
+      ],
+      "fpTargetIds": [
+        "vh14-0052|put_counter|put that many +1/+1 counters on Arcee.|1"
+      ]
+    }
+  ],
+  "accounting": {
+    "sourceGenuineParserFnCount": 19,
+    "sourceGenuineParserFpCount": 3,
+    "invalidGoldFnExcluded": 25,
+    "missingGoldFpExcluded": 8,
+    "invalidGoldTargetsImported": 0,
+    "duplicateTargets": 0,
+    "unclassifiedTargets": 0,
+    "integrityAssertions": 3,
+    "leakageAssertions": 22,
+    "contrastAssertions": 0,
+    "postCorrectionActionTargetCount": 19,
+    "parserBlindGoldCorrectionsApplied": 2,
+    "invalidGoldFnReclassifiedInPack": 2
+  },
+  "parserBlindGoldCorrections": [
+    {
+      "sourceV14CaseId": "vh14-0046",
+      "priorTargetId": "bddfd9f887f0f6dd",
+      "reason": "invalid_gold_token_copy_not_primitive_copy",
+      "action": "remove_action_scoring_case",
+      "preserveSemantics": "create_token + tokenCopyOf — not primitive copy",
+      "removedCaseId": "rc5-action-0046"
+    },
+    {
+      "sourceV14CaseId": "vh14-0114",
+      "priorTargetId": "4aa183675774c1b3",
+      "reason": "invalid_gold_draw_in_trigger_header",
+      "action": "replace_scoring_targets",
+      "preserveSemantics": "draw remains L1 trigger event reference only",
+      "replacementTargetIds": [
+        "rc5-goldcorr-0114-lose-life",
+        "rc5-goldcorr-0114-gain-life"
+      ]
+    }
+  ],
+  "priorPackVersion": "rc5-v14-regression-v150",
+  "priorContentHash": "551d4a54c8d110829be24e2a5e1cd8dd3757708776d572bc1e6bac2a699b7480",
+  "taxonomyVersion": "three-layer-v1.4",
+  "contentHash": "1a0b911060057f5bc7669d612fc5681d90fd6cd1207fd44dda96a6562a8efb7e",
+  "cases": [
+    {
+      "id": "rc5-action-0003",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "d4d44264-b276-4bd7-8fbe-6af292b08773",
+      "oracleText": "Tap an untapped Octopus you control: Tap target permanent.\n{U}{U}{U}: Tap all creatures without flying.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "tap",
+          "evidenceContains": "Tap all creatures without flying"
+        }
+      ],
+      "expectedRoles": [],
+      "cardName": "Aboshan, Cephalid Emperor",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f83b367f98e9e1c80f8d51b2ffd34069dafb7f5247dccd674e525e5daee3cb06",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.578Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_activated_cost_vs_effect",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 103,
+            "text": "Tap an untapped Octopus you control: Tap target permanent.\n{U}{U}{U}: Tap all creatures without flying."
+          },
+          "oracleTextHash": "f83b367f98e9e1c80f8d51b2ffd34069dafb7f5247dccd674e525e5daee3cb06",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0003",
+      "scoringTargets": [
+        {
+          "targetId": "7727916729ff4c1d",
+          "actionType": "tap",
+          "evidenceContains": "Tap all creatures without flying",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "scattered_one_offs",
+          "coverageStratum": "challenge_activated_cost_vs_effect"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0009",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "70d35dbd-1d91-4a2a-a643-6870d168f4f5",
+      "oracleText": "This land enters tapped.\n{T}: Add {W}.\nStation (Tap another creature you control: Put charge counters equal to its power on this Planet. Station only as a sorcery.)\n12+ | {3}{W}, {T}: Create a token that's a copy of target artifact or enchantment you control, except it's legendary. Activate only as a sorcery.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "copy",
+          "evidenceContains": "copy of target"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "ramp",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "copy"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "copy"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "add_mana",
+            "create_token",
+            "copy"
+          ]
+        }
+      ],
+      "cardName": "Adagia, Windswept Bastion",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "5c5b073aca231aec6be183708d6c102d1adfcd770d1cdaa4ffbb9778ee5b8dac",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.580Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_activated_cost_vs_effect",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "This land enters tapped.\n{T}: Add {W}.\nStation (Tap another creature you control: Put charge counters equal to its power"
+          },
+          "oracleTextHash": "5c5b073aca231aec6be183708d6c102d1adfcd770d1cdaa4ffbb9778ee5b8dac",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0009",
+      "scoringTargets": [
+        {
+          "targetId": "1efd8bfd77430e7c",
+          "actionType": "copy",
+          "evidenceContains": "copy of target",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "scattered_one_offs",
+          "coverageStratum": "challenge_activated_cost_vs_effect"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0011",
+      "category": "rc5-v14-action_scoring",
+      "layout": "class",
+      "oracleId": "f00bc101-8082-4459-b987-f0c4b7a12344",
+      "oracleText": "(Gain the next level as a sorcery to add its ability.)\nAt the beginning of your first main phase, mill a card, then exile a card from your graveyard at random. You may play the exiled card this turn.\n{1}{R}: Level 2\nWhenever one or more cards leave your graveyard, this Class deals 2 damage to each opponent.\n{1}{R}: Level 3\nSpells you cast from anywhere other than your hand cost {2} less to cast.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "minActivatedAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "mill a card, then exile a card from your graveyard at random"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "cast",
+            "deal_damage",
+            "mill"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "cast",
+            "deal_damage",
+            "mill"
+          ]
+        }
+      ],
+      "cardName": "Advanced Reconstruction",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "8024995fe161b09e5ae282e368e4df3a287215543f0632171089f8533913bbe0",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.584Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_activated_cost_vs_effect",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "(Gain the next level as a sorcery to add its ability.)\nAt the beginning of your first main phase, mill a card, then exil"
+          },
+          "oracleTextHash": "8024995fe161b09e5ae282e368e4df3a287215543f0632171089f8533913bbe0",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0011",
+      "scoringTargets": [
+        {
+          "targetId": "6e26bd9701b88e99",
+          "actionType": "mill",
+          "evidenceContains": "mill a card, then exile a card from your graveyard at random",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "scattered_one_offs",
+          "coverageStratum": "challenge_activated_cost_vs_effect"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0022",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "80ea63fd-691a-45ba-a4bf-862e5ec2922d",
+      "oracleText": "Reveal this card as you draft it. Reveal the next card you draft and note its name.\nWhen this creature enters, you may search your hand and/or library for a card with a name noted as you drafted cards named Aether Searcher. You may cast it without paying its mana cost. If you searched your library this way, shuffle.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "shuffle_library",
+          "evidenceContains": "shuffle"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "cast",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "cardName": "Aether Searcher",
+      "colorIdentity": [],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "4aa1d50b77c283c584c1510819aa94f37b7c2688cd9e98d1c4b06a0515cdcada",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.588Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_immediate_cast_vs_permission",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Reveal this card as you draft it. Reveal the next card you draft and note its name.\nWhen this creature enters, you may s"
+          },
+          "oracleTextHash": "4aa1d50b77c283c584c1510819aa94f37b7c2688cd9e98d1c4b06a0515cdcada",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0022",
+      "scoringTargets": [
+        {
+          "targetId": "762aabd9d83f077a",
+          "actionType": "shuffle_library",
+          "evidenceContains": "shuffle",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "scattered_one_offs",
+          "coverageStratum": "challenge_immediate_cast_vs_permission"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0083",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "061e7077-115b-4a37-b574-8fd4757d4bce",
+      "oracleText": "Landfall — Whenever a land you control enters, a random land card in your library perpetually gains \"Whenever this land becomes tapped, draw a card.\"",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw a card"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw"
+          ]
+        }
+      ],
+      "cardName": "Ambassador of Evendo",
+      "colorIdentity": [
+        "G",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "d695409ed195f5444b471a0568413f05615ee3776e26ad933b69d0f2562ca457",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.603Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_granted_nested_actions",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Landfall — Whenever a land you control enters, a random land card in your library perpetually gains \"Whenever this land "
+          },
+          "oracleTextHash": "d695409ed195f5444b471a0568413f05615ee3776e26ad933b69d0f2562ca457",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0083",
+      "scoringTargets": [
+        {
+          "targetId": "f4fde08c6ec84ae2",
+          "actionType": "draw",
+          "evidenceContains": "draw a card",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "granted_nested_actions",
+          "coverageStratum": "challenge_granted_nested_actions"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0087",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "13c97cb2-fc77-4d4b-8cfb-747f4d448151",
+      "oracleText": "Target creature card in your graveyard perpetually gains \"{1}{B}{B}, Exile this card from your graveyard: Shuffle it into its owner's library. Create a token that's a copy of it, except it's a 4/4 black Zombie in addition to its other types. Activate only as a sorcery.\"",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a token"
+        },
+        {
+          "actionType": "shuffle_into_library",
+          "evidenceContains": "Shuffle it into its owner's library"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "create_token",
+            "shuffle_into_library"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "create_token",
+            "shuffle_into_library"
+          ]
+        }
+      ],
+      "cardName": "Assemble from Parts",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ce8c4f48bf4490b7020147d6587dba6f607f6b420649440497191ed1dc8f6adf",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.604Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_granted_nested_actions",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Target creature card in your graveyard perpetually gains \"{1}{B}{B}, Exile this card from your graveyard: Shuffle it int"
+          },
+          "oracleTextHash": "ce8c4f48bf4490b7020147d6587dba6f607f6b420649440497191ed1dc8f6adf",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0087",
+      "scoringTargets": [
+        {
+          "targetId": "63d29808ffb99cd2",
+          "actionType": "create_token",
+          "evidenceContains": "Create a token",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "granted_nested_actions",
+          "coverageStratum": "challenge_granted_nested_actions"
+        },
+        {
+          "targetId": "38bb937842c566fa",
+          "actionType": "shuffle_into_library",
+          "evidenceContains": "Shuffle it into its owner's library",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "granted_nested_actions",
+          "coverageStratum": "challenge_granted_nested_actions"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0089",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "37e4b9fe-e90a-4c65-8ad7-8db603230a89",
+      "oracleText": "Until end of turn, target creature you control gains \"When this creature dies, return it to the battlefield tapped under its owner's control. It deals 1 damage to each opponent.\"\nOverload {2}{B}{B}",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 1 damage to each opponent"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "deal_damage"
+          ]
+        }
+      ],
+      "cardName": "Bail Out",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3cfc5ed7df1eaea87239869f2764968cb05e19094b8f239861f063598fec8cf1",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.605Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_granted_nested_actions",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Until end of turn, target creature you control gains \"When this creature dies, return it to the battlefield tapped under"
+          },
+          "oracleTextHash": "3cfc5ed7df1eaea87239869f2764968cb05e19094b8f239861f063598fec8cf1",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0089",
+      "scoringTargets": [
+        {
+          "targetId": "86ba7cc866e93467",
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 1 damage to each opponent",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "granted_nested_actions",
+          "coverageStratum": "challenge_granted_nested_actions"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0094",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "cdc7356c-9621-4420-9fda-c8b91df0ec7c",
+      "oracleText": "When this creature enters, tap target creature an opponent controls and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "tap",
+          "evidenceContains": "tap target creature an opponent controls and put a stun counter on it"
+        }
+      ],
+      "expectedRoles": [],
+      "cardName": "Alchemax Slayer-Bots",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "62d7b888f46bc8ec6bd3e42cda7ba335853a5c7806983eebda3ae65daa5247b8",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.605Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_replacement",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "When this creature enters, tap target creature an opponent controls and put a stun counter on it. (If a permanent with a"
+          },
+          "oracleTextHash": "62d7b888f46bc8ec6bd3e42cda7ba335853a5c7806983eebda3ae65daa5247b8",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0094",
+      "scoringTargets": [
+        {
+          "targetId": "cb5d7333e424d5e4",
+          "actionType": "tap",
+          "evidenceContains": "tap target creature an opponent controls and put a stun counter on it",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "replacement_effect_parsing",
+          "coverageStratum": "challenge_replacement"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0098",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "75070eaf-c931-46e5-9aa1-b849e33580c6",
+      "oracleText": "Ward {2}\nWhenever this creature attacks, put three stun counters on it and draw three cards. (If a permanent with a stun counter would become untapped, remove one from it instead.)\nWhenever you cast a Turtle spell, untap this creature.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw three cards"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "cast"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "draw",
+            "cast"
+          ]
+        }
+      ],
+      "cardName": "Ambling Stormshell",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "2b6b329df51411278a90d93d04baa640657c56094a2f7385a7f2cad1e183c233",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.605Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_replacement",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Ward {2}\nWhenever this creature attacks, put three stun counters on it and draw three cards. (If a permanent with a stun"
+          },
+          "oracleTextHash": "2b6b329df51411278a90d93d04baa640657c56094a2f7385a7f2cad1e183c233",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0098",
+      "scoringTargets": [
+        {
+          "targetId": "98ec65ada6d190e3",
+          "actionType": "draw",
+          "evidenceContains": "draw three cards",
+          "policyClass": "triggered_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "replacement_effect_parsing",
+          "coverageStratum": "challenge_replacement"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0105",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "23e68343-f5fa-4dab-95ba-edd701ee4ecd",
+      "oracleText": "Whenever Krydle of Baldur's Gate deals combat damage to a player, that player loses 1 life and mills a card, then you gain 1 life and scry 1.\nWhenever you attack, target creature can't be blocked this turn.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills a card, then you gain 1 life and scry 1"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "gain_life",
+            "lose_life",
+            "mill",
+            "scry"
+          ]
+        }
+      ],
+      "cardName": "A-Krydle of Baldur's Gate",
+      "colorIdentity": [
+        "B",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "c68b673dad426097dfae2043ef5265d11081be87a820bac3a36fc54e9e07c0e4",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.606Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_triggered",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Whenever Krydle of Baldur's Gate deals combat damage to a player, that player loses 1 life and mills a card, then you ga"
+          },
+          "oracleTextHash": "c68b673dad426097dfae2043ef5265d11081be87a820bac3a36fc54e9e07c0e4",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0105",
+      "scoringTargets": [
+        {
+          "targetId": "32966575178070e5",
+          "actionType": "mill",
+          "evidenceContains": "mills a card, then you gain 1 life and scry 1",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "triggered_families",
+          "coverageStratum": "broad_triggered"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0114",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "b191888b-a8b5-4544-a42d-98a7440b4528",
+      "oracleText": "Vigilance\nWhenever you draw a card, target opponent loses 1 life and you gain 1 life.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "lose_life",
+          "evidenceContains": "target opponent loses 1 life"
+        },
+        {
+          "actionType": "gain_life",
+          "evidenceContains": "you gain 1 life"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "gain_life",
+            "lose_life"
+          ]
+        }
+      ],
+      "cardName": "A-Queza, Augur of Agonies",
+      "colorIdentity": [
+        "B",
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "ee30f36e336b10ad33c3f320c0b71396c588233947b9a75a17744667660ab81c",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.607Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_triggered",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 85,
+            "text": "Vigilance\nWhenever you draw a card, target opponent loses 1 life and you gain 1 life."
+          },
+          "oracleTextHash": "ee30f36e336b10ad33c3f320c0b71396c588233947b9a75a17744667660ab81c",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0114",
+      "scoringTargets": [
+        {
+          "targetId": "rc5-goldcorr-0114-lose-life",
+          "actionType": "lose_life",
+          "evidenceContains": "target opponent loses 1 life",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "triggered_families",
+          "coverageStratum": "broad_triggered"
+        },
+        {
+          "targetId": "rc5-goldcorr-0114-gain-life",
+          "actionType": "gain_life",
+          "evidenceContains": "you gain 1 life",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "triggered_families",
+          "coverageStratum": "broad_triggered"
+        }
+      ],
+      "spentV14Regression": true,
+      "goldCorrectionApplied": "invalid_gold_draw_in_trigger_header",
+      "goldCorrectionAt": "2026-08-10T02:45:54.375Z"
+    },
+    {
+      "id": "rc5-action-0131",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "901ee0e3-1011-40e1-815a-09246112e8dc",
+      "oracleText": "Roll two d8 and choose one result. Draw cards equal to that result. Then you may cast an instant or sorcery spell with mana value less than or equal to the other result from your hand without paying its mana cost.",
+      "expectedStructure": {
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw cards equal to that result"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "cast"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "draw",
+            "cast"
+          ]
+        }
+      ],
+      "cardName": "Arcane Endeavor",
+      "colorIdentity": [
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "3cd7131637edbf4d8fc87778abd68e2259223aa41dc851e1ab0dc650a76394ac",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.608Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_modal",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Roll two d8 and choose one result. Draw cards equal to that result. Then you may cast an instant or sorcery spell with m"
+          },
+          "oracleTextHash": "3cd7131637edbf4d8fc87778abd68e2259223aa41dc851e1ab0dc650a76394ac",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0131",
+      "scoringTargets": [
+        {
+          "targetId": "819e85297f7bc7e8",
+          "actionType": "draw",
+          "evidenceContains": "Draw cards equal to that result",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "modal_families",
+          "coverageStratum": "broad_modal"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0133",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "72075231-e3b3-46cc-b994-2d95b24cf904",
+      "oracleText": "Choose one or both —\n• Return target creature to its owner's hand.\n• Target player searches their library and/or graveyard for a card named Ezio, Blade of Vengeance, reveals it, and puts it into their hand. If they search their library this way, they shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "search_library",
+          "evidenceContains": "searches their library and/or graveyard for a card named Ezio, Blade of Vengeance, reveals it, and puts it into their hand"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "search_library",
+            "return_to_hand",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "cardName": "Auditore Ambush",
+      "colorIdentity": [
+        "B",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "5bc2eb0af1b079c91ce8d753e7c8fb169a52dd001f80e91ba61360e24aa48167",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.609Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_modal",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Choose one or both —\n• Return target creature to its owner's hand.\n• Target player searches their library and/or graveya"
+          },
+          "oracleTextHash": "5bc2eb0af1b079c91ce8d753e7c8fb169a52dd001f80e91ba61360e24aa48167",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0133",
+      "scoringTargets": [
+        {
+          "targetId": "992391c6d1983f2b",
+          "actionType": "search_library",
+          "evidenceContains": "searches their library and/or graveyard for a card named Ezio, Blade of Vengeance, reveals it, and puts it into their hand",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "modal_families",
+          "coverageStratum": "broad_modal"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0137",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "34493cf5-7586-48ef-806d-57273b2ab034",
+      "oracleText": "Choose one or both —\n• Avengers Disassembled deals 3 damage to each creature.\n• Destroy target land. Its controller may search their library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target land"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "tutor",
+          "fromPrimitiveActions": [
+            "search_library",
+            "destroy",
+            "put_onto_battlefield",
+            "deal_damage",
+            "shuffle_library"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "search_library",
+            "destroy",
+            "put_onto_battlefield",
+            "deal_damage",
+            "shuffle_library"
+          ]
+        }
+      ],
+      "cardName": "Avengers Disassembled",
+      "colorIdentity": [
+        "R"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "127d34eaffaae01c6342621cdfcffc28cc221087ea5dad7bb5392aaf01b7a9e9",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.610Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_modal",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Choose one or both —\n• Avengers Disassembled deals 3 damage to each creature.\n• Destroy target land. Its controller may "
+          },
+          "oracleTextHash": "127d34eaffaae01c6342621cdfcffc28cc221087ea5dad7bb5392aaf01b7a9e9",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0137",
+      "scoringTargets": [
+        {
+          "targetId": "ffa7a21ac48886db",
+          "actionType": "destroy",
+          "evidenceContains": "Destroy target land",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "modal_families",
+          "coverageStratum": "broad_modal"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0156",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "cab092f9-b7ff-43b9-935f-310869a4daf8",
+      "oracleText": "When Abdel Adrian enters, exile any number of other nonland permanents you control until Abdel Adrian leaves the battlefield. Create a 1/1 white Soldier creature token for each permanent exiled this way.\nChoose a Background (You can have a Background as a second commander.)",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "exile",
+          "evidenceContains": "exile any number of other nonland permanents you control until Abdel Adrian leaves the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "create_token"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "exile",
+            "create_token"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "exile",
+            "create_token"
+          ]
+        }
+      ],
+      "cardName": "Abdel Adrian, Gorion's Ward",
+      "colorIdentity": [
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "58716b0a6cf085bf9b85ed64adc46ca20f1a30862c3226acbbcaf663fd0f17c5",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.612Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_variable_quantity",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "When Abdel Adrian enters, exile any number of other nonland permanents you control until Abdel Adrian leaves the battlef"
+          },
+          "oracleTextHash": "58716b0a6cf085bf9b85ed64adc46ca20f1a30862c3226acbbcaf663fd0f17c5",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0156",
+      "scoringTargets": [
+        {
+          "targetId": "fd424af544945e7b",
+          "actionType": "exile",
+          "evidenceContains": "exile any number of other nonland permanents you control until Abdel Adrian leaves the battlefield",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "scattered_one_offs",
+          "coverageStratum": "broad_variable_quantity"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0171",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "b6f52260-9ad5-4024-acf9-d77f3c08c872",
+      "oracleText": "+2: Exile the top three cards of target opponent's library.\n−X: Put a creature card with mana value X exiled with Ashiok onto the battlefield under your control. That creature is a Nightmare in addition to its other types.\n−10: Exile all cards from all opponents' hands and graveyards.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put a creature card with mana value X exiled with Ashiok onto the battlefield"
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "exile",
+            "exile",
+            "put_onto_battlefield"
+          ]
+        }
+      ],
+      "cardName": "Ashiok, Nightmare Weaver",
+      "colorIdentity": [
+        "B",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "b2badf19003705ea12ddeb7a8e8a380ce804485b9789a5836458dc245cdd8d75",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.614Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_saga_planeswalker",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "+2: Exile the top three cards of target opponent's library.\n−X: Put a creature card with mana value X exiled with Ashiok"
+          },
+          "oracleTextHash": "b2badf19003705ea12ddeb7a8e8a380ce804485b9789a5836458dc245cdd8d75",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0171",
+      "scoringTargets": [
+        {
+          "targetId": "5d1ab7495d8ec114",
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put a creature card with mana value X exiled with Ashiok onto the battlefield",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "saga_planeswalker",
+          "coverageStratum": "broad_saga_planeswalker"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-action-0209",
+      "category": "rc5-v14-action_scoring",
+      "layout": "normal",
+      "oracleId": "3a92b235-196b-4f46-9d20-06f4d3653d36",
+      "oracleText": "Put one, two, or three target creature cards from graveyards onto the battlefield under your control. Each of them enters with an additional -1/-1 counter on it.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put one, two, or three target creature cards from graveyards onto the battlefield"
+        }
+      ],
+      "expectedRoles": [],
+      "cardName": "Aberrant Return",
+      "colorIdentity": [
+        "B"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "5501213f95aefc55a5500a7ddeee6b1e2dbf17e1096ebbc225b663486ca74d87",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.617Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_supplement",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "Put one, two, or three target creature cards from graveyards onto the battlefield under your control. Each of them enter"
+          },
+          "oracleTextHash": "5501213f95aefc55a5500a7ddeee6b1e2dbf17e1096ebbc225b663486ca74d87",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0209",
+      "scoringTargets": [
+        {
+          "targetId": "284f6d08ebd2487d",
+          "actionType": "put_onto_battlefield",
+          "evidenceContains": "Put one, two, or three target creature cards from graveyards onto the battlefield",
+          "policyClass": "resolving_effect_layer2",
+          "adjudicationVerdict": "genuine_parser_fn",
+          "rc5Family": "scattered_one_offs",
+          "coverageStratum": "broad_supplement"
+        }
+      ],
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-fp-0052",
+      "category": "rc5-v14-fp_scoring",
+      "layout": "transform",
+      "oracleId": "9fba3097-d53f-4ea4-b5d2-8adddaa09524",
+      "oracleText": "More Than Meets the Eye {R}{W} (You may cast this card converted for {R}{W}.)\nFirst strike\n{1}, Remove one or more +1/+1 counters from Arcee: It deals that much damage to target creature. Convert Arcee.\n//\nLiving metal (During your turn, this Vehicle is also a creature.)\nWhenever you cast a spell that targets one or more creatures or Vehicles you control, put that many +1/+1 counters on Arcee. Convert Arcee.",
+      "expectedStructure": {
+        "minTriggeredAbilities": 1,
+        "optional": true
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "cast",
+          "evidenceContains": "You may cast this card converted for {R}{W}",
+          "cardFace": "front",
+          "optional": true,
+          "optionalEffect": true,
+          "semanticJustification": {
+            "clauseRole": "effect",
+            "abilityType": "spell_effect",
+            "executionContext": "permission",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": false,
+            "evidenceSpan": {
+              "start": 32,
+              "end": 75
+            },
+            "optionalEffect": true
+          }
+        },
+        {
+          "actionType": "cast",
+          "evidenceContains": "cast a spell that targets one or more creatures or Vehicles you control, put that many +1/+1 counters on Arcee",
+          "cardFace": "back",
+          "semanticJustification": {
+            "clauseRole": "trigger_event",
+            "abilityType": "triggered",
+            "executionContext": "trigger_reference",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": false,
+            "evidenceSpan": {
+              "start": 285,
+              "end": 395
+            }
+          }
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "cast",
+            "cast"
+          ]
+        }
+      ],
+      "cardName": "Arcee, Sharpshooter // Arcee, Acrobatic Coupe",
+      "colorIdentity": [
+        "R",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "f257b536251031509a5014dabc50f8f86b4305aff68c3c0e817b65cdf2d1006e",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.598Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "challenge_mdfc_face_provenance",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "More Than Meets the Eye {R}{W} (You may cast this card converted for {R}{W}.)\nFirst strike\n{1}, Remove one or more +1/+1"
+          },
+          "oracleTextHash": "f257b536251031509a5014dabc50f8f86b4305aff68c3c0e817b65cdf2d1006e",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0052",
+      "falsePositiveTarget": {
+        "gateFpId": "vh14-0052|put_counter|put that many +1/+1 counters on Arcee.|1",
+        "observedAction": "put_counter",
+        "observedEvidence": "put that many +1/+1 counters on Arcee.",
+        "adjudicationVerdict": "genuine_parser_fp",
+        "policyReason": "Emission not covered by oracle policy for missing gold.",
+        "rc5Family": "scattered_one_offs",
+        "coverageStratum": "challenge_mdfc_face_provenance"
+      },
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-fp-0169",
+      "category": "rc5-v14-fp_scoring",
+      "layout": "normal",
+      "oracleId": "a95d29b9-c30b-4e63-afcb-dec7ed522c5a",
+      "oracleText": "+2: Arzakon deals 3 damage to any other target.\n−3: Create a Black Lotus token. (It's a {0} artifact with \"{T}, Sacrifice this token: Add three mana of any one color.\")\n−7: Each player shuffles their hand and graveyard into their library, then draws seven cards.\nArzakon can be your commander.",
+      "expectedStructure": {
+        "minActivatedAbilities": 1
+      },
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "draw",
+          "semanticJustification": {
+            "clauseRole": "effect",
+            "abilityType": "loyalty",
+            "executionContext": "immediate",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": true,
+            "evidenceSpan": {
+              "start": 244,
+              "end": 248
+            }
+          }
+        },
+        {
+          "actionType": "create_token",
+          "evidenceContains": "Create a Black Lotus token",
+          "semanticJustification": {
+            "clauseRole": "effect",
+            "abilityType": "loyalty",
+            "executionContext": "immediate",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": true,
+            "evidenceSpan": {
+              "start": 52,
+              "end": 78
+            }
+          }
+        },
+        {
+          "actionType": "deal_damage",
+          "evidenceContains": "deals 3 damage to any other target",
+          "semanticJustification": {
+            "clauseRole": "effect",
+            "abilityType": "loyalty",
+            "executionContext": "immediate",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": true,
+            "evidenceSpan": {
+              "start": 12,
+              "end": 46
+            }
+          }
+        },
+        {
+          "actionType": "shuffle_into_library",
+          "evidenceContains": "shuffles their hand and graveyard into their library",
+          "semanticJustification": {
+            "clauseRole": "effect",
+            "abilityType": "loyalty",
+            "executionContext": "immediate",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": true,
+            "evidenceSpan": {
+              "start": 185,
+              "end": 237
+            }
+          }
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token",
+            "sacrifice",
+            "deal_damage",
+            "shuffle_into_library"
+          ]
+        },
+        {
+          "role": "enabler",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token",
+            "sacrifice",
+            "deal_damage",
+            "shuffle_into_library"
+          ]
+        },
+        {
+          "role": "payoff",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token",
+            "sacrifice",
+            "deal_damage",
+            "shuffle_into_library"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "draw",
+            "create_token",
+            "sacrifice",
+            "deal_damage",
+            "shuffle_into_library"
+          ]
+        }
+      ],
+      "cardName": "Arzakon",
+      "colorIdentity": [
+        "B",
+        "G",
+        "R",
+        "U",
+        "W"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "932854232519c4183c67b349f9ef0634f5cb1a74b7196554c9a4abb67878f72b",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.614Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_saga_planeswalker",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "+2: Arzakon deals 3 damage to any other target.\n−3: Create a Black Lotus token. (It's a {0} artifact with \"{T}, Sacrific"
+          },
+          "oracleTextHash": "932854232519c4183c67b349f9ef0634f5cb1a74b7196554c9a4abb67878f72b",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0169",
+      "falsePositiveTarget": {
+        "gateFpId": "vh14-0169|sacrifice|Sacrifice this token: Add three mana of any one color|4",
+        "observedAction": "sacrifice",
+        "observedEvidence": "Sacrifice this token: Add three mana of any one color",
+        "adjudicationVerdict": "genuine_parser_fp",
+        "policyReason": "Emission not covered by oracle policy for missing gold.",
+        "rc5Family": "saga_planeswalker",
+        "coverageStratum": "broad_saga_planeswalker"
+      },
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-fp-0172",
+      "category": "rc5-v14-fp_scoring",
+      "layout": "normal",
+      "oracleId": "ce79bbd2-edf0-4d5e-9aaf-717ec3960c48",
+      "oracleText": "+2: Draw a card. Each player mills two cards.\n−5: Put target creature card from a graveyard onto the battlefield under your control.\n−11: Gain control of all creatures target opponent controls.",
+      "expectedPrimitiveActions": [
+        {
+          "actionType": "draw",
+          "evidenceContains": "Draw a card",
+          "semanticJustification": {
+            "clauseRole": "effect",
+            "abilityType": "loyalty",
+            "executionContext": "immediate",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": true,
+            "evidenceSpan": {
+              "start": 4,
+              "end": 15
+            }
+          }
+        },
+        {
+          "actionType": "return_to_battlefield",
+          "evidenceContains": "Put target creature card from a graveyard onto the battlefield",
+          "semanticJustification": {
+            "clauseRole": "effect",
+            "abilityType": "loyalty",
+            "executionContext": "immediate",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": true,
+            "evidenceSpan": {
+              "start": 50,
+              "end": 112
+            }
+          }
+        },
+        {
+          "actionType": "mill",
+          "evidenceContains": "mills two cards",
+          "semanticJustification": {
+            "clauseRole": "effect",
+            "abilityType": "loyalty",
+            "executionContext": "immediate",
+            "semanticOwner": "source_card",
+            "cardNativeLayer2Eligible": true,
+            "evidenceSpan": {
+              "start": 29,
+              "end": 44
+            }
+          }
+        }
+      ],
+      "expectedRoles": [
+        {
+          "role": "card_advantage",
+          "fromPrimitiveActions": [
+            "draw",
+            "return_to_battlefield",
+            "mill"
+          ]
+        },
+        {
+          "role": "recursion",
+          "fromPrimitiveActions": [
+            "draw",
+            "return_to_battlefield",
+            "mill"
+          ]
+        },
+        {
+          "role": "removal",
+          "fromPrimitiveActions": [
+            "draw",
+            "return_to_battlefield",
+            "mill"
+          ]
+        }
+      ],
+      "cardName": "Ashiok, Sculptor of Fears",
+      "colorIdentity": [
+        "B",
+        "U"
+      ],
+      "goldenCatalogVersion": "scryfall-oracle_cards:2026-08-05T21:03:08.408+00:00",
+      "goldenOracleTextHash": "29be69e6af82f24a03d4adb6cae2d418eca5f358ef79d4426eca7afaba3a4d92",
+      "evaluationLabelVersion": "eval-catalog-backed-v1",
+      "taxonomyVersion": "three-layer-v1.4",
+      "evaluationSetVersion": "rc5-v14-regression-v151",
+      "goldReviewVersion": "validation-v14-gold-policy-corrector-v1",
+      "goldReviewedAt": "2026-08-09T20:27:57.614Z",
+      "goldReviewer": "catalog-audit-agent",
+      "goldReviewStatus": "reviewed",
+      "goldCompletenessStatus": "complete_within_scope",
+      "identityStatus": "catalog_exact",
+      "reviewer": "catalog-audit-agent",
+      "coverageStratum": "broad_saga_planeswalker",
+      "parserConsulted": false,
+      "caseScope": "full_card",
+      "scopeReason": "Complete primitive gold within full card oracle text.",
+      "certifiedEmptyLayer2": false,
+      "benchmarkTargets": [
+        {
+          "expectedContext": "source_owned_reference",
+          "fullRegionSpan": {
+            "start": 0,
+            "end": 120,
+            "text": "+2: Draw a card. Each player mills two cards.\n−5: Put target creature card from a graveyard onto the battlefield under y"
+          },
+          "oracleTextHash": "29be69e6af82f24a03d4adb6cae2d418eca5f358ef79d4426eca7afaba3a4d92",
+          "adjudicationStatus": "parser_blind_adjudicated"
+        }
+      ],
+      "sourceV14CaseId": "vh14-0172",
+      "falsePositiveTarget": {
+        "gateFpId": "vh14-0172|put_onto_battlefield|Put target creature card from a graveyard onto the battlefield|3",
+        "observedAction": "put_onto_battlefield",
+        "observedEvidence": "Put target creature card from a graveyard onto the battlefield",
+        "adjudicationVerdict": "genuine_parser_fp",
+        "policyReason": "Emission not covered by oracle policy for missing gold.",
+        "rc5Family": "saga_planeswalker",
+        "coverageStratum": "broad_saga_planeswalker"
+      },
+      "spentV14Regression": true
+    },
+    {
+      "id": "rc5-integrity-0052",
+      "sourceV14CaseId": "vh14-0052",
+      "oracleId": "9fba3097-d53f-4ea4-b5d2-8adddaa09524",
+      "oracleText": "More Than Meets the Eye {R}{W} (You may cast this card converted for {R}{W}.)\nFirst strike\n{1}, Remove one or more +1/+1 counters from Arcee: It deals that much damage to target creature. Convert Arcee.\n//\nLiving metal (During your turn, this Vehicle is also a creature.)\nWhenever you cast a spell that targets one or more creatures or Vehicles you control, put that many +1/+1 counters on Arcee. Convert Arcee.",
+      "category": "rc5-v14-integrity_invariant",
+      "rc5Section": "integrity_invariant"
+    },
+    {
+      "id": "rc5-integrity-0087",
+      "sourceV14CaseId": "vh14-0087",
+      "oracleId": "13c97cb2-fc77-4d4b-8cfb-747f4d448151",
+      "oracleText": "Target creature card in your graveyard perpetually gains \"{1}{B}{B}, Exile this card from your graveyard: Shuffle it into its owner's library. Create a token that's a copy of it, except it's a 4/4 black Zombie in addition to its other types. Activate only as a sorcery.\"",
+      "category": "rc5-v14-integrity_invariant",
+      "rc5Section": "integrity_invariant"
+    },
+    {
+      "id": "rc5-integrity-0195",
+      "sourceV14CaseId": "vh14-0195",
+      "oracleId": "bedcb58e-7958-4364-8783-790ab52f92ea",
+      "oracleText": "Landfall — Whenever a land you control enters, mill two cards.\n{B/G}: Level 2\nWhenever a land you control enters, creature cards in your graveyard perpetually get +1/+1.\n{4}{B/G}{B/G}: Level 3\nYou may play lands and cast creature spells from your graveyard. If you cast a spell this way, that creature enters with a finality counter on it.",
+      "category": "rc5-v14-integrity_invariant",
+      "rc5Section": "integrity_invariant"
+    },
+    {
+      "id": "rc5-leakage-0016",
+      "sourceV14CaseId": "vh14-0016",
+      "oracleId": "3e0e3676-e634-4e64-bdfd-4aaa5885461f",
+      "oracleText": "Exile the top four cards of your library in a face-down pile, then exile the top four cards of your library in a face-up pile. An opponent chooses one of those piles. Put that pile into your graveyard. Look at the cards in the other pile. You may cast a spell from among them without paying its mana cost. Put the rest into your hand.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0050",
+      "sourceV14CaseId": "vh14-0050",
+      "oracleId": "b5c8e24a-f4d7-42dc-8117-905ad0bad888",
+      "oracleText": "Teamwork 4 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 4 or more.)\nChoose one. If this spell was cast using teamwork, choose both instead.\n• Target player creates a 6/5 blue Leviathan creature token with hexproof.\n• Return one or two target nonland permanents to their owners' hands.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0051",
+      "sourceV14CaseId": "vh14-0051",
+      "oracleId": "a78b063a-7f74-465a-9670-34f927f4bfe9",
+      "oracleText": "Whenever you cast your first instant or sorcery spell each turn, this creature gets +2/+0 until end of turn.\n//\nPut target instant or sorcery card from your graveyard on top of your library. (Then exile this card. You may cast the creature later from exile.)",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0052",
+      "sourceV14CaseId": "vh14-0052",
+      "oracleId": "9fba3097-d53f-4ea4-b5d2-8adddaa09524",
+      "oracleText": "More Than Meets the Eye {R}{W} (You may cast this card converted for {R}{W}.)\nFirst strike\n{1}, Remove one or more +1/+1 counters from Arcee: It deals that much damage to target creature. Convert Arcee.\n//\nLiving metal (During your turn, this Vehicle is also a creature.)\nWhenever you cast a spell that targets one or more creatures or Vehicles you control, put that many +1/+1 counters on Arcee. Convert Arcee.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0058",
+      "sourceV14CaseId": "vh14-0058",
+      "oracleId": "a0593a5b-6f76-4eb3-a1b1-9794d2d36c92",
+      "oracleText": "Target creature gets +1/+1 and gains double strike until end of turn.\nFuse (You may cast one or both halves of this card from your hand.)\n//\nAll creatures able to block target creature this turn do so.\nFuse (You may cast one or both halves of this card from your hand.)",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0059",
+      "sourceV14CaseId": "vh14-0059",
+      "oracleId": "31fc5d8b-94bc-4688-8a84-f15800e717a8",
+      "oracleText": "Whenever this creature enters or transforms into Ashling, Rekindled, you may discard a card. If you do, draw a card.\nAt the beginning of your first main phase, you may pay {U}. If you do, transform Ashling.\n//\nWhenever this creature transforms into Ashling, Rimebound and at the beginning of your first main phase, add two mana of any one color. Spend this mana only to cast spells with mana value 4 or greater.\nAt the beginning of your first main phase, you may pay {R}. If you do, transform Ashling.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0071",
+      "sourceV14CaseId": "vh14-0071",
+      "oracleId": "f4437cb3-85f7-49b5-bb41-6a948549d987",
+      "oracleText": "When this enchantment enters, return target creature card from your graveyard to your hand.\nWhenever a creature card leaves your graveyard, amass Goblins 1.\n{1}{B}: Goblins and Orcs you control gain menace until end of turn.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0073",
+      "sourceV14CaseId": "vh14-0073",
+      "oracleId": "82b9ad93-df75-4417-9746-798db8fe6ba0",
+      "oracleText": "When this creature enters, you may return target sorcery card from your graveyard to your hand.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0075",
+      "sourceV14CaseId": "vh14-0075",
+      "oracleId": "a45bb088-16fd-4d91-8fd6-3c52f1c24748",
+      "oracleText": "When you cast this spell while you control your commander, copy this spell. You may choose a new target for the copy.\nReturn target permanent card from your graveyard to your hand.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0076",
+      "sourceV14CaseId": "vh14-0076",
+      "oracleId": "9b6a74fb-c48f-4d85-b4b3-96eb80b9efc7",
+      "oracleText": "Flying\nAt the beginning of your upkeep, return target Spirit card from your graveyard to your hand.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0082",
+      "sourceV14CaseId": "vh14-0082",
+      "oracleId": "1e048c15-50d6-4313-880a-e04348952a51",
+      "oracleText": "{T}: Draw a card, then exile a card from your hand and put a number of time counters on it equal to its mana value. It gains \"When the last time counter is removed from this card, if it's exiled, you may cast it without paying its mana cost. If you cast a creature spell this way, it gains haste until end of turn.\" Then remove a time counter from each other card you own in exile.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0097",
+      "sourceV14CaseId": "vh14-0097",
+      "oracleId": "278e51fe-3cd9-4c82-bd81-2164771f8611",
+      "oracleText": "Flash\nIf an opponent would draw two or more cards, instead you and that player each draw a card.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0111",
+      "sourceV14CaseId": "vh14-0111",
+      "oracleId": "4f16c8ea-84f6-4706-8b3d-5848aba1b9bb",
+      "oracleText": "Flash\nWhenever an opponent draws a card except the first one they draw in each of their draw steps, Orcish Bowmasters deals 1 damage to any target. Then amass Orcs 1.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0122",
+      "sourceV14CaseId": "vh14-0122",
+      "oracleId": "e3eb6f90-ccfc-41e7-bff6-0b378226bc7e",
+      "oracleText": "{T}: Add {C}.\n{T}: Add one mana of any color. Spend this mana only to cast a creature spell.\n{6}, {T}: Create a 1/1 colorless Shapeshifter creature token with changeling. (It's every creature type.)",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0129",
+      "sourceV14CaseId": "vh14-0129",
+      "oracleId": "c4edcdc0-91de-410c-95dd-219efcef692a",
+      "oracleText": "Whenever you cast a spell with a squirrel in its art, you get {A} (an acorn counter).\nWhenever a Squirrel you control enters or dies, you get {A}.\n{2}{B}, Pay X {A}: Target creature gets -X/-X until end of turn.\n{G}, Pay X {A}: Target creature gets +X/+X until end of turn.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0131",
+      "sourceV14CaseId": "vh14-0131",
+      "oracleId": "901ee0e3-1011-40e1-815a-09246112e8dc",
+      "oracleText": "Roll two d8 and choose one result. Draw cards equal to that result. Then you may cast an instant or sorcery spell with mana value less than or equal to the other result from your hand without paying its mana cost.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0138",
+      "sourceV14CaseId": "vh14-0138",
+      "oracleId": "905e4bd1-f5f2-4691-b13f-ce2628d26a38",
+      "oracleText": "Flying\nWhenever this Vehicle enters or attacks, choose one —\n• You may put a Hero creature card from your hand onto the battlefield.\n• Return target Hero creature card from your graveyard to your hand.\nCrew 3",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0144",
+      "sourceV14CaseId": "vh14-0144",
+      "oracleId": "5c4ce9e6-a8c2-4d34-a188-c0595004ab3b",
+      "oracleText": "You may pay {R}{G} rather than pay this spell's mana cost. Spend only mana produced by Treasures to cast it this way.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0191",
+      "sourceV14CaseId": "vh14-0191",
+      "oracleId": "1d15c566-d96d-454d-a4fe-eea8e6aed415",
+      "oracleText": "Flying\nWhenever you cast a creature spell without flying, conjure a duplicate of it into your hand. The duplicate perpetually gains flying. This ability triggers only once each turn.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0193",
+      "sourceV14CaseId": "vh14-0193",
+      "oracleId": "a6657fcf-f08c-4b03-8ec8-cb0b194eb553",
+      "oracleText": "Whenever you cast an instant or sorcery spell, if this artifact has fewer than three charge counters on it, put a charge counter on it.\nRemove three charge counters from this artifact: When you next cast an instant or sorcery spell this turn, copy it and you may choose new targets for the copy.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0195",
+      "sourceV14CaseId": "vh14-0195",
+      "oracleId": "bedcb58e-7958-4364-8783-790ab52f92ea",
+      "oracleText": "Landfall — Whenever a land you control enters, mill two cards.\n{B/G}: Level 2\nWhenever a land you control enters, creature cards in your graveyard perpetually get +1/+1.\n{4}{B/G}{B/G}: Level 3\nYou may play lands and cast creature spells from your graveyard. If you cast a spell this way, that creature enters with a finality counter on it.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    },
+    {
+      "id": "rc5-leakage-0212",
+      "sourceV14CaseId": "vh14-0212",
+      "oracleId": "d6d7faa8-ecc9-408b-9c46-a0f62c74f567",
+      "oracleText": "You may discard a Plains card rather than pay this spell's mana cost.\nDestroy target artifact or enchantment.",
+      "category": "rc5-v14-policy_leakage",
+      "rc5Section": "policy_leakage"
+    }
+  ],
+  "sealed": true,
+  "parserExecutionCount": 0,
+  "parserConsulted": false,
+  "holdoutStatus": "development",
+  "note": "RC5 v14 regression pack v151 — parser-blind gold corrections for vh14-0046 (copy) and vh14-0114 (draw). Historical v14 artifacts unchanged."
+}

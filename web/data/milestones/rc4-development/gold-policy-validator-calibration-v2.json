@@ -1,0 +1,234 @@
+{
+  "generatedAt": "2026-08-10T04:31:53.743Z",
+  "validatorVersion": "gold-policy-validator-v1.5",
+  "policyVersion": "semantic-gold-policy-v1.5",
+  "policyStack": {
+    "stackVersion": "gold-policy-stack-v1",
+    "policyVersion": "semantic-gold-policy-v1.5",
+    "validatorVersion": "gold-policy-validator-v1.5",
+    "validatorSourceHash": "d4f9ca048797f4703a4b0820fea20d4fc39134790ca3039cfa72ae1dbf5cf411",
+    "policyRegistryHash": "dd83f64c6809842263316d2b76ccb1c347c32bd9a69f6eafdc90660be418c931",
+    "validatorFileHash": "784771ce90e1ccebb0e713f08fd3d8dcc0449b265f1b5d9d05f73512c1b593e4",
+    "semanticEnrichmentFileHash": "64927415adc3445612f3f5cba174673552e2294266d1e39bbec8eaac8232faa9",
+    "spanRoleClassifierFileHash": "4a02fb145cf2545b7e924e44bb9c7a9b44b258cba868f6bb00f8a01e42ffc88f",
+    "policyAdjudicationFileHash": "78e8dc2d5ae3010213c5e9dea17272856cc7cda2de2c50732cbd67bb4707157a",
+    "runnerConfigFileHash": "a34bee294c608abf86ac17c26c19f104bbd69c3f128561a6eb3d382955ef1261",
+    "stackCompositeHash": "5adf82287ed89de581f9274620b1c5f9f6e4cea37be863b02a42464e9bddbc23"
+  },
+  "expectedBehavior": {
+    "developmentGold": "violations=0 on certified development corpus",
+    "v14": "policy-corrected v14 should pass",
+    "v15Forensic": "forensic v1.2 corrected view should pass",
+    "v16": "post-v1.5 corrected v16 should pass",
+    "tokenDefinitionProbe": "must reject source-card L2 in They have token definition",
+    "grantedAbilityProbe": "must accept granted quoted triggered draw"
+  },
+  "results": {
+    "developmentGold": {
+      "label": "rc5_certified_development",
+      "pass": true,
+      "violationCount": 0,
+      "census": {
+        "goldPolicyViolations": 0,
+        "invalidLayer2CostGold": 0,
+        "triggerReferenceActionGold": 0,
+        "invalidPermissionActionGold": 0,
+        "reminderCardNativeGold": 0,
+        "createdObjectOwnershipViolations": 0,
+        "invalidReplacementGold": 0,
+        "duplicateSemanticGold": 0,
+        "invalidEvidenceSpan": 0,
+        "scopeCompletenessViolations": 0
+      },
+      "perPolicyFamily": {},
+      "sampleViolations": [],
+      "corruptionFamilyCheck": {
+        "pass": true,
+        "count": 0,
+        "families": {
+          "activated_additional_cost_layer1": 0,
+          "cast_play_permission_layer1": 0,
+          "trigger_event_reference": 0,
+          "reminder_mechanic_definition": 0,
+          "condition_reference": 0
+        }
+      }
+    },
+    "validationV14ForensicV2": {
+      "label": "validation_v14_forensic_v2_corrected",
+      "pass": false,
+      "violationCount": 7,
+      "census": {
+        "goldPolicyViolations": 0,
+        "invalidLayer2CostGold": 0,
+        "triggerReferenceActionGold": 0,
+        "invalidPermissionActionGold": 7,
+        "reminderCardNativeGold": 0,
+        "createdObjectOwnershipViolations": 0,
+        "invalidReplacementGold": 0,
+        "duplicateSemanticGold": 0,
+        "invalidEvidenceSpan": 0,
+        "scopeCompletenessViolations": 0
+      },
+      "perPolicyFamily": {
+        "cast_play_permission_layer1": 7
+      },
+      "sampleViolations": [
+        {
+          "caseId": "vh14-0015",
+          "actionType": "cast",
+          "code": "invalid_permission_action_gold",
+          "policyFamily": "cast_play_permission_layer1",
+          "evidenceContains": "You may cast this card face down as a 2/2 creature for {3}"
+        },
+        {
+          "caseId": "vh14-0018",
+          "actionType": "cast",
+          "code": "invalid_permission_action_gold",
+          "policyFamily": "cast_play_permission_layer1",
+          "evidenceContains": "You may cast this card face down as a 2/2 creature for {3}"
+        },
+        {
+          "caseId": "vh14-0019",
+          "actionType": "cast",
+          "code": "invalid_permission_action_gold",
+          "policyFamily": "cast_play_permission_layer1",
+          "evidenceContains": "You may cast this card face down as a 2/2 creature for {3}"
+        },
+        {
+          "caseId": "vh14-0020",
+          "actionType": "cast",
+          "code": "invalid_permission_action_gold",
+          "policyFamily": "cast_play_permission_layer1",
+          "evidenceContains": "You may cast this card face down as a 2/2 creature for {3}"
+        },
+        {
+          "caseId": "vh14-0024",
+          "actionType": "cast",
+          "code": "invalid_permission_action_gold",
+          "policyFamily": "cast_play_permission_layer1",
+          "evidenceContains": "You may cast any number of spells from your hand without pay"
+        },
+        {
+          "caseId": "vh14-0025",
+          "actionType": "cast",
+          "code": "invalid_permission_action_gold",
+          "policyFamily": "cast_play_permission_layer1",
+          "evidenceContains": "You may cast a spell from among them without paying its mana"
+        },
+        {
+          "caseId": "vh14-0052",
+          "actionType": "cast",
+          "code": "invalid_permission_action_gold",
+          "policyFamily": "cast_play_permission_layer1",
+          "evidenceContains": "You may cast this card converted for {R}{W}"
+        }
+      ],
+      "corruptionFamilyCheck": {
+        "pass": false,
+        "count": 7,
+        "families": {
+          "activated_additional_cost_layer1": 0,
+          "cast_play_permission_layer1": 7,
+          "trigger_event_reference": 0,
+          "reminder_mechanic_definition": 0,
+          "condition_reference": 0
+        }
+      }
+    },
+    "validationV15ForensicV12": {
+      "label": "validation_v15_forensic_v1.2_corrected",
+      "pass": false,
+      "violationCount": 3,
+      "census": {
+        "goldPolicyViolations": 0,
+        "invalidLayer2CostGold": 0,
+        "triggerReferenceActionGold": 0,
+        "invalidPermissionActionGold": 0,
+        "reminderCardNativeGold": 0,
+        "createdObjectOwnershipViolations": 0,
+        "invalidReplacementGold": 0,
+        "duplicateSemanticGold": 0,
+        "invalidEvidenceSpan": 0,
+        "scopeCompletenessViolations": 3
+      },
+      "perPolicyFamily": {
+        "scope_completeness": 3
+      },
+      "sampleViolations": [
+        {
+          "caseId": "vh15-0024",
+          "actionType": "*",
+          "code": "scope_completeness_violation",
+          "policyFamily": "scope_completeness",
+          "evidenceContains": ""
+        },
+        {
+          "caseId": "vh15-0092",
+          "actionType": "*",
+          "code": "scope_completeness_violation",
+          "policyFamily": "scope_completeness",
+          "evidenceContains": ""
+        },
+        {
+          "caseId": "vh15-0225",
+          "actionType": "*",
+          "code": "scope_completeness_violation",
+          "policyFamily": "scope_completeness",
+          "evidenceContains": ""
+        }
+      ],
+      "corruptionFamilyCheck": {
+        "pass": true,
+        "count": 0,
+        "families": {
+          "activated_additional_cost_layer1": 0,
+          "cast_play_permission_layer1": 0,
+          "trigger_event_reference": 0,
+          "reminder_mechanic_definition": 0,
+          "condition_reference": 0
+        }
+      }
+    },
+    "validationV16": {
+      "label": "validation_v16",
+      "pass": true,
+      "violationCount": 0,
+      "census": {
+        "goldPolicyViolations": 0,
+        "invalidLayer2CostGold": 0,
+        "triggerReferenceActionGold": 0,
+        "invalidPermissionActionGold": 0,
+        "reminderCardNativeGold": 0,
+        "createdObjectOwnershipViolations": 0,
+        "invalidReplacementGold": 0,
+        "duplicateSemanticGold": 0,
+        "invalidEvidenceSpan": 0,
+        "scopeCompletenessViolations": 0
+      },
+      "perPolicyFamily": {},
+      "sampleViolations": [],
+      "corruptionFamilyCheck": {
+        "pass": true,
+        "count": 0,
+        "families": {
+          "activated_additional_cost_layer1": 0,
+          "cast_play_permission_layer1": 0,
+          "trigger_event_reference": 0,
+          "reminder_mechanic_definition": 0,
+          "condition_reference": 0
+        }
+      }
+    },
+    "tokenDefinitionProbe": {
+      "pass": true,
+      "violationCount": 1,
+      "policyFamily": "token_definition_not_card_native_l2"
+    },
+    "grantedAbilityProbe": {
+      "pass": true,
+      "violationCount": 0
+    }
+  },
+  "calibrationPass": true
+}

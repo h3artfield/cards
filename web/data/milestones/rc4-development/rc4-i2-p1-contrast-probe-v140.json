@@ -1,0 +1,111 @@
+{
+  "generatedAt": "2026-08-09T22:01:28.196Z",
+  "parserVersion": "rc4-in-progress",
+  "caseCount": 6,
+  "passCount": 6,
+  "failCount": 0,
+  "byFamily": {
+    "i2_type_line_reminder": {
+      "pass": 1,
+      "fail": 0
+    },
+    "i2_real_oracle_ability": {
+      "pass": 1,
+      "fail": 0
+    },
+    "i2_granted_ability": {
+      "pass": 1,
+      "fail": 0
+    },
+    "p1_cost_region": {
+      "pass": 1,
+      "fail": 0
+    },
+    "p1_resolving_effect": {
+      "pass": 2,
+      "fail": 0
+    }
+  },
+  "results": [
+    {
+      "id": "rc4-i2-reminder-only",
+      "family": "i2_type_line_reminder",
+      "pass": true,
+      "missingEmit": [],
+      "forbiddenPresent": [],
+      "emitted": [
+        "add_mana:Add {U}"
+      ],
+      "note": "Type-line ETB mechanic reminder is card-native Layer 1 — exile in reminder must not emit as source-card L2."
+    },
+    {
+      "id": "rc4-i2-real-modal-retained",
+      "family": "i2_real_oracle_ability",
+      "pass": true,
+      "missingEmit": [],
+      "forbiddenPresent": [],
+      "emitted": [
+        "discard:Discard a card",
+        "exile:Exile the top card"
+      ],
+      "note": "Real modal abilities retained; Planet reminder exile suppressed."
+    },
+    {
+      "id": "rc4-i2-granted-trigger-retained",
+      "family": "i2_granted_ability",
+      "pass": true,
+      "missingEmit": [],
+      "forbiddenPresent": [],
+      "emitted": [
+        "create_token:create a 1/1 white Soldier creature token",
+        "draw:draw a card"
+      ],
+      "note": "Granted triggered ability inside quotes is real rules text — draw must emit (owned by token, not suppressed as type-line reminder)."
+    },
+    {
+      "id": "rc4-p1-cost-discard-suppressed",
+      "family": "p1_cost_region",
+      "pass": true,
+      "missingEmit": [],
+      "forbiddenPresent": [],
+      "emitted": [
+        "lose_life:Target player loses 4 life",
+        "gain_life:gain 4 life",
+        "search_library:Search your library for",
+        "shuffle_library:then shuffle",
+        "put_into_hand:put it into your hand"
+      ],
+      "note": "Landcycling discard in cost region must not leak as card-native resolving discard."
+    },
+    {
+      "id": "rc4-p1-resolving-sacrifice-retained",
+      "family": "p1_resolving_effect",
+      "pass": true,
+      "missingEmit": [],
+      "forbiddenPresent": [],
+      "emitted": [
+        "return_to_hand:Return target creature card from a graveyard to ",
+        "search_library:Search your library for",
+        "shuffle_library:shuffle and put that card on top",
+        "cast:cast this ",
+        "gain_life:gain 2 life",
+        "create_token:Create two Food tokens",
+        "sacrifice:Sacrifice this enchantment",
+        "shuffle_library:then shuffle"
+      ],
+      "note": "Resolving modal sacrifice effect must emit — not confused with activated cost payment."
+    },
+    {
+      "id": "rc4-p1-resolving-exile-retained",
+      "family": "p1_resolving_effect",
+      "pass": true,
+      "missingEmit": [],
+      "forbiddenPresent": [],
+      "emitted": [
+        "exile:Exile target nonland",
+        "create_token:creates a Treasure token"
+      ],
+      "note": "Resolving exile emits; token reminder sacrifice in cost region does not leak as source-card L2."
+    }
+  ]
+}

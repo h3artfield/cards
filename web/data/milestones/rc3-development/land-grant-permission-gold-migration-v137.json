@@ -1,0 +1,124 @@
+{
+  "migrationVersion": "land-grant-permission-gold-migration-v137",
+  "frozenAt": "2026-08-09T12:00:00.000Z",
+  "parserConsulted": false,
+  "reviewer": "rc3-v137-permission-policy-adjudication",
+  "rule": "Land-grant exile cast windows are Layer-1 future permissions and termination conditions — NO Layer-2 cast gold",
+  "policyDistinction": {
+    "future_specific_object_permission": "You may cast [Card] for as long as it remains exiled → Layer 1 permission (objectScope=specific_object, duration=while_condition)",
+    "termination_condition": "until [Card] is cast from exile → Layer 1 condition / future-event reference — NOT cast primitive",
+    "one_shot_contrast": "You may cast that card. / You may cast the copy. → resolution completes with opportunity → Layer-2 cast only when permission does NOT persist beyond resolution"
+  },
+  "permissionModel": {
+    "fields": [
+      "permittedAction",
+      "objectScope",
+      "objectRef",
+      "objectCriteria",
+      "sourceZone",
+      "duration",
+      "condition",
+      "evidenceContains"
+    ],
+    "objectScopeValues": ["specific_object", "object_class"],
+    "durationValues": ["continuous", "while_condition", "until_end_of_turn", "this_turn"]
+  },
+  "records": [
+    {
+      "caseId": "rc3-pos-cat-0001",
+      "cardName": "A-Glamorous Outlaw",
+      "removeLayer2Actions": [
+        { "actionType": "cast", "evidenceContains": "cast from exile" },
+        { "actionType": "cast", "evidenceContains": "You may cast Glamorous Outlaw for as long as it remains exiled" }
+      ],
+      "layer1Permission": {
+        "permittedAction": "cast",
+        "objectScope": "specific_object",
+        "objectRef": "Glamorous Outlaw",
+        "sourceZone": "exile",
+        "duration": "while_condition",
+        "condition": "remains_exiled",
+        "evidenceContains": "You may cast Glamorous Outlaw for as long as it remains exiled"
+      },
+      "layer1Condition": {
+        "kind": "termination_condition",
+        "eventReference": "cast_from_exile",
+        "objectRef": "Glamorous Outlaw",
+        "evidenceContains": "until Glamorous Outlaw is cast from exile"
+      },
+      "policyClass": "future_specific_object_permission"
+    },
+    {
+      "caseId": "rc3-pos-cat-0002",
+      "cardName": "A-Masked Bandits",
+      "removeLayer2Actions": [
+        { "actionType": "cast", "evidenceContains": "cast from exile" },
+        { "actionType": "cast", "evidenceContains": "You may cast Masked Bandits for as long as it remains exiled" }
+      ],
+      "layer1Permission": {
+        "permittedAction": "cast",
+        "objectScope": "specific_object",
+        "objectRef": "Masked Bandits",
+        "sourceZone": "exile",
+        "duration": "while_condition",
+        "condition": "remains_exiled",
+        "evidenceContains": "You may cast Masked Bandits for as long as it remains exiled"
+      },
+      "layer1Condition": {
+        "kind": "termination_condition",
+        "eventReference": "cast_from_exile",
+        "objectRef": "Masked Bandits",
+        "evidenceContains": "until Masked Bandits is cast from exile"
+      },
+      "policyClass": "future_specific_object_permission"
+    },
+    {
+      "caseId": "rc3-pos-cat-0003",
+      "cardName": "A-Rakish Revelers",
+      "removeLayer2Actions": [
+        { "actionType": "cast", "evidenceContains": "cast from exile" },
+        { "actionType": "cast", "evidenceContains": "You may cast Rakish Revelers for as long as it remains exiled" }
+      ],
+      "layer1Permission": {
+        "permittedAction": "cast",
+        "objectScope": "specific_object",
+        "objectRef": "Rakish Revelers",
+        "sourceZone": "exile",
+        "duration": "while_condition",
+        "condition": "remains_exiled",
+        "evidenceContains": "You may cast Rakish Revelers for as long as it remains exiled"
+      },
+      "layer1Condition": {
+        "kind": "termination_condition",
+        "eventReference": "cast_from_exile",
+        "objectRef": "Rakish Revelers",
+        "evidenceContains": "until Rakish Revelers is cast from exile"
+      },
+      "policyClass": "future_specific_object_permission"
+    },
+    {
+      "caseId": "rc3-pos-cat-0004",
+      "cardName": "A-Shattered Seraph",
+      "removeLayer2Actions": [
+        { "actionType": "cast", "evidenceContains": "cast from exile" },
+        { "actionType": "cast", "evidenceContains": "You may cast Shattered Seraph for as long as it remains exiled" }
+      ],
+      "layer1Permission": {
+        "permittedAction": "cast",
+        "objectScope": "specific_object",
+        "objectRef": "Shattered Seraph",
+        "sourceZone": "exile",
+        "duration": "while_condition",
+        "condition": "remains_exiled",
+        "evidenceContains": "You may cast Shattered Seraph for as long as it remains exiled"
+      },
+      "layer1Condition": {
+        "kind": "termination_condition",
+        "eventReference": "cast_from_exile",
+        "objectRef": "Shattered Seraph",
+        "evidenceContains": "until Shattered Seraph is cast from exile"
+      },
+      "policyClass": "future_specific_object_permission"
+    }
+  ]
+}

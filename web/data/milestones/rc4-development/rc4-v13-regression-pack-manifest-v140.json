@@ -1,0 +1,46 @@
+{
+  "manifestVersion": "rc4-v13-regression-pack-v140",
+  "frozenAt": "2026-08-09T21:16:27.495Z",
+  "parserExecutionCount": 0,
+  "packPath": "data/oracle-action-eval-rc4-v13-regression-v140.json",
+  "contentHash": "6366740949728a57eeabd5ba3d250d5ba9e66b8d4f941d4a099246bfa89e8543",
+  "adjudicationRef": "data/milestones/validation-v13-rc3-certification/validation-v13-policy-adjudication-v2.json",
+  "accounting": {
+    "sourceValidParserFnCount": 9,
+    "sourceGenuineParserFpCount": 1,
+    "invalidGoldTargetsImported": 0,
+    "duplicateTargets": 0,
+    "unclassifiedTargets": 0,
+    "integrityAssertions": 3,
+    "leakageAssertions": 5,
+    "contrastAssertions": 0
+  },
+  "actionScoringCaseIds": [
+    "vh13-0016",
+    "vh13-0067",
+    "vh13-0068",
+    "vh13-0106",
+    "vh13-0126",
+    "vh13-0160",
+    "vh13-0178",
+    "vh13-0206",
+    "vh13-0207"
+  ],
+  "fpScoringCaseIds": [
+    "vh13-0153"
+  ],
+  "integrityCaseIds": [
+    "vh13-0131",
+    "vh13-0137",
+    "vh13-0138"
+  ],
+  "leakageCaseIds": [
+    "vh13-0016",
+    "vh13-0018",
+    "vh13-0024",
+    "vh13-0074",
+    "vh13-0163"
+  ],
+  "note": "Action scoring separated from structural/policy assertions.",
+  "manifestHash": "c19d9937be28534c7cc7a298839b718041edec38f2346bae3b8e3d7d14e9fc22"
+}

@@ -1,0 +1,48 @@
+{
+  "migrationVersion": "token-definition-activated-cost-gold-migration-v135",
+  "frozenAt": "2026-08-08T19:00:00.000Z",
+  "parserConsulted": false,
+  "reviewer": "rc3-granted-semantic-policy-audit-v135",
+  "rule": "Activated costs (sacrifice/discard/exile/tap before colon) are Layer-1 only. Token/object definition capabilities are not source-card Layer-2 actions.",
+  "records": [
+    {
+      "caseId": "rc3-pos-v12-0033",
+      "cardName": "A-Urza, Powerstone Prodigy",
+      "removeLayer2Actions": [
+        { "actionType": "add_mana", "evidenceContains": "Add {C}" },
+        { "actionType": "cast", "evidenceContains": "cast a nonartifact spell" }
+      ],
+      "policyClass": "token_object_definition_capability",
+      "policyReason": "Powerstone token reminder parenthetical — mana ability is created-object capability, not source-card resolution."
+    },
+    {
+      "caseId": "rc3-pos-v12-0146",
+      "cardName": "Angelic Sleuth",
+      "removeLayer2Actions": [
+        { "actionType": "sacrifice", "evidenceContains": "Sacrifice this token" },
+        { "actionType": "draw", "evidenceContains": "Draw a card" }
+      ],
+      "policyClass": "token_object_definition_capability",
+      "policyReason": "Investigate Clue reminder — '{2}, Sacrifice this token: Draw a card' is token activated cost/effect, not source-card Layer-2."
+    },
+    {
+      "caseId": "rc3-pos-v12-0147",
+      "cardName": "Ant-Man's Army",
+      "removeLayer2Actions": [
+        { "actionType": "gain_life", "evidenceContains": "gain 3 life" }
+      ],
+      "policyClass": "token_object_definition_capability",
+      "policyReason": "Food token reminder activated ability — gain life is token capability, not immediate source-card effect."
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "cardName": "Antique Collector",
+      "removeLayer2Actions": [
+        { "actionType": "sacrifice", "evidenceContains": "Sacrifice this artifact" },
+        { "actionType": "draw", "evidenceContains": "Draw a card" }
+      ],
+      "policyClass": "token_object_definition_capability",
+      "policyReason": "Investigate Clue reminder — sacrifice before colon is activated cost, not Layer-2 source-card sacrifice."
+    }
+  ]
+}

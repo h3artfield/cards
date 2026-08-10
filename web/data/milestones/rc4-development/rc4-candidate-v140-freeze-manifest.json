@@ -1,0 +1,180 @@
+{
+  "freezeLabel": "rc4-candidate-v140",
+  "status": "CANDIDATE_FROZEN",
+  "frozenAt": "2026-08-09T22:01:25.781Z",
+  "parserVersion": "oracle-action-v1.40-rc3-semantic-integrity",
+  "parserCommitSha": "3541911617893f81f0e3fcc3de46654fd01c0563",
+  "parserScopePaths": [
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-transform.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-clause-native.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-promotion.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-action-builder.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-builder.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-schema.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-rc3.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-granted-rules-span-detector.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-semantic-context-router.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-scoring-scope.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-extraction-metadata.ts",
+    "scripts/oracle-action-unified-matcher.ts",
+    "scripts/oracle-action-semantic-matcher.ts",
+    "scripts/lib/rc3-case-scope-scoring.ts",
+    "scripts/lib/gold-policy-validator-v1.ts",
+    "scripts/lib/rc4-regression-scoring-v1.ts"
+  ],
+  "parserBlobClosureHash": "a8cdda7fbb2771933d9a04b6ac52658f7e62949209c65eed1d27930c67bc84bc",
+  "goldPolicy": {
+    "policyVersion": "semantic-gold-policy-v1.4",
+    "validatorVersion": "gold-policy-validator-v1.4",
+    "validatorHash": "2c6e17de856003351823bc0ed6969108d965088e4455dbb65f873e79a94cda79",
+    "policyRegistryHash": "f04feed13c27607e6db1eb767ee04ef733c36898fd22adb2bb2b8f20ea6ad135"
+  },
+  "developmentGold": {
+    "certifiedHash": "eae3767e192f202752cc9424e2a9b05636d76a7bfda0768dfa1f1954e57c3945",
+    "certificatePath": "data/milestones/rc4-development/rc4-development-gold-policy-certificate-v1.json",
+    "correctionsHash": "5e8a66141e92a0b2ea0dbd6e8b16b88bcf42334feeb37a32bb2e5675d7980068",
+    "scrubOverlayHash": "ee26a606d4b23871164d949e47c35dfe41603fd698209d49b9be6879578840df"
+  },
+  "goldMigrationOverlay": {
+    "paths": [
+      "data/milestones/rc3-development/persistent-permission-gold-migration-v135.json",
+      "data/milestones/rc3-development/granted-shuffle-gold-migration-v135.json",
+      "data/milestones/rc3-development/token-definition-gold-migration-v135.json",
+      "data/milestones/rc3-development/land-grant-permission-gold-migration-v137.json",
+      "data/milestones/rc3-development/zone-ninjutsu-replacement-gold-migration-v137.json",
+      "data/milestones/rc3-development/activated-cost-fall-to-earth-gold-migration-v139.json",
+      "data/milestones/rc4-development/rc4-development-gold-policy-scrub-v1.json"
+    ],
+    "hashes": {
+      "data/milestones/rc3-development/persistent-permission-gold-migration-v135.json": "cd4c3cbebbdb8cc74d73b90be025660c75dc39503a68c82827f85b53ba4740f6",
+      "data/milestones/rc3-development/granted-shuffle-gold-migration-v135.json": "824b30604fef9bfefb891181edc7fb2729834e1faf7384dec137b3f3684606e2",
+      "data/milestones/rc3-development/token-definition-gold-migration-v135.json": "0da7bda1877dab61253e6fdaa21556c8260fb17f45f43aa4492f8cee3576117f",
+      "data/milestones/rc3-development/land-grant-permission-gold-migration-v137.json": "a360941bab92ffb3fa887c008a5bb77e516bdf834db25efd0bfa93f10c154ab1",
+      "data/milestones/rc3-development/zone-ninjutsu-replacement-gold-migration-v137.json": "1c2c83551d765d546756eda8eb9078328b9063da9db6fd4b1298669b0c5216f2",
+      "data/milestones/rc3-development/activated-cost-fall-to-earth-gold-migration-v139.json": "4a35cab53b14e451cdb41fd36b517ec06f086b78f19fe90a4074efea7be354fe",
+      "data/milestones/rc4-development/rc4-development-gold-policy-scrub-v1.json": "ee26a606d4b23871164d949e47c35dfe41603fd698209d49b9be6879578840df"
+    },
+    "recordCount": 41
+  },
+  "evaluators": {
+    "semanticMatcher": "04b359506615d3b51bf9b4733f85c6f49a08374a782edca93701c043e1d4ed33",
+    "unifiedMatcher": "b6de494e7133ed88e095cd83ff8301efec97a3deb9831ea988e3fecb094ea5c5",
+    "goldPolicyValidator": "7472abc42d0da51b82ab1d732f5e3bb469e6ffad12ceaf7b5c0029bbdba515c5",
+    "rc4RegressionScoring": "37dd01fdbe20591363e5543f96131328c637ecb98f6e335f31ed1cd2c71ea5bc"
+  },
+  "regressionPack": {
+    "path": "data/oracle-action-eval-rc4-v13-regression-v140.json",
+    "hash": "4444954dd68cf298cfe81c28eb3851627c20f524f64d20e66b8b9cdfc1bab0c5"
+  },
+  "authoritativeDevelopment": {
+    "combined": {
+      "tp": 575,
+      "fp": 1,
+      "fn": 27,
+      "precision": 0.9982638888888888,
+      "recall": 0.9551495016611296
+    },
+    "unrelatedCatalogPositive": {
+      "tp": 56,
+      "fp": 0,
+      "fn": 5,
+      "precision": 1,
+      "recall": 0.9180327868852459
+    },
+    "gates": {
+      "combinedDevelopment": {
+        "pass": true,
+        "precision": 0.9982638888888888,
+        "recall": 0.9551495016611296,
+        "threshold": {
+          "precision": 0.98,
+          "recall": 0.92
+        }
+      },
+      "unrelatedCatalogPositive": {
+        "pass": true,
+        "precision": 1,
+        "recall": 0.9180327868852459,
+        "threshold": {
+          "precision": 0.95,
+          "recall": 0.9
+        }
+      }
+    }
+  },
+  "v13RegressionLedger": {
+    "recoveredGenuineFn": {
+      "count": 5,
+      "total": 9,
+      "caseIds": [
+        "vh13-0016",
+        "vh13-0068",
+        "vh13-0206",
+        "vh13-0207",
+        "vh13-0160"
+      ]
+    },
+    "remainingKnownFn": {
+      "count": 4,
+      "total": 9,
+      "caseIds": [
+        "vh13-0067",
+        "vh13-0106",
+        "vh13-0126",
+        "vh13-0178"
+      ],
+      "candidateBlocker": false,
+      "note": "Spent v13 validation material — intentionally paused to avoid overfitting"
+    },
+    "genuineFpRegression": {
+      "fixed": 1,
+      "total": 1,
+      "caseId": "vh13-0153"
+    },
+    "integrity": {
+      "fixed": 3,
+      "total": 3
+    },
+    "leakage": {
+      "fixed": 5,
+      "total": 5
+    }
+  },
+  "policyInvariants": {
+    "semanticInvalid": 0,
+    "idViolations": 0,
+    "provenanceViolations": 0,
+    "activatedCostLayer2Leakage": 0,
+    "permissionLeakage": 0,
+    "triggerEventActionLeakage": 0,
+    "reminderLeakage": 0,
+    "tokenOwnershipLeakage": 0,
+    "crossFaceLeakage": 0
+  },
+  "goldPolicyValidatorDevViolations": 0,
+  "v14": {
+    "sealed": true,
+    "benchmarkHash": "07675ba1f73672460c17788c4adbb8898877e677d6cdbe66a381e417adf7d5a3",
+    "certificatePath": "data/milestones/validation-v14-certification/validation-v14-gold-policy-certificate-v1.json",
+    "parserExecutionCount": 0,
+    "authorized": false,
+    "note": "Single execution authorized only after this RC4 freeze"
+  },
+  "spentV13Residuals": {
+    "remainingKnownFn": {
+      "count": 4,
+      "total": 9,
+      "caseIds": [
+        "vh13-0067",
+        "vh13-0106",
+        "vh13-0126",
+        "vh13-0178"
+      ],
+      "candidateBlocker": false,
+      "note": "Spent v13 validation material — intentionally paused to avoid overfitting"
+    },
+    "doNotFixBeforeFreeze": true
+  },
+  "manifestContentHash": "fa412079caedb38fee23575e6499eacef59376e861187dc4e9e41c8085ff2a9b",
+  "developmentGoldHash": "eae3767e192f202752cc9424e2a9b05636d76a7bfda0768dfa1f1954e57c3945"
+}

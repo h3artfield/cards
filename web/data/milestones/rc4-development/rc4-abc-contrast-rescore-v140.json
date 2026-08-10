@@ -1,0 +1,242 @@
+{
+  "generatedAt": "2026-08-09T22:01:25.805Z",
+  "parserVersion": "rc4-in-progress",
+  "scoringSource": "adjudicated action targets from validation-v13-policy-adjudication-v2",
+  "slices": {
+    "counter": {
+      "tp": 4,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "cast": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1
+    },
+    "library_fp": {
+      "rows": [
+        {
+          "caseId": "rc4-fp-0153",
+          "sourceV13CaseId": "vh13-0153",
+          "cardName": "Aminatou, the Fateshifter",
+          "falsePositiveTarget": {
+            "gateFpId": "vh13-0153|search_library|put a card from your hand on top of your library|1",
+            "observedAction": "search_library",
+            "observedEvidence": "put a card from your hand on top of your library",
+            "adjudicationVerdict": "genuine_parser_fp",
+            "policyReason": "Put hand card on library top is not search_library — wrong primitive taxonomy."
+          },
+          "fp": 0,
+          "pass": true,
+          "emitted": [
+            {
+              "actionType": "draw",
+              "evidence": "Draw a card"
+            },
+            {
+              "actionType": "exile",
+              "evidence": "Exile another target permanent you own, then"
+            }
+          ]
+        }
+      ],
+      "fp": 0,
+      "passCount": 1
+    }
+  },
+  "sliceDetails": {
+    "counter": [
+      {
+        "caseId": "rc4-action-0016",
+        "sourceV13CaseId": "vh13-0016",
+        "cardName": "A.I.M. Scientists",
+        "targets": [
+          {
+            "targetId": "26b3cdc065056171",
+            "actionType": "put_counter",
+            "evidenceContains": "put a +1/+1 counter on this creature",
+            "policyClass": "resolving_effect_layer2",
+            "adjudicationVerdict": "valid_gold_parser_fn"
+          }
+        ],
+        "metrics": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "emitted": [
+          {
+            "actionType": "draw",
+            "evidence": "Draw a card"
+          },
+          {
+            "actionType": "discard",
+            "evidence": "discard a card"
+          },
+          {
+            "actionType": "put_counter",
+            "evidence": "put a +1/+1 counter"
+          },
+          {
+            "actionType": "search_library",
+            "evidence": "Search your library for a basic land card, reveal it, put it into your hand, then shuffle"
+          },
+          {
+            "actionType": "put_into_hand",
+            "evidence": "put it into your hand"
+          },
+          {
+            "actionType": "shuffle_library",
+            "evidence": "then shuffle"
+          }
+        ]
+      },
+      {
+        "caseId": "rc4-action-0068",
+        "sourceV13CaseId": "vh13-0068",
+        "cardName": "_____-o-saurus",
+        "targets": [
+          {
+            "targetId": "b8bcc5f0fc2dbc0b",
+            "actionType": "put_counter",
+            "evidenceContains": "Put a +1/+1 counter on it for each unique vowel on that sticker",
+            "policyClass": "compound_effect_layer2",
+            "adjudicationVerdict": "valid_gold_parser_fn"
+          }
+        ],
+        "metrics": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "emitted": [
+          {
+            "actionType": "put_counter",
+            "evidence": "Put a +1/+1 counter"
+          }
+        ]
+      },
+      {
+        "caseId": "rc4-action-0206",
+        "sourceV13CaseId": "vh13-0206",
+        "cardName": "A-Psionic Snoop",
+        "targets": [
+          {
+            "targetId": "542465eb1d77f3e5",
+            "actionType": "put_counter",
+            "evidenceContains": "put a +1/+1 counter on this creature",
+            "policyClass": "resolving_effect_layer2",
+            "adjudicationVerdict": "valid_gold_parser_fn"
+          }
+        ],
+        "metrics": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "emitted": [
+          {
+            "actionType": "draw",
+            "evidence": "Draw a card"
+          },
+          {
+            "actionType": "discard",
+            "evidence": "discard a card"
+          },
+          {
+            "actionType": "put_counter",
+            "evidence": "put a +1/+1 counter"
+          }
+        ]
+      },
+      {
+        "caseId": "rc4-action-0207",
+        "sourceV13CaseId": "vh13-0207",
+        "cardName": "A-Sigil of Myrkul",
+        "targets": [
+          {
+            "targetId": "bbd7590be7e7d0de",
+            "actionType": "put_counter",
+            "evidenceContains": "put a +1/+1 counter on target creature you control and it gains deathtouch until end of turn",
+            "policyClass": "resolving_effect_layer2",
+            "adjudicationVerdict": "valid_gold_parser_fn"
+          }
+        ],
+        "metrics": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "emitted": [
+          {
+            "actionType": "put_counter",
+            "evidence": "put a +1/+1 counter"
+          }
+        ]
+      }
+    ],
+    "cast": [
+      {
+        "caseId": "rc4-action-0160",
+        "sourceV13CaseId": "vh13-0160",
+        "cardName": "Abigale, Poet Laureate // Heroic Stanza",
+        "targets": [
+          {
+            "targetId": "617bd7ed3b544132",
+            "actionType": "cast",
+            "evidenceContains": "you may cast a copy of its spell",
+            "policyClass": "immediate_resolution_cast",
+            "adjudicationVerdict": "valid_gold_parser_fn",
+            "cardFace": "front",
+            "optionalEffect": true
+          }
+        ],
+        "metrics": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0
+        },
+        "emitted": [
+          {
+            "actionType": "put_counter",
+            "evidence": "Put a +1/+1 counter"
+          },
+          {
+            "actionType": "cast",
+            "evidence": "you may cast a copy of its spell"
+          }
+        ]
+      }
+    ],
+    "library_fp": [
+      {
+        "caseId": "rc4-fp-0153",
+        "sourceV13CaseId": "vh13-0153",
+        "cardName": "Aminatou, the Fateshifter",
+        "falsePositiveTarget": {
+          "gateFpId": "vh13-0153|search_library|put a card from your hand on top of your library|1",
+          "observedAction": "search_library",
+          "observedEvidence": "put a card from your hand on top of your library",
+          "adjudicationVerdict": "genuine_parser_fp",
+          "policyReason": "Put hand card on library top is not search_library — wrong primitive taxonomy."
+        },
+        "fp": 0,
+        "pass": true,
+        "emitted": [
+          {
+            "actionType": "draw",
+            "evidence": "Draw a card"
+          },
+          {
+            "actionType": "exile",
+            "evidence": "Exile another target permanent you own, then"
+          }
+        ]
+      }
+    ]
+  }
+}

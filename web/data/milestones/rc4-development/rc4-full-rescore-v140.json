@@ -1,0 +1,523 @@
+{
+  "generatedAt": "2026-08-09T22:00:31.621Z",
+  "parserVersion": "oracle-action-v1.40-rc3-semantic-integrity",
+  "goldPolicyValidatorVersion": "gold-policy-validator-v1.4",
+  "developmentGoldHash": "eae3767e192f202752cc9424e2a9b05636d76a7bfda0768dfa1f1954e57c3945",
+  "goldPolicyValidator": {
+    "pass": true,
+    "violations": 0,
+    "census": {
+      "goldPolicyViolations": 0,
+      "invalidLayer2CostGold": 0,
+      "triggerReferenceActionGold": 0,
+      "invalidPermissionActionGold": 0,
+      "reminderCardNativeGold": 0,
+      "createdObjectOwnershipViolations": 0,
+      "invalidReplacementGold": 0,
+      "duplicateSemanticGold": 0,
+      "invalidEvidenceSpan": 0,
+      "scopeCompletenessViolations": 0
+    }
+  },
+  "development": {
+    "combined": {
+      "tp": 575,
+      "fp": 1,
+      "fn": 27,
+      "precision": 0.9982638888888888,
+      "recall": 0.9551495016611296
+    },
+    "unrelatedCatalogPositive": {
+      "tp": 56,
+      "fp": 0,
+      "fn": 5,
+      "precision": 1,
+      "recall": 0.9180327868852459
+    },
+    "gates": {
+      "combinedDevelopment": {
+        "pass": true,
+        "precision": 0.9982638888888888,
+        "recall": 0.9551495016611296,
+        "threshold": {
+          "precision": 0.98,
+          "recall": 0.92
+        }
+      },
+      "unrelatedCatalogPositive": {
+        "pass": true,
+        "precision": 1,
+        "recall": 0.9180327868852459,
+        "threshold": {
+          "precision": 0.95,
+          "recall": 0.9
+        }
+      }
+    }
+  },
+  "v13Regression": {
+    "ledger": {
+      "recoveredGenuineFn": {
+        "count": 5,
+        "total": 9,
+        "caseIds": [
+          "vh13-0016",
+          "vh13-0068",
+          "vh13-0206",
+          "vh13-0207",
+          "vh13-0160"
+        ]
+      },
+      "remainingKnownFn": {
+        "count": 4,
+        "total": 9,
+        "caseIds": [
+          "vh13-0067",
+          "vh13-0106",
+          "vh13-0126",
+          "vh13-0178"
+        ],
+        "candidateBlocker": false,
+        "note": "Spent v13 validation material — intentionally paused to avoid overfitting"
+      },
+      "genuineFpRegression": {
+        "fixed": 1,
+        "total": 1,
+        "caseId": "vh13-0153"
+      },
+      "integrity": {
+        "fixed": 3,
+        "total": 3
+      },
+      "leakage": {
+        "fixed": 5,
+        "total": 5
+      }
+    },
+    "accounting": {
+      "sourceValidParserFnCount": 9,
+      "sourceGenuineParserFpCount": 1,
+      "invalidGoldTargetsImported": 0,
+      "duplicateTargets": 0,
+      "unclassifiedTargets": 0,
+      "integrityAssertions": 3,
+      "leakageAssertions": 5,
+      "contrastAssertions": 0
+    },
+    "actionScore": {
+      "tp": 5,
+      "fp": 0,
+      "fn": 4,
+      "precision": 1,
+      "recall": 0.5555555555555556,
+      "targetCount": 9,
+      "caseCount": 9,
+      "note": "Action score is target-only adjudicated ledger — not raw card gold recall"
+    },
+    "fpScore": {
+      "rows": [
+        {
+          "caseId": "rc4-fp-0153",
+          "sourceV13CaseId": "vh13-0153",
+          "cardName": "Aminatou, the Fateshifter",
+          "falsePositiveTarget": {
+            "gateFpId": "vh13-0153|search_library|put a card from your hand on top of your library|1",
+            "observedAction": "search_library",
+            "observedEvidence": "put a card from your hand on top of your library",
+            "adjudicationVerdict": "genuine_parser_fp",
+            "policyReason": "Put hand card on library top is not search_library — wrong primitive taxonomy."
+          },
+          "fp": 0,
+          "pass": true,
+          "emitted": [
+            {
+              "actionType": "draw",
+              "evidence": "Draw a card"
+            },
+            {
+              "actionType": "exile",
+              "evidence": "Exile another target permanent you own, then"
+            }
+          ]
+        }
+      ],
+      "fp": 0,
+      "passCount": 1
+    },
+    "integrity": {
+      "rows": [
+        {
+          "assertionId": "rc4-integrity-0131",
+          "sourceV13CaseId": "vh13-0131",
+          "pass": true,
+          "idViolations": 0,
+          "provenanceViolations": 0
+        },
+        {
+          "assertionId": "rc4-integrity-0137",
+          "sourceV13CaseId": "vh13-0137",
+          "pass": true,
+          "idViolations": 0,
+          "provenanceViolations": 0
+        },
+        {
+          "assertionId": "rc4-integrity-0138",
+          "sourceV13CaseId": "vh13-0138",
+          "pass": true,
+          "idViolations": 0,
+          "provenanceViolations": 0
+        }
+      ],
+      "passCount": 3,
+      "idViolations": 0,
+      "provenanceViolations": 0
+    },
+    "leakage": {
+      "rows": [
+        {
+          "assertionId": "rc4-leakage-0016",
+          "sourceV13CaseId": "vh13-0016",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc4-leakage-0018",
+          "sourceV13CaseId": "vh13-0018",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc4-leakage-0024",
+          "sourceV13CaseId": "vh13-0024",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc4-leakage-0074",
+          "sourceV13CaseId": "vh13-0074",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        },
+        {
+          "assertionId": "rc4-leakage-0163",
+          "sourceV13CaseId": "vh13-0163",
+          "pass": true,
+          "structuralLeak": 0,
+          "forbiddenHits": []
+        }
+      ],
+      "passCount": 5,
+      "structuralLeak": 0,
+      "forbiddenHitCount": 0
+    },
+    "slices": {
+      "counter": {
+        "rows": [
+          {
+            "caseId": "rc4-action-0016",
+            "sourceV13CaseId": "vh13-0016",
+            "cardName": "A.I.M. Scientists",
+            "targets": [
+              {
+                "targetId": "26b3cdc065056171",
+                "actionType": "put_counter",
+                "evidenceContains": "put a +1/+1 counter on this creature",
+                "policyClass": "resolving_effect_layer2",
+                "adjudicationVerdict": "valid_gold_parser_fn"
+              }
+            ],
+            "metrics": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "emitted": [
+              {
+                "actionType": "draw",
+                "evidence": "Draw a card"
+              },
+              {
+                "actionType": "discard",
+                "evidence": "discard a card"
+              },
+              {
+                "actionType": "put_counter",
+                "evidence": "put a +1/+1 counter"
+              },
+              {
+                "actionType": "search_library",
+                "evidence": "Search your library for a basic land card, reveal it, put it into your hand, then shuffle"
+              },
+              {
+                "actionType": "put_into_hand",
+                "evidence": "put it into your hand"
+              },
+              {
+                "actionType": "shuffle_library",
+                "evidence": "then shuffle"
+              }
+            ]
+          },
+          {
+            "caseId": "rc4-action-0068",
+            "sourceV13CaseId": "vh13-0068",
+            "cardName": "_____-o-saurus",
+            "targets": [
+              {
+                "targetId": "b8bcc5f0fc2dbc0b",
+                "actionType": "put_counter",
+                "evidenceContains": "Put a +1/+1 counter on it for each unique vowel on that sticker",
+                "policyClass": "compound_effect_layer2",
+                "adjudicationVerdict": "valid_gold_parser_fn"
+              }
+            ],
+            "metrics": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "emitted": [
+              {
+                "actionType": "put_counter",
+                "evidence": "Put a +1/+1 counter"
+              }
+            ]
+          },
+          {
+            "caseId": "rc4-action-0206",
+            "sourceV13CaseId": "vh13-0206",
+            "cardName": "A-Psionic Snoop",
+            "targets": [
+              {
+                "targetId": "542465eb1d77f3e5",
+                "actionType": "put_counter",
+                "evidenceContains": "put a +1/+1 counter on this creature",
+                "policyClass": "resolving_effect_layer2",
+                "adjudicationVerdict": "valid_gold_parser_fn"
+              }
+            ],
+            "metrics": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "emitted": [
+              {
+                "actionType": "draw",
+                "evidence": "Draw a card"
+              },
+              {
+                "actionType": "discard",
+                "evidence": "discard a card"
+              },
+              {
+                "actionType": "put_counter",
+                "evidence": "put a +1/+1 counter"
+              }
+            ]
+          },
+          {
+            "caseId": "rc4-action-0207",
+            "sourceV13CaseId": "vh13-0207",
+            "cardName": "A-Sigil of Myrkul",
+            "targets": [
+              {
+                "targetId": "bbd7590be7e7d0de",
+                "actionType": "put_counter",
+                "evidenceContains": "put a +1/+1 counter on target creature you control and it gains deathtouch until end of turn",
+                "policyClass": "resolving_effect_layer2",
+                "adjudicationVerdict": "valid_gold_parser_fn"
+              }
+            ],
+            "metrics": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "emitted": [
+              {
+                "actionType": "put_counter",
+                "evidence": "put a +1/+1 counter"
+              }
+            ]
+          }
+        ],
+        "accepted": {
+          "tp": 4,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "targetCount": 4
+      },
+      "cast": {
+        "rows": [
+          {
+            "caseId": "rc4-action-0160",
+            "sourceV13CaseId": "vh13-0160",
+            "cardName": "Abigale, Poet Laureate // Heroic Stanza",
+            "targets": [
+              {
+                "targetId": "617bd7ed3b544132",
+                "actionType": "cast",
+                "evidenceContains": "you may cast a copy of its spell",
+                "policyClass": "immediate_resolution_cast",
+                "adjudicationVerdict": "valid_gold_parser_fn",
+                "cardFace": "front",
+                "optionalEffect": true
+              }
+            ],
+            "metrics": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0
+            },
+            "emitted": [
+              {
+                "actionType": "put_counter",
+                "evidence": "Put a +1/+1 counter"
+              },
+              {
+                "actionType": "cast",
+                "evidence": "you may cast a copy of its spell"
+              }
+            ]
+          }
+        ],
+        "accepted": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1
+        },
+        "targetCount": 1
+      },
+      "library_fp": {
+        "rows": [
+          {
+            "caseId": "rc4-fp-0153",
+            "sourceV13CaseId": "vh13-0153",
+            "cardName": "Aminatou, the Fateshifter",
+            "falsePositiveTarget": {
+              "gateFpId": "vh13-0153|search_library|put a card from your hand on top of your library|1",
+              "observedAction": "search_library",
+              "observedEvidence": "put a card from your hand on top of your library",
+              "adjudicationVerdict": "genuine_parser_fp",
+              "policyReason": "Put hand card on library top is not search_library — wrong primitive taxonomy."
+            },
+            "fp": 0,
+            "pass": true,
+            "emitted": [
+              {
+                "actionType": "draw",
+                "evidence": "Draw a card"
+              },
+              {
+                "actionType": "exile",
+                "evidence": "Exile another target permanent you own, then"
+              }
+            ]
+          }
+        ],
+        "fp": 0,
+        "passCount": 1
+      }
+    },
+    "remainingGenuineFnLedger": [
+      {
+        "caseId": "vh13-0067",
+        "card": "_____ Goblin",
+        "fn": 1,
+        "targets": [
+          {
+            "targetId": "17885c1868b14195",
+            "actionType": "add_mana",
+            "evidenceContains": "Add {R}",
+            "policyClass": "triggered_effect_layer2",
+            "adjudicationVerdict": "valid_gold_parser_fn"
+          }
+        ],
+        "emitted": []
+      },
+      {
+        "caseId": "vh13-0106",
+        "card": "A-Elven Bow",
+        "fn": 1,
+        "targets": [
+          {
+            "targetId": "0f1538f9cf19b828",
+            "actionType": "create_token",
+            "evidenceContains": "create a 1/1 green Elf Warrior creature token",
+            "policyClass": "resolving_effect_layer2",
+            "adjudicationVerdict": "valid_gold_parser_fn"
+          }
+        ],
+        "emitted": []
+      },
+      {
+        "caseId": "vh13-0126",
+        "card": "A-Wizard Class",
+        "fn": 1,
+        "targets": [
+          {
+            "targetId": "936ef3e4bf4d3674",
+            "actionType": "draw",
+            "evidenceContains": "draw a card, put a +1/+1 counter on target cr",
+            "policyClass": "activated_effect_layer2",
+            "adjudicationVerdict": "valid_gold_parser_fn"
+          }
+        ],
+        "emitted": [
+          {
+            "actionType": "draw",
+            "evidence": "draw two cards"
+          },
+          {
+            "actionType": "put_counter",
+            "evidence": "put a +1/+1 counter"
+          }
+        ]
+      },
+      {
+        "caseId": "vh13-0178",
+        "card": "Alesha, Who Laughs at Fate",
+        "fn": 1,
+        "targets": [
+          {
+            "targetId": "1a94e144d0288569",
+            "actionType": "return_to_battlefield",
+            "evidenceContains": "return target creature card with mana value less than or equal to Alesha's power from your graveyard to the battlefield",
+            "policyClass": "resolving_effect_layer2",
+            "adjudicationVerdict": "valid_gold_parser_fn"
+          }
+        ],
+        "emitted": [
+          {
+            "actionType": "put_counter",
+            "evidence": "put a +1/+1 counter"
+          }
+        ]
+      }
+    ]
+  },
+  "policyInvariants": {
+    "semanticInvalid": 0,
+    "idViolations": 0,
+    "provenanceViolations": 0,
+    "activatedCostLayer2Leakage": 0,
+    "permissionLeakage": 0,
+    "triggerEventActionLeakage": 0,
+    "reminderLeakage": 0,
+    "tokenOwnershipLeakage": 0,
+    "crossFaceLeakage": 0
+  },
+  "regressionPass": true,
+  "invariantsPass": true,
+  "candidateReady": true
+}

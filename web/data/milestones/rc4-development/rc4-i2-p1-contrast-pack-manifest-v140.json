@@ -1,0 +1,15 @@
+{
+  "manifestVersion": "rc4-i2-p1-contrast-pack-v140",
+  "frozenAt": "2026-08-09T20:52:00.000Z",
+  "packPath": "data/oracle-action-eval-rc4-i2-p1-contrast-v140.json",
+  "probeScript": "scripts/probe-rc4-i2-p1-contrast-v140.ts",
+  "caseCount": 6,
+  "families": [
+    "i2_type_line_reminder",
+    "i2_real_oracle_ability",
+    "i2_granted_ability",
+    "p1_cost_region",
+    "p1_resolving_effect"
+  ],
+  "note": "Parser-behavior contrast regressions required before RC4 candidate freeze (I2 accepted with contrast, P1 accepted)."
+}

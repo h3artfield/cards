@@ -1,0 +1,177 @@
+{
+  "fpCount": 1,
+  "fnCount": 27,
+  "fps": [
+    {
+      "caseId": "dev-v9-001",
+      "cardName": "Mox Diamond",
+      "actionType": "put_onto_battlefield",
+      "evidence": "put this artifact onto the battlefield",
+      "forbidden": []
+    }
+  ],
+  "fns": [
+    {
+      "caseId": "dev-opt-023",
+      "cardName": "Path to Exile",
+      "actionType": "exile",
+      "evidenceContains": "Exile target creature"
+    },
+    {
+      "caseId": "dev-v9-001",
+      "cardName": "Mox Diamond",
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put this artifact onto the battlefield"
+    },
+    {
+      "caseId": "dev-v9-023",
+      "cardName": "Howling Mine",
+      "actionType": "draw",
+      "evidenceContains": "draws an additional card"
+    },
+    {
+      "caseId": "eval-0009",
+      "cardName": "Path to Exile",
+      "actionType": "exile",
+      "evidenceContains": "Exile"
+    },
+    {
+      "caseId": "eval-0059",
+      "cardName": "Fable of the Mirror-Breaker // Reflection of Kiki-Jiki",
+      "actionType": "exile",
+      "evidenceContains": "Exile this Saga"
+    },
+    {
+      "caseId": "eval-0082",
+      "cardName": "Pit of Offerings",
+      "actionType": "add_mana",
+      "evidenceContains": "Add one mana of any of the exiled cards' colors"
+    },
+    {
+      "caseId": "eval-0174",
+      "cardName": "Eliminate the Competition",
+      "actionType": "destroy",
+      "evidenceContains": "Destroy X target creatures"
+    },
+    {
+      "caseId": "eval-0191",
+      "cardName": "Inspiring Easel",
+      "actionType": "copy",
+      "evidenceContains": "copy"
+    },
+    {
+      "caseId": "eval-0259",
+      "cardName": "Discovery // Dispersal",
+      "actionType": "return_to_hand",
+      "evidenceContains": "returns a nonland permanent"
+    },
+    {
+      "caseId": "eval-0264",
+      "cardName": "Glassworks // Shattered Yard",
+      "actionType": "deal_damage",
+      "evidenceContains": "deals 4 damage"
+    },
+    {
+      "caseId": "eval-0282",
+      "cardName": "Oft-Nabbed Goat",
+      "actionType": "draw",
+      "evidenceContains": "Draw a card"
+    },
+    {
+      "caseId": "dev-exp-v1-008",
+      "cardName": "Cogwork Assembler",
+      "actionType": "copy",
+      "evidenceContains": "copy of target artifact"
+    },
+    {
+      "caseId": "dev-exp-v3-017",
+      "cardName": "Minion Reflector",
+      "actionType": "create_token",
+      "evidenceContains": "create a token that's a copy of that creature"
+    },
+    {
+      "caseId": "dev-exp-v3-022",
+      "cardName": "Kheru Lich Lord",
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "return a creature card at random from your graveyard to the battlefield"
+    },
+    {
+      "caseId": "rc3-pos-v12-0018",
+      "cardName": "Acquire",
+      "actionType": "shuffle_library",
+      "evidenceContains": "shuffles"
+    },
+    {
+      "caseId": "rc3-pos-v12-0071",
+      "cardName": "Aether Shockwave",
+      "actionType": "tap",
+      "evidenceContains": "Tap all Spirits"
+    },
+    {
+      "caseId": "rc3-pos-v12-0071",
+      "cardName": "Aether Shockwave",
+      "actionType": "tap",
+      "evidenceContains": "Tap all non-Spirit creatures"
+    },
+    {
+      "caseId": "rc3-pos-v12-0093",
+      "cardName": "Altar of the Wretched // Wretched Bonemass",
+      "actionType": "draw",
+      "evidenceContains": "draw X cards, then mill X cards, where X is t"
+    },
+    {
+      "caseId": "rc3-pos-v12-0116",
+      "cardName": "Acolyte's Reward",
+      "actionType": "deal_damage",
+      "evidenceContains": "deals that much damage to any target"
+    },
+    {
+      "caseId": "rc3-pos-v12-0130",
+      "cardName": "Abuelo's Awakening",
+      "actionType": "return_to_battlefield",
+      "evidenceContains": "Return target artifact or non-Aura enchantment card from your graveyard to the battlefield"
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "cardName": "Antique Collector",
+      "actionType": "create_token",
+      "evidenceContains": "Create a colorless Clue artifact token"
+    },
+    {
+      "caseId": "rc3-pos-v12-0148",
+      "cardName": "Antique Collector",
+      "actionType": "shuffle_into_library",
+      "evidenceContains": "shuffle it into its owner's library"
+    },
+    {
+      "caseId": "rc3-pos-cat-0005",
+      "cardName": "\"Ach! Hans, Run!\"",
+      "actionType": "put_onto_battlefield",
+      "evidenceContains": "put it onto the battlefield"
+    },
+    {
+      "caseId": "rc3-pos-cat-0006",
+      "cardName": "1996 World Champion",
+      "actionType": "put_counter",
+      "evidenceContains": "put 1996 World Champion on top of it"
+    },
+    {
+      "caseId": "rc3-pos-cat-0012",
+      "cardName": "Aberrant Researcher // Perfected Form",
+      "actionType": "mill",
+      "evidenceContains": "mill a card, put the top card of your library into your graveyard"
+    },
+    {
+      "caseId": "rc3-pos-cat-0012",
+      "cardName": "Aberrant Researcher // Perfected Form",
+      "actionType": "mill",
+      "evidenceContains": "milled this way, transform this creature"
+    },
+    {
+      "caseId": "rc3-pos-cat-0015",
+      "cardName": "______",
+      "actionType": "cast",
+      "evidenceContains": "cast spells of the chosen types or spells whose names begin with the first letter of your name"
+    }
+  ]
+}
