@@ -34,6 +34,8 @@ export const COLLECTIONS = {
   mtgKnowledgeAliases: "mtgKnowledgeAliases",
   mtgKnowledgeIngestionRuns: "mtgKnowledgeIngestionRuns",
   mtgKnowledgeEvaluations: "mtgKnowledgeEvaluations",
+  catalogCoverageAdjudications: "catalogCoverageAdjudications",
+  catalogCoverageAdjudicationSessions: "catalogCoverageAdjudicationSessions",
 } as const;
 
 export const STORE_SETTINGS_DOC = "default";
