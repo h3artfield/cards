@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, Line } from "@react-three/drei";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
@@ -15,6 +15,11 @@ const QUALITY_COLORS: Record<string, string> = {
 
 const SELECTED_COLOR = "#fbbf24";
 const HOVER_COLOR = "#ffffff";
+
+/** Disable raycast so decorative markers never steal clicks from the point cloud. */
+function disableRaycast(obj: THREE.Object3D) {
+  obj.raycast = () => undefined;
+}
 
 function pointColor(
   p: SemanticMapPoint,
@@ -31,25 +36,46 @@ function pointColor(
   return new THREE.Color(QUALITY_COLORS[p.qualityStatus] ?? "#7dd3fc");
 }
 
+function nearestPointToRay(
+  points: SemanticMapPoint[],
+  ray: THREE.Ray,
+  maxDistance: number,
+): SemanticMapPoint | null {
+  let best: SemanticMapPoint | null = null;
+  let bestDist = maxDistance;
+  const tmp = new THREE.Vector3();
+  for (const p of points) {
+    tmp.set(p.x, p.y, p.z);
+    const dist = ray.distanceToPoint(tmp);
+    if (dist < bestDist) {
+      bestDist = dist;
+      best = p;
+    }
+  }
+  return best;
+}
+
+function pickDistanceThreshold(camera: THREE.Camera, span: number): number {
+  if (!(camera instanceof THREE.PerspectiveCamera)) return span * 0.02;
+  const dist = camera.position.length();
+  return Math.max(span * 0.012, dist * 0.025);
+}
+
 function SemanticPoints({
   points,
   selectedOracleId,
   hoverOracleId,
   highlightOracleIds,
   inventoryMap,
-  onHover,
-  onSelect,
+  meshRef,
 }: {
   points: SemanticMapPoint[];
   selectedOracleId: string | null;
   hoverOracleId: string | null;
   highlightOracleIds: string[];
   inventoryMap: Map<string, SemanticMapInventoryOverlay>;
-  onHover: (id: string | null) => void;
-  onSelect: (id: string) => void;
+  meshRef: React.RefObject<THREE.InstancedMesh | null>;
 }) {
-  const meshRef = useRef<THREE.InstancedMesh>(null);
-  const idByIndex = useMemo(() => points.map((p) => p.oracleId), [points]);
   const tempObj = useMemo(() => new THREE.Object3D(), []);
 
   useEffect(() => {
@@ -76,7 +102,8 @@ function SemanticPoints({
     mesh.count = points.length;
     mesh.instanceMatrix.needsUpdate = true;
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
-  }, [points, selectedOracleId, hoverOracleId, highlightOracleIds, inventoryMap, tempObj]);
+    mesh.computeBoundingSphere();
+  }, [points, selectedOracleId, hoverOracleId, highlightOracleIds, inventoryMap, tempObj, meshRef]);
 
   if (points.length === 0) return null;
 
@@ -85,25 +112,99 @@ function SemanticPoints({
       ref={meshRef}
       args={[undefined, undefined, points.length]}
       frustumCulled={false}
-      onPointerMove={(e) => {
-        e.stopPropagation();
-        const idx = e.instanceId;
-        if (idx == null) return;
-        onHover(idByIndex[idx] ?? null);
-      }}
-      onPointerOut={() => onHover(null)}
-      onClick={(e) => {
-        e.stopPropagation();
-        const idx = e.instanceId;
-        if (idx == null) return;
-        const id = idByIndex[idx];
-        if (id) onSelect(id);
-      }}
     >
-      <sphereGeometry args={[0.035, 8, 8]} />
-      <meshBasicMaterial vertexColors toneMapped={false} transparent opacity={0.85} />
+      <sphereGeometry args={[0.045, 10, 10]} />
+      <meshBasicMaterial vertexColors toneMapped={false} transparent opacity={0.85} depthWrite={false} />
     </instancedMesh>
   );
+}
+
+function PointCloudInteraction({
+  points,
+  allPoints,
+  meshRef,
+  span,
+  onHover,
+  onSelect,
+}: {
+  points: SemanticMapPoint[];
+  allPoints: SemanticMapPoint[];
+  meshRef: React.RefObject<THREE.InstancedMesh | null>;
+  span: number;
+  onHover: (id: string | null) => void;
+  onSelect: (id: string) => void;
+}) {
+  const { camera, raycaster, gl } = useThree();
+  const idByIndex = useMemo(() => points.map((p) => p.oracleId), [points]);
+  const dragRef = useRef<{ x: number; y: number; dragging: boolean }>({ x: 0, y: 0, dragging: false });
+
+  const resolvePick = useCallback(
+    (clientX: number, clientY: number, allowNearestFallback: boolean): string | null => {
+      const rect = gl.domElement.getBoundingClientRect();
+      const ndcX = ((clientX - rect.left) / rect.width) * 2 - 1;
+      const ndcY = -(((clientY - rect.top) / rect.height) * 2 - 1);
+      raycaster.setFromCamera(new THREE.Vector2(ndcX, ndcY), camera);
+
+      const mesh = meshRef.current;
+      if (mesh) {
+        const hits = raycaster.intersectObject(mesh, false);
+        if (hits.length > 0 && hits[0].instanceId != null) {
+          const id = idByIndex[hits[0].instanceId];
+          if (id) return id;
+        }
+      }
+
+      if (!allowNearestFallback) return null;
+      const nearest = nearestPointToRay(allPoints, raycaster.ray, pickDistanceThreshold(camera, span));
+      return nearest?.oracleId ?? null;
+    },
+    [allPoints, camera, gl.domElement, idByIndex, meshRef, raycaster, span],
+  );
+
+  useEffect(() => {
+    const el = gl.domElement;
+    const onPointerDown = (e: PointerEvent) => {
+      dragRef.current = { x: e.clientX, y: e.clientY, dragging: false };
+    };
+    const onPointerMove = (e: PointerEvent) => {
+      if (Math.hypot(e.clientX - dragRef.current.x, e.clientY - dragRef.current.y) > 4) {
+        dragRef.current.dragging = true;
+      }
+      const id = resolvePick(e.clientX, e.clientY, false);
+      onHover(id);
+      el.style.cursor = id ? "pointer" : "grab";
+    };
+    const onPointerUp = (e: PointerEvent) => {
+      const moved = Math.hypot(e.clientX - dragRef.current.x, e.clientY - dragRef.current.y);
+      if (!dragRef.current.dragging && moved < 6) {
+        const id = resolvePick(e.clientX, e.clientY, true);
+        if (id) onSelect(id);
+      }
+      dragRef.current.dragging = false;
+    };
+    const onPointerLeave = () => {
+      onHover(null);
+      el.style.cursor = "grab";
+    };
+
+    el.addEventListener("pointerdown", onPointerDown);
+    el.addEventListener("pointermove", onPointerMove);
+    el.addEventListener("pointerup", onPointerUp);
+    el.addEventListener("pointerleave", onPointerLeave);
+    el.style.cursor = "grab";
+    el.style.touchAction = "none";
+
+    return () => {
+      el.removeEventListener("pointerdown", onPointerDown);
+      el.removeEventListener("pointermove", onPointerMove);
+      el.removeEventListener("pointerup", onPointerUp);
+      el.removeEventListener("pointerleave", onPointerLeave);
+      el.style.cursor = "";
+      el.style.touchAction = "";
+    };
+  }, [gl.domElement, onHover, onSelect, resolvePick]);
+
+  return null;
 }
 
 function PointMarker({
@@ -121,6 +222,11 @@ function PointMarker({
 }) {
   const innerRef = useRef<THREE.Mesh>(null);
   const ringRef = useRef<THREE.Mesh>(null);
+  const groupRef = useRef<THREE.Group>(null);
+
+  useEffect(() => {
+    if (groupRef.current) disableRaycast(groupRef.current);
+  }, []);
 
   useFrame(({ clock }) => {
     if (!pulse) return;
@@ -130,7 +236,7 @@ function PointMarker({
   });
 
   return (
-    <group position={[point.x, point.y, point.z]}>
+    <group ref={groupRef} position={[point.x, point.y, point.z]}>
       <mesh ref={innerRef}>
         <sphereGeometry args={[innerRadius, 20, 20]} />
         <meshBasicMaterial color={color} toneMapped={false} depthTest={false} transparent opacity={0.95} />
@@ -211,6 +317,7 @@ function CameraFly({
 function SceneInner(props: {
   points: SemanticMapPoint[];
   allPoints: SemanticMapPoint[];
+  span: number;
   selectedOracleId: string | null;
   hoverOracleId: string | null;
   highlightOracleIds: string[];
@@ -222,11 +329,17 @@ function SceneInner(props: {
   onSelect: (id: string) => void;
 }) {
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
+  const meshRef = useRef<THREE.InstancedMesh | null>(null);
+  const gridRef = useRef<THREE.GridHelper | null>(null);
   const selectedPoint = props.allPoints.find((p) => p.oracleId === props.selectedOracleId) ?? null;
   const hoverPoint =
     props.hoverOracleId && props.hoverOracleId !== props.selectedOracleId
       ? props.allPoints.find((p) => p.oracleId === props.hoverOracleId) ?? null
       : null;
+
+  useEffect(() => {
+    if (gridRef.current) disableRaycast(gridRef.current);
+  }, []);
 
   return (
     <>
@@ -239,6 +352,13 @@ function SceneInner(props: {
         hoverOracleId={props.hoverOracleId}
         highlightOracleIds={props.highlightOracleIds}
         inventoryMap={props.inventoryMap}
+        meshRef={meshRef}
+      />
+      <PointCloudInteraction
+        points={props.points}
+        allPoints={props.allPoints}
+        meshRef={meshRef}
+        span={props.span}
         onHover={props.onHover}
         onSelect={props.onSelect}
       />
@@ -256,9 +376,42 @@ function SceneInner(props: {
         onComplete={props.onFlyComplete}
       />
       <OrbitControls ref={controlsRef} makeDefault enableDamping dampingFactor={0.08} />
-      <gridHelper args={[20, 20, "#333", "#222"]} />
+      <gridHelper ref={gridRef} args={[20, 20, "#333", "#222"]} />
     </>
   );
+}
+
+function computeBounds(allPoints: SemanticMapPoint[]) {
+  if (allPoints.length === 0) {
+    return {
+      center: [0, 0, 0] as [number, number, number],
+      span: 8,
+      position: [0, 0, 8] as [number, number, number],
+    };
+  }
+  let minX = Infinity;
+  let maxX = -Infinity;
+  let minY = Infinity;
+  let maxY = -Infinity;
+  let minZ = Infinity;
+  let maxZ = -Infinity;
+  for (const p of allPoints) {
+    minX = Math.min(minX, p.x);
+    maxX = Math.max(maxX, p.x);
+    minY = Math.min(minY, p.y);
+    maxY = Math.max(maxY, p.y);
+    minZ = Math.min(minZ, p.z);
+    maxZ = Math.max(maxZ, p.z);
+  }
+  const cx = (minX + maxX) / 2;
+  const cy = (minY + maxY) / 2;
+  const cz = (minZ + maxZ) / 2;
+  const span = Math.max(maxX - minX, maxY - minY, maxZ - minZ, 1);
+  return {
+    center: [cx, cy, cz] as [number, number, number],
+    span,
+    position: [cx, cy, cz + span * 1.4] as [number, number, number],
+  };
 }
 
 export function SemanticMapCanvas3D(props: {
@@ -281,35 +434,14 @@ export function SemanticMapCanvas3D(props: {
   onHover: (id: string | null) => void;
   onSelect: (id: string) => void;
 }) {
-  const initialCamera = useMemo(() => {
-    if (props.allPoints.length === 0) return { position: [0, 0, 8] as [number, number, number], fov: 55 };
-    let minX = Infinity;
-    let maxX = -Infinity;
-    let minY = Infinity;
-    let maxY = -Infinity;
-    let minZ = Infinity;
-    let maxZ = -Infinity;
-    for (const p of props.allPoints) {
-      minX = Math.min(minX, p.x);
-      maxX = Math.max(maxX, p.x);
-      minY = Math.min(minY, p.y);
-      maxY = Math.max(maxY, p.y);
-      minZ = Math.min(minZ, p.z);
-      maxZ = Math.max(maxZ, p.z);
-    }
-    const cx = (minX + maxX) / 2;
-    const cy = (minY + maxY) / 2;
-    const cz = (minZ + maxZ) / 2;
-    const span = Math.max(maxX - minX, maxY - minY, maxZ - minZ, 1);
-    const dist = span * 1.4;
-    return { position: [cx, cy, cz + dist] as [number, number, number], fov: 50 };
-  }, [props.allPoints]);
+  const bounds = useMemo(() => computeBounds(props.allPoints), [props.allPoints]);
 
   return (
-    <Canvas camera={{ position: initialCamera.position, fov: initialCamera.fov }} className="h-full w-full">
+    <Canvas camera={{ position: bounds.position, fov: 50 }} className="h-full w-full">
       <SceneInner
         points={props.points}
         allPoints={props.allPoints}
+        span={bounds.span}
         selectedOracleId={props.selectedOracleId}
         hoverOracleId={props.hoverOracleId}
         highlightOracleIds={props.highlightOracleIds}
