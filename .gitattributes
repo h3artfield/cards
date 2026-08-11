@@ -1,0 +1,9 @@
+# Deterministic parser/evaluator/policy source bytes across platforms.
+# Holdout preflight binds parserBlobClosure from disk reads — LF enforced.
+.gitattributes text eol=lf
+web/**/*.ts text eol=lf
+web/**/*.tsx text eol=lf
+web/**/*.json text eol=lf
+web/**/*.js text eol=lf
+web/**/*.mjs text eol=lf
+web/**/*.cjs text eol=lf

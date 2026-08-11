@@ -1,0 +1,32 @@
+{
+  "capturedAt": "2026-08-10T23:28:11.083Z",
+  "parserVersion": "oracle-action-v1.44-rc8-ownership-grant-family",
+  "expectedParserBlobClosure": "e5c2f7054cda29cb512a0d6be133661f85ce9eee444d6b60884ecc4739df32b3",
+  "parserBlobClosureDisk": "e5c2f7054cda29cb512a0d6be133661f85ce9eee444d6b60884ecc4739df32b3",
+  "parserBlobClosureGitLf": "d3af8eca52a6bce6582d7f8a62e8aa2a89b4baefa9f36bff036adc9b2a6ce560",
+  "developmentCorpusParseHash": "88288488175a740eee5f9c299295d9865349b7852a702247ab921366d5505233",
+  "developmentCaseCount": 431,
+  "perFileLfHashes": {
+    "src/lib/deck-builder/golden-catalog/oracle-action-parser-v1.ts": "44ee6c69114bde2e6d2ee2cb35ed22cdeb94a680c90f23f0ba9f4c9aede52675",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-transform.ts": "848a4ffe269f18733c9f519e3110807250e3e3026ebc613e57a93d8f3a1f3957",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-clause-native.ts": "40b22d7683498ed779a16873533cfad065e150fc4f572ddc6f70c3fbe375bb94",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-ability-block.ts": "971970e192fcdf4f6bd4ed372ca4e5f7e67f516a43d6b75d8fd501e88ba003c7",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-granted-rules-span-detector.ts": "ba74ca13d8e4a5a7593a85b41324380cd27a05fb854a0b4134b319646cd86068",
+    "src/lib/deck-builder/golden-catalog/oracle-span-role-classifier.ts": "8f249a6331b14aafa754d9377a75b08ef15f3f3dff3b70ea5db978ad07feb878",
+    "src/lib/deck-builder/golden-catalog/oracle-compound-clause-segmentation.ts": "c44c44b5d4c03d3aaa5d8b6a12fe38c620d8b5a79512d8ebc3ab9241d7f9236f",
+    "src/lib/deck-builder/golden-catalog/oracle-modal-option-parse.ts": "6221892af5432b16163a01cc744d460a732e7561090e3cba542839cb41809617",
+    "src/lib/deck-builder/golden-catalog/oracle-action-structural-blocks.ts": "b3d983e843562dafb73e0f18dd8a91b6d6e78a54fdd7bb18413bbdc5274fab78",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-rc3.ts": "d71a54df3c0dbf590966810d863b48f910033141f0bc442e5c6da672dedf3088",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-builder.ts": "ecdd1d8bfef1763af68cdc2d12700e71d69803dd68a2b67659018b10a5b2de20",
+    "src/lib/deck-builder/golden-catalog/oracle-ability-segmentation.ts": "9381b09acce555b1819c154758bd99d99342258a2b93cc346edf042a291d8008",
+    "scripts/oracle-action-semantic-matcher.ts": "8f173e68258b92563c1aebb19f3cc4cb58e02292f168213fed531aee869f8201",
+    "scripts/oracle-action-unified-matcher.ts": "a76db2e0dc2aaa9807050aaebb6c46e8f962072b7a91150663cac1b7a256ec5d",
+    "scripts/lib/gold-policy-validator-v1.ts": "65f2f4a02d350c9a1f9871f0d408112cde932a849e7d2dad2e36941bb8442ce2",
+    "scripts/lib/rc5-regression-scoring-v1.ts": "67d570cceec42534d532b7117fd67d124489a21e6f2187f0f2a52764009b31c7",
+    "scripts/lib/reminder-derived-leakage-v1.ts": "dce8d6e4b7567789d9958afc062c03b7595108028254da40d0bd10c3d64c32d9",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-integrity.ts": "3079ca0bb3a770c63b0e117683ce30a5f52d0bbca502c6f99578926d144fa92c",
+    "scripts/test-rc8-action-ownership-regressions.ts": "f876c3659363f447f448e2eec552768894c3da350937b4845ab839498b4cf021"
+  },
+  "rc8RegressionCommand": "npx tsx scripts/test-rc8-action-ownership-regressions.ts",
+  "rescoreCommand": "npx tsx scripts/rescore-rc7-certified-dev-v152.ts"
+}

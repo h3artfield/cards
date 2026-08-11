@@ -1,0 +1,60 @@
+{
+  "artifactType": "Rc8ProvenanceLfPackagingManifest",
+  "version": "rc8-provenance-lf-packaging-v1",
+  "packagedAt": "2026-08-10T23:55:22.436Z",
+  "status": "PROVENANCE_NORMALIZED",
+  "supersedes": "data/milestones/rc8-development/rc8-candidate-v152-freeze-manifest.json",
+  "note": "Provenance-only LF normalization — no parser semantics changed.",
+  "parserVersion": "oracle-action-v1.44-rc8-ownership-grant-family",
+  "parserCommitSha": "2b0bb6d1eed52bf3c1ca860d0e2d68c0fe1265fb",
+  "rc8CandidateGitSha": "2b0bb6d1eed52bf3c1ca860d0e2d68c0fe1265fb",
+  "parserBlobClosureHash": "d3af8eca52a6bce6582d7f8a62e8aa2a89b4baefa9f36bff036adc9b2a6ce560",
+  "historicalRc8ParserBlobClosureHash": "e5c2f7054cda29cb512a0d6be133661f85ce9eee444d6b60884ecc4739df32b3",
+  "parserBlobClosureTransition": {
+    "from": "e5c2f7054cda29cb512a0d6be133661f85ce9eee444d6b60884ecc4739df32b3",
+    "to": "d3af8eca52a6bce6582d7f8a62e8aa2a89b4baefa9f36bff036adc9b2a6ce560",
+    "reason": "CRLF disk bytes at RC8 freeze → canonical LF git/disk bytes; semantic content identical"
+  },
+  "gitattributesPath": ".gitattributes",
+  "renormalizeScope": [
+    "src/lib/deck-builder/golden-catalog/oracle-action-parser-v1.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-transform.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-clause-native.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-ability-block.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-rc3-granted-rules-span-detector.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-span-role-classifier.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-compound-clause-segmentation.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-modal-option-parse.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-action-structural-blocks.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-rc3.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-parse-builder.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-ability-segmentation.ts",
+    "scripts/oracle-action-semantic-matcher.ts",
+    "scripts/oracle-action-unified-matcher.ts",
+    "scripts/lib/gold-policy-validator-v1.ts",
+    "scripts/lib/rc5-regression-scoring-v1.ts",
+    "scripts/lib/reminder-derived-leakage-v1.ts",
+    "src/lib/deck-builder/golden-catalog/oracle-semantic-integrity.ts",
+    "scripts/test-rc8-action-ownership-regressions.ts",
+    "data/milestones/rc3-foundations/gold-policy-registry-v1.json",
+    "scripts/lib/gold-semantic-enrichment-v1.ts",
+    "scripts/lib/validation-v13-policy-adjudication.ts",
+    "scripts/run-gold-policy-validator.ts",
+    "../.gitattributes"
+  ],
+  "verification": {
+    "baselinePath": "data/milestones/rc8-development/rc8-provenance-lf-baseline-v1.json",
+    "developmentCorpusParseHash": "88288488175a740eee5f9c299295d9865349b7852a702247ab921366d5505233",
+    "developmentCorpusParseHashUnchanged": true,
+    "rc8RegressionPass": true,
+    "rescoreRc8CandidateReady": true,
+    "parserBlobClosureReproducibleFromHead": true,
+    "freshCheckoutRequiresManualByteSync": false
+  },
+  "rc8CandidateBindingUnchanged": {
+    "parserVersion": "oracle-action-v1.44-rc8-ownership-grant-family",
+    "semanticGoldPolicyStackUnchanged": true,
+    "v18OfficialSpent": true,
+    "blindStatus": "DO_NOT_TOUCH"
+  }
+}
