@@ -1,0 +1,58 @@
+{
+  "artifactType": "CatalogHealthCensus",
+  "version": "catalog-health-census-paper-v3",
+  "generatedAt": "2026-08-11T05:26:27.415Z",
+  "frame": "paper-eligible-v3",
+  "populationHash": "2fe9397218077c11dce3aa11b876e74cc91c4b1063e8e1234ded1fc034b11fd1",
+  "paperEligibleOracleCards": 34862,
+  "sourceShadowManifest": "data/milestones/catalog-shadow/catalog-shadow-parse-rc8-firestore-v2-manifest.json",
+  "sourceShadowContentHash": "7eda36edec87455ff5c994a7ea5a8c424d5c1a3d956d16a50e5caff304c7fe9c",
+  "sourceShadowCardCount": 35932,
+  "derivation": "exact paperEligible identity filter on frozen RC8 firestore-v2 shadow parse — no parser re-run",
+  "parserVersion": "oracle-action-v1.44-rc8-ownership-grant-family",
+  "parserBlobClosure": "d3af8eca52a6bce6582d7f8a62e8aa2a89b4baefa9f36bff036adc9b2a6ce560",
+  "scryfallBulkSource": {
+    "type": "default_cards",
+    "updatedAt": "2026-08-10T21:05:22.167+00:00",
+    "note": "Paper denominator reproducibility pinned to paper-eligibility-audit-v1 Scryfall default_cards bulk"
+  },
+  "totals": {
+    "oracleCards": 34862,
+    "successfullyParsed": 34817,
+    "structuralInvalid": 45,
+    "provenanceInvalid": 0,
+    "idInvalid": 6,
+    "cardsWithNoDiagnostics": 34856,
+    "cardsWithNeedsReview": 650,
+    "cardsWithAnyParserDiagnostic": 6,
+    "cardsNonPublishable": 45
+  },
+  "rates": {
+    "structuralInvalidPct": 0.13,
+    "provenanceInvalidPct": 0,
+    "idInvalidPct": 0.02,
+    "needsReviewPct": 1.86,
+    "nonPublishablePct": 0.13,
+    "anyDiagnosticPct": 0.02
+  },
+  "byComplexityBucket": {
+    "cards": {
+      "simple": 20529,
+      "normal": 12577,
+      "complex": 1671,
+      "pathological": 85
+    },
+    "structuralInvalid": {
+      "simple": 0,
+      "normal": 30,
+      "complex": 10,
+      "pathological": 5
+    },
+    "needsReview": {
+      "simple": 171,
+      "normal": 403,
+      "complex": 67,
+      "pathological": 9
+    }
+  }
+}

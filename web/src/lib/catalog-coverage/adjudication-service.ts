@@ -1,4 +1,4 @@
-import calibrationBlindPack from "./calibration-blind-pack-v1.json";
+import calibrationBlindPack from "./calibration-blind-pack-v2.json";
 import { COLLECTIONS } from "@/lib/firebase/collections";
 import { forFirestore } from "@/lib/firebase/for-firestore";
 import {
@@ -48,6 +48,8 @@ type AdjudicationDoc = {
   startedAt: string;
   updatedAt: string;
   submittedAt?: string;
+  supersededCalibrationBatch?: string;
+  excludedFromV3Gold?: boolean;
 };
 
 type SessionDoc = {
@@ -64,6 +66,38 @@ type SessionDoc = {
   createdAt: string;
   updatedAt: string;
 };
+
+function currentStudyFrame() {
+  return {
+    sampleIdentityHash: CATALOG_COVERAGE_SAMPLE_IDENTITY_HASH,
+    populationHash: CATALOG_COVERAGE_POPULATION_HASH,
+    calibrationBatchHash: CATALOG_COVERAGE_CALIBRATION_BATCH_HASH,
+    annotationProtocolVersion: CATALOG_COVERAGE_ANNOTATION_PROTOCOL_VERSION,
+  };
+}
+
+function adjudicationMatchesCurrentFrame(
+  row: Pick<
+    AdjudicationDoc,
+    "sampleIdentityHash" | "populationHash" | "calibrationBatchHash" | "annotationProtocolVersion"
+  >,
+): boolean {
+  const frame = currentStudyFrame();
+  return (
+    row.sampleIdentityHash === frame.sampleIdentityHash &&
+    row.populationHash === frame.populationHash &&
+    row.calibrationBatchHash === frame.calibrationBatchHash &&
+    row.annotationProtocolVersion === frame.annotationProtocolVersion
+  );
+}
+
+function sessionMatchesCurrentFrame(session: SessionDoc): boolean {
+  return adjudicationMatchesCurrentFrame(session);
+}
+
+export function getCurrentStudyFrame() {
+  return currentStudyFrame();
+}
 
 function loadCalibrationPack(): BlindPackFile {
   const pack = calibrationBlindPack as BlindPackFile;
@@ -164,6 +198,7 @@ export async function getSessionInfo(adjudicatorId: string): Promise<Adjudicatio
   const snap = await db.collection(ADJUDICATION_SESSION_COLLECTION).doc(adjudicatorId).get();
   if (!snap.exists) return null;
   const session = snap.data() as SessionDoc;
+  if (!sessionMatchesCurrentFrame(session)) return null;
   const protocolFrozen = await readProtocolFrozen();
   const quorumReached = await calibrationQuorumReached();
 
@@ -206,10 +241,7 @@ export async function startSession(input: {
   };
 
   const db = await getDb();
-  await db
-    .collection(ADJUDICATION_SESSION_COLLECTION)
-    .doc(adjudicatorId)
-    .set(forFirestore(session), { merge: true });
+  await db.collection(ADJUDICATION_SESSION_COLLECTION).doc(adjudicatorId).set(forFirestore(session));
 
   const protocolFrozen = await readProtocolFrozen();
   const quorumReached = await calibrationQuorumReached();
@@ -249,7 +281,9 @@ export async function loadAdjudicationDraft(
     .doc(adjudicationDocId(adjudicatorId, oracleId))
     .get();
   if (!snap.exists) return null;
-  return snap.data() as AdjudicationDoc;
+  const row = snap.data() as AdjudicationDoc;
+  if (!adjudicationMatchesCurrentFrame(row)) return null;
+  return row;
 }
 
 export async function saveAdjudicationDraft(input: {
@@ -303,6 +337,7 @@ async function refreshSessionCounts(adjudicatorId: string): Promise<void> {
     .where("adjudicatorId", "==", adjudicatorId)
     .where("phase", "==", "calibration")
     .where("status", "==", "submitted")
+    .where("calibrationBatchHash", "==", CATALOG_COVERAGE_CALIBRATION_BATCH_HASH)
     .get();
 
   const submittedOracleIds = new Set(
@@ -327,6 +362,7 @@ export async function calibrationQuorumReached(): Promise<boolean> {
     .collection(ADJUDICATION_SESSION_COLLECTION)
     .where("phase", "==", "calibration")
     .where("allSubmitted", "==", true)
+    .where("calibrationBatchHash", "==", CATALOG_COVERAGE_CALIBRATION_BATCH_HASH)
     .get();
   return snap.size >= CALIBRATION_ADJUDICATOR_QUORUM;
 }
@@ -337,6 +373,7 @@ export async function listSubmittedAdjudicators(): Promise<string[]> {
     .collection(ADJUDICATION_SESSION_COLLECTION)
     .where("phase", "==", "calibration")
     .where("allSubmitted", "==", true)
+    .where("calibrationBatchHash", "==", CATALOG_COVERAGE_CALIBRATION_BATCH_HASH)
     .get();
   return snap.docs.map((d) => (d.data() as SessionDoc).adjudicatorId).sort();
 }
@@ -361,11 +398,13 @@ export async function loadAllSubmittedForCalibration(): Promise<
     .collection(ADJUDICATION_COLLECTION)
     .where("phase", "==", "calibration")
     .where("status", "==", "submitted")
+    .where("calibrationBatchHash", "==", CATALOG_COVERAGE_CALIBRATION_BATCH_HASH)
     .get();
 
   return snap.docs
     .map((doc) => {
       const row = doc.data() as AdjudicationDoc;
+      if (!adjudicationMatchesCurrentFrame(row)) return null;
       if (!row.semanticGold) return null;
       return {
         adjudicatorId: row.adjudicatorId,
@@ -508,7 +547,10 @@ export async function getProgressForAdjudicator(adjudicatorId: string): Promise<
   }
   for (const doc of snap.docs) {
     const row = doc.data() as AdjudicationDoc;
-    progress[row.oracleId] = row.status;
+    if (!adjudicationMatchesCurrentFrame(row)) continue;
+    if (progress[row.oracleId] !== undefined) {
+      progress[row.oracleId] = row.status;
+    }
   }
   return progress;
 }

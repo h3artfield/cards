@@ -1,0 +1,2094 @@
+{
+  "artifactType": "CatalogPaperEligibilityAudit",
+  "version": "catalog-paper-eligibility-audit-v1",
+  "generatedAt": "2026-08-11T05:00:41.284Z",
+  "durationMs": 6206,
+  "authoritativeRule": "paperEligible = oracle identity has >=1 printing in Scryfall default_cards whose games[] contains 'paper'",
+  "dataSources": {
+    "populationSnapshot": "data/milestones/catalog-shadow/catalog-population-snapshot-firestore-v2.json",
+    "sampleV2": "data/milestones/catalog-shadow/catalog-coverage-sample-v2.json",
+    "calibrationBatch": "data/milestones/catalog-shadow/catalog-coverage-calibration-batch-v1.json",
+    "scryfallBulk": {
+      "type": "default_cards",
+      "updatedAt": "2026-08-10T21:05:22.167+00:00",
+      "cachePath": "C:/Users/h3art/PycharmProjects/cards/web/.cache/scryfall-bulk/default_cards-2026-08-10T21-05-22-167+00-00.jsonl.gz"
+    }
+  },
+  "catalogModel": {
+    "rawScryfallCatalog": "Complete imported source — includes digital-only identities",
+    "paperSemanticCatalog": "Physical-card identities — hasPaperPrinting == true",
+    "storeInventory": "Printings physically sellable by The Game Lodge"
+  },
+  "populationV2": {
+    "populationHash": "986c26116efaea45a20bb0cffe388fc20340db47839300ce69127942681dcbc5",
+    "totalCatalogOracleCards": 38542,
+    "legitimateIdentitiesABC": 35932,
+    "paperEligibleIdentities": 34862,
+    "digitalOnlyIdentities": 1070,
+    "nonCardCategoryD": 2610,
+    "malformedCategoryE": 0
+  },
+  "paperPopulationV3": {
+    "status": "REQUIRED",
+    "paperEligiblePopulationHash": "2fe9397218077c11dce3aa11b876e74cc91c4b1063e8e1234ded1fc034b11fd1",
+    "paperEligibleCount": 34862,
+    "note": "Sample v2 contains digital-only identities — supersede v2, freeze paper population v3, redraw sample v3 and calibration probabilistically."
+  },
+  "digitalOnlyBreakdown": {
+    "totalDigitalOnlyInLegitimateFrame": 1070,
+    "bySubtype": [
+      {
+        "key": "alchemy",
+        "count": 741
+      },
+      {
+        "key": "arena_only",
+        "count": 235
+      },
+      {
+        "key": "mtgo_only",
+        "count": 76
+      },
+      {
+        "key": "other_digital",
+        "count": 18
+      }
+    ],
+    "bySet": [
+      {
+        "key": "hbg",
+        "count": 213
+      },
+      {
+        "key": "pmoa",
+        "count": 74
+      },
+      {
+        "key": "ymid",
+        "count": 58
+      },
+      {
+        "key": "snc",
+        "count": 44
+      },
+      {
+        "key": "j21",
+        "count": 31
+      },
+      {
+        "key": "ydsk",
+        "count": 30
+      },
+      {
+        "key": "yecl",
+        "count": 30
+      },
+      {
+        "key": "yeoe",
+        "count": 30
+      },
+      {
+        "key": "ylci",
+        "count": 30
+      },
+      {
+        "key": "ymkm",
+        "count": 30
+      },
+      {
+        "key": "yneo",
+        "count": 30
+      },
+      {
+        "key": "yone",
+        "count": 30
+      },
+      {
+        "key": "ysnc",
+        "count": 30
+      },
+      {
+        "key": "ysos",
+        "count": 30
+      },
+      {
+        "key": "ytdm",
+        "count": 30
+      },
+      {
+        "key": "yblb",
+        "count": 29
+      },
+      {
+        "key": "ybro",
+        "count": 29
+      },
+      {
+        "key": "ydft",
+        "count": 29
+      },
+      {
+        "key": "ydmu",
+        "count": 29
+      },
+      {
+        "key": "ywoe",
+        "count": 29
+      },
+      {
+        "key": "yotj",
+        "count": 25
+      },
+      {
+        "key": "afr",
+        "count": 22
+      },
+      {
+        "key": "khm",
+        "count": 18
+      },
+      {
+        "key": "dmu",
+        "count": 17
+      },
+      {
+        "key": "neo",
+        "count": 17
+      },
+      {
+        "key": "anb",
+        "count": 16
+      },
+      {
+        "key": "znr",
+        "count": 15
+      },
+      {
+        "key": "bro",
+        "count": 12
+      },
+      {
+        "key": "vow",
+        "count": 11
+      },
+      {
+        "key": "past",
+        "count": 10
+      },
+      {
+        "key": "stx",
+        "count": 10
+      },
+      {
+        "key": "oana",
+        "count": 9
+      },
+      {
+        "key": "psdg",
+        "count": 8
+      },
+      {
+        "key": "mid",
+        "count": 7
+      },
+      {
+        "key": "mh3",
+        "count": 4
+      },
+      {
+        "key": "xana",
+        "count": 3
+      },
+      {
+        "key": "dsk",
+        "count": 2
+      },
+      {
+        "key": "ltr",
+        "count": 2
+      },
+      {
+        "key": "mbc",
+        "count": 2
+      },
+      {
+        "key": "blb",
+        "count": 1
+      }
+    ],
+    "byLayout": [
+      {
+        "key": "normal",
+        "count": 955
+      },
+      {
+        "key": "vanguard",
+        "count": 74
+      },
+      {
+        "key": "adventure",
+        "count": 12
+      },
+      {
+        "key": "transform",
+        "count": 8
+      },
+      {
+        "key": "saga",
+        "count": 6
+      },
+      {
+        "key": "class",
+        "count": 4
+      },
+      {
+        "key": "prepare",
+        "count": 3
+      },
+      {
+        "key": "case",
+        "count": 2
+      },
+      {
+        "key": "modal_dfc",
+        "count": 2
+      },
+      {
+        "key": "prototype",
+        "count": 2
+      },
+      {
+        "key": "split",
+        "count": 2
+      }
+    ],
+    "byGames": [
+      {
+        "key": "arena",
+        "count": 976
+      },
+      {
+        "key": "mtgo",
+        "count": 76
+      },
+      {
+        "key": "astral",
+        "count": 10
+      },
+      {
+        "key": "sega",
+        "count": 8
+      }
+    ],
+    "byDigitalFlag": [
+      {
+        "key": "true",
+        "count": 1100
+      }
+    ]
+  },
+  "examples": {
+    "warzoneDuplicator": {
+      "oracleId": "3a5b8972-7e50-42aa-a922-fa476260fafd",
+      "canonicalName": "Warzone Duplicator",
+      "populationCategory": "A",
+      "layout": "prototype",
+      "printingCount": 1,
+      "paperPrintingCount": 0,
+      "gamesUnion": [
+        "arena"
+      ],
+      "setCodes": [
+        "ybro"
+      ],
+      "setTypes": [
+        "alchemy"
+      ],
+      "layouts": [
+        "prototype"
+      ],
+      "digitalOnlySubtype": "alchemy",
+      "examplePrintings": [
+        {
+          "scryfallId": "d40bfed4-7f86-486e-a903-0165cd40e77b",
+          "name": "Warzone Duplicator",
+          "set": "ybro",
+          "setName": "Alchemy: The Brothers' War",
+          "setType": "alchemy",
+          "layout": "prototype",
+          "games": [
+            "arena"
+          ],
+          "digital": true
+        }
+      ]
+    },
+    "digitalOnlySample": [
+      {
+        "oracleId": "acee1d16-1651-4e2c-8138-cc6456c4ee71",
+        "canonicalName": "\"Name Sticker\" Goblin",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "mtgo"
+        ],
+        "setCodes": [
+          "unf"
+        ],
+        "setTypes": [
+          "funny"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "mtgo_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "fd1442b4-da59-4042-835f-143c8dcaa73b",
+            "name": "\"Name Sticker\" Goblin",
+            "set": "unf",
+            "setName": "Unfinity",
+            "setType": "funny",
+            "layout": "normal",
+            "games": [
+              "mtgo"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "4e0854f8-de38-4574-9fc9-b340c88b2945",
+        "canonicalName": "A Golden Opportunity",
+        "populationCategory": "A",
+        "layout": "saga",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "ywoe"
+        ],
+        "setTypes": [
+          "alchemy"
+        ],
+        "layouts": [
+          "saga"
+        ],
+        "digitalOnlySubtype": "alchemy",
+        "examplePrintings": [
+          {
+            "scryfallId": "651be3e2-0d26-4def-98c1-3e526e650fe5",
+            "name": "A Golden Opportunity",
+            "set": "ywoe",
+            "setName": "Alchemy: Wilds of Eldraine",
+            "setType": "alchemy",
+            "layout": "saga",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "f0cc4b7d-3b52-4a16-8ae7-4e64a682e43d",
+        "canonicalName": "A-Acererak the Archlich",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "afr"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "eb363654-2004-4db8-bbd2-5b121da4f2a0",
+            "name": "A-Acererak the Archlich",
+            "set": "afr",
+            "setName": "Adventures in the Forgotten Realms",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "1be31774-decb-4d33-900c-5ec6e725d803",
+        "canonicalName": "A-Akki Ronin",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "neo"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "0c780e37-91b1-4fe1-85c9-7007d91209d5",
+            "name": "A-Akki Ronin",
+            "set": "neo",
+            "setName": "Kamigawa: Neon Dynasty",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "2d6186a6-5236-4fb9-bcb6-f6825b148886",
+        "canonicalName": "A-Alrund, God of the Cosmos // A-Hakka, Whispering Raven",
+        "populationCategory": "A",
+        "layout": "modal_dfc",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "khm"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "modal_dfc"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "b443504e-1b25-4565-bad7-2575826c7bb9",
+            "name": "A-Alrund, God of the Cosmos // A-Hakka, Whispering Raven",
+            "set": "khm",
+            "setName": "Kaldheim",
+            "setType": "expansion",
+            "layout": "modal_dfc",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "6c7d22e4-2607-4cf5-a939-28361f38f3b6",
+        "canonicalName": "A-Ancestral Katana",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "neo"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "0321b706-87b0-4bea-89d3-ec2e7252dc7c",
+            "name": "A-Ancestral Katana",
+            "set": "neo",
+            "setName": "Kamigawa: Neon Dynasty",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "dc22be73-1d72-4455-9a7a-871b75ecc4c7",
+        "canonicalName": "A-Ardent Dustspeaker",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "stx"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "79b12c44-9537-4863-a678-c982e8714a5a",
+            "name": "A-Ardent Dustspeaker",
+            "set": "stx",
+            "setName": "Strixhaven: School of Mages",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "21fa88e8-c236-4f4e-989a-09efffb30c77",
+        "canonicalName": "A-Armory Veteran",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "afr"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "423f13ba-e165-4add-9935-d88503e1e761",
+            "name": "A-Armory Veteran",
+            "set": "afr",
+            "setName": "Adventures in the Forgotten Realms",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "7ae924fc-ddbc-4729-84cf-982f8fe91208",
+        "canonicalName": "A-Asari Captain",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "neo"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "ea1d684e-c4dd-481b-856e-8331d4f64be2",
+            "name": "A-Asari Captain",
+            "set": "neo",
+            "setName": "Kamigawa: Neon Dynasty",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "9ffed3f8-31c8-4671-8357-e0ab23b21551",
+        "canonicalName": "A-Baleful Beholder",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "hbg"
+        ],
+        "setTypes": [
+          "alchemy"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "alchemy",
+        "examplePrintings": [
+          {
+            "scryfallId": "8a7df52e-fa91-4c2b-a465-47274bf7e6aa",
+            "name": "A-Baleful Beholder",
+            "set": "hbg",
+            "setName": "Alchemy Horizons: Baldur's Gate",
+            "setType": "alchemy",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "fb6b271f-689e-46e0-97b8-044aaf582898",
+        "canonicalName": "A-Base Camp",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "znr"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "b56f7e2a-150c-4daa-811c-a0347ff850bf",
+            "name": "A-Base Camp",
+            "set": "znr",
+            "setName": "Zendikar Rising",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "ee12e2e0-7eda-4f5e-9373-d4c029995adb",
+        "canonicalName": "A-Binding Geist // A-Spectral Binding",
+        "populationCategory": "A",
+        "layout": "transform",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "vow"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "transform"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "6e40e8f7-38f9-454a-9127-164b39737cb8",
+            "name": "A-Binding Geist // A-Spectral Binding",
+            "set": "vow",
+            "setName": "Innistrad: Crimson Vow",
+            "setType": "expansion",
+            "layout": "transform",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "4264cf22-8823-4bb9-b414-15e8e10c011b",
+        "canonicalName": "A-Blessed Hippogriff // A-Tyr's Blessing",
+        "populationCategory": "A",
+        "layout": "adventure",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "hbg"
+        ],
+        "setTypes": [
+          "alchemy"
+        ],
+        "layouts": [
+          "adventure"
+        ],
+        "digitalOnlySubtype": "alchemy",
+        "examplePrintings": [
+          {
+            "scryfallId": "024c82c5-611e-48bd-ad56-9d31e4adda0e",
+            "name": "A-Blessed Hippogriff // A-Tyr's Blessing",
+            "set": "hbg",
+            "setName": "Alchemy Horizons: Baldur's Gate",
+            "setType": "alchemy",
+            "layout": "adventure",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "1d96c049-d747-4c98-a5fe-a0c94b6a899c",
+        "canonicalName": "A-Blood Artist",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "jmp"
+        ],
+        "setTypes": [
+          "draft_innovation"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "ab76e956-5d6c-49b8-991c-c39d5b18b876",
+            "name": "A-Blood Artist",
+            "set": "jmp",
+            "setName": "Jumpstart",
+            "setType": "draft_innovation",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "34b9e436-7db0-4820-a780-46cc0bd901bc",
+        "canonicalName": "A-Bretagard Stronghold",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "khm"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "88010fdf-41e5-4303-82e2-19cfe9082270",
+            "name": "A-Bretagard Stronghold",
+            "set": "khm",
+            "setName": "Kaldheim",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "8a7dbc4c-c378-466c-8e05-be644faf1bd0",
+        "canonicalName": "A-Briar Hydra",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "dmu"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "71165520-9471-40dd-a45b-2955b006c7d2",
+            "name": "A-Briar Hydra",
+            "set": "dmu",
+            "setName": "Dominaria United",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "55717e47-c1ab-4218-bc1c-10e58e91fa87",
+        "canonicalName": "A-Brine Comber // A-Brinebound Gift",
+        "populationCategory": "A",
+        "layout": "transform",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "vow"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "transform"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "d0e03cdb-1082-448b-ae5c-501fb8bc3f3b",
+            "name": "A-Brine Comber // A-Brinebound Gift",
+            "set": "vow",
+            "setName": "Innistrad: Crimson Vow",
+            "setType": "expansion",
+            "layout": "transform",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "a0486c42-2340-40b8-bf18-620f395b724e",
+        "canonicalName": "A-Bruenor Battlehammer",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "afr"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "7ad77890-cf97-4707-ab31-be0f5be0e120",
+            "name": "A-Bruenor Battlehammer",
+            "set": "afr",
+            "setName": "Adventures in the Forgotten Realms",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "cdf8d38c-8c80-483d-92be-7d35fcd0f2e5",
+        "canonicalName": "A-Buy Your Silence",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "snc"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "b8c0cecd-c718-4238-9164-ebb6c20fc99c",
+            "name": "A-Buy Your Silence",
+            "set": "snc",
+            "setName": "Streets of New Capenna",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "71b3e813-7205-43e5-8411-7945191c766f",
+        "canonicalName": "A-Cabaretti Charm",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "snc"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "94e82413-9736-4013-a39a-5498c1c85bba",
+            "name": "A-Cabaretti Charm",
+            "set": "snc",
+            "setName": "Streets of New Capenna",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "9b51b64d-24e1-40c2-95de-2cdd1fc49aee",
+        "canonicalName": "A-Canopy Tactician",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "khm"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "693eb7cb-a78c-4d79-b4de-f59da76cce31",
+            "name": "A-Canopy Tactician",
+            "set": "khm",
+            "setName": "Kaldheim",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "ce3b09aa-2642-402a-b7e8-5e8ed896af3c",
+        "canonicalName": "A-Capenna Express",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "snc"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "1dbc5b78-2156-4a9a-863f-b2f82fbdc87d",
+            "name": "A-Capenna Express",
+            "set": "snc",
+            "setName": "Streets of New Capenna",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "05087f4f-f6c8-43d8-ac4b-9209088b68f7",
+        "canonicalName": "A-Carnelian Orb of Dragonkind",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "hbg"
+        ],
+        "setTypes": [
+          "alchemy"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "alchemy",
+        "examplePrintings": [
+          {
+            "scryfallId": "e11103a3-95dc-4453-a3f3-975fcff5fba0",
+            "name": "A-Carnelian Orb of Dragonkind",
+            "set": "hbg",
+            "setName": "Alchemy Horizons: Baldur's Gate",
+            "setType": "alchemy",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "abec055e-95a3-44ef-add1-cd0ea51e3144",
+        "canonicalName": "A-Case the Joint",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "snc"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "97aa1331-3a2b-4c1e-a1ab-b53756141b35",
+            "name": "A-Case the Joint",
+            "set": "snc",
+            "setName": "Streets of New Capenna",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "6a94fb8a-c0bf-40d9-ad78-de9695797888",
+        "canonicalName": "A-Cauldron Familiar",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "eld"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "c55cdc15-e289-49a0-94d9-d0a118ad0a2a",
+            "name": "A-Cauldron Familiar",
+            "set": "eld",
+            "setName": "Throne of Eldraine",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "60ae87f0-807f-47a9-b1b0-6cea4e68973d",
+        "canonicalName": "A-Celebrity Fencer",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "snc"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "6d9428ae-9c59-4cac-a29b-039a34cfdb6d",
+            "name": "A-Celebrity Fencer",
+            "set": "snc",
+            "setName": "Streets of New Capenna",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "0f50f22c-ea4d-40b9-9f05-2f1739c92bdd",
+        "canonicalName": "A-Celestial Regulator",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "snc"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "1ede1b10-56df-4e17-bf86-1082edff1b51",
+            "name": "A-Celestial Regulator",
+            "set": "snc",
+            "setName": "Streets of New Capenna",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "c6a4a39e-87e6-47bd-bbe3-ca3c98c2049c",
+        "canonicalName": "A-Circle of the Land Druid",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "hbg"
+        ],
+        "setTypes": [
+          "alchemy"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "alchemy",
+        "examplePrintings": [
+          {
+            "scryfallId": "0790fb0e-1db0-4edc-a287-8b1684310a67",
+            "name": "A-Circle of the Land Druid",
+            "set": "hbg",
+            "setName": "Alchemy Horizons: Baldur's Gate",
+            "setType": "alchemy",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "b2278421-e4f2-4f00-83c4-b69b7059aa5a",
+        "canonicalName": "A-Circuit Mender",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "neo"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "6a93c43b-0604-47fa-ae4e-4f72d342acf9",
+            "name": "A-Circuit Mender",
+            "set": "neo",
+            "setName": "Kamigawa: Neon Dynasty",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      },
+      {
+        "oracleId": "f3c89e17-1f29-4126-9f1d-53923ed343c2",
+        "canonicalName": "A-Civil Servant",
+        "populationCategory": "A",
+        "layout": "normal",
+        "printingCount": 1,
+        "paperPrintingCount": 0,
+        "gamesUnion": [
+          "arena"
+        ],
+        "setCodes": [
+          "snc"
+        ],
+        "setTypes": [
+          "expansion"
+        ],
+        "layouts": [
+          "normal"
+        ],
+        "digitalOnlySubtype": "arena_only",
+        "examplePrintings": [
+          {
+            "scryfallId": "186e9707-b20e-4ea6-b353-9abd98174011",
+            "name": "A-Civil Servant",
+            "set": "snc",
+            "setName": "Streets of New Capenna",
+            "setType": "expansion",
+            "layout": "normal",
+            "games": [
+              "arena"
+            ],
+            "digital": true
+          }
+        ]
+      }
+    ]
+  },
+  "sampleV2": {
+    "sampleIdentityHash": "8cc44c119302ad8ffb331f5ca8f6761fc0b52fb81bb799ec3f2762276d1931bb",
+    "sampleCount": 1000,
+    "digitalOnlyCount": 38,
+    "digitalOnlyCards": [
+      {
+        "oracleId": "02374eee-d408-4ef5-b057-d2e158e3b0cb",
+        "oracleTextHash": "d7a5a644459eae9e88c0070e75bef76e5492021260ee7387f3421f5c8fb88640",
+        "cardStructureHash": "53b0870cf68a3ee80e8ce16602b27e632006373c54da154fc665dd05b439dbfb",
+        "canonicalName": "Lukamina, Hawk Form",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "simple",
+        "populationBucketSize": 20964,
+        "sampleBucketSize": 450,
+        "inclusionProbability": 0.021465369204350316,
+        "surveyWeight": 46.586666666666666,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "0546d1fb-2427-4b00-9a56-258a979dccd8",
+        "oracleTextHash": "1a3d8e802a0916a8ce58f9f750fdc0ab413f7c49e81672a3da9bbe6b5190f307",
+        "cardStructureHash": "8baedd9af08fa4a71adb352cb02a9bf4c70cd243e9120c8e8f255f22a4b68256",
+        "canonicalName": "Rankle, Pitiless Trickster",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "0be4bf5e-1c93-49ea-a568-209638bf738e",
+        "oracleTextHash": "f3a604b9429cb3ecb3fefc6a768eaa327a8f3bfe1542df41f0a75ddddc930750",
+        "cardStructureHash": "edf2118add5cc6e951f95ae85e2d7cfe5fb8b2863cb8fa916eea9a8c493ab64b",
+        "canonicalName": "A-Rowan, Scholar of Sparks // A-Will, Scholar of Frost",
+        "layout": "modal_dfc",
+        "populationCategory": "A",
+        "complexityBucket": "pathological",
+        "populationBucketSize": 90,
+        "sampleBucketSize": 50,
+        "inclusionProbability": 0.5555555555555556,
+        "surveyWeight": 1.8,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "108c6fc6-6a6a-4f73-ba2b-ac8803f9801c",
+        "oracleTextHash": "1f7486cee0b04c08ec87878ddd7e29b64210c71621242d6f6da5aeee78bd4c9c",
+        "cardStructureHash": "7c0fe3400a9f72a2de053e5391749e9e8072e01926d28aa58278f79fad6a595a",
+        "canonicalName": "Baffling Defenses",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "simple",
+        "populationBucketSize": 20964,
+        "sampleBucketSize": 450,
+        "inclusionProbability": 0.021465369204350316,
+        "surveyWeight": 46.586666666666666,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "192e6f26-242e-4ae5-b9df-532044c9e92b",
+        "oracleTextHash": "40d5e0e5444b1d8208870e23f50b7a2b9b1277f64d276387746bae79cfbbb58b",
+        "cardStructureHash": "73af5b87e154e0246789a14b2444217ed831ab6b44b15333635650cb79589647",
+        "canonicalName": "Geistchanneler",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "1b06a75f-a67b-4184-97e8-3a8d989639b8",
+        "oracleTextHash": "f6aa7b9521097e05a5e8107d9abbe220c2dfba2665e88bf361b41f7537552d89",
+        "cardStructureHash": "b03300d3eda5fac9cba63736c1cd83f4c15cb7abe0b1d0d8c5d2cbc653664723",
+        "canonicalName": "Ichor Aberration",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "complex",
+        "populationBucketSize": 1746,
+        "sampleBucketSize": 200,
+        "inclusionProbability": 0.1145475372279496,
+        "surveyWeight": 8.73,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "1d15c566-d96d-454d-a4fe-eea8e6aed415",
+        "oracleTextHash": "907904e646790c277f636b46caa6dabe0cb308ec916f4ccca3e92ce72df89fba",
+        "cardStructureHash": "2a92ecf0b619affc088489515bbe2dfa723f6a491c667022d761ff69ab42f905",
+        "canonicalName": "Ace Flockbringer",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "simple",
+        "populationBucketSize": 20964,
+        "sampleBucketSize": 450,
+        "inclusionProbability": 0.021465369204350316,
+        "surveyWeight": 46.586666666666666,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "1d5f2d48-621f-4104-90b6-41bf31606265",
+        "oracleTextHash": "2d3639be4a7f1f2a2d74b40cde12a4954e543b721a27866392904492e7a9c2c1",
+        "cardStructureHash": "b706c4312446808325837fa1be3032529a251c28c992ed6e2b188578e55be22c",
+        "canonicalName": "Dragonfly Pilot",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "324e1f46-8c1b-41a8-9b7b-7914487d1825",
+        "oracleTextHash": "60e26513a7949b0243ea5f91f26637ff05b1b4836de537cd6cadd2ca1550fe89",
+        "cardStructureHash": "c3452fa057b3f64b43233cd3f47067266778d244fcd754f2ea6af5dd3a149919",
+        "canonicalName": "Tend to the Kiln",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "complex",
+        "populationBucketSize": 1746,
+        "sampleBucketSize": 200,
+        "inclusionProbability": 0.1145475372279496,
+        "surveyWeight": 8.73,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "3a5b8972-7e50-42aa-a922-fa476260fafd",
+        "oracleTextHash": "2f18c06cdbbd9e2f948fb44d510cbb21eaa581c485d6ea96ffe3db75c6bc1773",
+        "cardStructureHash": "1b362a1730b0aa3cbe1e8eef44fdddf62e5f974a706947fdbe0f105730edf52f",
+        "canonicalName": "Warzone Duplicator",
+        "layout": "prototype",
+        "populationCategory": "A",
+        "complexityBucket": "complex",
+        "populationBucketSize": 1746,
+        "sampleBucketSize": 200,
+        "inclusionProbability": 0.1145475372279496,
+        "surveyWeight": 8.73,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "3a928b39-413b-4b4c-9a05-c421b185e5b5",
+        "oracleTextHash": "f1670557306ef109a3d682237c5d748ef9d28dca5039b5b2f215a4d1e694a2fc",
+        "cardStructureHash": "38018ba272c51ba7afc34ac69dba641364026c57c6339aea1b47f376f6cd587a",
+        "canonicalName": "Thendar, the Overminer",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "4b0b97a2-95ef-496e-ac88-48f97c70f34b",
+        "oracleTextHash": "644ee466c26912d56c7bded3bf1f9c2dc128462559a2221b92b31a84e6ce533e",
+        "cardStructureHash": "6d864efbce9af68537c5f145138ae40e4b53f36528b3a330010ddd80c593d37b",
+        "canonicalName": "A-Midnight Assassin",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "simple",
+        "populationBucketSize": 20964,
+        "sampleBucketSize": 450,
+        "inclusionProbability": 0.021465369204350316,
+        "surveyWeight": 46.586666666666666,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "4d057a7d-1c66-4e39-acd5-91d68ef1ceae",
+        "oracleTextHash": "8556f4611a4b4d07eee156e16960012d0c3ab33c4644c072690fdb85a289f861",
+        "cardStructureHash": "0b8e7278d00f92384b1a983aeae661cec0111b62735f1daa81b228a67b267a33",
+        "canonicalName": "Masterpiece Vault",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "5228730a-cebc-472e-ab9a-f424e0c893fd",
+        "oracleTextHash": "c710ad34aaac6da0d011b479853de09fb8d1d653d03f1d3795ebb0e24833040c",
+        "cardStructureHash": "c979022ca6a79f639cc984b3ac83bc4f77d220efb11d0435a8763779d02264c2",
+        "canonicalName": "A-Gutter Skulker // A-Gutter Shortcut",
+        "layout": "transform",
+        "populationCategory": "A",
+        "complexityBucket": "pathological",
+        "populationBucketSize": 90,
+        "sampleBucketSize": 50,
+        "inclusionProbability": 0.5555555555555556,
+        "surveyWeight": 1.8,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "75d9c775-bf04-4690-923c-c99a3fbbca32",
+        "oracleTextHash": "2dc4f17bb125ccae8254ba9737265805b9ca87b601baeda9672404557981b736",
+        "cardStructureHash": "059ee7b6fe9e6f4f14bab256c46a4ecda5f9f9bf125b77a5434bff3600b248a8",
+        "canonicalName": "Mapping the Maze",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "7728e8b6-c226-49dd-b065-512d81e63a2b",
+        "oracleTextHash": "394fe8babdad2a95fc933240f1dd57c2efa2a0d5d25c439711698860b1424d6c",
+        "cardStructureHash": "e92ba4534161d2bfaedba1166bc3d9e6f9d222ad9d3b6e5bdd5a2d8a2b388ffb",
+        "canonicalName": "Darkstar Banisher",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "794e1dcb-aa64-4824-8d7b-0c65fc3afa13",
+        "oracleTextHash": "d3748123aca61f94264d981d871ea7b9cf52183efb913cd92eed1de646f7a941",
+        "cardStructureHash": "f6f387a6dc2697c0214bea212aa05f436f5c6d0882af7b2e707b99060e85edd0",
+        "canonicalName": "Electrostatic Blast",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "7b3e354e-0fa3-4ae1-93b5-9ebc29e8b59e",
+        "oracleTextHash": "a7ff7abe5068ec10a5e21b6840d351a9ec26180e255b75922d37eb03a940ab9e",
+        "cardStructureHash": "cd3c4a3835cd2692b92e2a17978b7cf83efee3590c4c9bf83f1955b64858b4f5",
+        "canonicalName": "Sarkhan's Scorn",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "simple",
+        "populationBucketSize": 20964,
+        "sampleBucketSize": 450,
+        "inclusionProbability": 0.021465369204350316,
+        "surveyWeight": 46.586666666666666,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "873f362b-1307-4464-980d-8f064b9382f0",
+        "oracleTextHash": "32fd65f5ab43151f02792c67c3d137d2b2a5551117f722006be7d54fac8c350a",
+        "cardStructureHash": "cd79f8d17974f8e9ce5d7d5734ddaba095279bf79fadd03215da46e78c9b6d00",
+        "canonicalName": "Skywriter Djinn",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "903bb1dc-09cc-4dc2-8400-5a36ce9c8d6e",
+        "oracleTextHash": "cde7510d215b8aa38823a21c557f0bef234daeca0d5ed28313523ac4835874e5",
+        "cardStructureHash": "96a7fdebdbca8b3bfe1c8d7a6996de4f5f43e188d4f9776bfff8e95a0483c12c",
+        "canonicalName": "Galathul Galecaller // Corvid Squall",
+        "layout": "prepare",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "9163a809-bab8-4807-9be8-eff836988228",
+        "oracleTextHash": "98791337416f3e5a0d3a0dc12e67fb79591cdabffba62064e2feaad703faa19d",
+        "cardStructureHash": "4abf319f348013a1a34f94be6e9c00576c497de10f704ab045b78bbb03b1ca05",
+        "canonicalName": "Gutmorn, Pactbound Servant",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "complex",
+        "populationBucketSize": 1746,
+        "sampleBucketSize": 200,
+        "inclusionProbability": 0.1145475372279496,
+        "surveyWeight": 8.73,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "94701ec4-4cd3-46cc-a2fc-7ab3642ed247",
+        "oracleTextHash": "d7ee6171e14cb6e585d92941a46684b009521e07425a8ee3ff1f23d70bf635c7",
+        "cardStructureHash": "f4d2e694656440f905a7ead8bc9dfbeb283e0714dd9c7f3debe998ef6408e40f",
+        "canonicalName": "Goblin Warchief Avatar",
+        "layout": "vanguard",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "9ef53bd8-9999-4ea3-a43a-4084a9f208db",
+        "oracleTextHash": "5b188d14ed90a72821ee39340787d0fd74d82f968456f654fb176d5605c163d0",
+        "cardStructureHash": "4bd84b56509dbcb76f78665fe2e46c78d190dcb458ebbca8896b2729b1053f02",
+        "canonicalName": "A-Dorothea, Vengeful Victim // A-Dorothea's Retribution",
+        "layout": "transform",
+        "populationCategory": "A",
+        "complexityBucket": "pathological",
+        "populationBucketSize": 90,
+        "sampleBucketSize": 50,
+        "inclusionProbability": 0.5555555555555556,
+        "surveyWeight": 1.8,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "a9ff9370-ad4e-4363-ab46-7ec48eac9887",
+        "oracleTextHash": "d07366eebb303853e8504130481d31ba61e4683a413e538069b2440c691f5cf4",
+        "cardStructureHash": "5d0aa093ed86bcce5ece17bf5f085d82d30fc1a21826faa21c7bf74fde540ec0",
+        "canonicalName": "Arcane Archery",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "acd99f6d-31af-44d6-b176-235117227cae",
+        "oracleTextHash": "0ff29458d31e43afbd81f7ed8464e1568817543506b418fe03a34b6642acb67b",
+        "cardStructureHash": "aeb7079407f51303bb2b3730e29a7a07b5c23166f4633542f3601af82338ced5",
+        "canonicalName": "Oyaminartok, Polar Werebear",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "b2429b0a-0600-48fe-9487-f706eb7b958f",
+        "oracleTextHash": "cb7347a41f9102aef9e37c1f907c6ca789f89e603338c3936c6a491a6cf30228",
+        "cardStructureHash": "ee6a4aae5f173c139deabb3fd4c91592b001365e860131920de06581897eb2bf",
+        "canonicalName": "A-Urza's Command",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "complex",
+        "populationBucketSize": 1746,
+        "sampleBucketSize": 200,
+        "inclusionProbability": 0.1145475372279496,
+        "surveyWeight": 8.73,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "b4cfcb3e-6f62-424f-b7c5-f9ba456e47c5",
+        "oracleTextHash": "d501fcf4e093ab00dbcb3b8b1ea931bfe873b79a9d6c279fd0255ec658b778ce",
+        "cardStructureHash": "d70f3bc903298cbd2dce1d986480286fe4ced246415b69713336506380eaf07b",
+        "canonicalName": "Sap Vitality",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "simple",
+        "populationBucketSize": 20964,
+        "sampleBucketSize": 450,
+        "inclusionProbability": 0.021465369204350316,
+        "surveyWeight": 46.586666666666666,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "bd983b4d-158c-46f7-940a-5220eab22796",
+        "oracleTextHash": "5ac422db52b435d2d4f7c4d5bae1cbef7b8e454e595a6f4ebf57e08db6131d46",
+        "cardStructureHash": "d67e75e2ba62e39f04395f0a8112f6f1a816b5b66a37ad9a8f155c8601fd9f4f",
+        "canonicalName": "A-Skemfar Avenger",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "simple",
+        "populationBucketSize": 20964,
+        "sampleBucketSize": 450,
+        "inclusionProbability": 0.021465369204350316,
+        "surveyWeight": 46.586666666666666,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "c10a8eac-da9b-44d0-9627-28ddc32793b0",
+        "oracleTextHash": "a0a1e867ab7a1c9881047353f4da68ffef9654111ae7e1ca3b0713f7cd6f40e5",
+        "cardStructureHash": "705fb71681bb74afe1e8ff9dc253f3b0fbd7d860b8fe859d6b7c8ef9f44e90df",
+        "canonicalName": "A-Wizard Class",
+        "layout": "class",
+        "populationCategory": "A",
+        "complexityBucket": "complex",
+        "populationBucketSize": 1746,
+        "sampleBucketSize": 200,
+        "inclusionProbability": 0.1145475372279496,
+        "surveyWeight": 8.73,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "c64f0dd6-50cc-48fa-a6bc-9153638632dc",
+        "oracleTextHash": "70386cef3a9bda2d6cc95530d5250f8e0f3350bb37a551c7c874fa7c574955ac",
+        "cardStructureHash": "81812783577232b15a35cd854e1bdfa018b18245e220d22657b27d389d420268",
+        "canonicalName": "Mentor of Evos Isle",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "simple",
+        "populationBucketSize": 20964,
+        "sampleBucketSize": 450,
+        "inclusionProbability": 0.021465369204350316,
+        "surveyWeight": 46.586666666666666,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "c77990ad-9350-4adc-b2b3-55b04402bfb4",
+        "oracleTextHash": "9db14995cb43af607d99069a1ebb2789e99d92f824fab011c9f4d7bd80cf0a97",
+        "cardStructureHash": "c85f2aa85fe457655b9d92f14e9b0575e2ddca387fbee9bdfd9a1a353b331077",
+        "canonicalName": "A-Scout the Wilderness",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "d9233055-44d3-49ee-8926-ced8e042f043",
+        "oracleTextHash": "7880ee61a9bbe01b081712182f074d006a3a8a7963b232d77870ad0174217da2",
+        "cardStructureHash": "8af89289f3149506ed9acca5c425f941dbd4391d30ba9190667af760082c3369",
+        "canonicalName": "Case of the Market Melee",
+        "layout": "case",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "dedcb109-2f39-4059-b67b-75ea61296c8d",
+        "oracleTextHash": "ae6a0cad0f72fc8cc2bdb17da0b48f52c8cd78b5aae5706e948805f2cc800e65",
+        "cardStructureHash": "7a88d63d2935d7d8b7295c252c87050e7181ee4d76b1eca0c14d07757f26029e",
+        "canonicalName": "A-Tyvar Kell",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "complex",
+        "populationBucketSize": 1746,
+        "sampleBucketSize": 200,
+        "inclusionProbability": 0.1145475372279496,
+        "surveyWeight": 8.73,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "eef3d87e-82b6-4f3c-af1a-38e67133baa1",
+        "oracleTextHash": "799a5e654d96f6b476ca0162c714e1a3ac9596aebd64df9a0e7559282713e4a4",
+        "cardStructureHash": "55cc2bec2f2c3ce8e83e4ff40e263803872ceefdffdae328c2e658b542a331c5",
+        "canonicalName": "Vv'viza, Orbital Overseer",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "f1c260ea-5b9a-4925-b352-312762fba32f",
+        "oracleTextHash": "9998e5db3a9485cc5a7e9c88e17311badb0a533e4e62fb6606bc70cf6b437c19",
+        "cardStructureHash": "bc9c7801d2b858074ec8cac6f92b56241f23cbd24ebb06dcde4b7c9090359b83",
+        "canonicalName": "Follow the Tracks",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "simple",
+        "populationBucketSize": 20964,
+        "sampleBucketSize": 450,
+        "inclusionProbability": 0.021465369204350316,
+        "surveyWeight": 46.586666666666666,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "f3415dda-2800-4f25-b46d-fcb07e18c0cb",
+        "oracleTextHash": "00719132c9d130b41462efc391132b44e5b72f7fb1bc3432edc3da57bab80c12",
+        "cardStructureHash": "9e90102cda578be15737613c98235b19a1abd6de3dcd78c01ddaef6d510c0793",
+        "canonicalName": "Lizardfolk Librarians",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "populationBucketSize": 13132,
+        "sampleBucketSize": 300,
+        "inclusionProbability": 0.022844958879074017,
+        "surveyWeight": 43.77333333333333,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "fb6b271f-689e-46e0-97b8-044aaf582898",
+        "oracleTextHash": "1749df2ae642e3bf813f76dc69f74d4a3205d84aad37f6fe89397da73c628f3d",
+        "cardStructureHash": "1e3a1f9a11d2e4f05a4e2473be42cbb6b316c79b104b8c4113afe46fab5cd3f9",
+        "canonicalName": "A-Base Camp",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "simple",
+        "populationBucketSize": 20964,
+        "sampleBucketSize": 450,
+        "inclusionProbability": 0.021465369204350316,
+        "surveyWeight": 46.586666666666666,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      },
+      {
+        "oracleId": "fde9e060-68ae-469f-9ab4-25fccac78568",
+        "oracleTextHash": "3201b7086739c3bbd17458509daf90e440a71d13b5b35fd03ac5ae9c2fea39fe",
+        "cardStructureHash": "ed9be7e76a18d012dfe1427cff028af486069be5bec5cc147064169cf8348e53",
+        "canonicalName": "Bloodrage Alpha",
+        "layout": "normal",
+        "populationCategory": "A",
+        "complexityBucket": "complex",
+        "populationBucketSize": 1746,
+        "sampleBucketSize": 200,
+        "inclusionProbability": 0.1145475372279496,
+        "surveyWeight": 8.73,
+        "randomSeed": "catalog-coverage-sample-seed-v2-20260811"
+      }
+    ],
+    "status": "SUPERSEDED_PENDING_V3"
+  },
+  "calibrationBatchV1": {
+    "batchIdentityHash": "b8125ca2b09da0753baa664e97afc5d0e71780297139a1d03094461be01c2b24",
+    "cardCount": 35,
+    "digitalOnlyCount": 4,
+    "digitalOnlyCards": [
+      {
+        "oracleId": "3a5b8972-7e50-42aa-a922-fa476260fafd",
+        "canonicalName": "Warzone Duplicator",
+        "oracleTextHash": "2f18c06cdbbd9e2f948fb44d510cbb21eaa581c485d6ea96ffe3db75c6bc1773",
+        "cardStructureHash": "1b362a1730b0aa3cbe1e8eef44fdddf62e5f974a706947fdbe0f105730edf52f",
+        "layout": "prototype",
+        "typeLine": "Artifact Creature — Construct",
+        "populationCategory": "A",
+        "complexityBucket": "complex",
+        "selectionTags": [
+          "granted"
+        ],
+        "allMatchingTags": [
+          "complex",
+          "multi_face",
+          "granted",
+          "replacement"
+        ],
+        "oracleText": "Prototype {3}{U} — 3/3\nWhen this creature enters, return target creature an opponent controls with power less than this creature's power to its owner's hand. If that creature wasn't a token, conjure a duplicate of it into your hand. It perpetually gains \"You may spend mana as though it were mana of any color to cast this spell.\"",
+        "officialRulingsConsulted": false,
+        "adjudicationSlots": {
+          "primaryA": {
+            "status": "pending",
+            "adjudicatorId": null
+          },
+          "primaryB": {
+            "status": "pending",
+            "adjudicatorId": null
+          }
+        }
+      },
+      {
+        "oracleId": "4d057a7d-1c66-4e39-acd5-91d68ef1ceae",
+        "canonicalName": "Masterpiece Vault",
+        "oracleTextHash": "8556f4611a4b4d07eee156e16960012d0c3ab33c4644c072690fdb85a289f861",
+        "cardStructureHash": "0b8e7278d00f92384b1a983aeae661cec0111b62735f1daa81b228a67b267a33",
+        "layout": "normal",
+        "typeLine": "Artifact",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "selectionTags": [
+          "normal"
+        ],
+        "allMatchingTags": [
+          "normal"
+        ],
+        "oracleText": "When this artifact is put into a graveyard from the battlefield, draft a card from Masterpiece Vault's spellbook and put it onto the battlefield. When an Equipment enters this way, attach it to up to one target creature you control.\n{5}: Sacrifice this artifact.",
+        "officialRulingsConsulted": false,
+        "adjudicationSlots": {
+          "primaryA": {
+            "status": "pending",
+            "adjudicatorId": null
+          },
+          "primaryB": {
+            "status": "pending",
+            "adjudicatorId": null
+          }
+        }
+      },
+      {
+        "oracleId": "794e1dcb-aa64-4824-8d7b-0c65fc3afa13",
+        "canonicalName": "Electrostatic Blast",
+        "oracleTextHash": "d3748123aca61f94264d981d871ea7b9cf52183efb913cd92eed1de646f7a941",
+        "cardStructureHash": "f6f387a6dc2697c0214bea212aa05f436f5c6d0882af7b2e707b99060e85edd0",
+        "layout": "normal",
+        "typeLine": "Instant",
+        "populationCategory": "A",
+        "complexityBucket": "normal",
+        "selectionTags": [
+          "normal"
+        ],
+        "allMatchingTags": [
+          "normal"
+        ],
+        "oracleText": "Electrostatic Blast deals 2 damage to any target. You get a one-time boon with \"When you cast an instant or sorcery spell, exile the top three cards of your library. You may play one of those cards until end of turn.\"",
+        "officialRulingsConsulted": false,
+        "adjudicationSlots": {
+          "primaryA": {
+            "status": "pending",
+            "adjudicatorId": null
+          },
+          "primaryB": {
+            "status": "pending",
+            "adjudicatorId": null
+          }
+        }
+      },
+      {
+        "oracleId": "9ef53bd8-9999-4ea3-a43a-4084a9f208db",
+        "canonicalName": "A-Dorothea, Vengeful Victim // A-Dorothea's Retribution",
+        "oracleTextHash": "5b188d14ed90a72821ee39340787d0fd74d82f968456f654fb176d5605c163d0",
+        "cardStructureHash": "4bd84b56509dbcb76f78665fe2e46c78d190dcb458ebbca8896b2729b1053f02",
+        "layout": "transform",
+        "typeLine": "Legendary Creature — Spirit // Enchantment — Aura",
+        "populationCategory": "A",
+        "complexityBucket": "pathological",
+        "selectionTags": [
+          "pathological"
+        ],
+        "allMatchingTags": [
+          "pathological",
+          "multi_face",
+          "granted",
+          "replacement"
+        ],
+        "cardFaces": [
+          {
+            "name": "A-Dorothea, Vengeful Victim",
+            "manaCost": "{W}{U}",
+            "typeLine": "Legendary Creature — Spirit",
+            "oracleText": "Flying\nWhen Dorothea, Vengeful Victim attacks or blocks, sacrifice it at end of combat.\nDisturb {W}{U} (You may cast this card from your graveyard transformed for its disturb cost.)",
+            "colors": [
+              "U",
+              "W"
+            ],
+            "power": "4",
+            "toughness": "4"
+          },
+          {
+            "name": "A-Dorothea's Retribution",
+            "manaCost": "",
+            "typeLine": "Enchantment — Aura",
+            "oracleText": "Enchant creature\nEnchanted creature has \"Whenever this creature attacks, create a 4/4 white Spirit creature token with flying that's tapped and attacking. Sacrifice that token at end of combat.\"\nIf Dorothea's Retribution would be put into a graveyard from anywhere, exile it instead.",
+            "colors": [
+              "U",
+              "W"
+            ]
+          }
+        ],
+        "oracleText": "Flying\nWhen Dorothea, Vengeful Victim attacks or blocks, sacrifice it at end of combat.\nDisturb {W}{U} (You may cast this card from your graveyard transformed for its disturb cost.)\n//\nEnchant creature\nEnchanted creature has \"Whenever this creature attacks, create a 4/4 white Spirit creature token with flying that's tapped and attacking. Sacrifice that token at end of combat.\"\nIf Dorothea's Retribution would be put into a graveyard from anywhere, exile it instead.",
+        "officialRulingsConsulted": false,
+        "adjudicationSlots": {
+          "primaryA": {
+            "status": "pending",
+            "adjudicatorId": null
+          },
+          "primaryB": {
+            "status": "pending",
+            "adjudicatorId": null
+          }
+        }
+      }
+    ]
+  },
+  "adjudication": {
+    "calibrationStatus": "SUSPENDED_PENDING_PAPER_POPULATION_CORRECTION",
+    "instruction": "Stop calibration after submitted cards. Preserve Cody's adjudications. Do not annotate remaining calibration cards until paper population v3 is sealed.",
+    "submittedCount": 2,
+    "submittedDigitalOnlyCount": 0,
+    "submittedDigitalOnly": [],
+    "submittedCards": [
+      {
+        "adjudicatorId": "cody",
+        "oracleId": "0a4bf88d-106a-413b-9d80-8775c1ff5ded",
+        "status": "submitted",
+        "submittedAt": "2026-08-11T04:42:36.576Z"
+      },
+      {
+        "adjudicatorId": "cody",
+        "oracleId": "2ef063d2-8702-43a3-a7d0-fc255f8512d3",
+        "status": "submitted",
+        "submittedAt": "2026-08-11T04:44:47.038Z"
+      }
+    ]
+  },
+  "parserPolicy": {
+    "rc8": "FROZEN — no changes",
+    "rc9": "NOT AUTHORIZED",
+    "blindBenchmark": "DO NOT TOUCH"
+  }
+}

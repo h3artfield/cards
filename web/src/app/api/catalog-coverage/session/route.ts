@@ -32,6 +32,9 @@ export async function GET(req: NextRequest) {
       annotationProtocolVersion: CATALOG_COVERAGE_ANNOTATION_PROTOCOL_VERSION,
       accessRequired: isAdjudicationAccessConfigured(),
       fullSampleLocked: true,
+      calibrationSuspended: false,
+      digitalOnlyCount: 0,
+      populationFrame: "paper-eligible-v3",
     };
 
     if (!adjudicatorId) {
@@ -43,9 +46,17 @@ export async function GET(req: NextRequest) {
     }
 
     const session = await getSessionInfo(adjudicatorId);
-    if (!session) return jsonError("Session not found", 404);
+    if (!session) {
+      return jsonOk({
+        ...publicMeta,
+        session: null,
+        sessionStale: true,
+        progress: Object.fromEntries(getCalibrationCards().map((c) => [c.oracleId, "pending"])),
+        quorumReached: await calibrationQuorumReached(),
+      });
+    }
     const progress = await getProgressForAdjudicator(adjudicatorId);
-    return jsonOk({ session, progress, ...publicMeta });
+    return jsonOk({ session, progress, sessionStale: false, ...publicMeta });
   } catch (err) {
     return handleRouteError(err);
   }
@@ -65,7 +76,7 @@ export async function POST(req: NextRequest) {
     const adjudicatorId = body.adjudicatorId?.trim() || slugifyAdjudicatorId(body.displayName);
     const session = await startSession({ displayName: body.displayName, adjudicatorId });
     const progress = await getProgressForAdjudicator(adjudicatorId);
-    return jsonOk({ session, progress, adjudicatorId });
+    return jsonOk({ session, progress, adjudicatorId, sessionStale: false });
   } catch (err) {
     return handleRouteError(err);
   }

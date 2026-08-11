@@ -1,0 +1,60 @@
+{
+  "artifactType": "CatalogCoverageAnnotationProtocol",
+  "version": "catalog-coverage-annotation-protocol-v1",
+  "status": "AUTHORIZED_PENDING_CALIBRATION",
+  "suspendedAt": null,
+  "suspensionReason": null,
+  "populationHash": "2fe9397218077c11dce3aa11b876e74cc91c4b1063e8e1234ded1fc034b11fd1",
+  "sampleIdentityHash": "a9e333ad6fb1f13e5dc8fdf5ecdd7e947764d0e3376971fbb522094ea171cf29",
+  "calibrationBatchIdentityHash": "7ea9232ea09cb328378951b2e8b7a6d24ce7bfee0c4f49da7e33a49ae390c987",
+  "supersededCalibrationBatchV1": "b8125ca2b09da0753baa664e97afc5d0e71780297139a1d03094461be01c2b24",
+  "supersededSampleV2": "8cc44c119302ad8ffb331f5ca8f6761fc0b52fb81bb799ec3f2762276d1931bb",
+  "supersededPopulationV2": "986c26116efaea45a20bb0cffe388fc20340db47839300ce69127942681dcbc5",
+  "populationFrame": "paper-eligible-v3",
+  "semanticGoldSchemaVersion": "catalog-coverage-semantic-gold-schema-v1",
+  "wholeCardRubricVersion": "catalog-coverage-whole-card-rubric-v1",
+  "goldPolicyVersion": "semantic-gold-policy-v1.8",
+  "blankTextTreatment": {
+    "categoryCInSample": 11,
+    "rule": "legitimateCard=true, oracleRulesTextEmpty=true, expectedCardNativeL2Actions=[]; zero actions may be EXACT"
+  },
+  "requiredSemanticDimensions": [
+    "ability boundaries",
+    "ability type",
+    "Layer-2 primitive",
+    "evidence span",
+    "optionality",
+    "condition/dependency",
+    "semanticOwner",
+    "executionContext",
+    "source_card",
+    "granted_object",
+    "created_object",
+    "face ownership",
+    "modal option",
+    "zone transition"
+  ],
+  "parserBlindness": {
+    "mandatory": true,
+    "forbiddenInputs": [
+      "RC8 semantic AST",
+      "accepted actions",
+      "needs_review",
+      "diagnostics",
+      "structural-invalid status",
+      "shadow outputs",
+      "prior benchmark history"
+    ]
+  },
+  "officialRulingsPolicy": "Allowed when genuinely needed; record officialRulingsConsulted and rulingReferences.",
+  "disagreementTypes": [
+    "primitive",
+    "ownership",
+    "ability_boundary",
+    "whole_card_class",
+    "blank_text_treatment",
+    "other"
+  ],
+  "calibrationResolutionRequired": true,
+  "bulkAnnotationBlockedUntilCalibrationFrozen": true
+}

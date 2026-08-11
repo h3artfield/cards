@@ -1,0 +1,1206 @@
+{
+  "artifactType": "CatalogCoverageCalibrationBatch",
+  "version": "catalog-coverage-calibration-batch-v2",
+  "status": "SEALED_FROM_SAMPLE_V3",
+  "purpose": "Protocol calibration only — do not redraw or replace cards.",
+  "sealedAt": "2026-08-11T05:07:32.788Z",
+  "calibrationSeed": "catalog-coverage-calibration-batch-seed-v2-20260811",
+  "samplePath": "data/milestones/catalog-shadow/catalog-coverage-sample-v3.json",
+  "sampleIdentityHash": "a9e333ad6fb1f13e5dc8fdf5ecdd7e947764d0e3376971fbb522094ea171cf29",
+  "populationHash": "2fe9397218077c11dce3aa11b876e74cc91c4b1063e8e1234ded1fc034b11fd1",
+  "batchSize": 35,
+  "batchIdentityHash": "7ea9232ea09cb328378951b2e8b7a6d24ce7bfee0c4f49da7e33a49ae390c987",
+  "tagQuotas": {
+    "blank_text": 4,
+    "simple": 4,
+    "normal": 4,
+    "complex": 4,
+    "pathological": 3,
+    "multi_face": 4,
+    "granted": 3,
+    "replacement": 3,
+    "modal": 3,
+    "saga_planeswalker": 3
+  },
+  "tagCoverage": {
+    "blank_text": 4,
+    "simple": 8,
+    "normal": 13,
+    "complex": 10,
+    "pathological": 4,
+    "multi_face": 14,
+    "granted": 3,
+    "replacement": 6,
+    "modal": 3,
+    "saga_planeswalker": 6
+  },
+  "cards": [
+    {
+      "oracleId": "0ab5fde8-e7db-4265-81c6-2a6488ba56c4",
+      "canonicalName": "Zulaport Enforcer",
+      "oracleTextHash": "847002257b7cf7e84663543d631e5766cc1794763913a23f431966352c5a6737",
+      "cardStructureHash": "d473f9adc021fa566a2d6f68839ebf83cc839c4f20fd391a7ae89edeea0cf480",
+      "layout": "leveler",
+      "typeLine": "Creature — Human Warrior",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "multi_face"
+      ],
+      "allMatchingTags": [
+        "normal",
+        "multi_face"
+      ],
+      "oracleText": "Level up {4} ({4}: Put a level counter on this. Level up only as a sorcery.)\nLEVEL 1-2\n3/3\nLEVEL 3+\n5/5\nThis creature can't be blocked except by black creatures.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "173d63fa-c467-4871-b2e1-6507cf3fb2c2",
+      "canonicalName": "The Vast Scrier",
+      "oracleTextHash": "7471e1fab0693eadfb2b2c3880b1f6d56f24c2691d10b824976a0d5c30bd5645",
+      "cardStructureHash": "88dce489512dfe02ebbcba7f596150839ba91aedf38ff7139805c22996275265",
+      "layout": "normal",
+      "typeLine": "Legendary Creature — Human Cleric",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "complex"
+      ],
+      "allMatchingTags": [
+        "complex"
+      ],
+      "oracleText": "Flying\nWhenever The Vast Scrier attacks a player, you may put a Soldier, Warrior, or Wizard creature card from your hand onto the battlefield tapped and attacking that player. If it has any \"Whenever this creature attacks\" triggers, those trigger. If you don't put a card onto the battlefield this way, scry 2.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "1c6c1604-0724-40b1-9df6-71e57e5063c9",
+      "canonicalName": "Kjeldoran Escort",
+      "oracleTextHash": "c34c855aa9c3f1c17598409ecad5aa7b4421db3f1d115a93f986a156f9628601",
+      "cardStructureHash": "9ff46d81b70dfd0c9da0ad4b320c1d7b8dfcb80976cabd5c7b70861ea8f7d3e4",
+      "layout": "normal",
+      "typeLine": "Creature — Human Soldier",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "normal"
+      ],
+      "allMatchingTags": [
+        "normal"
+      ],
+      "oracleText": "Banding (Any creatures with banding, and up to one without, can attack in a band. Bands are blocked as a group. If any creatures with banding you control are blocking or being blocked by a creature, you divide that creature's combat damage, not its controller, among any of the creatures it's being blocked by or is blocking.)",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "2f14e92d-307f-4854-b7ec-a2f6ce03dced",
+      "canonicalName": "Blighted Shaman",
+      "oracleTextHash": "1093e74987c336eb54c0fd4eca761d9e482ae18fe7bc8146844b5159d236c6e2",
+      "cardStructureHash": "714f82445311baa1b988580bd20cb767a30418af95758e4010a7e9675b9806e9",
+      "layout": "normal",
+      "typeLine": "Creature — Human Cleric Shaman",
+      "populationCategory": "A",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "simple"
+      ],
+      "allMatchingTags": [
+        "simple"
+      ],
+      "oracleText": "{T}, Sacrifice a Swamp: Target creature gets +1/+1 until end of turn.\n{T}, Sacrifice a creature: Target creature gets +2/+2 until end of turn.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "2f5bf099-2e01-4e1c-9ebf-0ce0ac66939e",
+      "canonicalName": "Centaur Courser",
+      "oracleTextHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "cardStructureHash": "2f01ef34646a288cede0b8bfa89ac15cd66d6a224719172f6a7b0ad168f91c13",
+      "layout": "normal",
+      "typeLine": "Creature — Centaur Warrior",
+      "populationCategory": "C",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "blank_text"
+      ],
+      "allMatchingTags": [
+        "blank_text",
+        "simple"
+      ],
+      "oracleText": "",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "314a5c76-1a68-433b-a383-1834400254a8",
+      "canonicalName": "Demonfire",
+      "oracleTextHash": "d17405850a2aca7c378a297fe954446de282282431a2432c7aa5607c8fee6d04",
+      "cardStructureHash": "3106be3d2c93746d0deed57a0c73ecbcbcf33d7db082c94540de307b8b681479",
+      "layout": "normal",
+      "typeLine": "Sorcery",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "replacement"
+      ],
+      "allMatchingTags": [
+        "normal",
+        "replacement"
+      ],
+      "oracleText": "Demonfire deals X damage to any target. If a creature dealt damage this way would die this turn, exile it instead.\nHellbent — If you have no cards in hand, this spell can't be countered and the damage can't be prevented.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "3d3fd8a2-78d4-4f52-8fcd-0c6fa93f0043",
+      "canonicalName": "Corrosion",
+      "oracleTextHash": "b7a626fb5dc54941669c9b317214fa2fa57c962d95d49595ceb0b0aa75eba702",
+      "cardStructureHash": "17a86f2babaae2a073f0de64614d7eed0000bd7c488cdbd16fe307d2e1669103",
+      "layout": "normal",
+      "typeLine": "Enchantment",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "complex"
+      ],
+      "allMatchingTags": [
+        "complex"
+      ],
+      "oracleText": "Cumulative upkeep {1} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nAt the beginning of your upkeep, put a rust counter on each artifact target opponent controls. Then destroy each artifact with mana value less than or equal to the number of rust counters on it. Artifacts destroyed this way can't be regenerated.\nWhen this enchantment leaves the battlefield, remove all rust counters from all permanents.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "4ed9bccf-c655-426e-8192-65beab830fcd",
+      "canonicalName": "Skirk Ridge Exhumer",
+      "oracleTextHash": "990b5e194dfb9525683e28667da0d7e817216c9d6945cbb0e6a74d3521fd52d9",
+      "cardStructureHash": "bfad9b7b4666e24684472d406e29eabc19a282ea03e8fbd359c83eb2f6604453",
+      "layout": "normal",
+      "typeLine": "Creature — Zombie Spellshaper",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "granted"
+      ],
+      "allMatchingTags": [
+        "normal",
+        "granted"
+      ],
+      "oracleText": "{B}, {T}, Discard a card: Create a 1/1 black Zombie Goblin creature token named Festering Goblin. It has \"When this token dies, target creature gets -1/-1 until end of turn.\"",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "4f598459-b776-4ac1-bc69-8fde21674451",
+      "canonicalName": "Volunteer Militia",
+      "oracleTextHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "cardStructureHash": "00db7992f391d4a413f0dff0e4221dba717fc75863d16e47dbc7018c56b6f5fd",
+      "layout": "normal",
+      "typeLine": "Creature — Human Soldier",
+      "populationCategory": "C",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "blank_text"
+      ],
+      "allMatchingTags": [
+        "blank_text",
+        "simple"
+      ],
+      "oracleText": "",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "4ff8c359-430f-434e-ac1e-822abdc28360",
+      "canonicalName": "Spellrune Painter // Spellrune Howler",
+      "oracleTextHash": "cb32c75ff000a637025c239092b5ec416e2fb74d77e1e4d8e898c7bfd7f8290b",
+      "cardStructureHash": "d8fc3e1eb2ab0df86f7190e0189a9346805a470eb25a2c0a31eb97bfc1828342",
+      "layout": "transform",
+      "typeLine": "Creature — Human Shaman Werewolf // Creature — Werewolf",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "complex"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "multi_face"
+      ],
+      "cardFaces": [
+        {
+          "name": "Spellrune Painter",
+          "manaCost": "{2}{R}",
+          "typeLine": "Creature — Human Shaman Werewolf",
+          "oracleText": "Whenever you cast an instant or sorcery spell, this creature gets +1/+1 until end of turn.\nDaybound (If a player casts no spells during their own turn, it becomes night next turn.)",
+          "colors": [
+            "R"
+          ],
+          "power": "2",
+          "toughness": "3"
+        },
+        {
+          "name": "Spellrune Howler",
+          "manaCost": "",
+          "typeLine": "Creature — Werewolf",
+          "oracleText": "Whenever you cast an instant or sorcery spell, this creature gets +2/+2 until end of turn.\nNightbound (If a player casts at least two spells during their own turn, it becomes day next turn.)",
+          "colors": [
+            "R"
+          ],
+          "power": "3",
+          "toughness": "4"
+        }
+      ],
+      "oracleText": "Whenever you cast an instant or sorcery spell, this creature gets +1/+1 until end of turn.\nDaybound (If a player casts no spells during their own turn, it becomes night next turn.)\n//\nWhenever you cast an instant or sorcery spell, this creature gets +2/+2 until end of turn.\nNightbound (If a player casts at least two spells during their own turn, it becomes day next turn.)",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "5b76612b-b2d3-457d-8049-1bf01b8ec28b",
+      "canonicalName": "Windmill Farm",
+      "oracleTextHash": "d30a6f74efc8846ffe81a2500445df137a0a0fa16bedeeeabbe9e22eeee66333",
+      "cardStructureHash": "4675f4bf02a4ae65634cd6213feb340aa7775d280fc5847eecb791a3798205ab",
+      "layout": "planar",
+      "typeLine": "Plane — Amsterdam",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "granted"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "multi_face",
+        "granted",
+        "saga_planeswalker"
+      ],
+      "oracleText": "When you planeswalk here and at the beginning of your upkeep, create a Tulip Petal artifact token that has \"{T}, Sacrifice this artifact: Add one mana of any color.\"\nChaos: Spin this plane until the arrow lands on a permanent. If the plane rotated at least 360 degrees during the spin, create a token that's a copy of that permanent.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "67d29e56-9ca8-46bc-9ee0-20184e867ce4",
+      "canonicalName": "Summon: Valefor",
+      "oracleTextHash": "6ffe13168e755887739c01269d0811022ecf17cabb4f5711f96849b974afd607",
+      "cardStructureHash": "3c35df2a21d654ed0d2f9e3711cb817f44bb1aacd0c51bfe85e1cdd8be2f6a9d",
+      "layout": "saga",
+      "typeLine": "Enchantment Creature — Saga Drake",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "saga_planeswalker"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "multi_face",
+        "saga_planeswalker"
+      ],
+      "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after IV.)\nI — Sonic Wings — Each opponent chooses a creature with the greatest mana value among creatures they control. Return those creatures to their owners' hands.\nII, III, IV — Tap up to one target creature and put a stun counter on it.\nFlying",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "6f4cfd69-c739-4398-93a5-e6238b7cd83b",
+      "canonicalName": "Prizefighter Construct",
+      "oracleTextHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "cardStructureHash": "651419962a9baba31898aa15a8ae7408bb4e27bb8c07cd21f5e348f1eb37c406",
+      "layout": "normal",
+      "typeLine": "Artifact Creature — Construct",
+      "populationCategory": "C",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "blank_text"
+      ],
+      "allMatchingTags": [
+        "blank_text",
+        "simple"
+      ],
+      "oracleText": "",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "701361ae-d3c0-4fba-bccd-2f2464911c6f",
+      "canonicalName": "That's Enough Slices",
+      "oracleTextHash": "89477b9052648100833569ee4b072fe5b92a60cb09b219601f46835356fc5e0f",
+      "cardStructureHash": "2129a24ca4a3fdb2af37185802ea7373531bb663230f8d9a4eef17a149149bec",
+      "layout": "planar",
+      "typeLine": "Phenome-nom",
+      "populationCategory": "A",
+      "complexityBucket": "pathological",
+      "selectionTags": [
+        "pathological"
+      ],
+      "allMatchingTags": [
+        "pathological",
+        "multi_face",
+        "replacement",
+        "saga_planeswalker"
+      ],
+      "oracleText": "When you encounter this phenome-nom, each player creates a Pizza token. If that player has the least life or is tied for the least life, they create two Pizza tokens instead. Then planeswalk away from this phenome-nom. (A Pizza token is a Food artifact with \"{2}, {T}, Sacrifice this token: You gain 6 life.\")",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "830e3e37-a80c-4b0e-b9af-393ad4ca01d7",
+      "canonicalName": "Faithbound Judge // Sinner's Judgment",
+      "oracleTextHash": "948c3ad89c9760fc991634975ded55ed1134868c9e0ebc614b27f32e789fae17",
+      "cardStructureHash": "052248eebca4f9e051564b9fb7296366fb2492e3873a43bec5294a13e5dd256a",
+      "layout": "transform",
+      "typeLine": "Creature — Spirit Soldier // Enchantment — Aura Curse",
+      "populationCategory": "A",
+      "complexityBucket": "pathological",
+      "selectionTags": [
+        "pathological"
+      ],
+      "allMatchingTags": [
+        "pathological",
+        "multi_face",
+        "replacement"
+      ],
+      "cardFaces": [
+        {
+          "name": "Faithbound Judge",
+          "manaCost": "{1}{W}{W}",
+          "typeLine": "Creature — Spirit Soldier",
+          "oracleText": "Defender, flying, vigilance\nAt the beginning of your upkeep, if this creature has two or fewer judgment counters on it, put a judgment counter on it.\nAs long as this creature has three or more judgment counters on it, it can attack as though it didn't have defender.\nDisturb {5}{W}{W}",
+          "colors": [
+            "W"
+          ],
+          "power": "4",
+          "toughness": "4"
+        },
+        {
+          "name": "Sinner's Judgment",
+          "manaCost": "",
+          "typeLine": "Enchantment — Aura Curse",
+          "oracleText": "Enchant player\nAt the beginning of your upkeep, put a judgment counter on this Aura. Then if there are three or more judgment counters on it, enchanted player loses the game.\nIf Sinner's Judgment would be put into a graveyard from anywhere, exile it instead.",
+          "colors": [
+            "W"
+          ]
+        }
+      ],
+      "oracleText": "Defender, flying, vigilance\nAt the beginning of your upkeep, if this creature has two or fewer judgment counters on it, put a judgment counter on it.\nAs long as this creature has three or more judgment counters on it, it can attack as though it didn't have defender.\nDisturb {5}{W}{W}\n//\nEnchant player\nAt the beginning of your upkeep, put a judgment counter on this Aura. Then if there are three or more judgment counters on it, enchanted player loses the game.\nIf Sinner's Judgment would be put into a graveyard from anywhere, exile it instead.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "850e5010-9cd1-42bf-9309-14058714cc75",
+      "canonicalName": "Don't Try This at Home",
+      "oracleTextHash": "0699ee881b77b64cb7e35e509efbefb84feccf1549467ca9a078518eafe3366d",
+      "cardStructureHash": "da692774d890ec06b207f502c50baf43226349ae8b1adab4312261584af40e85",
+      "layout": "normal",
+      "typeLine": "Enchantment",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "replacement"
+      ],
+      "allMatchingTags": [
+        "normal",
+        "replacement"
+      ],
+      "oracleText": "If a hot source you control would deal damage to a permanent or player, it deals that much damage plus 1 instead. (Something is hot if it has hot things in its art, like fire or explosions.)\n{1}{R}, Sacrifice this enchantment: It deals damage equal to twice the number of hot cards in your graveyard to target creature or planeswalker.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "85e9a43e-5676-4d12-ac27-e8cf57307d5e",
+      "canonicalName": "Cemetery Desecrator",
+      "oracleTextHash": "198007e17c16a9b17f7bce84624ab1de37764dbbe2703b00a945ddfbb2d1b969",
+      "cardStructureHash": "79238f5f46320dd3ced4e9d21a5f62b2dc04c197c4a29d9f1c118642505528e3",
+      "layout": "normal",
+      "typeLine": "Creature — Zombie",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "modal"
+      ],
+      "allMatchingTags": [
+        "normal",
+        "modal"
+      ],
+      "oracleText": "Menace\nWhen this creature enters or dies, exile another card from a graveyard. When you do, choose one —\n• Remove X counters from target permanent, where X is the mana value of the exiled card.\n• Target creature an opponent controls gets -X/-X until end of turn, where X is the mana value of the exiled card.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "86851bdb-9b2f-4407-97a1-a6a9f2e0ef66",
+      "canonicalName": "Vronos, Masked Inquisitor",
+      "oracleTextHash": "02df7712d8075f740e496e3e35c95ff8eb87b1a41b08408971d91a9331abd2cf",
+      "cardStructureHash": "1ba0d2e557c980e74e7e753d18f1b7bd31367d8a7a44b021fd9323a0041df71c",
+      "layout": "normal",
+      "typeLine": "Legendary Planeswalker — Vronos",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "replacement"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "replacement"
+      ],
+      "oracleText": "+1: Up to two other target planeswalkers you control phase out at the beginning of the next end step. (Treat them and anything attached to them as though they don't exist until your next turn.)\n−2: For each opponent, return up to one target nonland permanent that player controls to its owner's hand.\n−7: Target artifact you control becomes a 9/9 Construct artifact creature and gains vigilance, indestructible, and \"This creature can't be blocked.\"",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "8940f80b-9c8d-48c0-97c0-c18d77797911",
+      "canonicalName": "Vitaspore Thallid",
+      "oracleTextHash": "bb0a553e29884b34204cb5aa0079731c8d1ff1bbe6501f6d56a962b02122c641",
+      "cardStructureHash": "83c2ce37be67b222f4e99adc7b055c8f55d200fd094281d8bf6b79c706194725",
+      "layout": "normal",
+      "typeLine": "Creature — Fungus",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "normal"
+      ],
+      "allMatchingTags": [
+        "normal"
+      ],
+      "oracleText": "At the beginning of your upkeep, put a spore counter on this creature.\nRemove three spore counters from this creature: Create a 1/1 green Saproling creature token.\nSacrifice a Saproling: Target creature gains haste until end of turn.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "8ac13b2c-845e-4c49-9a8c-2cfcc69dc0d4",
+      "canonicalName": "Lifening Elemental",
+      "oracleTextHash": "c8555d173a131e0f3a9b1724fe2631f59dc8f81bd9604dfa03f1ed00528d574b",
+      "cardStructureHash": "89a16bcc7d8364596f853c94dc067bf325125cc6a98eee43634b47ac1379dd30",
+      "layout": "normal",
+      "typeLine": "Creature — Vampire Elemental",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "normal"
+      ],
+      "allMatchingTags": [
+        "normal"
+      ],
+      "oracleText": "Lifelink\nSplice onto instant or sorcery {1}{B} (As you cast an instant or sorcery spell, you may reveal this card from your hand and pay its splice cost. If you do, add this card's abilities to that spell. It's still an instant or sorcery spell.)",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "8c72d54e-97a6-408e-ae77-18d3c96b3bd8",
+      "canonicalName": "Scarlet Witch, Chaotic Avenger",
+      "oracleTextHash": "a58f711882b9ee709ded19566aa24ffe0ea5e176021ffbbf786cf3849b2227ec",
+      "cardStructureHash": "3a17b45ef0758ca2f9f2af6b45f8dea2db9f3c6c80cbf2e2ac0ec61f350c6410",
+      "layout": "normal",
+      "typeLine": "Legendary Creature — Mutant Warlock Hero",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "normal"
+      ],
+      "allMatchingTags": [
+        "normal"
+      ],
+      "oracleText": "Flying\nWhenever Scarlet Witch deals combat damage to a player, look at the top two cards of your library, then exile them face down. Then you may cast a Hero or noncreature spell from among cards exiled with Scarlet Witch without paying its mana cost.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "97f33045-8b89-47fb-ba28-fa06f42c4b5e",
+      "canonicalName": "Deceptive Divination",
+      "oracleTextHash": "83e45a95a2a7f8c30e794e49d879d4c0ad74f90ba27df609d85ef55704a7c594",
+      "cardStructureHash": "cbcd05014eab42811f82db228866f8ced62c8cfc6d7a1b46e85df2198a8210f3",
+      "layout": "planar",
+      "typeLine": "Plane — Secret Lair",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "modal"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "multi_face",
+        "modal",
+        "saga_planeswalker"
+      ],
+      "oracleText": "Change the text of each sorcery spell and sorcery card not on the stack by replacing \"sorcery\" with \"instant.\"\nWhenever chaos ensues, choose two target players. Each of them searches their library for a card, then shuffles and puts that card on top.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "a3b2e0a2-f4ad-457b-ae70-7732bc3479ff",
+      "canonicalName": "Rite of Belzenlok",
+      "oracleTextHash": "ade17c8d41636be405d7e2cd6affa84d2c4a6a79225756842a5bf3f4bcd9ea3f",
+      "cardStructureHash": "a6f4f9df10806315a2051699f61058b29a91b25ed824e1dc53dbcf2c47e94bf5",
+      "layout": "saga",
+      "typeLine": "Enchantment — Saga",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "saga_planeswalker"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "multi_face",
+        "saga_planeswalker"
+      ],
+      "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI, II — Create two 0/1 black Cleric creature tokens.\nIII — Create a 6/6 black Demon creature token with flying, trample, and \"At the beginning of your upkeep, sacrifice another creature. If you can't, this token deals 6 damage to you.\"",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "b24d95fa-3cf7-495e-9082-11f8db151906",
+      "canonicalName": "Tyrox, Saurid Tyrant",
+      "oracleTextHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "cardStructureHash": "b25043210dbbba02fdaedbefc89c31fcddfb74c5e629befc8dea263435c4cbe5",
+      "layout": "normal",
+      "typeLine": "Legendary Creature — Dinosaur Warrior",
+      "populationCategory": "C",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "blank_text"
+      ],
+      "allMatchingTags": [
+        "blank_text",
+        "simple"
+      ],
+      "oracleText": "",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "bd43b485-e42e-4c20-adcb-799b0ce18a59",
+      "canonicalName": "Jorn, God of Winter // Kaldring, the Rimestaff",
+      "oracleTextHash": "7cdcdb12e007471f974851bcf9fbec0f2169210dcb4eb0ea044ca8b5304d8e87",
+      "cardStructureHash": "bac9310e37dae664bdc7af601961b4efcc7d123ed49f5f72ef853c98a08c453b",
+      "layout": "modal_dfc",
+      "typeLine": "Legendary Snow Creature — God // Legendary Snow Artifact",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "multi_face"
+      ],
+      "allMatchingTags": [
+        "normal",
+        "multi_face"
+      ],
+      "cardFaces": [
+        {
+          "name": "Jorn, God of Winter",
+          "manaCost": "{2}{G}",
+          "typeLine": "Legendary Snow Creature — God",
+          "oracleText": "Whenever Jorn attacks, untap each snow permanent you control.",
+          "colors": [
+            "G"
+          ],
+          "power": "3",
+          "toughness": "3"
+        },
+        {
+          "name": "Kaldring, the Rimestaff",
+          "manaCost": "{1}{U}{B}",
+          "typeLine": "Legendary Snow Artifact",
+          "oracleText": "{T}: You may play target snow permanent card from your graveyard this turn. If you do, it enters tapped.",
+          "colors": [
+            "B",
+            "U"
+          ]
+        }
+      ],
+      "oracleText": "Whenever Jorn attacks, untap each snow permanent you control.\n//\n{T}: You may play target snow permanent card from your graveyard this turn. If you do, it enters tapped.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "c29390f2-28ac-4d2f-8e33-bf2f9ae77aa2",
+      "canonicalName": "Telepathic Transmission // Telepathic Transmission (cont'd)",
+      "oracleTextHash": "2afef0b009ff7c3e8854c0290cd9767c1751038fb7eb7ef1e738142d0a038e02",
+      "cardStructureHash": "9c5ccadb27f3ee48200df77158d5ed8d554ef4ace5ad83a55aaf179cc6031e6e",
+      "layout": "double_faced_token",
+      "typeLine": "Card",
+      "populationCategory": "A",
+      "complexityBucket": "pathological",
+      "selectionTags": [
+        "pathological"
+      ],
+      "allMatchingTags": [
+        "pathological",
+        "multi_face"
+      ],
+      "cardFaces": [
+        {
+          "name": "Telepathic Transmission",
+          "manaCost": "",
+          "typeLine": "Card",
+          "oracleText": "2-4 players | 2 packs | 5 minutes\nOBJECTIVE:\nOrder your cards without communicating in this game that puts your telepathy to the test.\nGET READY:\nOpen two booster packs and remove all cards without _Magic_ backs. Shuffle the rest of the cards together and deal them out as evenly as possible to each player. One player then discards a land to begin a central discard pile.\nLET'S PLAY:\n**Lands** ➧ **Other Colorless Cards** ➧ {w} ➧ {u} ➧ {b} ➧ {r} ➧ {g}\nWithin each category, order cards by numerically ascending mana value.\nA card of the same color and cost can be played on another card of the same color and cost.",
+          "colors": []
+        },
+        {
+          "name": "Telepathic Transmission (cont'd)",
+          "manaCost": "",
+          "oracleText": "A multicolored card counts as any one of its colors.\nThere is no turn order. If someone has a card to play in the above sequence, they may play it at any time.\nIf at any point a player notices the sequence has been broken by a card in their hand, they say \"restart\" and reveal the card that should have come next in the sequence. Restart the game by shuffling all cards together and dealing them out again. Use your knowledge of _Magic_ and the cards revealed between restarts to successfully complete the sequence.\nTO WIN:\nThe game is over when all cards have been discarded in the correct order. Keep track of the number of restarts—one or fewer is a victory!",
+          "colors": []
+        }
+      ],
+      "oracleText": "2-4 players | 2 packs | 5 minutes\nOBJECTIVE:\nOrder your cards without communicating in this game that puts your telepathy to the test.\nGET READY:\nOpen two booster packs and remove all cards without _Magic_ backs. Shuffle the rest of the cards together and deal them out as evenly as possible to each player. One player then discards a land to begin a central discard pile.\nLET'S PLAY:\n**Lands** ➧ **Other Colorless Cards** ➧ {w} ➧ {u} ➧ {b} ➧ {r} ➧ {g}\nWithin each category, order cards by numerically ascending mana value.\nA card of the same color and cost can be played on another card of the same color and cost.\n//\nA multicolored card counts as any one of its colors.\nThere is no turn order. If someone has a card to play in the above sequence, they may play it at any time.\nIf at any point a player notices the sequence has been broken by a card in their hand, they say \"restart\" and reveal the card that should have come next in the sequence. Restart the game by shuffling all cards together and dealing them out again. Use your knowledge of _Magic_ and the cards revealed between restarts to successfully complete the sequence.\nTO WIN:\nThe game is over when all cards have been discarded in the correct order. Keep track of the number of restarts—one or fewer is a victory!",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "e154e612-4041-4fb7-903f-917588dbe58e",
+      "canonicalName": "Fangren Marauder",
+      "oracleTextHash": "526befc80f89aefa6ef6d20294578646af1da5b152e60628862cb33a51a13163",
+      "cardStructureHash": "46d4a6622a155d3307e01b0f017ca5b5b11948d03974fcacc4413818a76b02cb",
+      "layout": "normal",
+      "typeLine": "Creature — Beast",
+      "populationCategory": "A",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "simple"
+      ],
+      "allMatchingTags": [
+        "simple"
+      ],
+      "oracleText": "Whenever an artifact is put into a graveyard from the battlefield, you may gain 5 life.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "e2fc5069-374b-4feb-acd9-976ddf90e504",
+      "canonicalName": "Pious Evangel // Wayward Disciple",
+      "oracleTextHash": "343983486fc071093a271b23f079176b5193befb1fec5f4806a0f149cfbc3282",
+      "cardStructureHash": "2461f322d8772eea46420ea7fecc82726e7c9d20abd9ac1bdd5667e4158297c0",
+      "layout": "transform",
+      "typeLine": "Creature — Human Cleric // Creature — Human Cleric",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "multi_face"
+      ],
+      "allMatchingTags": [
+        "normal",
+        "multi_face"
+      ],
+      "cardFaces": [
+        {
+          "name": "Pious Evangel",
+          "manaCost": "{2}{W}",
+          "typeLine": "Creature — Human Cleric",
+          "oracleText": "Whenever this creature or another creature you control enters, you gain 1 life.\n{2}, {T}, Sacrifice another permanent: Transform this creature.",
+          "colors": [
+            "W"
+          ],
+          "power": "2",
+          "toughness": "2"
+        },
+        {
+          "name": "Wayward Disciple",
+          "manaCost": "",
+          "typeLine": "Creature — Human Cleric",
+          "oracleText": "Whenever this creature or another creature you control dies, target opponent loses 1 life and you gain 1 life.",
+          "colors": [
+            "B"
+          ],
+          "power": "2",
+          "toughness": "4"
+        }
+      ],
+      "oracleText": "Whenever this creature or another creature you control enters, you gain 1 life.\n{2}, {T}, Sacrifice another permanent: Transform this creature.\n//\nWhenever this creature or another creature you control dies, target opponent loses 1 life and you gain 1 life.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "e7092928-3d70-4c7f-aea6-4532b0c5e5eb",
+      "canonicalName": "New Player's Journey",
+      "oracleTextHash": "d45187717dfcea49152d4ac1deb7bd2f24f3c8b9b2cb4d584bc3a06b0ae3ee18",
+      "cardStructureHash": "98dcb9ae74db7a8b5323b1898e41238aea2d2e0826346c584c44d84bb51e0d79",
+      "layout": "planar",
+      "typeLine": "Plane — Foundations",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "saga_planeswalker"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "multi_face",
+        "saga_planeswalker"
+      ],
+      "oracleText": "When you planeswalk here, each player may search their library for a basic land card, put it into their hand, then shuffle.\nWhenever you play a card from Foundations or a core set (including Alpha!), draw a card.\nWhenever chaos ensues, you gain life equal to the number of years you've played Magic, rounded up. Then planeswalk.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "e7564d66-767c-4cd9-a5f0-0f2488a4a74b",
+      "canonicalName": "Heliod's Intervention",
+      "oracleTextHash": "9c077d90c3d3c59a525d95604f02ed09656815d339a5c2c419fe9b0bbb8e32cf",
+      "cardStructureHash": "7c5025c419e80c584b3c6bee53f4ac2087a8bdabc0a8d805ca1df9ed1715d1de",
+      "layout": "normal",
+      "typeLine": "Instant",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "modal"
+      ],
+      "allMatchingTags": [
+        "normal",
+        "modal"
+      ],
+      "oracleText": "Choose one —\n• Destroy X target artifacts and/or enchantments.\n• Target player gains twice X life.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "ee524e82-35c4-4cae-b65e-3e147eac2927",
+      "canonicalName": "Mila, Crafty Companion // Lukka, Wayward Bonder",
+      "oracleTextHash": "2b8f77543d5bd3edeea81487d5410ce38aaeabb239c271d165cfe8753a89e704",
+      "cardStructureHash": "397312eda5ea89b82cf5894a9f398cc6d3ab762f5b169d2ce9bd37bc0472a2c8",
+      "layout": "modal_dfc",
+      "typeLine": "Legendary Creature — Fox // Legendary Planeswalker — Lukka",
+      "populationCategory": "A",
+      "complexityBucket": "pathological",
+      "selectionTags": [
+        "multi_face"
+      ],
+      "allMatchingTags": [
+        "pathological",
+        "multi_face",
+        "replacement"
+      ],
+      "cardFaces": [
+        {
+          "name": "Mila, Crafty Companion",
+          "manaCost": "{1}{W}{W}",
+          "typeLine": "Legendary Creature — Fox",
+          "oracleText": "Whenever an opponent attacks one or more planeswalkers you control, put a loyalty counter on each planeswalker you control.\nWhenever a permanent you control becomes the target of a spell or ability an opponent controls, you may draw a card.",
+          "colors": [
+            "W"
+          ],
+          "power": "2",
+          "toughness": "3"
+        },
+        {
+          "name": "Lukka, Wayward Bonder",
+          "manaCost": "{4}{R}{R}",
+          "typeLine": "Legendary Planeswalker — Lukka",
+          "oracleText": "+1: You may discard a card. If you do, draw a card. If a creature card was discarded this way, draw two cards instead.\n−2: Return target creature card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of your next upkeep.\n−7: You get an emblem with \"Whenever a creature you control enters, it deals damage equal to its power to any target.\"",
+          "colors": [
+            "R"
+          ],
+          "loyalty": "5"
+        }
+      ],
+      "oracleText": "Whenever an opponent attacks one or more planeswalkers you control, put a loyalty counter on each planeswalker you control.\nWhenever a permanent you control becomes the target of a spell or ability an opponent controls, you may draw a card.\n//\n+1: You may discard a card. If you do, draw a card. If a creature card was discarded this way, draw two cards instead.\n−2: Return target creature card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of your next upkeep.\n−7: You get an emblem with \"Whenever a creature you control enters, it deals damage equal to its power to any target.\"",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "f48b2349-797e-4e79-aea7-2413e78129e1",
+      "canonicalName": "Morgul-Knife Wound",
+      "oracleTextHash": "3531b4d9113951f844146371504662a019cd7088571ae2107add4385696cfc91",
+      "cardStructureHash": "42a9e6498f1e43d35660b58cccb137faaac86cfbaf246574eac168c128de13dd",
+      "layout": "normal",
+      "typeLine": "Enchantment — Aura",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "granted"
+      ],
+      "allMatchingTags": [
+        "normal",
+        "granted"
+      ],
+      "oracleText": "Enchant creature\nEnchanted creature gets -3/-0 and has \"At the beginning of your upkeep, exile this creature unless you pay 2 life.\"",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "f672ea4f-8268-4540-b30e-9307ac6a97bd",
+      "canonicalName": "Yeah Nah // Nah Yeah",
+      "oracleTextHash": "2207d22cdd2287d4ff2540b015fcea00c3d1adf9b457fc6676b4e38d76b9e002",
+      "cardStructureHash": "ab98f9aec80b469c1a256bfe3d2e77aed567e75084948ede4f5b02258bf62658",
+      "layout": "split",
+      "typeLine": "Instant // Instant",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "complex"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "multi_face"
+      ],
+      "cardFaces": [
+        {
+          "name": "Yeah Nah",
+          "manaCost": "{2}{U}",
+          "typeLine": "Instant",
+          "oracleText": "Each player votes for yeah or nah. If yeah gets the most votes or is tied for the most votes, each player copies target spell. If nah gets the most votes, counter that spell.\nFuse (You may cast one or both halves of this card from your hand.)"
+        },
+        {
+          "name": "Nah Yeah",
+          "manaCost": "{U}",
+          "typeLine": "Instant",
+          "oracleText": "Split second\nTarget spell resolves. (It just happens right now.)\nFuse (You may cast one or both halves of this card from your hand.)"
+        }
+      ],
+      "oracleText": "Each player votes for yeah or nah. If yeah gets the most votes or is tied for the most votes, each player copies target spell. If nah gets the most votes, counter that spell.\nFuse (You may cast one or both halves of this card from your hand.)\n//\nSplit second\nTarget spell resolves. (It just happens right now.)\nFuse (You may cast one or both halves of this card from your hand.)",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "fb9cd9d0-8eea-4aa8-bb9c-bb0aac847421",
+      "canonicalName": "Hovel Hurler",
+      "oracleTextHash": "e7087d2296ac60632058af11cff9825933f510c43f75dc97ba25fb7cae84ed7b",
+      "cardStructureHash": "a3665b56320f945b892e62381f3ddda4d332ee2a387654e23f80cb654aa85f87",
+      "layout": "normal",
+      "typeLine": "Creature — Giant Warrior",
+      "populationCategory": "A",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "simple"
+      ],
+      "allMatchingTags": [
+        "simple"
+      ],
+      "oracleText": "This creature enters with two -1/-1 counters on it.\n{R/W}{R/W}, Remove a counter from this creature: Another target creature you control gets +1/+0 and gains flying until end of turn. Activate only as a sorcery.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "ff03a063-9634-4746-a208-9dbcde5c6bdb",
+      "canonicalName": "Overflowing Insight",
+      "oracleTextHash": "b6f670e49a8eae55d433e4748250546c54dbdeed566158923de03f0e81f4d681",
+      "cardStructureHash": "89280a139f82cc3c94b72868f1eb023df778b8fbdc4ba461bae7d3ae8ad95310",
+      "layout": "normal",
+      "typeLine": "Sorcery",
+      "populationCategory": "A",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "simple"
+      ],
+      "allMatchingTags": [
+        "simple"
+      ],
+      "oracleText": "Target player draws seven cards.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    }
+  ],
+  "disagreementResolutionRequired": true,
+  "versionsToFreezeAfterCalibration": {
+    "annotationProtocolVersion": "catalog-coverage-annotation-protocol-v1",
+    "wholeCardRubricVersion": "catalog-coverage-whole-card-rubric-v1",
+    "semanticGoldSchemaVersion": "catalog-coverage-semantic-gold-schema-v1"
+  }
+}

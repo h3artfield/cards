@@ -480,6 +480,13 @@ export function CatalogCoverageAdjudicationApp({ slug }: { slug: string }) {
     const res = await fetch(`/api/catalog-coverage/session?adjudicatorId=${encodeURIComponent(adjId)}`);
     if (!res.ok) throw new Error("Failed to load session");
     const data = await res.json();
+    if (data.sessionStale || !data.session) {
+      localStorage.removeItem(STORAGE_KEY);
+      setAdjudicatorId(null);
+      setSession(null);
+      setProgress({});
+      return;
+    }
     setSession(data.session);
     setProgress(data.progress ?? {});
   }, []);
