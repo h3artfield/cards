@@ -1,0 +1,7098 @@
+[
+  {
+    "clusterId": 0,
+    "size": 611,
+    "topActions": [
+      {
+        "action": "create_token",
+        "count": 611
+      },
+      {
+        "action": "exile",
+        "count": 46
+      },
+      {
+        "action": "put_counter",
+        "count": 36
+      },
+      {
+        "action": "sacrifice",
+        "count": 33
+      },
+      {
+        "action": "cast",
+        "count": 21
+      },
+      {
+        "action": "destroy",
+        "count": 15
+      },
+      {
+        "action": "deal_damage",
+        "count": 10
+      },
+      {
+        "action": "untap",
+        "count": 9
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "token_generation",
+        "count": 611
+      },
+      {
+        "role": "board_interaction",
+        "count": 138
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 53
+      },
+      {
+        "role": "ramp",
+        "count": 30
+      },
+      {
+        "role": "mana_generation",
+        "count": 30
+      },
+      {
+        "role": "cost_reduction",
+        "count": 10
+      },
+      {
+        "role": "protection",
+        "count": 8
+      },
+      {
+        "role": "life_loss",
+        "count": 2
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 577
+      },
+      {
+        "abilityType": "triggered",
+        "count": 58
+      },
+      {
+        "abilityType": "activated",
+        "count": 13
+      },
+      {
+        "abilityType": "replacement",
+        "count": 7
+      },
+      {
+        "abilityType": "static",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "003bf21f-6815-4098-a186-aa15f5947541",
+        "name": "Kalitas, Bloodchief of Ghet"
+      },
+      {
+        "oracleId": "015004d7-989b-4549-9ffa-b062126d04d2",
+        "name": "Inquisitive Puppet"
+      },
+      {
+        "oracleId": "01546b7d-a233-4176-8843-d732074dc5b6",
+        "name": "Doubling Season"
+      },
+      {
+        "oracleId": "0192ba05-6144-4fec-a803-462ecdf64195",
+        "name": "Royal Warden"
+      },
+      {
+        "oracleId": "01cebebb-050c-4b69-8a13-c569183a3cc3",
+        "name": "Cogwork Assembler"
+      }
+    ]
+  },
+  {
+    "clusterId": 1,
+    "size": 660,
+    "topActions": [
+      {
+        "action": "add_mana",
+        "count": 650
+      },
+      {
+        "action": "put_counter",
+        "count": 27
+      },
+      {
+        "action": "create_token",
+        "count": 26
+      },
+      {
+        "action": "deal_damage",
+        "count": 19
+      },
+      {
+        "action": "cast",
+        "count": 19
+      },
+      {
+        "action": "exile",
+        "count": 17
+      },
+      {
+        "action": "untap",
+        "count": 17
+      },
+      {
+        "action": "scry",
+        "count": 11
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "ramp",
+        "count": 660
+      },
+      {
+        "role": "mana_generation",
+        "count": 660
+      },
+      {
+        "role": "board_interaction",
+        "count": 74
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 61
+      },
+      {
+        "role": "token_generation",
+        "count": 26
+      },
+      {
+        "role": "protection",
+        "count": 12
+      },
+      {
+        "role": "life_gain",
+        "count": 8
+      },
+      {
+        "role": "cost_reduction",
+        "count": 5
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "activated",
+        "count": 433
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 249
+      },
+      {
+        "abilityType": "triggered",
+        "count": 91
+      },
+      {
+        "abilityType": "static",
+        "count": 1
+      },
+      {
+        "abilityType": "modal",
+        "count": 1
+      },
+      {
+        "abilityType": "loyalty",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "001c233f-2959-479b-a82a-64a25ac60830",
+        "name": "Nantuko Elder"
+      },
+      {
+        "oracleId": "008cb342-79f5-4df6-a6b7-0e9e22ed693f",
+        "name": "Coalition Relic"
+      },
+      {
+        "oracleId": "00e35322-1a9a-41e3-9ce1-359c8eaa3bc7",
+        "name": "Talisman of Progress"
+      },
+      {
+        "oracleId": "013e4281-4e3e-47c2-ac9a-f570668bcb16",
+        "name": "Maraleaf Pixie"
+      },
+      {
+        "oracleId": "01cd52f9-7fac-4396-bec7-d06bf683e011",
+        "name": "Akki Rockspeaker"
+      }
+    ]
+  },
+  {
+    "clusterId": 2,
+    "size": 161,
+    "topActions": [
+      {
+        "action": "put_counter",
+        "count": 22
+      },
+      {
+        "action": "create_token",
+        "count": 19
+      },
+      {
+        "action": "destroy",
+        "count": 9
+      },
+      {
+        "action": "exile",
+        "count": 7
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 5
+      },
+      {
+        "action": "cast",
+        "count": 5
+      },
+      {
+        "action": "scry",
+        "count": 3
+      },
+      {
+        "action": "sacrifice",
+        "count": 3
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "protection",
+        "count": 161
+      },
+      {
+        "role": "board_interaction",
+        "count": 38
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 24
+      },
+      {
+        "role": "token_generation",
+        "count": 19
+      },
+      {
+        "role": "cost_reduction",
+        "count": 5
+      },
+      {
+        "role": "ramp",
+        "count": 3
+      },
+      {
+        "role": "mana_generation",
+        "count": 3
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 42
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 22
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "0114f97f-b196-4af1-90aa-eba164cb8f22",
+        "name": "Etchings of the Chosen"
+      },
+      {
+        "oracleId": "01d202b9-1ac6-484c-a208-a8bc69bccdb2",
+        "name": "Void Grafter"
+      },
+      {
+        "oracleId": "01d70534-7c26-4a54-9eca-d0ebbefc2159",
+        "name": "Valeron Outlander"
+      },
+      {
+        "oracleId": "02598a35-1b11-4abe-89cd-fc44c8c36c15",
+        "name": "Winota, Joiner of Forces"
+      },
+      {
+        "oracleId": "04576b4d-2977-4cdf-b4a5-b0b47995e962",
+        "name": "Yavimaya Barbarian"
+      }
+    ]
+  },
+  {
+    "clusterId": 3,
+    "size": 489,
+    "topActions": [
+      {
+        "action": "create_token",
+        "count": 132
+      },
+      {
+        "action": "draw",
+        "count": 97
+      },
+      {
+        "action": "add_mana",
+        "count": 90
+      },
+      {
+        "action": "put_counter",
+        "count": 88
+      },
+      {
+        "action": "deal_damage",
+        "count": 80
+      },
+      {
+        "action": "sacrifice",
+        "count": 49
+      },
+      {
+        "action": "exile",
+        "count": 42
+      },
+      {
+        "action": "transform",
+        "count": 33
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 264
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 181
+      },
+      {
+        "role": "token_generation",
+        "count": 132
+      },
+      {
+        "role": "card_advantage",
+        "count": 102
+      },
+      {
+        "role": "card_draw",
+        "count": 97
+      },
+      {
+        "role": "ramp",
+        "count": 96
+      },
+      {
+        "role": "mana_generation",
+        "count": 96
+      },
+      {
+        "role": "sacrifice_payoff",
+        "count": 45
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 243
+      },
+      {
+        "abilityType": "activated",
+        "count": 220
+      },
+      {
+        "abilityType": "static",
+        "count": 118
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 81
+      },
+      {
+        "abilityType": "modal",
+        "count": 4
+      },
+      {
+        "abilityType": "replacement",
+        "count": 2
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "00f00001-bd84-4dbf-a707-f4b1549100d4",
+        "name": "The Great Aerie"
+      },
+      {
+        "oracleId": "0124977f-06e6-430a-a874-f7d05883a97c",
+        "name": "Minion Reflector"
+      },
+      {
+        "oracleId": "020225db-5623-49c2-8cdf-1ec2a05b8b0a",
+        "name": "Compulsory Rest"
+      },
+      {
+        "oracleId": "02718076-4c71-4bf5-988f-e6f94fbf0aef",
+        "name": "Spara's Adjudicators"
+      },
+      {
+        "oracleId": "028335db-58f6-47fe-8c6a-f336d0d91fb1",
+        "name": "Freewind Equenaut"
+      }
+    ]
+  },
+  {
+    "clusterId": 4,
+    "size": 352,
+    "topActions": [
+      {
+        "action": "search_library",
+        "count": 352
+      },
+      {
+        "action": "shuffle_library",
+        "count": 352
+      },
+      {
+        "action": "put_into_hand",
+        "count": 351
+      },
+      {
+        "action": "create_token",
+        "count": 30
+      },
+      {
+        "action": "gain_life",
+        "count": 19
+      },
+      {
+        "action": "draw",
+        "count": 19
+      },
+      {
+        "action": "deal_damage",
+        "count": 17
+      },
+      {
+        "action": "put_counter",
+        "count": 15
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "card_advantage",
+        "count": 352
+      },
+      {
+        "role": "tutor",
+        "count": 352
+      },
+      {
+        "role": "board_interaction",
+        "count": 52
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 35
+      },
+      {
+        "role": "token_generation",
+        "count": 30
+      },
+      {
+        "role": "life_gain",
+        "count": 19
+      },
+      {
+        "role": "card_draw",
+        "count": 19
+      },
+      {
+        "role": "ramp",
+        "count": 13
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 207
+      },
+      {
+        "abilityType": "triggered",
+        "count": 164
+      },
+      {
+        "abilityType": "activated",
+        "count": 17
+      },
+      {
+        "abilityType": "modal",
+        "count": 10
+      },
+      {
+        "abilityType": "static",
+        "count": 7
+      },
+      {
+        "abilityType": "loyalty",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "003c48d4-0303-4970-8637-47ae060385aa",
+        "name": "Safewright Quest"
+      },
+      {
+        "oracleId": "01197456-62f1-4bc0-9f2f-127f97f9b05d",
+        "name": "Higure, the Still Wind"
+      },
+      {
+        "oracleId": "020c26ba-ed46-47c3-925c-b9f32500f503",
+        "name": "Vraska's Scorn"
+      },
+      {
+        "oracleId": "02b5ea0b-c0a3-4213-9064-e688190fca5e",
+        "name": "Screaming Seahawk"
+      },
+      {
+        "oracleId": "02d0b0fd-ff73-4e26-be44-d85c743d51e4",
+        "name": "Remembrance"
+      }
+    ]
+  },
+  {
+    "clusterId": 5,
+    "size": 241,
+    "topActions": [
+      {
+        "action": "play",
+        "count": 241
+      },
+      {
+        "action": "exile",
+        "count": 156
+      },
+      {
+        "action": "cast",
+        "count": 26
+      },
+      {
+        "action": "deal_damage",
+        "count": 22
+      },
+      {
+        "action": "draw",
+        "count": 18
+      },
+      {
+        "action": "create_token",
+        "count": 17
+      },
+      {
+        "action": "put_counter",
+        "count": 17
+      },
+      {
+        "action": "discard",
+        "count": 9
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 166
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 41
+      },
+      {
+        "role": "card_advantage",
+        "count": 24
+      },
+      {
+        "role": "card_draw",
+        "count": 18
+      },
+      {
+        "role": "token_generation",
+        "count": 17
+      },
+      {
+        "role": "ramp",
+        "count": 12
+      },
+      {
+        "role": "mana_generation",
+        "count": 12
+      },
+      {
+        "role": "combat_payoff",
+        "count": 10
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 129
+      },
+      {
+        "abilityType": "triggered",
+        "count": 125
+      },
+      {
+        "abilityType": "activated",
+        "count": 16
+      },
+      {
+        "abilityType": "static",
+        "count": 12
+      },
+      {
+        "abilityType": "modal",
+        "count": 9
+      },
+      {
+        "abilityType": "loyalty",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "00cfbea0-e862-468b-90d5-7478eb9847c0",
+        "name": "End-Blaze Epiphany"
+      },
+      {
+        "oracleId": "024cfe2e-d3c0-4341-bb70-67664ed1595d",
+        "name": "Titania"
+      },
+      {
+        "oracleId": "03cd7583-d054-4359-8c94-7776c54198ed",
+        "name": "Party Thrasher"
+      },
+      {
+        "oracleId": "04152e7a-969c-4858-841b-0a569a9fc1bf",
+        "name": "Professional Face-Breaker"
+      },
+      {
+        "oracleId": "06af8e20-6f60-400d-9120-c99311232dde",
+        "name": "Knacksaw Clique"
+      }
+    ]
+  },
+  {
+    "clusterId": 6,
+    "size": 147,
+    "topActions": [
+      {
+        "action": "put_counter",
+        "count": 145
+      },
+      {
+        "action": "create_token",
+        "count": 15
+      },
+      {
+        "action": "exile",
+        "count": 4
+      },
+      {
+        "action": "deal_damage",
+        "count": 3
+      },
+      {
+        "action": "sacrifice",
+        "count": 2
+      },
+      {
+        "action": "scry",
+        "count": 2
+      },
+      {
+        "action": "cast",
+        "count": 2
+      },
+      {
+        "action": "untap",
+        "count": 2
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 147
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 147
+      },
+      {
+        "role": "token_generation",
+        "count": 15
+      },
+      {
+        "role": "cost_reduction",
+        "count": 5
+      },
+      {
+        "role": "protection",
+        "count": 3
+      },
+      {
+        "role": "ramp",
+        "count": 1
+      },
+      {
+        "role": "mana_generation",
+        "count": 1
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 81
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 59
+      },
+      {
+        "abilityType": "activated",
+        "count": 10
+      },
+      {
+        "abilityType": "modal",
+        "count": 4
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "02acf8b2-6108-4496-9803-7199ca7e199a",
+        "name": "Ent-Draught Basin"
+      },
+      {
+        "oracleId": "0308b9f2-11da-41d0-8d18-18e8c0c600ab",
+        "name": "Matopi Golem"
+      },
+      {
+        "oracleId": "04b0d194-4263-44e5-979d-40f793cc1ba0",
+        "name": "Push Your Luck"
+      },
+      {
+        "oracleId": "054c6250-ac96-42f6-931d-925761ab7764",
+        "name": "Power Plant Worker"
+      },
+      {
+        "oracleId": "072d05c4-e0d7-47af-b2a9-16b90810fd30",
+        "name": "Costume Closet"
+      }
+    ]
+  },
+  {
+    "clusterId": 7,
+    "size": 74,
+    "topActions": [
+      {
+        "action": "shuffle_library",
+        "count": 74
+      },
+      {
+        "action": "exile",
+        "count": 10
+      },
+      {
+        "action": "create_token",
+        "count": 8
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 7
+      },
+      {
+        "action": "cast",
+        "count": 5
+      },
+      {
+        "action": "put_counter",
+        "count": 5
+      },
+      {
+        "action": "sacrifice",
+        "count": 2
+      },
+      {
+        "action": "untap",
+        "count": 2
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 17
+      },
+      {
+        "role": "token_generation",
+        "count": 8
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 7
+      },
+      {
+        "role": "cost_reduction",
+        "count": 2
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 57
+      },
+      {
+        "abilityType": "triggered",
+        "count": 26
+      },
+      {
+        "abilityType": "activated",
+        "count": 3
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "02a283fc-ca38-48fb-b53c-0d863fca4b08",
+        "name": "Urza's Construction Drone"
+      },
+      {
+        "oracleId": "07995092-af6c-43b8-b30b-17e020ead37c",
+        "name": "Thunderous Debut"
+      },
+      {
+        "oracleId": "0c82ae16-f995-4ac3-adb4-a5cc93a6e6f2",
+        "name": "Gomazoa"
+      },
+      {
+        "oracleId": "0e14f59f-021a-4ad3-a26b-8f79e680c426",
+        "name": "Regna, the Redeemer"
+      },
+      {
+        "oracleId": "1675476c-25b1-46c2-81ce-fef9a2360bcc",
+        "name": "Blaring Captain"
+      }
+    ]
+  },
+  {
+    "clusterId": 8,
+    "size": 39,
+    "topActions": [
+      {
+        "action": "draw",
+        "count": 14
+      },
+      {
+        "action": "create_token",
+        "count": 11
+      },
+      {
+        "action": "discard",
+        "count": 8
+      },
+      {
+        "action": "put_counter",
+        "count": 7
+      },
+      {
+        "action": "put_into_hand",
+        "count": 6
+      },
+      {
+        "action": "deal_damage",
+        "count": 6
+      },
+      {
+        "action": "search_library",
+        "count": 5
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 5
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 19
+      },
+      {
+        "role": "card_advantage",
+        "count": 19
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 14
+      },
+      {
+        "role": "card_draw",
+        "count": 14
+      },
+      {
+        "role": "token_generation",
+        "count": 11
+      },
+      {
+        "role": "tutor",
+        "count": 5
+      },
+      {
+        "role": "sacrifice_payoff",
+        "count": 3
+      },
+      {
+        "role": "protection",
+        "count": 3
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 37
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 9
+      },
+      {
+        "abilityType": "activated",
+        "count": 2
+      },
+      {
+        "abilityType": "modal",
+        "count": 2
+      },
+      {
+        "abilityType": "loyalty",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "1abcdddd-0022-4dfe-8c15-eb1fa86de614",
+        "name": "Invasion of Azgol // Ashen Reaper"
+      },
+      {
+        "oracleId": "1e5a5a7d-2c34-4e56-96e9-ebcf7745a03c",
+        "name": "Invasion of Ixalan // Belligerent Regisaur"
+      },
+      {
+        "oracleId": "21d90735-5e04-4a8c-a546-ff26d4d5998d",
+        "name": "Invasion of Ikoria // Zilortha, Apex of Ikoria"
+      },
+      {
+        "oracleId": "2d125ef5-074c-44eb-a1d0-c308d48bfbc2",
+        "name": "Invasion of Karsus // Refraction Elemental"
+      },
+      {
+        "oracleId": "2e0d12dc-55fa-4363-b28f-612e7cfa12c6",
+        "name": "Invasion of Muraganda // Primordial Plasm"
+      }
+    ]
+  },
+  {
+    "clusterId": 9,
+    "size": 1542,
+    "topActions": [
+      {
+        "action": "exile",
+        "count": 74
+      },
+      {
+        "action": "untap",
+        "count": 40
+      },
+      {
+        "action": "deal_damage",
+        "count": 36
+      },
+      {
+        "action": "sacrifice",
+        "count": 22
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 19
+      },
+      {
+        "action": "scry",
+        "count": 12
+      },
+      {
+        "action": "surveil",
+        "count": 4
+      },
+      {
+        "action": "shuffle_into_library",
+        "count": 2
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 131
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 76
+      },
+      {
+        "role": "ramp",
+        "count": 37
+      },
+      {
+        "role": "mana_generation",
+        "count": 37
+      },
+      {
+        "role": "cost_reduction",
+        "count": 18
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 150
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 54
+      },
+      {
+        "abilityType": "activated",
+        "count": 7
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "0006faf6-7a61-426c-9034-579f2cfcfa83",
+        "name": "Sensory Deprivation"
+      },
+      {
+        "oracleId": "002100cd-1ab1-44da-93a0-1269d47a712a",
+        "name": "Waterknot"
+      },
+      {
+        "oracleId": "00571e7f-4e40-4a07-a529-34580e942338",
+        "name": "Food Fight"
+      },
+      {
+        "oracleId": "00606d5e-a134-4363-9ee6-05e03d58f234",
+        "name": "Strength of Unity"
+      },
+      {
+        "oracleId": "0073d731-e60d-433a-ac35-a22af855da20",
+        "name": "Dungeon Delver"
+      }
+    ]
+  },
+  {
+    "clusterId": 10,
+    "size": 26,
+    "topActions": [
+      {
+        "action": "destroy",
+        "count": 26
+      },
+      {
+        "action": "lose_life",
+        "count": 13
+      },
+      {
+        "action": "deal_damage",
+        "count": 10
+      },
+      {
+        "action": "draw",
+        "count": 9
+      },
+      {
+        "action": "sacrifice",
+        "count": 4
+      },
+      {
+        "action": "discard",
+        "count": 4
+      },
+      {
+        "action": "create_token",
+        "count": 3
+      },
+      {
+        "action": "gain_life",
+        "count": 3
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 26
+      },
+      {
+        "role": "board_wipe",
+        "count": 26
+      },
+      {
+        "role": "life_loss",
+        "count": 13
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 11
+      },
+      {
+        "role": "card_draw",
+        "count": 9
+      },
+      {
+        "role": "card_advantage",
+        "count": 9
+      },
+      {
+        "role": "token_generation",
+        "count": 3
+      },
+      {
+        "role": "life_gain",
+        "count": 3
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 16
+      },
+      {
+        "abilityType": "triggered",
+        "count": 9
+      },
+      {
+        "abilityType": "static",
+        "count": 4
+      },
+      {
+        "abilityType": "loyalty",
+        "count": 3
+      },
+      {
+        "abilityType": "activated",
+        "count": 2
+      },
+      {
+        "abilityType": "modal",
+        "count": 2
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "032f59c3-9f47-4db3-a43c-065a99ed7efe",
+        "name": "Summon: Primal Odin"
+      },
+      {
+        "oracleId": "0639bd82-084f-47d5-b158-05dfc29efa40",
+        "name": "No Witnesses"
+      },
+      {
+        "oracleId": "0efb0d7e-dea0-4817-a243-15066e9ef333",
+        "name": "Grist, the Hunger Tide"
+      },
+      {
+        "oracleId": "0ff9c0cc-4fb3-4117-9a8e-5b51f62306c4",
+        "name": "The Ruinous Wrecking Crew"
+      },
+      {
+        "oracleId": "127de52b-df75-4342-95a0-20d84c5bf916",
+        "name": "The Meathook Massacre"
+      }
+    ]
+  },
+  {
+    "clusterId": 11,
+    "size": 267,
+    "topActions": [
+      {
+        "action": "copy",
+        "count": 267
+      },
+      {
+        "action": "cast",
+        "count": 46
+      },
+      {
+        "action": "exile",
+        "count": 34
+      },
+      {
+        "action": "add_mana",
+        "count": 17
+      },
+      {
+        "action": "draw",
+        "count": 17
+      },
+      {
+        "action": "create_token",
+        "count": 15
+      },
+      {
+        "action": "deal_damage",
+        "count": 11
+      },
+      {
+        "action": "put_counter",
+        "count": 10
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "spell_copying",
+        "count": 267
+      },
+      {
+        "role": "copy_effects",
+        "count": 267
+      },
+      {
+        "role": "board_interaction",
+        "count": 61
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 21
+      },
+      {
+        "role": "card_advantage",
+        "count": 19
+      },
+      {
+        "role": "ramp",
+        "count": 17
+      },
+      {
+        "role": "mana_generation",
+        "count": 17
+      },
+      {
+        "role": "card_draw",
+        "count": 17
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 147
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 115
+      },
+      {
+        "abilityType": "activated",
+        "count": 26
+      },
+      {
+        "abilityType": "static",
+        "count": 24
+      },
+      {
+        "abilityType": "modal",
+        "count": 8
+      },
+      {
+        "abilityType": "loyalty",
+        "count": 6
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "005354c1-7ee5-498d-87b7-b12cfb9ec12c",
+        "name": "Providence of Night"
+      },
+      {
+        "oracleId": "009a4073-5946-4131-928c-c5c373745344",
+        "name": "Mindlink Mech"
+      },
+      {
+        "oracleId": "022e38c3-fcea-428f-a0d0-a6cca057faa3",
+        "name": "Strixhaven"
+      },
+      {
+        "oracleId": "026b7221-0caf-4c8b-8c1b-e7de836797b7",
+        "name": "Mirrorweave"
+      },
+      {
+        "oracleId": "03f5c566-825c-4c46-9c01-a2f9b1e70a13",
+        "name": "The Mycosynth Gardens"
+      }
+    ]
+  },
+  {
+    "clusterId": 12,
+    "size": 947,
+    "topActions": [
+      {
+        "action": "deal_damage",
+        "count": 947
+      },
+      {
+        "action": "sacrifice",
+        "count": 63
+      },
+      {
+        "action": "put_counter",
+        "count": 61
+      },
+      {
+        "action": "draw",
+        "count": 44
+      },
+      {
+        "action": "create_token",
+        "count": 37
+      },
+      {
+        "action": "cast",
+        "count": 36
+      },
+      {
+        "action": "gain_life",
+        "count": 29
+      },
+      {
+        "action": "discard",
+        "count": 25
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 947
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 947
+      },
+      {
+        "role": "combat_payoff",
+        "count": 947
+      },
+      {
+        "role": "sacrifice_payoff",
+        "count": 47
+      },
+      {
+        "role": "card_draw",
+        "count": 44
+      },
+      {
+        "role": "card_advantage",
+        "count": 44
+      },
+      {
+        "role": "token_generation",
+        "count": 37
+      },
+      {
+        "role": "life_gain",
+        "count": 29
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 569
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 359
+      },
+      {
+        "abilityType": "activated",
+        "count": 128
+      },
+      {
+        "abilityType": "modal",
+        "count": 8
+      },
+      {
+        "abilityType": "static",
+        "count": 3
+      },
+      {
+        "abilityType": "loyalty",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "0013f005-2b49-48a4-8a74-9bbdadc88c9f",
+        "name": "Munitions Enthusiast"
+      },
+      {
+        "oracleId": "011bb6cc-f1a1-4790-befc-373acabf63b8",
+        "name": "Arc Mage"
+      },
+      {
+        "oracleId": "01499544-6850-49f0-a66e-113df19c4340",
+        "name": "Pheres-Band Brawler"
+      },
+      {
+        "oracleId": "01805d0d-3a72-4d26-9475-3e68c278b7fe",
+        "name": "Cinder Elemental"
+      },
+      {
+        "oracleId": "01e81249-6c45-4fae-86ee-9ef5fbec99ec",
+        "name": "Embraal Gear-Smasher"
+      }
+    ]
+  },
+  {
+    "clusterId": 13,
+    "size": 430,
+    "topActions": [
+      {
+        "action": "draw",
+        "count": 423
+      },
+      {
+        "action": "discard",
+        "count": 55
+      },
+      {
+        "action": "cast",
+        "count": 42
+      },
+      {
+        "action": "shuffle_into_library",
+        "count": 30
+      },
+      {
+        "action": "deal_damage",
+        "count": 29
+      },
+      {
+        "action": "destroy",
+        "count": 21
+      },
+      {
+        "action": "exile",
+        "count": 17
+      },
+      {
+        "action": "create_token",
+        "count": 16
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "card_advantage",
+        "count": 424
+      },
+      {
+        "role": "card_draw",
+        "count": 423
+      },
+      {
+        "role": "board_interaction",
+        "count": 79
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 49
+      },
+      {
+        "role": "token_generation",
+        "count": 16
+      },
+      {
+        "role": "life_gain",
+        "count": 14
+      },
+      {
+        "role": "cost_reduction",
+        "count": 12
+      },
+      {
+        "role": "protection",
+        "count": 11
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 395
+      },
+      {
+        "abilityType": "static",
+        "count": 29
+      },
+      {
+        "abilityType": "triggered",
+        "count": 15
+      },
+      {
+        "abilityType": "modal",
+        "count": 11
+      },
+      {
+        "abilityType": "activated",
+        "count": 3
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "002965be-a36f-4a09-9ce0-c6535bca1703",
+        "name": "Veil of Summer"
+      },
+      {
+        "oracleId": "0040db73-ac11-4c15-a1ac-5a2c4c085f09",
+        "name": "Instill Infection"
+      },
+      {
+        "oracleId": "008c92bc-3022-4d34-aa04-584576ff8f8e",
+        "name": "Deem Worthy"
+      },
+      {
+        "oracleId": "0101f891-e54c-43e5-86f3-263d95060fcd",
+        "name": "Refocus"
+      },
+      {
+        "oracleId": "011af4c1-e8ed-44bf-b7b5-dfdc18524cd0",
+        "name": "Heartwarming Redemption"
+      }
+    ]
+  },
+  {
+    "clusterId": 14,
+    "size": 584,
+    "topActions": [
+      {
+        "action": "destroy",
+        "count": 30
+      },
+      {
+        "action": "cast",
+        "count": 27
+      },
+      {
+        "action": "put_counter",
+        "count": 20
+      },
+      {
+        "action": "untap",
+        "count": 14
+      },
+      {
+        "action": "exile",
+        "count": 13
+      },
+      {
+        "action": "sacrifice",
+        "count": 10
+      },
+      {
+        "action": "create_token",
+        "count": 6
+      },
+      {
+        "action": "scry",
+        "count": 6
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "protection",
+        "count": 584
+      },
+      {
+        "role": "board_interaction",
+        "count": 70
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 35
+      },
+      {
+        "role": "cost_reduction",
+        "count": 6
+      },
+      {
+        "role": "token_generation",
+        "count": 6
+      },
+      {
+        "role": "ramp",
+        "count": 2
+      },
+      {
+        "role": "mana_generation",
+        "count": 2
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 82
+      },
+      {
+        "abilityType": "triggered",
+        "count": 40
+      },
+      {
+        "abilityType": "activated",
+        "count": 5
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "011b2243-b8be-471f-9d8f-824a40e599df",
+        "name": "Soul of the Rapids"
+      },
+      {
+        "oracleId": "019aa6a6-7be8-4c3d-8f3e-4ccce2b9c3d3",
+        "name": "Jareth, Leonine Titan"
+      },
+      {
+        "oracleId": "01c8d29f-4924-4d55-80bc-0c0c06bcb733",
+        "name": "Eight-and-a-Half-Tails"
+      },
+      {
+        "oracleId": "01e742ed-660c-43c6-b393-e589a54cbe1b",
+        "name": "Voice of the Blessed"
+      },
+      {
+        "oracleId": "025f8db8-11d1-4c59-8e1f-004c9c843fd8",
+        "name": "Spearbreaker Behemoth"
+      }
+    ]
+  },
+  {
+    "clusterId": 15,
+    "size": 89,
+    "topActions": [
+      {
+        "action": "add_mana",
+        "count": 9
+      },
+      {
+        "action": "put_counter",
+        "count": 3
+      },
+      {
+        "action": "deal_damage",
+        "count": 3
+      },
+      {
+        "action": "cast",
+        "count": 2
+      },
+      {
+        "action": "untap",
+        "count": 2
+      },
+      {
+        "action": "create_token",
+        "count": 2
+      },
+      {
+        "action": "destroy",
+        "count": 1
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "ramp",
+        "count": 10
+      },
+      {
+        "role": "mana_generation",
+        "count": 10
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 8
+      },
+      {
+        "role": "board_interaction",
+        "count": 7
+      },
+      {
+        "role": "protection",
+        "count": 4
+      },
+      {
+        "role": "token_generation",
+        "count": 2
+      },
+      {
+        "role": "combat_payoff",
+        "count": 1
+      },
+      {
+        "role": "cost_reduction",
+        "count": 1
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 10
+      },
+      {
+        "abilityType": "triggered",
+        "count": 6
+      },
+      {
+        "abilityType": "activated",
+        "count": 5
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "02457c7f-eced-4bf3-9b61-309b4ceab2d5",
+        "name": "Goring Warplow"
+      },
+      {
+        "oracleId": "06c0476f-0a88-479e-b942-a485acfbf589",
+        "name": "Mishra's Warform"
+      },
+      {
+        "oracleId": "092f0002-2f8d-4811-8c2e-60c2dd1e0d20",
+        "name": "Sword"
+      },
+      {
+        "oracleId": "09abac92-2bc9-4fac-84db-96f53d706a69",
+        "name": "Golem"
+      },
+      {
+        "oracleId": "0c14074c-58b0-4497-a0c3-9f2a28536964",
+        "name": "Stoneforged Blade"
+      }
+    ]
+  },
+  {
+    "clusterId": 16,
+    "size": 444,
+    "topActions": [
+      {
+        "action": "draw",
+        "count": 444
+      },
+      {
+        "action": "add_mana",
+        "count": 99
+      },
+      {
+        "action": "create_token",
+        "count": 49
+      },
+      {
+        "action": "discard",
+        "count": 49
+      },
+      {
+        "action": "exile",
+        "count": 27
+      },
+      {
+        "action": "gain_life",
+        "count": 25
+      },
+      {
+        "action": "deal_damage",
+        "count": 14
+      },
+      {
+        "action": "put_counter",
+        "count": 9
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "card_draw",
+        "count": 444
+      },
+      {
+        "role": "card_advantage",
+        "count": 444
+      },
+      {
+        "role": "ramp",
+        "count": 115
+      },
+      {
+        "role": "mana_generation",
+        "count": 115
+      },
+      {
+        "role": "board_interaction",
+        "count": 56
+      },
+      {
+        "role": "token_generation",
+        "count": 49
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 28
+      },
+      {
+        "role": "life_gain",
+        "count": 25
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 279
+      },
+      {
+        "abilityType": "triggered",
+        "count": 183
+      },
+      {
+        "abilityType": "activated",
+        "count": 89
+      },
+      {
+        "abilityType": "modal",
+        "count": 6
+      },
+      {
+        "abilityType": "static",
+        "count": 4
+      },
+      {
+        "abilityType": "replacement",
+        "count": 3
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "00225c40-27ff-410f-a591-5c788c6a2bd6",
+        "name": "Ruthless Knave"
+      },
+      {
+        "oracleId": "00cd3bf9-0dd6-4ec0-a841-1839a71604ab",
+        "name": "Courier's Briefcase"
+      },
+      {
+        "oracleId": "00fdcc19-88ed-46c3-91f0-095806228105",
+        "name": "Waste Not"
+      },
+      {
+        "oracleId": "022b42a6-ee0f-4080-b973-c1b68938c3be",
+        "name": "Phyrexian Dragon Engine"
+      },
+      {
+        "oracleId": "02a8b849-e708-427c-92fe-9a41bb0ec7fe",
+        "name": "Friendly Teddy"
+      }
+    ]
+  },
+  {
+    "clusterId": 17,
+    "size": 7,
+    "topActions": [
+      {
+        "action": "put_onto_battlefield",
+        "count": 7
+      },
+      {
+        "action": "exile",
+        "count": 6
+      },
+      {
+        "action": "sacrifice",
+        "count": 3
+      },
+      {
+        "action": "cast",
+        "count": 1
+      },
+      {
+        "action": "deal_damage",
+        "count": 1
+      },
+      {
+        "action": "gain_life",
+        "count": 1
+      },
+      {
+        "action": "return_to_hand",
+        "count": 1
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 6
+      },
+      {
+        "role": "recursion",
+        "count": 2
+      },
+      {
+        "role": "cast_from_exile",
+        "count": 1
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 1
+      },
+      {
+        "role": "life_gain",
+        "count": 1
+      },
+      {
+        "role": "cost_reduction",
+        "count": 1
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "static",
+        "count": 3
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 2
+      },
+      {
+        "abilityType": "loyalty",
+        "count": 1
+      },
+      {
+        "abilityType": "triggered",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "0335e7db-5e0e-4271-8ae7-437a1d2c16ac",
+        "name": "Torrent Elemental"
+      },
+      {
+        "oracleId": "3939fbe0-3be4-41ef-828d-c93f2cb33b4f",
+        "name": "Living End"
+      },
+      {
+        "oracleId": "62dac700-49f7-4745-af67-37d2a81dcebc",
+        "name": "Scrap Mastery"
+      },
+      {
+        "oracleId": "9e6a3df4-67a3-452e-a6ef-f04dbadb21ef",
+        "name": "Living Death"
+      },
+      {
+        "oracleId": "c9160997-0305-47f5-9a2f-77588d167da0",
+        "name": "Aminatou's Augury"
+      }
+    ]
+  },
+  {
+    "clusterId": 18,
+    "size": 1123,
+    "topActions": [
+      {
+        "action": "put_counter",
+        "count": 1123
+      },
+      {
+        "action": "cast",
+        "count": 69
+      },
+      {
+        "action": "exile",
+        "count": 26
+      },
+      {
+        "action": "destroy",
+        "count": 19
+      },
+      {
+        "action": "untap",
+        "count": 16
+      },
+      {
+        "action": "discard",
+        "count": 14
+      },
+      {
+        "action": "scry",
+        "count": 11
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 5
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 1123
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 1123
+      },
+      {
+        "role": "cost_reduction",
+        "count": 28
+      },
+      {
+        "role": "ramp",
+        "count": 12
+      },
+      {
+        "role": "mana_generation",
+        "count": 12
+      },
+      {
+        "role": "protection",
+        "count": 11
+      },
+      {
+        "role": "token_generation",
+        "count": 3
+      },
+      {
+        "role": "life_gain",
+        "count": 2
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 720
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 445
+      },
+      {
+        "abilityType": "activated",
+        "count": 17
+      },
+      {
+        "abilityType": "modal",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "00187de2-bc48-4137-97d8-a9a0fafc76c1",
+        "name": "Pteramander"
+      },
+      {
+        "oracleId": "0068a341-92a5-470e-a565-9ace69eb04a8",
+        "name": "Warden of the First Tree"
+      },
+      {
+        "oracleId": "009240f3-b7f8-4cbe-a3e9-974da66fb62c",
+        "name": "Soul-Scar Mage"
+      },
+      {
+        "oracleId": "00a15abc-bdac-4977-90a0-f08d41941d01",
+        "name": "Yorvo, Lord of Garenbrig"
+      },
+      {
+        "oracleId": "00f1d167-c143-471d-bd52-da2a65d087c4",
+        "name": "Sagu Pummeler"
+      }
+    ]
+  },
+  {
+    "clusterId": 19,
+    "size": 81,
+    "topActions": [
+      {
+        "action": "draw",
+        "count": 31
+      },
+      {
+        "action": "create_token",
+        "count": 22
+      },
+      {
+        "action": "gain_life",
+        "count": 18
+      },
+      {
+        "action": "sacrifice",
+        "count": 16
+      },
+      {
+        "action": "deal_damage",
+        "count": 15
+      },
+      {
+        "action": "exile",
+        "count": 12
+      },
+      {
+        "action": "put_counter",
+        "count": 10
+      },
+      {
+        "action": "discard",
+        "count": 9
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 46
+      },
+      {
+        "role": "card_advantage",
+        "count": 36
+      },
+      {
+        "role": "card_draw",
+        "count": 31
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 25
+      },
+      {
+        "role": "token_generation",
+        "count": 22
+      },
+      {
+        "role": "life_gain",
+        "count": 18
+      },
+      {
+        "role": "sacrifice_payoff",
+        "count": 13
+      },
+      {
+        "role": "ramp",
+        "count": 9
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 46
+      },
+      {
+        "abilityType": "activated",
+        "count": 24
+      },
+      {
+        "abilityType": "static",
+        "count": 19
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 9
+      },
+      {
+        "abilityType": "replacement",
+        "count": 2
+      },
+      {
+        "abilityType": "loyalty",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "02d25219-888d-4032-9e9e-8c6f879a9084",
+        "name": "Ghostly Touch"
+      },
+      {
+        "oracleId": "0a766368-c982-4cba-9638-c7a56978c240",
+        "name": "Pollywog Symbiote"
+      },
+      {
+        "oracleId": "0b9be4fa-5238-4afd-a9f6-f9022e67e5ab",
+        "name": "Kibo, Uktabi Prince"
+      },
+      {
+        "oracleId": "0edc8ad3-2920-4b25-8a86-98ce216111d1",
+        "name": "Sorcerer's Wand"
+      },
+      {
+        "oracleId": "0fa2cb01-476e-4e82-94e6-9639e53a7743",
+        "name": "Equinox"
+      }
+    ]
+  },
+  {
+    "clusterId": 20,
+    "size": 131,
+    "topActions": [
+      {
+        "action": "draw",
+        "count": 26
+      },
+      {
+        "action": "create_token",
+        "count": 25
+      },
+      {
+        "action": "deal_damage",
+        "count": 23
+      },
+      {
+        "action": "destroy",
+        "count": 18
+      },
+      {
+        "action": "exile",
+        "count": 12
+      },
+      {
+        "action": "put_counter",
+        "count": 11
+      },
+      {
+        "action": "discard",
+        "count": 10
+      },
+      {
+        "action": "search_library",
+        "count": 9
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 66
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 42
+      },
+      {
+        "role": "card_advantage",
+        "count": 35
+      },
+      {
+        "role": "card_draw",
+        "count": 26
+      },
+      {
+        "role": "token_generation",
+        "count": 25
+      },
+      {
+        "role": "tutor",
+        "count": 9
+      },
+      {
+        "role": "life_loss",
+        "count": 9
+      },
+      {
+        "role": "life_gain",
+        "count": 7
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 86
+      },
+      {
+        "abilityType": "triggered",
+        "count": 29
+      },
+      {
+        "abilityType": "static",
+        "count": 10
+      },
+      {
+        "abilityType": "activated",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "03d3fee8-f7de-4152-8c18-6d279cc6c125",
+        "name": "Heaven // Earth"
+      },
+      {
+        "oracleId": "043370fd-9cfe-47ce-8019-e915cee1ae95",
+        "name": "Breaking // Entering"
+      },
+      {
+        "oracleId": "0741151a-fec0-4ed3-9295-0d0f56d24165",
+        "name": "Flesh // Blood"
+      },
+      {
+        "oracleId": "087018b6-6355-4534-9a35-9336b4b7fccc",
+        "name": "Assure // Assemble"
+      },
+      {
+        "oracleId": "0b1f2522-960c-405f-9622-4cadbc7ba545",
+        "name": "Struggle // Survive"
+      }
+    ]
+  },
+  {
+    "clusterId": 21,
+    "size": 730,
+    "topActions": [
+      {
+        "action": "gain_life",
+        "count": 730
+      },
+      {
+        "action": "deal_damage",
+        "count": 71
+      },
+      {
+        "action": "destroy",
+        "count": 55
+      },
+      {
+        "action": "put_counter",
+        "count": 40
+      },
+      {
+        "action": "create_token",
+        "count": 39
+      },
+      {
+        "action": "exile",
+        "count": 39
+      },
+      {
+        "action": "draw",
+        "count": 31
+      },
+      {
+        "action": "cast",
+        "count": 22
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "life_gain",
+        "count": 730
+      },
+      {
+        "role": "board_interaction",
+        "count": 204
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 114
+      },
+      {
+        "role": "token_generation",
+        "count": 39
+      },
+      {
+        "role": "card_draw",
+        "count": 31
+      },
+      {
+        "role": "card_advantage",
+        "count": 31
+      },
+      {
+        "role": "ramp",
+        "count": 18
+      },
+      {
+        "role": "mana_generation",
+        "count": 18
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 380
+      },
+      {
+        "abilityType": "triggered",
+        "count": 380
+      },
+      {
+        "abilityType": "activated",
+        "count": 25
+      },
+      {
+        "abilityType": "modal",
+        "count": 8
+      },
+      {
+        "abilityType": "replacement",
+        "count": 3
+      },
+      {
+        "abilityType": "static",
+        "count": 2
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "009a399b-c78e-475b-8bc3-7db2afc9d676",
+        "name": "Airdrop Aeronauts"
+      },
+      {
+        "oracleId": "0109432d-5a2a-456f-ad39-b75cb4c73420",
+        "name": "Bogwater Lumaret"
+      },
+      {
+        "oracleId": "011d4f47-c6fd-434b-98f2-2f558fbff40b",
+        "name": "Fracturing Gust"
+      },
+      {
+        "oracleId": "011ff7a5-6bce-4784-a19b-e74f7b49b8f1",
+        "name": "Campfire"
+      },
+      {
+        "oracleId": "014c94d8-2c39-4d33-902b-fa2398406fd5",
+        "name": "Sunbeam Spellbomb"
+      }
+    ]
+  },
+  {
+    "clusterId": 22,
+    "size": 392,
+    "topActions": [
+      {
+        "action": "create_token",
+        "count": 392
+      },
+      {
+        "action": "put_counter",
+        "count": 39
+      },
+      {
+        "action": "exile",
+        "count": 27
+      },
+      {
+        "action": "cast",
+        "count": 20
+      },
+      {
+        "action": "untap",
+        "count": 9
+      },
+      {
+        "action": "sacrifice",
+        "count": 5
+      },
+      {
+        "action": "scry",
+        "count": 4
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 4
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "token_generation",
+        "count": 392
+      },
+      {
+        "role": "board_interaction",
+        "count": 71
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 48
+      },
+      {
+        "role": "ramp",
+        "count": 19
+      },
+      {
+        "role": "mana_generation",
+        "count": 19
+      },
+      {
+        "role": "cost_reduction",
+        "count": 4
+      },
+      {
+        "role": "protection",
+        "count": 2
+      },
+      {
+        "role": "card_draw",
+        "count": 2
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 319
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 111
+      },
+      {
+        "abilityType": "activated",
+        "count": 10
+      },
+      {
+        "abilityType": "replacement",
+        "count": 2
+      },
+      {
+        "abilityType": "static",
+        "count": 1
+      },
+      {
+        "abilityType": "loyalty",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "01432542-2ea7-45bc-bc90-151516faee0e",
+        "name": "Tyranid Harridan"
+      },
+      {
+        "oracleId": "05075332-6856-4147-a22d-3a5bd1e96b7b",
+        "name": "Phyrexian Warhorse"
+      },
+      {
+        "oracleId": "05551d91-50c6-46d1-86a4-cd3d177d0923",
+        "name": "Anim Pakal, Thousandth Moon"
+      },
+      {
+        "oracleId": "060ef981-db05-436b-b1c1-f55071375344",
+        "name": "Don Andres, the Renegade"
+      },
+      {
+        "oracleId": "0631a529-4af6-47a4-b913-efbe6b2aadfd",
+        "name": "The Dogronmaster"
+      }
+    ]
+  },
+  {
+    "clusterId": 23,
+    "size": 148,
+    "topActions": [
+      {
+        "action": "put_onto_battlefield",
+        "count": 148
+      },
+      {
+        "action": "search_library",
+        "count": 87
+      },
+      {
+        "action": "shuffle_library",
+        "count": 87
+      },
+      {
+        "action": "draw",
+        "count": 15
+      },
+      {
+        "action": "sacrifice",
+        "count": 15
+      },
+      {
+        "action": "create_token",
+        "count": 14
+      },
+      {
+        "action": "destroy",
+        "count": 13
+      },
+      {
+        "action": "add_mana",
+        "count": 9
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "card_advantage",
+        "count": 98
+      },
+      {
+        "role": "tutor",
+        "count": 87
+      },
+      {
+        "role": "board_interaction",
+        "count": 32
+      },
+      {
+        "role": "card_draw",
+        "count": 15
+      },
+      {
+        "role": "token_generation",
+        "count": 14
+      },
+      {
+        "role": "ramp",
+        "count": 10
+      },
+      {
+        "role": "mana_generation",
+        "count": 10
+      },
+      {
+        "role": "sacrifice_payoff",
+        "count": 7
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 76
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 64
+      },
+      {
+        "abilityType": "activated",
+        "count": 27
+      },
+      {
+        "abilityType": "static",
+        "count": 3
+      },
+      {
+        "abilityType": "modal",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "00c0543c-2a1f-4425-8283-4062d74a1637",
+        "name": "Solemn Simulacrum"
+      },
+      {
+        "oracleId": "00e25126-b807-4753-ba63-9a533755e5ce",
+        "name": "Lantern of Revealing"
+      },
+      {
+        "oracleId": "01076e04-3106-4968-8ef4-b26fc3786699",
+        "name": "Planebound Accomplice"
+      },
+      {
+        "oracleId": "0539c5b3-96e3-4030-9940-25aa0be47d8b",
+        "name": "A-Lantern of Revealing"
+      },
+      {
+        "oracleId": "065346cd-cd81-478e-8a62-2c7ea421bdcd",
+        "name": "Horizon Boughs"
+      }
+    ]
+  },
+  {
+    "clusterId": 24,
+    "size": 1092,
+    "topActions": [
+      {
+        "action": "exile",
+        "count": 41
+      },
+      {
+        "action": "surveil",
+        "count": 18
+      },
+      {
+        "action": "sacrifice",
+        "count": 13
+      },
+      {
+        "action": "scry",
+        "count": 10
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 7
+      },
+      {
+        "action": "untap",
+        "count": 4
+      },
+      {
+        "action": "shuffle_into_library",
+        "count": 1
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 54
+      },
+      {
+        "role": "cost_reduction",
+        "count": 13
+      },
+      {
+        "role": "ramp",
+        "count": 7
+      },
+      {
+        "role": "mana_generation",
+        "count": 7
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 4
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 44
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 41
+      },
+      {
+        "abilityType": "activated",
+        "count": 6
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "002ad5fa-a20c-4d30-beef-401d89868d67",
+        "name": "Wei Strike Force"
+      },
+      {
+        "oracleId": "00358a89-2058-448b-a2fd-389f639ba2da",
+        "name": "Murk Dwellers"
+      },
+      {
+        "oracleId": "0036d062-10dc-4267-98b4-1d2f6b190a61",
+        "name": "Whispering Shade"
+      },
+      {
+        "oracleId": "008290c2-499d-425b-9a6c-c4aeb47c33ff",
+        "name": "Dakmor Scorpion"
+      },
+      {
+        "oracleId": "00b3971b-5bf7-4a3f-9607-6265f9af9098",
+        "name": "Crypt Creeper"
+      }
+    ]
+  },
+  {
+    "clusterId": 25,
+    "size": 407,
+    "topActions": [
+      {
+        "action": "mill",
+        "count": 407
+      },
+      {
+        "action": "create_token",
+        "count": 42
+      },
+      {
+        "action": "draw",
+        "count": 33
+      },
+      {
+        "action": "exile",
+        "count": 22
+      },
+      {
+        "action": "gain_life",
+        "count": 21
+      },
+      {
+        "action": "cast",
+        "count": 20
+      },
+      {
+        "action": "return_to_battlefield",
+        "count": 19
+      },
+      {
+        "action": "lose_life",
+        "count": 18
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "graveyard_setup",
+        "count": 407
+      },
+      {
+        "role": "mill",
+        "count": 407
+      },
+      {
+        "role": "board_interaction",
+        "count": 55
+      },
+      {
+        "role": "token_generation",
+        "count": 42
+      },
+      {
+        "role": "card_advantage",
+        "count": 39
+      },
+      {
+        "role": "card_draw",
+        "count": 33
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 29
+      },
+      {
+        "role": "life_gain",
+        "count": 21
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 215
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 173
+      },
+      {
+        "abilityType": "activated",
+        "count": 26
+      },
+      {
+        "abilityType": "loyalty",
+        "count": 13
+      },
+      {
+        "abilityType": "modal",
+        "count": 12
+      },
+      {
+        "abilityType": "static",
+        "count": 12
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "03dafab4-841f-41cb-8f2e-8188f5177837",
+        "name": "Jace, the Perfected Mind"
+      },
+      {
+        "oracleId": "046ccc8a-ec0d-4dc5-b41d-5e8a6d86812a",
+        "name": "Phenax, God of Deception"
+      },
+      {
+        "oracleId": "04cc5292-a485-4bb8-a143-9364229d480f",
+        "name": "Vedalken Entrancer"
+      },
+      {
+        "oracleId": "06c25d71-f3f4-4089-b9bc-de96fbad73a5",
+        "name": "The Cyber-Controller"
+      },
+      {
+        "oracleId": "06ccec61-27d2-4079-80b5-29ebd3a980ee",
+        "name": "Cache Grab"
+      }
+    ]
+  },
+  {
+    "clusterId": 26,
+    "size": 382,
+    "topActions": [
+      {
+        "action": "create_token",
+        "count": 65
+      },
+      {
+        "action": "cast",
+        "count": 56
+      },
+      {
+        "action": "draw",
+        "count": 56
+      },
+      {
+        "action": "exile",
+        "count": 45
+      },
+      {
+        "action": "add_mana",
+        "count": 35
+      },
+      {
+        "action": "deal_damage",
+        "count": 35
+      },
+      {
+        "action": "put_counter",
+        "count": 32
+      },
+      {
+        "action": "discard",
+        "count": 31
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 133
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 79
+      },
+      {
+        "role": "card_advantage",
+        "count": 66
+      },
+      {
+        "role": "token_generation",
+        "count": 65
+      },
+      {
+        "role": "card_draw",
+        "count": 56
+      },
+      {
+        "role": "ramp",
+        "count": 42
+      },
+      {
+        "role": "mana_generation",
+        "count": 42
+      },
+      {
+        "role": "combat_payoff",
+        "count": 35
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 176
+      },
+      {
+        "abilityType": "triggered",
+        "count": 151
+      },
+      {
+        "abilityType": "activated",
+        "count": 33
+      },
+      {
+        "abilityType": "static",
+        "count": 9
+      },
+      {
+        "abilityType": "loyalty",
+        "count": 4
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "01fbdd79-5c23-43d5-8e95-492f8e994956",
+        "name": "Angel // Demon"
+      },
+      {
+        "oracleId": "02125db4-4507-467a-ac0c-406de2c7d533",
+        "name": "Adventurous Eater // Have a Bite"
+      },
+      {
+        "oracleId": "0296d57e-e5b9-456f-bb21-eb584adefb4c",
+        "name": "Gollum, Silent Slinker // Meager Meal"
+      },
+      {
+        "oracleId": "0355249a-8e4e-41db-9cea-1b901faffbe6",
+        "name": "Witch Enchanter // Witch-Blessed Meadow"
+      },
+      {
+        "oracleId": "03931270-504a-4b0b-af3f-918bf124ea07",
+        "name": "Maelstrom Artisan // Rocket Volley"
+      }
+    ]
+  },
+  {
+    "clusterId": 27,
+    "size": 1162,
+    "topActions": [
+      {
+        "action": "untap",
+        "count": 55
+      },
+      {
+        "action": "scry",
+        "count": 40
+      },
+      {
+        "action": "exile",
+        "count": 21
+      },
+      {
+        "action": "surveil",
+        "count": 19
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 12
+      },
+      {
+        "action": "sacrifice",
+        "count": 5
+      },
+      {
+        "action": "shuffle_into_library",
+        "count": 2
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "combat_manipulation",
+        "count": 55
+      },
+      {
+        "role": "cost_reduction",
+        "count": 41
+      },
+      {
+        "role": "board_interaction",
+        "count": 26
+      },
+      {
+        "role": "ramp",
+        "count": 4
+      },
+      {
+        "role": "mana_generation",
+        "count": 4
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 86
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 58
+      },
+      {
+        "abilityType": "activated",
+        "count": 14
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "000d5588-5a4c-434e-988d-396632ade42c",
+        "name": "Storm Crow"
+      },
+      {
+        "oracleId": "000e5d65-96c3-498b-bd01-72b1a1991850",
+        "name": "Walking Sponge"
+      },
+      {
+        "oracleId": "0023888e-7bec-43e0-8dee-d1a4eb94b372",
+        "name": "Palinchron"
+      },
+      {
+        "oracleId": "00268072-af77-40d2-8d2d-c02426575ee1",
+        "name": "Phyrexian Broodstar"
+      },
+      {
+        "oracleId": "002e767c-0b30-4ad1-a924-88da400a4cff",
+        "name": "Marang River Prowler"
+      }
+    ]
+  },
+  {
+    "clusterId": 28,
+    "size": 366,
+    "topActions": [
+      {
+        "action": "destroy",
+        "count": 93
+      },
+      {
+        "action": "sacrifice",
+        "count": 68
+      },
+      {
+        "action": "create_token",
+        "count": 61
+      },
+      {
+        "action": "deal_damage",
+        "count": 50
+      },
+      {
+        "action": "cast",
+        "count": 48
+      },
+      {
+        "action": "untap",
+        "count": 34
+      },
+      {
+        "action": "put_counter",
+        "count": 34
+      },
+      {
+        "action": "exile",
+        "count": 27
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 250
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 117
+      },
+      {
+        "role": "token_generation",
+        "count": 61
+      },
+      {
+        "role": "protection",
+        "count": 25
+      },
+      {
+        "role": "ramp",
+        "count": 9
+      },
+      {
+        "role": "mana_generation",
+        "count": 9
+      },
+      {
+        "role": "life_gain",
+        "count": 9
+      },
+      {
+        "role": "life_loss",
+        "count": 7
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "static",
+        "count": 366
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 25
+      },
+      {
+        "abilityType": "triggered",
+        "count": 7
+      },
+      {
+        "abilityType": "activated",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "01443d75-3f86-45c0-81fa-fbf1b3175d4f",
+        "name": "Akroan Line Breaker"
+      },
+      {
+        "oracleId": "0180bed7-892a-4af9-ac4b-96c9cd4beb42",
+        "name": "Gix's Caress"
+      },
+      {
+        "oracleId": "023f9e20-51fc-493d-a7aa-c9fcbdc7cd04",
+        "name": "Unnerving Assault"
+      },
+      {
+        "oracleId": "03136fe1-17e2-4b1c-860a-dc6373c8fdb5",
+        "name": "Storage Matrix"
+      },
+      {
+        "oracleId": "0332f7b5-dad3-4fd0-b86c-78bd8301f59d",
+        "name": "Gnawing Crescendo"
+      }
+    ]
+  },
+  {
+    "clusterId": 29,
+    "size": 1080,
+    "topActions": [
+      {
+        "action": "add_mana",
+        "count": 1058
+      },
+      {
+        "action": "create_token",
+        "count": 77
+      },
+      {
+        "action": "draw",
+        "count": 73
+      },
+      {
+        "action": "deal_damage",
+        "count": 63
+      },
+      {
+        "action": "gain_life",
+        "count": 49
+      },
+      {
+        "action": "sacrifice",
+        "count": 43
+      },
+      {
+        "action": "put_counter",
+        "count": 33
+      },
+      {
+        "action": "scry",
+        "count": 32
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "ramp",
+        "count": 1080
+      },
+      {
+        "role": "mana_generation",
+        "count": 1080
+      },
+      {
+        "role": "board_interaction",
+        "count": 171
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 117
+      },
+      {
+        "role": "card_advantage",
+        "count": 86
+      },
+      {
+        "role": "token_generation",
+        "count": 77
+      },
+      {
+        "role": "card_draw",
+        "count": 73
+      },
+      {
+        "role": "life_gain",
+        "count": 49
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "activated",
+        "count": 909
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 479
+      },
+      {
+        "abilityType": "triggered",
+        "count": 137
+      },
+      {
+        "abilityType": "static",
+        "count": 10
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "00625242-9348-4ef4-b975-f2ac82fee21d",
+        "name": "Savai Triome"
+      },
+      {
+        "oracleId": "0070db93-142b-4d04-afd3-836792dc134b",
+        "name": "Sodden Verdure"
+      },
+      {
+        "oracleId": "008f2698-1721-45a3-8353-10f2f400dc8f",
+        "name": "Shizo, Death's Storehouse"
+      },
+      {
+        "oracleId": "00b34fab-5a80-4a4d-b6cf-72479197677a",
+        "name": "Timber Gorge"
+      },
+      {
+        "oracleId": "00ddbb94-5ccd-488f-b0cf-1726d8324621",
+        "name": "A-Hall of Tagsin"
+      }
+    ]
+  },
+  {
+    "clusterId": 30,
+    "size": 320,
+    "topActions": [
+      {
+        "action": "search_library",
+        "count": 320
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 320
+      },
+      {
+        "action": "shuffle_library",
+        "count": 320
+      },
+      {
+        "action": "add_mana",
+        "count": 27
+      },
+      {
+        "action": "sacrifice",
+        "count": 27
+      },
+      {
+        "action": "create_token",
+        "count": 20
+      },
+      {
+        "action": "draw",
+        "count": 16
+      },
+      {
+        "action": "destroy",
+        "count": 11
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "card_advantage",
+        "count": 320
+      },
+      {
+        "role": "tutor",
+        "count": 320
+      },
+      {
+        "role": "board_interaction",
+        "count": 51
+      },
+      {
+        "role": "ramp",
+        "count": 27
+      },
+      {
+        "role": "mana_generation",
+        "count": 27
+      },
+      {
+        "role": "token_generation",
+        "count": 20
+      },
+      {
+        "role": "card_draw",
+        "count": 16
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 15
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 255
+      },
+      {
+        "abilityType": "triggered",
+        "count": 60
+      },
+      {
+        "abilityType": "activated",
+        "count": 31
+      },
+      {
+        "abilityType": "static",
+        "count": 8
+      },
+      {
+        "abilityType": "modal",
+        "count": 7
+      },
+      {
+        "abilityType": "loyalty",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "0056fc91-4398-471c-b561-7ff99750ac8a",
+        "name": "Escape Tunnel"
+      },
+      {
+        "oracleId": "006bbd8b-2007-419d-8b84-9ff73f2f95b7",
+        "name": "Thunderherd Migration"
+      },
+      {
+        "oracleId": "0259f063-3e3f-4e07-9066-f748d4819829",
+        "name": "Nature's Rhythm"
+      },
+      {
+        "oracleId": "02679a2e-303d-412f-87d8-0a37a8ca259c",
+        "name": "Blighted Woodland"
+      },
+      {
+        "oracleId": "032b8a0d-491a-4a12-ab9f-689010054d5b",
+        "name": "Prismatic Vista"
+      }
+    ]
+  },
+  {
+    "clusterId": 31,
+    "size": 433,
+    "topActions": [
+      {
+        "action": "counter",
+        "count": 433
+      },
+      {
+        "action": "draw",
+        "count": 60
+      },
+      {
+        "action": "cast",
+        "count": 35
+      },
+      {
+        "action": "create_token",
+        "count": 27
+      },
+      {
+        "action": "exile",
+        "count": 23
+      },
+      {
+        "action": "discard",
+        "count": 18
+      },
+      {
+        "action": "destroy",
+        "count": 14
+      },
+      {
+        "action": "scry",
+        "count": 10
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "countermagic",
+        "count": 433
+      },
+      {
+        "role": "card_advantage",
+        "count": 64
+      },
+      {
+        "role": "card_draw",
+        "count": 60
+      },
+      {
+        "role": "board_interaction",
+        "count": 60
+      },
+      {
+        "role": "counter_synergy",
+        "count": 34
+      },
+      {
+        "role": "token_generation",
+        "count": 27
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 22
+      },
+      {
+        "role": "cost_reduction",
+        "count": 12
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 356
+      },
+      {
+        "abilityType": "modal",
+        "count": 46
+      },
+      {
+        "abilityType": "triggered",
+        "count": 26
+      },
+      {
+        "abilityType": "static",
+        "count": 16
+      },
+      {
+        "abilityType": "activated",
+        "count": 10
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "01003192-8927-4e55-8dd9-e9e088a3fbe4",
+        "name": "Spell Contortion"
+      },
+      {
+        "oracleId": "0144d9bb-d3cb-4c23-b133-6653d7c3a76d",
+        "name": "Grip of Amnesia"
+      },
+      {
+        "oracleId": "0146de73-29bf-415a-b450-11074553f715",
+        "name": "Deny the Divine"
+      },
+      {
+        "oracleId": "016718df-2eb5-499f-adea-18231c0375b3",
+        "name": "Hurl into History"
+      },
+      {
+        "oracleId": "01da67a5-e3dc-44f4-8a93-513bfa4d8fbc",
+        "name": "Ionize"
+      }
+    ]
+  },
+  {
+    "clusterId": 32,
+    "size": 1403,
+    "topActions": [
+      {
+        "action": "exile",
+        "count": 71
+      },
+      {
+        "action": "untap",
+        "count": 41
+      },
+      {
+        "action": "scry",
+        "count": 15
+      },
+      {
+        "action": "sacrifice",
+        "count": 11
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 8
+      },
+      {
+        "action": "surveil",
+        "count": 5
+      },
+      {
+        "action": "shuffle_into_library",
+        "count": 4
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 82
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 41
+      },
+      {
+        "role": "cost_reduction",
+        "count": 21
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 95
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 57
+      },
+      {
+        "abilityType": "activated",
+        "count": 3
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "002a9cea-8cf7-48ba-83eb-e1c87a7024e5",
+        "name": "Disposal Mummy"
+      },
+      {
+        "oracleId": "00602959-e9a1-4706-a1cb-70156a6fc713",
+        "name": "Stern Marshal"
+      },
+      {
+        "oracleId": "00605b83-faf6-4779-be9d-6a2c8f0ea722",
+        "name": "Trapjaw Tyrant"
+      },
+      {
+        "oracleId": "00895741-f94f-4d80-8ca4-c436bf3c8d56",
+        "name": "Steadfast Cathar"
+      },
+      {
+        "oracleId": "00bcbeb5-196a-4a54-ac8d-dec708e68d01",
+        "name": "Devoted Paladin"
+      }
+    ]
+  },
+  {
+    "clusterId": 33,
+    "size": 875,
+    "topActions": [
+      {
+        "action": "deal_damage",
+        "count": 875
+      },
+      {
+        "action": "cast",
+        "count": 59
+      },
+      {
+        "action": "exile",
+        "count": 44
+      },
+      {
+        "action": "destroy",
+        "count": 24
+      },
+      {
+        "action": "put_counter",
+        "count": 24
+      },
+      {
+        "action": "discard",
+        "count": 17
+      },
+      {
+        "action": "scry",
+        "count": 16
+      },
+      {
+        "action": "sacrifice",
+        "count": 15
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 875
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 875
+      },
+      {
+        "role": "cost_reduction",
+        "count": 28
+      },
+      {
+        "role": "token_generation",
+        "count": 10
+      },
+      {
+        "role": "ramp",
+        "count": 9
+      },
+      {
+        "role": "mana_generation",
+        "count": 9
+      },
+      {
+        "role": "protection",
+        "count": 8
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 763
+      },
+      {
+        "abilityType": "triggered",
+        "count": 119
+      },
+      {
+        "abilityType": "activated",
+        "count": 3
+      },
+      {
+        "abilityType": "static",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "0071723e-388d-4ae7-bc99-c143dd356c63",
+        "name": "Goblin Barrage"
+      },
+      {
+        "oracleId": "00e36265-0cd8-4084-adf5-d1ed44f0d689",
+        "name": "Harvest Pyre"
+      },
+      {
+        "oracleId": "01d0156f-c26a-4668-a3a4-15ee0790d1b6",
+        "name": "Delete"
+      },
+      {
+        "oracleId": "025939a0-424a-41bf-8fc9-2ef9ea5485f7",
+        "name": "Fire Covenant"
+      },
+      {
+        "oracleId": "029d08cb-da4d-4f4e-b667-62712af63260",
+        "name": "Chain of Plasma"
+      }
+    ]
+  },
+  {
+    "clusterId": 34,
+    "size": 1361,
+    "topActions": [
+      {
+        "action": "exile",
+        "count": 50
+      },
+      {
+        "action": "untap",
+        "count": 41
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 33
+      },
+      {
+        "action": "surveil",
+        "count": 13
+      },
+      {
+        "action": "scry",
+        "count": 12
+      },
+      {
+        "action": "shuffle_into_library",
+        "count": 5
+      },
+      {
+        "action": "sacrifice",
+        "count": 3
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 53
+      },
+      {
+        "role": "cost_reduction",
+        "count": 48
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 41
+      },
+      {
+        "role": "ramp",
+        "count": 13
+      },
+      {
+        "role": "mana_generation",
+        "count": 13
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 77
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 56
+      },
+      {
+        "abilityType": "activated",
+        "count": 16
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "00573e77-8ff6-4acb-8683-8827d965288f",
+        "name": "Behemoth Sledge"
+      },
+      {
+        "oracleId": "00abb43b-550f-42d2-9049-61ac56ff5d8d",
+        "name": "Boros Recruit"
+      },
+      {
+        "oracleId": "00bcfbaf-cd31-4688-973e-4238749051b7",
+        "name": "Unyielding Krumar"
+      },
+      {
+        "oracleId": "011371f0-a7f1-47a5-9883-22a14cfe4de9",
+        "name": "Shrewd Hatchling"
+      },
+      {
+        "oracleId": "012c665c-24b1-49d6-b575-2b4ee1c3a833",
+        "name": "Puresight Merrow"
+      }
+    ]
+  },
+  {
+    "clusterId": 35,
+    "size": 400,
+    "topActions": [
+      {
+        "action": "return_to_hand",
+        "count": 400
+      },
+      {
+        "action": "draw",
+        "count": 53
+      },
+      {
+        "action": "cast",
+        "count": 26
+      },
+      {
+        "action": "create_token",
+        "count": 23
+      },
+      {
+        "action": "exile",
+        "count": 17
+      },
+      {
+        "action": "discard",
+        "count": 16
+      },
+      {
+        "action": "deal_damage",
+        "count": 13
+      },
+      {
+        "action": "put_counter",
+        "count": 13
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 62
+      },
+      {
+        "role": "card_advantage",
+        "count": 59
+      },
+      {
+        "role": "card_draw",
+        "count": 53
+      },
+      {
+        "role": "removal",
+        "count": 48
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 28
+      },
+      {
+        "role": "token_generation",
+        "count": 23
+      },
+      {
+        "role": "cost_reduction",
+        "count": 14
+      },
+      {
+        "role": "ramp",
+        "count": 12
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 211
+      },
+      {
+        "abilityType": "triggered",
+        "count": 161
+      },
+      {
+        "abilityType": "modal",
+        "count": 33
+      },
+      {
+        "abilityType": "activated",
+        "count": 22
+      },
+      {
+        "abilityType": "loyalty",
+        "count": 7
+      },
+      {
+        "abilityType": "static",
+        "count": 7
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "00cb93a8-5d33-4c6a-9e2a-4b3560f76f3f",
+        "name": "Demonic Vigor"
+      },
+      {
+        "oracleId": "0129ffe2-389f-4e05-8a04-96461bac39a5",
+        "name": "Greasefang, Okiba Boss"
+      },
+      {
+        "oracleId": "01fd889f-1839-44b9-b936-0e62c8f8a730",
+        "name": "Flooded Shoreline"
+      },
+      {
+        "oracleId": "021d8596-782a-4cfd-8b70-ac5bb8a5aff1",
+        "name": "Drag Under"
+      },
+      {
+        "oracleId": "02600fd0-8538-4d38-aa9f-60b211366653",
+        "name": "Paths of Tuinvale"
+      }
+    ]
+  },
+  {
+    "clusterId": 36,
+    "size": 869,
+    "topActions": [
+      {
+        "action": "deal_damage",
+        "count": 85
+      },
+      {
+        "action": "untap",
+        "count": 70
+      },
+      {
+        "action": "exile",
+        "count": 66
+      },
+      {
+        "action": "destroy",
+        "count": 38
+      },
+      {
+        "action": "sacrifice",
+        "count": 21
+      },
+      {
+        "action": "cast",
+        "count": 15
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 13
+      },
+      {
+        "action": "discard",
+        "count": 11
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 203
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 152
+      },
+      {
+        "role": "ramp",
+        "count": 32
+      },
+      {
+        "role": "mana_generation",
+        "count": 32
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 173
+      },
+      {
+        "abilityType": "triggered",
+        "count": 117
+      },
+      {
+        "abilityType": "activated",
+        "count": 20
+      },
+      {
+        "abilityType": "replacement",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "0004ebd0-dfd6-4276-b4a6-de0003e94237",
+        "name": "Static Orb"
+      },
+      {
+        "oracleId": "004584f8-fd89-4a3e-9782-c117dbe1532b",
+        "name": "Weakstone"
+      },
+      {
+        "oracleId": "01591d42-4ef8-471d-beda-d31186bba6a6",
+        "name": "Gerrard's Hourglass Pendant"
+      },
+      {
+        "oracleId": "037c49e4-39ca-4d72-8f5c-9adc5687601b",
+        "name": "Moonring Mirror"
+      },
+      {
+        "oracleId": "0394846e-bc27-4d67-988e-b08a389690de",
+        "name": "Rover Blades"
+      }
+    ]
+  },
+  {
+    "clusterId": 37,
+    "size": 1127,
+    "topActions": [
+      {
+        "action": "create_token",
+        "count": 65
+      },
+      {
+        "action": "deal_damage",
+        "count": 37
+      },
+      {
+        "action": "put_counter",
+        "count": 31
+      },
+      {
+        "action": "exile",
+        "count": 28
+      },
+      {
+        "action": "cast",
+        "count": 23
+      },
+      {
+        "action": "destroy",
+        "count": 20
+      },
+      {
+        "action": "untap",
+        "count": 16
+      },
+      {
+        "action": "discard",
+        "count": 12
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 117
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 81
+      },
+      {
+        "role": "token_generation",
+        "count": 65
+      },
+      {
+        "role": "protection",
+        "count": 25
+      },
+      {
+        "role": "cost_reduction",
+        "count": 12
+      },
+      {
+        "role": "ramp",
+        "count": 10
+      },
+      {
+        "role": "mana_generation",
+        "count": 10
+      },
+      {
+        "role": "life_gain",
+        "count": 9
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 178
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 45
+      },
+      {
+        "abilityType": "activated",
+        "count": 8
+      },
+      {
+        "abilityType": "static",
+        "count": 5
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "0045c5fa-3229-4050-b139-5712fa24b308",
+        "name": "Demon"
+      },
+      {
+        "oracleId": "0065fbf9-32bf-4a82-b324-73035c8e5aee",
+        "name": "Pirate"
+      },
+      {
+        "oracleId": "00b266f8-10db-4778-b865-4189b1ab4d30",
+        "name": "Elemental"
+      },
+      {
+        "oracleId": "00bc99d9-2cc4-4dd5-a37b-4918fff8160a",
+        "name": "Ultramarines Honour Guard"
+      },
+      {
+        "oracleId": "00fd090a-2021-41ac-be80-07c7c23027e3",
+        "name": "Chrome Dome, Cyber-Ninja"
+      }
+    ]
+  },
+  {
+    "clusterId": 38,
+    "size": 451,
+    "topActions": [
+      {
+        "action": "tap",
+        "count": 451
+      },
+      {
+        "action": "untap",
+        "count": 69
+      },
+      {
+        "action": "draw",
+        "count": 47
+      },
+      {
+        "action": "cast",
+        "count": 21
+      },
+      {
+        "action": "deal_damage",
+        "count": 19
+      },
+      {
+        "action": "put_counter",
+        "count": 16
+      },
+      {
+        "action": "create_token",
+        "count": 9
+      },
+      {
+        "action": "exile",
+        "count": 9
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 451
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 451
+      },
+      {
+        "role": "card_advantage",
+        "count": 48
+      },
+      {
+        "role": "card_draw",
+        "count": 47
+      },
+      {
+        "role": "token_generation",
+        "count": 9
+      },
+      {
+        "role": "cost_reduction",
+        "count": 8
+      },
+      {
+        "role": "ramp",
+        "count": 5
+      },
+      {
+        "role": "mana_generation",
+        "count": 5
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 261
+      },
+      {
+        "abilityType": "triggered",
+        "count": 172
+      },
+      {
+        "abilityType": "activated",
+        "count": 35
+      },
+      {
+        "abilityType": "modal",
+        "count": 23
+      },
+      {
+        "abilityType": "static",
+        "count": 5
+      },
+      {
+        "abilityType": "replacement",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "00d11662-9d10-4915-b80c-c1ad54b4e71b",
+        "name": "Half-Elf Monk"
+      },
+      {
+        "oracleId": "00d1596a-c3e2-4109-86da-388934a0c652",
+        "name": "Coeurl"
+      },
+      {
+        "oracleId": "010b22f5-ea2f-4de2-b8b9-0439347a61d0",
+        "name": "Ethereal Grasp"
+      },
+      {
+        "oracleId": "03e25120-b4e4-409e-8dbc-7574ea4c78d6",
+        "name": "Checkpoint Officer"
+      },
+      {
+        "oracleId": "03e356ae-f1e8-4730-8d2b-b9e2f32db915",
+        "name": "Mind Spiral"
+      }
+    ]
+  },
+  {
+    "clusterId": 39,
+    "size": 290,
+    "topActions": [
+      {
+        "action": "create_token",
+        "count": 131
+      },
+      {
+        "action": "draw",
+        "count": 98
+      },
+      {
+        "action": "deal_damage",
+        "count": 75
+      },
+      {
+        "action": "exile",
+        "count": 57
+      },
+      {
+        "action": "gain_life",
+        "count": 46
+      },
+      {
+        "action": "put_counter",
+        "count": 42
+      },
+      {
+        "action": "discard",
+        "count": 41
+      },
+      {
+        "action": "put_into_hand",
+        "count": 37
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 183
+      },
+      {
+        "role": "card_advantage",
+        "count": 148
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 138
+      },
+      {
+        "role": "token_generation",
+        "count": 131
+      },
+      {
+        "role": "card_draw",
+        "count": 98
+      },
+      {
+        "role": "life_gain",
+        "count": 46
+      },
+      {
+        "role": "ramp",
+        "count": 39
+      },
+      {
+        "role": "mana_generation",
+        "count": 39
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "loyalty",
+        "count": 290
+      },
+      {
+        "abilityType": "triggered",
+        "count": 25
+      },
+      {
+        "abilityType": "activated",
+        "count": 5
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 4
+      },
+      {
+        "abilityType": "static",
+        "count": 2
+      },
+      {
+        "abilityType": "replacement",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "021b4745-4a15-462c-a6b0-2dee1dc9d196",
+        "name": "Tamiyo, Compleated Sage"
+      },
+      {
+        "oracleId": "04aa210a-235f-4e07-87d1-0d28cdf6888b",
+        "name": "Huatli, Dinosaur Knight"
+      },
+      {
+        "oracleId": "04ddb495-e9b0-47bf-b892-c7ae7b87c10c",
+        "name": "Zariel, Archduke of Avernus"
+      },
+      {
+        "oracleId": "04f2c320-dfcc-440a-9e24-3c2083d74e7c",
+        "name": "Jiang Yanggu, Wildcrafter"
+      },
+      {
+        "oracleId": "05d09c55-f551-4cb4-a8d2-4811dccc848d",
+        "name": "Vraska, Betrayal's Sting"
+      }
+    ]
+  },
+  {
+    "clusterId": 40,
+    "size": 649,
+    "topActions": [
+      {
+        "action": "cast",
+        "count": 649
+      },
+      {
+        "action": "exile",
+        "count": 118
+      },
+      {
+        "action": "put_counter",
+        "count": 21
+      },
+      {
+        "action": "sacrifice",
+        "count": 17
+      },
+      {
+        "action": "destroy",
+        "count": 15
+      },
+      {
+        "action": "untap",
+        "count": 14
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 13
+      },
+      {
+        "action": "create_token",
+        "count": 10
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 165
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 39
+      },
+      {
+        "role": "cost_reduction",
+        "count": 24
+      },
+      {
+        "role": "token_generation",
+        "count": 10
+      },
+      {
+        "role": "protection",
+        "count": 5
+      },
+      {
+        "role": "card_draw",
+        "count": 3
+      },
+      {
+        "role": "card_advantage",
+        "count": 3
+      },
+      {
+        "role": "life_gain",
+        "count": 2
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 486
+      },
+      {
+        "abilityType": "triggered",
+        "count": 203
+      },
+      {
+        "abilityType": "activated",
+        "count": 13
+      },
+      {
+        "abilityType": "static",
+        "count": 5
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "0068f8c1-d1a2-4f7b-b39f-963acb2c023b",
+        "name": "Vault Guardsman"
+      },
+      {
+        "oracleId": "00ba0c24-a671-493e-ba46-13e45d1818f1",
+        "name": "Ogre Battlecaster"
+      },
+      {
+        "oracleId": "00e8b4c9-3a79-4864-a730-c0081d397c5b",
+        "name": "Dazzling Sphinx"
+      },
+      {
+        "oracleId": "01758a4a-ac29-47ad-8e88-158374f1ae4c",
+        "name": "Don & Raph, Hard Science"
+      },
+      {
+        "oracleId": "01f8db27-1191-488e-b0d5-172821613c15",
+        "name": "Eye of the Storm"
+      }
+    ]
+  },
+  {
+    "clusterId": 41,
+    "size": 994,
+    "topActions": [
+      {
+        "action": "create_token",
+        "count": 994
+      },
+      {
+        "action": "put_counter",
+        "count": 86
+      },
+      {
+        "action": "cast",
+        "count": 28
+      },
+      {
+        "action": "exile",
+        "count": 26
+      },
+      {
+        "action": "destroy",
+        "count": 12
+      },
+      {
+        "action": "deal_damage",
+        "count": 9
+      },
+      {
+        "action": "discard",
+        "count": 8
+      },
+      {
+        "action": "scry",
+        "count": 4
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "token_generation",
+        "count": 994
+      },
+      {
+        "role": "board_interaction",
+        "count": 132
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 98
+      },
+      {
+        "role": "ramp",
+        "count": 82
+      },
+      {
+        "role": "mana_generation",
+        "count": 82
+      },
+      {
+        "role": "protection",
+        "count": 24
+      },
+      {
+        "role": "cost_reduction",
+        "count": 3
+      },
+      {
+        "role": "card_draw",
+        "count": 1
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 990
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 48
+      },
+      {
+        "abilityType": "activated",
+        "count": 7
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "0030578c-afaf-4072-a62b-2510bdceb64a",
+        "name": "Lattice Library"
+      },
+      {
+        "oracleId": "003d9c17-5d5c-469f-ad87-d78faf55e025",
+        "name": "Seedship Agrarian"
+      },
+      {
+        "oracleId": "006f4a62-8590-4ca0-9f51-3aea26cd1a54",
+        "name": "One with the Kami"
+      },
+      {
+        "oracleId": "007c110d-4364-41e5-a8bc-6ac05ecbbd00",
+        "name": "Thopter Assembly"
+      },
+      {
+        "oracleId": "00b50215-e832-417f-9c80-2bc3050b6ebb",
+        "name": "Spider-Ham, Peter Porker"
+      }
+    ]
+  },
+  {
+    "clusterId": 42,
+    "size": 333,
+    "topActions": [
+      {
+        "action": "draw",
+        "count": 333
+      },
+      {
+        "action": "discard",
+        "count": 70
+      },
+      {
+        "action": "deal_damage",
+        "count": 29
+      },
+      {
+        "action": "cast",
+        "count": 25
+      },
+      {
+        "action": "create_token",
+        "count": 20
+      },
+      {
+        "action": "destroy",
+        "count": 19
+      },
+      {
+        "action": "gain_life",
+        "count": 16
+      },
+      {
+        "action": "scry",
+        "count": 14
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "card_draw",
+        "count": 333
+      },
+      {
+        "role": "card_advantage",
+        "count": 333
+      },
+      {
+        "role": "board_interaction",
+        "count": 71
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 41
+      },
+      {
+        "role": "token_generation",
+        "count": 20
+      },
+      {
+        "role": "life_gain",
+        "count": 16
+      },
+      {
+        "role": "cost_reduction",
+        "count": 12
+      },
+      {
+        "role": "ramp",
+        "count": 7
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 300
+      },
+      {
+        "abilityType": "static",
+        "count": 30
+      },
+      {
+        "abilityType": "modal",
+        "count": 10
+      },
+      {
+        "abilityType": "triggered",
+        "count": 6
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "008011e2-7b82-4962-af6e-be627112f37f",
+        "name": "Theft of Dreams"
+      },
+      {
+        "oracleId": "00e75a6b-699e-4824-86e5-66d45245cd9b",
+        "name": "Oracle's Restoration"
+      },
+      {
+        "oracleId": "01766d9b-b2af-4a27-9e65-08c82e7d7637",
+        "name": "Pyretic Charge"
+      },
+      {
+        "oracleId": "01ac8323-28c5-4ab6-984c-5067aacb89c5",
+        "name": "You Compleat Me"
+      },
+      {
+        "oracleId": "02090581-61aa-4348-ad57-451be8ee91c2",
+        "name": "Ponder"
+      }
+    ]
+  },
+  {
+    "clusterId": 43,
+    "size": 23,
+    "topActions": [
+      {
+        "action": "return_to_hand",
+        "count": 23
+      },
+      {
+        "action": "add_mana",
+        "count": 21
+      },
+      {
+        "action": "mill",
+        "count": 3
+      },
+      {
+        "action": "sacrifice",
+        "count": 2
+      },
+      {
+        "action": "draw",
+        "count": 2
+      },
+      {
+        "action": "create_token",
+        "count": 1
+      },
+      {
+        "action": "deal_damage",
+        "count": 1
+      },
+      {
+        "action": "exile",
+        "count": 1
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "recursion",
+        "count": 23
+      },
+      {
+        "role": "ramp",
+        "count": 22
+      },
+      {
+        "role": "mana_generation",
+        "count": 22
+      },
+      {
+        "role": "board_interaction",
+        "count": 3
+      },
+      {
+        "role": "graveyard_setup",
+        "count": 3
+      },
+      {
+        "role": "mill",
+        "count": 3
+      },
+      {
+        "role": "cost_reduction",
+        "count": 2
+      },
+      {
+        "role": "card_draw",
+        "count": 2
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 20
+      },
+      {
+        "abilityType": "activated",
+        "count": 16
+      },
+      {
+        "abilityType": "triggered",
+        "count": 6
+      },
+      {
+        "abilityType": "static",
+        "count": 1
+      },
+      {
+        "abilityType": "loyalty",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "0b299983-9f0f-404a-acd1-8f142572b1f1",
+        "name": "Extus, Oriq Overlord // Awaken the Blood Avatar"
+      },
+      {
+        "oracleId": "1ed9e351-0000-4b75-8ecb-d15bd88df68a",
+        "name": "Tamiyo, Inquisitive Student // Tamiyo, Seasoned Scholar"
+      },
+      {
+        "oracleId": "2bc38f14-0314-4351-8138-e2b8bf041404",
+        "name": "Memorial to Folly"
+      },
+      {
+        "oracleId": "3644f316-f9a3-46c9-9b1e-747f86cf4ead",
+        "name": "Buried Ruin"
+      },
+      {
+        "oracleId": "3cd9bac9-0abc-43d8-9f84-94f965f7a2e0",
+        "name": "Cormela, Glamour Thief"
+      }
+    ]
+  },
+  {
+    "clusterId": 44,
+    "size": 1515,
+    "topActions": [
+      {
+        "action": "draw",
+        "count": 1515
+      },
+      {
+        "action": "discard",
+        "count": 344
+      },
+      {
+        "action": "put_counter",
+        "count": 172
+      },
+      {
+        "action": "create_token",
+        "count": 119
+      },
+      {
+        "action": "cast",
+        "count": 74
+      },
+      {
+        "action": "gain_life",
+        "count": 50
+      },
+      {
+        "action": "exile",
+        "count": 26
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 22
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "card_draw",
+        "count": 1515
+      },
+      {
+        "role": "card_advantage",
+        "count": 1515
+      },
+      {
+        "role": "board_interaction",
+        "count": 226
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 206
+      },
+      {
+        "role": "token_generation",
+        "count": 119
+      },
+      {
+        "role": "life_gain",
+        "count": 50
+      },
+      {
+        "role": "protection",
+        "count": 41
+      },
+      {
+        "role": "cost_reduction",
+        "count": 40
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 1089
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 469
+      },
+      {
+        "abilityType": "activated",
+        "count": 51
+      },
+      {
+        "abilityType": "replacement",
+        "count": 19
+      },
+      {
+        "abilityType": "static",
+        "count": 11
+      },
+      {
+        "abilityType": "modal",
+        "count": 10
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "001c6369-df13-427d-89df-718d5c09f382",
+        "name": "Vedalken Heretic"
+      },
+      {
+        "oracleId": "002cd9b4-efce-429f-82cd-d37352d2e932",
+        "name": "Wasp, Shrinking Savior"
+      },
+      {
+        "oracleId": "004f82f0-74cc-4bc7-ab22-ab1a5247bc29",
+        "name": "Keldon Raider"
+      },
+      {
+        "oracleId": "005c181a-05db-4c15-9893-65103cca338e",
+        "name": "Toluz, Clever Conductor"
+      },
+      {
+        "oracleId": "005ee549-1bf5-478f-bc3f-3e791bd7eecf",
+        "name": "Kindred Discovery"
+      }
+    ]
+  },
+  {
+    "clusterId": 45,
+    "size": 784,
+    "topActions": [
+      {
+        "action": "destroy",
+        "count": 784
+      },
+      {
+        "action": "cast",
+        "count": 42
+      },
+      {
+        "action": "create_token",
+        "count": 23
+      },
+      {
+        "action": "scry",
+        "count": 15
+      },
+      {
+        "action": "discard",
+        "count": 11
+      },
+      {
+        "action": "put_counter",
+        "count": 8
+      },
+      {
+        "action": "surveil",
+        "count": 6
+      },
+      {
+        "action": "exile",
+        "count": 6
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 784
+      },
+      {
+        "role": "token_generation",
+        "count": 23
+      },
+      {
+        "role": "cost_reduction",
+        "count": 21
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 20
+      },
+      {
+        "role": "ramp",
+        "count": 6
+      },
+      {
+        "role": "mana_generation",
+        "count": 6
+      },
+      {
+        "role": "protection",
+        "count": 5
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 588
+      },
+      {
+        "abilityType": "triggered",
+        "count": 161
+      },
+      {
+        "abilityType": "activated",
+        "count": 41
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "007f3b20-d58b-4986-8de8-9e419af88628",
+        "name": "Vivisection Evangelist"
+      },
+      {
+        "oracleId": "00af96af-5eae-4044-a2f7-a08cd0699d1e",
+        "name": "Ogre Arsonist"
+      },
+      {
+        "oracleId": "00e94b75-ad31-4e1f-b3be-eed7cd3e4d76",
+        "name": "Stand Up for Yourself"
+      },
+      {
+        "oracleId": "00efb113-ba5a-4749-b42b-5693b980f26f",
+        "name": "Dakmor Lancer"
+      },
+      {
+        "oracleId": "0217da8e-e74f-4f5c-ab75-f17600f94405",
+        "name": "Rock Soldiers"
+      }
+    ]
+  },
+  {
+    "clusterId": 46,
+    "size": 467,
+    "topActions": [
+      {
+        "action": "cast",
+        "count": 23
+      },
+      {
+        "action": "scry",
+        "count": 7
+      },
+      {
+        "action": "surveil",
+        "count": 6
+      },
+      {
+        "action": "destroy",
+        "count": 5
+      },
+      {
+        "action": "create_token",
+        "count": 4
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 4
+      },
+      {
+        "action": "exile",
+        "count": 3
+      },
+      {
+        "action": "untap",
+        "count": 2
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "cost_reduction",
+        "count": 84
+      },
+      {
+        "role": "board_interaction",
+        "count": 9
+      },
+      {
+        "role": "token_generation",
+        "count": 4
+      },
+      {
+        "role": "protection",
+        "count": 3
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 2
+      },
+      {
+        "role": "ramp",
+        "count": 2
+      },
+      {
+        "role": "mana_generation",
+        "count": 2
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 30
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 22
+      },
+      {
+        "abilityType": "activated",
+        "count": 3
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "009fcd1e-5c5f-435b-afc1-099f1622e45c",
+        "name": "Phyrexian Juggernaut"
+      },
+      {
+        "oracleId": "00ad27a1-9162-408d-ac75-970e45d7e06c",
+        "name": "Patchwork Gnomes"
+      },
+      {
+        "oracleId": "02765930-e15e-4cc1-ac0d-040334a9c5bc",
+        "name": "Chainbreaker"
+      },
+      {
+        "oracleId": "0339bd11-ad71-4998-9b5d-a32790f0e5e3",
+        "name": "Barkform Harvester"
+      },
+      {
+        "oracleId": "034264da-a404-4037-b215-b095bba77490",
+        "name": "Wingrattle Scarecrow"
+      }
+    ]
+  },
+  {
+    "clusterId": 47,
+    "size": 841,
+    "topActions": [
+      {
+        "action": "sacrifice",
+        "count": 841
+      },
+      {
+        "action": "create_token",
+        "count": 169
+      },
+      {
+        "action": "draw",
+        "count": 61
+      },
+      {
+        "action": "put_counter",
+        "count": 49
+      },
+      {
+        "action": "discard",
+        "count": 49
+      },
+      {
+        "action": "exile",
+        "count": 43
+      },
+      {
+        "action": "deal_damage",
+        "count": 39
+      },
+      {
+        "action": "cast",
+        "count": 36
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 841
+      },
+      {
+        "role": "sacrifice_payoff",
+        "count": 799
+      },
+      {
+        "role": "token_generation",
+        "count": 169
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 98
+      },
+      {
+        "role": "sacrifice_outlet",
+        "count": 62
+      },
+      {
+        "role": "card_draw",
+        "count": 61
+      },
+      {
+        "role": "card_advantage",
+        "count": 61
+      },
+      {
+        "role": "protection",
+        "count": 26
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 733
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 184
+      },
+      {
+        "abilityType": "activated",
+        "count": 37
+      },
+      {
+        "abilityType": "modal",
+        "count": 8
+      },
+      {
+        "abilityType": "static",
+        "count": 7
+      },
+      {
+        "abilityType": "replacement",
+        "count": 3
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "008a11c1-d283-49fe-abd7-ff4fe8b1fe79",
+        "name": "Rhovanion Rampager"
+      },
+      {
+        "oracleId": "0156bfbc-26bc-4699-a7ff-437f7c043716",
+        "name": "Brawl-Bash Ogre"
+      },
+      {
+        "oracleId": "0166996d-941f-49fe-bf4f-64b6fd4b69e9",
+        "name": "Ragefire Hellkite"
+      },
+      {
+        "oracleId": "01add64a-205d-4c0e-a393-89e7a1a0ea44",
+        "name": "Impetuous Devils"
+      },
+      {
+        "oracleId": "01deda1e-01f2-495f-992a-ca2e8b0a1111",
+        "name": "Labyrinth Guardian"
+      }
+    ]
+  },
+  {
+    "clusterId": 48,
+    "size": 1219,
+    "topActions": [
+      {
+        "action": "exile",
+        "count": 95
+      },
+      {
+        "action": "untap",
+        "count": 71
+      },
+      {
+        "action": "cast",
+        "count": 51
+      },
+      {
+        "action": "put_counter",
+        "count": 39
+      },
+      {
+        "action": "scry",
+        "count": 23
+      },
+      {
+        "action": "sacrifice",
+        "count": 21
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 12
+      },
+      {
+        "action": "surveil",
+        "count": 8
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 156
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 103
+      },
+      {
+        "role": "cost_reduction",
+        "count": 25
+      },
+      {
+        "role": "ramp",
+        "count": 8
+      },
+      {
+        "role": "mana_generation",
+        "count": 8
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 293
+      },
+      {
+        "abilityType": "replacement",
+        "count": 11
+      },
+      {
+        "abilityType": "triggered",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "00317e4f-0228-469a-9789-fb6c39976860",
+        "name": "Aura Graft"
+      },
+      {
+        "oracleId": "0045cf16-86dd-4417-ae36-88ca63b30c26",
+        "name": "Strength of Night"
+      },
+      {
+        "oracleId": "0123b162-0413-4022-acc0-e5bd061d3fb4",
+        "name": "Divergent Growth"
+      },
+      {
+        "oracleId": "013a465b-7034-45fe-bf62-c3d273131ec5",
+        "name": "Square Up"
+      },
+      {
+        "oracleId": "0140cf53-71ef-4d37-9197-48aab35ca4a2",
+        "name": "Bull Rush"
+      }
+    ]
+  },
+  {
+    "clusterId": 49,
+    "size": 458,
+    "topActions": [
+      {
+        "action": "return_to_battlefield",
+        "count": 458
+      },
+      {
+        "action": "exile",
+        "count": 84
+      },
+      {
+        "action": "draw",
+        "count": 36
+      },
+      {
+        "action": "sacrifice",
+        "count": 33
+      },
+      {
+        "action": "put_counter",
+        "count": 33
+      },
+      {
+        "action": "create_token",
+        "count": 31
+      },
+      {
+        "action": "cast",
+        "count": 28
+      },
+      {
+        "action": "discard",
+        "count": 20
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "reanimation",
+        "count": 458
+      },
+      {
+        "role": "board_interaction",
+        "count": 160
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 45
+      },
+      {
+        "role": "card_advantage",
+        "count": 41
+      },
+      {
+        "role": "card_draw",
+        "count": 36
+      },
+      {
+        "role": "token_generation",
+        "count": 31
+      },
+      {
+        "role": "sacrifice_payoff",
+        "count": 20
+      },
+      {
+        "role": "protection",
+        "count": 17
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 253
+      },
+      {
+        "abilityType": "triggered",
+        "count": 215
+      },
+      {
+        "abilityType": "modal",
+        "count": 26
+      },
+      {
+        "abilityType": "activated",
+        "count": 14
+      },
+      {
+        "abilityType": "static",
+        "count": 9
+      },
+      {
+        "abilityType": "replacement",
+        "count": 2
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "008d5896-6fc9-4aaa-8c6f-a44c2feb98bb",
+        "name": "Vizier of Deferment"
+      },
+      {
+        "oracleId": "00b36996-43c6-42a5-892c-c7c8864cf973",
+        "name": "Blur"
+      },
+      {
+        "oracleId": "00e0b103-892c-49b3-836d-867fff197bbd",
+        "name": "Puppeteer Clique"
+      },
+      {
+        "oracleId": "00f06814-0419-4956-8003-c6a0b58ee330",
+        "name": "Blighted Nightmare"
+      },
+      {
+        "oracleId": "0131d2ac-d677-45fd-9729-a5428139cb5b",
+        "name": "Dragon Fangs"
+      }
+    ]
+  },
+  {
+    "clusterId": 50,
+    "size": 330,
+    "topActions": [
+      {
+        "action": "create_token",
+        "count": 330
+      },
+      {
+        "action": "cast",
+        "count": 26
+      },
+      {
+        "action": "destroy",
+        "count": 23
+      },
+      {
+        "action": "put_counter",
+        "count": 19
+      },
+      {
+        "action": "exile",
+        "count": 19
+      },
+      {
+        "action": "deal_damage",
+        "count": 17
+      },
+      {
+        "action": "sacrifice",
+        "count": 12
+      },
+      {
+        "action": "gain_life",
+        "count": 8
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "token_generation",
+        "count": 330
+      },
+      {
+        "role": "board_interaction",
+        "count": 85
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 36
+      },
+      {
+        "role": "ramp",
+        "count": 17
+      },
+      {
+        "role": "mana_generation",
+        "count": 17
+      },
+      {
+        "role": "life_gain",
+        "count": 8
+      },
+      {
+        "role": "cost_reduction",
+        "count": 3
+      },
+      {
+        "role": "card_draw",
+        "count": 2
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 330
+      },
+      {
+        "abilityType": "triggered",
+        "count": 2
+      },
+      {
+        "abilityType": "static",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "017f1f83-18a8-4523-917d-98f6ca7838b7",
+        "name": "Box of Free-Range Goblins"
+      },
+      {
+        "oracleId": "01c729d7-9b80-479d-8d30-ae47c76c2c50",
+        "name": "Rhonas's Last Stand"
+      },
+      {
+        "oracleId": "01f06642-015f-40b4-a940-af576ad9e82c",
+        "name": "Goblin Gathering"
+      },
+      {
+        "oracleId": "0728b195-2dfe-4d73-91ae-e658a97b0b9a",
+        "name": "Hard Evidence"
+      },
+      {
+        "oracleId": "07b28ed7-eab8-4560-9994-3befcba876d3",
+        "name": "Choco-Comet"
+      }
+    ]
+  },
+  {
+    "clusterId": 51,
+    "size": 272,
+    "topActions": [
+      {
+        "action": "destroy",
+        "count": 139
+      },
+      {
+        "action": "deal_damage",
+        "count": 89
+      },
+      {
+        "action": "put_counter",
+        "count": 49
+      },
+      {
+        "action": "exile",
+        "count": 44
+      },
+      {
+        "action": "gain_life",
+        "count": 35
+      },
+      {
+        "action": "draw",
+        "count": 20
+      },
+      {
+        "action": "discard",
+        "count": 19
+      },
+      {
+        "action": "sacrifice",
+        "count": 15
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 243
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 145
+      },
+      {
+        "role": "life_gain",
+        "count": 35
+      },
+      {
+        "role": "card_advantage",
+        "count": 22
+      },
+      {
+        "role": "card_draw",
+        "count": 20
+      },
+      {
+        "role": "protection",
+        "count": 13
+      },
+      {
+        "role": "token_generation",
+        "count": 8
+      },
+      {
+        "role": "combat_payoff",
+        "count": 2
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "modal",
+        "count": 269
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 5
+      },
+      {
+        "abilityType": "triggered",
+        "count": 2
+      },
+      {
+        "abilityType": "static",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "011558f3-3c23-430e-a08b-8f91238e7971",
+        "name": "Unfortunate Accident"
+      },
+      {
+        "oracleId": "0146f430-da82-48d3-a576-c2b05101797f",
+        "name": "Dawnbringer Cleric"
+      },
+      {
+        "oracleId": "022667d0-60f2-4e37-bc50-53198fc933ab",
+        "name": "Seek Bolas's Counsel"
+      },
+      {
+        "oracleId": "03fde598-5b6b-4c7f-ba13-c06ed1fa918a",
+        "name": "Consuming Sinkhole"
+      },
+      {
+        "oracleId": "0413e0e4-c8f8-44c3-a749-c799766bc8cd",
+        "name": "Drill Too Deep"
+      }
+    ]
+  },
+  {
+    "clusterId": 52,
+    "size": 124,
+    "topActions": [
+      {
+        "action": "put_counter",
+        "count": 13
+      },
+      {
+        "action": "deal_damage",
+        "count": 12
+      },
+      {
+        "action": "cast",
+        "count": 10
+      },
+      {
+        "action": "create_token",
+        "count": 9
+      },
+      {
+        "action": "destroy",
+        "count": 6
+      },
+      {
+        "action": "untap",
+        "count": 4
+      },
+      {
+        "action": "scry",
+        "count": 3
+      },
+      {
+        "action": "exile",
+        "count": 2
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "protection",
+        "count": 124
+      },
+      {
+        "role": "board_interaction",
+        "count": 32
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 28
+      },
+      {
+        "role": "token_generation",
+        "count": 9
+      },
+      {
+        "role": "cost_reduction",
+        "count": 6
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 52
+      },
+      {
+        "abilityType": "modal",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "02d998a6-0afd-4be1-a209-05618fcc43ea",
+        "name": "Mizzium Skin"
+      },
+      {
+        "oracleId": "0324941f-484c-4656-8d1c-66e919c2bc7c",
+        "name": "Rending Volley"
+      },
+      {
+        "oracleId": "03f5946b-e000-4b39-a49f-1c31668b51bd",
+        "name": "Autumn's Veil"
+      },
+      {
+        "oracleId": "04046ae4-5c51-434b-930c-f3b1d348bf4b",
+        "name": "Rootborn Defenses"
+      },
+      {
+        "oracleId": "06c3e85c-17d8-44e1-a0f8-07ef3f1624cb",
+        "name": "Heated Debate"
+      }
+    ]
+  },
+  {
+    "clusterId": 53,
+    "size": 131,
+    "topActions": [
+      {
+        "action": "create_token",
+        "count": 129
+      },
+      {
+        "action": "draw",
+        "count": 31
+      },
+      {
+        "action": "put_counter",
+        "count": 25
+      },
+      {
+        "action": "deal_damage",
+        "count": 20
+      },
+      {
+        "action": "sacrifice",
+        "count": 14
+      },
+      {
+        "action": "scry",
+        "count": 12
+      },
+      {
+        "action": "gain_life",
+        "count": 11
+      },
+      {
+        "action": "destroy",
+        "count": 11
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "token_generation",
+        "count": 129
+      },
+      {
+        "role": "board_interaction",
+        "count": 70
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 49
+      },
+      {
+        "role": "card_draw",
+        "count": 31
+      },
+      {
+        "role": "card_advantage",
+        "count": 31
+      },
+      {
+        "role": "ramp",
+        "count": 11
+      },
+      {
+        "role": "mana_generation",
+        "count": 11
+      },
+      {
+        "role": "life_gain",
+        "count": 11
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "modal",
+        "count": 129
+      },
+      {
+        "abilityType": "triggered",
+        "count": 8
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 3
+      },
+      {
+        "abilityType": "replacement",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "0038e74a-b950-47ff-8853-dba6a3b31091",
+        "name": "Saheeli's Artistry"
+      },
+      {
+        "oracleId": "01bc8bfa-2e46-4324-a848-cc68bc9330d0",
+        "name": "Doomsday Confluence"
+      },
+      {
+        "oracleId": "051ff7e0-dd00-4467-8796-a5d1c21934ed",
+        "name": "Bejeweled Warg"
+      },
+      {
+        "oracleId": "06bea0b2-1d0f-4d64-a13e-723d08042e83",
+        "name": "Arbalest Engineers"
+      },
+      {
+        "oracleId": "0b786547-67ed-49fa-9981-35c4c2175f62",
+        "name": "Ember Island Production"
+      }
+    ]
+  },
+  {
+    "clusterId": 54,
+    "size": 366,
+    "topActions": [
+      {
+        "action": "put_into_hand",
+        "count": 366
+      },
+      {
+        "action": "put_counter",
+        "count": 43
+      },
+      {
+        "action": "cast",
+        "count": 32
+      },
+      {
+        "action": "draw",
+        "count": 26
+      },
+      {
+        "action": "discard",
+        "count": 21
+      },
+      {
+        "action": "create_token",
+        "count": 17
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 16
+      },
+      {
+        "action": "exile",
+        "count": 16
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "card_advantage",
+        "count": 366
+      },
+      {
+        "role": "board_interaction",
+        "count": 70
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 52
+      },
+      {
+        "role": "card_draw",
+        "count": 26
+      },
+      {
+        "role": "token_generation",
+        "count": 17
+      },
+      {
+        "role": "ramp",
+        "count": 12
+      },
+      {
+        "role": "mana_generation",
+        "count": 12
+      },
+      {
+        "role": "protection",
+        "count": 8
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 195
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 171
+      },
+      {
+        "abilityType": "activated",
+        "count": 16
+      },
+      {
+        "abilityType": "static",
+        "count": 4
+      },
+      {
+        "abilityType": "replacement",
+        "count": 4
+      },
+      {
+        "abilityType": "modal",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "004b2032-0d29-4361-b9c8-a3c0c7b63e2c",
+        "name": "Spike, Tournament Grinder"
+      },
+      {
+        "oracleId": "0089b07c-7f47-4a9a-9fb7-cc38ec9d7bcd",
+        "name": "Harald, King of Skemfar"
+      },
+      {
+        "oracleId": "00915480-ffa8-4930-a158-b1c1f75b7876",
+        "name": "Courageous Outrider"
+      },
+      {
+        "oracleId": "01a79429-7d57-4a51-9815-a20905ed4707",
+        "name": "Rashmi, Eternities Crafter"
+      },
+      {
+        "oracleId": "021428b1-005c-40ed-9d47-fb5aa970598b",
+        "name": "River Herald Scout"
+      }
+    ]
+  },
+  {
+    "clusterId": 55,
+    "size": 276,
+    "topActions": [
+      {
+        "action": "lose_life",
+        "count": 276
+      },
+      {
+        "action": "gain_life",
+        "count": 276
+      },
+      {
+        "action": "draw",
+        "count": 34
+      },
+      {
+        "action": "create_token",
+        "count": 28
+      },
+      {
+        "action": "discard",
+        "count": 16
+      },
+      {
+        "action": "put_counter",
+        "count": 15
+      },
+      {
+        "action": "sacrifice",
+        "count": 12
+      },
+      {
+        "action": "exile",
+        "count": 12
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "life_gain",
+        "count": 276
+      },
+      {
+        "role": "life_loss",
+        "count": 276
+      },
+      {
+        "role": "board_interaction",
+        "count": 42
+      },
+      {
+        "role": "card_advantage",
+        "count": 37
+      },
+      {
+        "role": "card_draw",
+        "count": 34
+      },
+      {
+        "role": "token_generation",
+        "count": 28
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 20
+      },
+      {
+        "role": "sacrifice_payoff",
+        "count": 10
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 180
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 99
+      },
+      {
+        "abilityType": "modal",
+        "count": 19
+      },
+      {
+        "abilityType": "activated",
+        "count": 9
+      },
+      {
+        "abilityType": "static",
+        "count": 4
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "00ed7aca-b3c1-4d48-acd5-b1596daeb4c3",
+        "name": "Whiplash, Vengeful Engineer"
+      },
+      {
+        "oracleId": "01294ac9-1a06-4ee8-b3b1-db1f07c9d94e",
+        "name": "Cruel Ultimatum"
+      },
+      {
+        "oracleId": "048925e1-3bd6-4caa-90b9-e75e890032a5",
+        "name": "Specter of the Fens"
+      },
+      {
+        "oracleId": "0859d16e-2a1f-4b48-8687-99af8a8bdb38",
+        "name": "Postmortem Professor"
+      },
+      {
+        "oracleId": "0868ebbb-2fe9-4f53-9697-acad8cda5ec1",
+        "name": "Greed's Gambit"
+      }
+    ]
+  },
+  {
+    "clusterId": 56,
+    "size": 371,
+    "topActions": [
+      {
+        "action": "discard",
+        "count": 371
+      },
+      {
+        "action": "cast",
+        "count": 44
+      },
+      {
+        "action": "sacrifice",
+        "count": 10
+      },
+      {
+        "action": "exile",
+        "count": 6
+      },
+      {
+        "action": "destroy",
+        "count": 6
+      },
+      {
+        "action": "put_counter",
+        "count": 5
+      },
+      {
+        "action": "draw",
+        "count": 5
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 3
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 27
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 9
+      },
+      {
+        "role": "card_draw",
+        "count": 5
+      },
+      {
+        "role": "card_advantage",
+        "count": 5
+      },
+      {
+        "role": "protection",
+        "count": 3
+      },
+      {
+        "role": "combat_payoff",
+        "count": 2
+      },
+      {
+        "role": "token_generation",
+        "count": 2
+      },
+      {
+        "role": "life_loss",
+        "count": 1
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 217
+      },
+      {
+        "abilityType": "triggered",
+        "count": 154
+      },
+      {
+        "abilityType": "activated",
+        "count": 6
+      },
+      {
+        "abilityType": "modal",
+        "count": 4
+      },
+      {
+        "abilityType": "static",
+        "count": 3
+      },
+      {
+        "abilityType": "replacement",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "0077740a-528b-4ee3-b331-fac321b95302",
+        "name": "Mind Extraction"
+      },
+      {
+        "oracleId": "01072a45-ab1c-4d19-b493-76cf4aae351e",
+        "name": "Duplicity"
+      },
+      {
+        "oracleId": "018107d1-ebf7-4657-bc91-c8374af55cc5",
+        "name": "Cabal Therapy"
+      },
+      {
+        "oracleId": "01ab7724-1967-4da6-aebd-3729983d6a0e",
+        "name": "Bloodthorn Flail"
+      },
+      {
+        "oracleId": "01d4c859-8b15-4567-a2c4-70a30c709999",
+        "name": "Cryptwailing"
+      }
+    ]
+  },
+  {
+    "clusterId": 57,
+    "size": 1318,
+    "topActions": [
+      {
+        "action": "untap",
+        "count": 45
+      },
+      {
+        "action": "exile",
+        "count": 23
+      },
+      {
+        "action": "sacrifice",
+        "count": 16
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 11
+      },
+      {
+        "action": "shuffle_into_library",
+        "count": 4
+      },
+      {
+        "action": "surveil",
+        "count": 2
+      },
+      {
+        "action": "scry",
+        "count": 2
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "combat_manipulation",
+        "count": 45
+      },
+      {
+        "role": "board_interaction",
+        "count": 39
+      },
+      {
+        "role": "cost_reduction",
+        "count": 26
+      },
+      {
+        "role": "ramp",
+        "count": 9
+      },
+      {
+        "role": "mana_generation",
+        "count": 9
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 55
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 39
+      },
+      {
+        "abilityType": "activated",
+        "count": 3
+      },
+      {
+        "abilityType": "replacement",
+        "count": 3
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "000492bf-7eaa-4939-a51c-4eef74e4c1d1",
+        "name": "Mine Security"
+      },
+      {
+        "oracleId": "0056e07b-416b-487e-9e6c-3697db402dd4",
+        "name": "Leopard-Spotted Jiao"
+      },
+      {
+        "oracleId": "008ac258-763c-4379-bfcd-b9cc4d7296dd",
+        "name": "Magma Sliver"
+      },
+      {
+        "oracleId": "00a9bdd0-8a39-4489-bd42-2ac92e550781",
+        "name": "Labyrinth Adversary"
+      },
+      {
+        "oracleId": "014ca38f-d4ac-4417-bfa8-785a7d6fce43",
+        "name": "Goblin Flotilla"
+      }
+    ]
+  },
+  {
+    "clusterId": 58,
+    "size": 910,
+    "topActions": [
+      {
+        "action": "exile",
+        "count": 85
+      },
+      {
+        "action": "untap",
+        "count": 49
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 45
+      },
+      {
+        "action": "put_counter",
+        "count": 39
+      },
+      {
+        "action": "sacrifice",
+        "count": 21
+      },
+      {
+        "action": "cast",
+        "count": 19
+      },
+      {
+        "action": "scry",
+        "count": 9
+      },
+      {
+        "action": "surveil",
+        "count": 4
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "board_interaction",
+        "count": 143
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 86
+      },
+      {
+        "role": "cost_reduction",
+        "count": 18
+      },
+      {
+        "role": "ramp",
+        "count": 7
+      },
+      {
+        "role": "mana_generation",
+        "count": 7
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 248
+      },
+      {
+        "abilityType": "triggered",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "00078ea3-0462-4a6e-b7b1-25fea012b2b7",
+        "name": "Kavaron Consumed"
+      },
+      {
+        "oracleId": "0012bc78-e69d-4a67-a302-e5fe0dfd4407",
+        "name": "Ravnica at War"
+      },
+      {
+        "oracleId": "00181784-9213-492a-ba8c-2028969b049e",
+        "name": "Torrent of Fire"
+      },
+      {
+        "oracleId": "00afc724-be09-4e92-a50c-88011bd10ccd",
+        "name": "Hunt the Hunter"
+      },
+      {
+        "oracleId": "00e9957a-5684-4a07-954e-8161925fefe4",
+        "name": "Bond of Discipline"
+      }
+    ]
+  },
+  {
+    "clusterId": 59,
+    "size": 95,
+    "topActions": [
+      {
+        "action": "create_token",
+        "count": 95
+      },
+      {
+        "action": "add_mana",
+        "count": 49
+      },
+      {
+        "action": "sacrifice",
+        "count": 47
+      },
+      {
+        "action": "gain_life",
+        "count": 23
+      },
+      {
+        "action": "deal_damage",
+        "count": 18
+      },
+      {
+        "action": "draw",
+        "count": 18
+      },
+      {
+        "action": "put_counter",
+        "count": 10
+      },
+      {
+        "action": "exile",
+        "count": 8
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "token_generation",
+        "count": 95
+      },
+      {
+        "role": "board_interaction",
+        "count": 70
+      },
+      {
+        "role": "ramp",
+        "count": 49
+      },
+      {
+        "role": "mana_generation",
+        "count": 49
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 31
+      },
+      {
+        "role": "sacrifice_payoff",
+        "count": 30
+      },
+      {
+        "role": "life_gain",
+        "count": 23
+      },
+      {
+        "role": "card_advantage",
+        "count": 22
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 54
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 48
+      },
+      {
+        "abilityType": "modal",
+        "count": 4
+      },
+      {
+        "abilityType": "activated",
+        "count": 4
+      },
+      {
+        "abilityType": "static",
+        "count": 2
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "01160cb5-6d83-4317-9522-74083b3a83bb",
+        "name": "Eldrazi Confluence"
+      },
+      {
+        "oracleId": "02be0b99-d40b-4287-989b-12eb2701115c",
+        "name": "Pest Rescuer"
+      },
+      {
+        "oracleId": "043dd2e5-21e4-49b9-90b2-831e587b2238",
+        "name": "Containment Breach"
+      },
+      {
+        "oracleId": "0527b7b5-a55d-4720-af1f-17fc1178f4a6",
+        "name": "Queen Brahne"
+      },
+      {
+        "oracleId": "088d63ec-bd5e-4e80-acf9-2af270a9b395",
+        "name": "Incubator Drone"
+      }
+    ]
+  },
+  {
+    "clusterId": 60,
+    "size": 701,
+    "topActions": [
+      {
+        "action": "lose_life",
+        "count": 701
+      },
+      {
+        "action": "draw",
+        "count": 212
+      },
+      {
+        "action": "create_token",
+        "count": 71
+      },
+      {
+        "action": "discard",
+        "count": 67
+      },
+      {
+        "action": "sacrifice",
+        "count": 67
+      },
+      {
+        "action": "cast",
+        "count": 36
+      },
+      {
+        "action": "destroy",
+        "count": 34
+      },
+      {
+        "action": "put_counter",
+        "count": 33
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "life_loss",
+        "count": 701
+      },
+      {
+        "role": "card_advantage",
+        "count": 227
+      },
+      {
+        "role": "card_draw",
+        "count": 212
+      },
+      {
+        "role": "board_interaction",
+        "count": 150
+      },
+      {
+        "role": "token_generation",
+        "count": 71
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 42
+      },
+      {
+        "role": "sacrifice_payoff",
+        "count": 42
+      },
+      {
+        "role": "ramp",
+        "count": 16
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 424
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 282
+      },
+      {
+        "abilityType": "modal",
+        "count": 24
+      },
+      {
+        "abilityType": "static",
+        "count": 22
+      },
+      {
+        "abilityType": "activated",
+        "count": 17
+      },
+      {
+        "abilityType": "replacement",
+        "count": 3
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "000d8291-d6a8-436e-9e17-7531333686a8",
+        "name": "Snarlfang Vermin"
+      },
+      {
+        "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+        "name": "Greta, Sweettooth Scourge"
+      },
+      {
+        "oracleId": "003e5dc6-8b26-4a0a-a50b-5f0806a7bacd",
+        "name": "South Wind Avatar"
+      },
+      {
+        "oracleId": "00807825-88e5-4b88-8527-a49f553a91be",
+        "name": "Witch's Mark"
+      },
+      {
+        "oracleId": "008eda1f-b913-4f04-8c29-5e87c270149e",
+        "name": "Tinybones, Trinket Thief"
+      }
+    ]
+  },
+  {
+    "clusterId": 61,
+    "size": 1332,
+    "topActions": [
+      {
+        "action": "untap",
+        "count": 48
+      },
+      {
+        "action": "put_onto_battlefield",
+        "count": 34
+      },
+      {
+        "action": "sacrifice",
+        "count": 18
+      },
+      {
+        "action": "exile",
+        "count": 11
+      },
+      {
+        "action": "scry",
+        "count": 5
+      },
+      {
+        "action": "surveil",
+        "count": 4
+      },
+      {
+        "action": "shuffle_into_library",
+        "count": 1
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "combat_manipulation",
+        "count": 48
+      },
+      {
+        "role": "board_interaction",
+        "count": 29
+      },
+      {
+        "role": "cost_reduction",
+        "count": 29
+      },
+      {
+        "role": "ramp",
+        "count": 27
+      },
+      {
+        "role": "mana_generation",
+        "count": 27
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "triggered",
+        "count": 51
+      },
+      {
+        "abilityType": "spell_effect",
+        "count": 49
+      },
+      {
+        "abilityType": "activated",
+        "count": 18
+      },
+      {
+        "abilityType": "replacement",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "00037840-6089-42ec-8c5c-281f9f474504",
+        "name": "Nissa, Worldsoul Speaker"
+      },
+      {
+        "oracleId": "00185f3b-2777-4417-a8e0-4691f41c0ec1",
+        "name": "Wyluli Wolf"
+      },
+      {
+        "oracleId": "00284955-0a1b-4939-9567-a7d34cbcee51",
+        "name": "Hua Tuo, Honored Physician"
+      },
+      {
+        "oracleId": "0049438b-e37e-4c57-820e-f2ddf3322170",
+        "name": "High-Rise Sawjack"
+      },
+      {
+        "oracleId": "007161cb-a44b-4443-a53a-dfaacc6cfb86",
+        "name": "Carnage Wurm"
+      }
+    ]
+  },
+  {
+    "clusterId": 62,
+    "size": 515,
+    "topActions": [
+      {
+        "action": "return_to_hand",
+        "count": 515
+      },
+      {
+        "action": "mill",
+        "count": 40
+      },
+      {
+        "action": "draw",
+        "count": 34
+      },
+      {
+        "action": "create_token",
+        "count": 26
+      },
+      {
+        "action": "put_counter",
+        "count": 22
+      },
+      {
+        "action": "cast",
+        "count": 20
+      },
+      {
+        "action": "discard",
+        "count": 20
+      },
+      {
+        "action": "gain_life",
+        "count": 18
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "recursion",
+        "count": 515
+      },
+      {
+        "role": "board_interaction",
+        "count": 85
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 45
+      },
+      {
+        "role": "card_advantage",
+        "count": 44
+      },
+      {
+        "role": "graveyard_setup",
+        "count": 40
+      },
+      {
+        "role": "mill",
+        "count": 40
+      },
+      {
+        "role": "card_draw",
+        "count": 34
+      },
+      {
+        "role": "token_generation",
+        "count": 26
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 301
+      },
+      {
+        "abilityType": "triggered",
+        "count": 206
+      },
+      {
+        "abilityType": "modal",
+        "count": 44
+      },
+      {
+        "abilityType": "loyalty",
+        "count": 8
+      },
+      {
+        "abilityType": "static",
+        "count": 4
+      },
+      {
+        "abilityType": "activated",
+        "count": 3
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "0007c283-5b7a-4c00-9ca1-b455c8dff8c3",
+        "name": "Road of Return"
+      },
+      {
+        "oracleId": "00771a33-7443-43f9-a61e-1737b62b1f81",
+        "name": "Pharika's Mender"
+      },
+      {
+        "oracleId": "00909d51-3da8-41eb-a535-0c325fedc59f",
+        "name": "Summon the School"
+      },
+      {
+        "oracleId": "00c1788d-c52f-4839-9cd8-11fb86c418b6",
+        "name": "Stormchaser's Talent"
+      },
+      {
+        "oracleId": "010ec11a-0484-486d-b7c0-de65593bf457",
+        "name": "Sanguine Indulgence"
+      }
+    ]
+  },
+  {
+    "clusterId": 63,
+    "size": 175,
+    "topActions": [
+      {
+        "action": "search_library",
+        "count": 175
+      },
+      {
+        "action": "shuffle_library",
+        "count": 166
+      },
+      {
+        "action": "sacrifice",
+        "count": 10
+      },
+      {
+        "action": "cast",
+        "count": 9
+      },
+      {
+        "action": "draw",
+        "count": 9
+      },
+      {
+        "action": "exile",
+        "count": 7
+      },
+      {
+        "action": "lose_life",
+        "count": 5
+      },
+      {
+        "action": "discard",
+        "count": 4
+      }
+    ],
+    "topDerivedRoles": [
+      {
+        "role": "card_advantage",
+        "count": 175
+      },
+      {
+        "role": "tutor",
+        "count": 175
+      },
+      {
+        "role": "board_interaction",
+        "count": 24
+      },
+      {
+        "role": "card_draw",
+        "count": 9
+      },
+      {
+        "role": "combat_manipulation",
+        "count": 5
+      },
+      {
+        "role": "life_loss",
+        "count": 5
+      },
+      {
+        "role": "cost_reduction",
+        "count": 3
+      },
+      {
+        "role": "ramp",
+        "count": 3
+      }
+    ],
+    "topAbilityTypes": [
+      {
+        "abilityType": "spell_effect",
+        "count": 97
+      },
+      {
+        "abilityType": "triggered",
+        "count": 71
+      },
+      {
+        "abilityType": "modal",
+        "count": 8
+      },
+      {
+        "abilityType": "activated",
+        "count": 6
+      },
+      {
+        "abilityType": "static",
+        "count": 2
+      },
+      {
+        "abilityType": "replacement",
+        "count": 1
+      }
+    ],
+    "representativeCards": [
+      {
+        "oracleId": "00ab9841-934f-4a66-a98d-68d01661b1c9",
+        "name": "Squadron Hawk"
+      },
+      {
+        "oracleId": "00f82f84-81a5-45e5-9c35-9d627a180950",
+        "name": "Collective Voyage"
+      },
+      {
+        "oracleId": "01c2b66a-66d1-4282-a078-b1fa737c57f4",
+        "name": "Pir's Whim"
+      },
+      {
+        "oracleId": "035ee753-232f-4ba2-afbf-8d1eb162e6f8",
+        "name": "Merrow Harbinger"
+      },
+      {
+        "oracleId": "05b9c160-e160-455e-8939-6096fae31769",
+        "name": "Scavenger Hunt"
+      }
+    ]
+  }
+]

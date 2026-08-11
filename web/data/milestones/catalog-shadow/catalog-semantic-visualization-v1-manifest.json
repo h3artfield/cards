@@ -1,0 +1,32 @@
+{
+  "artifactType": "CatalogSemanticVisualizationManifest",
+  "version": "catalog-semantic-visualization-v1",
+  "generatedAt": "2026-08-11T06:13:17.048Z",
+  "status": "EXPERIMENTAL",
+  "label": "RC8 Semantic Map — Experimental",
+  "disclaimer": "Position represents similarity in the current RC8 semantic model. Spatial proximity is exploratory and does not by itself imply a confirmed gameplay synergy. Similarity ≠ synergy.",
+  "shadowParseManifestPath": "C:/Users/h3art/PycharmProjects/cards/web/data/milestones/catalog-shadow/catalog-shadow-parse-rc8-firestore-v2-manifest.json",
+  "shadowParseContentHash": "7eda36edec87455ff5c994a7ea5a8c424d5c1a3d956d16a50e5caff304c7fe9c",
+  "parserVersion": "oracle-action-v1.44-rc8-ownership-grant-family",
+  "populationCount": 35932,
+  "embeddingVersion": "semantic-feature-vector-v1+semantic-derived-features-v1",
+  "featureVectorVersion": "semantic-feature-vector-v1",
+  "derivedFeatureVersion": "semantic-derived-features-v1",
+  "projectionAlgorithm": "UMAP",
+  "projectionVersion": "umap-3d-v1",
+  "projectionParameters": {
+    "nComponents": 3,
+    "nNeighbors": 15,
+    "minDist": 0.1,
+    "randomSeed": 42,
+    "metric": "cosine"
+  },
+  "pca2dVersion": "pca-2d-v1",
+  "clusterVersion": "kmeans-v1",
+  "clusterCount": 64,
+  "randomSeed": 42,
+  "pointsArtifactPath": "C:/Users/h3art/PycharmProjects/cards/web/data/milestones/catalog-shadow/catalog-semantic-visualization-v1-points.json.gz",
+  "neighborsArtifactPath": "C:/Users/h3art/PycharmProjects/cards/web/data/milestones/catalog-shadow/catalog-semantic-visualization-v1-neighbors.jsonl.gz",
+  "clustersArtifactPath": "C:/Users/h3art/PycharmProjects/cards/web/data/milestones/catalog-shadow/catalog-semantic-visualization-v1-clusters.json",
+  "contentHash": "222a2896364ad0888b07eaa4eec078b39efdef5da0dea2de19d6d34361000f5d"
+}

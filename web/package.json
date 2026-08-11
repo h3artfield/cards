@@ -88,7 +88,8 @@
     "mtg-rag:validate": "npx --yes tsx scripts/mtg-rag/validate.ts",
     "mtg-rag:smoke-test": "npx --yes tsx scripts/mtg-rag/smokeTest.ts",
     "mtg-rag:chunk": "npx --yes tsx scripts/mtg-rag/chunk.ts",
-    "mtg-rag:evaluate": "npx --yes tsx scripts/mtg-rag/evaluate.ts"
+    "mtg-rag:evaluate": "npx --yes tsx scripts/mtg-rag/evaluate.ts",
+    "semantic-map:build": "npx --yes tsx scripts/build-catalog-semantic-visualization-v1.ts"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
@@ -102,6 +103,7 @@
     "react-dom": "19.2.4",
     "stripe": "^17.7.0",
     "three": "^0.185.1",
+    "umap-js": "^1.4.0",
     "uuid": "^14.0.1"
   },
   "devDependencies": {
