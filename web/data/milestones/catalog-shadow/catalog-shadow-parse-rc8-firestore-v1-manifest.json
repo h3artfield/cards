@@ -1,0 +1,32 @@
+{
+  "artifactType": "CatalogShadowParseManifest",
+  "version": "catalog-shadow-parse-rc8-v1",
+  "frame": "firestore",
+  "generatedAt": "2026-08-11T01:11:37.979Z",
+  "status": "SHADOW_ONLY",
+  "note": "Authoritative Firestore population frame — not written to production semantic collection.",
+  "parserVersion": "oracle-action-v1.44-rc8-ownership-grant-family",
+  "parserCommitSha": "f8aa7561108bc43a94762a9bede5520e5a39dd27",
+  "parserBlobClosure": "d3af8eca52a6bce6582d7f8a62e8aa2a89b4baefa9f36bff036adc9b2a6ce560",
+  "catalogSource": "firestore",
+  "catalogSourceDetail": "catalogOracleCards",
+  "catalogVersion": "2026-08-05T21:03:08.408+00:00",
+  "populationSnapshotPath": "C:/Users/h3art/PycharmProjects/cards/web/data/milestones/catalog-shadow/catalog-population-snapshot-firestore-v1.json",
+  "populationHash": "df8b6ec1c809a8b62acc160a7a8e751c68f0b42f61aa110520a84b19be13f7bf",
+  "firestoreTotalCatalogOracleCards": 38542,
+  "eligibleOracleIds": 35582,
+  "cardCount": 35582,
+  "contentHash": "5cfb6d189f8490cfc58e50edb7d2b7bf1072db439f07f32a7122f10d54509909",
+  "complexityBucketDefinitionVersion": "catalog-complexity-bucket-v1",
+  "healthMetricDefinitions": {
+    "cardsWithAnyIntegrityIssue": "semanticInvalid OR idInvalid OR provenanceInvalid OR acceptedActionOutsideOwnerSpanCount > 0 OR forbiddenEmissionCount > 0",
+    "cardsWithAnyParserDiagnostic": "semantic.diagnostics.length > 0",
+    "cardsWithAnyNeedsReview": "needsReviewActions.length > 0",
+    "cardsNonPublishable": "publishable === false (structuralInvalid OR idInvalid OR provenanceInvalid)",
+    "cardsWithNoDiagnostics": "semantic.diagnostics.length === 0 (orthogonal to correctness — many valid cards emit zero diagnostics)"
+  },
+  "artifactPath": "C:/Users/h3art/PycharmProjects/cards/web/data/milestones/catalog-shadow/catalog-shadow-parse-rc8-firestore-v1.jsonl.gz",
+  "digest": "a31fd2ceff1ceb8fdcdc89da631703363d63b118b6fe57e3bd184e001605425f",
+  "preservedBulkSnapshotNote": "Historical bulk-cache run catalog-shadow-parse-rc8-75ce13bb133f5fde preserved separately.",
+  "blindStatus": "DO_NOT_TOUCH"
+}

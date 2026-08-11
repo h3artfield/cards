@@ -1,0 +1,42 @@
+{
+  "registryVersion": "gold-policy-registry-v1.8",
+  "policyVersion": "semantic-gold-policy-v1.8",
+  "validatorVersion": "gold-policy-validator-v1.8",
+  "supersedes": "data/milestones/rc3-foundations/gold-policy-registry-v1.json",
+  "frozenAt": "2026-08-11T00:00:00.000Z",
+  "taxonomyVersion": "three-layer-v1.8",
+  "parserBlind": true,
+  "preservesV17Permanently": true,
+  "v18GapRepairs": [
+    "static_cast_activate_payment_restriction",
+    "foretell_suspend_deferred_cast_reminder"
+  ],
+  "allowedInputs": [
+    "canonicalOracleText",
+    "cardFaceIdentity",
+    "caseScope",
+    "benchmarkTargets",
+    "goldActions",
+    "goldStructuralAnnotations",
+    "taxonomyVersion"
+  ],
+  "forbiddenInputs": [
+    "parserOutput",
+    "tpFpFn",
+    "parserEvidenceSpans",
+    "rc4Behavior",
+    "matcherResults"
+  ],
+  "policyFamilies": [
+    {
+      "id": "static_cast_activate_restriction_v18",
+      "metric": "invalidPermissionActionGold",
+      "summary": "Static can't pay/sacrifice to cast/activate — Layer-1 restriction, not L2 cast/sacrifice gold"
+    },
+    {
+      "id": "foretell_deferred_cast_reminder_v18",
+      "metric": "invalidPermissionActionGold",
+      "summary": "Foretell/suspend deferred-cast reminder lines — Layer-1 mechanic definition, not L2 cast gold"
+    }
+  ]
+}

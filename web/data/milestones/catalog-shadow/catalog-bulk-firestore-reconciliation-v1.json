@@ -1,0 +1,152 @@
+{
+  "artifactType": "CatalogBulkFirestoreReconciliation",
+  "version": "catalog-bulk-firestore-reconciliation-v1",
+  "reconciledAt": "2026-08-11T01:17:46.172Z",
+  "bulkManifest": "data/milestones/catalog-shadow/catalog-shadow-parse-rc8-75ce13bb133f5fde-manifest.json",
+  "bulkCachePath": "C:\\Users\\h3art\\PycharmProjects\\cards\\web\\.cache\\scryfall-bulk\\oracle_cards-2026-08-05T21-03-08-408+00-00.jsonl.gz",
+  "bulkRecordCount": 35582,
+  "firestorePopulationSnapshot": "data/milestones/catalog-shadow/catalog-population-snapshot-firestore-v1.json",
+  "firestoreTotalCatalogOracleCards": 38542,
+  "firestoreEligibleOracleIds": 35582,
+  "firestoreExcludedNoOracleText": 2960,
+  "firestoreDuplicateOracleIds": 0,
+  "counts": {
+    "inBoth": 35582,
+    "onlyInBulkCache": 0,
+    "onlyInFirestore": 0,
+    "sharedWithTextHashDiff": 5,
+    "sharedWithMetadataDiff": 6
+  },
+  "onlyInBulkCache": [],
+  "onlyInFirestore": [],
+  "sharedTextOrMetadataDiffs": [
+    {
+      "oracleId": "43985bbc-a0f6-4812-984e-392bc8562633",
+      "bulk": {
+        "oracleId": "43985bbc-a0f6-4812-984e-392bc8562633",
+        "oracleTextHash": "522f9065ecbe764a1316e38aad12383e878569e6585954bec0e865fb8210fdbb",
+        "canonicalName": "Blood Crypt",
+        "layout": "normal",
+        "sourceVersion": "scryfall-oracle_cards:2026-11-13"
+      },
+      "firestore": {
+        "oracleId": "43985bbc-a0f6-4812-984e-392bc8562633",
+        "oracleTextHash": "6051470224c7823cefda39449f0103d0ab94de4d1ea53057da4c814fc408ba81",
+        "canonicalName": "Blood Crypt // Blood Crypt",
+        "layout": "normal",
+        "sourceVersion": "2026-08-06T01:45:31.312Z"
+      },
+      "nameDiff": true,
+      "layoutDiff": false,
+      "sourceVersionDiff": true
+    },
+    {
+      "oracleId": "975ec9a3-6f20-4177-8211-82526e092538",
+      "bulk": {
+        "oracleId": "975ec9a3-6f20-4177-8211-82526e092538",
+        "oracleTextHash": "28adcb9f948badb251efb7cb3050c0616fe7d6e21150f9ec4d6cbecd90f66fbb",
+        "canonicalName": "Overgrown Tomb",
+        "layout": "normal",
+        "sourceVersion": "scryfall-oracle_cards:2026-11-13"
+      },
+      "firestore": {
+        "oracleId": "975ec9a3-6f20-4177-8211-82526e092538",
+        "oracleTextHash": "c9c79b3138da20172507f3683df4fb09d6416d9aac0abe0edb7636dd2d40d491",
+        "canonicalName": "Overgrown Tomb // Overgrown Tomb",
+        "layout": "normal",
+        "sourceVersion": "2026-08-06T01:45:31.430Z"
+      },
+      "nameDiff": true,
+      "layoutDiff": false,
+      "sourceVersionDiff": true
+    },
+    {
+      "oracleId": "da1e019c-2ffb-412d-90d7-f2e5e5c44c4b",
+      "bulk": {
+        "oracleId": "da1e019c-2ffb-412d-90d7-f2e5e5c44c4b",
+        "oracleTextHash": "fb5712d6be8a7950814a23dec8090eee290ef342fbdd59a46a5b42a0a965b6c4",
+        "canonicalName": "Bloomvine Regent // Claim Territory",
+        "layout": "adventure",
+        "sourceVersion": "scryfall-oracle_cards:2025-04-11"
+      },
+      "firestore": {
+        "oracleId": "da1e019c-2ffb-412d-90d7-f2e5e5c44c4b",
+        "oracleTextHash": "fb5712d6be8a7950814a23dec8090eee290ef342fbdd59a46a5b42a0a965b6c4",
+        "canonicalName": "Bloomvine Regent // Claim Territory // Bloomvine Regent",
+        "layout": "adventure",
+        "sourceVersion": "2026-08-06T01:45:30.781Z"
+      },
+      "nameDiff": true,
+      "layoutDiff": false,
+      "sourceVersionDiff": true
+    },
+    {
+      "oracleId": "f1266a1b-bae6-4ded-b4d5-7586a5b6c5d0",
+      "bulk": {
+        "oracleId": "f1266a1b-bae6-4ded-b4d5-7586a5b6c5d0",
+        "oracleTextHash": "b918bcdeb15bd58d9c19fb17da61dca990649066558484c2ebeaa5d069e3354b",
+        "canonicalName": "Clarion Conqueror",
+        "layout": "normal",
+        "sourceVersion": "scryfall-oracle_cards:2025-04-11"
+      },
+      "firestore": {
+        "oracleId": "f1266a1b-bae6-4ded-b4d5-7586a5b6c5d0",
+        "oracleTextHash": "5958c3fd05943f20c04077c9b6acd30cfb692c6dc4b3641c50c60a6f623e1666",
+        "canonicalName": "Clarion Conqueror // Clarion Conqueror",
+        "layout": "normal",
+        "sourceVersion": "2026-08-06T01:45:33.840Z"
+      },
+      "nameDiff": true,
+      "layoutDiff": false,
+      "sourceVersionDiff": true
+    },
+    {
+      "oracleId": "f1750962-a87c-49f6-b731-02ae971ac6ea",
+      "bulk": {
+        "oracleId": "f1750962-a87c-49f6-b731-02ae971ac6ea",
+        "oracleTextHash": "93024ee84964a10512f7e7dd5a337215a28f476d963b7282ae9230c26dda6eb2",
+        "canonicalName": "Hallowed Fountain",
+        "layout": "normal",
+        "sourceVersion": "scryfall-oracle_cards:2026-11-13"
+      },
+      "firestore": {
+        "oracleId": "f1750962-a87c-49f6-b731-02ae971ac6ea",
+        "oracleTextHash": "dd3445da03906a0fdea34add695c154dd3d02279d7f1f3008544f86ac671a0b5",
+        "canonicalName": "Hallowed Fountain // Hallowed Fountain",
+        "layout": "normal",
+        "sourceVersion": "2026-08-06T01:45:31.074Z"
+      },
+      "nameDiff": true,
+      "layoutDiff": false,
+      "sourceVersionDiff": true
+    },
+    {
+      "oracleId": "f413a83d-a40d-434c-b20a-4c707c0527fa",
+      "bulk": {
+        "oracleId": "f413a83d-a40d-434c-b20a-4c707c0527fa",
+        "oracleTextHash": "624231b82f19744582b3ec5eb095c0eaccb57f2238bc0ba2b40de4b5a6f3c8c9",
+        "canonicalName": "Temple Garden",
+        "layout": "normal",
+        "sourceVersion": "scryfall-oracle_cards:2026-11-13"
+      },
+      "firestore": {
+        "oracleId": "f413a83d-a40d-434c-b20a-4c707c0527fa",
+        "oracleTextHash": "412942efa4924540f13ef7216cda589e0c6693616060f48dfd10950a323b2a5f",
+        "canonicalName": "Temple Garden // Temple Garden",
+        "layout": "normal",
+        "sourceVersion": "2026-08-06T01:45:35.019Z"
+      },
+      "nameDiff": true,
+      "layoutDiff": false,
+      "sourceVersionDiff": true
+    }
+  ],
+  "populationHash": "df8b6ec1c809a8b62acc160a7a8e751c68f0b42f61aa110520a84b19be13f7bf",
+  "reconciliationHash": "311bdce77eb9ba7fee57ec3934c3fa08c85fbdc6dfe8ef8d60b28eec9ec6f8f0",
+  "interpretationGuide": {
+    "onlyInBulkCache": "Likely stale Scryfall bulk cache and/or bulk rows filtered differently at import",
+    "onlyInFirestore": "Newer catalog imports not yet in local bulk cache",
+    "sharedTextHashDiff": "Same oracleId but oracle text changed between bulk snapshot and Firestore golden catalog",
+    "authoritativePopulationFrame": "Firestore eligibleOracleIds"
+  }
+}

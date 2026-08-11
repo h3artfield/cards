@@ -1,0 +1,19 @@
+{
+  "artifactType": "CatalogShadowParseManifest",
+  "version": "catalog-shadow-parse-rc8-v1",
+  "generatedAt": "2026-08-11T00:28:46.708Z",
+  "status": "SHADOW_ONLY",
+  "note": "Offline shadow parse — not written to production semantic collection.",
+  "parserVersion": "oracle-action-v1.44-rc8-ownership-grant-family",
+  "parserCommitSha": "f8aa7561108bc43a94762a9bede5520e5a39dd27",
+  "parserBlobClosure": "d3af8eca52a6bce6582d7f8a62e8aa2a89b4baefa9f36bff036adc9b2a6ce560",
+  "catalogSource": "scryfall_bulk_cache",
+  "catalogSourceDetail": "C:\\Users\\h3art\\PycharmProjects\\cards\\web\\.cache\\scryfall-bulk\\oracle_cards-2026-08-05T21-03-08-408+00-00.jsonl.gz",
+  "catalogVersion": "2023-08-04",
+  "cardCount": 35582,
+  "contentHash": "6c54f6108aa7d76895d44584e82dc8f806746782eff8b220797c14a8cb0c41d3",
+  "complexityBucketDefinitionVersion": "catalog-complexity-bucket-v1",
+  "artifactPath": "C:/Users/h3art/PycharmProjects/cards/web/data/milestones/catalog-shadow/catalog-shadow-parse-rc8-75ce13bb133f5fde.jsonl.gz",
+  "digest": "75ce13bb133f5fdeabcfca113d84e5324e3d195978d3262115c44dc31f7fe9ae",
+  "blindStatus": "DO_NOT_TOUCH"
+}

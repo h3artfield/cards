@@ -1,0 +1,248 @@
+{
+  "artifactType": "ValidationRootCauseLedger",
+  "version": "validation-v18-root-cause-ledger-v1",
+  "integrity": {
+    "mappedRows": 13,
+    "expectedRows": 13,
+    "unclassified": 0,
+    "duplicateMismatchAssignment": 0,
+    "distinctMechanismFamilies": 12,
+    "allGenuineMapped": true
+  },
+  "ledger": [
+    {
+      "caseId": "vh18-0031",
+      "cardName": "Bilbo, Fellow Conspirator",
+      "mismatchKind": "FN",
+      "primitive": "create_token",
+      "goldEvidence": "create a Food token and a Treasure token",
+      "observedEvidence": null,
+      "coverageStratum": "challenge_replacement",
+      "failureStage": "primitive_extraction",
+      "primaryMechanism": "replacement_consequence_extraction",
+      "recurrence": {
+        "observedV15": false,
+        "observedV16": true,
+        "observedV17": true,
+        "observedV18": true
+      },
+      "mismatchId": "b6a19278bcaba0e9"
+    },
+    {
+      "caseId": "vh18-0044",
+      "cardName": "Death in Heaven",
+      "mismatchKind": "FN",
+      "primitive": "put_onto_battlefield",
+      "goldEvidence": "Put all creature cards exiled with this enchantment onto the battlefield",
+      "observedEvidence": null,
+      "coverageStratum": "broad_saga_planeswalker",
+      "failureStage": "primitive_extraction",
+      "primaryMechanism": "broad_saga_planeswalker|put_onto_battlefield|primitive_extraction",
+      "recurrence": {
+        "observedV15": false,
+        "observedV16": false,
+        "observedV17": false,
+        "observedV18": true
+      },
+      "mismatchId": "6211fe9759b5bc9b"
+    },
+    {
+      "caseId": "vh18-0044",
+      "cardName": "Death in Heaven",
+      "mismatchKind": "FN",
+      "primitive": "mill",
+      "goldEvidence": "mills two cards, then exiles their graveyard",
+      "observedEvidence": null,
+      "coverageStratum": "broad_saga_planeswalker",
+      "failureStage": "primitive_extraction",
+      "primaryMechanism": "mill_imperative_extraction",
+      "recurrence": {
+        "observedV15": false,
+        "observedV16": false,
+        "observedV17": true,
+        "observedV18": true
+      },
+      "mismatchId": "2cdf97e9bc582138"
+    },
+    {
+      "caseId": "vh18-0048",
+      "cardName": "Choreographed Sparks",
+      "mismatchKind": "FN",
+      "primitive": "sacrifice",
+      "goldEvidence": "sacrifice this token",
+      "observedEvidence": null,
+      "coverageStratum": "challenge_modal_option_lineage",
+      "failureStage": "primitive_extraction",
+      "primaryMechanism": "challenge_modal_option_lineage|sacrifice|primitive_extraction",
+      "recurrence": {
+        "observedV15": false,
+        "observedV16": false,
+        "observedV17": false,
+        "observedV18": true
+      },
+      "mismatchId": "ea084755212c4dc7"
+    },
+    {
+      "caseId": "vh18-0091",
+      "cardName": "Arcane Savant",
+      "mismatchKind": "FN",
+      "primitive": "shuffle_library",
+      "goldEvidence": "shuffle your deck to start the game, you may reveal this card from your deck and exile an instant or sorcery card you drafted that isn't in your deck",
+      "observedEvidence": null,
+      "coverageStratum": "challenge_immediate_cast_vs_permission",
+      "failureStage": "primitive_extraction",
+      "primaryMechanism": "immediate_cast_grammar",
+      "recurrence": {
+        "observedV15": false,
+        "observedV16": false,
+        "observedV17": false,
+        "observedV18": true
+      },
+      "mismatchId": "c38bac6e2d5cf551"
+    },
+    {
+      "caseId": "vh18-0095",
+      "cardName": "Armor of Thorns",
+      "mismatchKind": "FN",
+      "primitive": "sacrifice",
+      "goldEvidence": "sacrifices it at the beginning of the next cleanup step",
+      "observedEvidence": null,
+      "coverageStratum": "challenge_immediate_cast_vs_permission",
+      "failureStage": "primitive_extraction",
+      "primaryMechanism": "immediate_cast_grammar",
+      "recurrence": {
+        "observedV15": false,
+        "observedV16": false,
+        "observedV17": false,
+        "observedV18": true
+      },
+      "mismatchId": "d1d5e87bf5c3a14e"
+    },
+    {
+      "caseId": "vh18-0151",
+      "cardName": "Command Performance",
+      "mismatchKind": "FN",
+      "primitive": "put_onto_battlefield",
+      "goldEvidence": "Put the top card of your Attraction deck onto the battlefield",
+      "observedEvidence": null,
+      "coverageStratum": "broad_modal",
+      "failureStage": "primitive_extraction",
+      "primaryMechanism": "broad_modal|put_onto_battlefield|primitive_extraction",
+      "recurrence": {
+        "observedV15": false,
+        "observedV16": false,
+        "observedV17": false,
+        "observedV18": true
+      },
+      "mismatchId": "269cb20d49a440f6"
+    },
+    {
+      "caseId": "vh18-0152",
+      "cardName": "Common Black Removal",
+      "mismatchKind": "FN",
+      "primitive": "mill",
+      "goldEvidence": "mills cards equal to its power",
+      "observedEvidence": null,
+      "coverageStratum": "broad_modal",
+      "failureStage": "primitive_extraction",
+      "primaryMechanism": "broad_modal|mill|primitive_extraction",
+      "recurrence": {
+        "observedV15": false,
+        "observedV16": false,
+        "observedV17": false,
+        "observedV18": true
+      },
+      "mismatchId": "ab24707bd978b1ff"
+    },
+    {
+      "caseId": "vh18-0175",
+      "cardName": "Altar of Dementia",
+      "mismatchKind": "FN",
+      "primitive": "mill",
+      "goldEvidence": "mills cards equal to the sacrificed creature's power",
+      "observedEvidence": null,
+      "coverageStratum": "broad_variable_quantity",
+      "failureStage": "primitive_extraction",
+      "primaryMechanism": "broad_variable_quantity|mill|primitive_extraction",
+      "recurrence": {
+        "observedV15": false,
+        "observedV16": false,
+        "observedV17": false,
+        "observedV18": true
+      },
+      "mismatchId": "d808a63aba6a8371"
+    },
+    {
+      "caseId": "vh18-0206",
+      "cardName": "Altar of Mogis",
+      "mismatchKind": "FN",
+      "primitive": "sacrifice",
+      "goldEvidence": "sacrifices two Minotaurs",
+      "observedEvidence": null,
+      "coverageStratum": "broad_supplement",
+      "failureStage": "primitive_extraction",
+      "primaryMechanism": "broad_supplement|sacrifice|primitive_extraction",
+      "recurrence": {
+        "observedV15": false,
+        "observedV16": false,
+        "observedV17": false,
+        "observedV18": true
+      },
+      "mismatchId": "082a4217ed6fe12b"
+    },
+    {
+      "caseId": "vh18-0207",
+      "cardName": "Altar of the Brood",
+      "mismatchKind": "FN",
+      "primitive": "mill",
+      "goldEvidence": "mills a card",
+      "observedEvidence": null,
+      "coverageStratum": "broad_supplement",
+      "failureStage": "primitive_extraction",
+      "primaryMechanism": "broad_supplement|mill|primitive_extraction",
+      "recurrence": {
+        "observedV15": false,
+        "observedV16": false,
+        "observedV17": false,
+        "observedV18": true
+      },
+      "mismatchId": "86b41850586d3c02"
+    },
+    {
+      "caseId": "vh18-0148",
+      "cardName": "Altar of the Lost",
+      "mismatchKind": "FP",
+      "primitive": "add_mana",
+      "goldEvidence": null,
+      "observedEvidence": "Add two mana in any combination of colors",
+      "coverageStratum": "broad_activated",
+      "adjudicationDisposition": "genuine_parser_fp",
+      "primaryMechanism": "activated_add_mana_emission",
+      "recurrence": {
+        "observedV15": false,
+        "observedV16": false,
+        "observedV17": false,
+        "observedV18": true
+      },
+      "mismatchId": "vh18-0148|add_mana|Add two mana in any combination of colors|0"
+    },
+    {
+      "caseId": "vh18-0164",
+      "cardName": "Allies at Last",
+      "mismatchKind": "FP",
+      "primitive": "deal_damage",
+      "goldEvidence": null,
+      "observedEvidence": "deal damage equal to their power to target creature an opponent controls",
+      "coverageStratum": "broad_compound",
+      "adjudicationDisposition": "genuine_parser_fp",
+      "primaryMechanism": "compound_deal_damage_emission",
+      "recurrence": {
+        "observedV15": false,
+        "observedV16": false,
+        "observedV17": false,
+        "observedV18": true
+      },
+      "mismatchId": "vh18-0164|deal_damage|deal damage equal to their power to target creature an opponent controls|0"
+    }
+  ]
+}

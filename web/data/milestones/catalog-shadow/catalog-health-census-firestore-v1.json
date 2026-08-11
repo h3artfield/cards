@@ -1,0 +1,104 @@
+{
+  "artifactType": "CatalogHealthCensus",
+  "version": "catalog-health-census-v1",
+  "generatedAt": "2026-08-11T01:13:37.481Z",
+  "sourceManifest": "data/milestones/catalog-shadow/catalog-shadow-parse-rc8-firestore-v1-manifest.json",
+  "frame": "firestore",
+  "parserVersion": "oracle-action-v1.44-rc8-ownership-grant-family",
+  "parserBlobClosure": "d3af8eca52a6bce6582d7f8a62e8aa2a89b4baefa9f36bff036adc9b2a6ce560",
+  "healthMetricDefinitions": {
+    "cardsWithAnyIntegrityIssue": "semanticInvalid OR idInvalid OR provenanceInvalid OR acceptedActionOutsideOwnerSpanCount > 0 OR forbiddenEmissionCount > 0",
+    "cardsWithAnyParserDiagnostic": "semantic.diagnostics.length > 0",
+    "cardsWithAnyNeedsReview": "needsReviewActions.length > 0",
+    "cardsNonPublishable": "publishable === false (structuralInvalid OR idInvalid OR provenanceInvalid)",
+    "cardsWithNoDiagnostics": "semantic.diagnostics.length === 0 (orthogonal to correctness — many valid cards emit zero diagnostics)"
+  },
+  "totals": {
+    "oracleCards": 35582,
+    "successfullyParsed": 35537,
+    "structuralInvalid": 45,
+    "provenanceInvalid": 0,
+    "idInvalid": 6,
+    "cardsWithNoDiagnostics": 35576,
+    "cardsWithNeedsReview": 661,
+    "cardsWithAbstention": 0,
+    "cardsWithUnsupportedConstructs": 0,
+    "cardsWithAnyIntegrityIssue": 45,
+    "cardsWithAnyParserDiagnostic": 6,
+    "cardsWithAnyNeedsReview": 661,
+    "cardsNonPublishable": 45,
+    "totalAbilities": 70582,
+    "totalAcceptedL2Actions": 38398,
+    "totalNeedsReviewActions": 756,
+    "totalGrantedAbilities": 4095,
+    "totalReplacementEffects": 0,
+    "totalModalOptions": 2156
+  },
+  "percentages": {
+    "successfullyParsed": 99.87,
+    "structuralInvalid": 0.13,
+    "provenanceInvalid": 0,
+    "idInvalid": 0.02,
+    "cardsWithNoDiagnostics": 99.98,
+    "cardsWithNeedsReview": 1.86,
+    "cardsWithAbstention": 0,
+    "cardsWithUnsupportedConstructs": 0,
+    "cardsWithAnyIntegrityIssue": 0.13,
+    "cardsWithAnyParserDiagnostic": 0.02,
+    "cardsWithAnyNeedsReview": 1.86,
+    "cardsNonPublishable": 0.13
+  },
+  "perCardAverages": {
+    "acceptedL2Actions": 1.08,
+    "abilities": 1.98,
+    "needsReviewActions": 0.02,
+    "diagnostics": 0
+  },
+  "complexityBuckets": {
+    "definitionVersion": "catalog-complexity-bucket-v1",
+    "cardCounts": {
+      "simple": 20614,
+      "normal": 13132,
+      "complex": 1746,
+      "pathological": 90
+    },
+    "structuralInvalidByBucket": {
+      "simple": 0,
+      "normal": 30,
+      "complex": 10,
+      "pathological": 5
+    },
+    "needsReviewCardsByBucket": {
+      "simple": 173,
+      "normal": 410,
+      "complex": 69,
+      "pathological": 9
+    },
+    "parserHealthByBucket": {
+      "simple": {
+        "cards": 20614,
+        "structuralInvalidRate": 0,
+        "needsReviewRate": 0.84,
+        "avgAcceptedL2Actions": 0.83
+      },
+      "normal": {
+        "cards": 13132,
+        "structuralInvalidRate": 0.23,
+        "needsReviewRate": 3.12,
+        "avgAcceptedL2Actions": 1.34
+      },
+      "complex": {
+        "cards": 1746,
+        "structuralInvalidRate": 0.57,
+        "needsReviewRate": 3.95,
+        "avgAcceptedL2Actions": 1.97
+      },
+      "pathological": {
+        "cards": 90,
+        "structuralInvalidRate": 5.56,
+        "needsReviewRate": 10,
+        "avgAcceptedL2Actions": 3.19
+      }
+    }
+  }
+}

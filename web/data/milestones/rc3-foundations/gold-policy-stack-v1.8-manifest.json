@@ -1,0 +1,25 @@
+{
+  "artifactType": "GoldPolicyStackManifest",
+  "version": "gold-policy-stack-v1.8",
+  "status": "CERTIFIED_GAP_REPAIR",
+  "preservesV17Permanently": true,
+  "stack": {
+    "stackVersion": "gold-policy-stack-v1.8",
+    "policyVersion": "semantic-gold-policy-v1.8",
+    "validatorVersion": "gold-policy-validator-v1.8",
+    "validatorSourceHash": "b07a756fdb10b32c8e5f946b4a7dde4a32e774da90b33a808d1e38a19189c766",
+    "policyRegistryHash": "02808bba0d2db268e8d38a33feb7a5b5864dbfecfabd8ab30e44a5065352f40a",
+    "validatorFileHash": "58945c2ee9aab787e06f018c925ee11ebba89b2002053e5463676c5cbd3ba62a",
+    "semanticEnrichmentFileHash": "3142e715f44657d98e219101312d5edbc2a0f2a2ca43b71cae7e9250502972d6",
+    "spanRoleClassifierFileHash": "8f249a6331b14aafa754d9377a75b08ef15f3f3dff3b70ea5db978ad07feb878",
+    "policyAdjudicationFileHash": "def9bb5eb614b1624e4a5d3a7a3092a6361778995b69bd356c643fd553ac21dd",
+    "policyExtensionsFileHash": "57c33adb8ad2382debbc11531f89136bf4691caafb84fb8bf7a5bcbe22c789c9",
+    "runnerConfigFileHash": "a34bee294c608abf86ac17c26c19f104bbd69c3f128561a6eb3d382955ef1261",
+    "stackCompositeHash": "0abc50510a1253b82d5bac30ecce89907a4251568edb290cc7dd4fd32aeef50b"
+  },
+  "gapRepairs": [
+    "static_cast_activate_payment_restriction",
+    "foretell_suspend_deferred_cast_reminder"
+  ],
+  "regressionCommand": "npx tsx scripts/test-gold-policy-validator-regression-v1.ts"
+}
