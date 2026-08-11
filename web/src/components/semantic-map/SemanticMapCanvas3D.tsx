@@ -6,12 +6,8 @@ import { OrbitControls, Line } from "@react-three/drei";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import * as THREE from "three";
 import type { SemanticMapCompareResult, SemanticMapInventoryOverlay, SemanticMapPoint } from "@/lib/semantic-visualization/types";
-
-const QUALITY_COLORS: Record<string, string> = {
-  publishable: "#7dd3fc",
-  needs_review: "#fbbf24",
-  quarantined: "#f87171",
-};
+import { colorIdentityMask } from "./semantic-map-mana-colors";
+import { createManaPointMaterial, ensureManaInstanceAttributes } from "./semantic-map-point-material";
 
 const SELECTED_COLOR = "#fbbf24";
 const HOVER_COLOR = "#ffffff";
@@ -21,19 +17,11 @@ function disableRaycast(obj: THREE.Object3D) {
   obj.raycast = () => undefined;
 }
 
-function pointColor(
-  p: SemanticMapPoint,
-  inventory: SemanticMapInventoryOverlay | undefined,
-  selectedOracleId: string | null,
-  hoverOracleId: string | null,
-): THREE.Color {
-  if (p.oracleId === selectedOracleId) return new THREE.Color(SELECTED_COLOR);
-  if (p.oracleId === hoverOracleId) return new THREE.Color(HOVER_COLOR);
-  if (inventory?.inStock) return new THREE.Color("#34d399");
-  if (selectedOracleId && p.oracleId !== selectedOracleId) {
-    return new THREE.Color(QUALITY_COLORS[p.qualityStatus] ?? "#7dd3fc").multiplyScalar(0.45);
-  }
-  return new THREE.Color(QUALITY_COLORS[p.qualityStatus] ?? "#7dd3fc");
+function instanceDim(p: SemanticMapPoint, selectedOracleId: string | null): number {
+  if (p.qualityStatus === "quarantined") return 0.35;
+  if (p.qualityStatus === "needs_review") return 0.75;
+  if (selectedOracleId && p.oracleId !== selectedOracleId) return 0.55;
+  return 1;
 }
 
 function nearestPointToRay(
@@ -77,14 +65,14 @@ function SemanticPoints({
   meshRef: React.RefObject<THREE.InstancedMesh | null>;
 }) {
   const tempObj = useMemo(() => new THREE.Object3D(), []);
+  const material = useMemo(() => createManaPointMaterial(), []);
+  const geometry = useMemo(() => new THREE.SphereGeometry(0.045, 16, 16), []);
 
   useEffect(() => {
     const mesh = meshRef.current;
     if (!mesh || points.length === 0) return;
 
-    if (!mesh.instanceColor) {
-      mesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(points.length * 3), 3);
-    }
+    const { colorMask, dim } = ensureManaInstanceAttributes(geometry, points.length);
 
     points.forEach((p, i) => {
       const isSelected = p.oracleId === selectedOracleId;
@@ -94,28 +82,24 @@ function SemanticPoints({
       tempObj.scale.setScalar(scale);
       tempObj.updateMatrix();
       mesh.setMatrixAt(i, tempObj.matrix);
-      mesh.setColorAt(
-        i,
-        pointColor(p, inventoryMap.get(p.oracleId), selectedOracleId, hoverOracleId),
-      );
+      colorMask.setX(i, colorIdentityMask(p.colorIdentity));
+      dim.setX(i, instanceDim(p, selectedOracleId));
     });
     mesh.count = points.length;
     mesh.instanceMatrix.needsUpdate = true;
-    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    colorMask.needsUpdate = true;
+    dim.needsUpdate = true;
     mesh.computeBoundingSphere();
-  }, [points, selectedOracleId, hoverOracleId, highlightOracleIds, inventoryMap, tempObj, meshRef]);
+  }, [points, selectedOracleId, hoverOracleId, highlightOracleIds, tempObj, meshRef, geometry]);
 
   if (points.length === 0) return null;
 
   return (
     <instancedMesh
       ref={meshRef}
-      args={[undefined, undefined, points.length]}
+      args={[geometry, material, points.length]}
       frustumCulled={false}
-    >
-      <sphereGeometry args={[0.045, 10, 10]} />
-      <meshBasicMaterial vertexColors toneMapped={false} transparent opacity={0.85} depthWrite={false} />
-    </instancedMesh>
+    />
   );
 }
 

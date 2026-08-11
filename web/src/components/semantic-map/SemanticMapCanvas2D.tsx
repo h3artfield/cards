@@ -2,12 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { SemanticMapCompareResult, SemanticMapInventoryOverlay, SemanticMapPoint } from "@/lib/semantic-visualization/types";
-
-const QUALITY_COLORS: Record<string, string> = {
-  publishable: "#7dd3fc",
-  needs_review: "#fbbf24",
-  quarantined: "#f87171",
-};
+import { drawManaNode2D } from "./semantic-map-mana-colors";
 
 export function SemanticMapCanvas2D({
   points,
@@ -101,15 +96,19 @@ export function SemanticMapCanvas2D({
       const isSelected = p.oracleId === selectedOracleId;
       const isHighlight = highlightOracleIds.includes(p.oracleId);
       const isHover = p.oracleId === hoverOracleId;
-      let color = inv?.inStock ? "#34d399" : (QUALITY_COLORS[p.qualityStatus] ?? "#7dd3fc");
-      if (selectedOracleId && !isSelected && !isHighlight) color = "#334155";
-      if (isSelected) color = "#fbbf24";
-      if (isHover && !isSelected) color = "#ffffff";
-      const radius = isSelected ? 10 : isHighlight ? 7 : isHover ? 6 : 3;
-      ctx.beginPath();
-      ctx.fillStyle = color;
-      ctx.arc(sx, sy, radius, 0, Math.PI * 2);
-      ctx.fill();
+      const radius = isSelected ? 10 : isHighlight ? 7 : isHover ? 6 : 4;
+      let dim = 1;
+      if (p.qualityStatus === "quarantined") dim = 0.35;
+      else if (p.qualityStatus === "needs_review") dim = 0.75;
+      else if (selectedOracleId && !isSelected && !isHighlight) dim = 0.55;
+
+      drawManaNode2D(ctx, sx, sy, radius, p.colorIdentity, {
+        dim,
+        inventoryRing: Boolean(inv?.inStock),
+        stroke: isHover && !isSelected ? "#ffffff" : "#d4d4d4",
+        lineWidth: isSelected ? 2.5 : 1.5,
+      });
+
       if (isSelected) {
         ctx.beginPath();
         ctx.strokeStyle = "#ffffff";
@@ -122,8 +121,10 @@ export function SemanticMapCanvas2D({
         ctx.arc(sx, sy, radius + 8, 0, Math.PI * 2);
         ctx.stroke();
       } else if (isHover) {
-        ctx.strokeStyle = "#fff";
+        ctx.beginPath();
+        ctx.strokeStyle = "#ffffff";
         ctx.lineWidth = 2;
+        ctx.arc(sx, sy, radius + 2, 0, Math.PI * 2);
         ctx.stroke();
       }
     }
