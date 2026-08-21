@@ -1,0 +1,27 @@
+{
+  "version": "phase-rps-mechanical-gate-report-v1",
+  "createdAt": "2026-08-21T01:55:00.000Z",
+  "localCommitHint": "5046d49 was HEAD when the run started; this milestone is uncommitted local work",
+  "recommendation": "C",
+  "recommendationText": "Existing semantic space is inadequate for mechanics as a general encoder. Build a dedicated mechanical representation. Secondary blocker D: public Spellbook combo recipes (needs/produces chains) are not available, so reconstructed-family parity cannot be the last word.",
+  "gates": {
+    "A": "PASS — architecture-discovery.json",
+    "B": "PASS — identity 99.81% EXACT_ID; Spellbook research sample attributed",
+    "C": "MIXED — synthetic engine PASS; reconstructed Spellbook family exact parity 59.25% (public API lacks combo needs)",
+    "D": "PASS — PU evaluation; kNN best; frequency/linear/MLP collapse at 0.5 without negatives",
+    "E": "PASS — MLP did not help (worse mAP than linear)",
+    "F": "PARTIAL — hidden feature-edge recall 85.3% via kNN; variant-level interaction reconstruction 0 (feature support mismatch)",
+    "G": "PASS — 240 POSSIBLE_NOVEL candidates generated and labeled as unverified; local review queue only"
+  },
+  "safety": {
+    "productionFirestoreWrites": "NONE",
+    "productionSchemaMigrations": "NONE",
+    "deployments": "NONE",
+    "remotePushes": "NONE",
+    "openaiCalls": "NONE",
+    "newEmbeddingCalls": "NONE",
+    "existingOracleEmbeddingsModified": "NO"
+  },
+  "ui": "http://localhost:3000/experimental/mechanical-space",
+  "doNotProceed": ["RPS", "Hodge", "archetype clustering", "production Firestore collections", "Professor labeling"]
+}

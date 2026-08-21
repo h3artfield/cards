@@ -1,0 +1,498 @@
+{
+  "version": "mechanical-graph-parity-v1",
+  "createdAt": "2026-08-21T01:51:51.927Z",
+  "syntheticEngineSelftest": "PASS",
+  "publicApiLimitation": "GET /combos/ is not public. Parity uses reconstructed families from variants (uses + templates + produces). Feature-chaining needs are not available from the public variant payload.",
+  "recipesTested": 263,
+  "referenceVariants": 400,
+  "exactlyReconstructed": 237,
+  "missing": 163,
+  "additional": 40,
+  "identityMismatches": 0,
+  "templateMismatches": 10,
+  "minimalityDifferences": 40,
+  "featureChainFailures": 0,
+  "exactParityPct": 59.25,
+  "mismatches": [
+    {
+      "family": "539",
+      "type": "missing",
+      "key": "73089a39-a2f6-4aa2-a058-e6551475153d:1|8f933fae-6c0c-42d7-a817-14760d8285cd:1",
+      "recipeId": "csb:recipe:539"
+    },
+    {
+      "family": "539",
+      "type": "missing",
+      "key": "7336a541-3ae9-4ab2-acb8-f574c0a5b3a9:1|8f933fae-6c0c-42d7-a817-14760d8285cd:1",
+      "recipeId": "csb:recipe:539"
+    },
+    {
+      "family": "539",
+      "type": "missing",
+      "key": "7336a541-3ae9-4ab2-acb8-f574c0a5b3a9:1|fd505c02-c59e-476d-8e88-35da862ddc23:1",
+      "recipeId": "csb:recipe:539"
+    },
+    {
+      "family": "539",
+      "type": "missing",
+      "key": "73089a39-a2f6-4aa2-a058-e6551475153d:1|fd505c02-c59e-476d-8e88-35da862ddc23:1",
+      "recipeId": "csb:recipe:539"
+    },
+    {
+      "family": "539",
+      "type": "missing",
+      "key": "8f933fae-6c0c-42d7-a817-14760d8285cd:1|98e698ae-1a69-469c-9cfb-0e3fedeb71d4:1",
+      "recipeId": "csb:recipe:539"
+    },
+    {
+      "family": "539",
+      "type": "missing",
+      "key": "814b87fe-2a75-4ff2-8637-7e69e3fb285b:1|8f933fae-6c0c-42d7-a817-14760d8285cd:1",
+      "recipeId": "csb:recipe:539"
+    },
+    {
+      "family": "539",
+      "type": "missing",
+      "key": "98e698ae-1a69-469c-9cfb-0e3fedeb71d4:1|fd505c02-c59e-476d-8e88-35da862ddc23:1",
+      "recipeId": "csb:recipe:539"
+    },
+    {
+      "family": "539",
+      "type": "missing",
+      "key": "814b87fe-2a75-4ff2-8637-7e69e3fb285b:1|fd505c02-c59e-476d-8e88-35da862ddc23:1",
+      "recipeId": "csb:recipe:539"
+    },
+    {
+      "family": "539",
+      "type": "missing",
+      "key": "8d72ddb3-ef6e-4847-b6d4-5d85b1dd5802:1|8f933fae-6c0c-42d7-a817-14760d8285cd:1",
+      "recipeId": "csb:recipe:539"
+    },
+    {
+      "family": "539",
+      "type": "missing",
+      "key": "8d72ddb3-ef6e-4847-b6d4-5d85b1dd5802:1|fd505c02-c59e-476d-8e88-35da862ddc23:1",
+      "recipeId": "csb:recipe:539"
+    },
+    {
+      "family": "539",
+      "type": "missing",
+      "key": "1915a311-209b-4628-8122-af3055a78fed:1|8f933fae-6c0c-42d7-a817-14760d8285cd:1",
+      "recipeId": "csb:recipe:539"
+    },
+    {
+      "family": "539",
+      "type": "missing",
+      "key": "2121bcb4-f5fe-447f-9112-c7e5b5c45baf:1|8f933fae-6c0c-42d7-a817-14760d8285cd:1",
+      "recipeId": "csb:recipe:539"
+    },
+    {
+      "family": "539",
+      "type": "missing",
+      "key": "8f933fae-6c0c-42d7-a817-14760d8285cd:1|f19e7c5c-67fa-4ae4-89b8-afa0e08a6c48:1",
+      "recipeId": "csb:recipe:539"
+    },
+    {
+      "family": "396",
+      "type": "missing",
+      "key": "83cf1169-5853-4332-b897-7b17d72d76ab:1|8eb7c0a5-6190-40de-b473-2d1daa3bbe28:1",
+      "recipeId": "csb:recipe:396"
+    },
+    {
+      "family": "396",
+      "type": "missing",
+      "key": "8eb7c0a5-6190-40de-b473-2d1daa3bbe28:1|92b91910-9b65-4421-8eef-a33793161089:1",
+      "recipeId": "csb:recipe:396"
+    },
+    {
+      "family": "396",
+      "type": "missing",
+      "key": "8eb7c0a5-6190-40de-b473-2d1daa3bbe28:1|eea18c55-8695-4ba1-9b38-3e7638692f5f:1",
+      "recipeId": "csb:recipe:396"
+    },
+    {
+      "family": "396",
+      "type": "missing",
+      "key": "5c80d39e-f3af-4d24-bca0-19f0bd0f5082:1|8eb7c0a5-6190-40de-b473-2d1daa3bbe28:1",
+      "recipeId": "csb:recipe:396"
+    },
+    {
+      "family": "396",
+      "type": "missing",
+      "key": "112f2b3f-32e7-40b1-b80e-0b99184a840c:1|8eb7c0a5-6190-40de-b473-2d1daa3bbe28:1",
+      "recipeId": "csb:recipe:396"
+    },
+    {
+      "family": "396",
+      "type": "additional",
+      "key": "8eb7c0a5-6190-40de-b473-2d1daa3bbe28:1",
+      "recipeId": "csb:recipe:396"
+    },
+    {
+      "family": "33677",
+      "type": "missing",
+      "key": "223fa044-d387-4884-bf4e-75f1b61c6a46:1|33666a98-812f-4892-9f8d-33e0cbecc340:1",
+      "recipeId": "csb:recipe:33677"
+    },
+    {
+      "family": "33677",
+      "type": "missing",
+      "key": "33666a98-812f-4892-9f8d-33e0cbecc340:1|d9f1dc61-831e-4244-a2da-aa9da6fd5b50:1",
+      "recipeId": "csb:recipe:33677"
+    },
+    {
+      "family": "33677",
+      "type": "missing",
+      "key": "33666a98-812f-4892-9f8d-33e0cbecc340:1|e83b8830-fa97-4e60-b042-005e552a3ceb:1",
+      "recipeId": "csb:recipe:33677"
+    },
+    {
+      "family": "33677",
+      "type": "missing",
+      "key": "1576f031-57ca-4894-b461-8ea57b6cefdc:1|33666a98-812f-4892-9f8d-33e0cbecc340:1",
+      "recipeId": "csb:recipe:33677"
+    },
+    {
+      "family": "33677",
+      "type": "missing",
+      "key": "223fa044-d387-4884-bf4e-75f1b61c6a46:1|959acb66-84ca-4535-bca2-ad591895735e:1",
+      "recipeId": "csb:recipe:33677"
+    },
+    {
+      "family": "33677",
+      "type": "missing",
+      "key": "959acb66-84ca-4535-bca2-ad591895735e:1|d9f1dc61-831e-4244-a2da-aa9da6fd5b50:1",
+      "recipeId": "csb:recipe:33677"
+    },
+    {
+      "family": "33677",
+      "type": "missing",
+      "key": "959acb66-84ca-4535-bca2-ad591895735e:1|e83b8830-fa97-4e60-b042-005e552a3ceb:1",
+      "recipeId": "csb:recipe:33677"
+    },
+    {
+      "family": "33677",
+      "type": "missing",
+      "key": "1576f031-57ca-4894-b461-8ea57b6cefdc:1|959acb66-84ca-4535-bca2-ad591895735e:1",
+      "recipeId": "csb:recipe:33677"
+    },
+    {
+      "family": "30204",
+      "type": "missing",
+      "key": "4d18bcba-a346-445e-a182-6cc30b7e066d:1|9dbc3530-b278-4c8d-b2cc-a09dfac9d5e5:1|a784481f-eccb-4112-bb38-04a659319660:1",
+      "recipeId": "csb:recipe:30204"
+    },
+    {
+      "family": "30204",
+      "type": "missing",
+      "key": "8d02b297-97c4-4379-9862-0a462400f66f:1|9dbc3530-b278-4c8d-b2cc-a09dfac9d5e5:1|a784481f-eccb-4112-bb38-04a659319660:1",
+      "recipeId": "csb:recipe:30204"
+    },
+    {
+      "family": "30204",
+      "type": "additional",
+      "key": "9dbc3530-b278-4c8d-b2cc-a09dfac9d5e5:1|a784481f-eccb-4112-bb38-04a659319660:1",
+      "recipeId": "csb:recipe:30204"
+    },
+    {
+      "family": "589",
+      "type": "missing",
+      "key": "13575cf9-65c1-4861-b21e-eb2155e07766:1|18f22960-87ec-43cd-82ea-ec5cabf49ad3:1|994bc16d-fdc6-475c-96df-beeb4d5aa03e:1",
+      "recipeId": "csb:recipe:589"
+    },
+    {
+      "family": "589",
+      "type": "missing",
+      "key": "13575cf9-65c1-4861-b21e-eb2155e07766:1|96b87445-6362-4a17-91b2-cbf203fd03fd:1|994bc16d-fdc6-475c-96df-beeb4d5aa03e:1",
+      "recipeId": "csb:recipe:589"
+    },
+    {
+      "family": "589",
+      "type": "missing",
+      "key": "13575cf9-65c1-4861-b21e-eb2155e07766:1|2a838818-d590-4374-9a63-d9e6381a0f0d:1|994bc16d-fdc6-475c-96df-beeb4d5aa03e:1",
+      "recipeId": "csb:recipe:589"
+    },
+    {
+      "family": "589",
+      "type": "missing",
+      "key": "13575cf9-65c1-4861-b21e-eb2155e07766:1|751f22bc-bcea-4213-a37b-b5f72448a4c4:1|96b87445-6362-4a17-91b2-cbf203fd03fd:1",
+      "recipeId": "csb:recipe:589"
+    },
+    {
+      "family": "589",
+      "type": "missing",
+      "key": "13575cf9-65c1-4861-b21e-eb2155e07766:1|994bc16d-fdc6-475c-96df-beeb4d5aa03e:1|df4b5f7b-9d83-49b1-bd5e-77d0652eb34c:1",
+      "recipeId": "csb:recipe:589"
+    },
+    {
+      "family": "589",
+      "type": "missing",
+      "key": "0ffce5e0-6b1d-4d1a-9318-1a1a219df532:1|13575cf9-65c1-4861-b21e-eb2155e07766:1|994bc16d-fdc6-475c-96df-beeb4d5aa03e:1",
+      "recipeId": "csb:recipe:589"
+    },
+    {
+      "family": "589",
+      "type": "missing",
+      "key": "13575cf9-65c1-4861-b21e-eb2155e07766:1|18bdc181-9592-4147-81fb-7f83ce137f70:1|994bc16d-fdc6-475c-96df-beeb4d5aa03e:1",
+      "recipeId": "csb:recipe:589"
+    },
+    {
+      "family": "589",
+      "type": "missing",
+      "key": "13575cf9-65c1-4861-b21e-eb2155e07766:1|18f22960-87ec-43cd-82ea-ec5cabf49ad3:1|751f22bc-bcea-4213-a37b-b5f72448a4c4:1",
+      "recipeId": "csb:recipe:589"
+    },
+    {
+      "family": "589",
+      "type": "missing",
+      "key": "13575cf9-65c1-4861-b21e-eb2155e07766:1|96b87445-6362-4a17-91b2-cbf203fd03fd:1|b1f8eb7b-7e01-4bf8-a557-64e16a6052af:1",
+      "recipeId": "csb:recipe:589"
+    },
+    {
+      "family": "589",
+      "type": "missing",
+      "key": "13575cf9-65c1-4861-b21e-eb2155e07766:1|2a838818-d590-4374-9a63-d9e6381a0f0d:1|751f22bc-bcea-4213-a37b-b5f72448a4c4:1",
+      "recipeId": "csb:recipe:589"
+    },
+    {
+      "family": "589",
+      "type": "missing",
+      "key": "13575cf9-65c1-4861-b21e-eb2155e07766:1|18f22960-87ec-43cd-82ea-ec5cabf49ad3:1|b1f8eb7b-7e01-4bf8-a557-64e16a6052af:1",
+      "recipeId": "csb:recipe:589"
+    },
+    {
+      "family": "589",
+      "type": "missing",
+      "key": "13575cf9-65c1-4861-b21e-eb2155e07766:1|994bc16d-fdc6-475c-96df-beeb4d5aa03e:1|bbd0c406-c995-46e0-898d-375fdbede203:1",
+      "recipeId": "csb:recipe:589"
+    },
+    {
+      "family": "589",
+      "type": "additional",
+      "key": "13575cf9-65c1-4861-b21e-eb2155e07766:1",
+      "recipeId": "csb:recipe:589"
+    },
+    {
+      "family": "538",
+      "type": "missing",
+      "key": "5f15125e-ae89-471e-b055-226a783bc7c1:1|8f933fae-6c0c-42d7-a817-14760d8285cd:1",
+      "recipeId": "csb:recipe:538"
+    },
+    {
+      "family": "538",
+      "type": "missing",
+      "key": "5f15125e-ae89-471e-b055-226a783bc7c1:1|fd505c02-c59e-476d-8e88-35da862ddc23:1",
+      "recipeId": "csb:recipe:538"
+    },
+    {
+      "family": "538",
+      "type": "additional",
+      "key": "5f15125e-ae89-471e-b055-226a783bc7c1:1",
+      "recipeId": "csb:recipe:538"
+    },
+    {
+      "family": "580",
+      "type": "missing",
+      "key": "274b999f-f193-48fd-9a4a-0fdaf535e6c3:1|e0f0f290-c83f-4d97-9f5d-786c7136b0d1:1",
+      "recipeId": "csb:recipe:580"
+    },
+    {
+      "family": "580",
+      "type": "missing",
+      "key": "274b999f-f193-48fd-9a4a-0fdaf535e6c3:1|e2ea7d01-6564-4a7f-b935-49a5e3978dac:1",
+      "recipeId": "csb:recipe:580"
+    },
+    {
+      "family": "580",
+      "type": "missing",
+      "key": "274b999f-f193-48fd-9a4a-0fdaf535e6c3:1|54530a84-8278-4c93-a2cb-f5c86619a053:1",
+      "recipeId": "csb:recipe:580"
+    },
+    {
+      "family": "580",
+      "type": "missing",
+      "key": "274b999f-f193-48fd-9a4a-0fdaf535e6c3:1|bd513d9d-5aa2-4860-bd86-8b5d9430f133:1",
+      "recipeId": "csb:recipe:580"
+    },
+    {
+      "family": "580",
+      "type": "missing",
+      "key": "274b999f-f193-48fd-9a4a-0fdaf535e6c3:1|d16fcb45-7fe7-4640-a325-badb64cadd62:1",
+      "recipeId": "csb:recipe:580"
+    },
+    {
+      "family": "580",
+      "type": "missing",
+      "key": "274b999f-f193-48fd-9a4a-0fdaf535e6c3:1|52d349e7-4bd2-468a-ab26-df8cd262f6f6:1",
+      "recipeId": "csb:recipe:580"
+    },
+    {
+      "family": "580",
+      "type": "missing",
+      "key": "274b999f-f193-48fd-9a4a-0fdaf535e6c3:1|e1976b6c-7e43-4f4a-b082-f95495a1b260:1",
+      "recipeId": "csb:recipe:580"
+    },
+    {
+      "family": "580",
+      "type": "additional",
+      "key": "274b999f-f193-48fd-9a4a-0fdaf535e6c3:1",
+      "recipeId": "csb:recipe:580"
+    },
+    {
+      "family": "27267",
+      "type": "missing",
+      "key": "09ff28b1-b6c9-48e6-b12e-2f0e644f709f:1|310f141c-7f37-4729-aed6-dd9c09db448d:1|ace86e56-efde-4eb7-8815-71456a4c3abe:1",
+      "recipeId": "csb:recipe:27267"
+    },
+    {
+      "family": "27267",
+      "type": "missing",
+      "key": "09ff28b1-b6c9-48e6-b12e-2f0e644f709f:1|76b003e0-15af-4f22-bdf2-1ade5430964a:1|ace86e56-efde-4eb7-8815-71456a4c3abe:1",
+      "recipeId": "csb:recipe:27267"
+    },
+    {
+      "family": "27267",
+      "type": "missing",
+      "key": "09ff28b1-b6c9-48e6-b12e-2f0e644f709f:1|ace86e56-efde-4eb7-8815-71456a4c3abe:1|c7f33cea-2ec8-4081-9208-a5b1d86721b3:1",
+      "recipeId": "csb:recipe:27267"
+    },
+    {
+      "family": "27267",
+      "type": "missing",
+      "key": "09ff28b1-b6c9-48e6-b12e-2f0e644f709f:1|70113003-be5e-406a-9aec-cb480468c36d:1|ace86e56-efde-4eb7-8815-71456a4c3abe:1",
+      "recipeId": "csb:recipe:27267"
+    },
+    {
+      "family": "27267",
+      "type": "additional",
+      "key": "09ff28b1-b6c9-48e6-b12e-2f0e644f709f:1|ace86e56-efde-4eb7-8815-71456a4c3abe:1",
+      "recipeId": "csb:recipe:27267"
+    },
+    {
+      "family": "1895",
+      "type": "missing",
+      "key": "331b44e4-cf08-44f4-8afd-a7374e5dc5ed:1|6ad8011d-3471-4369-9d68-b264cc027487:1",
+      "recipeId": "csb:recipe:1895"
+    },
+    {
+      "family": "1895",
+      "type": "missing",
+      "key": "331b44e4-cf08-44f4-8afd-a7374e5dc5ed:1|736892cb-a34b-4bb9-b56c-e26e3db207a2:1",
+      "recipeId": "csb:recipe:1895"
+    },
+    {
+      "family": "1895",
+      "type": "missing",
+      "key": "331b44e4-cf08-44f4-8afd-a7374e5dc5ed:1|7a43bd27-fdd8-41f0-9bc4-92568f3408f1:1",
+      "recipeId": "csb:recipe:1895"
+    },
+    {
+      "family": "1895",
+      "type": "missing",
+      "key": "331b44e4-cf08-44f4-8afd-a7374e5dc5ed:1|de2440de-e948-4811-903c-0bbe376ff64d:1",
+      "recipeId": "csb:recipe:1895"
+    },
+    {
+      "family": "1895",
+      "type": "additional",
+      "key": "331b44e4-cf08-44f4-8afd-a7374e5dc5ed:1",
+      "recipeId": "csb:recipe:1895"
+    },
+    {
+      "family": "692",
+      "type": "missing",
+      "key": "09ff28b1-b6c9-48e6-b12e-2f0e644f709f:1|4d18bcba-a346-445e-a182-6cc30b7e066d:1|a784481f-eccb-4112-bb38-04a659319660:1",
+      "recipeId": "csb:recipe:692"
+    },
+    {
+      "family": "692",
+      "type": "missing",
+      "key": "09ff28b1-b6c9-48e6-b12e-2f0e644f709f:1|a784481f-eccb-4112-bb38-04a659319660:1|f82a4e85-526d-4456-b700-7760043a31be:1",
+      "recipeId": "csb:recipe:692"
+    },
+    {
+      "family": "692",
+      "type": "missing",
+      "key": "09ff28b1-b6c9-48e6-b12e-2f0e644f709f:1|a1cc5e37-b09a-4b7f-afd5-77c1c35aa425:1|a784481f-eccb-4112-bb38-04a659319660:1",
+      "recipeId": "csb:recipe:692"
+    },
+    {
+      "family": "692",
+      "type": "additional",
+      "key": "09ff28b1-b6c9-48e6-b12e-2f0e644f709f:1|a784481f-eccb-4112-bb38-04a659319660:1",
+      "recipeId": "csb:recipe:692"
+    },
+    {
+      "family": "2775",
+      "type": "missing",
+      "key": "0bd67481-6bd9-48d6-92bd-8933b5ea1eae:1|a91a3266-cadd-47a0-9b20-160307f14c07:1|ad0070db-6454-41cb-861f-8f5b8fc2a3b8:1",
+      "recipeId": "csb:recipe:2775"
+    },
+    {
+      "family": "2775",
+      "type": "missing",
+      "key": "0bd67481-6bd9-48d6-92bd-8933b5ea1eae:1|30b24e8e-3b0e-4d8e-90f3-f66eb7c1858c:1|ad0070db-6454-41cb-861f-8f5b8fc2a3b8:1",
+      "recipeId": "csb:recipe:2775"
+    },
+    {
+      "family": "2775",
+      "type": "additional",
+      "key": "0bd67481-6bd9-48d6-92bd-8933b5ea1eae:1|ad0070db-6454-41cb-861f-8f5b8fc2a3b8:1",
+      "recipeId": "csb:recipe:2775"
+    },
+    {
+      "family": "2687",
+      "type": "missing",
+      "key": "0fd114c4-092b-4e28-b0dc-ef529f3bc73e:1|38394ee3-6726-4f91-bc25-36bce0c6aab9:1",
+      "recipeId": "csb:recipe:2687"
+    },
+    {
+      "family": "2687",
+      "type": "missing",
+      "key": "38394ee3-6726-4f91-bc25-36bce0c6aab9:1|a8dba58b-2956-492e-ae30-49db2ae68e53:1",
+      "recipeId": "csb:recipe:2687"
+    },
+    {
+      "family": "2687",
+      "type": "additional",
+      "key": "38394ee3-6726-4f91-bc25-36bce0c6aab9:1",
+      "recipeId": "csb:recipe:2687"
+    },
+    {
+      "family": "2725",
+      "type": "missing",
+      "key": "3a198a16-17b9-481e-b516-5bc945c7e247:1|d7888719-647d-4022-a211-822fa09f0791:1",
+      "recipeId": "csb:recipe:2725"
+    },
+    {
+      "family": "2725",
+      "type": "missing",
+      "key": "6e2c2423-d854-4478-99e6-64f29851f026:1|d7888719-647d-4022-a211-822fa09f0791:1",
+      "recipeId": "csb:recipe:2725"
+    },
+    {
+      "family": "2725",
+      "type": "missing",
+      "key": "d7888719-647d-4022-a211-822fa09f0791:1|ee35de1c-aef1-4bd4-85fd-fe77bc927790:1",
+      "recipeId": "csb:recipe:2725"
+    },
+    {
+      "family": "2725",
+      "type": "missing",
+      "key": "1c857fa4-e823-494d-9ea4-7eb9e719c9b6:1|d7888719-647d-4022-a211-822fa09f0791:1",
+      "recipeId": "csb:recipe:2725"
+    },
+    {
+      "family": "2725",
+      "type": "missing",
+      "key": "1d725121-e50c-42f0-9128-56802f07c89e:1|d7888719-647d-4022-a211-822fa09f0791:1",
+      "recipeId": "csb:recipe:2725"
+    },
+    {
+      "family": "2725",
+      "type": "missing",
+      "key": "3a198a16-17b9-481e-b516-5bc945c7e247:1|44f3241f-af82-4f2e-b15d-7f279bf6e816:1",
+      "recipeId": "csb:recipe:2725"
+    }
+  ]
+}

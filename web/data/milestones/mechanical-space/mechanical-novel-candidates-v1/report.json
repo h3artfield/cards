@@ -1,0 +1,872 @@
+{
+  "version": "mechanical-novel-candidates-v1",
+  "createdAt": "2026-08-21T01:54:04.910Z",
+  "disclaimer": "Candidates are not verified combos. Do not present as factual interactions.",
+  "predictedUnseenEdges": 55818,
+  "candidatesGenerated": 240,
+  "graphStats": {
+    "candidatesConsidered": 30316,
+    "candidatesPruned": 0,
+    "minimalVariantsRetained": 40,
+    "cyclesEncountered": 0,
+    "cyclesCut": 0,
+    "maximumRecursionDepth": 1,
+    "elapsedMs": 5284
+  },
+  "cycles": [],
+  "snapshotCards": 35932,
+  "byClassCounts": {
+    "KNOWN_REFERENCE": 0,
+    "REDISCOVERED_REFERENCE": 0,
+    "POSSIBLE_NOVEL": 240,
+    "INVALID": 0,
+    "UNCERTAIN": 0
+  },
+  "examples": {
+    "highConfidence": [
+      {
+        "id": "cand:csb:feature:2670+csb:feature:1915::000492bf-7eaa-4939-a51c-4eef74e4c1d1:1|00173df7-a584-410c-af1d-ada9c791056a:1",
+        "classification": "POSSIBLE_NOVEL",
+        "cards": [
+          {
+            "oracleId": "000492bf-7eaa-4939-a51c-4eef74e4c1d1",
+            "name": "Mine Security",
+            "quantity": 1
+          },
+          {
+            "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+            "name": "Greta, Sweettooth Scourge",
+            "quantity": 1
+          }
+        ],
+        "recipeId": "cand:csb:feature:2670+csb:feature:1915",
+        "proof": [
+          {
+            "nodeType": "recipe",
+            "id": "cand:csb:feature:2670+csb:feature:1915",
+            "relation": "produces",
+            "provenance": "GROUNDED",
+            "children": [
+              {
+                "nodeType": "card",
+                "id": "00173df7-a584-410c-af1d-ada9c791056a",
+                "name": "Greta, Sweettooth Scourge",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "card",
+                "id": "000492bf-7eaa-4939-a51c-4eef74e4c1d1",
+                "name": "Mine Security",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "feature",
+                "id": "pair:csb:feature:2670+csb:feature:1915",
+                "relation": "produces",
+                "provenance": "GROUNDED"
+              }
+            ]
+          }
+        ],
+        "predicted": true,
+        "confidence": 1,
+        "known": false,
+        "verifier": {
+          "ok": true,
+          "reasons": []
+        }
+      },
+      {
+        "id": "cand:csb:feature:2670+csb:feature:1915::000d5588-5a4c-434e-988d-396632ade42c:1|00173df7-a584-410c-af1d-ada9c791056a:1",
+        "classification": "POSSIBLE_NOVEL",
+        "cards": [
+          {
+            "oracleId": "000d5588-5a4c-434e-988d-396632ade42c",
+            "name": "Storm Crow",
+            "quantity": 1
+          },
+          {
+            "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+            "name": "Greta, Sweettooth Scourge",
+            "quantity": 1
+          }
+        ],
+        "recipeId": "cand:csb:feature:2670+csb:feature:1915",
+        "proof": [
+          {
+            "nodeType": "recipe",
+            "id": "cand:csb:feature:2670+csb:feature:1915",
+            "relation": "produces",
+            "provenance": "GROUNDED",
+            "children": [
+              {
+                "nodeType": "card",
+                "id": "00173df7-a584-410c-af1d-ada9c791056a",
+                "name": "Greta, Sweettooth Scourge",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "card",
+                "id": "000d5588-5a4c-434e-988d-396632ade42c",
+                "name": "Storm Crow",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "feature",
+                "id": "pair:csb:feature:2670+csb:feature:1915",
+                "relation": "produces",
+                "provenance": "GROUNDED"
+              }
+            ]
+          }
+        ],
+        "predicted": true,
+        "confidence": 1,
+        "known": false,
+        "verifier": {
+          "ok": true,
+          "reasons": []
+        }
+      },
+      {
+        "id": "cand:csb:feature:2670+csb:feature:1915::000e5d65-96c3-498b-bd01-72b1a1991850:1|00173df7-a584-410c-af1d-ada9c791056a:1",
+        "classification": "POSSIBLE_NOVEL",
+        "cards": [
+          {
+            "oracleId": "000e5d65-96c3-498b-bd01-72b1a1991850",
+            "name": "Walking Sponge",
+            "quantity": 1
+          },
+          {
+            "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+            "name": "Greta, Sweettooth Scourge",
+            "quantity": 1
+          }
+        ],
+        "recipeId": "cand:csb:feature:2670+csb:feature:1915",
+        "proof": [
+          {
+            "nodeType": "recipe",
+            "id": "cand:csb:feature:2670+csb:feature:1915",
+            "relation": "produces",
+            "provenance": "GROUNDED",
+            "children": [
+              {
+                "nodeType": "card",
+                "id": "00173df7-a584-410c-af1d-ada9c791056a",
+                "name": "Greta, Sweettooth Scourge",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "card",
+                "id": "000e5d65-96c3-498b-bd01-72b1a1991850",
+                "name": "Walking Sponge",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "feature",
+                "id": "pair:csb:feature:2670+csb:feature:1915",
+                "relation": "produces",
+                "provenance": "GROUNDED"
+              }
+            ]
+          }
+        ],
+        "predicted": true,
+        "confidence": 1,
+        "known": false,
+        "verifier": {
+          "ok": true,
+          "reasons": []
+        }
+      },
+      {
+        "id": "cand:csb:feature:2670+csb:feature:1915::00173df7-a584-410c-af1d-ada9c791056a:1|00185f3b-2777-4417-a8e0-4691f41c0ec1:1",
+        "classification": "POSSIBLE_NOVEL",
+        "cards": [
+          {
+            "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+            "name": "Greta, Sweettooth Scourge",
+            "quantity": 1
+          },
+          {
+            "oracleId": "00185f3b-2777-4417-a8e0-4691f41c0ec1",
+            "name": "Wyluli Wolf",
+            "quantity": 1
+          }
+        ],
+        "recipeId": "cand:csb:feature:2670+csb:feature:1915",
+        "proof": [
+          {
+            "nodeType": "recipe",
+            "id": "cand:csb:feature:2670+csb:feature:1915",
+            "relation": "produces",
+            "provenance": "GROUNDED",
+            "children": [
+              {
+                "nodeType": "card",
+                "id": "00173df7-a584-410c-af1d-ada9c791056a",
+                "name": "Greta, Sweettooth Scourge",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "card",
+                "id": "00185f3b-2777-4417-a8e0-4691f41c0ec1",
+                "name": "Wyluli Wolf",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "feature",
+                "id": "pair:csb:feature:2670+csb:feature:1915",
+                "relation": "produces",
+                "provenance": "GROUNDED"
+              }
+            ]
+          }
+        ],
+        "predicted": true,
+        "confidence": 1,
+        "known": false,
+        "verifier": {
+          "ok": true,
+          "reasons": []
+        }
+      },
+      {
+        "id": "cand:csb:feature:2670+csb:feature:1915::00173df7-a584-410c-af1d-ada9c791056a:1|00284955-0a1b-4939-9567-a7d34cbcee51:1",
+        "classification": "POSSIBLE_NOVEL",
+        "cards": [
+          {
+            "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+            "name": "Greta, Sweettooth Scourge",
+            "quantity": 1
+          },
+          {
+            "oracleId": "00284955-0a1b-4939-9567-a7d34cbcee51",
+            "name": "Hua Tuo, Honored Physician",
+            "quantity": 1
+          }
+        ],
+        "recipeId": "cand:csb:feature:2670+csb:feature:1915",
+        "proof": [
+          {
+            "nodeType": "recipe",
+            "id": "cand:csb:feature:2670+csb:feature:1915",
+            "relation": "produces",
+            "provenance": "GROUNDED",
+            "children": [
+              {
+                "nodeType": "card",
+                "id": "00173df7-a584-410c-af1d-ada9c791056a",
+                "name": "Greta, Sweettooth Scourge",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "card",
+                "id": "00284955-0a1b-4939-9567-a7d34cbcee51",
+                "name": "Hua Tuo, Honored Physician",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "feature",
+                "id": "pair:csb:feature:2670+csb:feature:1915",
+                "relation": "produces",
+                "provenance": "GROUNDED"
+              }
+            ]
+          }
+        ],
+        "predicted": true,
+        "confidence": 1,
+        "known": false,
+        "verifier": {
+          "ok": true,
+          "reasons": []
+        }
+      },
+      {
+        "id": "cand:csb:feature:2670+csb:feature:1915::00173df7-a584-410c-af1d-ada9c791056a:1|002cd9b4-efce-429f-82cd-d37352d2e932:1",
+        "classification": "POSSIBLE_NOVEL",
+        "cards": [
+          {
+            "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+            "name": "Greta, Sweettooth Scourge",
+            "quantity": 1
+          },
+          {
+            "oracleId": "002cd9b4-efce-429f-82cd-d37352d2e932",
+            "name": "Wasp, Shrinking Savior",
+            "quantity": 1
+          }
+        ],
+        "recipeId": "cand:csb:feature:2670+csb:feature:1915",
+        "proof": [
+          {
+            "nodeType": "recipe",
+            "id": "cand:csb:feature:2670+csb:feature:1915",
+            "relation": "produces",
+            "provenance": "GROUNDED",
+            "children": [
+              {
+                "nodeType": "card",
+                "id": "00173df7-a584-410c-af1d-ada9c791056a",
+                "name": "Greta, Sweettooth Scourge",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "card",
+                "id": "002cd9b4-efce-429f-82cd-d37352d2e932",
+                "name": "Wasp, Shrinking Savior",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "feature",
+                "id": "pair:csb:feature:2670+csb:feature:1915",
+                "relation": "produces",
+                "provenance": "GROUNDED"
+              }
+            ]
+          }
+        ],
+        "predicted": true,
+        "confidence": 1,
+        "known": false,
+        "verifier": {
+          "ok": true,
+          "reasons": []
+        }
+      },
+      {
+        "id": "cand:csb:feature:2670+csb:feature:1915::00173df7-a584-410c-af1d-ada9c791056a:1|00378902-90f3-465a-b917-23c0e81a7400:1",
+        "classification": "POSSIBLE_NOVEL",
+        "cards": [
+          {
+            "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+            "name": "Greta, Sweettooth Scourge",
+            "quantity": 1
+          },
+          {
+            "oracleId": "00378902-90f3-465a-b917-23c0e81a7400",
+            "name": "Wall of Fortune",
+            "quantity": 1
+          }
+        ],
+        "recipeId": "cand:csb:feature:2670+csb:feature:1915",
+        "proof": [
+          {
+            "nodeType": "recipe",
+            "id": "cand:csb:feature:2670+csb:feature:1915",
+            "relation": "produces",
+            "provenance": "GROUNDED",
+            "children": [
+              {
+                "nodeType": "card",
+                "id": "00173df7-a584-410c-af1d-ada9c791056a",
+                "name": "Greta, Sweettooth Scourge",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "card",
+                "id": "00378902-90f3-465a-b917-23c0e81a7400",
+                "name": "Wall of Fortune",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "feature",
+                "id": "pair:csb:feature:2670+csb:feature:1915",
+                "relation": "produces",
+                "provenance": "GROUNDED"
+              }
+            ]
+          }
+        ],
+        "predicted": true,
+        "confidence": 1,
+        "known": false,
+        "verifier": {
+          "ok": true,
+          "reasons": []
+        }
+      },
+      {
+        "id": "cand:csb:feature:2670+csb:feature:1915::00173df7-a584-410c-af1d-ada9c791056a:1|0049438b-e37e-4c57-820e-f2ddf3322170:1",
+        "classification": "POSSIBLE_NOVEL",
+        "cards": [
+          {
+            "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+            "name": "Greta, Sweettooth Scourge",
+            "quantity": 1
+          },
+          {
+            "oracleId": "0049438b-e37e-4c57-820e-f2ddf3322170",
+            "name": "High-Rise Sawjack",
+            "quantity": 1
+          }
+        ],
+        "recipeId": "cand:csb:feature:2670+csb:feature:1915",
+        "proof": [
+          {
+            "nodeType": "recipe",
+            "id": "cand:csb:feature:2670+csb:feature:1915",
+            "relation": "produces",
+            "provenance": "GROUNDED",
+            "children": [
+              {
+                "nodeType": "card",
+                "id": "00173df7-a584-410c-af1d-ada9c791056a",
+                "name": "Greta, Sweettooth Scourge",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "card",
+                "id": "0049438b-e37e-4c57-820e-f2ddf3322170",
+                "name": "High-Rise Sawjack",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "feature",
+                "id": "pair:csb:feature:2670+csb:feature:1915",
+                "relation": "produces",
+                "provenance": "GROUNDED"
+              }
+            ]
+          }
+        ],
+        "predicted": true,
+        "confidence": 1,
+        "known": false,
+        "verifier": {
+          "ok": true,
+          "reasons": []
+        }
+      },
+      {
+        "id": "cand:csb:feature:2670+csb:feature:2593::00173df7-a584-410c-af1d-ada9c791056a:1|00225c40-27ff-410f-a591-5c788c6a2bd6:1",
+        "classification": "POSSIBLE_NOVEL",
+        "cards": [
+          {
+            "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+            "name": "Greta, Sweettooth Scourge",
+            "quantity": 1
+          },
+          {
+            "oracleId": "00225c40-27ff-410f-a591-5c788c6a2bd6",
+            "name": "Ruthless Knave",
+            "quantity": 1
+          }
+        ],
+        "recipeId": "cand:csb:feature:2670+csb:feature:2593",
+        "proof": [
+          {
+            "nodeType": "recipe",
+            "id": "cand:csb:feature:2670+csb:feature:2593",
+            "relation": "produces",
+            "provenance": "GROUNDED",
+            "children": [
+              {
+                "nodeType": "card",
+                "id": "00173df7-a584-410c-af1d-ada9c791056a",
+                "name": "Greta, Sweettooth Scourge",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "card",
+                "id": "00225c40-27ff-410f-a591-5c788c6a2bd6",
+                "name": "Ruthless Knave",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "feature",
+                "id": "pair:csb:feature:2670+csb:feature:2593",
+                "relation": "produces",
+                "provenance": "GROUNDED"
+              }
+            ]
+          }
+        ],
+        "predicted": true,
+        "confidence": 1,
+        "known": false,
+        "verifier": {
+          "ok": true,
+          "reasons": []
+        }
+      },
+      {
+        "id": "cand:csb:feature:2670+csb:feature:2593::00173df7-a584-410c-af1d-ada9c791056a:1|003bf21f-6815-4098-a186-aa15f5947541:1",
+        "classification": "POSSIBLE_NOVEL",
+        "cards": [
+          {
+            "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+            "name": "Greta, Sweettooth Scourge",
+            "quantity": 1
+          },
+          {
+            "oracleId": "003bf21f-6815-4098-a186-aa15f5947541",
+            "name": "Kalitas, Bloodchief of Ghet",
+            "quantity": 1
+          }
+        ],
+        "recipeId": "cand:csb:feature:2670+csb:feature:2593",
+        "proof": [
+          {
+            "nodeType": "recipe",
+            "id": "cand:csb:feature:2670+csb:feature:2593",
+            "relation": "produces",
+            "provenance": "GROUNDED",
+            "children": [
+              {
+                "nodeType": "card",
+                "id": "00173df7-a584-410c-af1d-ada9c791056a",
+                "name": "Greta, Sweettooth Scourge",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "card",
+                "id": "003bf21f-6815-4098-a186-aa15f5947541",
+                "name": "Kalitas, Bloodchief of Ghet",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "feature",
+                "id": "pair:csb:feature:2670+csb:feature:2593",
+                "relation": "produces",
+                "provenance": "GROUNDED"
+              }
+            ]
+          }
+        ],
+        "predicted": true,
+        "confidence": 1,
+        "known": false,
+        "verifier": {
+          "ok": true,
+          "reasons": []
+        }
+      },
+      {
+        "id": "cand:csb:feature:2670+csb:feature:2593::00173df7-a584-410c-af1d-ada9c791056a:1|003d9c17-5d5c-469f-ad87-d78faf55e025:1",
+        "classification": "POSSIBLE_NOVEL",
+        "cards": [
+          {
+            "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+            "name": "Greta, Sweettooth Scourge",
+            "quantity": 1
+          },
+          {
+            "oracleId": "003d9c17-5d5c-469f-ad87-d78faf55e025",
+            "name": "Seedship Agrarian",
+            "quantity": 1
+          }
+        ],
+        "recipeId": "cand:csb:feature:2670+csb:feature:2593",
+        "proof": [
+          {
+            "nodeType": "recipe",
+            "id": "cand:csb:feature:2670+csb:feature:2593",
+            "relation": "produces",
+            "provenance": "GROUNDED",
+            "children": [
+              {
+                "nodeType": "card",
+                "id": "00173df7-a584-410c-af1d-ada9c791056a",
+                "name": "Greta, Sweettooth Scourge",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "card",
+                "id": "003d9c17-5d5c-469f-ad87-d78faf55e025",
+                "name": "Seedship Agrarian",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "feature",
+                "id": "pair:csb:feature:2670+csb:feature:2593",
+                "relation": "produces",
+                "provenance": "GROUNDED"
+              }
+            ]
+          }
+        ],
+        "predicted": true,
+        "confidence": 1,
+        "known": false,
+        "verifier": {
+          "ok": true,
+          "reasons": []
+        }
+      },
+      {
+        "id": "cand:csb:feature:2670+csb:feature:2593::00173df7-a584-410c-af1d-ada9c791056a:1|006f4a62-8590-4ca0-9f51-3aea26cd1a54:1",
+        "classification": "POSSIBLE_NOVEL",
+        "cards": [
+          {
+            "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+            "name": "Greta, Sweettooth Scourge",
+            "quantity": 1
+          },
+          {
+            "oracleId": "006f4a62-8590-4ca0-9f51-3aea26cd1a54",
+            "name": "One with the Kami",
+            "quantity": 1
+          }
+        ],
+        "recipeId": "cand:csb:feature:2670+csb:feature:2593",
+        "proof": [
+          {
+            "nodeType": "recipe",
+            "id": "cand:csb:feature:2670+csb:feature:2593",
+            "relation": "produces",
+            "provenance": "GROUNDED",
+            "children": [
+              {
+                "nodeType": "card",
+                "id": "00173df7-a584-410c-af1d-ada9c791056a",
+                "name": "Greta, Sweettooth Scourge",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "card",
+                "id": "006f4a62-8590-4ca0-9f51-3aea26cd1a54",
+                "name": "One with the Kami",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "feature",
+                "id": "pair:csb:feature:2670+csb:feature:2593",
+                "relation": "produces",
+                "provenance": "GROUNDED"
+              }
+            ]
+          }
+        ],
+        "predicted": true,
+        "confidence": 1,
+        "known": false,
+        "verifier": {
+          "ok": true,
+          "reasons": []
+        }
+      },
+      {
+        "id": "cand:csb:feature:2670+csb:feature:2593::00173df7-a584-410c-af1d-ada9c791056a:1|0071723e-388d-4ae7-bc99-c143dd356c63:1",
+        "classification": "POSSIBLE_NOVEL",
+        "cards": [
+          {
+            "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+            "name": "Greta, Sweettooth Scourge",
+            "quantity": 1
+          },
+          {
+            "oracleId": "0071723e-388d-4ae7-bc99-c143dd356c63",
+            "name": "Goblin Barrage",
+            "quantity": 1
+          }
+        ],
+        "recipeId": "cand:csb:feature:2670+csb:feature:2593",
+        "proof": [
+          {
+            "nodeType": "recipe",
+            "id": "cand:csb:feature:2670+csb:feature:2593",
+            "relation": "produces",
+            "provenance": "GROUNDED",
+            "children": [
+              {
+                "nodeType": "card",
+                "id": "00173df7-a584-410c-af1d-ada9c791056a",
+                "name": "Greta, Sweettooth Scourge",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "card",
+                "id": "0071723e-388d-4ae7-bc99-c143dd356c63",
+                "name": "Goblin Barrage",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "feature",
+                "id": "pair:csb:feature:2670+csb:feature:2593",
+                "relation": "produces",
+                "provenance": "GROUNDED"
+              }
+            ]
+          }
+        ],
+        "predicted": true,
+        "confidence": 1,
+        "known": false,
+        "verifier": {
+          "ok": true,
+          "reasons": []
+        }
+      },
+      {
+        "id": "cand:csb:feature:2670+csb:feature:2593::00173df7-a584-410c-af1d-ada9c791056a:1|007c110d-4364-41e5-a8bc-6ac05ecbbd00:1",
+        "classification": "POSSIBLE_NOVEL",
+        "cards": [
+          {
+            "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+            "name": "Greta, Sweettooth Scourge",
+            "quantity": 1
+          },
+          {
+            "oracleId": "007c110d-4364-41e5-a8bc-6ac05ecbbd00",
+            "name": "Thopter Assembly",
+            "quantity": 1
+          }
+        ],
+        "recipeId": "cand:csb:feature:2670+csb:feature:2593",
+        "proof": [
+          {
+            "nodeType": "recipe",
+            "id": "cand:csb:feature:2670+csb:feature:2593",
+            "relation": "produces",
+            "provenance": "GROUNDED",
+            "children": [
+              {
+                "nodeType": "card",
+                "id": "00173df7-a584-410c-af1d-ada9c791056a",
+                "name": "Greta, Sweettooth Scourge",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "card",
+                "id": "007c110d-4364-41e5-a8bc-6ac05ecbbd00",
+                "name": "Thopter Assembly",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "feature",
+                "id": "pair:csb:feature:2670+csb:feature:2593",
+                "relation": "produces",
+                "provenance": "GROUNDED"
+              }
+            ]
+          }
+        ],
+        "predicted": true,
+        "confidence": 1,
+        "known": false,
+        "verifier": {
+          "ok": true,
+          "reasons": []
+        }
+      },
+      {
+        "id": "cand:csb:feature:2670+csb:feature:2593::00173df7-a584-410c-af1d-ada9c791056a:1|00807825-88e5-4b88-8527-a49f553a91be:1",
+        "classification": "POSSIBLE_NOVEL",
+        "cards": [
+          {
+            "oracleId": "00173df7-a584-410c-af1d-ada9c791056a",
+            "name": "Greta, Sweettooth Scourge",
+            "quantity": 1
+          },
+          {
+            "oracleId": "00807825-88e5-4b88-8527-a49f553a91be",
+            "name": "Witch's Mark",
+            "quantity": 1
+          }
+        ],
+        "recipeId": "cand:csb:feature:2670+csb:feature:2593",
+        "proof": [
+          {
+            "nodeType": "recipe",
+            "id": "cand:csb:feature:2670+csb:feature:2593",
+            "relation": "produces",
+            "provenance": "GROUNDED",
+            "children": [
+              {
+                "nodeType": "card",
+                "id": "00173df7-a584-410c-af1d-ada9c791056a",
+                "name": "Greta, Sweettooth Scourge",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "card",
+                "id": "00807825-88e5-4b88-8527-a49f553a91be",
+                "name": "Witch's Mark",
+                "relation": "provides",
+                "provenance": "PREDICTED",
+                "confidence": 1
+              },
+              {
+                "nodeType": "feature",
+                "id": "pair:csb:feature:2670+csb:feature:2593",
+                "relation": "produces",
+                "provenance": "GROUNDED"
+              }
+            ]
+          }
+        ],
+        "predicted": true,
+        "confidence": 1,
+        "known": false,
+        "verifier": {
+          "ok": true,
+          "reasons": []
+        }
+      }
+    ],
+    "mediumConfidence": [],
+    "rediscovered": [],
+    "invalid": []
+  }
+}

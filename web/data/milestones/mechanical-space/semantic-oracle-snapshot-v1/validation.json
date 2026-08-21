@@ -1,0 +1,25 @@
+{
+  "version": "semantic-oracle-snapshot-v1",
+  "oracleRecords": 35932,
+  "shadowRecords": 35932,
+  "vectorCount": 35932,
+  "matchedByOracleId": 35932,
+  "missingEmbeddings": 0,
+  "duplicateOracleIds": 0,
+  "invalidVectorDimensions": 0,
+  "nonFinite": 0,
+  "zeroVectors": 0,
+  "dimensions": 117,
+  "literalDimensions": 90,
+  "derivedDimensions": 27,
+  "model": "semantic-feature-vector-v1+semantic-derived-features-v1",
+  "expectedPopulation": 35932,
+  "examples": {
+    "missingEmbeddings": [],
+    "duplicateOracleIds": [],
+    "invalidDimensions": [],
+    "nonFinite": [],
+    "zeroVectors": []
+  },
+  "checksum": "479e34b8618126e7ce29d8c19d1214cdbed5f62252093b09a0494d4eac359350"
+}

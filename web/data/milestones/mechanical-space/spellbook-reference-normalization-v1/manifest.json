@@ -1,0 +1,38 @@
+{
+  "version": "spellbook-reference-normalization-v1",
+  "provenance": {
+    "sourceName": "Commander Spellbook",
+    "sourceUrl": "https://backend.commanderspellbook.com",
+    "sourceVersionObserved": "6.2.4",
+    "fetchedAt": "2026-08-21T01:51:07.731Z",
+    "licenseNote": "Backend/website source is MIT. This fetch is a local research sample of curated combo data, not a production redistributable dump, and is not presented as our dataset.",
+    "distinction": {
+      "codeAndAlgorithmReference": "Inspected public docs/source; independently implemented equivalent algorithms.",
+      "curatedData": "Local research/testing sample only. Not mirrored to production Firestore."
+    }
+  },
+  "counts": {
+    "features": 1304,
+    "cards": 8000,
+    "cardsWithFeatures": 3195,
+    "positiveCardFeatureEdges": 3677,
+    "templates": 196,
+    "variants": 400
+  },
+  "checksums": {
+    "features": "48c03be62278fab17089486e960983f786e70e0afe8e2c134a0f3cd5d9b8279d",
+    "cards": "ab948729b0089af3462a10a5a7d810232c96bf180ea6fd644f16bc038d19d3e2",
+    "variants": "c007c042346a3c26da775152e61c1615d7a402dcf73fb32779feef2dcd4d7faf",
+    "templates": "23fdb365bc174e5e656a97c8c02eb80c9eff8a54117c1ea4688d2fe1b7f02e1d"
+  },
+  "paths": {
+    "featuresPath": "C:\\Users\\h3art\\PycharmProjects\\cards\\web\\data\\milestones\\mechanical-space\\spellbook-reference-normalization-v1\\features.json",
+    "cardsPath": "C:\\Users\\h3art\\PycharmProjects\\cards\\web\\data\\milestones\\mechanical-space\\spellbook-reference-normalization-v1\\cards-slim.json",
+    "variantsPath": "C:\\Users\\h3art\\PycharmProjects\\cards\\web\\data\\milestones\\mechanical-space\\spellbook-reference-normalization-v1\\variants-sample.json",
+    "templatesPath": "C:\\Users\\h3art\\PycharmProjects\\cards\\web\\data\\milestones\\mechanical-space\\spellbook-reference-normalization-v1\\templates.json"
+  },
+  "notes": [
+    "GET /combos/ is not publicly listed (404). Recipes for parity are reconstructed from variant families and synthetic fixtures.",
+    "Card.features are grounded Card→Feature positives. Missing features are UNKNOWN, not negative."
+  ]
+}

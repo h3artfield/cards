@@ -1,0 +1,171 @@
+{
+  "version": "phase-rps-mechanical-architecture-discovery-v1",
+  "generatedAt": "2026-08-21T01:40:00.000Z",
+  "status": "GATE_A",
+  "method": "repository_inspection_no_guesses",
+  "milestoneRoot": "web/data/milestones/mechanical-space",
+  "constraints": {
+    "productionFirestore": "READ_ONLY",
+    "deploy": false,
+    "remotePush": false,
+    "openaiCalls": false,
+    "regenerateOracleEmbeddings": false,
+    "replaceEmbeddingModel": false,
+    "touchProfessor": false,
+    "touchMtgRag": false,
+    "touchGoldenCatalogDocuments": false
+  },
+  "centralFinding": {
+    "existingOracleSemanticSpace": "RC8 deterministic 117-d feature vectors, not neural embeddings",
+    "neuralEmbeddingsExistOnlyFor": "MTG RAG knowledge chunks in Firestore mtgKnowledgeChunks (text-embedding-3-small, 1536-d). Those are not card-level Oracle embeddings.",
+    "goldenCatalogEmbeddingFields": {
+      "path": "web/src/lib/deck-builder/golden-catalog/schemas.ts",
+      "fields": ["semanticEmbedding?", "functionalEmbedding?", "embeddingVersion?"],
+      "status": "schema placeholders only — no code writes these fields"
+    }
+  },
+  "goldenOracle": {
+    "firestoreCollection": "catalogOracleCards",
+    "documentId": "oracleId",
+    "primaryType": "GoldenCatalogOracleCard",
+    "schemaPath": "web/src/lib/deck-builder/golden-catalog/schemas.ts",
+    "collectionConstantPath": "web/src/lib/firebase/collections.ts",
+    "fields": {
+      "oracleId": "oracleId",
+      "scryfallId": "NOT on oracle documents — lives on catalogCards/CatalogPrinting.scryfallId; oracle links via printingIds[]",
+      "name": "canonicalName (+ normalizedName)",
+      "oracleText": "oracleText (DFC: cardFaces[].oracleText)",
+      "typeLine": "typeLine",
+      "colorIdentity": "colorIdentity",
+      "manaCost": "manaCost",
+      "manaValue": "manaValue",
+      "cmc": "cmc"
+    },
+    "rulings": {
+      "availableLocally": true,
+      "collection": "catalogRulings / catalogRulingsVersions/{versionId}/rulings",
+      "type": "CardRuling",
+      "keyedBy": "oracleId",
+      "notEmbeddedOnOracleDocuments": true
+    },
+    "readAbstractions": [
+      "web/src/lib/deck-builder/deck-builder-store.ts",
+      "web/scripts/lib/load-golden-catalog-index.ts",
+      "web/scripts/lib/load-catalog-oracle-records-v1.ts"
+    ],
+    "localFullBodyDump": "NONE committed. Full bodies live in production Firestore or Scryfall bulk cache .cache/scryfall-bulk/oracle_cards-*.jsonl.gz",
+    "localIdentitySnapshots": [
+      "web/data/milestones/catalog-shadow/catalog-population-snapshot-firestore-v3.json",
+      "web/data/milestones/catalog-shadow/catalog-population-identities-firestore-v3.jsonl"
+    ],
+    "observedPopulation": {
+      "source": "catalog-population-snapshot-firestore-v3",
+      "oracleDocs": 38542,
+      "paperEligible": 34862
+    }
+  },
+  "existingSemanticMap": {
+    "system": "RC8 Semantic Map",
+    "label": "RC8 Semantic Map — Experimental",
+    "manifest": "web/data/milestones/catalog-shadow/catalog-semantic-visualization-v1-manifest.json",
+    "points": "web/data/milestones/catalog-shadow/catalog-semantic-visualization-v1-points.json.gz",
+    "neighbors": "web/data/milestones/catalog-shadow/catalog-semantic-visualization-v1-neighbors.jsonl.gz",
+    "clusters": "web/data/milestones/catalog-shadow/catalog-semantic-visualization-v1-clusters.json",
+    "shadowParse": "web/data/milestones/catalog-shadow/catalog-shadow-parse-rc8-firestore-v2.jsonl.gz",
+    "shadowManifest": "web/data/milestones/catalog-shadow/catalog-shadow-parse-rc8-firestore-v2-manifest.json",
+    "keyedBy": "oracleId",
+    "embeddingModel": "semantic-feature-vector-v1+semantic-derived-features-v1",
+    "embeddingDimensions": 117,
+    "literalDimensions": 90,
+    "derivedDimensions": 27,
+    "featureVectorVersion": "semantic-feature-vector-v1",
+    "derivedFeatureVersion": "semantic-derived-features-v1",
+    "parserVersion": "oracle-action-v1.44-rc8-ownership-grant-family",
+    "populationCount": 35932,
+    "normalization": {
+      "preProjection": "z-score per dimension (normalizeFeatureMatrix)",
+      "neighborMetric": "cosine distance",
+      "umapMetric": "cosine"
+    },
+    "vectorDatabase": "NONE — brute-force precomputed neighbors at build time",
+    "nearestNeighborTooling": [
+      "web/src/lib/semantic-visualization/projection-v1.ts computeTopNeighbors k=20",
+      "web/src/lib/semantic-visualization/semantic-map-service.ts compareSemanticMapCards"
+    ],
+    "pcaUmapClustering": {
+      "umap": "umap-3d-v1 nComponents=3 nNeighbors=15 minDist=0.1 seed=42",
+      "pca": "pca-2d-v1 seed=42",
+      "kmeans": "kmeans-v1 k=64"
+    },
+    "buildScript": "web/scripts/build-catalog-semantic-visualization-v1.ts",
+    "buildRequiresFirestore": "YES for original build (loadGoldenCatalogIndex). Snapshot reconstruction uses frozen points metadata + frozen shadow parse and does not write Firestore.",
+    "rawVectorsStored": false,
+    "snapshotStrategy": "Deterministically recompute the existing 117-d combinedVector from frozen shadow parse + frozen visualization point metadata using buildCardFeatureBundle. This is extraction of the existing space, not a new embedding model."
+  },
+  "mtgRagVectors": {
+    "note": "Separate system. Do not treat as Oracle card embeddings. Do not call OpenAI. Do not migrate.",
+    "model": "text-embedding-3-small",
+    "dimensions": 1536,
+    "collection": "mtgKnowledgeChunks",
+    "keyedBy": "chunkId"
+  },
+  "infrastructure": {
+    "firestoreClient": "web/src/lib/firebase/client.ts",
+    "firestoreAdmin": "web/src/lib/firebase/admin.ts",
+    "dataStore": "web/src/lib/storage/data-store.ts",
+    "devFallback": "web/.data/dev-store.json",
+    "emulator": "FIRESTORE_EMULATOR_HOST recognized by firestore-health.ts; no firebase.json emulators block",
+    "milestoneConvention": "web/data/milestones/{area}/{versioned-artifact}",
+    "experimentalRoutes": "NONE existed. Creating /experimental/mechanical-space as specified.",
+    "existingExperimentalUi": [
+      "/s/[slug]/inventory/semantic-map",
+      "/s/[slug]/inventory/test"
+    ],
+    "testFramework": "tsx *.selftest.ts and web/scripts/test-*.ts — no Jest/Vitest/pytest",
+    "pythonMl": "NONE except services/grading-service (OpenCV). New local Python ML authorized under web/scripts/mechanical-space/python/",
+    "nodePythonInterop": "HTTP only to grading service today",
+    "commanderSpellbookInRepo": "Prompt mention only in web/src/lib/store-inventory/knowledge/mtg-commander-agent.ts — no API integration",
+    "allowProductionFlag": "DID NOT EXIST. Adding ALLOW_PRODUCTION_INTERACTION_WRITES=false safeguard.",
+    "professorPathsDoNotTouch": [
+      "web/src/lib/deck-synthesis/professor*.ts",
+      "web/src/components/professor/",
+      "web/src/app/api/store/[slug]/professor/"
+    ],
+    "mtgRagPathsDoNotTouch": [
+      "web/src/lib/mtg-rag/",
+      "web/scripts/mtg-rag/"
+    ]
+  },
+  "commanderSpellbookReference": {
+    "inspected": [
+      "https://spacecowmedia.github.io/commander-spellbook-backend/",
+      "https://github.com/SpaceCowMedia/commander-spellbook-backend/blob/master/docs/domain-model.md",
+      "https://github.com/SpaceCowMedia/commander-spellbook-backend/blob/master/docs/variant-generation.md",
+      "https://github.com/SpaceCowMedia/commander-spellbook-backend/blob/master/docs/minimal-set-of-multisets.md",
+      "https://backend.commanderspellbook.com/features/?limit=2",
+      "https://backend.commanderspellbook.com/cards/?limit=1",
+      "https://backend.commanderspellbook.com/variants/?limit=1"
+    ],
+    "publicApiBase": "https://backend.commanderspellbook.com",
+    "publicApiVersionObserved": "6.2.4",
+    "sourceLicense": "MIT for website and backend source code (commanderspellbook.com/about). Curated combo DATA is not assumed redistributable; local research sample only, attributed, not written to production.",
+    "concepts": {
+      "Card": "oracle-level, keyed by Scryfall oracleId, can produce Features",
+      "Feature": "named effect/result; status Hidden/Helper/Contextual/Standalone; uncountable flag",
+      "Template": "wildcard via scryfallQuery XOR explicit replacements",
+      "Combo": "editor-authored recipe: uses/requires/needs/produces/removes",
+      "Variant": "concrete generated card combination; public API primary object"
+    },
+    "publicComboRecipesEndpoint": "GET /combos/ returned 404. Recipes are not publicly listed; variants are. Card.features provides direct Card→Feature edges.",
+    "identity": "Spellbook Card.oracleId is Scryfall oracle UUID — EXACT_ID mapping onto our Golden Oracle."
+  },
+  "futureCollectionsNotCreatedThisMilestone": [
+    "mtgInteractionFeatures",
+    "mtgCardFeatureEdges",
+    "mtgInteractionRecipes",
+    "mtgInteractionTemplates",
+    "mtgInteractionVariants",
+    "mtgMechanicalPredictions",
+    "mtgInteractionModelRuns"
+  ]
+}

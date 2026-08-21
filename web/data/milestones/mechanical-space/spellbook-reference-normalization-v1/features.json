@@ -1,0 +1,7826 @@
+[
+  {
+    "id": 195,
+    "name": "Activated abilities can't be activated",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 335,
+    "name": "Activated abilities of permanents your opponents control can't be activated",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 210,
+    "name": "All creatures die upon entering",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 883,
+    "name": "All nonblack creatures die upon entering",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 882,
+    "name": "All nonwhite creatures die upon entering",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 843,
+    "name": "All spells opponents cast using Omen Machine are countered",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1866,
+    "name": "Animator - Artifact",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1868,
+    "name": "Animator - Land",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 452,
+    "name": "An opponent returns all cards from their graveyard to their hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1721,
+    "name": "An opponent sacrifices all permanents they control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1534,
+    "name": "Archon creatures with power 3 or greater do not untap",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 701,
+    "name": "Arrange your library in any order",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2093,
+    "name": "Artifact that is Mana-Neutral or Mana-Positive on ETB",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1984,
+    "name": "Artifact That Sacrifices Itself",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2088,
+    "name": "Artifact that Taps to Add Multiple Mana (Mana Rock)",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1861,
+    "name": "Artifact Type Adder",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2577,
+    "name": "Attack tax",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1774,
+    "name": "Aura or Equipment that grants deathtouch",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2530,
+    "name": "Aura that Returns Creatures to BF",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2138,
+    "name": "Aura with \"When enchanted creature dies, return it to the battlefield\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2158,
+    "name": "Boardwipe",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1811,
+    "name": "Bounceland",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2733,
+    "name": "Card Allowing Extra Activations of Planeswalker Abilities",
+    "uncountable": true,
+    "status": "PU"
+  },
+  {
+    "id": 2271,
+    "name": "Card Giving a Creature Myriad",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2795,
+    "name": "Cards that can Recur Permanents",
+    "uncountable": true,
+    "status": "PU"
+  },
+  {
+    "id": 2639,
+    "name": "Cards That Win the Game with an Empty Library",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2720,
+    "name": "Card that Allows Casting Spells from Graveyard or Exile",
+    "uncountable": true,
+    "status": "PU"
+  },
+  {
+    "id": 2813,
+    "name": "Card That Allows Paying Mana for Combat Phases",
+    "uncountable": true,
+    "status": "PU"
+  },
+  {
+    "id": 2045,
+    "name": "Card that Copies Abilities",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2181,
+    "name": "Card that Creates a Land Creature Token",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2736,
+    "name": "Card that Creates a Token Each Turn",
+    "uncountable": true,
+    "status": "PU"
+  },
+  {
+    "id": 2812,
+    "name": "Card that Exiles Graveyards",
+    "uncountable": true,
+    "status": "PU"
+  },
+  {
+    "id": 2676,
+    "name": "Card That Gives Firebending",
+    "uncountable": true,
+    "status": "PU"
+  },
+  {
+    "id": 1773,
+    "name": "Card that Grants \"{T}: Deal Damage\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2680,
+    "name": "Card that Tutors",
+    "uncountable": true,
+    "status": "PU"
+  },
+  {
+    "id": 2247,
+    "name": "Card with Dredge",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2403,
+    "name": "Card with \"Pay Mana: Return a permanent from BF to hand\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1988,
+    "name": "Card with \"Spells have flash\" (Flash Enabler)",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2156,
+    "name": "Card with \"Whenever a card is put into your graveyard, exile it\" (Rest in Peace / RIP Effect)",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2782,
+    "name": "Card with \"Whenever a player loses life, mill cards\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2810,
+    "name": "Card with \"Whenever (creature type) enters, attach an Equipment to it\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2157,
+    "name": "Card with \"You can't lose the game\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1750,
+    "name": "Cast all colorless artifacts from your graveyard any number of times",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2728,
+    "name": "Cast all instants and sorceries from opponents' graveyards infinite times",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1702,
+    "name": "Cast all instants and sorceries with mana value 4 or less from your hand and graveyard",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1595,
+    "name": "Cast all nonartifact, nonenchantment permanent cards in your graveyard",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1613,
+    "name": "Cast all permanent cards in your graveyard",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1723,
+    "name": "Cast all Sliver creature cards in your hand and library",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 947,
+    "name": "Cast all spells in your library",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1012,
+    "name": "Cast all spells in your library and exile",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1094,
+    "name": "Cast any instant cards from your graveyard, your library, exile, and opponents' graveyards infinite times",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 595,
+    "name": "Cast any number of spells from opponents' libraries",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1201,
+    "name": "Cast any spell of your choice from your library",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1676,
+    "name": "Cast a portion of the cards in your library and hand without paying their mana costs",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 2298,
+    "name": "Cast a subset of spells in your graveyard",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2297,
+    "name": "Cast a subset of spells in your library",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1629,
+    "name": "Cast every Dragon's Approach in your library and hand without paying their mana costs",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2704,
+    "name": "Channel effects",
+    "uncountable": true,
+    "status": "PU"
+  },
+  {
+    "id": 1822,
+    "name": "Clone - Artifact",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1797,
+    "name": "Clone - Creature",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1937,
+    "name": "Clone - Creature (Bypass Legend Rule)",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1963,
+    "name": "Clone - Enchantment",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1935,
+    "name": "Clone - Planeswalker",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1771,
+    "name": "Copy - Creature (Bypass Legend Rule)",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1795,
+    "name": "Cost Reducer - Activated Abilities",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1915,
+    "name": "Cost Reducer - Spells",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 898,
+    "name": "Counter all copies cast from Eye of the Storm",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2586,
+    "name": "Counter all nonlegendary creature spells",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 880,
+    "name": "Counter all spells",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 246,
+    "name": "Counter all spells opponents cast",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 756,
+    "name": "Counter all spells opponents cast from their hands",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 169,
+    "name": "Counter all spells opponents cast that are created by Knowledge Pool",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 749,
+    "name": "Counter all spells players cast from their hands",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1314,
+    "name": "Counter the first spell opponents cast each turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1270,
+    "name": "Create a copy of each artifact an opponent controls",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 197,
+    "name": "Creatures can't attack",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 150,
+    "name": "Creatures can't attack you",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2579,
+    "name": "Creatures can't block",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 798,
+    "name": "Creatures do not untap",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1972,
+    "name": "Creatures opponents control die upon entering",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1558,
+    "name": "Creatures opponents control do not untap",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2210,
+    "name": "Creatures with Morph, Megamorph or Disguise",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2407,
+    "name": "Creatures without islandwalk cannot attack",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 425,
+    "name": "Creatures you control can't be dealt damage",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2815,
+    "name": "Creature that adds mana when you attack",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2209,
+    "name": "Creature that can Sacrifice Itself",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1989,
+    "name": "Creature that is Mana Neutral on ETB",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1993,
+    "name": "Creature that is Mana Neutral on LTB",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1981,
+    "name": "Creature That Taps for 2+ Mana",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2260,
+    "name": "Creature that taps for 3+ mana",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 1870,
+    "name": "Creature Type Changers",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1883,
+    "name": "Creature with \"{1}, remove a +1/+1 counter: Create a creature token\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2748,
+    "name": "Creature with Combat Damage Trigger: Create Token(s)",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1740,
+    "name": "Creature with Cost of {0}",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2004,
+    "name": "Creature with ETB: \"Blink a creature\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2593,
+    "name": "Creature with ETB: Create 1+ Token(s)",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1805,
+    "name": "Creature with ETB: Create Treasure(s)",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2587,
+    "name": "Creature with ETB: Earthbend",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2095,
+    "name": "Creature with ETB: \"Proliferate\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1839,
+    "name": "Creature with ETB: \"Return a permanent to hand\" (Self-Bounce)",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1914,
+    "name": "Creature with ETB: \"Return card from GY to hand\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1882,
+    "name": "Creature with ETB: \"The Ring tempts you\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1844,
+    "name": "Creature with ETB: \"Untap another creature\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2170,
+    "name": "Creature with ETB: \"Venture into the dungeon\" or \"You take the initiative\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2711,
+    "name": "Creature with Mutate",
+    "uncountable": true,
+    "status": "PU"
+  },
+  {
+    "id": 2259,
+    "name": "Creature with MV=0 and Toughness=0",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2130,
+    "name": "Creature with \"Pay Mana: Return this creature from GY to BF\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2178,
+    "name": "Creature with \"Remove a -1/-1 counter from this creature: Untap it\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2765,
+    "name": "Creature with \"{T}: Put a +1/+1 counter on this creature\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1817,
+    "name": "Creature with \"{T}: Untap a permanent\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1837,
+    "name": "Creature with \"{T}: You may put a land card from your hand onto the battlefield.\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2691,
+    "name": "Creature with Undying",
+    "uncountable": true,
+    "status": "PU"
+  },
+  {
+    "id": 1874,
+    "name": "Creature with \"{U}: Untap this creature\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2399,
+    "name": "Creature with \"When dealt damage, deal damage\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2768,
+    "name": "Creature with \"Whenever a (permanent type) enters, proliferate\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2767,
+    "name": "Creature with \"Whenever you cast a (type of spell), proliferate\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1995,
+    "name": "Creature with \"Whenever you gain life, put a +1/+1 counter on this creature\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1196,
+    "name": "Deal lethal damage to all creatures opponents control with power 1 or greater",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 844,
+    "name": "Destroy all artifacts and enchantments opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1512,
+    "name": "Destroy all artifacts and enchantments that enter the battlefield under an opponent's control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1269,
+    "name": "Destroy all artifacts opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2590,
+    "name": "Destroy all artifacts opponents control during each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1479,
+    "name": "Destroy all artifacts that enter the battlefield under an opponent's control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1964,
+    "name": "Destroy all creatures, artifacts, and enchantments on each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 181,
+    "name": "Destroy all creatures, artifacts, and enchantments on each player's turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 491,
+    "name": "Destroy all creatures, artifacts, and enchantments opponents control on each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2591,
+    "name": "Destroy all creatures during each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1899,
+    "name": "Destroy all creatures during each turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1767,
+    "name": "Destroy all creatures except Myojin of Cleansing Fire during each turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 543,
+    "name": "Destroy all creatures opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2462,
+    "name": "Destroy all creatures opponents control during each turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1494,
+    "name": "Destroy all creatures opponents control whenever a creature enters the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2159,
+    "name": "Destroy all creatures opponents control whenever a creature enters the battlefield under your control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1885,
+    "name": "Destroy all creatures opponents control with toughness equal to 1",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1991,
+    "name": "Destroy all creatures target opponent controls",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 1349,
+    "name": "Destroy all creatures that enter the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1886,
+    "name": "Destroy all creatures that enter the battlefield under an opponent's control with toughness equal to 1",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2592,
+    "name": "Destroy all enchantments during each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 217,
+    "name": "Destroy all lands",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 527,
+    "name": "Destroy all lands, creatures, and artifacts your opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1258,
+    "name": "Destroy all lands opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1047,
+    "name": "Destroy all lands that enter the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 874,
+    "name": "Destroy all lands that enter the battlefield under an opponent's control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2452,
+    "name": "Destroy all nonartifact lands",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2453,
+    "name": "Destroy all nonartifact lands that enter the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2778,
+    "name": "Destroy all nonbasic lands opponents control",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 2573,
+    "name": "Destroy all nonblack creatures opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1693,
+    "name": "Destroy all nonblack creatures opponents control during each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1309,
+    "name": "Destroy all nonblack creatures that enter the battlefield under an opponent's control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 630,
+    "name": "Destroy all noncreature permanents opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1470,
+    "name": "Destroy all noncreature permanents opponents control each turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1049,
+    "name": "Destroy all noncreature permanents with mana value 0",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1048,
+    "name": "Destroy all noncreature permanents with mana value 0 upon entering",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 886,
+    "name": "Destroy all nonland permanents opponents control each turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1062,
+    "name": "Destroy all nontoken creatures opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 983,
+    "name": "Destroy all nontoken creatures opponents control whenever a creature enters the battlefield under your control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 64,
+    "name": "Destroy all permanents each turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 102,
+    "name": "Destroy all permanents opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1772,
+    "name": "Destroy all permanents opponents control each turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 297,
+    "name": "Destroy all permanents opponents control on each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 103,
+    "name": "Destroy all permanents with mana value 0",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 104,
+    "name": "Destroy all permanents with mana value 0 upon entering",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2797,
+    "name": "Destroy all unmodified creatures opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 285,
+    "name": "Destroy all x/1 creatures your opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 476,
+    "name": "Destroy any creature whenever a creature enters the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 856,
+    "name": "Destroy any nontoken creature that enters the battlefield under an opponent's control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1633,
+    "name": "Destroy any number of artifacts and enchantments",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1203,
+    "name": "Destroy any number of artifacts, enchantments, and nonartifact nonblack creatures",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 478,
+    "name": "Destroy any number of creatures",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 336,
+    "name": "Destroy any number of creatures opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1116,
+    "name": "Destroy any number of creatures opponents control during each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1370,
+    "name": "Destroy any number of creatures opponents control whenever you put a counter on a permanent or player",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1310,
+    "name": "Destroy any number of nonblack creatures opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1170,
+    "name": "Destroy any number of nonblack creatures opponents control during each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2724,
+    "name": "Destroy any number of noncreature permanents",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2714,
+    "name": "Destroy any number of nonland permanents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1308,
+    "name": "Destroy any number of nontoken creatures opponents control whenever a black creature enters the battlefield under your control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1306,
+    "name": "Destroy any number of nontoken creatures whenever a black creature enters the battlefield under your control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1307,
+    "name": "Destroy any number of nontoken creatures whenever a creature dies",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 928,
+    "name": "Destroy any number of target creatures during each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 857,
+    "name": "Destroy any number of target nontoken creatures",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 251,
+    "name": "Destroy any number of target permanents opponents control",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 477,
+    "name": "Destroy each creature that enters the battlefield under an opponent's control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2798,
+    "name": "Destroy each unmodified creature that enters the battlefield under an opponent's control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2740,
+    "name": "Destroy some creatures opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1325,
+    "name": "Destroy up to 100 creatures during each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 530,
+    "name": "Discard your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1880,
+    "name": "Donate a Permanent",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1759,
+    "name": "Doubler - Card Draw",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2224,
+    "name": "Doubler - Casting Spells",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1823,
+    "name": "Doubler - Lifegain",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1758,
+    "name": "Doubler - Tokens",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1897,
+    "name": "Doubler - Triggers",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2410,
+    "name": "Draw all noncreature cards from your library",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 22,
+    "name": "Draw the game",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 50,
+    "name": "Each opponent loses the game",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1177,
+    "name": "Each opponent loses the game at the beginning of their next upkeep",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2826,
+    "name": "Each opponent puts all basic lands from their library onto the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2572,
+    "name": "Each opponent returns all creature cards from their graveyard to the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2632,
+    "name": "Each opponent returns all creature cards from their graveyard to their hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 804,
+    "name": "Each opponent sacrifices all creatures they control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2335,
+    "name": "Each opponent sacrifices all nontoken creatures they control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2781,
+    "name": "Each opponent sacrifices all nontoken creatures they control during each of your turns",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 993,
+    "name": "Each opponent sacrifices all permanents they control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1907,
+    "name": "Each opponent sacrifices all planeswalkers they control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 805,
+    "name": "Each opponent sacrifices any creature that enters under their control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2735,
+    "name": "Each opponent sacrifices any nontoken creature that enters under their control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2772,
+    "name": "Each opponent sacrifices nearly infinite creatures",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 200,
+    "name": "Each opponent shuffles their hand into their library during their draw step",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 528,
+    "name": "Each opponent's life total becomes 1",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 430,
+    "name": "Each opponent with 20 or more life loses the game",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2123,
+    "name": "Each opponent with an even life total loses the game",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2690,
+    "name": "Each player may exile a portion of their library with the ability to play the exiled cards until the end of their next turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2776,
+    "name": "Effect that grants spells convoke",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2823,
+    "name": "Effect with \"Whenever you draw a card, this deals damage\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2222,
+    "name": "Equipment with Equip Cost = {0}",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 577,
+    "name": "Exile a card of your choice from an opponent's library on each opponent's turn and you may cast that card",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1205,
+    "name": "Exile all artifact and creature cards in opponents' libraries; you may play those cards",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 529,
+    "name": "Exile all cards in hands and graveyards",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 228,
+    "name": "Exile all creatures an opponent plays",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 227,
+    "name": "Exile all creatures opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1619,
+    "name": "Exile all creatures that enter the battlefield under an opponent's control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 897,
+    "name": "Exile all instants and sorceries any player casts",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 896,
+    "name": "Exile all instants and sorceries opponents cast",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1222,
+    "name": "Exile all instants and sorceries players cast from their hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1399,
+    "name": "Exile all lands opponents control during each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1198,
+    "name": "Exile all libraries",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1321,
+    "name": "Exile all noncreature spells players cast from their hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 229,
+    "name": "Exile all nonenchantment permanents opponents control each turn until end of turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 594,
+    "name": "Exile all nonland cards from opponents' libraries",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1602,
+    "name": "Exile all nonland cards from target opponent's library, with the ability for you to play them from exile",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 407,
+    "name": "Exile all nonland permanents opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2799,
+    "name": "Exile all nontoken creatures that enter the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 29,
+    "name": "Exile all of your opponents' permanents and hands",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 683,
+    "name": "Exile all permanents",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 687,
+    "name": "Exile all permanents except Barren Glory",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 684,
+    "name": "Exile all permanents except Near-Death Experience",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 218,
+    "name": "Exile all permanents opponents control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 260,
+    "name": "Exile all spells opponents cast from their hands",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1220,
+    "name": "Exile all spells players cast from their hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 168,
+    "name": "Exile all spells players cast from their hands",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1383,
+    "name": "Exile all spells target opponent casts from their hand",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 1075,
+    "name": "Exile any creature that enters under an opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2622,
+    "name": "Exile a portion of your library with the ability to play the exiled cards until your end step",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 490,
+    "name": "Exile each artifact and creature your opponents control each turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 144,
+    "name": "Exile each opponent's library",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2318,
+    "name": "Exile each opponent's library with the ability to play the exiled cards until end of turn",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 1176,
+    "name": "Exile target opponent's library",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 88,
+    "name": "Exile your library",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1691,
+    "name": "Exile your library and graveyard",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1268,
+    "name": "Exile your library with the ability to play the exiled cards until end of turn",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2375,
+    "name": "Exile your library with the ability to play the exiled cards until the end of your next turn",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 2119,
+    "name": "Exile your library with the ability to play the exiled cards until your next end step",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1742,
+    "name": "Extra Turn Spell",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2175,
+    "name": "Fetchland",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2231,
+    "name": "Free Creature Tappers",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1813,
+    "name": "Free Discard Outlet",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1743,
+    "name": "Free Sacrifice Outlet",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 544,
+    "name": "From now on, destroy any creatures opponents control at instant speed",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1873,
+    "name": "Gain control of all artifacts",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1218,
+    "name": "Gain control of all commanders",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 810,
+    "name": "Gain control of all creatures",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 147,
+    "name": "Gain control of all creatures and lands",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 617,
+    "name": "Gain control of all creatures every turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1780,
+    "name": "Gain control of all creatures opponents control and sacrifice them",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 568,
+    "name": "Gain control of all creatures until end of turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1516,
+    "name": "Gain control of all creatures until end of turn during each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1536,
+    "name": "Gain control of all creatures with toughness less than or equal to Dread Slaver's power",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2738,
+    "name": "Gain control of all lands opponents control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1405,
+    "name": "Gain control of all noncreature permanents",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 101,
+    "name": "Gain control of all permanents",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2801,
+    "name": "Gain control of all permanents an opponent controls during each of your turns",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1941,
+    "name": "Gain control of all permanents until end of turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 905,
+    "name": "Gain control of any creatures that enters the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1404,
+    "name": "Gain control of most creatures during each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2739,
+    "name": "Gain control of some creatures opponents control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1809,
+    "name": "Gain life on Creature ETB (Soul Sister)",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1994,
+    "name": "Gain life on Creature LTB (Blood Artist)",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1860,
+    "name": "Give Artifact Type to Creature",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1852,
+    "name": "Gives +1/+1 counter(s) to Creature upon ETB",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1800,
+    "name": "Gives Infect to Creature",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1815,
+    "name": "Haste Enabler",
+    "uncountable": true,
+    "status": "PU"
+  },
+  {
+    "id": 1806,
+    "name": "Increaser - Damage",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1824,
+    "name": "Increaser - Lifegain",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 979,
+    "name": "Infinite -1/-1 counters",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2244,
+    "name": "Infinite +1/+1 counters on a creature",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1571,
+    "name": "Infinite +1/+1 counters on a creature token",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1520,
+    "name": "Infinite +1/+1 counters on a creature token with haste",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 550,
+    "name": "Infinite -1/-1 counters on all other creatures",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 712,
+    "name": "Infinite +1/+1 counters on all Vehicles you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1922,
+    "name": "Infinite +1/+1 counters on an infinite number of creature tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1261,
+    "name": "Infinite -1/-1 counters on a permanent",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2429,
+    "name": "Infinite +1/+1 counters on artifact creatures you cast",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2287,
+    "name": "Infinite +1/+1 counters on certain creatures",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2382,
+    "name": "Infinite +1/+1 counters on Clerics you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1371,
+    "name": "Infinite -1/-1 counters on creatures opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 115,
+    "name": "Infinite +1/+1 counters on creatures you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1961,
+    "name": "Infinite +1/+1 counters on Dreadmobile",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2339,
+    "name": "Infinite +1/+1 counters on Goblins you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2537,
+    "name": "Infinite +1/+1 counters on Golems you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2386,
+    "name": "Infinite +1/+1 counters on legendary creatures you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2569,
+    "name": "Infinite +1/+1 counters on Merfolk you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2285,
+    "name": "Infinite +1/+1 counters on most creatures you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2663,
+    "name": "Infinite +1/+1 counters on non-Wall creatures you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1121,
+    "name": "Infinite +1/+1 counters on permanents you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2376,
+    "name": "Infinite +1/+1 counters on Soldiers you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2416,
+    "name": "Infinite +1/+1 counters on Squirrels you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 689,
+    "name": "Infinite activations of most planeswalkers",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2408,
+    "name": "Infinite artifact ETB",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2693,
+    "name": "Infinite artifact ETB for all players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2694,
+    "name": "Infinite artifact ETB for one or more opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2409,
+    "name": "Infinite artifact LTB",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2419,
+    "name": "Infinite artifact sacrifice triggers",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 587,
+    "name": "Infinite artifact tokens",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1449,
+    "name": "Infinite Banana tokens for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 108,
+    "name": "Infinite black mana",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1060,
+    "name": "Infinite black mana for all players",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 558,
+    "name": "Infinite black mana for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2480,
+    "name": "Infinite black mana if you control a black permanent",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 940,
+    "name": "Infinite black mana that can only be spent to cast instant and sorcery spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 157,
+    "name": "Infinite black mana that can't be spent to pay generic mana costs",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 87,
+    "name": "Infinite blinking",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 850,
+    "name": "Infinite blinking for all players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 959,
+    "name": "Infinite blinking of artifact creatures",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 961,
+    "name": "Infinite blinking of artifacts",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 985,
+    "name": "Infinite blinking of artifacts and creatures",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 143,
+    "name": "Infinite blinking of artifacts, creatures, and lands",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1275,
+    "name": "Infinite blinking of creature cards in opponent's graveyards",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1137,
+    "name": "Infinite blinking of creatures and creature cards in your graveyard",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 226,
+    "name": "Infinite blinking of creatures and enchantments",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1148,
+    "name": "Infinite blinking of creatures and planeswalkers",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 664,
+    "name": "Infinite blinking of creatures, artifacts and lands you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1138,
+    "name": "Infinite blinking of creatures on the battlefield and creature cards in graveyard and in library",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 984,
+    "name": "Infinite blinking of lands",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 492,
+    "name": "Infinite blinking of most creatures",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 470,
+    "name": "Infinite blinking of most creatures and most creature cards in your graveyard",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 559,
+    "name": "Infinite blinking of nonland permanents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1216,
+    "name": "Infinite blinking of nonland permanents and nonland permanent cards in graveyard and in library",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 505,
+    "name": "Infinite blinking of one creature",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 360,
+    "name": "Infinite blinking of permanents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 321,
+    "name": "Infinite blinking of some artifacts",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 1166,
+    "name": "Infinite blinking of some creature cards in your graveyard",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 488,
+    "name": "Infinite blinking of some creatures",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 813,
+    "name": "Infinite blinking of some creatures and planeswalkers",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 482,
+    "name": "Infinite blinking of some creatures and some creature cards in graveyard and in library",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 708,
+    "name": "Infinite blinking of Vehicles you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 699,
+    "name": "Infinite Blood tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 37,
+    "name": "Infinite blue mana",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2478,
+    "name": "Infinite blue mana if you control a blue permanent",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2426,
+    "name": "Infinite blue mana that can only be spent to activate abilities of artifacts",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2427,
+    "name": "Infinite blue mana that can only be spent to cast artifact spells",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 768,
+    "name": "Infinite blue mana that can only be spent to cast instant and sorcery spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1890,
+    "name": "Infinite blue mana that can only be spent to cast noncreature spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 795,
+    "name": "Infinite blue mana that can't be spent to pay generic mana costs",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 24,
+    "name": "Infinite card draw",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 100,
+    "name": "Infinite card draw at the beginning of the next upkeep",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 575,
+    "name": "Infinite card draw for all players",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1001,
+    "name": "Infinite card draw for any number of opponents",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 95,
+    "name": "Infinite card draw for any number of players",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 203,
+    "name": "Infinite card draw for any player",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 290,
+    "name": "Infinite card draw for each opponent",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 191,
+    "name": "Infinite card draw for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 703,
+    "name": "Infinite card draw for opponents that control a Wedding Ring",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 667,
+    "name": "Infinite card draw for target opponent",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 1754,
+    "name": "Infinite cascade with mana value equal to the next spell you cast",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 716,
+    "name": "Infinite casts of all cards exiled with kick counters on them",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 864,
+    "name": "Infinite casts of all spells created by Garth One-Eye except Shivan Dragon",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1498,
+    "name": "Infinite casts of all spells permitted by Garth One-Eye",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1282,
+    "name": "Infinite casts of any instants and/or sorcery cards in your hand or graveyard",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2299,
+    "name": "Infinite casts of a specific spell",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1893,
+    "name": "Infinite casts of cards exiled with Spellbinder",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 915,
+    "name": "Infinite casts of green instants and sorceries in your hand and graveyard",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2370,
+    "name": "Infinite casts of instant and sorcery cards in opponents' graveyards",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2219,
+    "name": "Infinite casts of instant and sorcery cards in your graveyard",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 919,
+    "name": "Infinite casts of instants and sorceries in your hand and graveyard",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1947,
+    "name": "Infinite casts of instants in your graveyard and/or hand",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1200,
+    "name": "Infinite cast triggers for all spells in your library",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 208,
+    "name": "Infinite charge counters on a permanent",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2428,
+    "name": "Infinite charge counters on artifacts you cast",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 645,
+    "name": "Infinite Clue tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1925,
+    "name": "Infinite Clue tokens for all players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1924,
+    "name": "Infinite Clue tokens for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 5,
+    "name": "Infinite colored mana",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1061,
+    "name": "Infinite colored mana for all players",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 535,
+    "name": "Infinite colored mana for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 776,
+    "name": "Infinite colored mana if your opponent allows it",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 938,
+    "name": "Infinite colored mana that can only be spent during combat phase",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 691,
+    "name": "Infinite colored mana that can only be spent to activate abilities",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2764,
+    "name": "Infinite colored mana that can only be spent to activate abilities of artifacts",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2786,
+    "name": "Infinite colored mana that can only be spent to activate abilities of certain creatures",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1123,
+    "name": "Infinite colored mana that can only be spent to activate abilities of creatures",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 693,
+    "name": "Infinite colored mana that can only be spent to cast artifact spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 463,
+    "name": "Infinite colored mana that can only be spent to cast creature spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2396,
+    "name": "Infinite colored mana that can only be spent to cast Demon spells",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2394,
+    "name": "Infinite colored mana that can only be spent to cast instant spells",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2640,
+    "name": "Infinite colored mana that can only be spent to cast legendary spells",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2202,
+    "name": "Infinite colored mana that can only be spent to cast monocolored spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1305,
+    "name": "Infinite colored mana that can only be spent to cast permanent spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2395,
+    "name": "Infinite colored mana that can only be spent to cast sorcery spells",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1387,
+    "name": "Infinite colored mana that can only be spent to cast spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2787,
+    "name": "Infinite colored mana that can only be spent to cast spells of a certain creature type",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2397,
+    "name": "Infinite colored mana that can only be spent to cast Spirit spells",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1278,
+    "name": "Infinite colored mana that can only be spent to cast your commander",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2821,
+    "name": "Infinite colored mana that can only be used to activate abilities of creatures",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1025,
+    "name": "Infinite colored mana that can only be used to cast creature spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1108,
+    "name": "Infinite colored mana that can't be spent to cast nonartifact spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1380,
+    "name": "Infinite colored mana that can't be spent to cast spells from your hand",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 11,
+    "name": "Infinite colorless mana",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 237,
+    "name": "Infinite colorless mana during each opponent's turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 126,
+    "name": "Infinite colorless mana that can only be spent to activate abilities",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1191,
+    "name": "Infinite colorless mana that can only be spent to activate abilities of artifacts",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 692,
+    "name": "Infinite colorless mana that can only be spent to cast artifact spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2028,
+    "name": "Infinite colorless mana that can only be spent to cast spells from your graveyard",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1551,
+    "name": "Infinite colorless mana that can't be spent to activate abilities",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1107,
+    "name": "Infinite colorless mana that can't be spent to cast nonartifact spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 815,
+    "name": "Infinite colorless mana that can't be spent to cast spells from your hand",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 205,
+    "name": "Infinite combat damage",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 925,
+    "name": "Infinite combat damage to one opponent",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 19,
+    "name": "Infinite combat phases",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 160,
+    "name": "Infinite commander casts",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1769,
+    "name": "Infinite copies of abilities on the stack",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 988,
+    "name": "Infinite copies of abilities with {X} in their cost",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1770,
+    "name": "Infinite copies of abilities you control on the stack",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 572,
+    "name": "Infinite copies of all artifacts",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1160,
+    "name": "Infinite copies of all creatures",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 714,
+    "name": "Infinite copies of all instants and sorceries with mana value 6 or less in your hand and graveyard",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 826,
+    "name": "Infinite copies of all noncreature permanents",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1079,
+    "name": "Infinite copies of all nonland permanents",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 443,
+    "name": "Infinite copies of all permanents",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1453,
+    "name": "Infinite copies of all tokens you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 828,
+    "name": "Infinite copies of any nontoken creatures",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2332,
+    "name": "Infinite copies of artifact creatures you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1659,
+    "name": "Infinite copies of artifacts, creatures and lands you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 977,
+    "name": "Infinite copies of artifacts you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1864,
+    "name": "Infinite copies of artifacts you control with haste",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1113,
+    "name": "Infinite copies of artifact tokens you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2137,
+    "name": "Infinite copies of artifact tokens you control that entered the battlefield this turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1533,
+    "name": "Infinite copies of a selection of creatures you control with haste",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 2300,
+    "name": "Infinite copies of a specific artifact",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2304,
+    "name": "Infinite copies of a specific creature",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2700,
+    "name": "Infinite copies of a specific creature with haste",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 2305,
+    "name": "Infinite copies of a specific enchantment",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2303,
+    "name": "Infinite copies of a specific land",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2301,
+    "name": "Infinite copies of a specific planeswalker",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 585,
+    "name": "Infinite copies of attacking creatures you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1728,
+    "name": "Infinite copies of cards exiled with Dino DNA",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 221,
+    "name": "Infinite copies of cards exiled with Isochron Scepter",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2059,
+    "name": "Infinite copies of creature cards in your graveyard that are 1/1 Insects",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2248,
+    "name": "Infinite copies of creature cards in your graveyard that are 4/4 Zombies",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1055,
+    "name": "Infinite copies of creatures you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1653,
+    "name": "Infinite copies of creatures you control with haste",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1779,
+    "name": "Infinite copies of creature tokens you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1828,
+    "name": "Infinite copies of creature tokens you control that entered the battlefield this turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1679,
+    "name": "Infinite copies of each artifact and creature card in your hand",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 193,
+    "name": "Infinite copies of instant and sorcery spells on the stack",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 421,
+    "name": "Infinite copies of instant and sorcery spells on the stack with mana value 2 or less that you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1017,
+    "name": "Infinite copies of instant cards with mana value 1 or less exiled by Elite Arcanist",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 202,
+    "name": "Infinite copies of instant or sorcery spells you cast",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2705,
+    "name": "Infinite copies of instants and sorceries",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2456,
+    "name": "Infinite copies of lands you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2352,
+    "name": "Infinite copies of legendary permanents you own in play until end of turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 974,
+    "name": "Infinite copies of most creatures you control with haste",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 971,
+    "name": "Infinite copies of most legendary creatures you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 949,
+    "name": "Infinite copies of most nontoken Dragons you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 450,
+    "name": "Infinite copies of most permanents",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1452,
+    "name": "Infinite copies of most tokens you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1727,
+    "name": "Infinite copies of nonartifact creature tokens you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 824,
+    "name": "Infinite copies of noncreature permanents you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1407,
+    "name": "Infinite copies of nonland permanents you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 344,
+    "name": "Infinite copies of nonlegendary creatures you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1063,
+    "name": "Infinite copies of nonlegendary nonartifact creatures you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 607,
+    "name": "Infinite copies of non-mana activated abiltiies you activate",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 600,
+    "name": "Infinite copies of nontoken creatures you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1898,
+    "name": "Infinite copies of one instant or sorcery",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 833,
+    "name": "Infinite copies of permanent spells you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 485,
+    "name": "Infinite copies of permanents you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1466,
+    "name": "Infinite copies of Replication Technique for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1144,
+    "name": "Infinite copies of spells exiled by Eye of the Storm",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 989,
+    "name": "Infinite copies of spells with {X} in their cost",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2682,
+    "name": "Infinite copies of the casted instant or sorcery",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2366,
+    "name": "Infinite copies of the cast enchantment",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 1471,
+    "name": "Infinite copies of tokens you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2134,
+    "name": "Infinite copies of tokens you control that entered the battlefield this turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2615,
+    "name": "Infinite copies of triggered abilities you control on the stack",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1568,
+    "name": "Infinite creature copies of all noncreature nonartifact permanents",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 825,
+    "name": "Infinite creature copies of all noncreature permanents",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1611,
+    "name": "Infinite creature copies of artifacts you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2401,
+    "name": "Infinite creature copies of artifacts you control with haste",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2368,
+    "name": "Infinite creature copies of nonlegendary enchantments you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2420,
+    "name": "Infinite creature copies of nonlegendary enchantments you control with haste",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 4,
+    "name": "Infinite creature ETB",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2501,
+    "name": "Infinite creature ETB at the beginning of your next upkeep",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1093,
+    "name": "Infinite creature ETB for all players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 999,
+    "name": "Infinite creature ETB for any number of opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1005,
+    "name": "Infinite creature ETB for any number of players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 867,
+    "name": "Infinite creature ETB for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1340,
+    "name": "Infinite creature ETB for target opponent",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 3,
+    "name": "Infinite creature LTB",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1490,
+    "name": "Infinite creature LTB for all players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2808,
+    "name": "Infinite creature LTB for any number of players",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 1354,
+    "name": "Infinite creature LTB for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1343,
+    "name": "Infinite creature LTB for target opponent",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 6,
+    "name": "Infinite creature sacrifice triggers",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1342,
+    "name": "Infinite creature sacrifice triggers for target opponent",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 1154,
+    "name": "Infinite creature token copies of all noncreature permanents",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 21,
+    "name": "Infinite creature tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2500,
+    "name": "Infinite creature tokens at the beginning of your next upkeep",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 998,
+    "name": "Infinite creature tokens for any number of opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1006,
+    "name": "Infinite creature tokens for any number of players",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 536,
+    "name": "Infinite creature tokens for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1990,
+    "name": "Infinite creature tokens for target opponent",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 2333,
+    "name": "Infinite creature tokens that are infinitely large",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2657,
+    "name": "Infinite creature tokens that are infinitely powerful",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 427,
+    "name": "Infinite creature tokens with 0 power",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 560,
+    "name": "Infinite creature tokens with defender",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 39,
+    "name": "Infinite creature tokens with haste",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 13,
+    "name": "Infinite damage",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 232,
+    "name": "Infinite damage to all creatures",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1157,
+    "name": "Infinite damage to all players",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 304,
+    "name": "Infinite damage to creatures",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1070,
+    "name": "Infinite damage to most creatures",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1601,
+    "name": "Infinite damage to most opponents",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 258,
+    "name": "Infinite damage to one opponent",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 402,
+    "name": "Infinite damage to some creatures",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 7,
+    "name": "Infinite death triggers",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1491,
+    "name": "Infinite death triggers for all players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1355,
+    "name": "Infinite death triggers for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1341,
+    "name": "Infinite death triggers for target opponent",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 1046,
+    "name": "Infinite die rolls",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 61,
+    "name": "Infinite draw triggers",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1280,
+    "name": "Infinite draw triggers at the beginning of the next upkeep",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 190,
+    "name": "Infinite draw triggers for all players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1000,
+    "name": "Infinite draw triggers for any number of opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 96,
+    "name": "Infinite draw triggers for any number of players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 291,
+    "name": "Infinite draw triggers for each opponent",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 823,
+    "name": "Infinite draw triggers for opponents that control a Wedding Ring",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 668,
+    "name": "Infinite draw triggers for target opponent",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 306,
+    "name": "Infinite enchantment destruction",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 317,
+    "name": "Infinite energy counters",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1179,
+    "name": "Infinite experience counters",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 688,
+    "name": "Infinite Food tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 907,
+    "name": "Infinite Forest tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 35,
+    "name": "Infinite green mana",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1058,
+    "name": "Infinite green mana for all players",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 555,
+    "name": "Infinite green mana for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2378,
+    "name": "Infinite green mana that can only be spent to activate abilities of creatures",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2379,
+    "name": "Infinite green mana that can only be spent to cast creature spells",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 158,
+    "name": "Infinite green mana that can't be spent to pay generic mana costs",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1345,
+    "name": "Infinite Incubator tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2191,
+    "name": "Infinite instances of the tapped creature's ability",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2072,
+    "name": "Infinite Island tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2471,
+    "name": "Infinite Junk tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2794,
+    "name": "Infinite land creature tokens",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 119,
+    "name": "Infinite landfall triggers",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 565,
+    "name": "Infinite landfall triggers for all players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 15,
+    "name": "Infinite lifegain",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1140,
+    "name": "Infinite lifegain for all players",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1450,
+    "name": "Infinite lifegain for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 14,
+    "name": "Infinite lifegain triggers",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1142,
+    "name": "Infinite lifegain triggers for all players",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1448,
+    "name": "Infinite lifegain triggers for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 26,
+    "name": "Infinite lifeloss",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 997,
+    "name": "Infinite lifeloss for any number of opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 995,
+    "name": "Infinite lifeloss for target opponent",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 62,
+    "name": "Infinite looting",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 347,
+    "name": "Infinite looting for all players",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2328,
+    "name": "Infinite looting for any number of players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 283,
+    "name": "Infinite looting for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2605,
+    "name": "Infinitely large Allies you control until end of turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1040,
+    "name": "Infinitely large creature",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 159,
+    "name": "Infinitely large creatures",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1016,
+    "name": "Infinitely large creatures you control until end of turn",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 651,
+    "name": "Infinitely large creature until end of turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2654,
+    "name": "Infinitely large Thopters you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2800,
+    "name": "Infinitely powerful attacking creatures you control until end of turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2384,
+    "name": "Infinitely powerful Bird tokens you control until end of turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2645,
+    "name": "Infinitely powerful creature",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2659,
+    "name": "Infinitely powerful creatures you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1579,
+    "name": "Infinitely powerful creatures you control until end of turn",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2275,
+    "name": "Infinitely powerful creature until end of turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2679,
+    "name": "Infinitely powerful Rats you control until end of turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2584,
+    "name": "Infinitely powerful red creatures you control until end of turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 77,
+    "name": "Infinite magecraft triggers",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1465,
+    "name": "Infinite magecraft triggers for all players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 387,
+    "name": "Infinite mana among colors of legendary creatures and planeswalkers you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 811,
+    "name": "Infinite mana among colors with which you have devotion",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1143,
+    "name": "Infinite mana artifact creatures you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 931,
+    "name": "Infinite mana artifacts and creatures you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 69,
+    "name": "Infinite mana artifacts you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2359,
+    "name": "Infinite mana artifacts you control can produce during the upkeep step",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 368,
+    "name": "Infinite mana basic lands you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1149,
+    "name": "Infinite mana creatures and lands you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 65,
+    "name": "Infinite mana creatures you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2360,
+    "name": "Infinite mana creatures you control can produce during the upkeep step",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2127,
+    "name": "Infinite mana creatures you control can produce except ones that attacked or entered the battlefield this turn",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1678,
+    "name": "Infinite mana creatures you control can produce for target opponent",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 2076,
+    "name": "Infinite mana creatures you control with +1/+1 counters on them can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2664,
+    "name": "Infinite mana creatures you control with counters on them can produce",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 972,
+    "name": "Infinite mana Deserts you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 581,
+    "name": "Infinite Mana during the upkeep step",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1777,
+    "name": "Infinite mana Elves you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 963,
+    "name": "Infinite mana enchanted permanents you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 338,
+    "name": "Infinite mana Forests you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1357,
+    "name": "Infinite mana for opponents that creatures they control can produce",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1358,
+    "name": "Infinite mana for opponents that lands they control can produce",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1692,
+    "name": "Infinite mana Gates you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 966,
+    "name": "Infinite mana green creatures and Forests you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1037,
+    "name": "Infinite mana green creatures you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 484,
+    "name": "Infinite mana lands and artifacts you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1042,
+    "name": "Infinite mana lands and green creatures you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 154,
+    "name": "Infinite mana lands, artifacts, and creatures you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 28,
+    "name": "Infinite mana lands you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 238,
+    "name": "Infinite mana lands you control can produce during each opponent's turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 663,
+    "name": "Infinite mana lands you control that enter the battlefield untapped can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1418,
+    "name": "Infinite mana legendary creatures you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2151,
+    "name": "Infinite mana legendary permanents you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2762,
+    "name": "Infinite mana most artifacts you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1130,
+    "name": "Infinite mana Myr you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2216,
+    "name": "Infinite mana noncreature artifacts you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2082,
+    "name": "Infinite mana non-Equipment artifacts with mana value 4 or greater you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 92,
+    "name": "Infinite mana nonland permanents you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2437,
+    "name": "Infinite mana nonland permanents you control that enter the battlefield untapped can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2503,
+    "name": "Infinite mana nontoken artifacts you control can produce",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1360,
+    "name": "Infinite mana nontoken creatures you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1698,
+    "name": "Infinite mana of any one color",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 312,
+    "name": "Infinite mana of colors among permanents you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 442,
+    "name": "Infinite mana permanents on the battlefield can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 151,
+    "name": "Infinite mana permanents you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 472,
+    "name": "Infinite mana permanents you control that enter the battlefield untapped can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1019,
+    "name": "Infinite mana snow lands you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 740,
+    "name": "Infinite mana snow permanents you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2755,
+    "name": "Infinite mana the permanent cast infinite times can produce",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 1808,
+    "name": "Infinite Map tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1917,
+    "name": "Infinite Meteorite tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 9,
+    "name": "Infinite mill",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 124,
+    "name": "Infinite mill for target opponent",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 769,
+    "name": "Infinite mill for up to two target players",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 2073,
+    "name": "Infinite Mountain tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2412,
+    "name": "Infinite Munitions tokens",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2651,
+    "name": "Infinite Mutagen tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2555,
+    "name": "Infinite Mutavault land tokens",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 67,
+    "name": "Infinite non-blue mana of colors among permanents you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1155,
+    "name": "Infinite noncreature artifact token copies of all creatures",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1400,
+    "name": "Infinite non-green mana of colors among permanents you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1167,
+    "name": "Infinite nonlegendary copies of creatures you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1030,
+    "name": "Infinite non-red and non-green mana among permanents you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 753,
+    "name": "Infinite non-white mana of colors among permanents you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1193,
+    "name": "Infinite optional card draw for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2071,
+    "name": "Infinite Plains tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 261,
+    "name": "Infinite planeswalker activations",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2290,
+    "name": "Infinite power and toughness for certain creatures",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2289,
+    "name": "Infinite power and toughness for certain creatures until end of turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2291,
+    "name": "Infinite power and toughness for most creatures you control until end of turn",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2749,
+    "name": "Infinite power for a creature",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 609,
+    "name": "Infinite power for any creature",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2293,
+    "name": "Infinite power for certain creatures until end of turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1195,
+    "name": "Infinite Powerstone tokens",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 314,
+    "name": "Infinite proliferate",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1705,
+    "name": "Infinite proliferate for artifacts, creatures, and lands",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2677,
+    "name": "Infinite radiation counters for yourself",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2111,
+    "name": "Infinite recrusion of some creature cards in your graveyard",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 1204,
+    "name": "Infinite recursion of all cards in your graveyard",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2684,
+    "name": "Infinite recursion of artifact cards in your graveyard",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2688,
+    "name": "Infinite recursion of artifact cards in your graveyard that are a certain mana value",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2655,
+    "name": "Infinite recursion of artifact creatures you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2660,
+    "name": "Infinite recursion of artifacts you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2529,
+    "name": "Infinite recursion of cards in your graveyard",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2729,
+    "name": "Infinite recursion of creature cards in all graveyards",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2145,
+    "name": "Infinite recursion of creature cards in your graveyard",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2687,
+    "name": "Infinite recursion of creature cards in your graveyard that are a certain mana value",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1753,
+    "name": "Infinite recursion of creature cards in your library",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2380,
+    "name": "Infinite recursion of creature cards with power 2 or less",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2661,
+    "name": "Infinite recursion of creatures you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2341,
+    "name": "Infinite recursion of Elemental cards in your graveyard",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2369,
+    "name": "Infinite recursion of enchantment cards in your graveyard",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 639,
+    "name": "Infinite recursion of instant and sorcery cards from your graveyard",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2336,
+    "name": "Infinite recursion of Knights you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 438,
+    "name": "Infinite recursion of most cards in your graveyard",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 439,
+    "name": "Infinite recursion of most instant and sorcery cards in your graveyard",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2644,
+    "name": "Infinite recursion of non-Human creatures you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2506,
+    "name": "Infinite recursion of some creature cards in your graveyard",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 2580,
+    "name": "Infinite recursion of some permanent cards in your graveyard",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 2421,
+    "name": "Infinite recursion of Zombie cards in your graveyard",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 20,
+    "name": "Infinite red mana",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1059,
+    "name": "Infinite red mana for all players",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 556,
+    "name": "Infinite red mana for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2481,
+    "name": "Infinite red mana if you control a red permanent",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1147,
+    "name": "Infinite red mana that can only be spent to cast artifact spells or activate artifact abilities",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1152,
+    "name": "Infinite red mana that can only be spent to cast artifact spells or to activate abilities of artifacts",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 767,
+    "name": "Infinite red mana that can only be spent to cast instant and sorcery spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 156,
+    "name": "Infinite red mana that can't be spent to pay generic mana costs",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 576,
+    "name": "Infinite Rock tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 133,
+    "name": "Infinite rummaging",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1192,
+    "name": "Infinite rummaging for all players",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 123,
+    "name": "Infinite scry",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 8,
+    "name": "Infinite scry 1",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2653,
+    "name": "Infinite scry 2",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 36,
+    "name": "Infinite self-discard triggers",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 346,
+    "name": "Infinite self-discard triggers for all players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2329,
+    "name": "Infinite self-discard triggers for any number of players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 371,
+    "name": "Infinite self-discard triggers for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 10,
+    "name": "Infinite self-mill",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2446,
+    "name": "Infinite self-mill on your next turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 337,
+    "name": "Infinite snow mana",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 17,
+    "name": "Infinite storm count",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 288,
+    "name": "Infinite surveil",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2074,
+    "name": "Infinite Swamp tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2713,
+    "name": "Infinite tapped artifact tokens",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1827,
+    "name": "Infinite tapped Blood tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 871,
+    "name": "Infinite tapped Clue tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2302,
+    "name": "Infinite tapped copies of a specific land",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2324,
+    "name": "Infinite tapped copies of creatures you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2458,
+    "name": "Infinite tapped copies of the Gate",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 80,
+    "name": "Infinite tapped creature tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2214,
+    "name": "Infinite tapped creature tokens for all players",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2388,
+    "name": "Infinite tapped creature tokens for all players except one",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 2162,
+    "name": "Infinite tapped creature tokens for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1493,
+    "name": "Infinite tapped creature tokens that are attacking",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 423,
+    "name": "Infinite tapped creature tokens until end of turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 532,
+    "name": "Infinite tapped creature tokens with haste",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 74,
+    "name": "Infinite tapped Food tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1942,
+    "name": "Infinite tapped Forest tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2316,
+    "name": "Infinite tapped Icy Manalith tokens",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1346,
+    "name": "Infinite tapped Incubator tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1859,
+    "name": "Infinite tapped Island tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 719,
+    "name": "Infinite tapped land tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1851,
+    "name": "Infinite tapped Map tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2604,
+    "name": "Infinite tapped Meteorite tokens",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 904,
+    "name": "Infinite tapped Mountain tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2718,
+    "name": "Infinite tapped Mutagen tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2554,
+    "name": "Infinite tapped Mutavault land tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2068,
+    "name": "Infinite tapped Plains tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1120,
+    "name": "Infinite tapped Powerstone tokens",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 910,
+    "name": "Infinite tapped Rock tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2731,
+    "name": "Infinite tapped Shard tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2069,
+    "name": "Infinite tapped Swamp tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 53,
+    "name": "Infinite tapped tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 75,
+    "name": "Infinite tapped Treasure tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2053,
+    "name": "Infinite token copies of each other creature you control with haste",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2556,
+    "name": "Infinite token copies of Elementals you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2633,
+    "name": "Infinite token copies of Elementals you control with haste",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2387,
+    "name": "Infinite token copies of nonlegendary enchantments you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 777,
+    "name": "Infinite Treasure and/or Clue tokens of your opponents' choosing",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 91,
+    "name": "Infinite Treasure tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1283,
+    "name": "Infinite Treasure tokens for all players",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2695,
+    "name": "Infinite Treasure tokens for one or more opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2533,
+    "name": "Infinite triggers from the creature with a tap trigger",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2551,
+    "name": "Infinite triggers of chapter abilities from nonlegendary Sagas you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 42,
+    "name": "Infinite turns",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1183,
+    "name": "Infinite turns after one turn cycle",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 509,
+    "name": "Infinite turns for each opponent",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2079,
+    "name": "Infinite unlocking of Rooms you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2344,
+    "name": "Infinite untap of all artifacts",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2789,
+    "name": "Infinite untap of all creatures of a certain creature type",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1004,
+    "name": "Infinite untap of all Elves and Warriors",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2543,
+    "name": "Infinite untap of all Forests",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1849,
+    "name": "Infinite untap of all Horrors",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2135,
+    "name": "Infinite untap of all Humans",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2442,
+    "name": "Infinite untap of all lands",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2570,
+    "name": "Infinite untap of all Merfolk",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2136,
+    "name": "Infinite untap of all Shamans",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2169,
+    "name": "Infinite untap of all Wizards",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1332,
+    "name": "Infinite untap of all Wizards and Merfolk",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 411,
+    "name": "Infinite untap of artifact creatures you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 479,
+    "name": "Infinite untap of artifacts and creatures",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 932,
+    "name": "Infinite untap of artifacts and creatures you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1095,
+    "name": "Infinite untap of artifacts, creatures, and lands you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 319,
+    "name": "Infinite untap of artifacts you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1379,
+    "name": "Infinite untap of basic lands you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2758,
+    "name": "Infinite untap of certain creatures you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 83,
+    "name": "Infinite untap of creatures",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1038,
+    "name": "Infinite untap of creatures and Forests you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 415,
+    "name": "Infinite untap of creatures and lands you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 57,
+    "name": "Infinite untap of creatures you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2039,
+    "name": "Infinite untap of creatures you control except one",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2128,
+    "name": "Infinite untap of creatures you control except ones that attacked or entered the battlefield this turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2075,
+    "name": "Infinite untap of creatures you control that have a +1/+1 counter on them",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2665,
+    "name": "Infinite untap of creatures you control with counters on them",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1778,
+    "name": "Infinite untap of Elves you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 962,
+    "name": "Infinite untap of enchanted permanents you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 872,
+    "name": "Infinite untap of Forests you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1036,
+    "name": "Infinite untap of green creatures and Forests you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1043,
+    "name": "Infinite untap of green creatures you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1798,
+    "name": "Infinite untap of Hydras and Wurms",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 153,
+    "name": "Infinite untap of lands, creatures, and artifacts you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 173,
+    "name": "Infinite untap of lands you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1417,
+    "name": "Infinite untap of legendary creatures you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1951,
+    "name": "Infinite untap of legendary permanents you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1318,
+    "name": "Infinite untap of modified creatures you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2816,
+    "name": "Infinite untap of most creatures you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 546,
+    "name": "Infinite untap of Myr you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 840,
+    "name": "Infinite untap of noncreature artifacts you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 93,
+    "name": "Infinite untap of nonland permanents you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2502,
+    "name": "Infinite untap of nontoken artifacts you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 412,
+    "name": "Infinite untap of nontoken creatures you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 167,
+    "name": "Infinite untap of permanents you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 942,
+    "name": "Infinite untap of Samurai you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 739,
+    "name": "Infinite untap of snow permanents you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1962,
+    "name": "Infinite untap of some creatures you control",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 2081,
+    "name": "Infinite untap of some non-Equipment artifacts you control",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 1232,
+    "name": "Infinite ventures into the dungeon",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 211,
+    "name": "Infinite white mana",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2479,
+    "name": "Infinite white mana if you control a white permanent",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 155,
+    "name": "Infinite white mana that can't be spent to pay generic mana costs",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2805,
+    "name": "Infnite untap of legendary permanents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2675,
+    "name": "Instant/Sorcery That Adds Mana (Rituals)",
+    "uncountable": true,
+    "status": "PU"
+  },
+  {
+    "id": 2005,
+    "name": "Instant / Sorcery that Blinks a Permanent",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1847,
+    "name": "Instant/Sorcery That Creates One or More Copies of a Creature",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1979,
+    "name": "Instant/Sorcery that has Mana-Only Buyback Cost",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2699,
+    "name": "Instant/Sorcery that Untaps Lands to Net Mana",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2086,
+    "name": "Instant/Sorcery with \"Return card from GY to hand\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2763,
+    "name": "Instant / Sorcery with \"Sacrifice a creature to add mana\"",
+    "uncountable": true,
+    "status": "PU"
+  },
+  {
+    "id": 2002,
+    "name": "Instant / Sorcery with \"Untap all creatures\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2734,
+    "name": "Instant That Counters or Bounces a Spell",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2063,
+    "name": "Instant with \"Copy Instant/Sorcery\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 178,
+    "name": "Lands are 1/1 creatures that can't tap for mana",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 376,
+    "name": "Lands can't enter the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 257,
+    "name": "Lands do not untap",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 256,
+    "name": "Lands your opponents control do not untap",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2060,
+    "name": "Land that Taps to Add Multiple Mana",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2751,
+    "name": "Legendary 0-drop",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 520,
+    "name": "Lethal damage to opponents not at some specific life totals",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 2617,
+    "name": "Lock",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 12,
+    "name": "Locks out all of your opponents but one, and allows you to choose which of your two neighboring opponents get to have turns",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2747,
+    "name": "Manifest a portion of your library",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1528,
+    "name": "Manifest your entire library",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2576,
+    "name": "Mass activated ability prevention",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2618,
+    "name": "Mass Land Denial",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1631,
+    "name": "Mill all creature cards in your library",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 148,
+    "name": "Most creatures can't attack you",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 301,
+    "name": "Near-infinite -1/-1 counters",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 45,
+    "name": "Near-infinite +1/+1 counters",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1250,
+    "name": "Near-infinite +1/+1 counters for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2284,
+    "name": "Near-infinite +1/+1 counters on a creature",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2459,
+    "name": "Near-infinite +1/+1 counters on a creature an opponent controls",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2246,
+    "name": "Near-infinite +1/+1 counters on a creature token",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2706,
+    "name": "Near-infinite +1/+1 counters on a near-infinite number of creature tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2288,
+    "name": "Near-infinite +1/+1 counters on certain creatures",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2383,
+    "name": "Near-infinite +1/+1 counters on Clerics you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 642,
+    "name": "Near-infinite +1/+1 counters on creatures you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2286,
+    "name": "Near-infinite +1/+1 counters on most creatures you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2669,
+    "name": "Near-infinite +1/+1 counters on Plants you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2647,
+    "name": "Near-infinite +1/+1 counters on Soldiers you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2423,
+    "name": "Near-infinite artifact ETB",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2424,
+    "name": "Near-infinite artifact LTB",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2425,
+    "name": "Near-infinite artifact sacrifice triggers",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2038,
+    "name": "Near-infinite artifact tokens",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 268,
+    "name": "Near-infinite black mana",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2548,
+    "name": "Near-infinite black mana for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 325,
+    "name": "Near-infinite blinking",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2791,
+    "name": "Near-infinite blinking of lands you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2470,
+    "name": "Near-infinite blinking of nonland permanents you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1362,
+    "name": "Near-infinite blinking of permanents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2200,
+    "name": "Near-infinite Blood tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1072,
+    "name": "Near-infinite blue mana",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1364,
+    "name": "Near-infinite blue mana that can only be spent to cast instant and/or sorcery spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1889,
+    "name": "Near-infinite blue mana that can only be spent to cast noncreature spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 292,
+    "name": "Near-infinite card draw",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1462,
+    "name": "Near-infinite card draw for all players",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1665,
+    "name": "Near-infinite card draw for any number of players",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 837,
+    "name": "Near-infinite card draw for each opponent",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 333,
+    "name": "Near-infinite card draw for target opponent",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 2372,
+    "name": "Near-infinite Caretaker's Talent tokens",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 330,
+    "name": "Near-infinite casts of all instant and sorcery spells in your library and exiled by Eye of the Storm",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2337,
+    "name": "Near-infinite casts of instant and sorcery cards in opponents' graveyards",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 870,
+    "name": "Near-infinite casts of instants and sorceries in your opponents' graveyards",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1287,
+    "name": "Near-infinite charge counters on a permanent",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 676,
+    "name": "Near-infinite Clue tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2504,
+    "name": "Near-infinite Clue tokens for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 139,
+    "name": "Near-infinite colored mana",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2155,
+    "name": "Near-infinite colored mana that can only be spent to cast creature spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2057,
+    "name": "Near-infinite colored mana that can only be spent to cast creature spells with mana value 4 or greater or creature spells with X in their mana cost",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 138,
+    "name": "Near-infinite colorless mana",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2557,
+    "name": "Near-infinite colorless mana that cannot be spent to cast spells from your hand",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1550,
+    "name": "Near-infinite colorless mana that can only be spent to activate abilities",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1478,
+    "name": "Near-infinite colorless mana that can only be spent to activate abilities of artifacts",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1477,
+    "name": "Near-infinite colorless mana that can only be spent to cast artifact spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2027,
+    "name": "Near-infinite colorless mana that can only be spent to cast spells from your graveyard",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 235,
+    "name": "Near-infinite combat damage",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1044,
+    "name": "Near-infinite combat damage to one opponent",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 379,
+    "name": "Near-infinite combat phases",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 629,
+    "name": "Near-infinite commander casts",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2107,
+    "name": "Near-infinite copies of all permanents",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2306,
+    "name": "Near-infinite copies of a specific artifact",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2307,
+    "name": "Near-infinite copies of a specific creature",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1097,
+    "name": "Near-infinite copies of creatures you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2356,
+    "name": "Near-infinite copies of the casted instant or sorcery",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 60,
+    "name": "Near-infinite creature ETB",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 849,
+    "name": "Near-infinite creature ETB for all players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2574,
+    "name": "Near-infinite creature ETB for target opponent",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 79,
+    "name": "Near-infinite creature LTB",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2774,
+    "name": "Near-infinite creature LTB for target opponent",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 136,
+    "name": "Near-infinite creature sacrifice triggers",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 207,
+    "name": "Near-infinite creature tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 58,
+    "name": "Near-infinite creature tokens for all players",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2788,
+    "name": "Near-infinite creature tokens that are near-infinitely large",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1865,
+    "name": "Near-infinite creature tokens that are tapped and attacking",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 351,
+    "name": "Near-infinite creature tokens with haste",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1,
+    "name": "Near-infinite damage",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1227,
+    "name": "Near-infinite damage to all players",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2621,
+    "name": "Near-infinite damage to any target",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1422,
+    "name": "Near-infinite damage to creatures",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1599,
+    "name": "Near-infinite damage to most opponents",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1206,
+    "name": "Near-infinite damage to one opponent",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 1694,
+    "name": "Near-infinite damage to some creatures",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 2415,
+    "name": "Near-infinite damage to target player",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 1812,
+    "name": "Near-infinite damage to you",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 134,
+    "name": "Near-infinite death triggers",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2775,
+    "name": "Near-infinite death triggers for target opponent",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 293,
+    "name": "Near-infinite draw triggers",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1464,
+    "name": "Near-infinite draw triggers for all players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1664,
+    "name": "Near-infinite draw triggers for any number of players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 838,
+    "name": "Near-infinite draw triggers for each opponent",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 332,
+    "name": "Near-infinite draw triggers for target opponent",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 2018,
+    "name": "Near-infinite energy counters",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2646,
+    "name": "Near-infinite experience counters",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2631,
+    "name": "Near-infinite face-down creatures",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 677,
+    "name": "Near-infinite Food tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2185,
+    "name": "Near-infinite Forest tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2489,
+    "name": "Near-infinite Gold tokens",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 189,
+    "name": "Near-infinite green mana",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2550,
+    "name": "Near-infinite green mana for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2108,
+    "name": "Near-infinite Island tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 78,
+    "name": "Near-infinite landfall triggers",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2825,
+    "name": "Near-infinite landfall triggers of all players",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 46,
+    "name": "Near-infinite lifegain",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 944,
+    "name": "Near-infinite lifegain for all players",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2433,
+    "name": "Near-infinite lifegain for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2447,
+    "name": "Near-infinite lifegain on your next turn",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 59,
+    "name": "Near-infinite lifegain triggers",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 943,
+    "name": "Near-infinite lifegain triggers for all players",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1446,
+    "name": "Near-infinite lifegain triggers for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2448,
+    "name": "Near-infinite lifegain triggers on your next turn",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 49,
+    "name": "Near-infinite lifeloss",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 889,
+    "name": "Near-infinite lifeloss for all players",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 601,
+    "name": "Near-infinite lifeloss for target opponent",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 1953,
+    "name": "Near-infinite lifeloss for up to two target opponents",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 375,
+    "name": "Near-infinite looting",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2649,
+    "name": "Near-infinite looting for any number of players",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2784,
+    "name": "Near-infinite looting for target opponent",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1045,
+    "name": "Near-infinitely large creature",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 481,
+    "name": "Near-infinitely large creatures until end of turn",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2357,
+    "name": "Near-infinitely large creatures you control until end of turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 271,
+    "name": "Near-infinitely large creature until end of turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2358,
+    "name": "Near-infinitely powerful creatures you control until end of turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2355,
+    "name": "Near-infinitely powerful creature until end of turn",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 110,
+    "name": "Near-infinite magecraft triggers",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2732,
+    "name": "Near-infinite mana among colors in your commander's color identity",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 818,
+    "name": "Near-infinite mana among colors of legendary creatures and planeswalkers you control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1289,
+    "name": "Near-infinite mana among colors with which you have devotion",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2166,
+    "name": "Near-infinite mana artifacts you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 542,
+    "name": "Near-infinite mana basic lands on the battlefield or in library can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 887,
+    "name": "Near-infinite mana basic lands you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 524,
+    "name": "Near-infinite mana creatures you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1099,
+    "name": "Near-infinite mana lands, artifacts, and creatures you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 98,
+    "name": "Near-infinite mana lands you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 111,
+    "name": "Near-infinite mana nonland permanents you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1032,
+    "name": "Near-infinite mana permanents you control can produce",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 125,
+    "name": "Near-infinite mill",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1529,
+    "name": "Near-infinite mill for target opponent",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 2292,
+    "name": "Near-infinite power and toughness for certain creatures until end of turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2295,
+    "name": "Near-infinite power for a creature",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2294,
+    "name": "Near-infinite power for a creature until end of turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2296,
+    "name": "Near-infinite power for certain creatures until end of turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 507,
+    "name": "Near-infinite proliferate",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2674,
+    "name": "Near-infinite recursion of lands you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 622,
+    "name": "Near-infinite red mana",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2549,
+    "name": "Near-infinite red mana for opponents",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1365,
+    "name": "Near-infinite red mana that can only be spent to cast instant and/or sorcery spells",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2600,
+    "name": "Near-infinite Rock tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 674,
+    "name": "Near-infinite scry",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 405,
+    "name": "Near-infinite scry 1",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 72,
+    "name": "Near-infinite self-discard triggers",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1463,
+    "name": "Near-infinite self-discard triggers for all players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2650,
+    "name": "Near-infinite self-discard triggers for any number of players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2785,
+    "name": "Near-infinite self-discard triggers for target opponent",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 137,
+    "name": "Near-infinite self-mill",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 68,
+    "name": "Near-infinite storm count",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2118,
+    "name": "Near-infinite surveil",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2266,
+    "name": "Near-infinite tapped Blood tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2567,
+    "name": "Near-infinite tapped Clue tokens",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 724,
+    "name": "Near-infinite tapped creature tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1457,
+    "name": "Near-infinite tapped Food tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2588,
+    "name": "Near-infinite tapped Incubator tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2417,
+    "name": "Near-infinite tapped Munitions tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2373,
+    "name": "Near-infinite tapped Plains tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2568,
+    "name": "Near-infinite tapped Powerstone tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2411,
+    "name": "Near-infinite tapped Rock tokens",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 574,
+    "name": "Near-infinite tapped Treasure tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 348,
+    "name": "Near-infinite Treasure tokens",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2721,
+    "name": "Near-infinite Treasure tokens for all players",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 621,
+    "name": "Near-infinite turns",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 350,
+    "name": "Near-infinite untap of all creatures",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1098,
+    "name": "Near-infinite untap of artifacts, creatures, and lands",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1085,
+    "name": "Near-infinite untap of artifacts you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2234,
+    "name": "Near-infinite untap of basic lands you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 781,
+    "name": "Near-infinite untap of creatures and lands you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 457,
+    "name": "Near-infinite untap of creatures you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1050,
+    "name": "Near-infinite untap of lands you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 996,
+    "name": "Near-infinite untap of permanents you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2263,
+    "name": "Near-infinite untap of Samurai you control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2106,
+    "name": "Near-infinite untap of some creatures you control",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 672,
+    "name": "Near-infinite ventures into the dungeon",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 370,
+    "name": "Near-infinite white mana",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 214,
+    "name": "Nobody can activate the abilites of any permanent on the battlefield",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1535,
+    "name": "Non-Archon creatures do not untap",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1923,
+    "name": "Nonbasic lands do not untap",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1976,
+    "name": "Nonwhite creatures opponents control die upon entering",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1164,
+    "name": "On each of your turns, you take an extra turn unless an opponent chooses to lose the game",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 107,
+    "name": "Opponents can only cast one non-artifact spell a turn if they first cast an artifact",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1384,
+    "name": "Opponents can only cast one spell per turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 216,
+    "name": "Opponents can only cast the remaining spells in their hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 204,
+    "name": "Opponents can only have cards in hand when it isn't your turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 591,
+    "name": "Opponents can only play lands exiled by Omen Machine",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1761,
+    "name": "Opponents can't activate abilities of creatures they control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1301,
+    "name": "Opponents can't activate abilities of lands or creatures they control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 47,
+    "name": "Opponents can't attack",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 48,
+    "name": "Opponents can't attack with most creatures",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 836,
+    "name": "Opponents can't block creatures you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 895,
+    "name": "Opponents can't cast copies made by Eye of the Storm",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 750,
+    "name": "Opponents can't cast creature spells",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1255,
+    "name": "Opponents can't cast creature spells with a mana value of 3 or less",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 466,
+    "name": "Opponents can't cast instants or sorceries",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1118,
+    "name": "Opponents can't cast instant spells during their turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1256,
+    "name": "Opponents can't cast noncreature spells",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1117,
+    "name": "Opponents can't cast sorcery spells",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 94,
+    "name": "Opponents can't cast spells",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 665,
+    "name": "Opponents can't cast spells exiled by Shared Fate",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1760,
+    "name": "Opponents can't draw cards",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 201,
+    "name": "Opponents can't draw cards during their turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2400,
+    "name": "Opponents can't gain life for the rest of the game",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 539,
+    "name": "Opponents can't have lands on the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1106,
+    "name": "Opponents can't play cards exiled by Possibility Storm",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 282,
+    "name": "Opponents can't play most lands",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 106,
+    "name": "Opponents can't resolve any spell for the rest of the game",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 185,
+    "name": "Opponents can't search libraries",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 538,
+    "name": "Opponents can't tap lands for mana",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 349,
+    "name": "Opponents discard their hands",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 212,
+    "name": "Opponents put all cards in hand on the bottom of their library on each of their draw steps",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 135,
+    "name": "Opponents sacrifice all their creatures each turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1266,
+    "name": "Opponents skip their draw steps",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 303,
+    "name": "Opponents skip their untap steps",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2090,
+    "name": "Permanent allowing Creatures to Tap for Free",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1486,
+    "name": "Permanently phase out all creatures and non-Aura enchantments on the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1397,
+    "name": "Permanently phase out all permanents opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1499,
+    "name": "Permanents you control phase out during your opponents' turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 660,
+    "name": "Permanents your opponents control do not untap",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2737,
+    "name": "Permanent That Can Untap Lands Each Combat",
+    "uncountable": true,
+    "status": "PU"
+  },
+  {
+    "id": 2229,
+    "name": "Permanent that causes you to draw a card when a creature deals damage",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2149,
+    "name": "Permanent that is a 1:1 Mana Filter",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2802,
+    "name": "Permanent that preserves counters when a permanent leaves",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1747,
+    "name": "Permanent with \"{2}: Add one mana of any color\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2083,
+    "name": "Permanent with Affinity and Generic Mana Cost",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2001,
+    "name": "Permanent with ETB: \"Exile a creature\" and LTB: \"Return exiled creature to BF\" (Banish Creature)",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2666,
+    "name": "Permanent with ETB: Put a Land into Play from Hand",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1879,
+    "name": "Permanent with Landfall Ability",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1966,
+    "name": "Permanent with \"Pay Mana: Blink a creature\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1986,
+    "name": "Permanent with \"Pay Mana: Untap a creature\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2759,
+    "name": "Permanent with \"When a permanent enters, pay mana to copy it\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1876,
+    "name": "Permanent with \"Whenever a creature you control dies, draw a card\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1933,
+    "name": "Permanent with \"Whenever a creature you control dies, opponent(s) lose 1+ life\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2112,
+    "name": "Permanent with \"Whenever a nontoken creature dies, create a token\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2121,
+    "name": "Permanent with \"Whenever a nontoken creature ETB/cast, create a creature token\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2193,
+    "name": "Permanent with \"Whenever an opponent loses life, gain life\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2180,
+    "name": "Permanent with \"Whenever a permanent enters, put a counter on a permanent\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2046,
+    "name": "Permanent with \"Whenever a permanent ETB, deal damage\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2194,
+    "name": "Permanent with \"Whenever a permanent ETB, draw a card\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1977,
+    "name": "Permanent with \"Whenever you draw a card, gain life\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1960,
+    "name": "Permanent with \"Whenever you gain life, an opponent loses life\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2761,
+    "name": "Permanent with \"Whenever you tap a creature for mana, add 1+ mana\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2141,
+    "name": "Permanent with \"Whenever you tap a land for mana, add 1+ mana\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2670,
+    "name": "Permanent with \"When you cast a spell, create a token\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2113,
+    "name": "Permanent with \"You don't lose the game due to having 0 or less life\" (Lich)",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1875,
+    "name": "Permanent with \"You may cast spells from the top of your library\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1794,
+    "name": "Permanent with \"You may play lands from your graveyard\"",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2385,
+    "name": "Phase out any number of creatures any number of times",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 1267,
+    "name": "Play all lands in your library",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2451,
+    "name": "Players cannot cast nonlegendary creature spells",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1322,
+    "name": "Players can only cast one noncreature spell per turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1312,
+    "name": "Players can only cast one spell per turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2578,
+    "name": "Players can't attack",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 30,
+    "name": "Players can't cast creature spells",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1497,
+    "name": "Players can't cast noncreature spells",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1507,
+    "name": "Players can't cast noncreature spells during their turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1221,
+    "name": "Players can't cast noncreature spells exiled by Knowledge Pool",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1219,
+    "name": "Players can't cast noncreature spells exiled by Omen Machine",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1224,
+    "name": "Players can't cast noncreature spells exiled by Possibility Storm",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1508,
+    "name": "Players can't cast sorcery spells",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1223,
+    "name": "Players can't cast spells exiled by Eye of the Storm",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 569,
+    "name": "Players can't cast spells from their hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 281,
+    "name": "Players can't draw cards",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 262,
+    "name": "Players can't draw more than one card per turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 801,
+    "name": "Players can't gain life",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 343,
+    "name": "Players can't play lands",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 184,
+    "name": "Players can't search libraries",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 263,
+    "name": "Players shuffle their hands into their libraries during each draw step",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 254,
+    "name": "Players skip their untap steps",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1872,
+    "name": "Players skip their upkeep steps",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 223,
+    "name": "Possibly infinite mana (requires non-land mana sources of 4+ mana)",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2697,
+    "name": "Prepare Creature",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2742,
+    "name": "Prevent all combat damage target opponent would deal",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1945,
+    "name": "Prevent all damage that would be dealt to creatures you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1476,
+    "name": "Prevent all damage that would be dealt to permanents you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 249,
+    "name": "Prevent all damage that would be dealt to you",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1068,
+    "name": "Prevent all damage that would be dealt to you and creatures you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 105,
+    "name": "Prevent all damage that would be dealt to you by sources you don't control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2131,
+    "name": "Prevent all damage that would be dealt to you during an opponent's turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1368,
+    "name": "Put all artifact and creature cards from your library onto the battlefield",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1333,
+    "name": "Put all artifact cards and a subset of creature cards from your library onto the battlefield",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1878,
+    "name": "Put all artifact cards from your hand and library onto the battlefield",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1672,
+    "name": "Put all artifact cards from your hand onto the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1789,
+    "name": "Put all artifact cards from your library onto the battlefield",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2494,
+    "name": "Put all artifact creature cards with mana value 1 or less from your graveyard onto the battlefield",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2493,
+    "name": "Put all artifact creature cards with mana value 1 or less from your library onto the battlefield",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2492,
+    "name": "Put all artifact creature cards with mana value 2 or less from your graveyard onto the battlefield",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2491,
+    "name": "Put all artifact creature cards with mana value 2 or less from your library onto the battlefield",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 641,
+    "name": "Put all basic Forests from your library onto the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2522,
+    "name": "Put all basic Forests from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1171,
+    "name": "Put all basic Forests, Islands, and Plains from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1172,
+    "name": "Put all basic Forests, Mountains, and Plains from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1234,
+    "name": "Put all basic Forests, Mountains, and Swamps from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1244,
+    "name": "Put all basic Islands, Forests, and Plains from your library onto the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2526,
+    "name": "Put all basic Islands from your library onto the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2524,
+    "name": "Put all basic Islands from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1233,
+    "name": "Put all basic Islands, Mountains, and Swamps from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1247,
+    "name": "Put all basic Islands, Swamps, and Mountains from your library onto the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1248,
+    "name": "Put all basic Islands, Swamps, and Plains from your library onto the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1919,
+    "name": "Put all basic lands from your library into your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 643,
+    "name": "Put all basic lands from your library onto the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 903,
+    "name": "Put all basic lands from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1245,
+    "name": "Put all basic Mountains, Forests, and Plains from your library onto the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2528,
+    "name": "Put all basic Mountains from your library onto the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2521,
+    "name": "Put all basic Mountains from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1240,
+    "name": "Put all basic Plains, Forests, and Islands from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1239,
+    "name": "Put all basic Plains, Forests, and Mountains from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1252,
+    "name": "Put all basic Plains from your library onto the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2523,
+    "name": "Put all basic Plains from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1246,
+    "name": "Put all basic Swamps, Forests, and Mountains from your library onto the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1175,
+    "name": "Put all basic Swamps, Forests, and Mountains from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2527,
+    "name": "Put all basic Swamps from your library onto the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2525,
+    "name": "Put all basic Swamps from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1173,
+    "name": "Put all basic Swamps, Islands, and Mountains from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1174,
+    "name": "Put all basic Swamps, Islands, and Plains from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 449,
+    "name": "Put all cards from your library and graveyard into your hand",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1217,
+    "name": "Put all commanders from the command zone onto the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 955,
+    "name": "Put all creature and land cards from your library into your hand",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1288,
+    "name": "Put all creature and planeswalker cards from each opponent's library and graveyard onto the battlefield under your control",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1768,
+    "name": "Put all creature cards destroyed by Myojin of Cleansing Fire onto the battlefield under your control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2547,
+    "name": "Put all creature cards from each opponent's graveyard onto the battlefield under your control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2546,
+    "name": "Put all creature cards from each opponent's library onto the battlefield under your control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2672,
+    "name": "Put all creature cards from your library and graveyard onto the battlefield with finality counters on them",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1660,
+    "name": "Put all creature cards from your library into your hand",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 51,
+    "name": "Put all creature cards from your library onto the battlefield",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2656,
+    "name": "Put all creature cards from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1007,
+    "name": "Put all creature cards in your library onto the battlefield, then into your graveyard",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2539,
+    "name": "Put all creature cards with mana value 3 or less from all graveyards onto the battlefield under your control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1014,
+    "name": "Put all enchant creature Auras in your library onto the battlefield",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2150,
+    "name": "Put all enchantment cards from your library into your hand",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 140,
+    "name": "Put all Equipment cards from your library onto the battlefield",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1344,
+    "name": "Put all Forests and Plains from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1701,
+    "name": "Put all instant and sorcery cards from your graveyard and library into your hand",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2710,
+    "name": "Put all instant and sorcery cards from your library into your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2624,
+    "name": "Put all land cards from your hand and graveyard onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1559,
+    "name": "Put all land cards from your library and graveyard onto the battlefield",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1638,
+    "name": "Put all land cards from your library into your graveyard",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1415,
+    "name": "Put all land cards from your opponents' libraries onto the battlefield tapped under your control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 242,
+    "name": "Put all lands from your hand and library onto the battlefield",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 729,
+    "name": "Put all lands from your hand and library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2343,
+    "name": "Put all lands from your library and graveyard onto the battlefield",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 1871,
+    "name": "Put all lands from your library and graveyard onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2250,
+    "name": "Put all lands from your library into your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 620,
+    "name": "Put all lands from your library onto the battlefield",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 976,
+    "name": "Put all lands from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1903,
+    "name": "Put all lands with a basic land type from your library into your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 541,
+    "name": "Put all lands with a basic land type from your library onto the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 206,
+    "name": "Put all lands with a basic land type from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1413,
+    "name": "Put all Mountains from your library onto the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 354,
+    "name": "Put all noncreature artifact cards from your library onto the battlefield",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1718,
+    "name": "Put all noncreature cards from your library into your hand",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2441,
+    "name": "Put all nonland cards from your library into your hand",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1208,
+    "name": "Put all nonland permanents in your graveyard and library onto the battlefield",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 1209,
+    "name": "Put all nonland permanents in your graveyard and library onto the battlefield and give them haste",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2532,
+    "name": "Put all permanent cards from your graveyard and library onto the battlefield",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1114,
+    "name": "Put all Plains cards from your libary into your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2436,
+    "name": "Put all Rebels from your library onto the battlefield",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 696,
+    "name": "Put a selection of cards from your library and graveyard onto the battlefield",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 1211,
+    "name": "Put a selection of creature cards from your graveyard and library onto the battlefield",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 1722,
+    "name": "Put a selection of creature cards from your library into your hand",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 2243,
+    "name": "Put a selection of creature cards from your library onto the battlefield",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 623,
+    "name": "Put a selection of permanant cards from your library and graveyard onto the battlefield",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 1821,
+    "name": "Put a selection of permanent cards from your hand onto the battlefield",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 711,
+    "name": "Put a selection of permanent cards from your library onto the battlefield",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 2820,
+    "name": "Put a subset of creature cards from your library onto the battlefield",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 313,
+    "name": "Put most creature cards from your library onto the battlefield",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 2743,
+    "name": "Put most land cards from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2757,
+    "name": "Put most lands from your library and graveyard onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2822,
+    "name": "Put most lands from your library onto the battlefield tapped",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2703,
+    "name": "Reanimates on spell cast",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2144,
+    "name": "Reanimate spell with 1 mv",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 2611,
+    "name": "Reduce any number of opposing creatures' toughness to 0",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2612,
+    "name": "Reduce any number of opposing creatures' toughness to 0 whenever an Elf enters under your control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1492,
+    "name": "Reduce the toughness of creatures opponents control to 0",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1974,
+    "name": "Reduce the toughness of creatures opponents control to 0 on each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2047,
+    "name": "Reduce the toughness of each creature opponents control to 0 upon entering",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1277,
+    "name": "Reduce the toughness of most creatures opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1538,
+    "name": "Remove any number of time counters from suspended cards and/or permanents you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 434,
+    "name": "Reorder your library, putting a number of cards into your hand equal to the amount of extra cards you had in your hand",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2211,
+    "name": "Replaces graveyard with exile",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1011,
+    "name": "Return all artifact cards from your graveyard to your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2469,
+    "name": "Return all artifact cards with mana value 3 or less from your graveyard to the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2582,
+    "name": "Return all artifact cards you own in exile to your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1943,
+    "name": "Return all artifacts from your graveyard to the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 448,
+    "name": "Return all cards from your graveyard to your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 161,
+    "name": "Return all creature cards from all graveyards to the battlefield under your control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 401,
+    "name": "Return all creature cards from each opponent's graveyard to the battlefield under your control",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 656,
+    "name": "Return all creature cards from your graveyard to the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1100,
+    "name": "Return all creature cards from your graveyard to your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2468,
+    "name": "Return all creature cards with mana value 3 or less from your graveyard to the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1982,
+    "name": "Return all creatures you don't control to their owner's hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2581,
+    "name": "Return all enchantment cards from your graveyard to the battlefield",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 444,
+    "name": "Return all instant and sorcery cards from your graveyard to your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 446,
+    "name": "Return all instant cards from your graveyard to your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 445,
+    "name": "Return all instant, sorcery, and creature cards from your graveyard to your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1802,
+    "name": "Return all land cards from all graveyards to the battlefield under their owner's control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 300,
+    "name": "Return all land cards from your graveyard to the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2598,
+    "name": "Return all land cards from your graveyard to your hand",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 462,
+    "name": "Return all lands you control to your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 447,
+    "name": "Return all noncreature, nonland cards from your graveyard to your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2496,
+    "name": "Return all noncreature nonland permanents with mana value 5 or less from your graveyard to the battlefield",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2440,
+    "name": "Return all nonland cards from your graveyard to your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 390,
+    "name": "Return all nonland permanents from your graveyard to the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 618,
+    "name": "Return all nonland permanents opponents control to their hand on each of your turns",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2806,
+    "name": "Return all nonland permanents opponents control to their owner's hand",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 163,
+    "name": "Return all nonland permanents to owner's hand each turn",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 822,
+    "name": "Return all permanent cards from your graveyard to the battlefield",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1682,
+    "name": "Return all permanents opponents control to their owner's hand",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1483,
+    "name": "Return all permanents target opponent controls to their hand",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 2377,
+    "name": "Return all permanents target opponent owns to their hand",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 2367,
+    "name": "Return any creature to its owner's hand when it enters the battlefield",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 927,
+    "name": "Return any number of artifacts and/or creatures to their owners' hands",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1675,
+    "name": "Return any number of creatures and/or planeswalkers to their owner's hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 678,
+    "name": "Return any number of creatures to their owners' hands",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1101,
+    "name": "Return any number of creatures you control to your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2601,
+    "name": "Return any number of nonland permanents from the battlefield to their owner's hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1524,
+    "name": "Return any number of permanents to their owner's hand",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1891,
+    "name": "Return any number of permanents to their owner's hand during each of your turns",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2186,
+    "name": "Return a portion of target creatures to their owner's hand",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 1199,
+    "name": "Return most cards from your graveyard to your hand",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1647,
+    "name": "Return most creature cards from your graveyard onto the battlefield",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1677,
+    "name": "Return most permanents you don't control to their owner's hand",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 175,
+    "name": "Return some artifact cards from your graveyard to your hand",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 357,
+    "name": "Return some creature cards from your graveyard to the battlefield",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 2023,
+    "name": "Return some creature cards from your graveyard to your hand",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 176,
+    "name": "Return some permanent cards from your graveyard to the battlefield tapped",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 686,
+    "name": "Set all life totals to 1",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 2345,
+    "name": "Shuffle all hands, graveyards and permanents on the battlefield into their owner's library",
+    "uncountable": false,
+    "status": "C"
+  },
+  {
+    "id": 1394,
+    "name": "Skip all your future turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 170,
+    "name": "Skip all your future turns, causing your opponents to eventually draw from an empty library and lose the game",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 359,
+    "name": "Skip your draw steps",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1150,
+    "name": "Skip your next several turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1557,
+    "name": "Tap all creatures opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1581,
+    "name": "Tap all creatures opponents control during each turn",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2043,
+    "name": "Tap all lands and creatures during each opponent's upkeep step",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 2042,
+    "name": "Tap all lands and creatures opponents control during each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 152,
+    "name": "Tap all lands, creatures, and artifacts opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 302,
+    "name": "Tap all permanents your opponents control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1926,
+    "name": "Tap all permanents your opponents control each upkeep",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1382,
+    "name": "Target opponent can only cast one spell per turn",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 63,
+    "name": "Target opponent loses the game",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 2274,
+    "name": "Target opponent loses the game at the beginning of their next end step",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 721,
+    "name": "Target opponent loses the game at the beginning of their next upkeep",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 1612,
+    "name": "Target opponent returns all cards in their graveyard to their hand",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 2188,
+    "name": "Target opponent returns some cards in their graveyard to their hand",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 1719,
+    "name": "Target opponent sacrifices all permanents they control",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 1623,
+    "name": "Target opponent skips all their future turns",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 244,
+    "name": "Target opponent skips their draw step",
+    "uncountable": false,
+    "status": "H"
+  },
+  {
+    "id": 182,
+    "name": "Target player loses the game",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 323,
+    "name": "Target player loses the game on each of your turns",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 1936,
+    "name": "The Legend Rule Doesn't Apply",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1739,
+    "name": "Transform any number of double-faced artifacts you control",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1265,
+    "name": "Untap all snow permanents you control during each of your turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1948,
+    "name": "Up to three target opponents lose the game",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 2,
+    "name": "Win the game",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 76,
+    "name": "Win the game at the beginning of your next upkeep",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 658,
+    "name": "You are unable to lose the game due to damage or lifeloss",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 213,
+    "name": "You can't be attacked",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 426,
+    "name": "You can't be dealt damage",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 1254,
+    "name": "You can't cast noncreature spells with a mana value greater than 3",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1253,
+    "name": "You can't cast noncreature spells with mana cost equal to X",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1180,
+    "name": "You can't cast spells",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 800,
+    "name": "You can't lose the game due to having 0 or less life",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 192,
+    "name": "You control one opponent on each of their turns",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 978,
+    "name": "You control one opponent on their turn each turn cycle",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 1162,
+    "name": "You control up to three opponents on each of their turns",
+    "uncountable": false,
+    "status": "S"
+  },
+  {
+    "id": 508,
+    "name": "You control your opponents on each of their turns",
+    "uncountable": true,
+    "status": "S"
+  },
+  {
+    "id": 149,
+    "name": "You do not draw cards during your draw steps",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 172,
+    "name": "You have protection from everything",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1501,
+    "name": "You have protection from everything during your opponents' turns",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1819,
+    "name": "You may play additional land(s) - Permanent",
+    "uncountable": false,
+    "status": "PU"
+  },
+  {
+    "id": 1969,
+    "name": "You may spend mana as though it were any color",
+    "uncountable": true,
+    "status": "PU"
+  },
+  {
+    "id": 1091,
+    "name": "Your life total can't be reduced to 0 or less",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 171,
+    "name": "Your life total can't change",
+    "uncountable": true,
+    "status": "H"
+  },
+  {
+    "id": 1500,
+    "name": "Your life total can't change during your opponents' turns",
+    "uncountable": true,
+    "status": "C"
+  },
+  {
+    "id": 433,
+    "name": "Your opponents mill cards instead of drawing them",
+    "uncountable": true,
+    "status": "H"
+  }
+]

@@ -1,0 +1,77 @@
+{
+  "version": "oracle-identity-mapping-v1",
+  "createdAt": "2026-08-21T01:51:20.912Z",
+  "totalExternalCardRefs": 8000,
+  "uniqueExternalCards": 8000,
+  "resolvedByStableId": 7985,
+  "resolvedByExactName": 0,
+  "resolvedByNormalizedName": 0,
+  "ambiguous": 0,
+  "unresolved": 15,
+  "resolutionPct": 99.8125,
+  "examples": {
+    "EXACT_ID": [
+      {
+        "externalId": "6869",
+        "externalName": "Aang, Airbending Master",
+        "externalOracleId": "f3176779-74f7-4136-a701-438feeead7a0",
+        "classification": "EXACT_ID",
+        "oracleId": "f3176779-74f7-4136-a701-438feeead7a0"
+      },
+      {
+        "externalId": "7062",
+        "externalName": "Aang, A Lot to Learn",
+        "externalOracleId": "854278bc-2bcf-45dd-abd5-6aca7a1e5fc9",
+        "classification": "EXACT_ID",
+        "oracleId": "854278bc-2bcf-45dd-abd5-6aca7a1e5fc9"
+      },
+      {
+        "externalId": "7043",
+        "externalName": "Aang, Swift Savior // Aang and La, Ocean's Fury",
+        "externalOracleId": "cbf09050-39d0-463b-96db-9e22011ae0d8",
+        "classification": "EXACT_ID",
+        "oracleId": "cbf09050-39d0-463b-96db-9e22011ae0d8"
+      }
+    ],
+    "EXACT_NAME_UNAMBIGUOUS": [],
+    "NORMALIZED_NAME_UNAMBIGUOUS": [],
+    "AMBIGUOUS": [],
+    "UNRESOLVED": [
+      {
+        "externalId": "7937",
+        "externalName": "Badgey, Malicious Glitch",
+        "externalOracleId": "227fb13b-0a07-4937-9048-7cf02efbc8e3",
+        "classification": "UNRESOLVED",
+        "reason": "stable oracleId present but not in local Golden/snapshot index"
+      },
+      {
+        "externalId": "7932",
+        "externalName": "Ceti Eel",
+        "externalOracleId": "b1914241-6b2b-4b3e-8626-aeb0b8cbc12d",
+        "classification": "UNRESOLVED",
+        "reason": "stable oracleId present but not in local Golden/snapshot index"
+      },
+      {
+        "externalId": "7939",
+        "externalName": "Cha'DIch Investigator",
+        "externalOracleId": "cfdef803-6f7a-4055-8d51-8e8c60953928",
+        "classification": "UNRESOLVED",
+        "reason": "stable oracleId present but not in local Golden/snapshot index"
+      },
+      {
+        "externalId": "8036",
+        "externalName": "Christine Chapel, Combat Medic",
+        "externalOracleId": "330e8a18-d224-4416-b59d-02b749c3a674",
+        "classification": "UNRESOLVED",
+        "reason": "stable oracleId present but not in local Golden/snapshot index"
+      },
+      {
+        "externalId": "7933",
+        "externalName": "Cold-Blooded Crew",
+        "externalOracleId": "d5e9b04f-4a97-4da1-bf86-3715fc75ab23",
+        "classification": "UNRESOLVED",
+        "reason": "stable oracleId present but not in local Golden/snapshot index"
+      }
+    ]
+  }
+}

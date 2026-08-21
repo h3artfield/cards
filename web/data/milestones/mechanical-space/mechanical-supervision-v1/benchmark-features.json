@@ -1,0 +1,296 @@
+[
+  {
+    "featureId": "csb:feature:2670",
+    "name": "Permanent with \"When you cast a spell, create a token\"",
+    "positiveExamples": 119,
+    "knownNegatives": 0,
+    "unknown": 35813,
+    "prevalence": 0.0033118111989313146,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:1915",
+    "name": "Cost Reducer - Spells",
+    "positiveExamples": 104,
+    "knownNegatives": 0,
+    "unknown": 35828,
+    "prevalence": 0.002894356005788712,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:2593",
+    "name": "Creature with ETB: Create 1+ Token(s)",
+    "positiveExamples": 102,
+    "knownNegatives": 0,
+    "unknown": 35830,
+    "prevalence": 0.0028386953133696983,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:1981",
+    "name": "Creature That Taps for 2+ Mana",
+    "positiveExamples": 68,
+    "knownNegatives": 0,
+    "unknown": 35864,
+    "prevalence": 0.0018924635422464654,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:2750",
+    "name": "Creature That Taps for 2+ Mana (copy)",
+    "positiveExamples": 67,
+    "knownNegatives": 0,
+    "unknown": 35865,
+    "prevalence": 0.0018646331960369587
+  },
+  {
+    "featureId": "csb:feature:1879",
+    "name": "Permanent with Landfall Ability",
+    "positiveExamples": 60,
+    "knownNegatives": 0,
+    "unknown": 35872,
+    "prevalence": 0.0016698207725704107,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:1743",
+    "name": "Free Sacrifice Outlet",
+    "positiveExamples": 54,
+    "knownNegatives": 0,
+    "unknown": 35878,
+    "prevalence": 0.0015028386953133696,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:2209",
+    "name": "Creature that can Sacrifice Itself",
+    "positiveExamples": 48,
+    "knownNegatives": 0,
+    "unknown": 35884,
+    "prevalence": 0.0013358566180563286,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:1914",
+    "name": "Creature with ETB: \"Return card from GY to hand\"",
+    "positiveExamples": 47,
+    "knownNegatives": 0,
+    "unknown": 35885,
+    "prevalence": 0.0013080262718468219,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:2629",
+    "name": "Creature That Enters With a +1/+1 Counter",
+    "positiveExamples": 45,
+    "knownNegatives": 0,
+    "unknown": 35887,
+    "prevalence": 0.0012523655794278081
+  },
+  {
+    "featureId": "csb:feature:1815",
+    "name": "Haste Enabler",
+    "positiveExamples": 37,
+    "knownNegatives": 0,
+    "unknown": 35895,
+    "prevalence": 0.0010297228097517533,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:2697",
+    "name": "Prepare Creature",
+    "positiveExamples": 36,
+    "knownNegatives": 0,
+    "unknown": 35896,
+    "prevalence": 0.0010018924635422464,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:1994",
+    "name": "Gain life on Creature LTB (Blood Artist)",
+    "positiveExamples": 36,
+    "knownNegatives": 0,
+    "unknown": 35896,
+    "prevalence": 0.0010018924635422464,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:2060",
+    "name": "Land that Taps to Add Multiple Mana",
+    "positiveExamples": 36,
+    "knownNegatives": 0,
+    "unknown": 35896,
+    "prevalence": 0.0010018924635422464,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:1809",
+    "name": "Gain life on Creature ETB (Soul Sister)",
+    "positiveExamples": 35,
+    "knownNegatives": 0,
+    "unknown": 35897,
+    "prevalence": 0.0009740621173327396,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:2088",
+    "name": "Artifact that Taps to Add Multiple Mana (Mana Rock)",
+    "positiveExamples": 35,
+    "knownNegatives": 0,
+    "unknown": 35897,
+    "prevalence": 0.0009740621173327396,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:2711",
+    "name": "Creature with Mutate",
+    "positiveExamples": 34,
+    "knownNegatives": 0,
+    "unknown": 35898,
+    "prevalence": 0.0009462317711232327,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:2542",
+    "name": "Land with Multiple Land Types",
+    "positiveExamples": 33,
+    "knownNegatives": 0,
+    "unknown": 35899,
+    "prevalence": 0.000918401424913726
+  },
+  {
+    "featureId": "csb:feature:1797",
+    "name": "Clone - Creature",
+    "positiveExamples": 33,
+    "knownNegatives": 0,
+    "unknown": 35899,
+    "prevalence": 0.000918401424913726,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:1847",
+    "name": "Instant/Sorcery That Creates One or More Copies of a Creature",
+    "positiveExamples": 31,
+    "knownNegatives": 0,
+    "unknown": 35901,
+    "prevalence": 0.0008627407324947122,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:1988",
+    "name": "Card with \"Spells have flash\" (Flash Enabler)",
+    "positiveExamples": 30,
+    "knownNegatives": 0,
+    "unknown": 35902,
+    "prevalence": 0.0008349103862852053,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:2641",
+    "name": "Creature with Attack Trigger: Create Token(s)",
+    "positiveExamples": 29,
+    "knownNegatives": 0,
+    "unknown": 35903,
+    "prevalence": 0.0008070800400756986
+  },
+  {
+    "featureId": "csb:feature:1995",
+    "name": "Creature with \"Whenever you gain life, put a +1/+1 counter on this creature\"",
+    "positiveExamples": 29,
+    "knownNegatives": 0,
+    "unknown": 35903,
+    "prevalence": 0.0008070800400756986,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:2602",
+    "name": "Creature with LTB/Death Trigger: Create Token(s)",
+    "positiveExamples": 29,
+    "knownNegatives": 0,
+    "unknown": 35903,
+    "prevalence": 0.0008070800400756986
+  },
+  {
+    "featureId": "csb:feature:2623",
+    "name": "Creature That Enters With a -1/-1 Counter",
+    "positiveExamples": 29,
+    "knownNegatives": 0,
+    "unknown": 35903,
+    "prevalence": 0.0008070800400756986
+  },
+  {
+    "featureId": "csb:feature:2534",
+    "name": "Card with \"Return card from graveyard to battlefield\"",
+    "positiveExamples": 28,
+    "knownNegatives": 0,
+    "unknown": 35904,
+    "prevalence": 0.0007792496938661917
+  },
+  {
+    "featureId": "csb:feature:1875",
+    "name": "Permanent with \"You may cast spells from the top of your library\"",
+    "positiveExamples": 28,
+    "knownNegatives": 0,
+    "unknown": 35904,
+    "prevalence": 0.0007792496938661917,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:1967",
+    "name": "Permanent that can Blink a Permanent Once Per Turn",
+    "positiveExamples": 26,
+    "knownNegatives": 0,
+    "unknown": 35906,
+    "prevalence": 0.000723589001447178
+  },
+  {
+    "featureId": "csb:feature:2005",
+    "name": "Instant / Sorcery that Blinks a Permanent",
+    "positiveExamples": 26,
+    "knownNegatives": 0,
+    "unknown": 35906,
+    "prevalence": 0.000723589001447178,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:1796",
+    "name": "Unconditional Life Payments",
+    "positiveExamples": 26,
+    "knownNegatives": 0,
+    "unknown": 35906,
+    "prevalence": 0.000723589001447178
+  },
+  {
+    "featureId": "csb:feature:1852",
+    "name": "Gives +1/+1 counter(s) to Creature upon ETB",
+    "positiveExamples": 26,
+    "knownNegatives": 0,
+    "unknown": 35906,
+    "prevalence": 0.000723589001447178,
+    "status": "PU"
+  },
+  {
+    "featureId": "csb:feature:2722",
+    "name": "Persist Creature",
+    "positiveExamples": 25,
+    "knownNegatives": 0,
+    "unknown": 35907,
+    "prevalence": 0.0006957586552376712
+  },
+  {
+    "featureId": "csb:feature:1801",
+    "name": "Increaser - Counters",
+    "positiveExamples": 25,
+    "knownNegatives": 0,
+    "unknown": 35907,
+    "prevalence": 0.0006957586552376712
+  },
+  {
+    "featureId": "csb:feature:2223",
+    "name": "Planeswalkers that have Loyalty Ability Adding Mana",
+    "positiveExamples": 25,
+    "knownNegatives": 0,
+    "unknown": 35907,
+    "prevalence": 0.0006957586552376712
+  }
+]

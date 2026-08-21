@@ -1,0 +1,10 @@
+{
+  "gpuDetected": true,
+  "cuda": "11.8",
+  "pytorch": "2.0.0+cu118",
+  "deviceName": "NVIDIA GeForce RTX 3090",
+  "vramBytes": 25769279488,
+  "driver": null,
+  "smokeOk": true,
+  "peakVramBytes": 9502720
+}

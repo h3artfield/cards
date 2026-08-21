@@ -1,0 +1,27 @@
+{
+  "version": "mechanical-supervision-v1",
+  "createdAt": "2026-08-21T01:51:25.304Z",
+  "embeddingChecksum": "479e34b8618126e7ce29d8c19d1214cdbed5f62252093b09a0494d4eac359350",
+  "embeddingModel": "semantic-feature-vector-v1+semantic-derived-features-v1",
+  "embeddingDimensions": 117,
+  "cardsWithPositiveLabels": 3182,
+  "featuresTotalInReference": 1304,
+  "benchmarkFeatures": 34,
+  "minSupport": 25,
+  "positiveEdges": 1439,
+  "knownNegativeEdges": 0,
+  "unknownEdges": 106749,
+  "training": 2188,
+  "validation": 485,
+  "holdout": 509,
+  "leakageProtections": {
+    "evalA": "deterministic hash split by oracleId 70/15/15 — baseline only",
+    "evalB": "interaction-family holdout computed in ML script from variant.of groups",
+    "evalC": "nearest-train cosine recorded for every holdout item; semantic neighbors must not be treated as independent",
+    "unknownSemantics": "absent Spellbook edges remain UNKNOWN; never converted to NEGATIVE",
+    "holdoutSpent": false
+  },
+  "datasetChecksum": "5c899e73d7f47a9d4640c4b63f6ef44f88f8d0aafc371d8c968639967758b82c",
+  "ontologyChecksum": "d0c2296bb33ca9e7cbefb70c5c3c3f7808577c88aa8d1c0f07a02044e53691b1",
+  "labelSemantics": "POSITIVE / NEGATIVE / UNKNOWN — PU learning. UNKNOWN is not 0."
+}

@@ -1,0 +1,16 @@
+{
+  "version": "mechanical-holdout-reconstruction-v1",
+  "createdAt": "2026-08-21T01:54:34.890Z",
+  "scoreSource": "knn-k5",
+  "featureEdgesHidden": 266,
+  "featureEdgesRecovered": 227,
+  "hiddenEdgeRecall": 0.8533834586466166,
+  "interactionsTested": 0,
+  "interactionsReconstructed": 0,
+  "falseCandidates": 0,
+  "precision": 0,
+  "recall": 0,
+  "hiddenSetSizeCheck": 266,
+  "examples": [],
+  "note": "High-support benchmark features are utility/helper properties (ETB tokens, cost reducers, sacrifice outlets). The 400-variant sample mostly produces standalone results such as Infinite mana, which are below the support threshold and have no probe scores. Feature-edge recovery is therefore the valid reconstruction metric in this sample."
+}

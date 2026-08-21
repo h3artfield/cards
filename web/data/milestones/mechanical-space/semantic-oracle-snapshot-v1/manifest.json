@@ -1,0 +1,23 @@
+{
+  "artifactType": "SemanticOracleSnapshot",
+  "version": "semantic-oracle-snapshot-v1",
+  "createdAt": "2026-08-21T01:50:50.662Z",
+  "cardCount": 35932,
+  "vectorCount": 35932,
+  "dimensions": 117,
+  "model": "semantic-feature-vector-v1+semantic-derived-features-v1",
+  "embeddingVersion": "semantic-feature-vector-v1+semantic-derived-features-v1",
+  "parserVersion": "oracle-action-v1.44-rc8-ownership-grant-family",
+  "shadowParseContentHash": "7eda36edec87455ff5c994a7ea5a8c424d5c1a3d956d16a50e5caff304c7fe9c",
+  "visualizationManifestHash": "6a5fe16bafc178cc0151efe3b220da408c4d7efdb06ae5ca7abaeece3dfa7001",
+  "checksum": "479e34b8618126e7ce29d8c19d1214cdbed5f62252093b09a0494d4eac359350",
+  "vectorsPath": "C:\\Users\\h3art\\PycharmProjects\\cards\\web\\data\\milestones\\mechanical-space\\semantic-oracle-snapshot-v1\\vectors.f32",
+  "indexPath": "C:\\Users\\h3art\\PycharmProjects\\cards\\web\\data\\milestones\\mechanical-space\\semantic-oracle-snapshot-v1\\index.jsonl",
+  "validationPath": "C:\\Users\\h3art\\PycharmProjects\\cards\\web\\data\\milestones\\mechanical-space\\semantic-oracle-snapshot-v1\\validation.json",
+  "notes": [
+    "Vectors are the existing RC8 combined feature space (literal + derived), not a new neural embedding.",
+    "Recomputed deterministically from frozen shadow parse + frozen visualization point metadata.",
+    "Source visualization: catalog-semantic-visualization-v1-manifest.json",
+    "No OpenAI calls. No Firestore writes."
+  ]
+}
