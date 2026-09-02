@@ -1,7 +1,7 @@
-import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { COLLECTIONS } from "../firebase/collections";
 import { forFirestore } from "../firebase/for-firestore";
 import { requireFirestore } from "../firebase/admin";
+import { prepareMtgKnowledgeChunkForWrite } from "./firestore-chunk-write";
 import type { MtgKnowledgeAlias, MtgKnowledgeChunk } from "./types";
 
 const CHUNK_BATCH_LIMIT = 50;
@@ -19,14 +19,7 @@ export async function upsertMtgKnowledgeChunks(
     const batch = db.batch();
     const slice = chunks.slice(i, i + CHUNK_BATCH_LIMIT);
     for (const chunk of slice) {
-      const { embedding, ...rest } = chunk;
-      const doc = {
-        ...rest,
-        ...(embedding?.length
-          ? { embedding: FieldValue.vector(embedding) }
-          : {}),
-      };
-      batch.set(col.doc(chunk.chunkId), forFirestore(doc), { merge: true });
+      batch.set(col.doc(chunk.chunkId), prepareMtgKnowledgeChunkForWrite(chunk), { merge: true });
     }
     await batch.commit();
     written += slice.length;

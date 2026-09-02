@@ -1,3 +1,4 @@
+import { classifyInventoryGame } from "./analytics";
 import { cacheInventoryImageFromBuffer } from "../storage/inventory-image";
 import { dataStore } from "../storage/data-store";
 import { isFirebaseStorageUrl } from "./image-url";
@@ -13,7 +14,8 @@ export async function persistResolvedInventoryImage(input: {
   tcgLowPrice?: number;
 }): Promise<void> {
   if (input.source === "firebase") return;
-  if (isFirebaseStorageUrl(input.item.frontImageUrl)) return;
+  const game = classifyInventoryGame(input.item);
+  if (isFirebaseStorageUrl(input.item.frontImageUrl) && game !== "Magic") return;
 
   const now = new Date().toISOString();
   try {

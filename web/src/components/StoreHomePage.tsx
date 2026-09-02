@@ -6,10 +6,6 @@ import { CustomerAuthShell } from "@/components/CustomerAuthShell";
 import { StoreBrandMark } from "@/components/StoreBrandMark";
 import { useCustomer } from "@/context/CustomerContext";
 import {
-  createCustomerOrder,
-  goToOrderScan,
-} from "@/lib/create-customer-order";
-import {
   authButton,
   authButtonSecondary,
   authError,
@@ -17,6 +13,10 @@ import {
 } from "@/lib/customer-auth-ui";
 import { googleAuthErrorMessage } from "@/lib/customer-auth-config";
 import { STORE_SLUG_SESSION_KEY } from "@/lib/store-slug";
+import {
+  deckBuildReturnPath,
+  deckBuildSignInHref,
+} from "@/lib/store-inventory/deck-build-auth";
 
 type StoreAuthConfig = {
   googleEnabled: boolean;
@@ -40,7 +40,6 @@ export function StoreHomePage({
 }: StoreHomePageProps) {
   const { customer, loading: customerLoading, logout, canViewOrderHistory, refresh } =
     useCustomer();
-  const [creating, setCreating] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
   const [authConfig, setAuthConfig] = useState<StoreAuthConfig>({
     googleEnabled: false,
@@ -103,21 +102,6 @@ export function StoreHomePage({
   const signInEmail = `/sign-in?store=${encodeURIComponent(slug)}`;
   const signInReturn = `/sign-in?store=${encodeURIComponent(slug)}&return=1`;
 
-  async function startNewOrder() {
-    if (!customer?.emailVerified) return;
-    setCreating(true);
-    setActionError(null);
-    try {
-      const order = await createCustomerOrder(customer.id, slug);
-      goToOrderScan(order.id);
-    } catch (err) {
-      setActionError(
-        err instanceof Error ? err.message : "Could not create order",
-      );
-      setCreating(false);
-    }
-  }
-
   if (error) {
     return (
       <CustomerAuthShell>
@@ -170,7 +154,7 @@ export function StoreHomePage({
               Browse store inventory
             </Link>
             <Link
-              href={`/s/${slug}/inventory?mode=deck-builder`}
+              href={deckBuildSignInHref(slug, deckBuildReturnPath(slug, "professor"))}
               className={`block ${authButtonSecondary} text-center no-underline`}
             >
               Build a Commander deck
@@ -181,18 +165,24 @@ export function StoreHomePage({
                 verification link.
               </p>
             ) : (
-              <button
-                type="button"
-                className={authButton}
-                disabled={creating}
-                onClick={() => void startNewOrder()}
-              >
-                {creating ? "Starting…" : "Start scanning cards"}
-              </button>
+              <>
+                <Link
+                  href={`/s/${slug}/scan`}
+                  className={`block ${authButton} text-center no-underline`}
+                >
+                  Scan cards
+                </Link>
+                <Link
+                  href={`/s/${slug}/collection`}
+                  className={`block ${authButtonSecondary} text-center no-underline`}
+                >
+                  My collection
+                </Link>
+              </>
             )}
             {canViewOrderHistory && customer?.emailVerified && (
               <Link href="/orders" className={`block ${authButtonSecondary} text-center no-underline`}>
-                View my orders
+                My account — orders &amp; saved decks
               </Link>
             )}
             <button type="button" className={authButtonSecondary} onClick={() => void logout()}>
@@ -208,7 +198,7 @@ export function StoreHomePage({
               Browse store inventory
             </Link>
             <Link
-              href={`/s/${slug}/inventory?mode=deck-builder`}
+              href={deckBuildSignInHref(slug, deckBuildReturnPath(slug, "professor"))}
               className={`block ${authButtonSecondary} text-center no-underline`}
             >
               Build a Commander deck

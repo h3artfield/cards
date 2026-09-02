@@ -34,9 +34,23 @@ export async function GET(req: NextRequest) {
       }
     }
 
+    // Customers are locked to the store they signed up at, so the account
+    // pages can rely on this instead of guessing from session storage.
+    const homeStore = customer.storeId
+      ? await dataStore.getSettings(customer.storeId)
+      : null;
+
     return jsonOk({
       customer: sanitizeCustomer(customer),
       canViewOrderHistory,
+      store: homeStore
+        ? {
+            id: homeStore.id,
+            slug: homeStore.storeSlug,
+            storeName: homeStore.storeName,
+            storeLogoUrl: homeStore.storeLogoUrl,
+          }
+        : null,
     });
   } catch (err) {
     return handleRouteError(err);

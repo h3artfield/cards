@@ -1,7 +1,11 @@
 import type { InventoryItem, ScannedCard } from "../types";
 import { dataStore } from "../storage/data-store";
 import { parseShopifySku } from "./product-builder";
-import { isInventorySold } from "./inventory-status";
+import {
+  inventoryEffectiveQuantity,
+  isCatalogImportItem,
+  isInventorySold,
+} from "./inventory-status";
 import type { ShopifyCardExport } from "./types";
 
 export type ShopifyOrderLineItem = {
@@ -25,7 +29,68 @@ export type SoldDetectionResult = {
   cardId: string;
   soldPrice: number;
   alreadySold: boolean;
+  /** Units this webhook consumed. */
+  quantitySold?: number;
+  /** Units still on the row — 0 means the row is now sold out. */
+  remainingQuantity?: number;
 };
+
+const MAX_TRACKED_SALE_REFS = 50;
+
+/** Stable key for one Shopify sale against one inventory row. */
+export function shopifySaleRef(
+  orderId: string | undefined,
+  lineItemId: string | undefined,
+): string | null {
+  if (!orderId) return null;
+  return lineItemId ? `${orderId}:${lineItemId}` : orderId;
+}
+
+export function isSaleAlreadyApplied(
+  item: InventoryItem,
+  ref: string | null,
+): boolean {
+  if (!ref) return false;
+  return Boolean(item.shopifySoldLineItemIds?.includes(ref));
+}
+
+function withSaleRef(
+  item: InventoryItem,
+  ref: string | null,
+): string[] | undefined {
+  if (!ref) return item.shopifySoldLineItemIds;
+  return [...(item.shopifySoldLineItemIds ?? []), ref].slice(
+    -MAX_TRACKED_SALE_REFS,
+  );
+}
+
+/**
+ * Imported rows hold many copies, so one sale decrements instead of closing
+ * the row. Buyback singles have no quantity fields and always go to zero.
+ */
+export function applySaleToQuantities(
+  item: InventoryItem,
+  quantitySold: number,
+): { item: InventoryItem; remaining: number } {
+  const sold = Math.max(1, Math.trunc(quantitySold));
+  if (!isCatalogImportItem(item)) {
+    return { item, remaining: 0 };
+  }
+
+  const remaining = Math.max(0, inventoryEffectiveQuantity(item) - sold);
+  const decrement = (value: number | undefined): number | undefined =>
+    value == null ? undefined : Math.max(0, value - sold);
+
+  return {
+    item: {
+      ...item,
+      quantity: decrement(item.quantity),
+      quantityOnHand: decrement(item.quantityOnHand),
+      quantityAvailable: decrement(item.quantityAvailable),
+    },
+    remaining,
+  };
+}
 
 function normalizeShopifyId(value: number | string | null | undefined): string {
   if (value == null) return "";
@@ -116,6 +181,7 @@ async function markInventorySoldFromShopify(input: {
   item: InventoryItem;
   card: ScannedCard | null;
   soldPrice: number;
+  quantitySold?: number;
   soldOrderId?: string;
   soldLineItemId?: string;
   detectionSource: "orders_paid" | "inventory_levels_update";
@@ -129,18 +195,74 @@ async function markInventorySoldFromShopify(input: {
       cardId: item.cardId ?? "",
       soldPrice: item.soldPrice ?? input.soldPrice,
       alreadySold: true,
+      remainingQuantity: 0,
+    };
+  }
+
+  const ref = shopifySaleRef(input.soldOrderId, input.soldLineItemId);
+  if (isSaleAlreadyApplied(item, ref)) {
+    return {
+      inventoryItemId: item.id,
+      cardId: item.cardId ?? "",
+      soldPrice: input.soldPrice,
+      alreadySold: true,
+      remainingQuantity: inventoryEffectiveQuantity(item),
     };
   }
 
   const now = new Date().toISOString();
+  const quantitySold = Math.max(1, Math.trunc(input.quantitySold ?? 1));
+  const { item: decremented, remaining } = applySaleToQuantities(
+    item,
+    quantitySold,
+  );
+
+  if (remaining > 0) {
+    await dataStore.saveInventoryItem({
+      ...decremented,
+      shopifySoldLineItemIds: withSaleRef(item, ref),
+      shopifyListing: decremented.shopifyListing
+        ? {
+            ...decremented.shopifyListing,
+            syncedQuantity: remaining,
+            syncedAt: now,
+          }
+        : undefined,
+    });
+
+    await dataStore.logAdminAction({
+      action: "inventory_sold_shopify",
+      metadata: {
+        inventoryItemId: item.id,
+        orderId: input.soldOrderId,
+        lineItemId: input.soldLineItemId,
+        soldPrice: input.soldPrice,
+        quantitySold,
+        remainingQuantity: remaining,
+        displayName: item.displayName,
+        detectionSource: input.detectionSource,
+      },
+    });
+
+    return {
+      inventoryItemId: item.id,
+      cardId: item.cardId ?? "",
+      soldPrice: input.soldPrice,
+      alreadySold: false,
+      quantitySold,
+      remainingQuantity: remaining,
+    };
+  }
+
   const updatedItem: InventoryItem = {
-    ...item,
+    ...decremented,
     status: "sold",
     soldAt: now,
     soldChannel: "shopify",
     soldPrice: input.soldPrice,
     soldOrderId: input.soldOrderId,
     soldLineItemId: input.soldLineItemId,
+    shopifySoldLineItemIds: withSaleRef(item, ref),
   };
   await dataStore.saveInventoryItem(updatedItem);
 
@@ -162,6 +284,8 @@ async function markInventorySoldFromShopify(input: {
       orderId: input.soldOrderId,
       lineItemId: input.soldLineItemId,
       soldPrice: input.soldPrice,
+      quantitySold,
+      remainingQuantity: 0,
       displayName: item.displayName,
       detectionSource: input.detectionSource,
     },
@@ -172,6 +296,8 @@ async function markInventorySoldFromShopify(input: {
     cardId: item.cardId ?? "",
     soldPrice: input.soldPrice,
     alreadySold: false,
+    quantitySold,
+    remainingQuantity: 0,
   };
 }
 
@@ -203,11 +329,14 @@ export async function processShopifyInventoryLevelUpdate(input: {
     input.payload.inventory_item_id,
   );
 
+  // Shopify reports zero available, so the whole row is gone regardless of
+  // how many units we thought were left.
   return markInventorySoldFromShopify({
     storeId: input.storeId,
     item,
     card,
     soldPrice,
+    quantitySold: Math.max(1, inventoryEffectiveQuantity(item)),
     soldOrderId: `inventory_level:${inventoryItemId}`,
     detectionSource: "inventory_levels_update",
   });
@@ -329,6 +458,7 @@ export async function processShopifyOrderPaid(input: {
         item,
         card,
         soldPrice,
+        quantitySold: qty,
         soldOrderId: orderId,
         soldLineItemId: lineItemId,
         detectionSource: "orders_paid",

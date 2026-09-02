@@ -2,18 +2,24 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCustomer } from "@/context/CustomerContext";
+import {
+  deckBuildReturnPath,
+  deckBuildSignInHref,
+} from "@/lib/store-inventory/deck-build-auth";
 import { StoreBrandMark } from "@/components/StoreBrandMark";
 import {
   DEFAULT_INVENTORY_FILTERS,
   InventoryCardGrid,
   InventoryFilterBar,
+  InventoryGameSourceBar,
   appendInventoryColorParams,
   inventoryColorFiltersActive,
   legacyColorToFilterPatch,
   type InventoryFilterState,
   type InventoryGridCard,
 } from "@/components/store-inventory/InventoryBrowseUI";
-import { DeckBuilderApp } from "@/components/deck-builder/DeckBuilderApp";
 import { StoreClerkChat } from "@/components/store-inventory/StoreClerkChat";
 import { ClerkDeckPanel } from "@/components/store-inventory/ClerkDeckPanel";
 import {
@@ -21,10 +27,12 @@ import {
   type ClerkPickCard,
 } from "@/components/store-inventory/ClerkPicksPanel";
 import { GatheringDesk } from "@/components/store-inventory/GatheringDesk";
+import { InventoryDecklistImport } from "@/components/store-inventory/InventoryDecklistImport";
 import type { GatheringCard } from "@/components/store-inventory/clerk-gathering";
 import type { ClerkDeckList } from "@/lib/store-inventory/clerk-types";
+import { appendInventoryBrowseParams } from "@/lib/store-inventory/inventory-browse-filter-params";
 
-type Tab = "browse" | "deck-builder";
+const BROWSE_PAGE_SIZE = 100;
 
 function titleFromSlug(slug: string): string {
   return slug
@@ -59,32 +67,32 @@ async function parseBrowseJson(res: Response): Promise<Record<string, unknown>> 
   }
 }
 
-function browseFiltersActive(filters: InventoryFilterState, committedQ: string): boolean {
-  return (
-    Boolean(committedQ.trim()) ||
-    inventoryColorFiltersActive(filters) ||
-    filters.cardType !== "all" ||
-    filters.sortBy !== "name"
-  );
+function browseFiltersActive(_filters: InventoryFilterState, _committedQ: string): boolean {
+  return true;
+}
+
+function clerkGameToBrowseGame(game?: string): InventoryFilterState["game"] {
+  if (game === "pokemon") return "pokemon";
+  if (game === "riftbound") return "riftbound";
+  return "magic";
 }
 
 export function StoreInventoryApp({
   slug,
   storeName: storeNameProp,
   logoUrl: logoUrlProp,
-  initialTab = "browse",
 }: {
   slug: string;
   storeName?: string;
   logoUrl?: string | null;
-  initialTab?: Tab;
 }) {
-  const [tab, setTab] = useState<Tab>(initialTab);
+  const router = useRouter();
+  const { customer, loading: customerLoading } = useCustomer();
+  const professorHref = deckBuildReturnPath(slug, "professor");
   const [storeName, setStoreName] = useState(storeNameProp ?? titleFromSlug(slug));
   const [logoUrl, setLogoUrl] = useState<string | null | undefined>(logoUrlProp);
   const [filters, setFilters] = useState<InventoryFilterState>({
     ...DEFAULT_INVENTORY_FILTERS,
-    game: "magic",
     sortBy: "name",
   });
   const [debouncedQ, setDebouncedQ] = useState("");
@@ -99,6 +107,7 @@ export function StoreInventoryApp({
   const [clerkPicks, setClerkPicks] = useState<ClerkPickCard[]>([]);
   const [gatheredCards, setGatheredCards] = useState<GatheringCard[]>([]);
   const [retryNonce, setRetryNonce] = useState(0);
+  const [pasteListOpen, setPasteListOpen] = useState(false);
 
   const addToGathering = useCallback((card: GatheringCard) => {
     setGatheredCards((prev) => {
@@ -106,6 +115,19 @@ export function StoreInventoryApp({
         return prev;
       }
       return [...prev, card];
+    });
+  }, []);
+
+  const addManyToGathering = useCallback((cards: GatheringCard[]) => {
+    setGatheredCards((prev) => {
+      const seen = new Set(prev.map((c) => c.inventoryItemId));
+      const next = [...prev];
+      for (const card of cards) {
+        if (seen.has(card.inventoryItemId)) continue;
+        seen.add(card.inventoryItemId);
+        next.push(card);
+      }
+      return next;
     });
   }, []);
 
@@ -150,8 +172,6 @@ export function StoreInventoryApp({
   }, [debouncedQ]);
 
   useEffect(() => {
-    if (tab !== "browse") return;
-
     const query = committedQ.trim();
     const browseActive = browseFiltersActive(filters, query);
     if (!browseActive) {
@@ -174,13 +194,13 @@ export function StoreInventoryApp({
 
     const params = new URLSearchParams({
       page: String(page),
-      limit: "48",
+      limit: String(BROWSE_PAGE_SIZE),
       game: filters.game,
       type: filters.cardType,
+      source: filters.source,
     });
     appendInventoryColorParams(params, filters);
-    if (query) params.set("q", query);
-    if (filters.sortBy !== "name") params.set("sort", filters.sortBy);
+    appendInventoryBrowseParams(params, filters, query);
 
     fetch(`${apiBase}/inventory/browse?${params}`, {
       signal: controller.signal,
@@ -218,10 +238,18 @@ export function StoreInventoryApp({
       controller.abort();
     };
   }, [
-    tab,
     apiBase,
     page,
     filters.game,
+    filters.source,
+    filters.cardTypes.join(","),
+    filters.oracleActions.join(","),
+    filters.primitiveActions.join(","),
+    filters.primitiveActionMode,
+    filters.abilityTypes.join(","),
+    filters.zones.join(","),
+    filters.semanticOwners.join(","),
+    filters.manaValuePreset,
     filters.selectedColors.join(","),
     filters.colorCount,
     filters.cardType,
@@ -243,25 +271,31 @@ export function StoreInventoryApp({
     if (
       next.q != null ||
       next.game != null ||
+      next.source != null ||
       next.selectedColors != null ||
       next.colorCount != null ||
       next.cardType != null ||
+      next.cardTypes != null ||
+      next.oracleActions != null ||
+      next.primitiveActions != null ||
+      next.primitiveActionMode != null ||
+      next.abilityTypes != null ||
+      next.zones != null ||
+      next.semanticOwners != null ||
+      next.manaValuePreset != null ||
       next.sortBy != null
     ) {
       setPage(1);
     }
   }
 
-  if (tab === "deck-builder") {
-    return (
-      <DeckBuilderApp
-        slug={slug}
-        storeName={storeName}
-        logoUrl={logoUrl}
-        inventoryFirst
-        onBackToInventory={() => setTab("browse")}
-      />
-    );
+  function goToDeckBuilder() {
+    if (customerLoading) return;
+    if (!customer) {
+      router.push(deckBuildSignInHref(slug, professorHref));
+      return;
+    }
+    router.push(professorHref);
   }
 
   return (
@@ -295,31 +329,37 @@ export function StoreInventoryApp({
           </div>
 
           <div className="mt-4 flex gap-2 border-b border-neutral-800 pb-0">
-            <TabButton active onClick={() => setTab("browse")}>
-              Browse inventory
-            </TabButton>
-            <TabButton active={false} onClick={() => setTab("deck-builder")}>
-              Deck builder
-            </TabButton>
+            <TabButton active>Browse inventory</TabButton>
+            <TabNavButton onClick={goToDeckBuilder}>Deck builder</TabNavButton>
           </div>
         </div>
       </header>
 
       <main className="mx-auto max-w-7xl px-4 py-4">
         <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_280px]">
-          <div className="min-w-0">
-        <StoreClerkChat
-          slug={slug}
-          storeName={storeName}
-          filters={filters}
-          onAddToGathering={addToGathering}
-          onApplyClerk={(clerk) => {
+          <div className="min-w-0 space-y-4">
+            <StoreClerkChat
+              slug={slug}
+              storeName={storeName}
+              filters={filters}
+              variant="queryBar"
+              onAddToGathering={addToGathering}
+              onPasteList={() => {
+                setPasteListOpen(true);
+                window.requestAnimationFrame(() => {
+                  document.getElementById("inventory-paste-list")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                  });
+                });
+              }}
+              onApplyClerk={(clerk) => {
             if (clerk.deckList) {
               setClerkDeck(clerk.deckList);
               setClerkPicks([]);
               patchFilters({
                 q: "",
-                game: clerk.deckList.game === "magic" ? "magic" : "pokemon",
+                game: clerkGameToBrowseGame(clerk.deckList.game),
                 selectedColors: [],
                 colorCount: "all",
                 cardType: "all",
@@ -336,10 +376,32 @@ export function StoreInventoryApp({
             }
 
             setClerkDeck(null);
-            if (clerk.clearBrowseFilters) {
+            const patch = clerk.browseFilterPatch;
+            if (patch) {
+              patchFilters({
+                q: patch.q,
+                game: patch.game,
+                selectedColors: patch.selectedColors,
+                colorCount: patch.colorCount,
+                cardType: patch.cardType,
+              });
+              setCommittedQ(patch.q);
+              setDebouncedQ(patch.q);
+              const picks = clerk.picks ?? [];
+              setClerkPicks(picks);
+              setClerkFilterNote(
+                picks.length
+                  ? `${picks.length} clerk pick${picks.length === 1 ? "" : "s"} · inventory filtered below`
+                  : patch.q
+                    ? `Showing inventory for “${patch.q}”`
+                    : patch.selectedColors.length
+                      ? `Showing ${patch.selectedColors.join("")} inventory below`
+                      : null,
+              );
+            } else if (clerk.clearBrowseFilters) {
               patchFilters({
                 q: clerk.searchQuery ?? "",
-                game: clerk.game ?? "magic",
+                game: clerkGameToBrowseGame(clerk.game),
                 selectedColors: [],
                 colorCount: "all",
                 cardType: "all",
@@ -360,7 +422,7 @@ export function StoreInventoryApp({
                 ...(clerk.searchQuery != null && !clerk.clearSearch
                   ? { q: clerk.searchQuery }
                   : {}),
-                ...(clerk.game ? { game: clerk.game } : {}),
+                ...(clerk.game ? { game: clerkGameToBrowseGame(clerk.game) } : {}),
                 ...(clerk.color
                   ? legacyColorToFilterPatch(clerk.color)
                   : {}),
@@ -378,130 +440,134 @@ export function StoreInventoryApp({
               setHighlightIds(new Set());
             }
           }}
-        />
+            />
 
-        <div className="mt-4 xl:hidden">
-          <GatheringDesk
-            cards={gatheredCards}
-            onAdd={addToGathering}
-            onRemove={removeFromGathering}
-            onClear={() => setGatheredCards([])}
-          />
-        </div>
+            <InventoryDecklistImport
+              slug={slug}
+              onAddMany={addManyToGathering}
+              open={pasteListOpen}
+              onOpenChange={setPasteListOpen}
+            />
 
-        {clerkDeck ? (
-          <ClerkDeckPanel deck={clerkDeck} onAddToGathering={addToGathering} />
-        ) : null}
+            <InventoryGameSourceBar
+              filters={filters}
+              onChange={patchFilters}
+              facets={data?.facets}
+            />
+            <InventoryFilterBar
+              slug={slug}
+              filters={filters}
+              onChange={patchFilters}
+              onSearchCommit={commitSearch}
+              facets={data?.facets}
+              showSearch={false}
+            />
 
-        {clerkPicks.length > 0 ? (
-          <ClerkPicksPanel
-            title="Clerk picks — in stock now"
-            picks={clerkPicks}
-            onAddToGathering={addToGathering}
-          />
-        ) : null}
+            {clerkFilterNote ? (
+              <p className="text-xs text-indigo-400">{clerkFilterNote}</p>
+            ) : null}
 
-        <div className="mt-4">
-          <InventoryFilterBar
-            slug={slug}
-            filters={filters}
-            onChange={patchFilters}
-            onSearchCommit={commitSearch}
-            facets={data?.facets}
-            showSearch
-          />
-        </div>
-
-        {clerkFilterNote ? (
-          <p className="mt-2 text-xs text-indigo-400">{clerkFilterNote}</p>
-        ) : null}
-
-        {data?.facets && browseFiltersActive(filters, committedQ) ? (
-          <p className="mt-3 text-xs text-neutral-500">
-            {data.total.toLocaleString()} cards shown
-            {filters.game !== "all"
-              ? ` (${filters.game})`
-              : ""}{" "}
-            · {data.facets.inStock.toLocaleString()} total in stock at{" "}
-            {storeName}
-          </p>
-        ) : null}
-
-        {!browseFiltersActive(filters, committedQ) ? (
-          <p className="mt-8 text-center text-sm text-neutral-500">
-            Search for a card, pick a color, or change sort to browse inventory
-            — or ask the clerk for picks.
-          </p>
-        ) : error ? (
-          <div className="mt-4 rounded-lg border border-red-900/50 bg-red-950/30 p-3 text-sm text-red-300">
-            <p>{error}</p>
-            <button
-              type="button"
-              className="mt-2 underline"
-              onClick={() => {
-                setError(null);
-                setRetryNonce((n) => n + 1);
-              }}
-            >
-              Retry
-            </button>
-          </div>
-        ) : loading && !data ? (
-          <p className="mt-8 text-center text-sm text-neutral-500">
-            Loading inventory…
-          </p>
-        ) : (
-          <>
-            {loading ? (
-              <p className="mt-4 text-center text-xs text-neutral-500">
-                Updating…
+            {data?.facets ? (
+              <p className="text-xs text-neutral-500">
+                {data.total.toLocaleString()} cards shown
+                {filters.source === "catalog" ? " (all printings)" : ` (${filters.game})`}{" "}
+                {filters.source === "inventory" ? (
+                  <>
+                    · {data.facets.inStock.toLocaleString()} total in stock at {storeName}
+                  </>
+                ) : null}
               </p>
             ) : null}
-            <div className="mt-4">
-              <InventoryCardGrid
-                cards={data?.items ?? []}
-                highlightIds={highlightIds}
-                draggable
-                size="large"
-                emptyMessage={
-                  data?.facets?.inStock === 0
-                    ? "No catalog inventory linked yet. Import TCGplayer or Shopify stock in admin, then run the inventory crosswalk."
-                    : inventoryColorFiltersActive(filters) && data?.total === 0
-                      ? "No cards match this color filter yet. Color data comes from Scryfall — run Admin → Deck Builder → Inventory crosswalk sync to link more cards."
-                      : "No cards match your search."
-                }
-              />
-            </div>
 
-            {data && data.totalPages > 1 ? (
-              <div className="mt-6 flex items-center justify-between text-sm">
+            {clerkDeck ? (
+              <ClerkDeckPanel deck={clerkDeck} onAddToGathering={addToGathering} />
+            ) : null}
+
+            {clerkPicks.length > 0 ? (
+              <ClerkPicksPanel
+                title="Top matches — in stock now"
+                picks={clerkPicks}
+                onAddToGathering={addToGathering}
+              />
+            ) : null}
+
+            {error ? (
+              <div className="rounded-lg border border-red-900/50 bg-red-950/30 p-3 text-sm text-red-300">
+                <p>{error}</p>
                 <button
                   type="button"
-                  disabled={page <= 1}
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  className="rounded-lg border border-neutral-700 px-3 py-1.5 disabled:opacity-40"
+                  className="mt-2 underline"
+                  onClick={() => {
+                    setError(null);
+                    setRetryNonce((n) => n + 1);
+                  }}
                 >
-                  Previous
-                </button>
-                <span className="text-neutral-400">
-                  Page {data.page} of {data.totalPages}
-                </span>
-                <button
-                  type="button"
-                  disabled={page >= data.totalPages}
-                  onClick={() => setPage((p) => p + 1)}
-                  className="rounded-lg border border-neutral-700 px-3 py-1.5 disabled:opacity-40"
-                >
-                  Next
+                  Retry
                 </button>
               </div>
-            ) : null}
-          </>
-        )}
+            ) : loading && !data ? (
+              <p className="py-8 text-center text-sm text-neutral-500">
+                Loading inventory…
+              </p>
+            ) : (
+              <>
+                {loading ? (
+                  <p className="text-center text-xs text-neutral-500">Updating…</p>
+                ) : null}
+                <InventoryCardGrid
+                  cards={data?.items ?? []}
+                  highlightIds={highlightIds}
+                  draggable
+                  size="large"
+                  emptyMessage={
+                    data?.facets?.inStock === 0
+                      ? "No catalog inventory linked yet. Import TCGplayer or Shopify stock in admin, then run the inventory crosswalk."
+                      : inventoryColorFiltersActive(filters) && data?.total === 0
+                        ? "No cards match this color filter yet. Color data comes from Scryfall — run Admin → Deck Builder → Inventory crosswalk sync to link more cards."
+                        : "No cards match your search."
+                  }
+                />
+
+                {data && data.totalPages > 1 ? (
+                  <div className="mt-6 flex items-center justify-between text-sm">
+                    <button
+                      type="button"
+                      disabled={page <= 1}
+                      onClick={() => setPage((p) => Math.max(1, p - 1))}
+                      className="rounded-lg border border-neutral-700 px-3 py-1.5 disabled:opacity-40"
+                    >
+                      Previous
+                    </button>
+                    <span className="text-neutral-400">
+                      Page {data.page} of {data.totalPages}
+                    </span>
+                    <button
+                      type="button"
+                      disabled={page >= data.totalPages}
+                      onClick={() => setPage((p) => p + 1)}
+                      className="rounded-lg border border-neutral-700 px-3 py-1.5 disabled:opacity-40"
+                    >
+                      Next
+                    </button>
+                  </div>
+                ) : null}
+              </>
+            )}
+
+            <div className="xl:hidden">
+              <GatheringDesk
+                slug={slug}
+                cards={gatheredCards}
+                onAdd={addToGathering}
+                onRemove={removeFromGathering}
+                onClear={() => setGatheredCards([])}
+              />
+            </div>
           </div>
 
           <aside className="hidden xl:block xl:sticky xl:top-4 xl:self-start">
             <GatheringDesk
+              slug={slug}
               cards={gatheredCards}
               onAdd={addToGathering}
               onRemove={removeFromGathering}
@@ -516,10 +582,28 @@ export function StoreInventoryApp({
 
 function TabButton({
   active,
-  onClick,
   children,
 }: {
   active: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <span
+      className={`border-b-2 px-4 py-2 text-sm font-medium ${
+        active
+          ? "border-indigo-500 text-white"
+          : "border-transparent text-neutral-400"
+      }`}
+    >
+      {children}
+    </span>
+  );
+}
+
+function TabNavButton({
+  onClick,
+  children,
+}: {
   onClick: () => void;
   children: React.ReactNode;
 }) {
@@ -527,11 +611,7 @@ function TabButton({
     <button
       type="button"
       onClick={onClick}
-      className={`border-b-2 px-4 py-2 text-sm font-medium transition ${
-        active
-          ? "border-indigo-500 text-white"
-          : "border-transparent text-neutral-400 hover:text-neutral-200"
-      }`}
+      className="border-b-2 border-transparent px-4 py-2 text-sm font-medium text-neutral-400 transition hover:text-neutral-200"
     >
       {children}
     </button>

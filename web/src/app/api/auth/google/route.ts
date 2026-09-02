@@ -5,10 +5,15 @@ import {
   isGoogleAuthEnabled,
 } from "@/lib/customer-auth-config";
 
-function oauthState(storeSlug: string, redirectUri: string): string {
+function oauthState(
+  storeSlug: string,
+  redirectUri: string,
+  afterLoginPath?: string,
+): string {
   const payload = JSON.stringify({
     storeSlug,
     redirectUri,
+    afterLoginPath: afterLoginPath?.trim() || undefined,
     nonce: randomBytes(16).toString("base64url"),
   });
   return Buffer.from(payload).toString("base64url");
@@ -20,9 +25,10 @@ export async function GET(req: NextRequest) {
   }
 
   const storeSlug = req.nextUrl.searchParams.get("store")?.trim() ?? "";
+  const afterLoginPath = req.nextUrl.searchParams.get("redirect")?.trim() ?? "";
   const clientId = process.env.GOOGLE_CLIENT_ID!.trim();
   const redirectUri = googleRedirectUriForRequest(req);
-  const state = oauthState(storeSlug, redirectUri);
+  const state = oauthState(storeSlug, redirectUri, afterLoginPath || undefined);
 
   const params = new URLSearchParams({
     client_id: clientId,

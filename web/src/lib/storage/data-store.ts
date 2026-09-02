@@ -5,11 +5,14 @@ import type {
   BuybackOrder,
   BuybackTransaction,
   CardFeedback,
+  CollectionCard,
   Customer,
   InventoryItem,
   ScannedCard,
+  ShopTicket,
   StoreRule,
   StoreSettings,
+  TradeCreditEntry,
 } from "../types";
 import type { StoreEvent, StoreEventSignup } from "../store-calendar/types";
 import {
@@ -36,7 +39,10 @@ import {
   readDevMemoryState,
 } from "./dev-file-store";
 import { forFirestore } from "../firebase/for-firestore";
-import { persistCardImages } from "./card-images";
+import {
+  persistCardImages,
+  persistCollectionCardImages,
+} from "./card-images";
 
 function dbOrMemory(): Firestore | null {
   if (isAdminConfigured()) {
@@ -84,12 +90,35 @@ function formatOrderNumber(sequence: number): string {
   return `BB-${String(sequence).padStart(6, "0")}`;
 }
 
+function formatTicketNumber(sequence: number): string {
+  return `T-${String(sequence).padStart(5, "0")}`;
+}
+
+function maxTicketSequence(tickets: ShopTicket[]): number {
+  return tickets.reduce((max, ticket) => {
+    const digits = ticket.ticketNumber?.match(/(\d+)\s*$/);
+    return Math.max(max, digits ? Number(digits[1]) : 0);
+  }, 0);
+}
+
 function inventoryStoreId(item: InventoryItem): string {
   return item.storeId?.trim() || DEFAULT_STORE_ID;
 }
 
 function transactionStoreId(tx: BuybackTransaction): string {
   return tx.storeId?.trim() || DEFAULT_STORE_ID;
+}
+
+function tradeCreditStoreId(entry: TradeCreditEntry): string {
+  return entry.storeId?.trim() || DEFAULT_STORE_ID;
+}
+
+function shopTicketStoreId(ticket: ShopTicket): string {
+  return ticket.storeId?.trim() || DEFAULT_STORE_ID;
+}
+
+function collectionCardStoreId(card: CollectionCard): string {
+  return card.storeId?.trim() || DEFAULT_STORE_ID;
 }
 
 function customerStoreId(customer: Customer): string {
@@ -107,6 +136,9 @@ export type PurgeCustomerDataResult = {
   customers: number;
   inventory: number;
   transactions: number;
+  tradeCreditEntries: number;
+  collectionCards: number;
+  shopTickets: number;
   feedback: number;
 };
 
@@ -444,7 +476,10 @@ export const dataStore = {
   async upsertCustomer(customer: Customer): Promise<Customer> {
     const db = dbOrMemory();
     if (db) {
-      await db.collection(COLLECTIONS.customers).doc(customer.id).set(customer);
+      await db
+        .collection(COLLECTIONS.customers)
+        .doc(customer.id)
+        .set(forFirestore(customer), { merge: true });
       return customer;
     }
     await mutateDevMemory((state) => {
@@ -824,6 +859,238 @@ export const dataStore = {
     });
   },
 
+  async saveTradeCreditEntry(entry: TradeCreditEntry): Promise<void> {
+    const db = dbOrMemory();
+    if (db) {
+      await db
+        .collection(COLLECTIONS.tradeCreditEntries)
+        .doc(entry.id)
+        .set(forFirestore(entry));
+      return;
+    }
+    await mutateDevMemory((state) => {
+      if (!state.tradeCreditEntries) state.tradeCreditEntries = [];
+      const idx = state.tradeCreditEntries.findIndex((e) => e.id === entry.id);
+      if (idx >= 0) state.tradeCreditEntries[idx] = entry;
+      else state.tradeCreditEntries.push(entry);
+    });
+  },
+
+  async getTradeCreditEntry(id: string): Promise<TradeCreditEntry | null> {
+    const db = dbOrMemory();
+    if (db) {
+      const doc = await db
+        .collection(COLLECTIONS.tradeCreditEntries)
+        .doc(id)
+        .get();
+      return doc.exists ? (doc.data() as TradeCreditEntry) : null;
+    }
+    const state = await readDevMemoryState();
+    return (state.tradeCreditEntries ?? []).find((e) => e.id === id) ?? null;
+  },
+
+  /** Oldest first, so a ledger reads top to bottom. */
+  async getTradeCreditEntries(
+    storeId: string,
+    customerId?: string,
+  ): Promise<TradeCreditEntry[]> {
+    const id = resolveStoreId(storeId);
+    const sortAsc = (a: TradeCreditEntry, b: TradeCreditEntry) =>
+      new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    const matches = (entry: TradeCreditEntry) =>
+      tradeCreditStoreId(entry) === id &&
+      (!customerId || entry.customerId === customerId);
+
+    const db = dbOrMemory();
+    if (db) {
+      let query = db
+        .collection(COLLECTIONS.tradeCreditEntries)
+        .where("storeId", "==", id);
+      if (customerId) {
+        query = query.where("customerId", "==", customerId);
+      }
+      const snap = await query.get();
+      return snap.docs
+        .map((d) => d.data() as TradeCreditEntry)
+        .filter(matches)
+        .sort(sortAsc);
+    }
+    const state = await readDevMemoryState();
+    return (state.tradeCreditEntries ?? []).filter(matches).sort(sortAsc);
+  },
+
+  async saveCollectionCard(card: CollectionCard): Promise<CollectionCard> {
+    const persisted = await persistCollectionCardImages(card);
+    const db = dbOrMemory();
+    if (db) {
+      await db
+        .collection(COLLECTIONS.collectionCards)
+        .doc(persisted.id)
+        .set(forFirestore(persisted));
+      return persisted;
+    }
+    await mutateDevMemory((state) => {
+      if (!state.collectionCards) state.collectionCards = [];
+      const idx = state.collectionCards.findIndex((c) => c.id === persisted.id);
+      if (idx >= 0) state.collectionCards[idx] = persisted;
+      else state.collectionCards.push(persisted);
+    });
+    return persisted;
+  },
+
+  async getCollectionCard(id: string): Promise<CollectionCard | null> {
+    const db = dbOrMemory();
+    if (db) {
+      const doc = await db
+        .collection(COLLECTIONS.collectionCards)
+        .doc(id)
+        .get();
+      return doc.exists ? (doc.data() as CollectionCard) : null;
+    }
+    const state = await readDevMemoryState();
+    return (state.collectionCards ?? []).find((c) => c.id === id) ?? null;
+  },
+
+  /** Newest first — the binder reads like a recent-scans list. */
+  async getCollectionCards(
+    storeId: string,
+    customerId: string,
+  ): Promise<CollectionCard[]> {
+    const id = resolveStoreId(storeId);
+    const matches = (card: CollectionCard) =>
+      collectionCardStoreId(card) === id && card.customerId === customerId;
+    const sortDesc = (a: CollectionCard, b: CollectionCard) =>
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+
+    const db = dbOrMemory();
+    if (db) {
+      const snap = await db
+        .collection(COLLECTIONS.collectionCards)
+        .where("storeId", "==", id)
+        .where("customerId", "==", customerId)
+        .get();
+      return snap.docs
+        .map((d) => d.data() as CollectionCard)
+        .filter(matches)
+        .sort(sortDesc);
+    }
+    const state = await readDevMemoryState();
+    return (state.collectionCards ?? []).filter(matches).sort(sortDesc);
+  },
+
+  async deleteCollectionCard(id: string): Promise<void> {
+    const db = dbOrMemory();
+    if (db) {
+      await db.collection(COLLECTIONS.collectionCards).doc(id).delete();
+      return;
+    }
+    await mutateDevMemory((state) => {
+      state.collectionCards = (state.collectionCards ?? []).filter(
+        (c) => c.id !== id,
+      );
+    });
+  },
+
+  async nextShopTicketNumber(storeId?: string): Promise<string> {
+    const id = resolveStoreId(storeId);
+    const db = dbOrMemory();
+    if (db) {
+      const counterRef = db
+        .collection(COLLECTIONS.counters)
+        .doc(`tickets-${id}`);
+      const existingCounter = await counterRef.get();
+      if (!existingCounter.exists) {
+        const seeded = maxTicketSequence(await this.getShopTickets(id));
+        if (seeded > 0) await counterRef.set({ value: seeded });
+      }
+
+      const num = await db.runTransaction(async (tx) => {
+        const snap = await tx.get(counterRef);
+        const current = snap.exists ? Number(snap.data()?.value ?? 0) : 0;
+        const next = current + 1;
+        tx.set(counterRef, { value: next });
+        return next;
+      });
+      return formatTicketNumber(num);
+    }
+
+    let num = 0;
+    await mutateDevMemory((state) => {
+      if (!state.ticketCounters) state.ticketCounters = {};
+      const seeded = maxTicketSequence(
+        (state.shopTickets ?? []).filter((t) => shopTicketStoreId(t) === id),
+      );
+      num = Math.max(state.ticketCounters[id] ?? 0, seeded) + 1;
+      state.ticketCounters[id] = num;
+    });
+    return formatTicketNumber(num);
+  },
+
+  async saveShopTicket(ticket: ShopTicket): Promise<ShopTicket> {
+    const db = dbOrMemory();
+    if (db) {
+      await db
+        .collection(COLLECTIONS.shopTickets)
+        .doc(ticket.id)
+        .set(forFirestore(ticket));
+      return ticket;
+    }
+    await mutateDevMemory((state) => {
+      if (!state.shopTickets) state.shopTickets = [];
+      const idx = state.shopTickets.findIndex((t) => t.id === ticket.id);
+      if (idx >= 0) state.shopTickets[idx] = ticket;
+      else state.shopTickets.push(ticket);
+    });
+    return ticket;
+  },
+
+  async getShopTicket(id: string): Promise<ShopTicket | null> {
+    const db = dbOrMemory();
+    if (db) {
+      const doc = await db.collection(COLLECTIONS.shopTickets).doc(id).get();
+      return doc.exists ? (doc.data() as ShopTicket) : null;
+    }
+    const state = await readDevMemoryState();
+    return (state.shopTickets ?? []).find((t) => t.id === id) ?? null;
+  },
+
+  /** Newest first — staff want the ticket they just rang up at the top. */
+  async getShopTickets(storeId?: string): Promise<ShopTicket[]> {
+    const id = resolveStoreId(storeId);
+    const sortDesc = (a: ShopTicket, b: ShopTicket) =>
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+
+    const db = dbOrMemory();
+    if (db) {
+      const snap = await db
+        .collection(COLLECTIONS.shopTickets)
+        .where("storeId", "==", id)
+        .get();
+      return snap.docs.map((d) => d.data() as ShopTicket).sort(sortDesc);
+    }
+    const state = await readDevMemoryState();
+    return (state.shopTickets ?? [])
+      .filter((t) => shopTicketStoreId(t) === id)
+      .sort(sortDesc);
+  },
+
+  async getTradeCreditEntriesByOrder(
+    orderId: string,
+  ): Promise<TradeCreditEntry[]> {
+    const db = dbOrMemory();
+    if (db) {
+      const snap = await db
+        .collection(COLLECTIONS.tradeCreditEntries)
+        .where("orderId", "==", orderId)
+        .get();
+      return snap.docs.map((d) => d.data() as TradeCreditEntry);
+    }
+    const state = await readDevMemoryState();
+    return (state.tradeCreditEntries ?? []).filter(
+      (e) => e.orderId === orderId,
+    );
+  },
+
   async saveFeedback(feedback: CardFeedback): Promise<void> {
     const db = dbOrMemory();
     if (db) {
@@ -889,6 +1156,21 @@ export const dataStore = {
             )
           ).flat()
     );
+    const tradeCreditEntries = (
+      await Promise.all(
+        targetStoreIds.map((id) => this.getTradeCreditEntries(id)),
+      )
+    ).flat();
+    const collectionCards = (
+      await Promise.all(
+        customers.map((c) =>
+          this.getCollectionCards(customerStoreId(c), c.id),
+        ),
+      )
+    ).flat();
+    const shopTickets = (
+      await Promise.all(targetStoreIds.map((id) => this.getShopTickets(id)))
+    ).flat();
     const feedback = (await this.listFeedback()).filter((f) =>
       storeIdSet.has(f.storeId?.trim() || DEFAULT_STORE_ID),
     );
@@ -926,6 +1208,21 @@ export const dataStore = {
       );
       await deleteFirestoreDocIds(
         db,
+        COLLECTIONS.tradeCreditEntries,
+        tradeCreditEntries.map((e) => e.id),
+      );
+      await deleteFirestoreDocIds(
+        db,
+        COLLECTIONS.collectionCards,
+        collectionCards.map((c) => c.id),
+      );
+      await deleteFirestoreDocIds(
+        db,
+        COLLECTIONS.shopTickets,
+        shopTickets.map((t) => t.id),
+      );
+      await deleteFirestoreDocIds(
+        db,
         COLLECTIONS.feedback,
         feedback.map((f) => f.id),
       );
@@ -951,12 +1248,23 @@ export const dataStore = {
         state.transactions = (state.transactions ?? []).filter(
           (t) => !storeIdSet.has(transactionStoreId(t)),
         );
+        state.tradeCreditEntries = (state.tradeCreditEntries ?? []).filter(
+          (e) => !storeIdSet.has(tradeCreditStoreId(e)),
+        );
+        state.collectionCards = (state.collectionCards ?? []).filter(
+          (c) => !storeIdSet.has(collectionCardStoreId(c)),
+        );
+        state.shopTickets = (state.shopTickets ?? []).filter(
+          (t) => !storeIdSet.has(shopTicketStoreId(t)),
+        );
         state.feedback = (state.feedback ?? []).filter(
           (f) => !storeIdSet.has(f.storeId?.trim() || DEFAULT_STORE_ID),
         );
         if (!state.orderCounters) state.orderCounters = {};
+        if (!state.ticketCounters) state.ticketCounters = {};
         for (const id of targetStoreIds) {
           delete state.orderCounters[id];
+          delete state.ticketCounters[id];
         }
       });
       cardsDeleted = cardsDeletedCount;
@@ -969,6 +1277,9 @@ export const dataStore = {
       customers: customers.length,
       inventory: inventory.length,
       transactions: transactions.length,
+      tradeCreditEntries: tradeCreditEntries.length,
+      collectionCards: collectionCards.length,
+      shopTickets: shopTickets.length,
       feedback: feedback.length,
     };
   },

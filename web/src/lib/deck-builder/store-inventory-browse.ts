@@ -10,8 +10,14 @@ import { inventoryItemMatchesSearch } from "../inventory/search";
 import {
   inventoryImageProxyPath,
   pickInventoryDisplayImageUrl,
+  catalogMatchesInventoryItem,
 } from "../inventory/resolve-display-image";
+import { classifyInventoryGame } from "../inventory/analytics";
 import { isFirebaseStorageUrl } from "../inventory/image-url";
+import {
+  isRc8SemanticFilterActive,
+} from "../inventory/inventory-rc8-semantic-match";
+import { loadSemanticBrowseIndex } from "../inventory/inventory-semantic-browse-index";
 import { deckBuilderStore } from "./deck-builder-store";
 import { getCachedStoreInventory } from "./store-inventory-cache";
 import type { CardCategory, InventoryItem } from "../types";
@@ -51,7 +57,7 @@ export interface StoreInventoryCard {
   rarity?: string;
 }
 
-export type StoreInventoryGameFilter = CardCategory | "all";
+export type StoreInventoryGameFilter = CardCategory | "all" | "riftbound";
 export type StoreInventoryColorFilter =
   | "all"
   | "W"
@@ -76,6 +82,20 @@ function inferGame(item: InventoryItem): CardCategory {
   if (line.includes("yugioh") || line.includes("yu-gi-oh")) return "yugioh";
   if (line.includes("sport")) return "sports";
   return "other";
+}
+
+function isRiftboundItem(item: InventoryItem): boolean {
+  const line = (item.productLine ?? "").toLowerCase();
+  const name = (item.productName ?? item.displayName ?? "").toLowerCase();
+  return line.includes("riftbound") || name.includes("riftbound");
+}
+
+function matchesGameFilter(item: InventoryItem, game: StoreInventoryGameFilter): boolean {
+  if (game === "all") return true;
+  if (game === "riftbound") return isRiftboundItem(item);
+  if (game === "magic") return classifyInventoryGame(item) === "Magic";
+  if (game === "pokemon") return classifyInventoryGame(item) === "Pokémon";
+  return inferGame(item) === game;
 }
 
 function matchesColorFilter(
@@ -174,10 +194,7 @@ function cardFromInventoryItemSync(
 
   let colorIdentity = item.catalogColorIdentity ?? catalog?.colorIdentity ?? [];
   let typeLine = item.catalogTypeLine ?? catalog?.typeLine;
-  let isCommander =
-    item.catalogCanBeSoleCommander ??
-    catalog?.isCommander ??
-    false;
+  let isCommander = item.catalogCanBeSoleCommander === true;
   const cmc = item.catalogCmc ?? catalog?.cmc;
   const manaCost = item.catalogManaCost ?? catalog?.manaCost;
   const oracleText = item.catalogOracleText ?? catalog?.oracleText;
@@ -187,14 +204,28 @@ function cardFromInventoryItemSync(
   const rarity = item.catalogRarity ?? catalog?.rarity;
   const setName = item.setName ?? catalog?.setName;
 
-  const directImage = pickInventoryDisplayImageUrl(item, catalog);
+  const catalogMatch = catalog != null && catalogMatchesInventoryItem(item, catalog);
+  const scryfallLinked =
+    Boolean(scryfallId && catalog?.imageNormal) &&
+    catalog?.id === scryfallId;
+  const isMagic = classifyInventoryGame(item) === "Magic";
+
+  let imageUrl: string | undefined;
+  if ((catalogMatch || scryfallLinked) && catalog?.imageNormal) {
+    imageUrl = catalog.imageNormal;
+  } else {
+    const directImage = pickInventoryDisplayImageUrl(item, catalog);
+    if (directImage && (!isMagic || !isFirebaseStorageUrl(directImage))) {
+      imageUrl = directImage;
+    }
+  }
 
   return {
     inventoryItemId: item.id,
     scryfallId: scryfallId ?? catalog?.id,
     oracleId: item.catalogOracleId ?? catalog?.oracleId,
     name: inventoryName,
-    imageUrl: isFirebaseStorageUrl(directImage) ? directImage : undefined,
+    imageUrl,
     imageProxyUrl: inventoryImageProxyPath(storeSlug, item.id),
     qty,
     listPrice: item.listPrice,
@@ -223,6 +254,7 @@ function itemMatchesBrowseFilters(
   colorCount: ColorCountFilter,
   cardType: StoreInventoryTypeFilter,
   semantic?: StoreInventorySemanticFilter,
+  semanticBrowseIndex?: ReturnType<typeof loadSemanticBrowseIndex>,
 ): boolean {
   const identity = item.catalogColorIdentity ?? [];
   if (
@@ -233,14 +265,19 @@ function itemMatchesBrowseFilters(
       return false;
     }
   }
+  if (!itemMatchesSemanticFilter(item, semantic, semanticBrowseIndex)) return false;
   if (cardType === "commander") {
     return item.catalogCanBeSoleCommander === true;
   }
-  if (!itemMatchesSemanticFilter(item, semantic)) return false;
   return true;
 }
 
-export type StoreInventorySortBy = "name" | "price_asc" | "price_desc";
+export type StoreInventorySortBy =
+  | "name"
+  | "price_asc"
+  | "price_desc"
+  | "cmc_asc"
+  | "cmc_desc";
 
 export async function browseStoreInventory(input: {
   storeId: string;
@@ -290,10 +327,14 @@ export async function browseStoreInventory(input: {
   const semantic = input.semantic;
   const textQuery = input.semanticOnly ? undefined : input.q?.trim().toLowerCase();
 
+  const semanticBrowseIndex = isRc8SemanticFilterActive(semantic)
+    ? loadSemanticBrowseIndex()
+    : undefined;
+
   const matchedItems: InventoryItem[] = [];
   for (const item of all) {
     if (requireClerkEligible && !isClerkEligibleInventory(item)) continue;
-    if (game !== "all" && inferGame(item) !== game) continue;
+    if (!matchesGameFilter(item, game)) continue;
     if (textQuery && !inventoryItemMatchesSearch(item, textQuery)) continue;
     if (
       !itemMatchesBrowseFilters(
@@ -302,17 +343,12 @@ export async function browseStoreInventory(input: {
         colorCount,
         cardType,
         semantic,
+        semanticBrowseIndex,
       )
     ) {
       continue;
     }
     if (cardType === "commander" && item.catalogCanBeSoleCommander !== true) {
-      continue;
-    }
-    if (
-      isSemanticFilterActive(semantic) &&
-      !itemMatchesSemanticFilter(item, semantic)
-    ) {
       continue;
     }
     matchedItems.push(item);
@@ -330,6 +366,17 @@ export async function browseStoreInventory(input: {
       }
     }
 
+    if (input.sortBy === "cmc_desc" || input.sortBy === "cmc_asc") {
+      const ca = a.catalogCmc ?? Number.POSITIVE_INFINITY;
+      const cb = b.catalogCmc ?? Number.POSITIVE_INFINITY;
+      const aMissing = !Number.isFinite(ca);
+      const bMissing = !Number.isFinite(cb);
+      if (aMissing !== bMissing) return aMissing ? 1 : -1;
+      if (ca !== cb) {
+        return input.sortBy === "cmc_desc" ? cb - ca : ca - cb;
+      }
+    }
+
     const aName = a.productName ?? a.displayName;
     const bName = b.productName ?? b.displayName;
     const aCmd = a.catalogCanBeSoleCommander === true;
@@ -339,7 +386,7 @@ export async function browseStoreInventory(input: {
   });
 
   const page = Math.max(1, input.page ?? 1);
-  const limit = Math.min(96, Math.max(1, input.limit ?? 48));
+  const limit = Math.min(100, Math.max(1, input.limit ?? 100));
   const total = matchedItems.length;
   const totalPages = Math.max(1, Math.ceil(total / limit));
   const start = (page - 1) * limit;
@@ -390,7 +437,7 @@ export async function browseStoreInventory(input: {
     ) {
       continue;
     }
-    if (!cardMatchesSemanticFilter(card, semantic)) continue;
+    if (!cardMatchesSemanticFilter(card, semantic, semanticBrowseIndex)) continue;
     enriched.push(card);
   }
 
@@ -399,7 +446,7 @@ export async function browseStoreInventory(input: {
   const gameCounts: Record<string, number> = {};
   let commanderCount = 0;
   for (const item of all) {
-    const g = inferGame(item);
+    const g = isRiftboundItem(item) ? "riftbound" : inferGame(item);
     gameCounts[g] = (gameCounts[g] ?? 0) + 1;
     if (item.catalogCanBeSoleCommander === true) {
       commanderCount += 1;

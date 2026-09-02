@@ -123,9 +123,17 @@ function OverviewPanel({ data }: { data: Record<string, unknown> | null }) {
         ["Holdout reconstruction recall", num(recon?.recall as number | undefined)],
         ["Candidate interactions", String(cand?.candidatesGenerated ?? "—")],
       ]} />
+      <StatCard title="K v1 / deck profiles" items={[
+        ["K status", String((data.pressureKLock as { status?: string } | null)?.status ?? (data.pressureK as { status?: string } | null)?.status ?? "—")],
+        ["Reviewed K edges", String(((data.pressureK as { matrix?: { reviewed?: number } } | null)?.matrix?.reviewed) ?? "—")],
+        ["Decks profiled", String((data.deckProfiles as { decksProfiled?: number } | null)?.decksProfiled ?? "—")],
+        ["Averages used", String((data.deckProfiles as { didNotAverageCoordinates?: boolean } | null)?.didNotAverageCoordinates === true ? "no" : "—")],
+        ["A→B pressure", String((data.deckPressure as { directedPairs?: number } | null)?.directedPairs ? `${(data.deckPressure as { directedPairs: number }).directedPairs} pairs` : "—")],
+        ["K coverage (mean)", String(((data.deckPressure as { coverageSummary?: { conservative?: { mean?: number } } } | null)?.coverageSummary?.conservative?.mean) ?? "—")],
+      ]} />
       <div className="md:col-span-2 rounded border border-neutral-800 p-4 text-sm text-neutral-400">
         Route: http://localhost:3000/experimental/mechanical-space · Safety: production writes NONE · OpenAI NONE ·
-        embeddings unmodified
+        embeddings unmodified · K frozen · no deck-vs-deck pressure
       </div>
     </div>
   );

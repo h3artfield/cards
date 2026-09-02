@@ -1,9 +1,15 @@
 import {
   browseStoreInventory,
+  type ColorCountFilter,
   type StoreInventoryCard,
   type StoreInventoryGameFilter,
   type StoreInventoryTypeFilter,
 } from "../../deck-builder/store-inventory-browse";
+import {
+  browseColorParamsFromClerkSemantic,
+  isExplicitCommanderInventoryRequest,
+  resolveClerkCardTypeFilter,
+} from "./clerk-browse-sync";
 import type {
   ClerkGame,
   InventorySearchParams,
@@ -50,6 +56,14 @@ export function buildSearchFromRouter(input: {
     maxPrice: input.maxPrice,
   });
 
+  const cardType =
+    input.formatCommander && isExplicitCommanderInventoryRequest(input.userQuestion)
+      ? "commander"
+      : resolveClerkCardTypeFilter({
+          userQuestion: input.userQuestion,
+          parsed,
+        });
+
   const params: InventorySearchParams = {
     q: parsed.q,
     game: parsed.browseGame ?? clerkGameToFilter(input.game),
@@ -60,7 +74,7 @@ export function buildSearchFromRouter(input: {
       Boolean(parsed.semantic.colorIdentitySupersetOf?.length)
         ? "all"
         : (parsed.color ?? "all"),
-    cardType: input.formatCommander ? "commander" : "all",
+    cardType,
     maxPrice: parsed.maxPrice,
     semantic: parsed.semantic,
     semanticOnly: parsed.semanticOnly,
@@ -90,12 +104,20 @@ export async function inventorySearchTool(input: {
   const browseLimit = input.params.priceSort
     ? 96
     : Math.min(96, limit * 2);
+  const browseColors = browseColorParamsFromClerkSemantic(input.params.semantic);
+  const parsedColors =
+    browseColors.selectedColors?.length || browseColors.colorCount
+      ? browseColors
+      : input.params.color && input.params.color !== "all" && ["W", "U", "B", "R", "G"].includes(input.params.color)
+        ? { selectedColors: [input.params.color], colorCount: "all" as const }
+        : {};
   const browse = await browseStoreInventory({
     storeId: input.storeId,
     storeSlug: input.storeSlug,
     q: input.params.q,
     game: input.params.game ?? "all",
-    color: input.params.color ?? "all",
+    selectedColors: parsedColors.selectedColors,
+    colorCount: (parsedColors.colorCount ?? "all") as ColorCountFilter | "all",
     cardType: input.params.cardType ?? "all",
     semantic: input.params.semantic,
     semanticOnly: input.params.semanticOnly,
@@ -106,7 +128,7 @@ export async function inventorySearchTool(input: {
       : input.params.priceSort === "asc"
         ? "price_asc"
         : undefined,
-    requireClerkEligible: true,
+    requireClerkEligible: false,
   });
 
   let items = browse.items;

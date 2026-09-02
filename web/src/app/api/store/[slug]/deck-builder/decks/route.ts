@@ -3,8 +3,14 @@ import { v4 as uuidv4 } from "uuid";
 import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
 import {
   getCustomerSession,
+  loadCustomer,
   requireCustomerSession,
 } from "@/lib/auth/customer-auth";
+import {
+  boundStoreName,
+  customerCanActAtStore,
+  storeMismatchResponse,
+} from "@/lib/auth/customer-store-binding";
 import { deckBuilderStore } from "@/lib/deck-builder/deck-builder-store";
 import { resolveStoreBySlug } from "@/lib/deck-builder/deck-builder-service";
 import { deckToMoxfieldExport } from "@/lib/deck-builder/commander-validation";
@@ -54,6 +60,13 @@ export async function POST(
     }
 
     const session = getCustomerSession(req);
+    if (session) {
+      const customer = await loadCustomer(session.customerId);
+      if (customer && !customerCanActAtStore(customer, store.id)) {
+        return storeMismatchResponse(await boundStoreName(customer));
+      }
+    }
+
     const now = new Date().toISOString();
     const ids = [
       body.commanderScryfallId,

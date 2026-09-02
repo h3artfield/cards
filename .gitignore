@@ -35,3 +35,10 @@ firebase-debug.log
 web/reports/
 web/.cache/
 
+# Python bytecode from the mechanical-space training scripts
+__pycache__/
+*.pyc
+
+# Phase 6A.1 benchmark authority private material (adjudication oracle — not for implementation)
+benchmark-authority/**/private/
+

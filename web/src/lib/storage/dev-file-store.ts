@@ -6,11 +6,14 @@ import type {
   BuybackOrder,
   BuybackTransaction,
   CardFeedback,
+  CollectionCard,
   Customer,
   InventoryItem,
   ScannedCard,
+  ShopTicket,
   StoreRule,
   StoreSettings,
+  TradeCreditEntry,
 } from "../types";
 import type { StoreEvent, StoreEventSignup } from "../store-calendar/types";
 import { DEFAULT_STORE_ID } from "../firebase/collections";
@@ -22,6 +25,9 @@ export interface DevMemoryState {
   cards: ScannedCard[];
   inventory: InventoryItem[];
   transactions: BuybackTransaction[];
+  tradeCreditEntries: TradeCreditEntry[];
+  collectionCards: CollectionCard[];
+  shopTickets: ShopTicket[];
   rules: StoreRule[];
   stores: Record<string, StoreSettings>;
   adminUsers: AdminUser[];
@@ -30,6 +36,7 @@ export interface DevMemoryState {
   /** @deprecated use orderCounters — kept for dev-store.json migration */
   counter: number;
   orderCounters: Record<string, number>;
+  ticketCounters: Record<string, number>;
   adminLogs: Record<string, unknown>[];
   storeEvents: StoreEvent[];
   storeEventSignups: StoreEventSignup[];
@@ -52,6 +59,9 @@ export function defaultDevMemoryState(): DevMemoryState {
     cards: [],
     inventory: [],
     transactions: [],
+    tradeCreditEntries: [],
+    collectionCards: [],
+    shopTickets: [],
     rules: [],
     stores: { [DEFAULT_STORE_ID]: gameLodge },
     adminUsers: [],
@@ -59,6 +69,7 @@ export function defaultDevMemoryState(): DevMemoryState {
     settings: gameLodge,
     counter: 0,
     orderCounters: {},
+    ticketCounters: {},
     adminLogs: [],
     storeEvents: [],
     storeEventSignups: [],
@@ -81,7 +92,11 @@ export async function readDevMemoryState(): Promise<DevMemoryState> {
       };
     }
     if (!memoryCache!.adminUsers) memoryCache!.adminUsers = [];
+    if (!memoryCache!.tradeCreditEntries) memoryCache!.tradeCreditEntries = [];
+    if (!memoryCache!.collectionCards) memoryCache!.collectionCards = [];
+    if (!memoryCache!.shopTickets) memoryCache!.shopTickets = [];
     if (!memoryCache!.orderCounters) memoryCache!.orderCounters = {};
+    if (!memoryCache!.ticketCounters) memoryCache!.ticketCounters = {};
     if (!memoryCache!.inventoryImportSnapshots) {
       memoryCache!.inventoryImportSnapshots = [];
     }

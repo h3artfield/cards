@@ -58,12 +58,7 @@ export function classifyClerkRequest(input: {
   const q = input.question.trim();
   const summary = input.conversationSummary ?? "";
 
-  const useStagedDeckBuild =
-    isExplicitDeckBuildRequest(q, summary) ||
-    isDeckBuildClarificationFollowUp({ question: q, conversationSummary: summary }) ||
-    isDeckBuildCommanderPickFollowUp({ question: q, conversationSummary: summary }) ||
-    (isDeckBuildConversation({ question: q, conversationSummary: summary }) &&
-      isExplicitDeckBuildRequest(q, summary));
+  const useStagedDeckBuild = false;
 
   if (useStagedDeckBuild) {
     return {
@@ -75,16 +70,16 @@ export function classifyClerkRequest(input: {
 
   if (isRulesQuestion(q)) {
     return {
-      mode: "knowledge",
-      answerSource: "knowledge",
+      mode: "inventory_direct",
+      answerSource: "inventory",
       useStagedDeckBuild: false,
     };
   }
 
   if (isEducationThenInventoryRequest(q, summary)) {
     return {
-      mode: "mixed",
-      answerSource: "mixed",
+      mode: "inventory_direct",
+      answerSource: "inventory",
       useStagedDeckBuild: false,
     };
   }
@@ -106,8 +101,8 @@ export function classifyClerkRequest(input: {
     isClerkClarificationFollowUp({ question: q, conversationSummary: summary })
   ) {
     return {
-      mode: "mixed",
-      answerSource: "mixed",
+      mode: "inventory_direct",
+      answerSource: "inventory",
       useStagedDeckBuild: false,
     };
   }
@@ -123,23 +118,23 @@ export function classifyClerkRequest(input: {
 
   if (isMagicStrategyAdviceRequest(q)) {
     return {
-      mode: "knowledge",
-      answerSource: "knowledge",
+      mode: "inventory_direct",
+      answerSource: "inventory",
       useStagedDeckBuild: false,
     };
   }
 
   if (/\b(build|brew|assemble)\b.*\bdeck\b/i.test(q)) {
     return {
-      mode: "mixed",
-      answerSource: "mixed",
+      mode: "inventory_direct",
+      answerSource: "inventory",
       useStagedDeckBuild: false,
     };
   }
 
   return {
-    mode: "mixed",
-    answerSource: "mixed",
+    mode: "inventory_direct",
+    answerSource: "inventory",
     useStagedDeckBuild: false,
   };
 }

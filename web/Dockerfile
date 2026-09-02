@@ -18,6 +18,7 @@ ARG NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
 ARG NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
 ARG NEXT_PUBLIC_FIREBASE_APP_ID
 ARG NEXT_PUBLIC_APP_URL=http://localhost:3000
+ARG NEXT_PUBLIC_PROFESSOR_SOL_DIRECTED_GUI_ENABLED=false
 ARG GIT_COMMIT_SHA=unknown
 ARG GIT_TREE_STATE=unknown
 ARG BUILD_CONTEXT_HASH=unknown
@@ -35,6 +36,7 @@ ENV NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=$NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
 ENV NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=$NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
 ENV NEXT_PUBLIC_FIREBASE_APP_ID=$NEXT_PUBLIC_FIREBASE_APP_ID
 ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
+ENV NEXT_PUBLIC_PROFESSOR_SOL_DIRECTED_GUI_ENABLED=$NEXT_PUBLIC_PROFESSOR_SOL_DIRECTED_GUI_ENABLED
 ENV GIT_COMMIT_SHA=$GIT_COMMIT_SHA
 ENV GIT_TREE_STATE=$GIT_TREE_STATE
 ENV BUILD_CONTEXT_HASH=$BUILD_CONTEXT_HASH
@@ -46,7 +48,8 @@ ENV GOLDEN_CATALOG_VERSION=$GOLDEN_CATALOG_VERSION
 ENV COMMANDER_ELIGIBILITY_VERSION=$COMMANDER_ELIGIBILITY_VERSION
 
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm run build
+ENV NODE_OPTIONS=--max-old-space-size=6144
+RUN npm run build -- --webpack
 
 FROM node:22-alpine AS runner
 WORKDIR /app
@@ -81,6 +84,15 @@ RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+RUN mkdir -p \
+  data/milestones/mechanical-space/commander-optimization-score-v1 \
+  data/milestones/mechanical-space/spellbook-win-architecture-space-v1 \
+  data/milestones/catalog-shadow
+COPY --from=builder --chown=nextjs:nodejs /app/data/milestones/mechanical-space/commander-optimization-score-v1/ ./data/milestones/mechanical-space/commander-optimization-score-v1/
+COPY --from=builder --chown=nextjs:nodejs /app/data/milestones/mechanical-space/spellbook-win-architecture-space-v1/normalized-combo-dictionary.jsonl ./data/milestones/mechanical-space/spellbook-win-architecture-space-v1/normalized-combo-dictionary.jsonl
+COPY --from=builder --chown=nextjs:nodejs /app/data/milestones/catalog-shadow/catalog-semantic-visualization-v1-points.json.gz ./data/milestones/catalog-shadow/catalog-semantic-visualization-v1-points.json.gz
+COPY --from=builder --chown=nextjs:nodejs /app/data/milestones/catalog-shadow/catalog-shadow-parse-rc8-firestore-v2.jsonl.gz ./data/milestones/catalog-shadow/catalog-shadow-parse-rc8-firestore-v2.jsonl.gz
 
 USER nextjs
 EXPOSE 8080

@@ -32,6 +32,7 @@ import {
   needsGoldenTableBackfill,
 } from "../inventory/magic-items";
 import { deriveCommanderClassification } from "./commander-classification";
+import { resolveProductCommanderFormatLegal } from "./commander-format-legality-snapshot-v1";
 import { upsertCatalogOracleFromPrinting } from "./catalog-oracle-card";
 
 export type CatalogMatchMethod =
@@ -205,14 +206,18 @@ export function enrichmentFromCatalog(
       commander: catalog.commanderFormatLegal ? "legal" : "not_legal",
     },
   });
+  const resolvedLegality = resolveProductCommanderFormatLegal({
+    catalog,
+    classification,
+  });
   return {
     scryfallId: catalog.id,
     oracleId: catalog.oracleId,
     colorIdentity: catalog.colorIdentity ?? [],
     colors: catalog.colors,
     typeLine: catalog.typeLine,
-    commanderFormatLegal: catalog.commanderFormatLegal ?? false,
-    canBeSoleCommander: classification.canBeSoleCommander,
+    commanderFormatLegal: resolvedLegality.commanderFormatLegal,
+    canBeSoleCommander: resolvedLegality.canBeSoleCommander,
     manaCost: catalog.manaCost,
     cmc: catalog.cmc,
     oracleText: catalog.oracleText,

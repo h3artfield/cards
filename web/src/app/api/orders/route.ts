@@ -11,10 +11,15 @@ import {
   requireCustomerSession,
   resolveStoreForSlug,
 } from "@/lib/auth/customer-auth";
+import {
+  bindCustomerToStore,
+  boundStoreName,
+  customerCanActAtStore,
+  storeMismatchResponse,
+} from "@/lib/auth/customer-store-binding";
 import { resolveStoreCustomerSettings } from "@/lib/customer-auth-config";
 import { dataStore } from "@/lib/storage/data-store";
 import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
-import { DEFAULT_STORE_ID } from "@/lib/firebase/collections";
 import type { BuybackOrder } from "@/lib/types";
 import { NextResponse } from "next/server";
 
@@ -34,21 +39,23 @@ export async function POST(req: NextRequest) {
       return jsonError("Create an account to scan cards", 403);
     }
 
-    let storeId = customer.storeId?.trim() || DEFAULT_STORE_ID;
-    let storeSlugResolved = storeSlug;
     let store = storeSlug ? await resolveStoreForSlug(storeSlug) : null;
     if (storeSlug && !store) return jsonError("Store not found", 404);
+    if (store && !customerCanActAtStore(customer, store.id)) {
+      return storeMismatchResponse(await boundStoreName(customer));
+    }
     if (!store && customer.storeId) {
       store = await dataStore.getStore(customer.storeId);
     }
-    if (store) {
-      storeId = store.id;
-      storeSlugResolved = storeSlugResolved ?? store.storeSlug;
-      const settings = resolveStoreCustomerSettings(store);
-      if (!customerCanSubmit(customer, settings.emailVerificationMode)) {
-        return jsonError("Verify your email before scanning cards", 403);
-      }
-    } else if (!customer.emailVerified && customer.authProviders.includes("email")) {
+    if (!store) {
+      return jsonError("Start from your store's page to scan cards", 400);
+    }
+
+    const bound = await bindCustomerToStore(customer, store.id);
+    const storeId = store.id;
+
+    const settings = resolveStoreCustomerSettings(store);
+    if (!customerCanSubmit(bound, settings.emailVerificationMode)) {
       return jsonError("Verify your email before scanning cards", 403);
     }
 
@@ -58,10 +65,10 @@ export async function POST(req: NextRequest) {
     const order: BuybackOrder = {
       id: uuidv4(),
       orderNumber,
-      customerId: customer.id,
+      customerId: bound.id,
       storeId,
-      storeSlug: storeSlugResolved,
-      customer: buildOrderCustomerSnapshot(customer),
+      storeSlug: storeSlug ?? store.storeSlug,
+      customer: buildOrderCustomerSnapshot(bound),
       status: "draft",
       createdAt: now,
       manualReviewCount: 0,

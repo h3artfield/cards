@@ -7,19 +7,28 @@ import {
 import { MTG_RAG_RETRIEVAL_LIMIT } from "./constants";
 import { corporaForIntent } from "./corpus-for-intent";
 import { vectorSearchMtgChunks } from "./chunk-retrieval";
+import { lexicalRetrieveMtgCandidates } from "./lexical-candidate-retrieval";
+import { finalizeHybridHitScores } from "./retrieval-ranking";
+import type { MatchTier } from "./retrieval-match-tiers";
 import type {
-  MtgKnowledgeAuthorityTier,
   MtgKnowledgeChunk,
   MtgKnowledgeCorpus,
   MtgQueryIntent,
 } from "./types";
 
-export type MtgRetrievalMethod = "alias_exact" | "vector";
+export type MtgRetrievalMethod = "alias_exact" | "lexical_exact" | "vector";
 
 export interface MtgKnowledgeHit {
   chunk: MtgKnowledgeChunk;
   score: number;
   method: MtgRetrievalMethod;
+  vectorDistance?: number;
+  vectorSimilarity?: number;
+  lexicalBoost?: number;
+  finalScore?: number;
+  matchTier?: MatchTier;
+  rrfScore?: number;
+  aliasSpecificity?: number;
 }
 
 export interface MtgHybridRetrievalResult {
@@ -27,41 +36,49 @@ export interface MtgHybridRetrievalResult {
   intent: MtgQueryIntent;
   corpora: MtgKnowledgeCorpus[];
   aliasMatches: number;
+  lexicalMatches: number;
   vectorMatches: number;
 }
 
-const AUTHORITY_RANK: Record<MtgKnowledgeAuthorityTier, number> = {
-  live_canonical_data: 5,
-  official_rules: 4,
-  curated_internal: 3,
-  community_education: 1,
-};
+export type HybridRetrievalMode =
+  | "RULES"
+  | "TERMINOLOGY"
+  | "STRATEGY"
+  | "COMMANDER_PRIMER"
+  | "PACKAGE"
+  | "INTERACTION";
 
-function rankHits(hits: MtgKnowledgeHit[]): MtgKnowledgeHit[] {
-  return [...hits].sort((a, b) => {
-    const authDiff =
-      AUTHORITY_RANK[b.chunk.authorityTier] - AUTHORITY_RANK[a.chunk.authorityTier];
-    if (authDiff !== 0) return authDiff;
-    const methodDiff = (a.method === "alias_exact" ? 1 : 0) - (b.method === "alias_exact" ? 1 : 0);
-    if (methodDiff !== 0) return methodDiff;
-    return b.score - a.score;
-  });
+function upsertHit(hits: MtgKnowledgeHit[], seen: Set<string>, hit: MtgKnowledgeHit): void {
+  const existing = hits.find((h) => h.chunk.chunkId === hit.chunk.chunkId);
+  if (existing) {
+    if (hit.vectorSimilarity != null) {
+      existing.vectorSimilarity = hit.vectorSimilarity;
+      existing.vectorDistance = hit.vectorDistance;
+    }
+    if (existing.method !== "alias_exact" && hit.method === "vector") {
+      existing.method = hit.method;
+    }
+    return;
+  }
+  seen.add(hit.chunk.chunkId);
+  hits.push(hit);
 }
 
 export async function hybridRetrieveMtgKnowledge(input: {
   question: string;
   intent: MtgQueryIntent;
+  corpora?: MtgKnowledgeCorpus[];
+  mode?: HybridRetrievalMode;
+  commanderName?: string;
   limit?: number;
 }): Promise<MtgHybridRetrievalResult> {
   const limit = input.limit ?? MTG_RAG_RETRIEVAL_LIMIT;
-  const corpora = corporaForIntent(input.intent);
+  const corpora = input.corpora ?? corporaForIntent(input.intent);
   const hits: MtgKnowledgeHit[] = [];
   const seen = new Set<string>();
 
   for (const hit of lookupEmbeddedClerkKnowledge(input.question)) {
-    if (seen.has(hit.chunk.chunkId)) continue;
-    seen.add(hit.chunk.chunkId);
-    hits.push(hit);
+    upsertHit(hits, seen, hit);
   }
 
   const aliasTerms = aliasCandidateTerms(input.question);
@@ -74,33 +91,69 @@ export async function hybridRetrieveMtgKnowledge(input: {
     );
     for (const chunk of aliasChunks) {
       if (!aliasCorpusOk.has(chunk.corpus)) continue;
-      if (seen.has(chunk.chunkId)) continue;
-      seen.add(chunk.chunkId);
-      hits.push({ chunk, score: 1, method: "alias_exact" });
+      upsertHit(hits, seen, {
+        chunk,
+        score: 1,
+        method: "alias_exact",
+        finalScore: 1,
+        vectorSimilarity: 1,
+      });
     }
+  }
+
+  let lexicalMatches = 0;
+  const lexicalChunks = await lexicalRetrieveMtgCandidates({
+    question: input.question,
+    corpora,
+    commanderName: input.commanderName,
+  });
+  for (const chunk of lexicalChunks) {
+    const before = seen.size;
+    upsertHit(hits, seen, {
+      chunk,
+      score: 0,
+      method: "lexical_exact",
+    });
+    if (seen.size > before) lexicalMatches++;
   }
 
   let vectorMatches = 0;
-  if (hits.length < limit) {
-    const vectorHits = await vectorSearchMtgChunks({
-      query: input.question,
-      corpora,
-      limit: limit * 2,
-    });
+  const vectorHits = await vectorSearchMtgChunks({
+    query: input.question,
+    corpora,
+    limit: limit * 2,
+  });
 
-    for (const chunk of vectorHits) {
-      if (seen.has(chunk.chunkId)) continue;
-      seen.add(chunk.chunkId);
-      vectorMatches++;
-      hits.push({ chunk, score: 0.75, method: "vector" });
-    }
+  for (const vectorHit of vectorHits) {
+    const before = seen.has(vectorHit.chunk.chunkId);
+    upsertHit(hits, seen, {
+      chunk: vectorHit.chunk,
+      score: vectorHit.vectorSimilarity,
+      method: "vector",
+      vectorDistance: vectorHit.vectorDistance,
+      vectorSimilarity: vectorHit.vectorSimilarity,
+    });
+    if (!before && seen.has(vectorHit.chunk.chunkId)) vectorMatches++;
   }
 
+  const ranked =
+    input.mode != null
+      ? finalizeHybridHitScores({
+          hits,
+          query: input.question,
+          mode: input.mode,
+          intent: input.intent,
+          commanderName: input.commanderName,
+          limit,
+        })
+      : [...hits].sort((a, b) => (b.finalScore ?? b.score) - (a.finalScore ?? a.score));
+
   return {
-    hits: rankHits(hits).slice(0, limit),
+    hits: ranked.slice(0, limit),
     intent: input.intent,
     corpora,
     aliasMatches: aliases.length,
+    lexicalMatches,
     vectorMatches,
   };
 }

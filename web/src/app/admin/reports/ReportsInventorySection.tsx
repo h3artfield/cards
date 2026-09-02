@@ -6,6 +6,7 @@ import { AdminSectionTabs } from "@/components/admin/AdminSectionTabs";
 import { adminFetch } from "@/lib/api-client";
 import { useAdmin } from "@/context/AdminContext";
 import type { BuybackTransaction, InventoryItem, ScannedCard } from "@/lib/types";
+import { CatalogShopifyExportPanel } from "@/components/admin/CatalogShopifyExportPanel";
 import { ShopifyInventoryExportPanel } from "@/components/admin/ShopifyInventoryExportPanel";
 import { ShopifyInventoryImportPanel } from "@/components/admin/ShopifyInventoryImportPanel";
 import { TcgplayerInventoryImportPanel } from "@/components/admin/TcgplayerInventoryImportPanel";
@@ -164,6 +165,11 @@ export function ReportsInventorySection({
             <TcgplayerInventoryImportPanel onImported={reloadInventory} />
             <ShopifyInventoryImportPanel onImported={reloadInventory} />
           </div>
+
+          <CatalogShopifyExportPanel
+            refreshKey={dashboardRefreshKey}
+            onExported={reloadInventory}
+          />
 
           {buybackOnHand.length > 0 ? (
             <ShopifyInventoryExportPanel

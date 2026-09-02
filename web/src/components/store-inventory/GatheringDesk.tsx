@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   cardDisplayImage,
@@ -7,20 +8,52 @@ import {
   readClerkDragPayload,
   type GatheringCard,
 } from "./clerk-gathering";
+import { CartPanel } from "./CartPanel";
 import { ColorPips } from "./InventoryBrowseUI";
+import { useCart } from "@/hooks/useCart";
+import {
+  buildGatheringDeckPrefill,
+  saveProfessorSetupPrefill,
+} from "@/lib/store-inventory/gathering-deck-build";
+import {
+  deckBuildSignInHref,
+  professorPathFromPile,
+} from "@/lib/store-inventory/deck-build-auth";
+import { useCustomer } from "@/context/CustomerContext";
 
 export function GatheringDesk({
+  slug,
   cards,
   onAdd,
   onRemove,
   onClear,
 }: {
+  slug: string;
   cards: GatheringCard[];
   onAdd: (card: GatheringCard) => void;
   onRemove: (inventoryItemId: string) => void;
   onClear: () => void;
 }) {
+  const router = useRouter();
+  const { customer, loading: customerLoading } = useCustomer();
+  const { add: addToCart } = useCart(slug);
   const [dragOver, setDragOver] = useState(false);
+
+  function cartLineFromCard(card: GatheringCard) {
+    return {
+      inventoryItemId: card.inventoryItemId,
+      name: card.name,
+      setName: card.setName,
+      imageUrl: cardDisplayImage(card),
+      unitPrice: cardDisplayPrice(card) ?? 0,
+      maxQuantity: card.qty > 0 ? card.qty : 1,
+    };
+  }
+
+  function addCardToCart(card: GatheringCard) {
+    if ((cardDisplayPrice(card) ?? 0) <= 0) return;
+    addToCart(cartLineFromCard(card));
+  }
 
   const total = cards.reduce(
     (sum, c) => sum + (cardDisplayPrice(c) ?? 0),
@@ -32,6 +65,18 @@ export function GatheringDesk({
     setDragOver(false);
     const payload = readClerkDragPayload(e.dataTransfer);
     if (payload) onAdd(payload);
+  }
+
+  function handleBuildDeck() {
+    if (cards.length === 0 || customerLoading) return;
+    const target = professorPathFromPile(slug);
+    if (!customer) {
+      router.push(deckBuildSignInHref(slug, target));
+      return;
+    }
+    const prefill = buildGatheringDeckPrefill(cards);
+    saveProfessorSetupPrefill(slug, prefill);
+    router.push(target);
   }
 
   return (
@@ -55,15 +100,33 @@ export function GatheringDesk({
             Drag cards here from the clerk or browse grid
           </p>
         </div>
-        {cards.length > 0 ? (
-          <button
-            type="button"
-            onClick={onClear}
-            className="shrink-0 text-[10px] text-neutral-500 underline hover:text-neutral-300"
-          >
-            Clear
-          </button>
-        ) : null}
+        <div className="flex shrink-0 flex-col items-end gap-1">
+          {cards.length > 0 ? (
+            <>
+              <button
+                type="button"
+                onClick={handleBuildDeck}
+                className="rounded-lg bg-indigo-600 px-2.5 py-1 text-[11px] font-semibold text-white hover:bg-indigo-500"
+              >
+                Build deck
+              </button>
+              <button
+                type="button"
+                onClick={() => cards.forEach(addCardToCart)}
+                className="rounded-lg border border-neutral-600 px-2.5 py-1 text-[11px] font-semibold text-white hover:border-white"
+              >
+                All to cart
+              </button>
+              <button
+                type="button"
+                onClick={onClear}
+                className="text-[10px] text-neutral-500 underline hover:text-neutral-300"
+              >
+                Clear
+              </button>
+            </>
+          ) : null}
+        </div>
       </div>
 
       {cards.length === 0 ? (
@@ -120,6 +183,15 @@ export function GatheringDesk({
                       </span>
                     ) : null}
                   </div>
+                  {price != null && price > 0 ? (
+                    <button
+                      type="button"
+                      onClick={() => addCardToCart(card)}
+                      className="w-full rounded border border-neutral-700 py-0.5 text-[10px] text-neutral-300 hover:border-white hover:text-white"
+                    >
+                      Add to cart
+                    </button>
+                  ) : null}
                 </div>
               </li>
             );
@@ -133,6 +205,8 @@ export function GatheringDesk({
           {total > 0 ? ` · ~$${total.toFixed(2)}` : ""}
         </p>
       ) : null}
+
+      <CartPanel slug={slug} />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/Button";
 import { adminFetch } from "@/lib/api-client";
 import type {
@@ -51,35 +51,73 @@ export function ShopifyIntegrationSettings() {
   const [locations, setLocations] = useState<Location[]>([]);
   const [showAdvanced, setShowAdvanced] = useState(false);
 
-  async function load() {
-    setLoading(true);
-    try {
-      const res = await adminFetch("/api/admin/shopify/settings");
-      const data = await res.json();
-      if (res.ok) {
-        setShopify(data.shopify ?? null);
+  const fetchSettings = useCallback(async () => {
+    const res = await adminFetch("/api/admin/shopify/settings");
+    const data = await res.json();
+
+    let nextLocations: Location[] | null = null;
+    if (data.shopify?.enabled) {
+      const locRes = await adminFetch("/api/admin/shopify/locations");
+      const locData = await locRes.json();
+      if (locRes.ok) nextLocations = locData.locations ?? [];
+    }
+
+    return { ok: res.ok, data, locations: nextLocations };
+  }, []);
+
+  const applySettings = useCallback(
+    (payload: Awaited<ReturnType<typeof fetchSettings>>) => {
+      if (payload.ok) {
+        setShopify(payload.data.shopify ?? null);
         setSoldDetectionWebhookUrl(
-          data.soldDetectionWebhookUrl ?? data.ordersPaidWebhookUrl ?? null,
+          payload.data.soldDetectionWebhookUrl ??
+            payload.data.ordersPaidWebhookUrl ??
+            null,
         );
         setAuthMethod(
-          data.shopify?.authMethod === "legacy_admin_token"
+          payload.data.shopify?.authMethod === "legacy_admin_token"
             ? "legacy_admin_token"
             : "client_credentials",
         );
       }
-      if (data.shopify?.enabled) {
-        const locRes = await adminFetch("/api/admin/shopify/locations");
-        const locData = await locRes.json();
-        if (locRes.ok) setLocations(locData.locations ?? []);
-      }
+      if (payload.locations) setLocations(payload.locations);
+    },
+    [],
+  );
+
+  async function load() {
+    setLoading(true);
+    try {
+      applySettings(await fetchSettings());
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    void load();
-  }, []);
+    let active = true;
+
+    fetchSettings()
+      .then((payload) => {
+        if (active) applySettings(payload);
+      })
+      .catch((err) => {
+        if (active) {
+          setError(
+            err instanceof Error
+              ? err.message
+              : "Could not load Shopify settings",
+          );
+        }
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [fetchSettings, applySettings]);
 
   function readForm(): Record<string, unknown> {
     const form = document.getElementById(
@@ -487,122 +525,128 @@ export function ShopifyIntegrationSettings() {
           {showAdvanced ? "Hide" : "Show"} export defaults
         </button>
 
-        {showAdvanced && (
-          <div className="space-y-4 rounded-lg border border-gray-200 bg-gray-50/50 p-4">
-            <label className="block text-sm sm:max-w-md">
-              Default inventory location
+        {/* Always mounted: collapsing must not drop fields from the form, or
+            saving would send unchecked boxes and blank inputs as real values. */}
+        <div
+          className={
+            showAdvanced
+              ? "space-y-4 rounded-lg border border-gray-200 bg-gray-50/50 p-4"
+              : "hidden"
+          }
+        >
+          <label className="block text-sm sm:max-w-md">
+            Default inventory location
+            <select
+              name="defaultLocationId"
+              className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
+              defaultValue={s?.defaultLocationId ?? ""}
+            >
+              <option value="">— Select after test connection —</option>
+              {locations.map((loc) => (
+                <option key={loc.id} value={loc.id}>
+                  {loc.name}
+                  {!loc.isActive ? " (inactive)" : ""}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="block text-sm">
+              Default product status
               <select
-                name="defaultLocationId"
+                name="defaultProductStatus"
                 className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
-                defaultValue={s?.defaultLocationId ?? ""}
+                defaultValue={s?.defaultProductStatus ?? "DRAFT"}
               >
-                <option value="">— Select after test connection —</option>
-                {locations.map((loc) => (
-                  <option key={loc.id} value={loc.id}>
-                    {loc.name}
-                    {!loc.isActive ? " (inactive)" : ""}
-                  </option>
-                ))}
+                <option value="DRAFT">Draft</option>
+                <option value="ACTIVE">Active</option>
               </select>
             </label>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="block text-sm">
-                Default product status
-                <select
-                  name="defaultProductStatus"
-                  className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
-                  defaultValue={s?.defaultProductStatus ?? "DRAFT"}
-                >
-                  <option value="DRAFT">Draft</option>
-                  <option value="ACTIVE">Active</option>
-                </select>
-              </label>
-              <label className="block text-sm">
-                Default price source
-                <select
-                  name="priceStrategy"
-                  className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
-                  defaultValue={s?.priceStrategy ?? "marketPrice"}
-                >
-                  <option value="marketPrice">Market price</option>
-                  <option value="marketPlusMarkup">Market price + markup</option>
-                  <option value="manual">Manual (required at export)</option>
-                </select>
-              </label>
-            </div>
-
-            <label className="block text-sm sm:max-w-xs">
-              Markup percent (if using market + markup)
-              <input
-                name="markupPercent"
-                type="number"
-                min={0}
-                step={1}
-                className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
-                defaultValue={s?.markupPercent ?? 0}
-              />
-            </label>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="block text-sm">
-                Default vendor
-                <input
-                  name="defaultVendor"
-                  className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
-                  defaultValue={s?.defaultVendor ?? ""}
-                />
-              </label>
-              <label className="block text-sm">
-                Default product type
-                <input
-                  name="defaultProductType"
-                  className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
-                  defaultValue={s?.defaultProductType ?? "Trading Card"}
-                />
-              </label>
-            </div>
-
             <label className="block text-sm">
-              Default tags (comma-separated)
-              <input
-                name="defaultTags"
+              Default price source
+              <select
+                name="priceStrategy"
                 className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
-                defaultValue={(s?.defaultTags ?? []).join(", ")}
+                defaultValue={s?.priceStrategy ?? "marketPrice"}
+              >
+                <option value="marketPrice">Market price</option>
+                <option value="marketPlusMarkup">Market price + markup</option>
+                <option value="manual">Manual (required at export)</option>
+              </select>
+            </label>
+          </div>
+
+          <label className="block text-sm sm:max-w-xs">
+            Markup percent (if using market + markup)
+            <input
+              name="markupPercent"
+              type="number"
+              min={0}
+              step={1}
+              className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
+              defaultValue={s?.markupPercent ?? 0}
+            />
+          </label>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="block text-sm">
+              Default vendor
+              <input
+                name="defaultVendor"
+                className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
+                defaultValue={s?.defaultVendor ?? ""}
               />
             </label>
-
-            <div className="flex flex-wrap gap-4 text-sm">
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="publishOnlineStore"
-                  defaultChecked={s?.publishOnlineStore}
-                  className="rounded"
-                />
-                Publish to Online Store (when Active)
-              </label>
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="publishShopChannel"
-                  defaultChecked={s?.publishShopChannel}
-                  className="rounded"
-                />
-                Publish to Shop channel (when Active)
-              </label>
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="requireStaffConfirmedOnly"
-                  defaultChecked={s?.requireStaffConfirmedOnly}
-                  className="rounded"
-                />
-                Require staff-confirmed printing (V2)
-              </label>
-            </div>
+            <label className="block text-sm">
+              Default product type
+              <input
+                name="defaultProductType"
+                className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
+                defaultValue={s?.defaultProductType ?? "Trading Card"}
+              />
+            </label>
           </div>
-        )}
+
+          <label className="block text-sm">
+            Default tags (comma-separated)
+            <input
+              name="defaultTags"
+              className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
+              defaultValue={(s?.defaultTags ?? []).join(", ")}
+            />
+          </label>
+
+          <div className="flex flex-wrap gap-4 text-sm">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="publishOnlineStore"
+                defaultChecked={s?.publishOnlineStore}
+                className="rounded"
+              />
+              Publish to Online Store (when Active)
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="publishShopChannel"
+                defaultChecked={s?.publishShopChannel}
+                className="rounded"
+              />
+              Publish to Shop channel (when Active)
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="requireStaffConfirmedOnly"
+                defaultChecked={s?.requireStaffConfirmedOnly}
+                className="rounded"
+              />
+              Require staff-confirmed printing (V2)
+            </label>
+          </div>
+        </div>
 
         {message && <p className="text-sm text-emerald-700">{message}</p>}
         {error && <p className="text-sm text-red-600">{error}</p>}

@@ -1,5 +1,5 @@
 import { isMtgRagEnabled } from "../../mtg-rag/constants";
-import { hybridRetrieveMtgKnowledge } from "../../mtg-rag/hybrid-retrieval";
+import { searchMtgKnowledgeByIntent } from "../../deck-intelligence/mtg-knowledge-service";
 import type { MtgQueryIntent } from "../../mtg-rag/types";
 import {
   routeMtgKnowledgeQuery,
@@ -199,9 +199,10 @@ export async function knowledgeRetrievalTool(input: {
         conversationSummary: input.ctx.conversation_summary,
       })).intent;
 
-    const knowledge = await hybridRetrieveMtgKnowledge({
-      question: input.ctx.user_question,
+    const knowledge = await searchMtgKnowledgeByIntent({
+      query: input.ctx.user_question,
       intent,
+      consumer: "store_clerk",
       limit: intent === "rules_question" ? 12 : undefined,
     });
 
@@ -224,9 +225,10 @@ export async function knowledgeRetrievalTool(input: {
 
   if (!shouldUseKnowledgeRetrieval(mtgRoute)) return null;
 
-  const knowledge = await hybridRetrieveMtgKnowledge({
-    question: input.ctx.user_question,
+  const knowledge = await searchMtgKnowledgeByIntent({
+    query: input.ctx.user_question,
     intent: mtgRoute.intent,
+    consumer: "store_clerk",
     limit: mtgRoute.intent === "rules_question" ? 12 : undefined,
   });
 
@@ -282,9 +284,10 @@ export async function retrieveCategoryInventoryKnowledge(input: {
 }): Promise<KnowledgeRetrievalResult | null> {
   if (!isMtgRagEnabled()) return null;
 
-  const knowledge = await hybridRetrieveMtgKnowledge({
-    question: input.ctx.user_question,
+  const knowledge = await searchMtgKnowledgeByIntent({
+    query: input.ctx.user_question,
     intent: "deckbuilding_education",
+    consumer: "store_clerk",
   });
 
   return {

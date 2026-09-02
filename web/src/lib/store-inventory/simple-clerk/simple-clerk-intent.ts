@@ -118,7 +118,7 @@ export function isPureTerminologyQuestion(question: string): boolean {
   );
 }
 
-/** Classify simple clerk questions — deck builds and complex chats return complex. */
+/** Classify simple clerk questions — inventory search only (no deck builds or rules RAG). */
 export function classifySimpleClerkQuestion(input: {
   question: string;
   conversationSummary?: string;
@@ -130,20 +130,20 @@ export function classifySimpleClerkQuestion(input: {
     isExplicitDeckBuildRequest(q, summary) ||
     isDeckBuildConversation({ question: q, conversationSummary: summary })
   ) {
-    return "deck_build";
+    return "inventory_lookup";
   }
 
-  if (isCardFactQuestion(q)) return "card_fact";
+  if (isCardFactQuestion(q)) return "inventory_lookup";
 
   if (isEducationThenInventoryRequest(q, summary)) {
-    return "mixed_education_inventory";
+    return "inventory_lookup";
   }
 
-  if (isRulesQuestion(q)) return "rules_legality";
+  if (isRulesQuestion(q)) return "inventory_lookup";
 
-  if (isPureTerminologyQuestion(q)) return "terminology";
+  if (isPureTerminologyQuestion(q)) return "inventory_lookup";
 
-  if (isCommanderCandidateQuery(q)) return "commander_recommendation";
+  if (isCommanderCandidateQuery(q)) return "inventory_lookup";
 
   if (
     isInventoryOrPriceClerkQuestion(q) ||
@@ -152,15 +152,14 @@ export function classifySimpleClerkQuestion(input: {
     return "inventory_lookup";
   }
 
-  if (questionMentionsEducationTopic(q)) return "terminology";
+  if (questionMentionsEducationTopic(q)) return "inventory_lookup";
 
-  return "complex";
+  return "inventory_lookup";
 }
 
 export function shouldUseSimpleClerkPipeline(input: {
   question: string;
   conversationSummary?: string;
 }): boolean {
-  const category = classifySimpleClerkQuestion(input);
-  return category !== "complex" && category !== "deck_build";
+  return true;
 }

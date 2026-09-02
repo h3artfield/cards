@@ -333,6 +333,83 @@ function productIdNumeric(gid: string): string {
   return m?.[1] ?? gid;
 }
 
+/** Set absolute available units for an existing Shopify inventory item. */
+export async function setShopifyInventoryQuantity(input: {
+  shopDomain: string;
+  accessToken: string;
+  inventoryItemId: string;
+  locationId: string;
+  quantity: number;
+  reason?: string;
+}): Promise<void> {
+  const data = await shopifyGraphql<{
+    inventorySetQuantities: { userErrors: ShopifyGraphqlError[] };
+  }>(
+    input.shopDomain,
+    input.accessToken,
+    `mutation SetInventory($input: InventorySetQuantitiesInput!) {
+      inventorySetQuantities(input: $input) {
+        userErrors { field message }
+      }
+    }`,
+    {
+      input: {
+        name: "available",
+        reason: input.reason ?? "correction",
+        referenceDocumentUri: `gid://cardscanner9000/InventorySync/${input.inventoryItemId}`,
+        ignoreCompareQuantity: true,
+        quantities: [
+          {
+            inventoryItemId: input.inventoryItemId,
+            locationId: input.locationId,
+            quantity: Math.max(0, Math.trunc(input.quantity)),
+          },
+        ],
+      },
+    },
+  );
+
+  const errors = collectUserErrors(data.inventorySetQuantities);
+  if (errors.length) {
+    throw new ShopifyApiError(
+      errors.map((e) => e.message).join("; "),
+      errors,
+    );
+  }
+}
+
+export async function updateShopifyVariantPrice(input: {
+  shopDomain: string;
+  accessToken: string;
+  productId: string;
+  variantId: string;
+  price: string;
+}): Promise<void> {
+  const data = await shopifyGraphql<{
+    productVariantsBulkUpdate: { userErrors: ShopifyGraphqlError[] };
+  }>(
+    input.shopDomain,
+    input.accessToken,
+    `mutation UpdateVariantPrice($productId: ID!, $variants: [ProductVariantsBulkInput!]!) {
+      productVariantsBulkUpdate(productId: $productId, variants: $variants) {
+        userErrors { field message }
+      }
+    }`,
+    {
+      productId: input.productId,
+      variants: [{ id: input.variantId, price: input.price }],
+    },
+  );
+
+  const errors = collectUserErrors(data.productVariantsBulkUpdate);
+  if (errors.length) {
+    throw new ShopifyApiError(
+      errors.map((e) => e.message).join("; "),
+      errors,
+    );
+  }
+}
+
 export async function publishShopifyProduct(input: {
   shopDomain: string;
   accessToken: string;

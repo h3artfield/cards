@@ -27,17 +27,33 @@ export function normalizeScryfallCollectorNumber(raw: string | undefined): strin
   return Number.isFinite(n) ? String(n) : digits[0];
 }
 
+export async function scryfallPost(url: string, body: unknown): Promise<Response> {
+  return scryfallRequest(url, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "User-Agent": SCRYFALL_USER_AGENT,
+    },
+    body: JSON.stringify(body),
+  });
+}
+
 export async function scryfallFetch(url: string): Promise<Response> {
+  return scryfallRequest(url, {
+    headers: {
+      Accept: "application/json",
+      "User-Agent": SCRYFALL_USER_AGENT,
+    },
+  });
+}
+
+async function scryfallRequest(url: string, init: RequestInit): Promise<Response> {
   let lastError: unknown;
   for (let attempt = 0; attempt < SCRYFALL_RETRY_ATTEMPTS; attempt++) {
     try {
       await paceScryfall();
-      const res = await fetch(url, {
-        headers: {
-          Accept: "application/json",
-          "User-Agent": SCRYFALL_USER_AGENT,
-        },
-      });
+      const res = await fetch(url, init);
       if (res.ok || res.status === 404) {
         return res;
       }

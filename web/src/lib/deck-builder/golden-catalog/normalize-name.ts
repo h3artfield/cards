@@ -1,5 +1,6 @@
 /** Normalize card name for dedup / lookup — matches inventory enrichment conventions. */
-export function normalizeOracleName(name: string): string {
+export function normalizeOracleName(name: string | null | undefined): string {
+  if (!name) return "";
   return name
     .trim()
     .toLowerCase()

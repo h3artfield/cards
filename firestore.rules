@@ -38,6 +38,25 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // Money ledgers — server only, never reachable from a client SDK.
+    match /transactions/{transactionId} {
+      allow read, write: if false;
+    }
+
+    match /tradeCreditEntries/{entryId} {
+      allow read, write: if false;
+    }
+
+    // Customer-owned binder cards — served through the app, not client SDKs.
+    match /collectionCards/{cardId} {
+      allow read, write: if false;
+    }
+
+    // In-store sales tickets — staff API only.
+    match /shopTickets/{ticketId} {
+      allow read, write: if false;
+    }
+
     match /adminLogs/{logId} {
       allow read, write: if isAdmin();
     }

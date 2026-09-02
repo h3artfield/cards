@@ -161,6 +161,14 @@ async function ensureShadowCache(): Promise<void> {
   }
 }
 
+/** RC8 shadow parse rows keyed by oracle id — for inventory semantic filters. */
+export async function getShadowSemanticIndexMap(): Promise<
+  Map<string, ShadowSemanticInput>
+> {
+  await ensureShadowCache();
+  return shadowCache ?? new Map();
+}
+
 async function getGoldenOracleCard(oracleId: string): Promise<GoldenCatalogOracleCard | null> {
   const { ensureFirebaseAdmin, requireFirestore, isAdminConfigured } = await import(
     "@/lib/firebase/admin"

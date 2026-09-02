@@ -1,5 +1,6 @@
 node_modules
 .next
+.cache
 .git
 .env
 .env.local
@@ -9,3 +10,28 @@ npm-debug.log*
 README.md
 Dockerfile
 .dockerignore
+
+# Offline training snapshots — not needed in production image.
+data/milestones/topdeck/
+
+# Mechanical-space research dumps. Do not use a blanket ignore — Docker
+# negation failed to keep COS v1 artifacts in the image.
+data/milestones/mechanical-space/commanderspellbook-exact-deck-detector-v1
+data/milestones/mechanical-space/outcome-derived-strategic-geometry-v1
+data/milestones/mechanical-space/deck-pressure-v4
+data/milestones/mechanical-space/topdeck-holdout-outcome-validation-v1
+data/milestones/mechanical-space/commanderspellbook-full-mirror-v1
+data/milestones/mechanical-space/external-gameplay-validation-v1
+data/milestones/mechanical-space/oracle-neural-semantic-space-v1
+data/milestones/mechanical-space/spellbook-win-architecture-space-v1/architecture-fingerprints.jsonl
+data/milestones/mechanical-space/deck-pressure-v3
+data/milestones/mechanical-space/mechanical-pressure-k-v3.0
+data/milestones/mechanical-space/mechanical-pressure-k-v2.7
+data/milestones/mechanical-space/mechanical-pressure-k-v2.6
+data/milestones/mechanical-space/mechanical-pressure-k-v2.5
+data/milestones/mechanical-space/mechanical-pressure-k-v2.4
+data/milestones/mechanical-space/mechanical-pressure-k-v2.3
+data/milestones/mechanical-space/mechanical-pressure-k-v2.2
+data/milestones/mechanical-space/mechanical-pressure-k-v2.1
+data/milestones/mechanical-space/mechanical-pressure-k-v2.0
+data/milestones/mechanical-space/commander-optimization-score-v2

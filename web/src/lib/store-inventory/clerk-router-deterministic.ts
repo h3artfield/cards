@@ -10,6 +10,7 @@ import {
 import { parseCommanderMaxPriceFromConversation } from "./clerk-tools/deck-build-context";
 import { parseCommanderMaxPrice } from "./clerk-tools/commander-context";
 import { parseClerkInventoryQuery } from "./clerk-tools/clerk-query-parser";
+import { isExplicitCommanderInventoryRequest } from "./clerk-tools/clerk-browse-sync";
 import type {
   ClerkOrchestratorContext,
   ClerkRouterResult,
@@ -97,7 +98,7 @@ export function buildDeterministicClerkRoute(input: {
       parsed.browseGame && parsed.browseGame !== "all"
         ? (parsed.browseGame as ClerkRouterResult["game"])
         : "magic",
-    format: "commander",
+    format: isExplicitCommanderInventoryRequest(q) ? "commander" : "unknown",
     intent,
     entities: {
       card_names: cardNames,

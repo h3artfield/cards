@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { getAdminStorage, getProjectId, isAdminConfigured } from "../firebase/admin";
-import type { ScannedCard } from "../types";
+import type { CollectionCard, ScannedCard } from "../types";
 import { hasBackImage } from "../card-image-utils";
 
 /** Firestore document limit is 1,048,576 bytes — leave room for other card fields. */
@@ -103,9 +103,8 @@ function assertInlineDocumentSize(card: ScannedCard): void {
   }
 }
 
-export async function uploadCardImage(
-  orderId: string,
-  cardId: string,
+async function uploadImage(
+  pathPrefix: string,
   side: "front" | "back",
   dataUrl: string,
 ): Promise<string> {
@@ -116,7 +115,7 @@ export async function uploadCardImage(
 
   const { mime, buffer } = parseDataUrl(dataUrl);
   const ext = mime.includes("png") ? "png" : "jpg";
-  const path = `orders/${orderId}/${cardId}/${side}.${ext}`;
+  const path = `${pathPrefix}/${side}.${ext}`;
   const token = uuidv4();
 
   await bucket.file(path).save(buffer, {
@@ -130,9 +129,17 @@ export async function uploadCardImage(
   return `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encoded}?alt=media&token=${token}`;
 }
 
-async function persistImageUrl(
+export async function uploadCardImage(
   orderId: string,
   cardId: string,
+  side: "front" | "back",
+  dataUrl: string,
+): Promise<string> {
+  return uploadImage(`orders/${orderId}/${cardId}`, side, dataUrl);
+}
+
+async function persistImageUrl(
+  pathPrefix: string,
   side: "front" | "back",
   url: string,
 ): Promise<string> {
@@ -149,7 +156,7 @@ async function persistImageUrl(
   }
 
   try {
-    return await uploadCardImage(orderId, cardId, side, url);
+    return await uploadImage(pathPrefix, side, url);
   } catch (err) {
     if (isStorageBucketMissingError(err) && url.length <= FIRESTORE_INLINE_IMAGE_MAX) {
       console.warn(
@@ -162,14 +169,14 @@ async function persistImageUrl(
 }
 
 export async function persistCardImages(card: ScannedCard): Promise<ScannedCard> {
+  const prefix = `orders/${card.orderId}/${card.id}`;
   const frontImageUrl = await persistImageUrl(
-    card.orderId,
-    card.id,
+    prefix,
     "front",
     card.frontImageUrl,
   );
   const backImageUrl = hasBackImage(card.backImageUrl)
-    ? await persistImageUrl(card.orderId, card.id, "back", card.backImageUrl)
+    ? await persistImageUrl(prefix, "back", card.backImageUrl)
     : "";
 
   const persisted = { ...card, frontImageUrl, backImageUrl };
@@ -177,4 +184,30 @@ export async function persistCardImages(card: ScannedCard): Promise<ScannedCard>
     assertInlineDocumentSize(persisted);
   }
   return persisted;
+}
+
+export async function persistCollectionCardImages(
+  card: CollectionCard,
+): Promise<CollectionCard> {
+  const prefix = `collections/${card.customerId}/${card.id}`;
+  const frontImageUrl = await persistImageUrl(
+    prefix,
+    "front",
+    card.frontImageUrl,
+  );
+  const back = card.backImageUrl ?? "";
+  const backImageUrl = hasBackImage(back)
+    ? await persistImageUrl(prefix, "back", back)
+    : undefined;
+
+  const inlineBytes =
+    (isDataUrl(frontImageUrl) ? frontImageUrl.length : 0) +
+    (backImageUrl && isDataUrl(backImageUrl) ? backImageUrl.length : 0);
+  if (inlineBytes > FIRESTORE_DOCUMENT_LIMIT - 8_000) {
+    throw new Error(
+      "Photos are too large to save. Use Take Photo — the app compresses them automatically.",
+    );
+  }
+
+  return { ...card, frontImageUrl, backImageUrl };
 }

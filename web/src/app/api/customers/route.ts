@@ -10,6 +10,10 @@ import {
   resolveStoreForSlug,
   touchCustomerLogin,
 } from "@/lib/auth/customer-auth";
+import {
+  boundStoreName,
+  customerCanActAtStore,
+} from "@/lib/auth/customer-store-binding";
 import { normalizeCustomer } from "@/lib/auth/normalize-customer";
 import { generateSecureToken, hashToken } from "@/lib/auth/customer-tokens";
 import { sanitizeCustomer } from "@/lib/auth/sanitize-customer";
@@ -35,7 +39,13 @@ export async function POST(req: NextRequest) {
     }
 
     const store = await resolveStoreForSlug(storeSlug ?? "");
-    const storeId = store?.id;
+    if (!store) {
+      return jsonError(
+        "Start from your store's page — accounts are created at one store.",
+        400,
+      );
+    }
+    const storeId = store.id;
 
     const passwordError = validateCustomerPassword(password);
     if (passwordError) {
@@ -64,6 +74,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (existing && !customerCanActAtStore(existing, storeId)) {
+      const otherStore = await boundStoreName(existing);
+      return jsonError(
+        `This email is already registered at another store${
+          otherStore ? ` (${otherStore})` : ""
+        }. Use a different email to join ${store.storeName}.`,
+        409,
+      );
+    }
+
     const passwordHash = await hashCustomerPassword(password);
     let verificationToken: string | undefined;
     let emailVerificationTokenHash: string | undefined;
@@ -81,7 +101,7 @@ export async function POST(req: NextRequest) {
           lastName,
           phone,
           passwordHash,
-          storeId: storeId ?? existing.storeId,
+          storeId,
           emailVerified: false,
           authProviders: Array.from(
             new Set<Customer["authProviders"][number]>([

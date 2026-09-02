@@ -36,7 +36,12 @@ export async function GET(
       ? await deckBuilderStore.getCatalogCard(scryfallId)
       : null;
 
-    const resolved = await resolveInventoryImageBuffer(item, catalog);
+    const itemForResolve =
+      scryfallId && !item.catalogScryfallId
+        ? { ...item, catalogScryfallId: scryfallId }
+        : item;
+
+    const resolved = await resolveInventoryImageBuffer(itemForResolve, catalog);
 
     void persistResolvedInventoryImage({
       item,

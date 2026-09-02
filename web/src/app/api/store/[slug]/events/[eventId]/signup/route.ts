@@ -1,7 +1,12 @@
 import { NextRequest } from "next/server";
 import { dataStore } from "@/lib/storage/data-store";
 import { jsonError, jsonOk, handleRouteError } from "@/lib/api-utils";
-import { getCustomerSession } from "@/lib/auth/customer-auth";
+import { getCustomerSession, loadCustomer } from "@/lib/auth/customer-auth";
+import {
+  boundStoreName,
+  customerCanActAtStore,
+  storeMismatchResponse,
+} from "@/lib/auth/customer-store-binding";
 import { registerEventSignup } from "@/lib/store-calendar/register-signup";
 import { DEFAULT_CALENDAR_SETTINGS } from "@/lib/store-calendar/types";
 
@@ -28,6 +33,12 @@ export async function POST(
 
     const body = (await request.json()) as Record<string, unknown>;
     const session = getCustomerSession(request);
+    if (session) {
+      const customer = await loadCustomer(session.customerId);
+      if (customer && !customerCanActAtStore(customer, store.id)) {
+        return storeMismatchResponse(await boundStoreName(customer));
+      }
+    }
 
     const timeZone =
       calendar?.timezone ?? DEFAULT_CALENDAR_SETTINGS.timezone;

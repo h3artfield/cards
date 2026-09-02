@@ -29,9 +29,13 @@ export async function GET(req: NextRequest) {
     const page = Number(params.get("page") ?? "1");
     const limit = Number(params.get("limit") ?? "48");
 
+    // The register sells buyback singles too; the catalog browser does not.
+    const includeAllSources = params.get("source") === "all";
     const all = await dataStore.getInventory(scope.storeId);
     const active = all.filter(
-      (item) => item.status !== "sold" && isCatalogImportItem(item),
+      (item) =>
+        item.status !== "sold" &&
+        (includeAllSources || isCatalogImportItem(item)),
     );
     const result = browseInventoryItems(active, { q, stock, listed, page, limit });
 

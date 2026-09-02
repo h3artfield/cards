@@ -1,8 +1,10 @@
 import { NextRequest } from "next/server";
 import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
-import { deckBuilderStore } from "@/lib/deck-builder/deck-builder-store";
 import { resolveStoreBySlug } from "@/lib/deck-builder/deck-builder-service";
-import { commanderNameToSlug } from "@/lib/deck-builder/edhrec-client";
+import {
+  searchProfessorCommandersV1,
+  warmProfessorCommanderBrowseCacheV1,
+} from "@/lib/deck-synthesis/professor-commander-search-service-v1";
 
 export async function GET(
   req: NextRequest,
@@ -14,39 +16,15 @@ export async function GET(
     if (!store) return jsonError("Store not found", 404);
 
     const q = req.nextUrl.searchParams.get("q")?.trim() ?? "";
-    if (!q) return jsonOk({ results: [] });
+    const prefetch = req.nextUrl.searchParams.get("prefetch") === "1";
 
-    const commanders = await deckBuilderStore.listEdhrecCommanders(500);
-    const lower = q.toLowerCase();
-    const matches = commanders
-      .filter((c) => c.commanderName.toLowerCase().includes(lower))
-      .slice(0, 20);
+    if (prefetch && !q) {
+      void warmProfessorCommanderBrowseCacheV1();
+      return jsonOk({ results: [], total: 0, warming: true, paperEligibleOnly: true });
+    }
 
-    const catalogMatches = await deckBuilderStore.searchCatalogCards(q, 10);
-    const catalogCommanders = catalogMatches.map((c) => ({
-      slug: commanderNameToSlug(c.name),
-      name: c.name,
-      scryfallId: c.id,
-      colorIdentity: c.colorIdentity,
-      imageUrl: c.imageNormal,
-      fromCatalog: true,
-    }));
-
-    const merged = [
-      ...matches.map((c) => ({
-        slug: c.commanderSlug,
-        name: c.commanderName,
-        rank: c.rank,
-        scryfallId: c.scryfallId,
-        colorIdentity: c.colorIdentity,
-        themes: c.themes,
-      })),
-      ...catalogCommanders.filter(
-        (c) => !matches.some((m) => m.commanderName === c.name),
-      ),
-    ].slice(0, 25);
-
-    return jsonOk({ results: merged });
+    const { results, total } = await searchProfessorCommandersV1(q);
+    return jsonOk({ results, total, paperEligibleOnly: true });
   } catch (err) {
     return handleRouteError(err);
   }

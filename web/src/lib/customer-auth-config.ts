@@ -85,6 +85,10 @@ export function googleAuthErrorMessage(code: string): string {
       return "Could not read your Google profile. Try again.";
     case "account_conflict":
       return "This Google account does not match the email account on file. Contact the store for help.";
+    case "wrong_store":
+      return "This account is registered at another store. Sign in from that store's page, or use a different email here.";
+    case "store_required":
+      return "Start from your store's page to sign in.";
     default:
       return "Sign-in failed. Try again.";
   }

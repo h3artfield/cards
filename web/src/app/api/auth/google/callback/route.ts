@@ -8,6 +8,7 @@ import {
   resolveStoreForSlug,
   touchCustomerLogin,
 } from "@/lib/auth/customer-auth";
+import { customerCanActAtStore } from "@/lib/auth/customer-store-binding";
 import { mergeGoogleOAuthCustomer } from "@/lib/auth/google-oauth-customer";
 import { normalizeCustomer } from "@/lib/auth/normalize-customer";
 import {
@@ -37,18 +38,30 @@ interface GoogleUserInfo {
 function parseState(state: string | null): {
   storeSlug: string;
   redirectUri?: string;
+  afterLoginPath?: string;
 } {
   if (!state) return { storeSlug: "" };
   try {
     const parsed = JSON.parse(
       Buffer.from(state, "base64url").toString("utf8"),
-    ) as { storeSlug?: string; redirectUri?: string };
+    ) as { storeSlug?: string; redirectUri?: string; afterLoginPath?: string };
     return {
       storeSlug: parsed.storeSlug?.trim() ?? "",
       redirectUri: parsed.redirectUri?.trim(),
+      afterLoginPath: parsed.afterLoginPath?.trim(),
     };
   } catch {
     return { storeSlug: "" };
+  }
+}
+
+function safeAfterLoginPath(path: string | undefined, origin: string): string | null {
+  if (!path?.startsWith("/")) return null;
+  if (path.includes("://")) return null;
+  try {
+    return new URL(path, origin).toString();
+  } catch {
+    return null;
   }
 }
 
@@ -74,7 +87,7 @@ export async function GET(req: NextRequest) {
 
   const code = req.nextUrl.searchParams.get("code");
   const error = req.nextUrl.searchParams.get("error");
-  const { storeSlug, redirectUri: stateRedirectUri } = parseState(
+  const { storeSlug, redirectUri: stateRedirectUri, afterLoginPath } = parseState(
     req.nextUrl.searchParams.get("state"),
   );
   const redirectUri =
@@ -126,6 +139,11 @@ export async function GET(req: NextRequest) {
 
   const email = profile.email.trim().toLowerCase();
   const store = await resolveStoreForSlug(storeSlug);
+  if (!store) {
+    return NextResponse.redirect(
+      redirectToStore(postAuthOrigin, storeSlug, { auth_error: "store_required" }),
+    );
+  }
   const now = new Date().toISOString();
 
   const byGoogle = (await dataStore.getCustomers()).find(
@@ -133,6 +151,13 @@ export async function GET(req: NextRequest) {
   );
   const byEmailRaw = await dataStore.getCustomerByEmail(email);
   const byEmail = byEmailRaw ? normalizeCustomer(byEmailRaw) : null;
+
+  const existingAccount = byGoogle ?? byEmail;
+  if (existingAccount && !customerCanActAtStore(existingAccount, store.id)) {
+    return NextResponse.redirect(
+      redirectToStore(postAuthOrigin, storeSlug, { auth_error: "wrong_store" }),
+    );
+  }
 
   const merged = mergeGoogleOAuthCustomer(
     {
@@ -146,7 +171,7 @@ export async function GET(req: NextRequest) {
     byGoogle,
     byEmail,
     {
-      storeId: store?.id,
+      storeId: store.id,
       now,
       newCustomerId: () => uuidv4(),
     },
@@ -171,12 +196,12 @@ export async function GET(req: NextRequest) {
     role: "customer",
   };
   const token = createCustomerSessionToken(session);
-  return NextResponse.redirect(
-    redirectToStore(postAuthOrigin, storeSlug, { signed_in: "google" }),
-    {
-      headers: {
-        "Set-Cookie": customerSessionCookieHeader(token),
-      },
+  const postLoginTarget =
+    safeAfterLoginPath(afterLoginPath, postAuthOrigin) ??
+    redirectToStore(postAuthOrigin, storeSlug, { signed_in: "google" });
+  return NextResponse.redirect(postLoginTarget, {
+    headers: {
+      "Set-Cookie": customerSessionCookieHeader(token),
     },
-  );
+  });
 }

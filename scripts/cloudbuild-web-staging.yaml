@@ -12,6 +12,7 @@ steps:
       - "--build-arg=NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${_FB_SENDER}"
       - "--build-arg=NEXT_PUBLIC_FIREBASE_APP_ID=${_FB_APP_ID}"
       - "--build-arg=NEXT_PUBLIC_APP_URL=${_APP_URL}"
+      - "--build-arg=NEXT_PUBLIC_PROFESSOR_SOL_DIRECTED_GUI_ENABLED=${_PROFESSOR_SOL_DIRECTED_GUI_ENABLED}"
       - "-t"
       - "us-central1-docker.pkg.dev/trading-card-buyback-dev/buyback/buyback-web-staging:latest"
       - "."
@@ -22,3 +23,4 @@ images:
 
 options:
   logging: CLOUD_LOGGING_ONLY
+  machineType: E2_HIGHCPU_32

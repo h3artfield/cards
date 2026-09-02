@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, Suspense, useState } from "react";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { apiFetch } from "@/lib/api-client";
 import {
@@ -12,11 +12,23 @@ import {
   authSubtext,
 } from "@/lib/customer-auth-ui";
 import { SignInShell } from "@/app/sign-in/SignInShell";
+import { CustomerOAuthButtons } from "@/components/CustomerOAuthButtons";
+import { STORE_SLUG_SESSION_KEY } from "@/lib/store-slug";
 
 function ForgotPasswordForm() {
   const [email, setEmail] = useState("");
+  const [storeSlug, setStoreSlug] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = sessionStorage.getItem(STORE_SLUG_SESSION_KEY);
+      if (stored) setStoreSlug(stored);
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -63,8 +75,16 @@ function ForgotPasswordForm() {
           {loading ? "Sending…" : "Send reset link"}
         </button>
       </form>
+      <CustomerOAuthButtons storeSlug={storeSlug} className="mt-4" />
       <p className="mt-6 text-center">
-        <Link href="/sign-in?return=1" className={authLink}>
+        <Link
+          href={
+            storeSlug
+              ? `/sign-in?store=${encodeURIComponent(storeSlug)}&return=1`
+              : "/sign-in?return=1"
+          }
+          className={authLink}
+        >
           Back to sign in
         </Link>
       </p>

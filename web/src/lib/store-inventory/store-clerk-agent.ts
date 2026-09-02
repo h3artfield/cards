@@ -52,6 +52,8 @@ import {
 } from "./clerk-router-deterministic";
 import { runSimpleClerkPipeline, type SimpleClerkTrace } from "./simple-clerk/simple-clerk-pipeline";
 import { classifySimpleClerkQuestion } from "./simple-clerk/simple-clerk-intent";
+import { clerkQueryToBrowseFilterPatch } from "./clerk-tools/clerk-browse-sync";
+import type { ClerkBrowseFilterPatch } from "./clerk-tools/clerk-browse-sync";
 import { resetLookupBudget } from "./clerk-tools/card-catalog";
 
 export interface StoreClerkInput {
@@ -79,6 +81,7 @@ export interface StoreClerkResponse {
   recommendations?: SpecialistRecommendation[];
   deckList?: ClerkDeckList;
   clearBrowseFilters?: boolean;
+  browseFilterPatch?: ClerkBrowseFilterPatch;
   /** Debug routing metadata for future UI tooling */
   routing?: {
     game: string;
@@ -680,16 +683,23 @@ export async function runStoreClerk(
     inventoryItems: cachedInventory,
   });
 
+  const browseFilterPatch = clerkQueryToBrowseFilterPatch({
+    userQuestion: input.message,
+    conversationSummary,
+    cardType: tools.inventory?.query?.cardType,
+  });
+
   return {
     reply: replyText,
     searchQuery,
-    game: formatted.game,
-    color: formatted.color,
-    cardType: formatted.cardType,
+    game: browseFilterPatch.game,
+    color: browseFilterPatch.selectedColors[0] as StoreInventoryColorFilter | undefined,
+    cardType: browseFilterPatch.cardType,
+    browseFilterPatch,
     highlightItemIds,
     suggestedCards,
     recommendations: specialist?.recommendations,
-    clearBrowseFilters: formatted.skipBrowseSearch || semanticInventory || suggestedCards.length > 0,
+    clearBrowseFilters: false,
     routing: {
       game: route.game,
       intent: route.intent,

@@ -18,8 +18,10 @@ import {
   authSubtext,
 } from "@/lib/customer-auth-ui";
 import { STORE_SLUG_SESSION_KEY } from "@/lib/store-slug";
+import { normalizeDeckBuildRedirectPath } from "@/lib/store-inventory/deck-build-auth";
 import type { BuybackOrder, Customer } from "@/lib/types";
 import { SignInShell } from "./SignInShell";
+import { CustomerOAuthButtons } from "@/components/CustomerOAuthButtons";
 
 const DRAFT_KEY = "buyback_signin_draft";
 const EMPTY_DRAFT = {
@@ -75,6 +77,10 @@ export function SignInForm() {
   const searchParams = useSearchParams();
   const storeSlugParam = searchParams.get("store");
   const isReturn = searchParams.get("return") === "1";
+  const redirectParam = searchParams.get("redirect");
+  const redirectPath = redirectParam
+    ? normalizeDeckBuildRedirectPath(redirectParam) ?? redirectParam
+    : null;
   const { setCustomer, refresh } = useCustomer();
 
   const [storeSlug, setStoreSlug] = useState<string | null>(storeSlugParam);
@@ -148,12 +154,19 @@ export function SignInForm() {
         "/api/customers/login",
         {
           method: "POST",
-          body: JSON.stringify({ email, password: pwd }),
+          body: JSON.stringify({
+            email,
+            password: pwd,
+            ...(storeSlug ? { storeSlug } : {}),
+          }),
         },
       );
       setReturnFound(found);
       setCustomer(found);
       await refresh();
+      if (redirectPath && found.emailVerified) {
+        router.push(redirectPath);
+      }
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Invalid email or password",
@@ -360,6 +373,11 @@ export function SignInForm() {
                 Forgot password?
               </Link>
             </p>
+            <CustomerOAuthButtons
+              storeSlug={storeSlug}
+              redirectPath={redirectPath}
+              className="pt-2"
+            />
           </form>
         ) : (
           <div className="space-y-3">
@@ -385,6 +403,27 @@ export function SignInForm() {
                   }}
                 >
                   Resend verification email
+                </button>
+              </>
+            ) : redirectPath ? (
+              <>
+                <p className={authSubtext}>
+                  You&apos;re signed in. Continue to deck building.
+                </p>
+                <button
+                  type="button"
+                  className={authButton}
+                  disabled={loading}
+                  onClick={() => router.push(redirectPath)}
+                >
+                  Continue to deck builder
+                </button>
+                <button
+                  type="button"
+                  className={authButtonSecondary}
+                  onClick={() => router.push("/orders")}
+                >
+                  View my account
                 </button>
               </>
             ) : (
@@ -437,6 +476,12 @@ export function SignInForm() {
           {loading ? "Creating account…" : "Create account"}
         </button>
       </form>
+
+      <CustomerOAuthButtons
+        storeSlug={storeSlug}
+        redirectPath={redirectPath}
+        className="mt-4"
+      />
 
       <p className="mt-8 text-center">
         <Link href={`/sign-in${returnQuery}`} className={authLink}>

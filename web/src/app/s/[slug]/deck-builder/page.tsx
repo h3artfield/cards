@@ -6,5 +6,5 @@ export default async function DeckBuilderRedirect({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  redirect(`/s/${slug}/inventory?mode=deck-builder`);
+  redirect(`/s/${slug}/inventory/professor`);
 }

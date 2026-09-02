@@ -1,5 +1,10 @@
 import type { InventoryItem } from "../types";
 import { colorIdentityKey } from "../mtg/named-color-identities";
+import {
+  isRc8SemanticFilterActive,
+  semanticSignalsMatchRc8Filter,
+  type SemanticBrowseSignals,
+} from "../inventory/inventory-rc8-semantic-match";
 
 /** Structured filters resolved from natural-language clerk questions. */
 export interface StoreInventorySemanticFilter {
@@ -27,11 +32,21 @@ export interface StoreInventorySemanticFilter {
   colorsExact?: string[];
   /** Rarity names, e.g. mythic, rare, common. */
   rarityAny?: string[];
+  /** RC8 primitive Oracle action types from semantic parse (e.g. draw, destroy). */
+  primitiveActions?: string[];
+  primitiveActionMode?: "any" | "all";
+  /** RC8 ability structure types (triggered, activated, static, …). */
+  abilityTypes?: string[];
+  /** RC8 zones referenced by accepted semantic actions. */
+  zones?: string[];
+  /** RC8 semantic owner (source_card, granted_object, …). */
+  semanticOwners?: string[];
 }
 
 export interface SemanticFilterCardFields {
   name?: string;
   setName?: string;
+  oracleId?: string;
   colorIdentity?: string[];
   colors?: string[];
   rarity?: string;
@@ -59,7 +74,11 @@ export function isSemanticFilterActive(
       semantic.colorIdentitySubsetOf?.length ||
       semantic.colorIdentitySupersetOf?.length ||
       semantic.colorsExact?.length ||
-      semantic.rarityAny?.length,
+      semantic.rarityAny?.length ||
+      semantic.primitiveActions?.length ||
+      semantic.abilityTypes?.length ||
+      semantic.zones?.length ||
+      semantic.semanticOwners?.length,
   );
 }
 
@@ -124,8 +143,18 @@ function tagMatches(wanted: string, candidate: string): boolean {
 export function itemMatchesSemanticFilter(
   item: InventoryItem,
   semantic: StoreInventorySemanticFilter | undefined,
+  semanticBrowseIndex?: Map<string, SemanticBrowseSignals>,
 ): boolean {
   if (!isSemanticFilterActive(semantic) || !semantic) return true;
+
+  if (isRc8SemanticFilterActive(semantic)) {
+    const oracleId = item.catalogOracleId?.trim();
+    if (!oracleId || !semanticBrowseIndex) return false;
+    const signals = semanticBrowseIndex.get(oracleId);
+    if (!signals || !semanticSignalsMatchRc8Filter(signals, semantic)) {
+      return false;
+    }
+  }
 
   if (semantic.nameIncludesAny?.length) {
     const haystack = itemNameHaystack(item);
@@ -256,8 +285,18 @@ export function itemMatchesSemanticFilter(
 export function cardMatchesSemanticFilter(
   card: SemanticFilterCardFields,
   semantic: StoreInventorySemanticFilter | undefined,
+  semanticBrowseIndex?: Map<string, SemanticBrowseSignals>,
 ): boolean {
   if (!isSemanticFilterActive(semantic) || !semantic) return true;
+
+  if (isRc8SemanticFilterActive(semantic)) {
+    const oracleId = card.oracleId?.trim();
+    if (!oracleId || !semanticBrowseIndex) return false;
+    const signals = semanticBrowseIndex.get(oracleId);
+    if (!signals || !semanticSignalsMatchRc8Filter(signals, semantic)) {
+      return false;
+    }
+  }
 
   if (semantic.nameIncludesAny?.length) {
     const haystack = [card.name, card.setName].filter(Boolean).join(" ").toLowerCase();

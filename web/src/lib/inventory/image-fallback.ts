@@ -1,4 +1,5 @@
 import { classifyInventoryGame } from "./analytics";
+import { isEnrichableMagicSingle } from "./magic-items";
 import { fetchTcgplayerProductDetails } from "../card-flow-v2/tcgplayer-japan-catalog";
 import { fetchTcgplayerCdnImage } from "../tcgplayer-inventory/cdn-image-fetch";
 import { scryfallFetch } from "../processing/scryfall-client";
@@ -23,6 +24,126 @@ export function cardNameFromInventoryItem(item: InventoryItem): string {
     .trim();
 }
 
+/** Names to try against Scryfall — TCGplayer titles often append parenthetical variant tags. */
+export function scryfallLookupNames(item: InventoryItem): string[] {
+  const names = new Set<string>();
+  const raw = cardNameFromInventoryItem(item);
+  if (raw) names.add(raw);
+
+  let stripped = raw;
+  while (/\([^)]*\)/.test(stripped)) {
+    stripped = stripped.replace(/\s*\([^)]*\)\s*$/, "").trim();
+    if (stripped) names.add(stripped);
+  }
+
+  const beforeParen = raw.split("(")[0]?.trim();
+  if (beforeParen && beforeParen.length > 2) names.add(beforeParen);
+
+  const productName = item.productName?.trim();
+  if (productName && productName !== raw) names.add(productName);
+
+  return [...names].filter(Boolean);
+}
+
+const MAGIC_TCGPLAYER_LINES = [
+  "Magic",
+  "Magic: The Gathering",
+  "Magic Singles",
+  "Magic Sealed Products",
+  "Magic Sealed Product",
+  "Magic: The Gathering Singles",
+  "Magic: The Gathering Sealed",
+];
+
+const POKEMON_TCGPLAYER_LINES = ["Pokemon", "Pokémon"];
+
+function tcgplayerProductLinesForGame(game: string): string[] | undefined {
+  if (game === "Magic") return MAGIC_TCGPLAYER_LINES;
+  if (game === "Pokémon") return POKEMON_TCGPLAYER_LINES;
+  return undefined;
+}
+
+/** Reject cross-game TCGplayer hits (e.g. Pokémon "Survival Brace" for MTG "Survival of the Fittest"). */
+export function tcgplayerProductLineMatchesGame(
+  productLineName: string | undefined,
+  game: string,
+): boolean {
+  const line = (productLineName ?? "").toLowerCase();
+  if (!line) return true;
+  if (game === "Magic") return line.includes("magic");
+  if (game === "Pokémon") return line.includes("pokemon") || line.includes("pokémon");
+  if (game === "Yu-Gi-Oh!") return line.includes("yugioh") || line.includes("yu-gi-oh");
+  return true;
+}
+
+/** Extra search queries for Secret Lair sealed SKUs on TCGplayer. */
+function secretLairImageSearchQueries(name: string): string[] {
+  if (!/secret lair/i.test(name)) return [];
+  const queries = new Set<string>();
+  const withoutPrefix = name.replace(/^Secret Lair Drop:\s*/i, "").trim();
+  if (withoutPrefix) queries.add(withoutPrefix);
+  const withoutFoil = withoutPrefix.replace(/\s*-\s*Foil Edition$/i, "").trim();
+  if (withoutFoil) queries.add(withoutFoil);
+  const title = withoutFoil.replace(/^Secret Lair x\s*/i, "").trim();
+  if (title) queries.add(title);
+  if (title) queries.add(`Secret Lair ${title}`);
+  return [...queries];
+}
+
+type TcgplayerSearchHit = {
+  productId?: number;
+  productName?: string;
+  productLineName?: string;
+  imageUrl?: string;
+};
+
+async function searchTcgplayerInventoryProducts(input: {
+  q: string;
+  productLineNames?: string[];
+  limit?: number;
+}): Promise<TcgplayerSearchHit[]> {
+  const trimmed = input.q.trim();
+  if (!trimmed) return [];
+
+  const body = {
+    algorithm: "sales",
+    from: 0,
+    size: input.limit ?? 8,
+    filters: {
+      ...(input.productLineNames?.length
+        ? { term: { productLineName: input.productLineNames } }
+        : {}),
+      range: { quantity: { gte: 1 } },
+      exclude: { channelExclusion: 0 },
+    },
+    context: { cart: {}, shippingCountry: "US", userProfile: {} },
+  };
+
+  try {
+    const res = await fetch(
+      `https://mp-search-api.tcgplayer.com/v1/search/request?q=${encodeURIComponent(trimmed)}&isList=false`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Origin: "https://www.tcgplayer.com",
+          Referer: "https://www.tcgplayer.com/",
+        },
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(INVENTORY_IMAGE_FETCH_TIMEOUT_MS),
+      },
+    );
+    if (!res.ok) return [];
+    const data = (await res.json()) as {
+      results?: Array<{ results?: TcgplayerSearchHit[] }>;
+    };
+    return data.results?.[0]?.results ?? [];
+  } catch {
+    return [];
+  }
+}
+
 export function inventoryImageSearchQueries(item: InventoryItem): string[] {
   const name = cardNameFromInventoryItem(item);
   const set = item.setName?.trim();
@@ -30,10 +151,17 @@ export function inventoryImageSearchQueries(item: InventoryItem): string[] {
   const queries = new Set<string>();
 
   if (item.productName?.trim()) queries.add(item.productName.trim());
+  for (const q of secretLairImageSearchQueries(name)) queries.add(q);
   if (name && set && num) queries.add(`${name} ${set} ${num}`);
   if (name && set) queries.add(`${name} ${set}`);
   if (name && num) queries.add(`${name} ${num}`);
   if (name) queries.add(name);
+
+  for (const variant of scryfallLookupNames(item)) {
+    if (variant !== name) queries.add(variant);
+    if (set && num) queries.add(`${variant} ${set} ${num}`);
+    if (set) queries.add(`${variant} ${set}`);
+  }
 
   const rawTitle = item.displayName.split(" — ")[0]?.trim();
   if (rawTitle && rawTitle !== name) queries.add(rawTitle);
@@ -57,55 +185,85 @@ async function fetchRemoteImage(
   return { buffer, contentType };
 }
 
-async function fetchScryfallImage(
+type ScryfallCardImageJson = {
+  image_uris?: { normal?: string };
+  card_faces?: Array<{ image_uris?: { normal?: string } }>;
+};
+
+function scryfallImageFromJson(
+  card: ScryfallCardImageJson | undefined,
+): string | undefined {
+  return card?.image_uris?.normal ?? card?.card_faces?.[0]?.image_uris?.normal;
+}
+
+async function lookupScryfallDisplayImageUrl(
   item: InventoryItem,
-): Promise<{ buffer: Buffer; contentType: string } | null> {
-  const cardName = cardNameFromInventoryItem(item);
+): Promise<string | undefined> {
+  const scryfallId = item.catalogScryfallId?.trim();
+  if (scryfallId) {
+    const res = await scryfallFetch(
+      `https://api.scryfall.com/cards/${encodeURIComponent(scryfallId)}`,
+    );
+    if (res.ok) {
+      const card = (await res.json()) as ScryfallCardImageJson;
+      const img = scryfallImageFromJson(card);
+      if (img) return img;
+    }
+  }
+
   const setName = item.setName?.trim();
   const number = item.cardNumber?.trim();
 
-  const searchQueries: string[] = [];
-  if (number && setName) {
-    searchQueries.push(`!"${cardName}" set:"${setName}" cn:${number}`);
-    searchQueries.push(`${cardName} set:"${setName}" cn:${number}`);
-  }
-  if (number) searchQueries.push(`!"${cardName}" cn:${number}`);
-  if (setName) searchQueries.push(`!"${cardName}" set:"${setName}"`);
-  searchQueries.push(`!"${cardName}"`);
+  for (const cardName of scryfallLookupNames(item)) {
+    const searchQueries: string[] = [];
+    if (number && setName) {
+      searchQueries.push(`!"${cardName}" set:"${setName}" cn:${number}`);
+      searchQueries.push(`${cardName} set:"${setName}" cn:${number}`);
+    }
+    if (number) searchQueries.push(`!"${cardName}" cn:${number}`);
+    if (setName) searchQueries.push(`!"${cardName}" set:"${setName}"`);
+    searchQueries.push(`!"${cardName}"`);
 
-  for (const query of searchQueries) {
-    const searchRes = await scryfallFetch(
-      `https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}&unique=cards`,
+    for (const query of searchQueries) {
+      const searchRes = await scryfallFetch(
+        `https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}&unique=cards`,
+      );
+      if (!searchRes.ok) continue;
+
+      const search = (await searchRes.json()) as {
+        data?: ScryfallCardImageJson[];
+      };
+      const img = scryfallImageFromJson(search.data?.[0]);
+      if (img) return img;
+    }
+
+    const namedRes = await scryfallFetch(
+      `https://api.scryfall.com/cards/named?fuzzy=${encodeURIComponent(cardName)}`,
     );
-    if (!searchRes.ok) continue;
 
-    const search = (await searchRes.json()) as {
-      data?: Array<{
-        image_uris?: { normal?: string };
-        card_faces?: Array<{ image_uris?: { normal?: string } }>;
-      }>;
-    };
-    const card = search.data?.[0];
-    const img =
-      card?.image_uris?.normal ?? card?.card_faces?.[0]?.image_uris?.normal;
-    if (img) return fetchRemoteImage(img);
+    if (namedRes.ok) {
+      const card = (await namedRes.json()) as ScryfallCardImageJson;
+      const img = scryfallImageFromJson(card);
+      if (img) return img;
+    }
   }
 
-  const namedRes = await scryfallFetch(
-    `https://api.scryfall.com/cards/named?fuzzy=${encodeURIComponent(cardName)}`,
-  );
+  return undefined;
+}
 
-  if (namedRes.ok) {
-    const card = (await namedRes.json()) as {
-      image_uris?: { normal?: string };
-      card_faces?: Array<{ image_uris?: { normal?: string } }>;
-    };
-    const img =
-      card.image_uris?.normal ?? card.card_faces?.[0]?.image_uris?.normal;
-    if (img) return fetchRemoteImage(img);
-  }
+/** Resolve a Scryfall CDN art URL without downloading the image bytes. */
+export async function resolveScryfallDisplayImageUrl(
+  item: InventoryItem,
+): Promise<string | undefined> {
+  return lookupScryfallDisplayImageUrl(item);
+}
 
-  return null;
+async function fetchScryfallImage(
+  item: InventoryItem,
+): Promise<{ buffer: Buffer; contentType: string } | null> {
+  const img = await lookupScryfallDisplayImageUrl(item);
+  if (!img) return null;
+  return fetchRemoteImage(img);
 }
 
 async function fetchPokemonTcgImage(
@@ -127,7 +285,6 @@ async function fetchPokemonTcgImage(
       number ? `name:"${name}" number:${number}` : null,
       setName ? `name:"${name}" set.name:"${setName}"` : null,
       `name:"${name}"`,
-      `name:${name.split(/\s+/)[0]}`,
     ].filter(Boolean) as string[];
 
     for (const q of queries) {
@@ -154,6 +311,10 @@ async function fetchPokemonTcgImage(
 async function fetchPriceChartingImage(
   item: InventoryItem,
 ): Promise<{ buffer: Buffer; contentType: string } | null> {
+  const game = classifyInventoryGame(item);
+  // PriceCharting fuzzy search routinely cross-matches games (e.g. Pokémon for MTG names).
+  if (game === "Magic" || game === "Pokémon") return null;
+
   const apiKey = process.env.PRICECHARTING_API_KEY?.trim();
   if (!apiKey) return null;
 
@@ -175,16 +336,24 @@ async function fetchPriceChartingImage(
   return null;
 }
 
-async function fetchTcgplayerCatalogImage(
+async function fetchTcgplayerProductImageById(
   item: InventoryItem,
+  productId: string,
+  existingUrl?: string,
 ): Promise<{
   buffer: Buffer;
   contentType: string;
   tcgLowPrice?: number;
 } | null> {
-  if (!item.tcgplayerProductId) return null;
+  const game = classifyInventoryGame(item);
+  const details = await fetchTcgplayerProductDetails(productId);
+  if (
+    details?.productLineName &&
+    !tcgplayerProductLineMatchesGame(details.productLineName, game)
+  ) {
+    return null;
+  }
 
-  const details = await fetchTcgplayerProductDetails(item.tcgplayerProductId);
   const tcgLowPrice =
     details?.lowestPrice != null && details.lowestPrice > 0
       ? details.lowestPrice
@@ -193,7 +362,7 @@ async function fetchTcgplayerCatalogImage(
         : undefined;
 
   try {
-    const fetched = await fetchTcgplayerCdnImage(item.tcgplayerProductId);
+    const fetched = await fetchTcgplayerCdnImage(productId, existingUrl);
     return {
       buffer: fetched.buffer,
       contentType: fetched.contentType,
@@ -204,48 +373,57 @@ async function fetchTcgplayerCatalogImage(
   }
 }
 
+async function fetchTcgplayerCatalogImage(
+  item: InventoryItem,
+): Promise<{
+  buffer: Buffer;
+  contentType: string;
+  tcgLowPrice?: number;
+} | null> {
+  if (!item.tcgplayerProductId) return null;
+  return fetchTcgplayerProductImageById(item, item.tcgplayerProductId);
+}
+
 async function fetchTcgplayerSearchImage(
   item: InventoryItem,
 ): Promise<{ buffer: Buffer; contentType: string } | null> {
-  const queries = inventoryImageSearchQueries(item).slice(0, 4);
+  const game = classifyInventoryGame(item);
+  const productLineNames = tcgplayerProductLinesForGame(game);
+  const queries = inventoryImageSearchQueries(item).slice(0, 6);
+  const preferredId = item.tcgplayerProductId?.trim();
+
   for (const query of queries) {
-    try {
-      const res = await fetch(
-        `https://mp-search-api.tcgplayer.com/v1/search/request?q=${encodeURIComponent(query)}&isList=false`,
-        {
-          headers: {
-            Accept: "application/json",
-            Origin: "https://www.tcgplayer.com",
-            Referer: "https://www.tcgplayer.com/",
-          },
-          signal: AbortSignal.timeout(INVENTORY_IMAGE_FETCH_TIMEOUT_MS),
-        },
-      );
-      if (!res.ok) continue;
+    const hits = await searchTcgplayerInventoryProducts({
+      q: query,
+      productLineNames,
+      limit: 8,
+    });
+    const gameFiltered = hits.filter((hit) =>
+      tcgplayerProductLineMatchesGame(hit.productLineName, game),
+    );
+    const ordered = preferredId
+      ? [
+          ...gameFiltered.filter((h) => String(h.productId) === preferredId),
+          ...gameFiltered.filter((h) => String(h.productId) !== preferredId),
+        ]
+      : gameFiltered;
 
-      const body = (await res.json()) as {
-        results?: Array<{ productId?: number }>;
-      };
-      const hits = body.results ?? [];
-      const preferredId = item.tcgplayerProductId?.trim();
-      const ordered = preferredId
-        ? [
-            ...hits.filter((h) => String(h.productId) === preferredId),
-            ...hits.filter((h) => String(h.productId) !== preferredId),
-          ]
-        : hits;
-
-      for (const hit of ordered.slice(0, 3)) {
-        if (!hit.productId) continue;
+    for (const hit of ordered.slice(0, 4)) {
+      if (hit.imageUrl?.trim()) {
         try {
-          const fetched = await fetchTcgplayerCdnImage(String(hit.productId));
-          return { buffer: fetched.buffer, contentType: fetched.contentType };
+          return await fetchRemoteImage(hit.imageUrl.trim());
         } catch {
-          continue;
+          /* try CDN next */
         }
       }
-    } catch {
-      continue;
+      if (!hit.productId) continue;
+      const fetched = await fetchTcgplayerProductImageById(
+        item,
+        String(hit.productId),
+      );
+      if (fetched) {
+        return { buffer: fetched.buffer, contentType: fetched.contentType };
+      }
     }
   }
   return null;
@@ -260,8 +438,9 @@ export async function fetchInventoryImageBuffer(
   sourceUrl: string,
 ): Promise<{ buffer: Buffer; contentType: string; tcgLowPrice?: number }> {
   const game = classifyInventoryGame(item);
+  const magicSingle = game === "Magic" && isEnrichableMagicSingle(item);
 
-  if (game === "Magic") {
+  if (magicSingle) {
     const scryfall = await fetchScryfallImage(item);
     if (scryfall) return scryfall;
   }
@@ -272,14 +451,17 @@ export async function fetchInventoryImageBuffer(
   }
 
   if (item.tcgplayerProductId) {
-    try {
-      const fetched = await fetchTcgplayerCdnImage(
-        item.tcgplayerProductId,
-        sourceUrl.includes("tcgplayer-cdn") ? sourceUrl : undefined,
-      );
-      return { buffer: fetched.buffer, contentType: fetched.contentType };
-    } catch {
-      /* fall through */
+    const fetched = await fetchTcgplayerProductImageById(
+      item,
+      item.tcgplayerProductId,
+      sourceUrl.includes("tcgplayer-cdn") ? sourceUrl : undefined,
+    );
+    if (fetched) {
+      return {
+        buffer: fetched.buffer,
+        contentType: fetched.contentType,
+        tcgLowPrice: fetched.tcgLowPrice,
+      };
     }
   }
 
@@ -295,17 +477,17 @@ export async function fetchInventoryImageBuffer(
   const tcgSearch = await fetchTcgplayerSearchImage(item);
   if (tcgSearch) return tcgSearch;
 
+  if (game === "Magic") {
+    const scryfall = await fetchScryfallImage(item);
+    if (scryfall) return scryfall;
+  }
+
   const priceCharting = await fetchPriceChartingImage(item);
   if (priceCharting) return priceCharting;
 
   if (game !== "Magic") {
     const scryfall = await fetchScryfallImage(item);
     if (scryfall) return scryfall;
-  }
-
-  if (game !== "Pokémon") {
-    const pokemon = await fetchPokemonTcgImage(item);
-    if (pokemon) return pokemon;
   }
 
   throw new Error("No image source available");

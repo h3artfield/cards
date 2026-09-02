@@ -3,12 +3,14 @@ import {
   cardNameFromInventoryItem,
   fetchInventoryImageBuffer,
 } from "./image-fallback";
+import { isEnrichableMagicSingle } from "./magic-items";
 import {
   isFirebaseStorageUrl,
   isTcgplayerCdnUrl,
 } from "./image-url";
 import type { CatalogCard } from "../deck-builder/types";
 import type { InventoryItem } from "../types";
+import { classifyInventoryGame } from "./analytics";
 
 /** Per-fetch timeout when resolving inventory card images (ms). */
 export const INVENTORY_IMAGE_FETCH_TIMEOUT_MS = Number(
@@ -55,14 +57,32 @@ export function pickInventoryDisplayImageUrl(
   item: InventoryItem,
   catalog?: CatalogCard | null,
 ): string | undefined {
+  const catalogMatch = catalogMatchesInventoryItem(item, catalog);
+  const game = classifyInventoryGame(item);
+
+  if (catalogMatch && catalog?.imageNormal) return catalog.imageNormal;
+
+  if (game === "Magic") {
+    if (catalogMatch && catalog?.imageNormal) return catalog.imageNormal;
+    // TCGplayer CDN blocks browser hotlinks — singles should use Scryfall/proxy instead.
+    if (!isEnrichableMagicSingle(item)) {
+      if (item.tcgplayerProductId) {
+        return tcgplayerCdnImageCandidates(item.tcgplayerProductId)[0];
+      }
+      if (isTcgplayerCdnUrl(item.frontImageUrl)) {
+        return item.frontImageUrl!.trim();
+      }
+    }
+    return undefined;
+  }
+
+  // Never serve cached Firebase art for Magic — bad cross-game caches have slipped in.
   if (
     isFirebaseStorageUrl(item.frontImageUrl) &&
-    catalogMatchesInventoryItem(item, catalog)
+    catalogMatch
   ) {
     return item.frontImageUrl!.trim();
   }
-
-  if (catalog?.imageNormal) return catalog.imageNormal;
 
   if (item.tcgplayerProductId) {
     const candidates = tcgplayerCdnImageCandidates(item.tcgplayerProductId);
@@ -104,7 +124,13 @@ export async function resolveInventoryImageBuffer(
   catalog?: CatalogCard | null,
 ): Promise<ResolvedInventoryImage> {
   const direct = pickInventoryDisplayImageUrl(item, catalog);
-  if (direct && isFirebaseStorageUrl(direct) && catalogMatchesInventoryItem(item, catalog)) {
+  const game = classifyInventoryGame(item);
+  if (
+    direct &&
+    isFirebaseStorageUrl(direct) &&
+    catalogMatchesInventoryItem(item, catalog) &&
+    game !== "Magic"
+  ) {
     const res = await fetch(direct, {
       signal: AbortSignal.timeout(INVENTORY_IMAGE_FETCH_TIMEOUT_MS),
     });
@@ -150,7 +176,7 @@ export function inventoryImageProxyPath(
   slug: string,
   inventoryItemId: string,
 ): string {
-  return `/api/store/${encodeURIComponent(slug)}/inventory/image?itemId=${encodeURIComponent(inventoryItemId)}`;
+  return `/api/store/${encodeURIComponent(slug)}/inventory/image?itemId=${encodeURIComponent(inventoryItemId)}&v=5`;
 }
 
 /** Short label for clerk / search context. */

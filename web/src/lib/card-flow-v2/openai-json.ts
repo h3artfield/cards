@@ -1,4 +1,5 @@
 import { trackApiCall } from "../processing/api-call-tracker";
+import { extractChatCompletionUsage } from "../deck-synthesis/professor-model-telemetry-v4-15-1-v1";
 
 export type VisionMessageContent =
   | { type: "text"; text: string }
@@ -14,11 +15,11 @@ export function requireOpenAiApiKey(): string {
   return apiKey;
 }
 
-export async function callOpenAiJson<T>(
+export async function callOpenAiJsonWithUsage<T>(
   system: string,
   userContent: VisionMessageContent[],
   options?: { model?: string; maxTokens?: number; temperature?: number },
-): Promise<T> {
+): Promise<{ parsed: T; usage: ReturnType<typeof extractChatCompletionUsage> }> {
   const apiKey = requireOpenAiApiKey();
   trackApiCall("openai");
   const model =
@@ -56,5 +57,14 @@ export async function callOpenAiJson<T>(
   const data = await response.json();
   const content = data.choices?.[0]?.message?.content;
   if (!content) throw new Error("OpenAI returned empty content");
-  return JSON.parse(content) as T;
+  return { parsed: JSON.parse(content) as T, usage: extractChatCompletionUsage(data) };
+}
+
+export async function callOpenAiJson<T>(
+  system: string,
+  userContent: VisionMessageContent[],
+  options?: { model?: string; maxTokens?: number; temperature?: number },
+): Promise<T> {
+  const { parsed } = await callOpenAiJsonWithUsage<T>(system, userContent, options);
+  return parsed;
 }

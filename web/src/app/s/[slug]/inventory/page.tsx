@@ -1,7 +1,7 @@
 "use client";
 
-import { Suspense } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { StoreInventoryApp } from "@/components/store-inventory/StoreInventoryApp";
 
 function InventoryLoadingShell() {
@@ -23,7 +23,14 @@ function InventoryLoadingShell() {
 function StoreInventoryContent() {
   const { slug } = useParams<{ slug: string }>();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const mode = searchParams.get("mode");
+
+  useEffect(() => {
+    if (slug && mode === "deck-builder") {
+      router.replace(`/s/${slug}/inventory/professor`);
+    }
+  }, [slug, mode, router]);
 
   if (!slug) {
     return (
@@ -33,12 +40,11 @@ function StoreInventoryContent() {
     );
   }
 
-  return (
-    <StoreInventoryApp
-      slug={slug}
-      initialTab={mode === "deck-builder" ? "deck-builder" : "browse"}
-    />
-  );
+  if (mode === "deck-builder") {
+    return <InventoryLoadingShell />;
+  }
+
+  return <StoreInventoryApp slug={slug} />;
 }
 
 export default function StoreInventoryPage() {

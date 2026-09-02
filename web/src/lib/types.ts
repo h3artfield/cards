@@ -246,6 +246,120 @@ export interface BuybackTransaction {
   createdAt: string;
 }
 
+export type TradeCreditEntryType =
+  | "issued"
+  | "spent"
+  | "reversal"
+  | "adjustment";
+
+/**
+ * Append-only trade credit ledger row, scoped to one customer at one store.
+ * Amount is signed dollars: positive adds credit, negative removes it.
+ */
+export interface TradeCreditEntry {
+  id: string;
+  storeId: string;
+  customerId: string;
+  type: TradeCreditEntryType;
+  amount: number;
+  orderId?: string;
+  orderNumber?: string;
+  transactionId?: string;
+  /** Shop ticket the credit was spent on. */
+  ticketId?: string;
+  note?: string;
+  createdByAdminId?: string;
+  createdByName?: string;
+  createdAt: string;
+}
+
+/** Derived view of a customer's trade credit at one store. */
+export interface TradeCreditBalance {
+  storeId: string;
+  customerId: string;
+  /** Negative means the customer owes the store (e.g. a spent order was reopened). */
+  balance: number;
+  issued: number;
+  spent: number;
+  entryCount: number;
+  lastEntryAt?: string;
+}
+
+export type CollectionCardStatus =
+  | "owned"
+  | "sent_to_buyback"
+  | "sold_to_store";
+
+/**
+ * A card the customer owns, scanned into their binder at one store rather
+ * than sold. Carries enough scan data to become a buyback ScannedCard later
+ * without re-scanning.
+ */
+export interface CollectionCard {
+  id: string;
+  storeId: string;
+  customerId: string;
+  frontImageUrl: string;
+  backImageUrl?: string;
+  itemType: ItemType;
+  category?: CardCategory;
+  displayName: string;
+  setName?: string;
+  cardNumber?: string;
+  catalogSource?: import("./card-flow-v2/types").CatalogSource;
+  catalogId?: string;
+  /** Magic printing + oracle ids — required for deck building. */
+  scryfallId?: string;
+  oracleId?: string;
+  conditionEstimate?: ConditionEstimate;
+  identityConfidence?: number;
+  identityLocked?: boolean;
+  /** Set when identification could not name the card. */
+  needsReview?: boolean;
+  visionJson?: Record<string, unknown>;
+  status: CollectionCardStatus;
+  buybackOrderId?: string;
+  buybackCardId?: string;
+  sentToBuybackAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type ShopTicketStatus = "open" | "completed" | "voided";
+
+export interface ShopTicketLine {
+  inventoryItemId: string;
+  displayName: string;
+  setName?: string;
+  quantity: number;
+  unitPrice: number;
+}
+
+/**
+ * An in-store sale rung up by staff. This is the only place trade credit can
+ * be spent — online checkout goes through Shopify, which takes card only.
+ */
+export interface ShopTicket {
+  id: string;
+  storeId: string;
+  ticketNumber: string;
+  status: ShopTicketStatus;
+  /** Required to apply trade credit; walk-ins can stay anonymous. */
+  customerId?: string;
+  customerName?: string;
+  lines: ShopTicketLine[];
+  subtotal: number;
+  tradeCreditApplied: number;
+  cashDue: number;
+  note?: string;
+  createdByAdminId?: string;
+  createdByName?: string;
+  createdAt: string;
+  updatedAt: string;
+  completedAt?: string;
+  voidedAt?: string;
+}
+
 /** Lifecycle of a physical card in store inventory. */
 export type InventoryStatus = "on_hand" | "listed" | "sold" | "withdrawn";
 
@@ -254,6 +368,7 @@ export type InventorySalesChannel =
   | "shopify"
   | "ebay"
   | "tcgplayer"
+  | "in_store"
   | "other";
 
 /** Where this inventory row originated. Legacy rows omit source (buyback). */
@@ -270,6 +385,10 @@ export interface InventoryShopifyListing {
   exportedBy?: string;
   productAdminUrl?: string;
   productOnlineUrl?: string;
+  /** Units last pushed to Shopify — compared against CSV quantity on re-import. */
+  syncedQuantity?: number;
+  syncedAt?: string;
+  syncError?: string;
 }
 
 /**
@@ -350,6 +469,14 @@ export interface InventoryItem {
   /** External order reference (e.g. Shopify order id). */
   soldOrderId?: string;
   soldLineItemId?: string;
+  /**
+   * Shopify order line items already applied to this row, newest last. Guards
+   * against double-decrementing multi-copy rows when a webhook is redelivered.
+   */
+  shopifySoldLineItemIds?: string[];
+  /** Shop tickets already rung up against this row, so a retried completion
+   * cannot decrement it twice. */
+  ticketSaleRefs?: string[];
   /** Denormalized Scryfall catalog — golden-table dimensions for browse/clerk. */
   catalogScryfallId?: string;
   catalogOracleId?: string;

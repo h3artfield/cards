@@ -1,0 +1,41 @@
+# Reduce Cloud Build upload size — web/ is the Docker build context.
+.git/
+.worktrees/
+**/.worktrees/
+
+web/node_modules/
+web/.next/
+web/.cache/
+
+# Offline training snapshots — not needed at runtime (~10GB).
+web/data/milestones/topdeck/
+
+# Mechanical-space research dumps. Explicit paths only — gcloudignore
+# negation does not keep COS v1 artifacts in the upload.
+web/data/milestones/mechanical-space/commanderspellbook-exact-deck-detector-v1/
+web/data/milestones/mechanical-space/outcome-derived-strategic-geometry-v1/
+web/data/milestones/mechanical-space/deck-pressure-v4/
+web/data/milestones/mechanical-space/topdeck-holdout-outcome-validation-v1/
+web/data/milestones/mechanical-space/commanderspellbook-full-mirror-v1/
+web/data/milestones/mechanical-space/external-gameplay-validation-v1/
+web/data/milestones/mechanical-space/oracle-neural-semantic-space-v1/
+web/data/milestones/mechanical-space/spellbook-win-architecture-space-v1/architecture-fingerprints.jsonl
+web/data/milestones/mechanical-space/deck-pressure-v3/
+web/data/milestones/mechanical-space/mechanical-pressure-k-v3.0/
+web/data/milestones/mechanical-space/mechanical-pressure-k-v2.7/
+web/data/milestones/mechanical-space/mechanical-pressure-k-v2.6/
+web/data/milestones/mechanical-space/mechanical-pressure-k-v2.5/
+web/data/milestones/mechanical-space/mechanical-pressure-k-v2.4/
+web/data/milestones/mechanical-space/mechanical-pressure-k-v2.3/
+web/data/milestones/mechanical-space/mechanical-pressure-k-v2.2/
+web/data/milestones/mechanical-space/mechanical-pressure-k-v2.1/
+web/data/milestones/mechanical-space/mechanical-pressure-k-v2.0/
+web/data/milestones/mechanical-space/commander-optimization-score-v2/
+
+**/.env.local
+**/.env*.local
+**/.tunnel-url
+
+services/
+grading-service/
+node_modules/

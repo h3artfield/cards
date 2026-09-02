@@ -76,6 +76,7 @@ export function InventorySearchAutocomplete({
       game: filters.game,
       limit: "10",
     });
+    if (filters.source === "catalog") return;
 
     fetch(
       `/api/store/${encodeURIComponent(slug)}/inventory/suggest?${params}`,
@@ -102,7 +103,7 @@ export function InventorySearchAutocomplete({
       .finally(() => setLoading(false));
 
     return () => controller.abort();
-  }, [debouncedQ, filters.game, slug]);
+  }, [debouncedQ, filters.game, filters.source, slug]);
 
   useEffect(() => {
     function onDocClick(e: MouseEvent) {

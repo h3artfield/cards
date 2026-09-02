@@ -6,7 +6,12 @@ import type {
   OrderReopenRecord,
   PurchaseType,
   ScannedCard,
+  TradeCreditEntry,
 } from "../types";
+import {
+  issueTradeCreditForBuyback,
+  reverseTradeCreditForOrder,
+} from "../trade-credit/trade-credit-ledger";
 import { cardDisplayName } from "./card-display-name";
 import { isCardIncludedInClerkOffer } from "./card-buy-decision";
 import { resolveClerkRunningOfferAmounts } from "../card-flow-v2/clerk-card-insights";
@@ -16,6 +21,8 @@ export interface CompleteBuybackResult {
   order: BuybackOrder;
   transaction: BuybackTransaction;
   inventory: InventoryItem[];
+  /** Set when the order was completed as trade. */
+  tradeCredit?: TradeCreditEntry;
 }
 
 function cardPurchasePrice(
@@ -115,7 +122,18 @@ export async function completeBuybackPurchase(
 
   await dataStore.saveOrder(updatedOrder);
 
-  return { order: updatedOrder, transaction, inventory };
+  const tradeCredit = await issueTradeCreditForBuyback({
+    order: updatedOrder,
+    transaction,
+    storeId,
+  });
+
+  return {
+    order: updatedOrder,
+    transaction,
+    inventory,
+    ...(tradeCredit ? { tradeCredit } : {}),
+  };
 }
 
 export async function cancelBuybackSale(
@@ -181,6 +199,11 @@ export async function reopenBuybackOrder(
 
   if (order.status === "paid") {
     await dataStore.deleteInventoryByOrderId(order.id);
+    await reverseTradeCreditForOrder({
+      orderId: order.id,
+      storeId,
+      note: `Order reopened by ${name}`,
+    });
   }
 
   const manualReviewCount = cards.filter(

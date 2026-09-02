@@ -3,8 +3,17 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import type { Customer } from "@/lib/types";
 
+/** The one store this customer belongs to. */
+export interface CustomerHomeStore {
+  id: string;
+  slug: string;
+  storeName: string;
+  storeLogoUrl?: string;
+}
+
 interface CustomerContextValue {
   customer: Customer | null;
+  store: CustomerHomeStore | null;
   canViewOrderHistory: boolean;
   setCustomer: (customer: Customer | null) => void;
   refresh: () => Promise<void>;
@@ -12,8 +21,36 @@ interface CustomerContextValue {
   loading: boolean;
 }
 
+type CustomerSession = {
+  customer: Customer | null;
+  store: CustomerHomeStore | null;
+  canViewOrderHistory: boolean;
+};
+
+const SIGNED_OUT: CustomerSession = {
+  customer: null,
+  store: null,
+  canViewOrderHistory: true,
+};
+
+async function fetchCustomerSession(): Promise<CustomerSession> {
+  try {
+    const res = await fetch("/api/customers/me", { credentials: "include" });
+    if (!res.ok) return SIGNED_OUT;
+    const data = await res.json();
+    return {
+      customer: data.customer ?? null,
+      store: data.store ?? null,
+      canViewOrderHistory: data.canViewOrderHistory !== false,
+    };
+  } catch {
+    return SIGNED_OUT;
+  }
+}
+
 const CustomerContext = createContext<CustomerContextValue>({
   customer: null,
+  store: null,
   canViewOrderHistory: true,
   setCustomer: () => {},
   refresh: async () => {},
@@ -23,28 +60,34 @@ const CustomerContext = createContext<CustomerContextValue>({
 
 export function CustomerProvider({ children }: { children: React.ReactNode }) {
   const [customer, setCustomerState] = useState<Customer | null>(null);
+  const [store, setStore] = useState<CustomerHomeStore | null>(null);
   const [canViewOrderHistory, setCanViewOrderHistory] = useState(true);
   const [loading, setLoading] = useState(true);
 
-  const refresh = useCallback(async () => {
-    try {
-      const res = await fetch("/api/customers/me", { credentials: "include" });
-      if (!res.ok) {
-        setCustomerState(null);
-        setCanViewOrderHistory(true);
-        return;
-      }
-      const data = await res.json();
-      setCustomerState(data.customer ?? null);
-      setCanViewOrderHistory(data.canViewOrderHistory !== false);
-    } catch {
-      setCustomerState(null);
-    }
+  const applySession = useCallback((session: CustomerSession) => {
+    setCustomerState(session.customer);
+    setStore(session.store);
+    setCanViewOrderHistory(session.canViewOrderHistory);
   }, []);
 
+  const refresh = useCallback(async () => {
+    applySession(await fetchCustomerSession());
+  }, [applySession]);
+
   useEffect(() => {
-    refresh().finally(() => setLoading(false));
-  }, [refresh]);
+    let active = true;
+    fetchCustomerSession()
+      .then((session) => {
+        if (active) applySession(session);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [applySession]);
 
   const setCustomer = (c: Customer | null) => {
     setCustomerState(c);
@@ -56,6 +99,7 @@ export function CustomerProvider({ children }: { children: React.ReactNode }) {
       credentials: "include",
     });
     setCustomerState(null);
+    setStore(null);
     setCanViewOrderHistory(true);
   }, []);
 
@@ -63,6 +107,7 @@ export function CustomerProvider({ children }: { children: React.ReactNode }) {
     <CustomerContext.Provider
       value={{
         customer,
+        store,
         canViewOrderHistory,
         setCustomer,
         refresh,

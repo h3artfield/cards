@@ -11,6 +11,7 @@ import {
 import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
 import { DEFAULT_STORE_ID } from "@/lib/firebase/collections";
 import { notifyOfferReady } from "@/lib/processing/notifications";
+import { sendBuybackCompletionReceipt } from "@/lib/receipts/send-receipts";
 import { analyzeCardResale } from "@/lib/processing/resale-analysis";
 import { runFullCardAnalysis } from "@/lib/processing/full-analysis";
 import { isCardIncludedInClerkOffer } from "@/lib/processing/card-buy-decision";
@@ -20,6 +21,7 @@ import {
   cancelBuybackSale,
   completeBuybackPurchase,
   reopenBuybackOrder,
+  type CompleteBuybackResult,
 } from "@/lib/processing/complete-buyback";
 
 export async function PATCH(
@@ -155,20 +157,21 @@ export async function PATCH(
       return jsonError("offerType must be cash or trade");
     }
     const cards = await dataStore.getCardsByOrder(id);
+    let completed: CompleteBuybackResult;
     try {
-      const result = await completeBuybackPurchase(
+      completed = await completeBuybackPurchase(
         order,
         cards,
         body.offerType,
         scope.storeId,
       );
-      Object.assign(order, result.order);
+      Object.assign(order, completed.order);
       await dataStore.logAdminAction({
         action: "complete_purchase",
         orderId: id,
         offerType: body.offerType,
-        amount: result.transaction.amount,
-        cardCount: result.transaction.cardCount,
+        amount: completed.transaction.amount,
+        cardCount: completed.transaction.cardCount,
       });
     } catch (err) {
       return jsonError(
@@ -176,6 +179,19 @@ export async function PATCH(
         400,
       );
     }
+
+    // The payout already happened; a receipt problem must not report failure.
+    const settings = await dataStore.getSettings(scope.storeId);
+    await sendBuybackCompletionReceipt({
+      storeId: scope.storeId,
+      storeName: settings.storeName,
+      customerId: order.customerId,
+      orderId: id,
+      orderNumber: order.orderNumber,
+      offerType: body.offerType,
+      amount: completed.transaction.amount,
+      cardCount: completed.transaction.cardCount,
+    });
   } else if (action === "cancel_sale") {
     try {
       const result = await cancelBuybackSale(order, scope.storeId);

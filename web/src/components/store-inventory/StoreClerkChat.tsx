@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import type { ClerkDeckList } from "@/lib/store-inventory/clerk-types";
-import type { CommanderDeckBuildSession } from "@/lib/store-inventory/clerk-tools/commander-deck-build-state";
 import {
   answerSourceLabel,
   classifyClerkRequest,
@@ -29,23 +28,8 @@ function summarizeClerkHistory(messages: ClerkMessage[]): string {
     .join("\n");
 }
 
-function clerkLoadingMessage(
-  query: string,
-  history: ClerkMessage[],
-  deckStage?: string,
-): string {
-  if (deckStage) return deckStage;
-  const classification = classifyClerkRequest({
-    question: query,
-    conversationSummary: summarizeClerkHistory(history),
-  });
-  if (classification.useStagedDeckBuild) {
-    return "Building your deck in stages — cards will appear as each section completes…";
-  }
-  if (classification.mode === "knowledge") {
-    return "Looking up MTG/Pokémon knowledge…";
-  }
-  return "Checking what's in stock…";
+function clerkLoadingMessage(query: string, history: ClerkMessage[]): string {
+  return "Searching our inventory…";
 }
 
 function clerkFooterNote(data: {
@@ -94,94 +78,49 @@ export function StoreClerkChat({
   filters,
   onApplyClerk,
   onAddToGathering: _onAddToGathering,
+  onPasteList,
+  variant = "queryBar",
 }: {
   slug: string;
   storeName: string;
   filters: InventoryFilterState;
+  variant?: "chat" | "queryBar";
   onApplyClerk: (input: {
     searchQuery?: string;
     game?: InventoryFilterState["game"];
     color?: LegacyInventoryColorFilter;
     cardType?: InventoryFilterState["cardType"];
+    selectedColors?: InventoryFilterState["selectedColors"];
+    colorCount?: InventoryFilterState["colorCount"];
     highlightIds?: string[];
     deckList?: ClerkDeckList;
     clearSearch?: boolean;
     clearBrowseFilters?: boolean;
     picks?: ClerkPickCard[];
+    browseFilterPatch?: {
+      q: string;
+      game: InventoryFilterState["game"];
+      selectedColors: InventoryFilterState["selectedColors"];
+      colorCount: InventoryFilterState["colorCount"];
+      cardType: InventoryFilterState["cardType"];
+    };
   }) => void;
   onAddToGathering?: (card: GatheringCard) => void;
+  onPasteList?: () => void;
 }) {
-  const [messages, setMessages] = useState<ClerkMessage[]>([
-    {
-      role: "assistant",
-      text: `Hey! I'm your clerk at ${storeName}. Ask about stock, prices, rules, or deck ideas — I'll explain the game and show what we have in stock.`,
-    },
-  ]);
+  const [messages, setMessages] = useState<ClerkMessage[]>(() =>
+    variant === "queryBar"
+      ? []
+      : [
+          {
+            role: "assistant",
+            text: `Hey! I'm your clerk at ${storeName}. Ask about stock, prices, colors, types, or card names — I'll search our inventory and show what's in stock.`,
+          },
+        ],
+  );
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState<string | null>(null);
-
-  async function runStagedDeckBuild(text: string, history: ClerkMessage[]) {
-    let session: CommanderDeckBuildSession | undefined;
-    let complete = false;
-    let lastReply = "";
-    const conversationSummary = summarizeClerkHistory(history);
-
-    while (!complete) {
-      const res = await fetch(
-        `/api/store/${encodeURIComponent(slug)}/inventory/clerk/deck-build`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            message: session ? undefined : text,
-            conversationSummary: session ? undefined : conversationSummary,
-            session,
-          }),
-        },
-      );
-      const data = await parseClerkResponse(res);
-      if (!res.ok) {
-        throw new Error(
-          typeof data.error === "string" ? data.error : "Deck build failed",
-        );
-      }
-
-      session = data.session as CommanderDeckBuildSession;
-      complete = Boolean(data.complete);
-      lastReply = String(data.reply ?? "");
-      const deckList = data.deckList as ClerkDeckList | undefined;
-      const stageLabel = String(data.stageLabel ?? "");
-      const stageIndex = Number(data.stageIndex ?? 0);
-      const totalStages = Number(data.totalStages ?? 7);
-
-      setLoadingMessage(
-        complete
-          ? "Finishing deck list…"
-          : `Adding ${stageLabel.toLowerCase()} (${stageIndex + 1}/${totalStages})…`,
-      );
-
-      if (deckList) {
-        onApplyClerk({
-          deckList,
-          highlightIds: deckList.lines
-            .map((l) => l.inventoryItemId)
-            .filter(Boolean) as string[],
-          clearSearch: true,
-          clearBrowseFilters: true,
-        });
-      }
-    }
-
-    setMessages((m) => [
-      ...m,
-      {
-        role: "assistant",
-        text: lastReply,
-        footerNote: "↓ Deck list updated below as each stage completed",
-      },
-    ]);
-  }
 
   async function send() {
     const text = input.trim();
@@ -198,11 +137,6 @@ export function StoreClerkChat({
         question: text,
         conversationSummary,
       });
-
-      if (classification.useStagedDeckBuild) {
-        await runStagedDeckBuild(text, history);
-        return;
-      }
 
       const historyPayload = history.map((m) => ({ role: m.role, text: m.text }));
       const res = await fetch(
@@ -280,10 +214,19 @@ export function StoreClerkChat({
         game: data.game as InventoryFilterState["game"] | undefined,
         color: data.color as LegacyInventoryColorFilter | undefined,
         cardType: data.cardType as InventoryFilterState["cardType"] | undefined,
+        browseFilterPatch: data.browseFilterPatch as
+          | {
+              q: string;
+              game: InventoryFilterState["game"];
+              selectedColors: InventoryFilterState["selectedColors"];
+              colorCount: InventoryFilterState["colorCount"];
+              cardType: InventoryFilterState["cardType"];
+            }
+          | undefined,
         highlightIds: data.highlightItemIds as string[] | undefined,
         deckList,
         picks: deckList ? undefined : picks,
-        clearSearch: Boolean(deckList || data.clearBrowseFilters),
+        clearSearch: Boolean(deckList),
         clearBrowseFilters: Boolean(data.clearBrowseFilters),
       });
     } catch (e) {
@@ -306,36 +249,63 @@ export function StoreClerkChat({
   return (
     <div className="rounded-xl border border-neutral-800 bg-neutral-900/60 p-3">
       <div className="mb-2 flex items-center justify-between gap-2">
-        <p className="text-sm font-semibold text-white">Ask the clerk</p>
-        <span className="text-[10px] uppercase tracking-wide text-indigo-400">
-          AI · knowledge + in-stock picks
-        </span>
+        <p className="text-sm font-semibold text-white">
+          {variant === "queryBar" ? "Search inventory" : "Ask the clerk"}
+        </p>
+        <div className="flex items-center gap-2">
+          {onPasteList ? (
+            <button
+              type="button"
+              onClick={onPasteList}
+              className="text-[11px] text-neutral-300 underline decoration-neutral-600 underline-offset-2 hover:text-white"
+            >
+              Paste a list
+            </button>
+          ) : null}
+          <span className="text-[10px] uppercase tracking-wide text-indigo-400">
+            In-stock search
+          </span>
+        </div>
       </div>
 
-      <ul className="mb-3 max-h-72 space-y-2 overflow-y-auto text-sm">
-        {messages.map((m, i) => (
-          <li
-            key={i}
-            className={
-              m.role === "user" ? "text-indigo-300" : "text-neutral-300"
-            }
-          >
-            <span className="whitespace-pre-line">{m.text}</span>
-            {m.footerNote ? (
-              <p className="mt-1 text-[10px] text-indigo-400">{m.footerNote}</p>
-            ) : null}
-          </li>
-        ))}
-        {loading && loadingMessage ? (
-          <li className="flex items-center gap-2.5 py-1 text-neutral-400">
-            <span
-              className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-indigo-500/25 border-t-indigo-400"
-              aria-hidden
-            />
-            <span className="text-xs">{loadingMessage}</span>
-          </li>
-        ) : null}
-      </ul>
+      {messages.length > 0 ? (
+        <ul
+          className={`mb-3 space-y-2 overflow-y-auto text-sm ${
+            variant === "queryBar" ? "max-h-28" : "max-h-72"
+          }`}
+        >
+          {messages.map((m, i) => (
+            <li
+              key={i}
+              className={
+                m.role === "user" ? "text-indigo-300" : "text-neutral-300"
+              }
+            >
+              <span className="whitespace-pre-line">{m.text}</span>
+              {m.footerNote ? (
+                <p className="mt-1 text-[10px] text-indigo-400">{m.footerNote}</p>
+              ) : null}
+            </li>
+          ))}
+          {loading && loadingMessage ? (
+            <li className="flex items-center gap-2.5 py-1 text-neutral-400">
+              <span
+                className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-indigo-500/25 border-t-indigo-400"
+                aria-hidden
+              />
+              <span className="text-xs">{loadingMessage}</span>
+            </li>
+          ) : null}
+        </ul>
+      ) : loading && loadingMessage ? (
+        <p className="mb-3 flex items-center gap-2.5 text-xs text-neutral-400">
+          <span
+            className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-indigo-500/25 border-t-indigo-400"
+            aria-hidden
+          />
+          {loadingMessage}
+        </p>
+      ) : null}
 
       <div className="flex gap-2">
         <input
@@ -343,7 +313,7 @@ export function StoreClerkChat({
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && void send()}
           disabled={loading}
-          placeholder="Stock, prices, rules, or deck ideas — e.g. Sol Ring, Witch-maw colors, deck under $100"
+          placeholder="Search inventory — e.g. mono green, Sol Ring, commanders under $5"
           className="flex-1 rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm text-white placeholder:text-neutral-500 disabled:opacity-60"
         />
         <button
@@ -361,7 +331,7 @@ export function StoreClerkChat({
               <span className="sr-only">Working…</span>
             </>
           ) : (
-            "Ask"
+            "Search"
           )}
         </button>
       </div>

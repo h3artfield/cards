@@ -18,6 +18,10 @@
 /out/
 /.data/
 
+# Outcome Audit v3 local video/frame cache (not evidence of record)
+/.data/egv1-outcome-audit-v3/
+/.data/omv1-transcripts/
+
 # production
 /build
 

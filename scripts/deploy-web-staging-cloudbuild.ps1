@@ -54,6 +54,7 @@ $subs = @(
   "_FB_SENDER=$(Get-EnvValue 'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID')"
   "_FB_APP_ID=$(Get-EnvValue 'NEXT_PUBLIC_FIREBASE_APP_ID')"
   "_APP_URL=$WEB_URL"
+  "_PROFESSOR_SOL_DIRECTED_GUI_ENABLED=true"
 ) -join ","
 
 Write-Host "==> Cloud Build (buyback-web-staging)"
@@ -119,11 +120,16 @@ V1_ANALYSIS_ASYNC_ENABLED: "false"
 CARD_PROCESSING_CONCURRENCY: "2"
 ORDER_PROCESSING_JOB_NAME: "order-processing-job"
 CLOUD_RUN_REGION: "us-central1"
-OPENAI_REQUEST_TIMEOUT_MS: "60000"
+OPENAI_REQUEST_TIMEOUT_MS: "180000"
 ORDER_PROCESSING_STUCK_THRESHOLD_MS: "600000"
 STRIPE_PRICE_ID_CARD_SCANNER_STORE_MONTHLY: "$(Get-EnvValue 'STRIPE_PRICE_ID_CARD_SCANNER_STORE_MONTHLY')"
 MTG_RAG_ENABLED: "true"
 CATALOG_COVERAGE_ADJUDICATION_ACCESS_TOKEN: "67238bc7e786d729ad413151c6924e91475006897b643caa"
+PROFESSOR_SOL_DIRECTED_GUI_ENABLED: "true"
+NEXT_PUBLIC_PROFESSOR_SOL_DIRECTED_GUI_ENABLED: "true"
+PROFESSOR_SOL_DIRECTED_LIVE: "1"
+PROFESSOR_SOL_DIRECTED_MODEL: "gpt-5.6-luna"
+PROFESSOR_SOL_DIRECTED_REASONING_EFFORT: "high"
 "@
 $envContent | Set-Content -Path $envPath -Encoding utf8
 
@@ -134,10 +140,11 @@ gcloud run deploy $WEB_SERVICE `
   --project=$PROJECT_ID `
   --allow-unauthenticated `
   --port=8080 `
-  --memory=1Gi `
-  --cpu=1 `
+  --memory=2Gi `
+  --cpu=2 `
   --min-instances=1 `
-  --timeout=300 `
+  --timeout=900 `
+  --no-cpu-throttling `
   --set-secrets=$SECRET_MOUNT `
   --env-vars-file=$envPath `
   --quiet

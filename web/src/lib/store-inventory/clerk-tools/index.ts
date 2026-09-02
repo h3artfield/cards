@@ -21,6 +21,7 @@ import {
   parseClerkInventoryQuery,
   isSemanticFilterActive,
 } from "./clerk-query-parser";
+import { resolveClerkCardTypeFilter } from "./clerk-browse-sync";
 import {
   isKnowledgeOnlyClerkPath,
   knowledgeRetrievalTool,
@@ -198,8 +199,10 @@ export async function runClerkTools(input: {
     const searchGame =
       semanticActive && route.game !== "magic" ? "magic" : route.game;
     const maxPrice = route.constraints.max_price ?? route.constraints.budget;
-    const cardType =
-      route.format === "commander" ? "commander" : ("all" as const);
+    const cardType = resolveClerkCardTypeFilter({
+      userQuestion: ctx.user_question,
+      parsed: parsedQuestion,
+    });
     const setProductLookup = isSetProductInventoryRequest({
       userQuestion: ctx.user_question,
       conversationSummary: ctx.conversation_summary,
@@ -265,7 +268,7 @@ export async function runClerkTools(input: {
               : cardNames,
           commander: route.entities.commander,
           maxPrice,
-          formatCommander: route.format === "commander",
+          formatCommander: cardType === "commander",
         });
         inventory = await inventorySearchTool({
           storeId: ctx.storeId,

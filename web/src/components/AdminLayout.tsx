@@ -20,6 +20,7 @@ const STORE_TABS = [
       "/admin/v2/knowledge",
     ],
   },
+  { href: "/admin/tickets", label: "Register", match: ["/admin/tickets"] },
   {
     href: "/admin/reports",
     label: "Reports",

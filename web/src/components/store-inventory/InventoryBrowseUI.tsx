@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   clerkDragPayload,
   CLERK_DRAG_MIME,
@@ -60,21 +60,49 @@ export type LegacyInventoryColorFilter =
   | ManaColor
   | Exclude<ColorCountFilter, "all">;
 
+export type InventoryBrowseGame = "magic" | "pokemon" | "riftbound";
+export type InventoryBrowseSource = "inventory" | "catalog";
+
+export type InventorySortBy =
+  | "name"
+  | "price_asc"
+  | "price_desc"
+  | "cmc_asc"
+  | "cmc_desc";
+
 export type InventoryFilterState = {
   q: string;
-  game: "all" | "magic" | "pokemon" | "yugioh" | "sports" | "other";
+  game: InventoryBrowseGame;
+  source: InventoryBrowseSource;
   selectedColors: ManaColor[];
   colorCount: ColorCountFilter;
   cardType: "all" | "commander";
-  sortBy: "name" | "price_asc" | "price_desc";
+  cardTypes: string[];
+  oracleActions: string[];
+  primitiveActions: string[];
+  primitiveActionMode: "any" | "all";
+  abilityTypes: string[];
+  zones: string[];
+  semanticOwners: string[];
+  manaValuePreset: "all" | "0-2" | "3-4" | "5+";
+  sortBy: InventorySortBy;
 };
 
 export const DEFAULT_INVENTORY_FILTERS: InventoryFilterState = {
   q: "",
-  game: "all",
+  game: "magic",
+  source: "inventory",
   selectedColors: [],
   colorCount: "all",
   cardType: "all",
+  cardTypes: [],
+  oracleActions: [],
+  primitiveActions: [],
+  primitiveActionMode: "any",
+  abilityTypes: [],
+  zones: [],
+  semanticOwners: [],
+  manaValuePreset: "all",
   sortBy: "name",
 };
 
@@ -131,6 +159,136 @@ function toggleSelectedColor(
 }
 
 import { InventorySearchAutocomplete } from "./InventorySearchAutocomplete";
+import {
+  INVENTORY_CARD_TYPE_OPTIONS,
+  INVENTORY_ORACLE_ACTION_CHIPS,
+  INVENTORY_PRIMITIVE_ACTION_OPTIONS,
+  INVENTORY_SEMANTIC_ABILITY_TYPES,
+  INVENTORY_SEMANTIC_OWNERS,
+  INVENTORY_SEMANTIC_ZONES,
+  type InventoryManaValuePreset,
+} from "@/lib/store-inventory/inventory-browse-filter-params";
+
+const GAME_OPTIONS: Array<{ id: InventoryBrowseGame; label: string }> = [
+  { id: "magic", label: "Magic" },
+  { id: "pokemon", label: "Pokémon" },
+  { id: "riftbound", label: "Riftbound" },
+];
+
+function RadioPill({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={active}
+      onClick={onClick}
+      className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
+        active
+          ? "bg-indigo-600 text-white"
+          : "border border-neutral-700 bg-neutral-900 text-neutral-300 hover:border-neutral-500"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+export function InventoryGameSourceBar({
+  filters,
+  onChange,
+  facets,
+}: {
+  filters: InventoryFilterState;
+  onChange: (next: Partial<InventoryFilterState>) => void;
+  facets?: { games: Record<string, number>; inStock: number };
+}) {
+  const inStockCount =
+    filters.game === "magic"
+      ? facets?.games.magic ?? 0
+      : filters.game === "pokemon"
+        ? facets?.games.pokemon ?? 0
+        : facets?.games.riftbound ?? 0;
+
+  return (
+    <div className="space-y-3 rounded-xl border border-neutral-800 bg-neutral-900/50 p-3">
+      <div>
+        <p className="text-[11px] font-medium uppercase tracking-wide text-neutral-500">Game</p>
+        <div className="mt-2 flex flex-wrap gap-2" role="radiogroup" aria-label="Game">
+          {GAME_OPTIONS.map((option) => (
+            <RadioPill
+              key={option.id}
+              active={filters.game === option.id}
+              onClick={() =>
+                onChange({
+                  game: option.id,
+                  cardType: option.id === "magic" ? filters.cardType : "all",
+                })
+              }
+            >
+              {option.label}
+            </RadioPill>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <p className="text-[11px] font-medium uppercase tracking-wide text-neutral-500">Browse</p>
+        <div className="mt-2 flex flex-wrap gap-2" role="radiogroup" aria-label="Browse source">
+          <RadioPill
+            active={filters.source === "inventory"}
+            onClick={() => onChange({ source: "inventory" })}
+          >
+            Store inventory{inStockCount > 0 ? ` (${inStockCount.toLocaleString()})` : ""}
+          </RadioPill>
+          <RadioPill
+            active={filters.source === "catalog"}
+            onClick={() => onChange({ source: "catalog" })}
+          >
+            All printings
+          </RadioPill>
+        </div>
+        <p className="mt-1.5 text-[11px] text-neutral-500">
+          {filters.source === "catalog"
+            ? "Browse all printings — cards load automatically (100 per page)."
+            : "Only cards this store has in stock — cards load automatically (100 per page)."}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function toggleListItem(list: string[], item: string): string[] {
+  if (list.includes(item)) return list.filter((v) => v !== item);
+  return [...list, item];
+}
+
+const MANA_VALUE_PRESETS: Array<{ id: InventoryManaValuePreset; label: string }> = [
+  { id: "all", label: "Any MV" },
+  { id: "0-2", label: "MV 0–2" },
+  { id: "3-4", label: "MV 3–4" },
+  { id: "5+", label: "MV 5+" },
+];
+
+function countAdvancedFiltersActive(filters: InventoryFilterState): number {
+  let n = 0;
+  if (filters.cardType === "commander") n += 1;
+  n += filters.cardTypes.length;
+  n += filters.oracleActions.length;
+  n += filters.primitiveActions.length;
+  n += filters.abilityTypes.length;
+  n += filters.zones.length;
+  n += filters.semanticOwners.length;
+  if (filters.primitiveActionMode === "all") n += 1;
+  return n;
+}
 
 export function InventoryFilterBar({
   slug,
@@ -149,6 +307,9 @@ export function InventoryFilterBar({
   showCommanderFilter?: boolean;
   showSearch?: boolean;
 }) {
+  const advancedActiveCount = countAdvancedFiltersActive(filters);
+  const [showAdvanced, setShowAdvanced] = useState(advancedActiveCount > 0);
+
   return (
     <div className="space-y-3">
       <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
@@ -171,48 +332,6 @@ export function InventoryFilterBar({
           )
         ) : null}
         <select
-          value={filters.game}
-          onChange={(e) =>
-            onChange({
-              game: e.target.value as InventoryFilterState["game"],
-            })
-          }
-          className="inventory-filter-input rounded-lg border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-white"
-        >
-          <option value="all">All games</option>
-          <option value="magic">
-            Magic ({facets?.games.magic ?? 0})
-          </option>
-          <option value="pokemon">
-            Pokémon ({facets?.games.pokemon ?? 0})
-          </option>
-          <option value="yugioh">
-            Yu-Gi-Oh ({facets?.games.yugioh ?? 0})
-          </option>
-          <option value="sports">
-            Sports ({facets?.games.sports ?? 0})
-          </option>
-          <option value="other">
-            Other ({facets?.games.other ?? 0})
-          </option>
-        </select>
-        {showCommanderFilter ? (
-          <select
-            value={filters.cardType}
-            onChange={(e) =>
-              onChange({
-                cardType: e.target.value as InventoryFilterState["cardType"],
-              })
-            }
-            className="inventory-filter-input rounded-lg border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-white"
-          >
-            <option value="all">All cards</option>
-            <option value="commander">
-              Commanders ({facets?.commanders ?? 0})
-            </option>
-          </select>
-        ) : null}
-        <select
           value={filters.sortBy}
           onChange={(e) =>
             onChange({
@@ -223,57 +342,273 @@ export function InventoryFilterBar({
           aria-label="Sort by"
         >
           <option value="name">Name A–Z</option>
-          <option value="price_desc">Price: high to low</option>
-          <option value="price_asc">Price: low to high</option>
+          {filters.source === "inventory" ? (
+            <>
+              <option value="price_desc">Price: high to low</option>
+              <option value="price_asc">Price: low to high</option>
+            </>
+          ) : null}
+          {filters.game === "magic" ? (
+            <>
+              <option value="cmc_asc">Mana value: low to high</option>
+              <option value="cmc_desc">Mana value: high to low</option>
+            </>
+          ) : null}
         </select>
       </div>
 
-      <div className="flex flex-wrap gap-1.5">
-        <FilterChip
-          active={
-            filters.selectedColors.length === 0 && filters.colorCount === "all"
-          }
-          onClick={() =>
-            onChange({ selectedColors: [], colorCount: "all" })
-          }
-        >
-          All colors
-        </FilterChip>
-        {(["W", "U", "B", "R", "G", "C"] as const).map((c) => (
-          <FilterChip
-            key={c}
-            active={filters.selectedColors.includes(c)}
-            onClick={() =>
-              onChange({
-                selectedColors: toggleSelectedColor(filters.selectedColors, c),
-                colorCount: "all",
-              })
-            }
-          >
-            {COLOR_META[c].label}
-          </FilterChip>
-        ))}
-        <FilterChip
-          active={filters.colorCount === "multicolor"}
-          onClick={() =>
-            onChange({ selectedColors: [], colorCount: "multicolor" })
-          }
-        >
-          Multicolor
-        </FilterChip>
-        <FilterChip
-          active={filters.colorCount === "two"}
-          onClick={() => onChange({ selectedColors: [], colorCount: "two" })}
-        >
-          2-color
-        </FilterChip>
-        <FilterChip
-          active={filters.colorCount === "three"}
-          onClick={() => onChange({ selectedColors: [], colorCount: "three" })}
-        >
-          3-color
-        </FilterChip>
-      </div>
+      {filters.game === "magic" ? (
+        <>
+          <div>
+            <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-neutral-500">
+              Mana value
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {MANA_VALUE_PRESETS.map((preset) => (
+                <FilterChip
+                  key={preset.id}
+                  active={filters.manaValuePreset === preset.id}
+                  onClick={() => onChange({ manaValuePreset: preset.id })}
+                >
+                  {preset.label}
+                </FilterChip>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-neutral-500">
+              Color
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              <FilterChip
+                active={
+                  filters.selectedColors.length === 0 && filters.colorCount === "all"
+                }
+                onClick={() =>
+                  onChange({ selectedColors: [], colorCount: "all" })
+                }
+              >
+                All colors
+              </FilterChip>
+              {(["W", "U", "B", "R", "G", "C"] as const).map((c) => (
+                <FilterChip
+                  key={c}
+                  active={filters.selectedColors.includes(c)}
+                  onClick={() =>
+                    onChange({
+                      selectedColors: toggleSelectedColor(filters.selectedColors, c),
+                      colorCount: "all",
+                    })
+                  }
+                >
+                  {COLOR_META[c].label}
+                </FilterChip>
+              ))}
+              <FilterChip
+                active={filters.colorCount === "multicolor"}
+                onClick={() =>
+                  onChange({ selectedColors: [], colorCount: "multicolor" })
+                }
+              >
+                Multicolor
+              </FilterChip>
+              <FilterChip
+                active={filters.colorCount === "two"}
+                onClick={() => onChange({ selectedColors: [], colorCount: "two" })}
+              >
+                2-color
+              </FilterChip>
+              <FilterChip
+                active={filters.colorCount === "three"}
+                onClick={() => onChange({ selectedColors: [], colorCount: "three" })}
+              >
+                3-color
+              </FilterChip>
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="button"
+              onClick={() => setShowAdvanced((open) => !open)}
+              className="flex items-center gap-2 text-xs font-medium text-neutral-400 transition hover:text-neutral-200"
+              aria-expanded={showAdvanced}
+            >
+              <span className="text-[11px] uppercase tracking-wide">
+                Advanced filters
+              </span>
+              <span aria-hidden>{showAdvanced ? "▾" : "▸"}</span>
+              {!showAdvanced && advancedActiveCount > 0 ? (
+                <span className="rounded-full bg-indigo-600/80 px-2 py-0.5 text-[10px] text-white">
+                  {advancedActiveCount} active
+                </span>
+              ) : null}
+            </button>
+
+            {showAdvanced ? (
+              <div className="mt-3 space-y-3 rounded-lg border border-neutral-800 bg-neutral-950/40 p-3">
+                <div>
+                  <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-neutral-500">
+                    Card type
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {showCommanderFilter ? (
+                      <FilterChip
+                        active={filters.cardType === "commander"}
+                        onClick={() =>
+                          onChange({
+                            cardType: filters.cardType === "commander" ? "all" : "commander",
+                            cardTypes: [],
+                          })
+                        }
+                      >
+                        Commander{facets?.commanders ? ` (${facets.commanders})` : ""}
+                      </FilterChip>
+                    ) : null}
+                    {INVENTORY_CARD_TYPE_OPTIONS.map((type) => (
+                      <FilterChip
+                        key={type}
+                        active={filters.cardTypes.includes(type)}
+                        onClick={() =>
+                          onChange({
+                            cardType: "all",
+                            cardTypes: toggleListItem(filters.cardTypes, type),
+                          })
+                        }
+                      >
+                        {type}
+                      </FilterChip>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-neutral-500">
+                    Deck roles
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {INVENTORY_ORACLE_ACTION_CHIPS.map((chip) => (
+                      <FilterChip
+                        key={chip.id}
+                        active={filters.oracleActions.includes(chip.id)}
+                        onClick={() =>
+                          onChange({
+                            oracleActions: toggleListItem(filters.oracleActions, chip.id),
+                          })
+                        }
+                      >
+                        {chip.label}
+                      </FilterChip>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-neutral-500">
+                    Semantic action
+                  </p>
+                  <div className="mb-2 flex gap-1.5">
+                    <FilterChip
+                      active={filters.primitiveActionMode === "any"}
+                      onClick={() => onChange({ primitiveActionMode: "any" })}
+                    >
+                      Any
+                    </FilterChip>
+                    <FilterChip
+                      active={filters.primitiveActionMode === "all"}
+                      onClick={() => onChange({ primitiveActionMode: "all" })}
+                    >
+                      All
+                    </FilterChip>
+                  </div>
+                  <div className="flex max-h-36 flex-wrap gap-1.5 overflow-y-auto">
+                    {INVENTORY_PRIMITIVE_ACTION_OPTIONS.map((action) => (
+                      <FilterChip
+                        key={action}
+                        active={filters.primitiveActions.includes(action)}
+                        onClick={() =>
+                          onChange({
+                            primitiveActions: toggleListItem(
+                              filters.primitiveActions,
+                              action,
+                            ),
+                          })
+                        }
+                      >
+                        {action.replace(/_/g, " ")}
+                      </FilterChip>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-neutral-500">
+                    Ability structure
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {INVENTORY_SEMANTIC_ABILITY_TYPES.map((ability) => (
+                      <FilterChip
+                        key={ability}
+                        active={filters.abilityTypes.includes(ability)}
+                        onClick={() =>
+                          onChange({
+                            abilityTypes: toggleListItem(filters.abilityTypes, ability),
+                          })
+                        }
+                      >
+                        {ability.replace(/_/g, " ")}
+                      </FilterChip>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-neutral-500">
+                    Zone interaction
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {INVENTORY_SEMANTIC_ZONES.map((zone) => (
+                      <FilterChip
+                        key={zone}
+                        active={filters.zones.includes(zone)}
+                        onClick={() =>
+                          onChange({
+                            zones: toggleListItem(filters.zones, zone),
+                          })
+                        }
+                      >
+                        {zone}
+                      </FilterChip>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-neutral-500">
+                    Semantic owner
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {INVENTORY_SEMANTIC_OWNERS.map((owner) => (
+                      <FilterChip
+                        key={owner}
+                        active={filters.semanticOwners.includes(owner)}
+                        onClick={() =>
+                          onChange({
+                            semanticOwners: toggleListItem(filters.semanticOwners, owner),
+                          })
+                        }
+                      >
+                        {owner.replace(/_/g, " ")}
+                      </FilterChip>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </>
+      ) : null}
     </div>
   );
 }
@@ -316,6 +651,7 @@ export type InventoryGridCard = {
   setName?: string;
   colorIdentity: string[];
   isCommander?: boolean;
+  typeLine?: string;
   slug?: string;
   themes?: Array<{ slug: string; label: string; count: number }>;
 };
@@ -325,9 +661,19 @@ function InventoryCardImage({
 }: {
   card: Pick<InventoryGridCard, "name" | "imageUrl" | "imageProxyUrl">;
 }) {
-  const candidates = [card.imageUrl, card.imageProxyUrl].filter(Boolean) as string[];
+  const candidates = useMemo(
+    () =>
+      [
+        ...(card.imageUrl?.includes("scryfall.io") ? [card.imageUrl] : []),
+        card.imageProxyUrl,
+        ...(card.imageUrl && !card.imageUrl.includes("scryfall.io")
+          ? [card.imageUrl]
+          : []),
+      ].filter(Boolean) as string[],
+    [card.imageProxyUrl, card.imageUrl],
+  );
   const [index, setIndex] = useState(0);
-  const src = candidates[index];
+  const src = index < candidates.length ? candidates[index] : undefined;
 
   if (!src) {
     return (
@@ -340,15 +686,14 @@ function InventoryCardImage({
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
+      key={src}
       src={src}
       alt={card.name}
       loading="lazy"
       decoding="async"
       draggable={false}
       className="pointer-events-none h-full w-full object-contain"
-      onError={() => {
-        if (index + 1 < candidates.length) setIndex(index + 1);
-      }}
+      onError={() => setIndex((current) => current + 1)}
     />
   );
 }
@@ -431,14 +776,13 @@ export function InventoryCardGrid({
                 >
                   ×{card.qty}
                 </span>
-              ) : null}
-              {card.isCommander ? (
+              ) : card.qty === 0 ? (
                 <span
-                  className={`absolute left-1.5 top-1.5 rounded bg-indigo-600/90 px-1.5 py-0.5 font-semibold uppercase text-white ${
-                    size === "large" ? "text-xs" : "text-[10px]"
+                  className={`absolute right-1.5 top-1.5 rounded bg-neutral-700/90 px-1.5 py-0.5 font-semibold uppercase text-neutral-200 ${
+                    size === "large" ? "text-[10px]" : "text-[9px]"
                   }`}
                 >
-                  CMD
+                  Catalog
                 </span>
               ) : null}
             </div>

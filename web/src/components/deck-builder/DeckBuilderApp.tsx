@@ -12,7 +12,15 @@ import {
   type InventoryFilterState,
   type InventoryGridCard,
 } from "@/components/store-inventory/InventoryBrowseUI";
+import { useCustomer } from "@/context/CustomerContext";
+import {
+  buildOwnedCardIndex,
+  cardOwnershipTag,
+  isCardOwned,
+  type OwnershipTag,
+} from "@/lib/collection/owned-index";
 import type { StoreDeckCard } from "@/lib/deck-builder/types";
+import type { CollectionCard } from "@/lib/types";
 
 type WizardStep = "game" | "format" | "commander" | "theme" | "builder";
 
@@ -95,6 +103,7 @@ export function DeckBuilderApp({
   const [deckCards, setDeckCards] = useState<StoreDeckCard[]>([]);
   const [inventory, setInventory] = useState<InventoryCard[]>([]);
   const [recommendations, setRecommendations] = useState<RecCard[]>([]);
+  const [collection, setCollection] = useState<CollectionCard[]>([]);
   const [recTab, setRecTab] = useState<"synergy" | "stock">("synergy");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -109,6 +118,7 @@ export function DeckBuilderApp({
   const [chatLoading, setChatLoading] = useState(false);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [exportText, setExportText] = useState<string | null>(null);
+  const { customer } = useCustomer();
 
   const apiBase = `/api/store/${encodeURIComponent(slug)}/deck-builder`;
 
@@ -120,6 +130,11 @@ export function DeckBuilderApp({
         .filter((c) => c.board === "main")
         .reduce((n, c) => n + c.qty, 0),
     [deckCards],
+  );
+
+  const ownedIndex = useMemo(
+    () => buildOwnedCardIndex(collection),
+    [collection],
   );
 
   const loadBuilderData = useCallback(async () => {
@@ -185,6 +200,27 @@ export function DeckBuilderApp({
       return () => clearTimeout(t);
     }
   }, [step, commanderScryfallId, deckCards, targetBracket, validateDeck]);
+
+  // The binder tells us which cards the shopper already has, so the builder
+  // can say "owned" instead of asking them to buy it again.
+  useEffect(() => {
+    if (!customer) return;
+
+    let active = true;
+    fetch(`/api/store/${encodeURIComponent(slug)}/collection`, {
+      credentials: "include",
+    })
+      .then(async (r) => {
+        if (!r.ok) return;
+        const data = (await r.json()) as { cards?: CollectionCard[] };
+        if (active) setCollection(data.cards ?? []);
+      })
+      .catch(() => {});
+
+    return () => {
+      active = false;
+    };
+  }, [customer, slug]);
 
   useEffect(() => {
     if (!initialShareToken) return;
@@ -313,6 +349,26 @@ export function DeckBuilderApp({
       scryfallId.slice(0, 8)
     );
   }
+
+  function deckRowTag(scryfallId: string): OwnershipTag {
+    const stocked = inventory.find((i) => i.scryfallId === scryfallId);
+    return cardOwnershipTag(
+      {
+        scryfallId,
+        name: cardName(scryfallId),
+        inStock: stocked ? stocked.qty > 0 : false,
+      },
+      ownedIndex,
+    );
+  }
+
+  const deckTally = deckCards.reduce(
+    (tally, row) => {
+      tally[deckRowTag(row.scryfallId)] += 1;
+      return tally;
+    },
+    { owned: 0, shop: 0, unavailable: 0 },
+  );
 
   async function saveDeck() {
     if (!commanderScryfallId || !selectedCommander) return;
@@ -772,15 +828,27 @@ export function DeckBuilderApp({
           <h2 className="mb-2 text-sm font-semibold uppercase text-neutral-400">
             Your deck
           </h2>
+          {customer && deckCards.length > 0 ? (
+            <p className="mb-2 text-xs text-neutral-400">
+              <span className="text-amber-300">{deckTally.owned} owned</span> ·{" "}
+              <span className="text-emerald-400">{deckTally.shop} in store</span>
+              {deckTally.unavailable > 0
+                ? ` · ${deckTally.unavailable} to source elsewhere`
+                : ""}
+            </p>
+          ) : null}
           <ul className="max-h-[70vh] space-y-1 overflow-y-auto text-sm">
             {deckCards.map((row) => (
               <li
                 key={`${row.board}-${row.scryfallId}`}
                 className="flex items-center justify-between rounded border border-neutral-800 px-2 py-1"
               >
-                <span>
-                  {row.qty}x {cardName(row.scryfallId)}
-                  {row.board === "commander" ? " (CMD)" : ""}
+                <span className="flex min-w-0 items-center gap-1.5">
+                  <span className="truncate">
+                    {row.qty}x {cardName(row.scryfallId)}
+                    {row.board === "commander" ? " (CMD)" : ""}
+                  </span>
+                  <OwnershipBadge tag={deckRowTag(row.scryfallId)} />
                 </span>
                 <div className="flex gap-1">
                   <button type="button" className="px-1 text-neutral-400" onClick={() => addCard(row.scryfallId, row.board)}>+</button>
@@ -833,7 +901,12 @@ export function DeckBuilderApp({
                     <p className="truncate">{r.name}</p>
                     <p className="text-xs text-neutral-500">
                       {Math.round(r.synergy * 100)}% · {r.category}
-                      {r.inStock ? (
+                      {isCardOwned(
+                        { scryfallId: r.scryfallId, name: r.name },
+                        ownedIndex,
+                      ) ? (
+                        <span className="ml-1 text-amber-300">In your binder</span>
+                      ) : r.inStock ? (
                         <span className="ml-1 text-emerald-400">In store ({r.stockQty})</span>
                       ) : null}
                     </p>
@@ -887,4 +960,22 @@ export function DeckBuilderApp({
       </div>
     </div>
   );
+}
+
+function OwnershipBadge({ tag }: { tag: OwnershipTag }) {
+  if (tag === "owned") {
+    return (
+      <span className="shrink-0 rounded bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-medium text-amber-300">
+        Owned
+      </span>
+    );
+  }
+  if (tag === "shop") {
+    return (
+      <span className="shrink-0 rounded bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-medium text-emerald-300">
+        Shop
+      </span>
+    );
+  }
+  return null;
 }

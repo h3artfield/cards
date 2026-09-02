@@ -18,6 +18,8 @@ export function clerkDragPayload(card: GatheringCard): string {
     qty: card.qty,
     colorIdentity: card.colorIdentity,
     setName: card.setName,
+    isCommander: card.isCommander,
+    typeLine: card.typeLine,
     reason: card.reason,
   } satisfies GatheringCard);
 }
