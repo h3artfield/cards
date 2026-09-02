@@ -1,9 +1,5 @@
 import { initializeApp, getApps, cert, App, applicationDefault } from "firebase-admin/app";
-import {
-  getFirestore,
-  initializeFirestore,
-  type Firestore,
-} from "firebase-admin/firestore";
+import { getFirestore, type Firestore } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
 import { isCloudDeployment } from "../cloud-env";
 
@@ -206,34 +202,22 @@ export function getAdminApp(): App | null {
 
 let firestoreSettingsApplied = false;
 
-function applyFirestoreSettings(db: Firestore): Firestore {
-  if (!firestoreSettingsApplied) {
-    try {
-      db.settings({ ignoreUndefinedProperties: true });
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "";
-      if (!message.includes("already been initialized")) {
-        throw err;
-      }
-    }
-    firestoreSettingsApplied = true;
-  }
-  return db;
-}
-
 export function getAdminFirestore(): Firestore | null {
   const app = getAdminApp();
   if (!app) return null;
   if (cachedFirestore) return cachedFirestore;
 
-  try {
-    cachedFirestore = initializeFirestore(app, { ignoreUndefinedProperties: true });
+  // Do not pass this through initializeFirestore(): firebase-admin forwards
+  // only `preferRest` to the Firestore constructor and drops the rest without
+  // erroring, which leaves undefined values rejected on every write.
+  const db = getFirestore(app);
+  if (!firestoreSettingsApplied) {
+    db.settings({ ignoreUndefinedProperties: true });
     firestoreSettingsApplied = true;
-    return cachedFirestore;
-  } catch {
-    cachedFirestore = applyFirestoreSettings(getFirestore(app));
-    return cachedFirestore;
   }
+
+  cachedFirestore = db;
+  return cachedFirestore;
 }
 
 export function getAdminStorage() {

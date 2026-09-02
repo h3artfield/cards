@@ -241,7 +241,7 @@ export const dataStore = {
       await db
         .collection(COLLECTIONS.stores)
         .doc(settings.id)
-        .set({ ...settings, id: settings.id }, { merge: true });
+        .set(forFirestore({ ...settings, id: settings.id }), { merge: true });
       return;
     }
     await mutateDevMemory((state) => {
@@ -342,7 +342,7 @@ export const dataStore = {
       await db
         .collection(COLLECTIONS.storeSettings)
         .doc(STORE_SETTINGS_DOC)
-        .set(settings, { merge: true });
+        .set(forFirestore(settings), { merge: true });
     }
   },
 
