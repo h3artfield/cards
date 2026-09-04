@@ -83,6 +83,7 @@
     "build:professor-v4-17-slice5-4-review-bundle": "npx --yes tsx scripts/build-v4-17-slice5-4-review-bundle-v1.ts",
     "test:professor-sol-directed-p0-truth": "npx --yes tsx src/lib/deck-synthesis/professor-sol-directed-p0-truth.selftest.ts",
     "test:commander-optimization-score-v1": "npx --yes tsx src/lib/commander-optimization-score/v1/commander-optimization-score-v1.selftest.ts",
+    "test:cos-v1-profile-measurability": "npx --yes tsx src/lib/commander-optimization-score/v1/profile-measurability-v1.selftest.ts",
     "test:cos-v1-universal-coverage": "npx --yes tsx src/lib/commander-optimization-score/v1/universal-coverage.selftest.ts",
     "test:commander-bracket-rubric-v1": "npx --yes tsx src/lib/commander-bracket-rubric/v1/commander-bracket-rubric-v1.selftest.ts",
     "test:deck-swap-v1": "npx --yes tsx src/lib/deck-swap/v1/deck-swap-v1.selftest.ts",

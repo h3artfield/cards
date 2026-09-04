@@ -37,7 +37,7 @@ export type DeckReportModelV111 = {
   competitiveStrength: number | null;
   buildOptimization: number | null;
   buildOptimizationLabel: string;
-  profileBars: Array<{ label: string; percentile: number; band: string }>;
+  profileBars: Array<{ label: string; percentile: number; band: string; measurable: boolean }>;
   whatItDoes: string;
   strengths: string[];
   headroom: string[];
@@ -103,10 +103,16 @@ export function buildSolDirectedDeckReportModelV111(args: {
       label: axis.label,
       percentile: Math.round(axis.percentile),
       band: axis.role === "load_bearing" ? "Strength drivers" : "Deck characteristics",
+      measurable: axis.measurable,
     }));
 
-  const rankedHigh = [...profile].sort((a, b) => b.percentile - a.percentile);
-  const rankedLow = [...profile].sort((a, b) => a.percentile - b.percentile);
+  // Only measurable axes can be a strength or an opportunity. A combo-derived
+  // axis with no verified line sits at the floor for every such deck, so
+  // ranking it would put "improve Redundancy" at the top of a customer report
+  // when no card change can move it.
+  const rankable = profile.filter((axis) => axis.measurable);
+  const rankedHigh = [...rankable].sort((a, b) => b.percentile - a.percentile);
+  const rankedLow = [...rankable].sort((a, b) => a.percentile - b.percentile);
   const strengths = rankedHigh.slice(0, 3).map((axis) => axis.label);
   const headroom = rankedLow.slice(0, 3).map((axis) => axis.label);
 

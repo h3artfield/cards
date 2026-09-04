@@ -17,6 +17,22 @@ export const COS_V1_PROFILE_META: Array<{
   { id: "coherence", label: "Coherence", role: "load_bearing" },
 ];
 
+/**
+ * Axes computed purely from verified CommanderSpellbook lines.
+ *
+ * `win_architecture` is 0 unless a complete line exists, and `redundancy` is
+ * sharedPieceConcentration — the share of combo sets containing the most
+ * reused card — which is 0 when there are no sets. With no verified line
+ * neither is a measurement of the deck, so a deck with no combos lands at the
+ * bottom of both reference distributions no matter how it is built. Notably
+ * `redundancy` does not mean strategic redundancy: a deck with many backup
+ * plans and no Spellbook combo still scores 0.
+ */
+export const COS_V1_COMBO_DERIVED_AXES: ReadonlySet<CosV1ProfileAxisId> = new Set<CosV1ProfileAxisId>([
+  "win_architecture",
+  "redundancy",
+]);
+
 export function profileScalars(
   feat: CosV1AccessFeatures,
   fp: CosV1ArchitectureFingerprint | null,

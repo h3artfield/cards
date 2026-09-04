@@ -6,7 +6,7 @@ import {
   COS_V1_SPELLBOOK_FINGERPRINT_SHA,
 } from "./constants";
 import { percentileFromGrid } from "./percentile";
-import { COS_V1_PROFILE_META, profileScalars } from "./profile-scalars";
+import { COS_V1_COMBO_DERIVED_AXES, COS_V1_PROFILE_META, profileScalars } from "./profile-scalars";
 import {
   COS_V1_UNIVERSAL_COVERAGE_VERSION,
   blendedReferencePercentile,
@@ -184,6 +184,18 @@ export function scoreFromHeadlineVector(args: {
   }
 
   const scalars = profileScalars(args.access, args.architecture);
+  /**
+   * Same rule as the withheld intercept above: do not present a number whose
+   * basis is missing. With no verified combo line the two combo-derived axes
+   * sit at the floor of their reference grids for every such deck, so their
+   * percentile describes the reference population, not this 99.
+   */
+  const noComboBasis = !args.architecture || Number(args.architecture.nNormalizedCombos || 0) === 0;
+  const measurability = (id: CosV1ProfileAxis["id"]) =>
+    noComboBasis && COS_V1_COMBO_DERIVED_AXES.has(id)
+      ? { measurable: false, unmeasurableReason: "NO_VERIFIED_COMBO_LINE" as const }
+      : { measurable: true };
+
   const profile: CosV1ProfileAxis[] = COS_V1_PROFILE_META.map((meta) => {
     const within = commanderKnown ? cmdRef?.profileQuantiles?.[meta.id] : null;
     const useWithin = Boolean(within && cmdRef && cmdRef.nUnique >= COS_V1_MIN_COMMANDER_UNIQUE);
@@ -192,6 +204,7 @@ export function scoreFromHeadlineVector(args: {
         ...meta,
         percentile: percentileFromGrid(scalars[meta.id], within!),
         mapping: "within_commander" as const,
+        ...measurability(meta.id),
       };
     }
     const globalGrid = args.reference.globalProfileQuantiles[meta.id]!;
@@ -207,6 +220,7 @@ export function scoreFromHeadlineVector(args: {
       ...meta,
       percentile,
       mapping: commanderGrid ? ("blended" as const) : ("global" as const),
+      ...measurability(meta.id),
     };
   });
 

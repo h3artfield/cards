@@ -80,6 +80,13 @@ function axisExplanation(axis: CosV1Score["profile"][number]): string {
     axis.role === "load_bearing"
       ? "This is one of the dimensions associated with the frozen strength model."
       : "This is a descriptive characteristic. It is not averaged into Competitive Strength.";
+
+  // Reporting a percentile here would describe the reference population rather
+  // than the deck: every deck without a verified line sits at the same floor.
+  if (!axis.measurable) {
+    return `${axis.label} is not measurable for this 99. It is derived entirely from verified CommanderSpellbook lines, and this list has none, so there is no basis to place it against ${peer}. This is not a finding that the deck is weak on ${axis.label.toLowerCase()}. ${associated}`;
+  }
+
   let standing: string;
   if (p >= 80) standing = `This build uses an unusually high ${axis.label.toLowerCase()} profile relative to ${peer}.`;
   else if (p >= 60) standing = `This build sits above typical ${peer} on ${axis.label.toLowerCase()}.`;
@@ -270,7 +277,10 @@ function winConditions(
 }
 
 function whyTheScore(score: CosV1Score): string[] {
-  const drivers = score.profile.filter((a) => a.role === "load_bearing");
+  // Unmeasurable axes are excluded: citing Win architecture as a dimension
+  // that "sits lower" reads as a verdict on the deck when it only reflects the
+  // absence of a verified combo line, which the combo section already states.
+  const drivers = score.profile.filter((a) => a.role === "load_bearing" && a.measurable);
   const high = [...drivers].sort((a, b) => b.percentile - a.percentile).filter((a) => a.percentile >= 70).slice(0, 3);
   const low = [...drivers].sort((a, b) => a.percentile - b.percentile).filter((a) => a.percentile < 40).slice(0, 2);
   const lines: string[] = [];
@@ -304,7 +314,10 @@ function whyTheScore(score: CosV1Score): string[] {
 
 function optimizationHeadroom(score: CosV1Score, architecture: CosV1ArchitectureFingerprint | null): string[] {
   const lines: string[] = [];
-  const ranked = [...score.profile].sort((a, b) => a.percentile - b.percentile);
+  // Naming an unmeasurable axis as the deck's biggest opportunity sends the
+  // player after something that cannot be improved by construction: Redundancy
+  // at the 0th percentile means "no verified combo line", not "add backups".
+  const ranked = [...score.profile].filter((a) => a.measurable).sort((a, b) => a.percentile - b.percentile);
   const weak = ranked.filter((a) => a.percentile < 45).slice(0, 3);
   if (weak.length) {
     lines.push(
@@ -346,6 +359,8 @@ export function buildCosV1PlayerReport(args: {
     percentile: axis.percentile,
     mapping: axis.mapping,
     explanation: axisExplanation(axis),
+    measurable: axis.measurable,
+    ...(axis.unmeasurableReason ? { unmeasurableReason: axis.unmeasurableReason } : {}),
   }));
   return {
     competitiveStrengthBlurb: competitiveStrengthBlurb(args.score),

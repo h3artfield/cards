@@ -28,6 +28,7 @@ import { downloadSolDirectedDeckReportPdf } from "@/lib/deck-synthesis/professor
 import { tcgPriceForCardName } from "@/lib/deck-synthesis/professor-brew-scryfall-prices-v1";
 import type { CosV1Score } from "@/lib/commander-optimization-score/v1/types";
 import { ordinalPercentile } from "@/lib/commander-optimization-score/v1/player-report";
+import { cosGradeDivergenceNoteV1 } from "@/lib/commander-optimization-score/v1/grade-divergence-v1";
 import { howCosWorksPath } from "@/lib/commander-optimization-score/v1/public-path";
 import { CosV1PlayerReportView } from "./CosV1PlayerReportView";
 
@@ -356,6 +357,10 @@ function ScorePlaystyleModal({
     (headProfessor ? headProfessorDisplayLetter(headProfessor.grade) : null) ??
     deckGrade?.overallLetter ??
     "—";
+  const divergenceNote = cosGradeDivergenceNoteV1({
+    displayLetter,
+    buildOptimization: cos?.buildOptimization,
+  });
   const showRequiredChanges =
     headProfessor != null &&
     headProfessor.requiredChanges.length > 0 &&
@@ -421,7 +426,7 @@ function ScorePlaystyleModal({
                 ) : null}
                 {cos?.buildOptimization != null ? (
                   <p className="professor-mtg-body text-sm tabular-nums">
-                    Build Optimization {Math.round(cos.buildOptimization)}th percentile
+                    Build Optimization {ordinalPercentile(cos.buildOptimization)} percentile
                     {cos.buildOptimizationReferenceDepth ? (
                       <span className="ml-2 opacity-70">
                         {cos.buildOptimizationReferenceDepth === "STRONG"
@@ -441,6 +446,9 @@ function ScorePlaystyleModal({
                     <p className="professor-mtg-muted text-xs leading-relaxed">
                       {cos.playerReport.buildOptimizationBlurb}
                     </p>
+                    {divergenceNote ? (
+                      <p className="professor-mtg-muted text-xs leading-relaxed">{divergenceNote}</p>
+                    ) : null}
                   </div>
                 ) : null}
               </div>

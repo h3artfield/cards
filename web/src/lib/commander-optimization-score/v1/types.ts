@@ -12,12 +12,27 @@ export type CosV1ProfileAxisId =
   | "role_compression"
   | "coherence";
 
+/**
+ * Why an axis has no basis to report. Two axes are derived entirely from
+ * verified CommanderSpellbook lines, so with no complete line their scalar is
+ * a structural zero rather than a measurement, and its percentile describes
+ * the reference population instead of the deck.
+ */
+export type CosV1AxisUnmeasurableReasonV1 = "NO_VERIFIED_COMBO_LINE";
+
 export type CosV1ProfileAxis = {
   id: CosV1ProfileAxisId;
   label: string;
   role: "load_bearing" | "descriptive_only";
   percentile: number;
   mapping: "within_commander" | "global" | "blended";
+  /**
+   * False when the axis has no basis for this deck. The percentile is still
+   * emitted so the frozen math is unchanged, but it must not be presented as a
+   * statement about the deck.
+   */
+  measurable: boolean;
+  unmeasurableReason?: CosV1AxisUnmeasurableReasonV1;
 };
 
 export type CosV1FailureCode =
@@ -43,6 +58,9 @@ export type CosV1PlayerReportAxis = {
   percentile: number;
   mapping: "within_commander" | "global" | "blended";
   explanation: string;
+  /** False when this axis has no basis for this deck — show no percentile. */
+  measurable: boolean;
+  unmeasurableReason?: CosV1AxisUnmeasurableReasonV1;
 };
 
 export type CosV1KnownCombo = {

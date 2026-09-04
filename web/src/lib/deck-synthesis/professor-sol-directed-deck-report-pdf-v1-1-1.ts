@@ -212,6 +212,17 @@ export async function downloadSolDirectedDeckReportPdf(args: {
         doc.text(pdfSafe(row.label), margin, y + 7);
         const barX = margin + 120;
         const barW = contentW - 160;
+        // An axis with no basis gets no bar and no number: a full-width empty
+        // track reading "0" says the deck failed at something it was never
+        // measured on.
+        if (row.measurable === false) {
+          doc.setFont("helvetica", "normal");
+          setInk(MUTED);
+          doc.text(pdfSafe("not measurable - no verified combo line"), barX, y + 7);
+          setInk();
+          y += 14;
+          continue;
+        }
         doc.setFillColor(BAR_BG.r, BAR_BG.g, BAR_BG.b);
         doc.roundedRect(barX, y, barW, 9, 2, 2, "F");
         doc.setFillColor(BAR.r, BAR.g, BAR.b);

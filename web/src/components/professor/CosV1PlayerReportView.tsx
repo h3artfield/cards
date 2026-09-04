@@ -12,27 +12,41 @@ function AxisRow({
   percentile,
   mapping,
   explanation,
+  measurable,
 }: {
   label: string;
   percentile: number;
   mapping: "within_commander" | "global" | "blended";
   explanation: string;
+  measurable?: boolean;
 }) {
+  // An axis with no basis shows no percentile and no bar. Rendering "0th" for
+  // a metric that only counts verified combo lines reads as a verdict on the
+  // deck, which is the opposite of what it means.
+  const unmeasurable = measurable === false;
   const width = `${Math.max(8, Math.min(100, Math.round(percentile)))}%`;
   return (
     <div className="professor-mtg-stat">
       <div className="flex items-baseline justify-between gap-2">
         <p className="professor-mtg-label text-[10px]">{label}</p>
         <p className="professor-mtg-body text-sm font-semibold tabular-nums">
-          {ordinalPercentile(percentile)}
-          <span className="ml-1 text-[10px] font-normal opacity-60">
-            {mapping === "within_commander" ? "vs this commander" : mapping === "blended" ? "blended" : "global"}
-          </span>
+          {unmeasurable ? (
+            <span className="text-xs font-normal opacity-70">not measurable</span>
+          ) : (
+            <>
+              {ordinalPercentile(percentile)}
+              <span className="ml-1 text-[10px] font-normal opacity-60">
+                {mapping === "within_commander" ? "vs this commander" : mapping === "blended" ? "blended" : "global"}
+              </span>
+            </>
+          )}
         </p>
       </div>
-      <div className="professor-mtg-bar mt-2">
-        <div className="professor-mtg-bar-fill" style={{ width }} />
-      </div>
+      {unmeasurable ? null : (
+        <div className="professor-mtg-bar mt-2">
+          <div className="professor-mtg-bar-fill" style={{ width }} />
+        </div>
+      )}
       <p className="professor-mtg-muted mt-2 text-xs leading-relaxed">{explanation}</p>
     </div>
   );
@@ -67,6 +81,7 @@ export function CosV1PlayerReportView({
                 percentile={axis.percentile}
                 mapping={axis.mapping}
                 explanation={axis.explanation}
+                measurable={axis.measurable}
               />
             ))}
           </div>
@@ -79,6 +94,7 @@ export function CosV1PlayerReportView({
                 percentile={axis.percentile}
                 mapping={axis.mapping}
                 explanation={axis.explanation}
+                measurable={axis.measurable}
               />
             ))}
           </div>
