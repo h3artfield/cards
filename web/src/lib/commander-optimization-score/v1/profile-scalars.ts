@@ -1,20 +1,83 @@
 import type { CosV1AccessFeatures, CosV1ArchitectureFingerprint, CosV1ProfileAxisId } from "./types";
 
+/**
+ * `measures` states what the scalar actually counts, in the player's language.
+ *
+ * Every axis label is broader than its measurement, and a reader who takes the
+ * label at face value will draw the wrong conclusion. "Redundancy" sounds like
+ * backup plans but counts combo-piece reuse; "Resilience" sounds like surviving
+ * a board wipe but counts graveyard recursion only; "Coherence" sounds like
+ * strategic focus but counts how tightly the deck concentrates into semantic
+ * clusters, per copy, so basic lands raise it. Showing the measurement next to
+ * the number is what makes the percentile interpretable.
+ */
 export const COS_V1_PROFILE_META: Array<{
   id: CosV1ProfileAxisId;
   label: string;
   role: "load_bearing" | "descriptive_only";
+  measures: string;
 }> = [
-  { id: "win_architecture", label: "Win architecture", role: "load_bearing" },
-  { id: "access_consistency", label: "Access / consistency", role: "descriptive_only" },
-  { id: "mana_efficiency", label: "Mana efficiency", role: "load_bearing" },
-  { id: "redundancy", label: "Redundancy", role: "descriptive_only" },
-  { id: "interaction", label: "Interaction", role: "load_bearing" },
-  { id: "protection", label: "Protection", role: "load_bearing" },
-  { id: "resilience", label: "Resilience", role: "descriptive_only" },
-  { id: "card_advantage", label: "Card advantage", role: "load_bearing" },
-  { id: "role_compression", label: "Role compression", role: "descriptive_only" },
-  { id: "coherence", label: "Coherence", role: "load_bearing" },
+  {
+    id: "win_architecture",
+    label: "Win architecture",
+    role: "load_bearing",
+    measures: "Verified CommanderSpellbook lines: how many, how short, and whether any is a two-card line.",
+  },
+  {
+    id: "access_consistency",
+    label: "Access / consistency",
+    role: "descriptive_only",
+    measures: "Share of nonland cards that search your library.",
+  },
+  {
+    id: "mana_efficiency",
+    label: "Mana efficiency",
+    role: "load_bearing",
+    measures: "Share of nonlands costing 2 or less, plus ramp density, less average mana value.",
+  },
+  {
+    id: "redundancy",
+    label: "Redundancy",
+    role: "descriptive_only",
+    measures: "How often one card is reused across your verified combo lines — not backup game plans.",
+  },
+  {
+    id: "interaction",
+    label: "Interaction",
+    role: "load_bearing",
+    measures: "Share of nonlands that counter, destroy, exile, fight, or damage a target.",
+  },
+  {
+    id: "protection",
+    label: "Protection",
+    role: "load_bearing",
+    measures: "Share of nonlands granting hexproof, indestructible, ward, or protection.",
+  },
+  {
+    id: "resilience",
+    label: "Resilience",
+    role: "descriptive_only",
+    measures: "Share of nonlands that recur cards from a graveyard — recursion only, not protection.",
+  },
+  {
+    id: "card_advantage",
+    label: "Card advantage",
+    role: "load_bearing",
+    measures: "Share of nonlands whose text draws cards.",
+  },
+  {
+    id: "role_compression",
+    label: "Role compression",
+    role: "descriptive_only",
+    measures: "Share of nonlands filling two or more of the roles above at once.",
+  },
+  {
+    id: "coherence",
+    label: "Coherence",
+    role: "load_bearing",
+    measures:
+      "How tightly the deck concentrates into a few card-similarity clusters. Every copy counts, so a high basic-land count raises it.",
+  },
 ];
 
 /**

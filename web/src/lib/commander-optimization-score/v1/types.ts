@@ -24,6 +24,8 @@ export type CosV1ProfileAxis = {
   id: CosV1ProfileAxisId;
   label: string;
   role: "load_bearing" | "descriptive_only";
+  /** What the scalar actually counts — every label is broader than its measurement. */
+  measures: string;
   percentile: number;
   mapping: "within_commander" | "global" | "blended";
   /**
@@ -58,6 +60,8 @@ export type CosV1PlayerReportAxis = {
   percentile: number;
   mapping: "within_commander" | "global" | "blended";
   explanation: string;
+  /** What the scalar actually counts — every label is broader than its measurement. */
+  measures: string;
   /** False when this axis has no basis for this deck — show no percentile. */
   measurable: boolean;
   unmeasurableReason?: CosV1AxisUnmeasurableReasonV1;

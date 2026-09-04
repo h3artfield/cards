@@ -13,12 +13,14 @@ function AxisRow({
   mapping,
   explanation,
   measurable,
+  measures,
 }: {
   label: string;
   percentile: number;
   mapping: "within_commander" | "global" | "blended";
   explanation: string;
   measurable?: boolean;
+  measures?: string;
 }) {
   // An axis with no basis shows no percentile and no bar. Rendering "0th" for
   // a metric that only counts verified combo lines reads as a verdict on the
@@ -47,6 +49,9 @@ function AxisRow({
           <div className="professor-mtg-bar-fill" style={{ width }} />
         </div>
       )}
+      {measures ? (
+        <p className="professor-mtg-muted mt-2 text-[11px] italic leading-relaxed opacity-80">{measures}</p>
+      ) : null}
       <p className="professor-mtg-muted mt-2 text-xs leading-relaxed">{explanation}</p>
     </div>
   );
@@ -82,6 +87,7 @@ export function CosV1PlayerReportView({
                 mapping={axis.mapping}
                 explanation={axis.explanation}
                 measurable={axis.measurable}
+                measures={axis.measures}
               />
             ))}
           </div>
@@ -95,6 +101,7 @@ export function CosV1PlayerReportView({
                 mapping={axis.mapping}
                 explanation={axis.explanation}
                 measurable={axis.measurable}
+                measures={axis.measures}
               />
             ))}
           </div>

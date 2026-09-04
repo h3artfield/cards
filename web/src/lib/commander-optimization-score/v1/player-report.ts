@@ -355,6 +355,7 @@ export function buildCosV1PlayerReport(args: {
   const profile: CosV1PlayerReportAxis[] = args.score.profile.map((axis) => ({
     id: axis.id,
     label: COS_V1_PROFILE_META.find((m) => m.id === axis.id)?.label ?? axis.label,
+    measures: COS_V1_PROFILE_META.find((m) => m.id === axis.id)?.measures ?? axis.measures,
     band: axis.role === "load_bearing" ? "Strength drivers" : "Deck characteristics",
     percentile: axis.percentile,
     mapping: axis.mapping,

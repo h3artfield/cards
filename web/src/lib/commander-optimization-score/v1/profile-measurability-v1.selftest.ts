@@ -18,7 +18,7 @@ import { resolve } from "node:path";
 import { createHash } from "node:crypto";
 import { scoreFromHeadlineVector } from "./score";
 import { buildCosV1PlayerReport } from "./player-report";
-import { COS_V1_COMBO_DERIVED_AXES } from "./profile-scalars";
+import { COS_V1_COMBO_DERIVED_AXES, COS_V1_PROFILE_META } from "./profile-scalars";
 import { cosGradeDivergenceNoteV1 } from "./grade-divergence-v1";
 import type { CosV1AccessFeatures, CosV1ArchitectureFingerprint, CosV1Model, CosV1Reference } from "./types";
 
@@ -221,6 +221,37 @@ check("a measurable weak axis is still reported as headroom", () => {
   const interaction = built.profile.find((a) => a.id === "interaction")!;
   assert.equal(interaction.measurable, true);
   assert.doesNotMatch(interaction.explanation, /not measurable/i);
+});
+
+console.log("\naxis labels state what they measure");
+
+check("every axis carries a measurement description", () => {
+  for (const meta of COS_V1_PROFILE_META) {
+    assert.ok(meta.measures && meta.measures.length > 20, `${meta.id} needs a measures line`);
+    assert.match(meta.measures, /\.$/, `${meta.id} measures should read as a sentence`);
+  }
+});
+
+check("the three labels that mislead say what they actually count", () => {
+  const by = (id: string) => COS_V1_PROFILE_META.find((m) => m.id === id)!.measures;
+  // Redundancy reads as "backup plans" but is combo-piece reuse.
+  assert.match(by("redundancy"), /combo lines/i);
+  assert.match(by("redundancy"), /not backup game plans/i);
+  // Resilience reads as "survives removal" but is graveyard recursion only.
+  assert.match(by("resilience"), /graveyard/i);
+  assert.match(by("resilience"), /not protection/i);
+  // Coherence reads as "focused strategy" but is cluster concentration, and
+  // measuring per copy means 20 basics are worth ~15 percentile points.
+  assert.match(by("coherence"), /clusters/i);
+  assert.match(by("coherence"), /basic-land/i);
+});
+
+check("the report carries the measurement through to the player", () => {
+  const { report: built } = report(comboless, UNKNOWN);
+  assert.equal(built.profile.length, 10);
+  for (const axis of built.profile) {
+    assert.ok(axis.measures && axis.measures.length > 20, `${axis.id} measures missing in report`);
+  }
 });
 
 console.log("\ngrade vs build-optimization divergence");
