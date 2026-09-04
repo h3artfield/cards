@@ -42,3 +42,15 @@ __pycache__/
 # Phase 6A.1 benchmark authority private material (adjudication oracle — not for implementation)
 benchmark-authority/**/private/
 
+# Scratch output from local build/measurement runs. These are dot-prefixed
+# request/result dumps written next to the app, useful as local fixtures for the
+# offline proof scripts but never part of the source tree.
+web/.*-test-request.json
+web/.*-test-result*.json
+web/.last-build.json
+web/.omnath-*.json
+
+# Logs from one-off deploy and index-build runs
+*.log
+_*-blob.txt
+
