@@ -2,6 +2,9 @@
  * Requirement-specific retrieval with global candidate dictionary, seeds, guardrails, land plan.
  */
 import type { DeckResolutionCatalog } from "../../../scripts/lib/load-deck-resolution-catalog";
+
+/** The catalog's card record, named locally so land ranking can be typed. */
+type CatalogCardV11 = NonNullable<ReturnType<DeckResolutionCatalog["byOracleId"]["get"]>>;
 import { isCurrentlyCommanderLegal } from "../../../scripts/lib/load-deck-resolution-catalog";
 import { combinedGoldenOracleText } from "../../../scripts/lib/load-golden-catalog-index";
 import { commanderLegalInIdentity } from "@/lib/semantic-visualization/filters-v1";
@@ -10,6 +13,11 @@ import {
   resolveCanonicalCardTruthV4164,
 } from "./professor-canonical-card-truth-v4-16-4-v1";
 import { isCanonicalLandForDeckPartition } from "./professor-canonical-deck-partition-v1";
+import {
+  classifyLandManaQualityV1,
+  isLandUnusableInIdentityV1,
+  landManaQualityRankV1,
+} from "./professor-sol-directed-land-mana-quality-v1";
 import { basicLandColorIdentity, isBasicLandName } from "./professor-commander-legality-v4-9-v1";
 import { resolveCanonicalCardIdentity } from "./professor-canonical-card-identity-v4-15-1-v1";
 import { resolvePlayableExactNameInCatalog } from "./professor-playable-oracle-resolution-v1-1-1";
@@ -615,8 +623,20 @@ function buildLandPool(args: {
     (basic) => basicSlots[basic.kind] > 0 && commanderLegalInIdentity(basic.colors, identity),
   );
   if (!hasIdentitySlot) {
+    // maxCopies is a hard ceiling on how many of a basic the deck may ever
+    // hold, not a target. These were five hand-tuned constants, and Swamp's was
+    // 7 against Forest's 14, so a mono-black deck could never hold an eighth
+    // Swamp — the "only seven basic Swamps" defect the Head Professor kept
+    // reporting on Mikaeus builds, which no land repair could fix because the
+    // pool forbade the fix. A single-colour deck gets a ceiling derived from
+    // its land count instead.
+    const monoColorCap = Math.max(16, Math.round(targetCount * 0.5));
     for (const basic of BASIC_LAND_KINDS) {
       if (!commanderLegalInIdentity(basic.colors, identity)) continue;
+      if (identity.length === 1) {
+        basicSlots[basic.kind] = Math.max(basicSlots[basic.kind]!, monoColorCap);
+        continue;
+      }
       if (basic.kind === "forest" && identity.includes("G")) basicSlots.forest = Math.max(basicSlots.forest, 14);
       if (basic.kind === "swamp" && identity.includes("B")) basicSlots.swamp = Math.max(basicSlots.swamp, 7);
       if (basic.kind === "plains" && identity.includes("W")) basicSlots.plains = Math.max(basicSlots.plains, 10);
@@ -684,8 +704,14 @@ function buildLandPool(args: {
   }
 
   if (nonBasicOracleIds.length < 15) {
+    // Legality alone is not enough here. A colorless land has an empty color
+    // identity, so it satisfies any identity check, and this backfill used to
+    // walk the catalog in whatever order it happened to be in — which is how a
+    // mono-black deck was handed Bant Panorama, whose only ability fetches a
+    // basic Forest, Plains, or Island. Rank on whether the land can actually
+    // cast the deck's spells, and drop the ones that never could.
+    const backfill: Array<{ card: CatalogCardV11; rank: number }> = [];
     for (const card of args.catalog.byOracleId.values()) {
-      if (nonBasicOracleIds.length >= 40) break;
       const truth = resolveCanonicalCardTruthV4164({
         name: card.canonicalName,
         oracleId: card.oracleId,
@@ -695,6 +721,22 @@ function buildLandPool(args: {
       if (!isCurrentlyCommanderLegal(card)) continue;
       if (!commanderLegalInIdentity(truth.colorIdentity, args.commanderColorIdentity)) continue;
       if (args.setRestrictions && !cardMatchesDeckSetRestrictions(card, args.setRestrictions)) continue;
+      if (seen.has(card.oracleId)) continue;
+
+      const profile = classifyLandManaQualityV1({
+        name: card.canonicalName,
+        oracleText: combinedGoldenOracleText(card),
+        commanderColorIdentity: args.commanderColorIdentity,
+      });
+      if (isLandUnusableInIdentityV1(profile)) continue;
+
+      backfill.push({ card, rank: landManaQualityRankV1(profile) });
+    }
+
+    backfill.sort((a, b) => b.rank - a.rank || a.card.canonicalName.localeCompare(b.card.canonicalName));
+
+    for (const { card } of backfill) {
+      if (nonBasicOracleIds.length >= 40) break;
       if (seen.has(card.oracleId)) continue;
       seen.add(card.oracleId);
       entries.push({

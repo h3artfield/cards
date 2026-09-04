@@ -216,4 +216,60 @@ check("colorless basics stay legal under every color identity", () => {
   assert.equal(repaired.deck.lands.find((land) => land.name === "Wastes")?.copies, 2);
 });
 
+check("a mono-color deck other than white gets its basics topped up", () => {
+  // The basic-boost repair used to return immediately unless the deck was
+  // mono-white, so a mono-blue (or mono-black) deck whose mana base the
+  // Professor faulted was skipped by it entirely. Nothing here is named in
+  // offPlanCards or requiredChanges, so the pass has to act on the mana
+  // assessment alone — which is what the "mana base:" assertion below pins.
+  const repaired = repairSolDirectedLandBaseV111({
+    deck: deckWithLands({
+      commanderName: "Talrand, Sky Summoner",
+      colorIdentity: ["U"],
+      lands: [
+        { name: "Island", copies: 7 },
+        { name: "Bant Panorama", copies: 1 },
+        { name: "Foundry of the Consuls", copies: 1 },
+        { name: "Wasteland", copies: 1 },
+        { name: "Ancient Tomb", copies: 1 },
+        { name: "Interplanar Beacon", copies: 1 },
+        { name: "City of Shadows", copies: 1 },
+        { name: "Miren, the Moaning Well", copies: 1 },
+        { name: "Hall of Oracles", copies: 1 },
+        { name: "Escape Tunnel", copies: 1 },
+        { name: "Crystal Vein", copies: 1 },
+      ],
+    }),
+    landPool: {
+      targetCount: 17,
+      basicForestSlots: 0,
+      basicSwampSlots: 0,
+      entries: [basicEntry("Island", 20)],
+      nonBasicOracleIds: [],
+    },
+    contract: {
+      nonlandSlotsRequired: 64,
+      landSlotsRequired: 35,
+      landPlan: { architecture: [{ role: "basic island", count: 14 }] },
+    } as unknown as RetrievalContractV11,
+    catalog,
+    professorVerdict: {
+      ...monoBlackVerdict,
+      manaAssessment:
+        "Too many lands produce only colorless mana. The mana base is the deck's decisive flaw.",
+      offPlanCards: [],
+      requiredChanges: [],
+    },
+  });
+
+  const islands = repaired.deck.lands.find((land) => land.name === "Island")?.copies ?? 0;
+  assert.ok(islands >= 14, `expected at least 14 Islands, got ${islands}`);
+  assert.ok(
+    repaired.repairs.some((repair) => repair.startsWith("mana base:")),
+    "the basic-boost pass should report its swaps",
+  );
+  // Swaps, not additions: the land count must not drift.
+  assert.equal(repaired.deck.landCount, 17);
+});
+
 console.log(`\nprofessor-sol-directed-land-base-repair-v1-1-1 selftest passed (${n} checks)`);

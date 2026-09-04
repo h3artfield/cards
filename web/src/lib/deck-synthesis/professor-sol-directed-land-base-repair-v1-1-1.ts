@@ -5,8 +5,17 @@ import { commanderLegalInIdentity } from "@/lib/semantic-visualization/filters-v
 import { resolveCanonicalCardTruthV4164 } from "./professor-canonical-card-truth-v4-16-4-v1";
 import { isCanonicalLandForDeckPartition } from "./professor-canonical-deck-partition-v1";
 import { basicLandColorIdentity, isBasicLandName } from "./professor-commander-legality-v4-9-v1";
-import { normalizeCardNameForMatch } from "./professor-canonical-card-identity-v4-15-1-v1";
+import {
+  normalizeCardNameForMatch,
+  resolveCanonicalCardIdentity,
+} from "./professor-canonical-card-identity-v4-15-1-v1";
+import {
+  classifyLandManaQualityV1,
+  landManaQualityRankV1,
+  type LandManaProfileV1,
+} from "./professor-sol-directed-land-mana-quality-v1";
 import type { DeckResolutionCatalog } from "../../../scripts/lib/load-deck-resolution-catalog";
+import { combinedGoldenOracleText } from "../../../scripts/lib/load-golden-catalog-index";
 import type { SolDirectedHeadProfessorWholeDeckVerdictV111 } from "./professor-sol-directed-head-professor-v1-1-1";
 import type {
   LandPoolEntryV11,
@@ -48,6 +57,30 @@ function mergeLandRows(
 function findLandPoolEntry(landPool: LandPoolV11, name: string): LandPoolEntryV11 | null {
   const key = normalizeCardNameForMatch(name);
   return landPool.entries.find((entry) => normalizeCardNameForMatch(entry.name) === key) ?? null;
+}
+
+/**
+ * Oracle-derived mana quality for a land already in the deck, by name.
+ *
+ * Returns null when the name cannot be resolved. Mana quality only orders cut
+ * preference, so an unresolvable land falls back to a neutral rank rather than
+ * failing the repair.
+ */
+function landManaProfileForDeckLandV111(args: {
+  name: string;
+  catalog: DeckResolutionCatalog;
+  colorIdentity: string[];
+}): LandManaProfileV1 | null {
+  if (!args.catalog?.byNormalizedName || !args.catalog?.byOracleId) return null;
+  const identity = resolveCanonicalCardIdentity({ name: args.name, catalog: args.catalog });
+  if (!identity.oracleId) return null;
+  const card = args.catalog.byOracleId.get(identity.oracleId);
+  if (!card) return null;
+  return classifyLandManaQualityV1({
+    name: card.canonicalName,
+    oracleText: combinedGoldenOracleText(card),
+    commanderColorIdentity: args.colorIdentity,
+  });
 }
 
 function basicNameInIdentity(name: string, colorIdentity: string[]): boolean {
@@ -434,60 +467,79 @@ function shouldBoostMonoColorBasicDensity(args: {
   return args.colorIdentity.includes("W") || args.colorIdentity.includes("B") || args.colorIdentity.includes("G");
 }
 
-function repairMonoWhitePlainsPackage(args: {
+/**
+ * Raise a single-colour deck's basic count when the Professor faults the mana base.
+ *
+ * This was mono-white only, so a mono-black Mikaeus deck whose mana base the
+ * Professor called "the deck's decisive flaw" was skipped outright. It now runs
+ * for any single-colour identity, and picks what to cut from Oracle-derived
+ * mana quality rather than guessing from words in the card's name.
+ */
+function repairMonoColorBasicPackage(args: {
   deck: SolDirectedConstructedDeckV11;
   landPool: LandPoolV11;
   contract: RetrievalContractV11;
+  catalog: DeckResolutionCatalog;
   professorVerdict?: SolDirectedHeadProfessorWholeDeckVerdictV111 | null;
   colorIdentity: string[];
 }): string[] {
   const repairs: string[] = [];
-  if (args.colorIdentity.length !== 1 || !args.colorIdentity.includes("W")) return repairs;
+  if (args.colorIdentity.length !== 1) return repairs;
 
   const professorTexts = [
     ...(args.professorVerdict?.requiredChanges ?? []),
     args.professorVerdict?.manaAssessment ?? "",
   ].join(" ");
-  const needsPlainsBoost =
-    /\b(plains|white mana|colorless|fail to produce white|mana base|low-synergy lands)\b/i.test(professorTexts);
-  if (!needsPlainsBoost) return repairs;
+  const needsBasicBoost =
+    /\b(plains|island|swamp|mountain|forest|basic|colorless|conditional|mana base|low-synergy lands)\b/i.test(
+      professorTexts,
+    ) || /fail to produce|nonfunctional/i.test(professorTexts);
+  if (!needsBasicBoost) return repairs;
 
-  const plainsEntry = findLandPoolEntry(args.landPool, "Plains");
-  if (!plainsEntry) return repairs;
+  const basicEntry = primaryBasicEntry(args.landPool, args.colorIdentity);
+  if (!basicEntry) return repairs;
 
-  const targetPlains = Math.max(
+  const targetBasics = Math.max(
     14,
     architectureTargetsFromContract(args.contract).basic ||
       Math.floor((args.contract.landSlotsRequired || 36) * 0.42),
   );
 
-  let plainsCount = landCopiesForEntry(args.deck, plainsEntry);
-  const colorlessPriority = (name: string): number => {
-    const key = normalizeCardNameForMatch(name);
-    if (key === normalizeCardNameForMatch("Plains")) return -1;
-    if (isBasicLandName(name)) return 0;
-    if (/tower|pathway|utility|scape|den|forge|pool|matrix|yard|temple|gate/i.test(name)) return 900;
-    return 400;
+  let basicCount = landCopiesForEntry(args.deck, basicEntry);
+  const basicKey = normalizeCardNameForMatch(basicEntry.name);
+
+  // Worst mana first. A land that cannot produce the deck's colour is cut
+  // before one that can, and the deck's own basic is never a cut candidate.
+  const cutQuality = (name: string): number => {
+    const profile = landManaProfileForDeckLandV111({
+      name,
+      catalog: args.catalog,
+      colorIdentity: args.colorIdentity,
+    });
+    if (!profile) return isBasicLandName(name) ? 100 : 40;
+    return landManaQualityRankV1(profile);
   };
 
   const cutCandidates = [...args.deck.lands]
-    .filter((land) => normalizeCardNameForMatch(land.name) !== normalizeCardNameForMatch("Plains"))
-    .sort((a, b) => colorlessPriority(b.name) - colorlessPriority(a.name));
+    .filter((land) => normalizeCardNameForMatch(land.name) !== basicKey)
+    .map((land) => ({ land, quality: cutQuality(land.name) }))
+    .sort((a, b) => a.quality - b.quality)
+    .map((row) => row.land);
 
-  while (plainsCount < targetPlains && cutCandidates.length > 0) {
+  while (basicCount < targetBasics && cutCandidates.length > 0) {
     const cut = cutCandidates.find((land) => land.copies > 0);
     if (!cut) break;
     const swap = replaceLandWithEntry({
       deck: args.deck,
       cutName: cut.name,
-      addEntry: plainsEntry,
+      addEntry: basicEntry,
     });
     if (!swap) {
       cut.copies = 0;
       continue;
     }
-    repairs.push(`mono-white mana: ${swap}`);
-    plainsCount += 1;
+    repairs.push(`mana base: ${swap}`);
+    basicCount += 1;
     if (cut.copies <= 0) {
       const idx = cutCandidates.indexOf(cut);
       if (idx >= 0) cutCandidates.splice(idx, 1);
@@ -574,10 +626,11 @@ export function repairSolDirectedLandBaseV111(args: {
     }),
   );
   repairs.push(
-    ...repairMonoWhitePlainsPackage({
+    ...repairMonoColorBasicPackage({
       deck,
       landPool: args.landPool,
       contract: args.contract,
+      catalog: args.catalog,
       professorVerdict: args.professorVerdict,
       colorIdentity,
     }),
