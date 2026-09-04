@@ -132,6 +132,7 @@ PROFESSOR_SOL_DIRECTED_MODEL: "gpt-5.6-luna"
 PROFESSOR_SOL_DIRECTED_REASONING_EFFORT: "high"
 PROFESSOR_SOL_DIRECTED_BRACKET_ATTAINMENT_ENABLED: "true"
 PROFESSOR_SOL_DIRECTED_BRACKET_CEILING_ENABLED: "true"
+NODE_OPTIONS: "--max-old-space-size=3072"
 "@
 $envContent | Set-Content -Path $envPath -Encoding utf8
 
@@ -142,7 +143,7 @@ gcloud run deploy $WEB_SERVICE `
   --project=$PROJECT_ID `
   --allow-unauthenticated `
   --port=8080 `
-  --memory=2Gi `
+  --memory=4Gi `
   --cpu=2 `
   --min-instances=1 `
   --timeout=900 `

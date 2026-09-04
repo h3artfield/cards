@@ -70,14 +70,17 @@ let cached:
     }
   | null = null;
 
-async function readJsonl(path: string): Promise<string[]> {
-  const lines: string[] = [];
+/**
+ * Streams non-blank JSONL lines. Yields rather than accumulating: these files
+ * run to tens of megabytes, and buffering every line into an array kept the
+ * raw text alive alongside the parsed rows, roughly doubling peak heap.
+ */
+async function* readJsonl(path: string): AsyncGenerator<string> {
   const stream = path.endsWith(".gz") ? createReadStream(path).pipe(createGunzip()) : createReadStream(path, "utf8");
   const rl = createInterface({ input: stream, crlfDelay: Infinity });
   for await (const line of rl) {
-    if (line.trim()) lines.push(line);
+    if (line.trim()) yield line;
   }
-  return lines;
 }
 
 let cachedCombos: { comboIndex: Map<string, CosV1ComboRow>; compiled: CosV1CompiledVariant[] } | null = null;
@@ -97,13 +100,13 @@ export async function loadSpellbookComboArtifacts(): Promise<{
   const ms = mechanicalSpaceRoot();
 
   const comboIndex = new Map<string, CosV1ComboRow>();
-  for (const line of await readJsonl(resolve(ms, "spellbook-win-architecture-space-v1", "normalized-combo-dictionary.jsonl"))) {
+  for await (const line of readJsonl(resolve(ms, "spellbook-win-architecture-space-v1", "normalized-combo-dictionary.jsonl"))) {
     const rec = JSON.parse(line) as CosV1ComboRow;
     comboIndex.set(rec.cardSetSignature, rec);
   }
 
   const compiled: CosV1CompiledVariant[] = [];
-  for (const line of await readJsonl(resolve(ms, "commander-optimization-score-v1", "detector-complete-variants.jsonl"))) {
+  for await (const line of readJsonl(resolve(ms, "commander-optimization-score-v1", "detector-complete-variants.jsonl"))) {
     compiled.push(JSON.parse(line) as CosV1CompiledVariant);
   }
 
@@ -138,7 +141,7 @@ export async function loadCosV1Runtime() {
   }
 
   const texts = new Map<string, string>();
-  for (const line of await readJsonl(resolve(catalogShadowRoot(), "catalog-shadow-parse-rc8-firestore-v2.jsonl.gz"))) {
+  for await (const line of readJsonl(resolve(catalogShadowRoot(), "catalog-shadow-parse-rc8-firestore-v2.jsonl.gz"))) {
     const rec = JSON.parse(line) as {
       oracleId?: string;
       semantic?: { abilities?: Array<{ abilitySpan?: { text?: string } }> };
