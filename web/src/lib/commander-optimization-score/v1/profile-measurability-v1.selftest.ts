@@ -254,6 +254,33 @@ check("the report carries the measurement through to the player", () => {
   }
 });
 
+console.log("\naxis banding reflects measured contribution");
+
+check("coherence is descriptive, not a strength driver", () => {
+  // LOO_coherence held-out drop is 0.000385 logloss and ADD_coherence has a
+  // negative mean per-event delta, so it cannot be billed as driving strength.
+  const coherence = COS_V1_PROFILE_META.find((m) => m.id === "coherence")!;
+  assert.equal(coherence.role, "descriptive_only");
+});
+
+check("the axes with real model credit stay load-bearing", () => {
+  const loadBearing = COS_V1_PROFILE_META.filter((m) => m.role === "load_bearing").map((m) => m.id);
+  assert.deepEqual(loadBearing.sort(), [
+    "card_advantage",
+    "interaction",
+    "mana_efficiency",
+    "protection",
+    "win_architecture",
+  ]);
+});
+
+check("coherence is banded and explained as a characteristic", () => {
+  const { report: built } = report(comboless, UNKNOWN);
+  const coherence = built.profile.find((a) => a.id === "coherence")!;
+  assert.equal(coherence.band, "Deck characteristics");
+  assert.match(coherence.explanation, /not averaged into Competitive Strength/i);
+});
+
 console.log("\ngrade vs build-optimization divergence");
 
 check("the Fynn case gets a note: A- above a 1st-percentile build score", () => {

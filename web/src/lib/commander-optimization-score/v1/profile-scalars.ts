@@ -74,7 +74,22 @@ export const COS_V1_PROFILE_META: Array<{
   {
     id: "coherence",
     label: "Coherence",
-    role: "load_bearing",
+    /**
+     * Presented as descriptive even though FORMULA.json lists it load_bearing.
+     *
+     * The ablation does not support billing this as a strength driver. Removing
+     * clusterEntropy from the model costs 0.000385 held-out logloss, and adding
+     * it to commander identity on its own has a negative mean per-event delta
+     * (-0.00033): as a predictor it is not distinguishable from noise. It is
+     * also the axis most easily moved by something unrelated to strategy — on a
+     * mono-green list, 20 basic Forests are worth about 15 percentile points,
+     * because entropy counts every copy.
+     *
+     * The scalar and the frozen 60-d feature vector are unchanged; this governs
+     * only which band the axis is displayed in and whether it is quoted as a
+     * reason for the score.
+     */
+    role: "descriptive_only",
     measures:
       "How tightly the deck concentrates into a few card-similarity clusters. Every copy counts, so a high basic-land count raises it.",
   },
