@@ -105,6 +105,7 @@
     "measure:bracket-attainment-spread-v1": "npx --yes tsx scripts/measure-bracket-attainment-spread-v1.ts",
     "test:professor-sol-directed-validated-deck-v1-1-1": "npx --yes tsx src/lib/deck-synthesis/professor-sol-directed-validated-deck-v1-1-1.selftest.ts",
     "test:professor-sol-directed-bracket-ceiling-v1": "npx --yes tsx src/lib/deck-synthesis/professor-sol-directed-bracket-ceiling-v1.selftest.ts",
+    "test:professor-sol-directed-repair-reversal-guard": "npx --yes tsx src/lib/deck-synthesis/professor-sol-directed-repair-reversal-guard-v1-1-1.selftest.ts",
     "prove:bracket-ceiling-v1": "npx --yes tsx scripts/prove-bracket-ceiling-v1.ts",
     "run:professor-sol-directed-v1-1-1-chatterfang": "npx --yes tsx scripts/run-professor-sol-directed-v1-1-1-chatterfang.ts",
     "test:professor-v4-16-6-1-build-gate": "npx --yes tsx src/lib/deck-synthesis/professor-v4-16-6-1-build-gate.selftest.ts",

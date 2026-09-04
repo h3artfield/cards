@@ -114,6 +114,25 @@ export function headProfessorGradeRank(grade: string): number | null {
   return HEAD_PROFESSOR_GRADE_RANK[letter] ?? null;
 }
 
+/**
+ * Whether to ship a deck an earlier repair pass produced instead of the latest one.
+ *
+ * Repair passes can lower the grade — a live Mikaeus build went C+ then D+ then
+ * C- and shipped the C-, because the loop kept whatever came last. An
+ * unparseable current grade counts as worse than a known one: there is no
+ * reason to prefer a deck we cannot grade over one we can.
+ */
+export function shouldKeepEarlierGradedDeckV111(args: {
+  currentGrade: string;
+  earlierGrade: string;
+}): boolean {
+  const earlierRank = headProfessorGradeRank(args.earlierGrade);
+  if (earlierRank == null) return false;
+  const currentRank = headProfessorGradeRank(args.currentGrade);
+  if (currentRank == null) return true;
+  return currentRank < earlierRank;
+}
+
 /** After repair passes are exhausted, ship legal decks graded D+ or better instead of hard-failing. */
 export function isSolDirectedHeadProfessorBestEffortShippableV111(
   verdict: SolDirectedHeadProfessorWholeDeckVerdictV111,

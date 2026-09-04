@@ -128,7 +128,8 @@ Rules:
 - Land swaps: cut/add one land copy at a time; ADD land must be in allowedLandNames
 - Propose up to 16 swaps focused on required fixes (nonland and land combined). Use the full budget when Professor listed multiple package repairs.
 - Preserve the architect's core win architecture unless a requiredChange explicitly demands otherwise
-- Do not leave required package gaps unfixed when an in-pool card satisfies the requirement`;
+- Do not leave required package gaps unfixed when an in-pool card satisfies the requirement
+- Never reverse an earlier repair pass: do not ADD a name in headProfessorRepair.previouslyCutNames, and do not CUT a name in headProfessorRepair.previouslyAddedNames. Those swaps are rejected. If you believe an earlier pass was wrong, say so in the summary instead of undoing it`;
 
 export type SolDirectedCriticRepairContextV111 = {
   requiredChanges: string[];
@@ -136,6 +137,14 @@ export type SolDirectedCriticRepairContextV111 = {
   professorSummary: string;
   priorGrade: string;
   classification: string;
+  /**
+   * Names earlier repair passes already cut. Re-adding one undoes prior work,
+   * so these are rejected at apply time — listing them here keeps the model
+   * from spending its swap budget on swaps that cannot land.
+   */
+  previouslyCutNames?: string[];
+  /** Names earlier repair passes already added. Cutting one undoes prior work. */
+  previouslyAddedNames?: string[];
 };
 
 function findCandidateByName(
@@ -203,8 +212,19 @@ function applySingleSwap(args: {
   candidateDictionary: Record<string, CanonicalCardFactsV11>;
   landPool?: LandPoolV11;
   allowLandSwaps?: boolean;
+  blockedAddKeys?: ReadonlySet<string>;
+  protectedCutKeys?: ReadonlySet<string>;
 }): { ok: true; deck: SolDirectedConstructedDeckV11 } | { ok: false; reason: string } {
   const cutKey = normalizeCardNameForMatch(args.swap.cut);
+
+  // Repair passes grade independently, so a later pass will happily undo an
+  // earlier one and burn the pass making no net change. Refuse the reversal.
+  if (args.blockedAddKeys?.has(normalizeCardNameForMatch(args.swap.add))) {
+    return { ok: false, reason: `ADD_REVERSES_EARLIER_CUT:${args.swap.add}` };
+  }
+  if (args.protectedCutKeys?.has(cutKey)) {
+    return { ok: false, reason: `CUT_REVERSES_EARLIER_ADD:${args.swap.cut}` };
+  }
   const cutIndex = args.deck.nonlands.findIndex(
     (card) => normalizeCardNameForMatch(card.name) === cutKey,
   );
@@ -249,6 +269,10 @@ export function applySolDirectedCriticSwapsV111(args: {
   landPool?: LandPoolV11;
   allowLandSwaps?: boolean;
   maxSwaps?: number;
+  /** Names an earlier repair pass cut — adding them back is refused. */
+  blockedAddNames?: readonly string[];
+  /** Names an earlier repair pass added — cutting them is refused. */
+  protectedCutNames?: readonly string[];
 }): {
   deck: SolDirectedConstructedDeckV11;
   appliedSwaps: SolDirectedCriticSwapV111[];
@@ -258,6 +282,9 @@ export function applySolDirectedCriticSwapsV111(args: {
   const appliedSwaps: SolDirectedCriticSwapV111[] = [];
   const rejectedSwaps: Array<{ swap: SolDirectedCriticSwapV111; reason: string }> = [];
 
+  const blockedAddKeys = new Set((args.blockedAddNames ?? []).map(normalizeCardNameForMatch));
+  const protectedCutKeys = new Set((args.protectedCutNames ?? []).map(normalizeCardNameForMatch));
+
   for (const swap of args.swaps.slice(0, args.maxSwaps ?? MAX_PRIMARY_CRITIC_SWAPS)) {
     const result = applySingleSwap({
       deck,
@@ -265,6 +292,8 @@ export function applySolDirectedCriticSwapsV111(args: {
       candidateDictionary: args.candidateDictionary,
       landPool: args.landPool,
       allowLandSwaps: args.allowLandSwaps,
+      blockedAddKeys,
+      protectedCutKeys,
     });
     if (result.ok) {
       deck = result.deck;
@@ -399,6 +428,8 @@ export async function runSolDirectedCriticV111(args: {
     landPool: args.landPool,
     allowLandSwaps: isRepair,
     maxSwaps,
+    blockedAddNames: args.repairContext?.previouslyCutNames,
+    protectedCutNames: args.repairContext?.previouslyAddedNames,
   });
 
   return {

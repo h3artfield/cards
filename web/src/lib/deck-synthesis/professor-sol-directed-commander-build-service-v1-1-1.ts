@@ -54,6 +54,8 @@ import { enrichSolDirectedDeckForDisplayV111 } from "./professor-sol-directed-de
 import {
   isSolDirectedHeadProfessorBestEffortShippableV111,
   headProfessorDisplayLetter,
+  headProfessorGradeRank,
+  shouldKeepEarlierGradedDeckV111,
   prepareHeadProfessorVerdictForCustomerV111,
 } from "./professor-sol-directed-deck-grade-v1-1-1";
 import {
@@ -1015,6 +1017,59 @@ export async function runSolDirectedCommanderBuild(
     let professorRepairApplied = false;
     let professorRepairPass = 0;
 
+    // Each repair pass re-grades from scratch, so without a record of what
+    // earlier passes did a later pass will undo them — and without a record of
+    // what earlier passes *scored*, a worse deck ships simply because it came
+    // last. Track both.
+    const repairCutNames: string[] = [];
+    const repairAddedNames: string[] = [];
+
+    let bestGraded: {
+      deck: SolDirectedConstructedDeckV11;
+      validation: typeof validation;
+      headProfessor: typeof headProfessor;
+      rank: number;
+    } | null = null;
+
+    const considerBestGraded = (): void => {
+      if (!validation.pass) return;
+      const rank = headProfessorGradeRank(headProfessor.verdict.grade);
+      if (rank == null) return;
+      if (bestGraded && rank <= bestGraded.rank) return;
+      bestGraded = {
+        deck: structuredClone(deckForReview),
+        validation,
+        headProfessor,
+        rank,
+      };
+    };
+
+    const restoreBestGradedIfBetter = async (): Promise<void> => {
+      const best = bestGraded;
+      if (!best) return;
+      if (
+        !shouldKeepEarlierGradedDeckV111({
+          currentGrade: headProfessor.verdict.grade,
+          earlierGrade: best.headProfessor.verdict.grade,
+        })
+      ) {
+        return;
+      }
+
+      const shipped = headProfessorDisplayLetter(headProfessor.verdict.grade) ?? headProfessor.verdict.grade;
+      const kept = headProfessorDisplayLetter(best.headProfessor.verdict.grade) ?? best.headProfessor.verdict.grade;
+      deckForReview = best.deck;
+      validation = best.validation;
+      headProfessor = best.headProfessor;
+      await appendSolDirectedBuildActivityV111({
+        buildId: job.buildId,
+        status: "HEAD_PROFESSOR_REVIEW",
+        message: `Repair graded ${shipped}, lower than an earlier pass at ${kept} — keeping the better deck.`,
+      });
+    };
+
+    considerBestGraded();
+
     while (
       shouldRunProfessorRepairCriticV111(headProfessor.verdict) &&
       modelCalls.length < MAX_MODEL_CALLS &&
@@ -1145,6 +1200,8 @@ export async function runSolDirectedCommanderBuild(
           professorSummary: headProfessor.verdict.reasoningSummary,
           priorGrade: headProfessor.verdict.grade,
           classification: headProfessor.verdict.classification,
+          previouslyCutNames: [...repairCutNames],
+          previouslyAddedNames: [...repairAddedNames],
         },
         onFeed: professorRepairFeed,
       });
@@ -1168,6 +1225,11 @@ export async function runSolDirectedCommanderBuild(
       validation = repairApplied.validation;
       professorRepairApplied =
         professorRepairApplied || repairApplied.criticVerdict.appliedSwaps.length > 0;
+
+      for (const swap of repairApplied.criticVerdict.appliedSwaps) {
+        repairCutNames.push(swap.cut);
+        repairAddedNames.push(swap.add);
+      }
 
       const repairSwapLines = repairApplied.criticVerdict.appliedSwaps
         .slice(0, 4)
@@ -1222,9 +1284,12 @@ export async function runSolDirectedCommanderBuild(
         onFeed: createSolDirectedAgentFeed({ buildId: job.buildId, status: "HEAD_PROFESSOR_REVIEW" }),
       });
       modelCalls.push(headProfessor.record);
+      considerBestGraded();
 
       if (isSolDirectedHeadProfessorShippableV111(headProfessor.verdict)) break;
     }
+
+    await restoreBestGradedIfBetter();
 
     if (!isSolDirectedHeadProfessorShippableV111(headProfessor.verdict)) {
       if (isLandBaseProfessorDefectV111(headProfessor.verdict)) {
@@ -1265,6 +1330,8 @@ export async function runSolDirectedCommanderBuild(
               onFeed: createSolDirectedAgentFeed({ buildId: job.buildId, status: "HEAD_PROFESSOR_REVIEW" }),
             });
             modelCalls.push(headProfessor.record);
+            considerBestGraded();
+            await restoreBestGradedIfBetter();
           }
         }
       }
