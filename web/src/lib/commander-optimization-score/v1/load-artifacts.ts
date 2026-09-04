@@ -80,6 +80,37 @@ async function readJsonl(path: string): Promise<string[]> {
   return lines;
 }
 
+let cachedCombos: { comboIndex: Map<string, CosV1ComboRow>; compiled: CosV1CompiledVariant[] } | null = null;
+
+/**
+ * Loads only the CommanderSpellbook detector table and combo dictionary.
+ *
+ * Split out from the full runtime so consumers that need combo detection but
+ * not COS scoring — the bracket rubric, for one — do not pull in the frozen
+ * model or gate on its hashes.
+ */
+export async function loadSpellbookComboArtifacts(): Promise<{
+  comboIndex: Map<string, CosV1ComboRow>;
+  compiled: CosV1CompiledVariant[];
+}> {
+  if (cachedCombos) return cachedCombos;
+  const ms = mechanicalSpaceRoot();
+
+  const comboIndex = new Map<string, CosV1ComboRow>();
+  for (const line of await readJsonl(resolve(ms, "spellbook-win-architecture-space-v1", "normalized-combo-dictionary.jsonl"))) {
+    const rec = JSON.parse(line) as CosV1ComboRow;
+    comboIndex.set(rec.cardSetSignature, rec);
+  }
+
+  const compiled: CosV1CompiledVariant[] = [];
+  for (const line of await readJsonl(resolve(ms, "commander-optimization-score-v1", "detector-complete-variants.jsonl"))) {
+    compiled.push(JSON.parse(line) as CosV1CompiledVariant);
+  }
+
+  cachedCombos = { comboIndex, compiled };
+  return cachedCombos;
+}
+
 export async function loadCosV1Runtime() {
   if (cached) return cached;
   const verified = await verifyCosV1Hashes();
@@ -91,17 +122,7 @@ export async function loadCosV1Runtime() {
   const model = JSON.parse(await readFile(resolve(cos, "MODEL.json"), "utf8")) as CosV1Model;
   const reference = JSON.parse(await readFile(resolve(cos, "REFERENCE.json"), "utf8")) as CosV1Reference;
 
-  const comboIndex = new Map<string, CosV1ComboRow>();
-  for (const line of await readJsonl(resolve(ms, "spellbook-win-architecture-space-v1", "normalized-combo-dictionary.jsonl"))) {
-    const rec = JSON.parse(line) as CosV1ComboRow;
-    comboIndex.set(rec.cardSetSignature, rec);
-  }
-
-  const detectorPath = resolve(cos, "detector-complete-variants.jsonl");
-  const compiled: CosV1CompiledVariant[] = [];
-  for (const line of await readJsonl(detectorPath)) {
-    compiled.push(JSON.parse(line) as CosV1CompiledVariant);
-  }
+  const { comboIndex, compiled } = await loadSpellbookComboArtifacts();
 
   const points = new Map<string, CosV1CatalogPoint>();
   const pointRaw = await new Promise<string>((resolveP, reject) => {

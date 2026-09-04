@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { CommanderBracket } from "@/lib/bracket-policy/commander-bracket-snapshot-v1";
 import { bracketLabel } from "@/lib/deck-synthesis/professor-brew-bracket-v4-v1";
+import { ProfessorDeckBracketPanel } from "./ProfessorDeckBracketPanel";
+import { ProfessorDeckSwapPanel } from "./ProfessorDeckSwapPanel";
 import { scryfallNamedImageUrl } from "@/lib/deck-synthesis/professor-brew-scryfall-images-v1";
 import type { ProfessorDeckInventoryEntryV43 } from "@/lib/deck-synthesis/professor-brew-inventory-match-v4-3-v1";
 import { computeSolDirectedDeckGradeV111, formatProfessorVerdictForCustomer, parseHeadProfessorGradeText, headProfessorClassificationHint, headProfessorDisplayLetter } from "@/lib/deck-synthesis/professor-sol-directed-deck-grade-v1-1-1";
@@ -455,7 +457,7 @@ function ScorePlaystyleModal({
                 </p>
               </div>
               <div>
-                <p className="professor-mtg-label">Bracket</p>
+                <p className="professor-mtg-label">Requested bracket</p>
                 <p className="professor-mtg-body text-sm">
                   {userInputs.bracket} · {bracketLabel(userInputs.bracket as CommanderBracket)}
                 </p>
@@ -647,6 +649,13 @@ export function ProfessorSolDirectedDeckListPanel({
     ];
     return { commanderOracleIds, mainboard };
   }, [commander.oracleId, deck]);
+  const bracketCards = useMemo(
+    () => [
+      ...(deck?.nonlands ?? []).map((card) => ({ name: card.name, copies: 1 })),
+      ...(deck?.lands ?? []).map((land) => ({ name: land.name, copies: land.copies ?? 1 })),
+    ],
+    [deck],
+  );
   const [scoreOpen, setScoreOpen] = useState(false);
   const [pdfBusy, setPdfBusy] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
@@ -1033,6 +1042,25 @@ export function ProfessorSolDirectedDeckListPanel({
           <button type="button" className="professor-mtg-link shrink-0 text-[11px]" onClick={() => setScoreOpen(true)}>
             View results
           </button>
+        </div>
+
+        <div className="border-t border-[var(--mtg-stone-border)] px-4 py-4 sm:px-5">
+          <ProfessorDeckBracketPanel
+            storeSlug={slug}
+            commanderName={commander.name}
+            cards={bracketCards}
+            requestedBracket={userInputs.bracket}
+          />
+        </div>
+
+        <div className="border-t border-[var(--mtg-stone-border)] px-4 py-4 sm:px-5">
+          <ProfessorDeckSwapPanel
+            storeSlug={slug}
+            commanderName={commander.name}
+            commanderColorIdentity={commander.colorIdentity}
+            cards={bracketCards}
+            requestedBracket={userInputs.bracket}
+          />
         </div>
 
         <div className="grid grid-cols-1 gap-0 divide-y divide-[var(--mtg-stone-border)] md:grid-cols-2 md:divide-x md:divide-y-0 xl:grid-cols-3">
