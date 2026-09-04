@@ -98,6 +98,7 @@
     "test:professor-sol-directed-candidate-hydration-v1-1-1": "npx --yes tsx src/lib/deck-synthesis/professor-sol-directed-candidate-hydration-v1-1-1.selftest.ts",
     "test:professor-sol-directed-land-base-repair-v1-1-1": "npx --yes tsx src/lib/deck-synthesis/professor-sol-directed-land-base-repair-v1-1-1.selftest.ts",
     "test:professor-sol-directed-land-mana-quality-v1": "npx --yes tsx src/lib/deck-synthesis/professor-sol-directed-land-mana-quality-v1.selftest.ts",
+    "test:professor-sol-directed-verdict-card-grounding-v1": "npx --yes tsx src/lib/deck-synthesis/professor-sol-directed-verdict-card-grounding-v1.selftest.ts",
     "test:professor-sol-directed-validator-v1-1": "npx --yes tsx src/lib/deck-synthesis/professor-sol-directed-validator-v1-1.selftest.ts",
     "test:professor-sol-directed-bracket-power-ranking-v1": "npx --yes tsx src/lib/deck-synthesis/professor-sol-directed-bracket-power-ranking-v1.selftest.ts",
     "test:professor-sol-directed-bracket-attainment-v1": "npx --yes tsx src/lib/deck-synthesis/professor-sol-directed-bracket-attainment-v1.selftest.ts",

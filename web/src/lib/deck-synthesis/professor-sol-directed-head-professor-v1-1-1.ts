@@ -22,6 +22,13 @@ import type {
   SolDirectedConstructedDeckV11,
 } from "./professor-sol-directed-types-v1-1";
 import type { SolDirectedValidationV111 } from "./professor-sol-directed-pre-head-professor-gate-v1-1-1";
+import { collectSolDirectedDeckCardNames } from "./professor-sol-directed-deck-enrichment-v1-1-1";
+import { normalizeOracleName } from "@/lib/deck-builder/golden-catalog/normalize-name";
+import {
+  buildGroundingCorrectionNoticeV1,
+  checkVerdictCardGroundingV1,
+  type VerdictCardGroundingV1,
+} from "./professor-sol-directed-verdict-card-grounding-v1";
 
 export const PROFESSOR_SOL_DIRECTED_HEAD_PROFESSOR_V1_1_1_VERSION =
   "professor-sol-directed-head-professor-v1-1-1";
@@ -191,7 +198,12 @@ export async function runSolDirectedHeadProfessorWholeDeckV111(args: {
   deckPreferences?: string;
   catalog: DeckResolutionCatalog;
   onFeed?: SolDirectedAgentFeedV111;
-}): Promise<{ verdict: SolDirectedHeadProfessorWholeDeckVerdictV111; record: SolDirectedModelCallRecordV1 }> {
+}): Promise<{
+  verdict: SolDirectedHeadProfessorWholeDeckVerdictV111;
+  /** Which cards the shipped review named that the deck does not contain. */
+  grounding: VerdictCardGroundingV1;
+  record: SolDirectedModelCallRecordV1;
+}> {
   const userPrompt = JSON.stringify(
     {
       purpose: "HEAD_PROFESSOR_WHOLE_DECK_ADJUDICATION",
@@ -250,15 +262,79 @@ export async function runSolDirectedHeadProfessorWholeDeckV111(args: {
 
   await args.onFeed?.in(formatHeadProfessorResponseInForFeed(parsed as unknown as Record<string, unknown>));
 
+  // A review that describes cards the deck does not contain cannot be acted
+  // on, and the player has no way to tell which parts to trust. One corrective
+  // re-ask, naming the offending cards, then ship whichever pass is grounded.
+  const deckCardNames = collectSolDirectedDeckCardNames(args.deck);
+  const isRealCardName = (name: string): boolean =>
+    args.catalog.byNormalizedName.has(normalizeOracleName(name));
+
+  let verdict = parsed;
+  let grounding = checkVerdictCardGroundingV1({
+    verdict: verdict as unknown as Record<string, unknown>,
+    deckCardNames,
+    isRealCardName,
+  });
+  let groundingRetryRecord: { model: string; callId: string | null } | null = null;
+
+  if (!grounding.grounded) {
+    const offDeck = [...new Set(grounding.descriptiveViolations.map((v) => v.cited))];
+    await args.onFeed?.status(
+      `Review cited ${offDeck.length} card(s) not in the deck (${offDeck.join(", ")}) — asking for a correction…`,
+    );
+
+    const correctedPrompt = `${userPrompt}\n\n${buildGroundingCorrectionNoticeV1(grounding)}`;
+    try {
+      const retry = await callHeadProfessorJsonV48<SolDirectedHeadProfessorWholeDeckVerdictV111>({
+        system: HEAD_PROFESSOR_SYSTEM_V111,
+        userContent: correctedPrompt,
+        jsonSchema: HEAD_PROFESSOR_WHOLE_DECK_SCHEMA,
+        schemaName: "sol_directed_head_professor_whole_deck_v1_1_1",
+        useJsonSchema: true,
+        ...modelOpts,
+        onProgress: args.onFeed?.progress,
+        telemetry: { collector, purpose: "HEAD_PROFESSOR_REVIEW", planned: false },
+      });
+
+      const retryGrounding = checkVerdictCardGroundingV1({
+        verdict: retry.parsed as unknown as Record<string, unknown>,
+        deckCardNames,
+        isRealCardName,
+      });
+
+      // Keep the retry only when it is actually better, so a correction pass
+      // cannot make the review worse than the one it replaced.
+      if (retryGrounding.descriptiveViolations.length < grounding.descriptiveViolations.length) {
+        verdict = retry.parsed;
+        grounding = retryGrounding;
+        groundingRetryRecord = { model: retry.model, callId: retry.callId ?? null };
+        await args.onFeed?.in(
+          formatHeadProfessorResponseInForFeed(verdict as unknown as Record<string, unknown>),
+        );
+      }
+    } catch {
+      // A failed correction leaves the original verdict in place; the grounding
+      // report below still records what was wrong with it.
+    }
+
+    if (!grounding.grounded) {
+      const remaining = [...new Set(grounding.descriptiveViolations.map((v) => v.cited))];
+      await args.onFeed?.status(
+        `Review still cites ${remaining.join(", ")} — not in this deck. Treat those statements as unreliable.`,
+      );
+    }
+  }
+
   return {
-    verdict: parsed,
+    verdict,
+    grounding,
     record: {
       purpose: "HEAD_PROFESSOR",
       systemPrompt: HEAD_PROFESSOR_SYSTEM_V111,
       userPrompt,
-      rawResponse: parsed,
-      model,
-      callId,
+      rawResponse: verdict,
+      model: groundingRetryRecord?.model ?? model,
+      callId: groundingRetryRecord?.callId ?? callId,
       latencyMs: Date.now() - startedAt,
       inputTokens: usage?.inputTokens ?? usage?.promptTokens ?? null,
       outputTokens: usage?.outputTokens ?? usage?.completionTokens ?? null,
