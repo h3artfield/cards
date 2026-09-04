@@ -1,9 +1,10 @@
 /**
  * Deterministic land-base repair — Constructor/Critic cannot always fix mana bases.
  */
+import { commanderLegalInIdentity } from "@/lib/semantic-visualization/filters-v1";
 import { resolveCanonicalCardTruthV4164 } from "./professor-canonical-card-truth-v4-16-4-v1";
 import { isCanonicalLandForDeckPartition } from "./professor-canonical-deck-partition-v1";
-import { isBasicLandName } from "./professor-commander-legality-v4-9-v1";
+import { basicLandColorIdentity, isBasicLandName } from "./professor-commander-legality-v4-9-v1";
 import { normalizeCardNameForMatch } from "./professor-canonical-card-identity-v4-15-1-v1";
 import type { DeckResolutionCatalog } from "../../../scripts/lib/load-deck-resolution-catalog";
 import type { SolDirectedHeadProfessorWholeDeckVerdictV111 } from "./professor-sol-directed-head-professor-v1-1-1";
@@ -49,10 +50,18 @@ function findLandPoolEntry(landPool: LandPoolV11, name: string): LandPoolEntryV1
   return landPool.entries.find((entry) => normalizeCardNameForMatch(entry.name) === key) ?? null;
 }
 
+function basicNameInIdentity(name: string, colorIdentity: string[]): boolean {
+  return commanderLegalInIdentity(basicLandColorIdentity(name), colorIdentity);
+}
+
+function identityBasicEntries(landPool: LandPoolV11, colorIdentity: string[]): LandPoolEntryV11[] {
+  return landPool.entries.filter(
+    (entry) => entry.isBasic && entry.maxCopies > 0 && basicNameInIdentity(entry.name, colorIdentity),
+  );
+}
+
 function primaryBasicEntry(landPool: LandPoolV11, colorIdentity: string[]): LandPoolEntryV11 | null {
-  const identityEntries = landPool.entries
-    .filter((entry) => entry.isBasic && entry.maxCopies > 0)
-    .sort((a, b) => b.maxCopies - a.maxCopies);
+  const identityEntries = identityBasicEntries(landPool, colorIdentity).sort((a, b) => b.maxCopies - a.maxCopies);
 
   if (colorIdentity.length === 1 && colorIdentity.includes("W")) {
     return (
@@ -349,7 +358,7 @@ function rebalanceMulticolorBasics(args: {
   const repairs: string[] = [];
   if (args.colorIdentity.length < 2) return repairs;
 
-  const basicEntries = args.landPool.entries.filter((entry) => entry.isBasic && entry.maxCopies > 0);
+  const basicEntries = identityBasicEntries(args.landPool, args.colorIdentity);
   if (basicEntries.length === 0) return repairs;
 
   const forestCopies = countBasicCopies(args.deck, "forest");
@@ -367,6 +376,26 @@ function rebalanceMulticolorBasics(args: {
     }
   }
 
+  return repairs;
+}
+
+/** Legality outranks the land pool's per-entry cap, so this ignores canAddLandEntry. */
+function evictOffIdentityBasics(args: {
+  deck: SolDirectedConstructedDeckV11;
+  colorIdentity: string[];
+  replacement: LandPoolEntryV11;
+}): string[] {
+  const repairs: string[] = [];
+  const offIdentity = args.deck.lands.filter(
+    (land) =>
+      land.copies > 0 && isBasicLandName(land.name) && !basicNameInIdentity(land.name, args.colorIdentity),
+  );
+  for (const land of offIdentity) {
+    const removed = removeLandCopiesByName(args.deck, land.name, land.copies);
+    if (removed <= 0) continue;
+    addLandCopiesByName(args.deck, args.replacement.name, removed);
+    repairs.push(`off-color basic: ${land.name} x${removed} → ${args.replacement.name}`);
+  }
   return repairs;
 }
 
@@ -488,6 +517,8 @@ export function repairSolDirectedLandBaseV111(args: {
     deck.landCount = landCopies(deck);
     return { deck, repairs };
   }
+
+  repairs.push(...evictOffIdentityBasics({ deck, colorIdentity, replacement: primaryBasic }));
 
   const forcedCutNames = new Set<string>();
   if (args.professorVerdict) {

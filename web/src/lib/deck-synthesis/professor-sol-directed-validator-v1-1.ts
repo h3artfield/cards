@@ -9,6 +9,7 @@ import {
   resolveCanonicalCardTruthV4164,
 } from "./professor-canonical-card-truth-v4-16-4-v1";
 import { isCanonicalLandForDeckPartition } from "./professor-canonical-deck-partition-v1";
+import { basicLandColorIdentity } from "./professor-basic-land-name-v1";
 import { isBasicLandName, evaluateSingletonPool } from "./professor-commander-legality-v4-9-v1";
 import { COMMANDER_DECK_LIBRARY_SIZE_V47 } from "./professor-deck-completion-v4-7-v1";
 import type { SolDirectedConstructedDeckV11 } from "./professor-sol-directed-types-v1-1";
@@ -60,6 +61,14 @@ export function validateSolDirectedDeckV11(args: {
     }
     if (!isCanonicalLandForDeckPartition(truth)) violations.push(`NONLAND_IN_LANDS:${land.name}`);
     if (prohibited.has(truth.oracleId!)) violations.push(`GUARDRAIL_LAND:${land.name}`);
+    // A basic's printed color identity is unreliable in the catalog, so derive it
+    // from the name the same way the v1.1.1 gate does.
+    const landColorIdentity = isBasicLandName(truth.name)
+      ? basicLandColorIdentity(truth.name)
+      : truth.colorIdentity;
+    if (!commanderLegalInIdentity(landColorIdentity, args.deck.commander.colorIdentity)) {
+      violations.push(`OFF_COLOR_LAND:${land.name}`);
+    }
     if (!isBasicLandName(truth.name) && land.copies > 1) {
       violations.push(`NONBASIC_DUPLICATE:${land.name}x${land.copies}`);
     }

@@ -10,6 +10,7 @@ import {
   resolveCanonicalCardTruthV4164,
 } from "./professor-canonical-card-truth-v4-16-4-v1";
 import { isCanonicalLandForDeckPartition } from "./professor-canonical-deck-partition-v1";
+import { basicLandColorIdentity, isBasicLandName } from "./professor-commander-legality-v4-9-v1";
 import { resolveCanonicalCardIdentity } from "./professor-canonical-card-identity-v4-15-1-v1";
 import { resolvePlayableExactNameInCatalog } from "./professor-playable-oracle-resolution-v1-1-1";
 import type { CommanderBlueprintV417 } from "./professor-brew-blueprint-v4-17-v1";
@@ -27,6 +28,7 @@ import type {
   RetrievalContractRequirementV11,
   RetrievalContractV11,
   RetrievalResultV11,
+  SemanticNeighborIndexV11,
 } from "./professor-sol-directed-types-v1-1";
 import { PROFESSOR_SOL_DIRECTED_TYPES_V1_1_VERSION } from "./professor-sol-directed-types-v1-1";
 import { inferCardSemanticFunctions } from "./professor-card-semantic-functions-v1-1-1";
@@ -36,6 +38,13 @@ import {
   scoreUserSemanticPreferencesV111,
   type UserSemanticPreferencesV111,
 } from "./professor-user-semantic-preferences-v1-1-1";
+import {
+  bracketPowerAdjustmentV1,
+  bracketPowerAppetiteV1,
+  type BracketPowerAdjustmentV1,
+  type BracketPowerAppetiteV1,
+} from "./professor-sol-directed-bracket-power-ranking-v1";
+import type { CommanderBracket } from "@/lib/bracket-policy/bracket-policy-v1";
 
 export const PROFESSOR_SOL_DIRECTED_RETRIEVAL_V1_1_VERSION = "professor-sol-directed-retrieval-v1-1";
 
@@ -218,6 +227,25 @@ export type RetrievalLaneV11 = "primary" | "expansion" | "below_expansion_thresh
 export const RETRIEVAL_EXPANSION_MIN_SCORE_PASS1_V11 = 16;
 export const RETRIEVAL_EXPANSION_MIN_SCORE_PASS2_V11 = 8;
 
+/**
+ * The RC8 artifact stores 20 neighbors per card; the far half of that list is already only loosely
+ * related, so functional substitutes are looked for in the nearer half only.
+ */
+export const RETRIEVAL_NEIGHBOR_CANDIDATES_PER_SEED_V11 = 10;
+
+/**
+ * Pool-selected matches also seed neighbor expansion, but only the strongest few: the tail of a pool
+ * is itself expansion-lane filler, and its neighbors drift another step away from the requirement.
+ */
+export const RETRIEVAL_NEIGHBOR_SEEDS_FROM_POOL_V11 = 5;
+
+/**
+ * Hard ceiling on neighbor-sourced ids per requirement pool. The smallest pool target is 12
+ * (computeTargetPoolSize), so 6 leaves scored retrieval the majority source in every pool and bounds
+ * how far one mis-seeded requirement can drag the constructor prompt away from the architect's plan.
+ */
+export const RETRIEVAL_NEIGHBOR_POOL_CAP_V11 = 6;
+
 export function classifyRetrievalLaneV11(args: {
   functionalMatch: boolean;
   score: number;
@@ -316,6 +344,91 @@ function legalNonlandCorpus(args: {
   return ids;
 }
 
+/**
+ * Everything retrieval needs to let the requested bracket influence pool
+ * ranking. Supplied by the caller so retrieval stays free of artifact loading.
+ */
+export type BracketPowerContextV11 = {
+  appetite: BracketPowerAppetiteV1;
+  gameChangerOracleIds: ReadonlySet<string>;
+  /** Share of colour-eligible tournament decks playing each card. */
+  playRateByOracleId: ReadonlyMap<string, number>;
+};
+
+/**
+ * Resolves one card's bracket-power verdict. With no context supplied this is
+ * a no-op, which is what keeps the feature inert until a caller opts in.
+ */
+function bracketPowerForOracleV11(
+  context: BracketPowerContextV11 | null | undefined,
+  oracleId: string,
+): BracketPowerAdjustmentV1 {
+  if (!context) return { excluded: false, bonus: 0 };
+  return bracketPowerAdjustmentV1({
+    appetite: context.appetite,
+    isGameChanger: context.gameChangerOracleIds.has(oracleId),
+    playRate: context.playRateByOracleId.get(oracleId) ?? null,
+  });
+}
+
+/**
+ * Neighbor ids ranked by seed priority then RC8 cosine distance, so architect-preferred examples
+ * outrank pool-selected matches, which outrank the commander's generic neighborhood.
+ */
+function collectNeighborExpansionIdsV11(args: {
+  requirementSeedOracleIds: string[];
+  poolSelectedOracleIds: string[];
+  commanderOracleId: string;
+  neighbors: SemanticNeighborIndexV11;
+  corpusOracleIdSet: Set<string>;
+  alreadyInPool: Set<string>;
+  limit: number;
+  catalog: DeckResolutionCatalog;
+  dictionary: Map<string, CanonicalCardFactsV11>;
+  bracketPower?: BracketPowerContextV11 | null;
+}): string[] {
+  if (args.limit <= 0) return [];
+
+  const seedTiers: string[][] = [
+    args.requirementSeedOracleIds,
+    args.poolSelectedOracleIds.slice(0, RETRIEVAL_NEIGHBOR_SEEDS_FROM_POOL_V11),
+    [args.commanderOracleId],
+  ];
+
+  const ranked = new Map<string, { seedTier: number; distance: number }>();
+  for (const [seedTier, seeds] of seedTiers.entries()) {
+    for (const seedOracleId of seeds) {
+      const seedNeighbors = args.neighbors.get(seedOracleId) ?? [];
+      for (const neighbor of seedNeighbors.slice(0, RETRIEVAL_NEIGHBOR_CANDIDATES_PER_SEED_V11)) {
+        if (args.alreadyInPool.has(neighbor.oracleId)) continue;
+        // Membership in the legal corpus is the whole legality/color-identity/guardrail/non-land gate.
+        if (!args.corpusOracleIdSet.has(neighbor.oracleId)) continue;
+        const prior = ranked.get(neighbor.oracleId);
+        const better =
+          !prior ||
+          seedTier < prior.seedTier ||
+          (seedTier === prior.seedTier && neighbor.distance < prior.distance);
+        if (better) ranked.set(neighbor.oracleId, { seedTier, distance: neighbor.distance });
+      }
+    }
+  }
+
+  const ordered = [...ranked.entries()].sort(
+    (a, b) => a[1].seedTier - b[1].seedTier || a[1].distance - b[1].distance || a[0].localeCompare(b[0]),
+  );
+
+  const accepted: string[] = [];
+  for (const [oracleId] of ordered) {
+    if (accepted.length >= args.limit) break;
+    if (bracketPowerForOracleV11(args.bracketPower, oracleId).excluded) continue;
+    const facts = args.dictionary.get(oracleId) ?? toCardFacts({ oracleId, catalog: args.catalog });
+    if (!facts || facts.isLand) continue;
+    args.dictionary.set(facts.oracleId, facts);
+    accepted.push(facts.oracleId);
+  }
+  return accepted;
+}
+
 function retrieveRequirementPool(args: {
   requirement: RetrievalContractRequirementV11;
   contract: RetrievalContractV11;
@@ -326,6 +439,11 @@ function retrieveRequirementPool(args: {
   corpusOracleIds: string[];
   dictionary: Map<string, CanonicalCardFactsV11>;
   userSemanticPreferences?: UserSemanticPreferencesV111 | null;
+  /** Both supplied together only when the caller enabled semantic-neighbor expansion. */
+  semanticNeighbors?: SemanticNeighborIndexV11 | null;
+  corpusOracleIdSet?: Set<string> | null;
+  /** Supplied only when the caller enabled bracket-aware power ranking. */
+  bracketPower?: BracketPowerContextV11 | null;
 }): RequirementPoolV11 {
   const profile = ROLE_SEARCH_PROFILES[args.requirement.requirementId] ?? {
     extraTokens: tokenize(args.requirement.primaryRole),
@@ -349,7 +467,10 @@ function retrieveRequirementPool(args: {
       resolution.oracleId &&
       resolution.commanderLegal &&
       resolution.colorLegal &&
-      !resolution.excludedByGuardrail
+      !resolution.excludedByGuardrail &&
+      // An architect naming a Game Changer must not smuggle one into a bracket
+      // whose hard rules allow none.
+      !bracketPowerForOracleV11(args.bracketPower, resolution.oracleId).excluded
     ) {
       const facts = toCardFacts({ oracleId: resolution.oracleId, catalog: args.catalog });
       if (facts && !facts.isLand) {
@@ -372,7 +493,13 @@ function retrieveRequirementPool(args: {
       userSemanticPreferences: args.userSemanticPreferences,
     });
     if (ranked.score <= 0 && !ranked.functionalMatch) continue;
-    scored.push({ oracleId, score: ranked.score, functionalMatch: ranked.functionalMatch });
+    const power = bracketPowerForOracleV11(args.bracketPower, oracleId);
+    if (power.excluded) continue;
+    scored.push({
+      oracleId,
+      score: ranked.score + power.bonus,
+      functionalMatch: ranked.functionalMatch,
+    });
   }
   scored.sort(
     (a, b) =>
@@ -399,14 +526,34 @@ function retrieveRequirementPool(args: {
     }
   }
 
+  const neighborOracleIds: string[] = [];
+  const filledPoolSize = seedOracleIds.length + semanticOracleIds.length;
+  if (args.semanticNeighbors && args.corpusOracleIdSet && filledPoolSize < poolTargetSize) {
+    neighborOracleIds.push(
+      ...collectNeighborExpansionIdsV11({
+        requirementSeedOracleIds: seedOracleIds,
+        poolSelectedOracleIds: semanticOracleIds,
+        commanderOracleId: args.commander.oracleId,
+        neighbors: args.semanticNeighbors,
+        corpusOracleIdSet: args.corpusOracleIdSet,
+        alreadyInPool: new Set([...seedOracleIds, ...semanticOracleIds]),
+        limit: Math.min(RETRIEVAL_NEIGHBOR_POOL_CAP_V11, poolTargetSize - filledPoolSize),
+        catalog: args.catalog,
+        dictionary: args.dictionary,
+        bracketPower: args.bracketPower,
+      }),
+    );
+  }
+
   return {
     requirementId: args.requirement.requirementId,
     primaryRole: args.requirement.primaryRole,
     requestedCount: args.requirement.requestedCount,
     targetPoolSize: poolTargetSize,
-    oracleIds: [...seedOracleIds, ...semanticOracleIds],
+    oracleIds: [...seedOracleIds, ...semanticOracleIds, ...neighborOracleIds],
     seedOracleIds,
     semanticOracleIds,
+    ...(neighborOracleIds.length > 0 ? { neighborOracleIds } : {}),
   };
 }
 
@@ -427,7 +574,10 @@ function resolveLandName(args: {
   });
   if (!isCanonicalLandForDeckPartition(truth)) return null;
   if (!isCurrentlyCommanderLegal(card)) return null;
-  if (!commanderLegalInIdentity(truth.colorIdentity, args.commanderColorIdentity)) return null;
+  const landColorIdentity = isBasicLandName(truth.name)
+    ? basicLandColorIdentity(truth.name)
+    : truth.colorIdentity;
+  if (!commanderLegalInIdentity(landColorIdentity, args.commanderColorIdentity)) return null;
   const lower = identity.canonicalName.toLowerCase();
   const isBasic = lower === "forest" || lower === "swamp";
   return {
@@ -578,6 +728,16 @@ export function runSolDirectedRetrievalV11(args: {
   commander: CommanderBlueprintV417;
   deckPreferences?: string;
   userSemanticPreferences?: UserSemanticPreferencesV111 | null;
+  /** OFF unless a caller opts in: neighbor expansion widens pools past the architect's own examples. */
+  semanticNeighborExpansionEnabled?: boolean;
+  /** From loadSemanticMapNeighbors(); expansion stays off when the artifact is unavailable. */
+  semanticNeighbors?: SemanticNeighborIndexV11 | null;
+  /** OFF unless a caller opts in: lets the requested bracket reorder pools by measured power. */
+  bracketPowerRankingEnabled?: boolean;
+  /** The bracket the player asked for. Power ranking stays off without it. */
+  requestedBracket?: CommanderBracket | null;
+  gameChangerOracleIds?: ReadonlySet<string> | null;
+  playRateByOracleId?: ReadonlyMap<string, number> | null;
 }): RetrievalResultV11 {
   const prohibitedNames = collectProhibitedNames(args.contract);
   const prohibitedOracleIds = new Set<string>();
@@ -615,6 +775,21 @@ export function runSolDirectedRetrievalV11(args: {
     setRestrictions,
   });
 
+  const neighborExpansionActive =
+    args.semanticNeighborExpansionEnabled === true &&
+    !!args.semanticNeighbors &&
+    args.semanticNeighbors.size > 0;
+  const corpusOracleIdSet = neighborExpansionActive ? new Set(corpusOracleIds) : null;
+
+  const bracketPower: BracketPowerContextV11 | null =
+    args.bracketPowerRankingEnabled === true && args.requestedBracket != null
+      ? {
+          appetite: bracketPowerAppetiteV1(args.requestedBracket),
+          gameChangerOracleIds: args.gameChangerOracleIds ?? new Set<string>(),
+          playRateByOracleId: args.playRateByOracleId ?? new Map<string, number>(),
+        }
+      : null;
+
   let expansionPasses = 0;
   const requirementPools: RequirementPoolV11[] = [];
   for (const requirement of args.contract.cardRequirements) {
@@ -629,6 +804,9 @@ export function runSolDirectedRetrievalV11(args: {
         corpusOracleIds,
         dictionary,
         userSemanticPreferences: args.userSemanticPreferences,
+        semanticNeighbors: neighborExpansionActive ? args.semanticNeighbors : null,
+        corpusOracleIdSet,
+        bracketPower,
       }),
     );
   }

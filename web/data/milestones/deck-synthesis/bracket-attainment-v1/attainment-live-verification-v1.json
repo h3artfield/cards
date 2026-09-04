@@ -1,0 +1,1250 @@
+{
+  "generatedAt": "2026-09-04T00:41:11.559Z",
+  "spec": {
+    "commanderName": "Chatterfang, Squirrel General",
+    "bracket": 3,
+    "playstyle": "tokens and sacrifice value",
+    "commanderStyle": "lean into what makes this commander unique"
+  },
+  "status": "COMPLETE",
+  "failureCode": null,
+  "validationPass": true,
+  "violations": [],
+  "assignedBracket": 3,
+  "gameChangerNames": [],
+  "elapsedMs": 427099,
+  "constructedDeck": {
+    "commander": {
+      "oracleId": "f15b3b76-d38a-48db-bb44-3296183c8641",
+      "name": "Chatterfang, Squirrel General",
+      "colorIdentity": [
+        "B",
+        "G"
+      ],
+      "manaValue": 3,
+      "oracleText": "Forestwalk (This creature can't be blocked as long as defending player controls a Forest.)\nIf one or more tokens would be created under your control, those tokens plus that many 1/1 green Squirrel creature tokens are created instead.\n{B}, Sacrifice X Squirrels: Target creature gets +X/-X until end of turn.",
+      "semanticFunctions": [
+        "TOKEN_GENERATION",
+        "SACRIFICE"
+      ],
+      "mechanics": [
+        "token_generation",
+        "sacrifice"
+      ],
+      "resourcesProduced": [
+        "TOKEN_GENERATION"
+      ],
+      "resourcesConsumed": [
+        "SACRIFICE"
+      ],
+      "triggeredEvents": [],
+      "zoneRelationships": [],
+      "exploitOpportunities": [
+        "token_generation",
+        "sacrifice"
+      ],
+      "provenance": [
+        "golden_catalog"
+      ]
+    },
+    "landCount": 36,
+    "lands": [
+      {
+        "name": "Forest",
+        "copies": 10
+      },
+      {
+        "name": "Swamp",
+        "copies": 6
+      },
+      {
+        "name": "Overgrown Tomb",
+        "copies": 1
+      },
+      {
+        "name": "Woodland Cemetery",
+        "copies": 1
+      },
+      {
+        "name": "Llanowar Wastes",
+        "copies": 1
+      },
+      {
+        "name": "Undergrowth Stadium",
+        "copies": 1
+      },
+      {
+        "name": "Deathcap Glade",
+        "copies": 1
+      },
+      {
+        "name": "Blooming Marsh",
+        "copies": 1
+      },
+      {
+        "name": "Necroblossom Snarl",
+        "copies": 1
+      },
+      {
+        "name": "Twilight Mire",
+        "copies": 1
+      },
+      {
+        "name": "Temple of Malady",
+        "copies": 1
+      },
+      {
+        "name": "Verdant Catacombs",
+        "copies": 1
+      },
+      {
+        "name": "Nurturing Peatland",
+        "copies": 1
+      },
+      {
+        "name": "Boseiju, Who Endures",
+        "copies": 1
+      },
+      {
+        "name": "Takenuma, Abandoned Mire",
+        "copies": 1
+      },
+      {
+        "name": "Castle Locthwain",
+        "copies": 1
+      },
+      {
+        "name": "Phyrexian Tower",
+        "copies": 1
+      },
+      {
+        "name": "Westvale Abbey // Ormendahl, Profane Prince",
+        "copies": 1
+      },
+      {
+        "name": "Lair of the Hydra",
+        "copies": 1
+      },
+      {
+        "name": "Bojuka Bog",
+        "copies": 1
+      },
+      {
+        "name": "War Room",
+        "copies": 1
+      },
+      {
+        "name": "Hagra Mauling // Hagra Broodpit",
+        "copies": 1
+      }
+    ],
+    "nonlands": [
+      {
+        "oracleId": "6ad8011d-3471-4369-9d68-b264cc027487",
+        "name": "Sol Ring",
+        "typeLine": "Artifact",
+        "primaryArchitectRequirement": "efficient_ramp_and_fixing",
+        "primaryRole": "Mana acceleration and color fixing",
+        "secondaryRoles": [
+          "Early-game acceleration"
+        ],
+        "packageMembership": [
+          "Ramp package"
+        ],
+        "whyInThisDeck": "The strongest available generic acceleration, enabling early engines and a timely Chatterfang while leaving more mana for sacrifice activations.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "0bc7f093-bef0-4f1a-852c-4b75ebf54838",
+        "name": "Arcane Signet",
+        "typeLine": "Artifact",
+        "primaryArchitectRequirement": "efficient_ramp_and_fixing",
+        "primaryRole": "Mana acceleration and color fixing",
+        "secondaryRoles": [
+          "Color fixing"
+        ],
+        "packageMembership": [
+          "Ramp package"
+        ],
+        "whyInThisDeck": "Reliable two-mana fixing for both colors and for Chatterfang's black activation.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "d3a0b660-358c-41bd-9cd2-41fbf3491b1a",
+        "name": "Birds of Paradise",
+        "typeLine": "Creature — Bird",
+        "primaryArchitectRequirement": "efficient_ramp_and_fixing",
+        "primaryRole": "Mana acceleration and color fixing",
+        "secondaryRoles": [
+          "Creature body",
+          "Color fixing"
+        ],
+        "packageMembership": [
+          "Ramp package",
+          "Creature sacrifice shell"
+        ],
+        "whyInThisDeck": "One-mana acceleration that fixes either color and remains useful as sacrifice fodder.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "68954295-54e3-4303-a6bc-fc4547a4e3a3",
+        "name": "Llanowar Elves",
+        "typeLine": "Creature — Elf Druid",
+        "primaryArchitectRequirement": "efficient_ramp_and_fixing",
+        "primaryRole": "Mana acceleration and color fixing",
+        "secondaryRoles": [
+          "Creature body"
+        ],
+        "packageMembership": [
+          "Ramp package",
+          "Creature sacrifice shell"
+        ],
+        "whyInThisDeck": "Efficient turn-one green acceleration that can later be converted into cards, removal, or aristocrat triggers.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "20347559-95a9-4689-bb79-c5bb3809b719",
+        "name": "Elves of Deep Shadow",
+        "typeLine": "Creature — Elf Druid",
+        "primaryArchitectRequirement": "efficient_ramp_and_fixing",
+        "primaryRole": "Mana acceleration and color fixing",
+        "secondaryRoles": [
+          "Black fixing",
+          "Creature body"
+        ],
+        "packageMembership": [
+          "Ramp package",
+          "Creature sacrifice shell"
+        ],
+        "whyInThisDeck": "Provides the black mana needed for Chatterfang's activated ability and black aristocrats while costing only one mana.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "e3afc704-220f-498f-9eaa-0821b17dc24c",
+        "name": "Sakura-Tribe Elder",
+        "typeLine": "Creature — Snake Shaman",
+        "primaryArchitectRequirement": "efficient_ramp_and_fixing",
+        "primaryRole": "Mana acceleration and color fixing",
+        "secondaryRoles": [
+          "Sacrifice fodder",
+          "Basic-land access"
+        ],
+        "packageMembership": [
+          "Ramp package",
+          "Sacrifice package"
+        ],
+        "whyInThisDeck": "Fixes mana, guarantees a land through removal, and naturally supplies a creature death for the deck's payoffs.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "78826359-fe63-44ad-adc4-a17ffcd710e4",
+        "name": "Nature's Lore",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "efficient_ramp_and_fixing",
+        "primaryRole": "Mana acceleration and color fixing",
+        "secondaryRoles": [
+          "Basic-land-type access",
+          "Untapped fixing"
+        ],
+        "packageMembership": [
+          "Ramp package"
+        ],
+        "whyInThisDeck": "Efficiently finds Forest duals and can establish both colors without adding a tapped land.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "1b882a0e-0ede-4d1a-bd1a-9b7cffbcde8e",
+        "name": "Three Visits",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "efficient_ramp_and_fixing",
+        "primaryRole": "Mana acceleration and color fixing",
+        "secondaryRoles": [
+          "Basic-land-type access",
+          "Fixing"
+        ],
+        "packageMembership": [
+          "Ramp package"
+        ],
+        "whyInThisDeck": "Redundant efficient Forest access that improves early Chatterfang and engine sequencing.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "42b8aa14-10bc-4bd6-88d9-4bb287eadd19",
+        "name": "Talisman of Resilience",
+        "typeLine": "Artifact",
+        "primaryArchitectRequirement": "efficient_ramp_and_fixing",
+        "primaryRole": "Mana acceleration and color fixing",
+        "secondaryRoles": [
+          "Token generation",
+          "High-output mana"
+        ],
+        "packageMembership": [
+          "Ramp package",
+          "Token package"
+        ],
+        "whyInThisDeck": "Dowsing Dagger requires an attack and successful transformation before producing mana. Talisman of Resilience provides immediate two-mana fixing and improves early Chatterfang, engine, and interaction sequencing.",
+        "structuralNecessity": "FLEX"
+      },
+      {
+        "oracleId": "4a338863-d599-46e7-9c30-e11b898ae1b0",
+        "name": "Chitterspitter",
+        "typeLine": "Artifact",
+        "primaryArchitectRequirement": "repeatable_token_engines",
+        "primaryRole": "Reliable token generation",
+        "secondaryRoles": [
+          "Sacrifice outlet",
+          "Squirrel anthem"
+        ],
+        "packageMembership": [
+          "Squirrel package",
+          "Token package"
+        ],
+        "whyInThisDeck": "A commander-specific engine that continuously creates Squirrels while turning sacrificed tokens into a scalable anthem.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "312c7a7b-2084-42b0-9b13-0a6d3e43a73d",
+        "name": "Camellia, the Seedmiser",
+        "typeLine": "Legendary Creature — Squirrel Warlock",
+        "primaryArchitectRequirement": "repeatable_token_engines",
+        "primaryRole": "Reliable token generation",
+        "secondaryRoles": [
+          "Low-cost setup",
+          "Death-trigger recursion"
+        ],
+        "packageMembership": [
+          "Squirrel package",
+          "Token package"
+        ],
+        "whyInThisDeck": "Camellia is a stronger midgame token-conversion engine in this shell: Food sacrifices create additional Squirrels, and its forage ability provides a scalable anthem. It works especially well with Ygra, Academy Manufactor, and Tireless Provisioner.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "f36d1d8b-8303-44a9-ab56-531931641ea2",
+        "name": "Academy Manufactor",
+        "typeLine": "Artifact Creature — Assembly-Worker",
+        "primaryArchitectRequirement": "repeatable_token_engines",
+        "primaryRole": "Reliable token generation",
+        "secondaryRoles": [
+          "Treasure production",
+          "Food production",
+          "Clue production"
+        ],
+        "packageMembership": [
+          "Manufactor package",
+          "Token package"
+        ],
+        "whyInThisDeck": "Turns every Clue, Food, or Treasure event into three artifact tokens, each of which also produces Chatterfang Squirrels.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "ab8d5f5c-1976-4f77-8ed2-8d28ee666741",
+        "name": "Tireless Provisioner",
+        "typeLine": "Creature — Elf Scout",
+        "primaryArchitectRequirement": "repeatable_token_engines",
+        "primaryRole": "Reliable token generation",
+        "secondaryRoles": [
+          "Ramp",
+          "Sacrifice fodder",
+          "Life gain"
+        ],
+        "packageMembership": [
+          "Landfall package",
+          "Manufactor package",
+          "Token package"
+        ],
+        "whyInThisDeck": "Landfall produces either mana or life resources and becomes especially explosive when Manufactor and Chatterfang are present.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "55eca80c-dcd8-4c2f-aa0f-fb0aec7b80f7",
+        "name": "Ophiomancer",
+        "typeLine": "Creature — Human Shaman",
+        "primaryArchitectRequirement": "repeatable_token_engines",
+        "primaryRole": "Reliable token generation",
+        "secondaryRoles": [
+          "Deathtouch defense",
+          "Sacrifice fodder"
+        ],
+        "packageMembership": [
+          "Token package",
+          "Sacrifice package"
+        ],
+        "whyInThisDeck": "Creates a deathtouch Snake on each upkeep cycle and naturally supports instant-speed sacrifice interactions.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "fb868840-09fa-49b1-85cb-b08ad065e972",
+        "name": "Bitterblossom",
+        "typeLine": "Kindred Enchantment — Faerie",
+        "primaryArchitectRequirement": "repeatable_token_engines",
+        "primaryRole": "Reliable token generation",
+        "secondaryRoles": [
+          "Evasive attackers",
+          "Sacrifice fodder"
+        ],
+        "packageMembership": [
+          "Token package",
+          "Go-wide package"
+        ],
+        "whyInThisDeck": "An independent two-mana source of evasive bodies that steadily becomes a large Squirrel board with Chatterfang.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "e6555cca-e608-4c87-b835-9cd47fd1f543",
+        "name": "Tireless Tracker",
+        "typeLine": "Creature — Human Scout",
+        "primaryArchitectRequirement": "repeatable_token_engines",
+        "primaryRole": "Reliable token generation",
+        "secondaryRoles": [
+          "Built-in sacrifice timing",
+          "Sacrifice fodder"
+        ],
+        "packageMembership": [
+          "Token package",
+          "Sacrifice package"
+        ],
+        "whyInThisDeck": "Tireless Tracker repeatedly creates Clues from the deck's land drops, which become substantially more material with Academy Manufactor and Chatterfang, while also supplying reliable card advantage.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "a336c10a-b5bd-47ff-ba2d-31e27af1e15a",
+        "name": "Tendershoot Dryad",
+        "typeLine": "Creature — Dryad",
+        "primaryArchitectRequirement": "repeatable_token_engines",
+        "primaryRole": "Reliable token generation",
+        "secondaryRoles": [
+          "Go-wide anthem",
+          "Board development"
+        ],
+        "packageMembership": [
+          "Token package",
+          "Go-wide package"
+        ],
+        "whyInThisDeck": "Creates a token every upkeep and becomes a powerful secondary anthem once the deck reaches ten permanents.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "f82a4e85-526d-4456-b700-7760043a31be",
+        "name": "Viscera Seer",
+        "typeLine": "Creature — Vampire Wizard",
+        "primaryArchitectRequirement": "sacrifice_outlets",
+        "primaryRole": "Reliable sacrifice outlet",
+        "secondaryRoles": [
+          "Instant-speed sacrifice",
+          "Card selection"
+        ],
+        "packageMembership": [
+          "Sacrifice package",
+          "Aristocrats package"
+        ],
+        "whyInThisDeck": "The best low-cost free outlet, allowing the deck to convert tokens into scry, death triggers, and protection from exile effects.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "a1e232c0-dc38-47be-a5a0-f68bc1d86a29",
+        "name": "Yawgmoth, Thran Physician",
+        "typeLine": "Legendary Creature — Human Cleric",
+        "primaryArchitectRequirement": "sacrifice_outlets",
+        "primaryRole": "Reliable sacrifice outlet",
+        "secondaryRoles": [
+          "Free sacrifice",
+          "Growing threat"
+        ],
+        "packageMembership": [
+          "Sacrifice package",
+          "Aristocrats package"
+        ],
+        "whyInThisDeck": "Carrion Feeder is a legitimate outlet but offers only growth. Yawgmoth is a repeatable sacrifice outlet that also draws cards, places -1/-1 counters for creature interaction, and proliferates, providing major role compression for the token-sacrifice plan.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "fdba89eb-1cf5-46e6-9d09-1adb9bc40fcd",
+        "name": "Yahenni, Undying Partisan",
+        "typeLine": "Legendary Creature — Aetherborn Vampire",
+        "primaryArchitectRequirement": "sacrifice_outlets",
+        "primaryRole": "Reliable sacrifice outlet",
+        "secondaryRoles": [
+          "Self-protection",
+          "Haste threat"
+        ],
+        "packageMembership": [
+          "Sacrifice package",
+          "Protection package"
+        ],
+        "whyInThisDeck": "Provides a repeatable outlet and can protect itself while growing from opposing creature deaths.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "3adbd963-e85d-4569-963a-4472594f06f9",
+        "name": "Woe Strider",
+        "typeLine": "Creature — Horror",
+        "primaryArchitectRequirement": "sacrifice_outlets",
+        "primaryRole": "Reliable sacrifice outlet",
+        "secondaryRoles": [
+          "Token generation",
+          "Scry",
+          "Graveyard resilience"
+        ],
+        "packageMembership": [
+          "Sacrifice package",
+          "Token package",
+          "Recursion package"
+        ],
+        "whyInThisDeck": "Combines an outlet, an entry token, repeated scry, and escape-based recovery in one recurrable creature.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "d64e9152-ef24-4394-aeb0-9c3befc56549",
+        "name": "Altar of Dementia",
+        "typeLine": "Artifact",
+        "primaryArchitectRequirement": "sacrifice_outlets",
+        "primaryRole": "Reliable sacrifice outlet",
+        "secondaryRoles": [
+          "Instant-speed sacrifice",
+          "Graveyard setup",
+          "Alternate win pressure"
+        ],
+        "packageMembership": [
+          "Sacrifice package",
+          "Graveyard package"
+        ],
+        "whyInThisDeck": "A free outlet that fuels graveyard recursion and can mill opponents or stock the deck's own graveyard without requiring mana.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "4d18bcba-a346-445e-a182-6cc30b7e066d",
+        "name": "Ashnod's Altar",
+        "typeLine": "Artifact",
+        "primaryArchitectRequirement": "sacrifice_outlets",
+        "primaryRole": "Reliable sacrifice outlet",
+        "secondaryRoles": [
+          "Creature selection",
+          "Repeatable battlefield access"
+        ],
+        "packageMembership": [
+          "Sacrifice package",
+          "Creature toolbox"
+        ],
+        "whyInThisDeck": "Birthing Ritual is not a reliable sacrifice outlet; it only conditionally sacrifices at the end step. Ashnod's Altar is a free, repeatable outlet that converts Squirrels into mana and directly supports aristocrat turns without Pitiless Plunderer.",
+        "structuralNecessity": "FLEX"
+      },
+      {
+        "oracleId": "65986c1b-8e51-4604-b685-d82fa7d1263a",
+        "name": "Skullclamp",
+        "typeLine": "Artifact — Equipment",
+        "primaryArchitectRequirement": "token_card_advantage",
+        "primaryRole": "Card draw and card velocity",
+        "secondaryRoles": [
+          "Sacrifice payoff",
+          "Equipment",
+          "Low-cost engine"
+        ],
+        "packageMembership": [
+          "Card-advantage package",
+          "Token package"
+        ],
+        "whyInThisDeck": "The premier way to turn 1/1 Squirrels and other expendable tokens into two cards each.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "51feda69-0ae8-4df3-bb50-a4bb9deb965d",
+        "name": "Species Specialist",
+        "typeLine": "Creature — Human Warrior",
+        "primaryArchitectRequirement": "token_card_advantage",
+        "primaryRole": "Card draw and card velocity",
+        "secondaryRoles": [
+          "Creature body",
+          "Tribal card draw"
+        ],
+        "packageMembership": [
+          "Card-advantage package",
+          "Squirrel package"
+        ],
+        "whyInThisDeck": "Choosing Squirrel converts the deck's primary creature type into repeatable card draw whenever its board is sacrificed.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "68639a3d-2192-4921-8298-c76bb0cd6b02",
+        "name": "Moldervine Reclamation",
+        "typeLine": "Enchantment",
+        "primaryArchitectRequirement": "token_card_advantage",
+        "primaryRole": "Card draw and card velocity",
+        "secondaryRoles": [
+          "Permanent engine",
+          "Creature-heavy synergy"
+        ],
+        "packageMembership": [
+          "Card-advantage package",
+          "Creature toolbox"
+        ],
+        "whyInThisDeck": "Moldervine Reclamation draws whenever the deck's creatures die and gains life, directly rewarding Squirrel sacrifices and creature-based rebuilding. It is more aligned with the deck's primary sacrifice plan than relying mainly on creature entry.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "5da7eea8-bb9e-47ce-a554-8a1ee058bd7a",
+        "name": "Beast Whisperer",
+        "typeLine": "Creature — Elf Druid",
+        "primaryArchitectRequirement": "token_card_advantage",
+        "primaryRole": "Card draw and card velocity",
+        "secondaryRoles": [
+          "Creature body",
+          "Creature-spell velocity"
+        ],
+        "packageMembership": [
+          "Card-advantage package",
+          "Creature toolbox"
+        ],
+        "whyInThisDeck": "Turns the creature-dense ramp, token, outlet, and recursion shell into a steady stream of cards.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "b099fc54-cdbc-46cb-b4e4-7c2ca77b115b",
+        "name": "Plumb the Forbidden",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "token_card_advantage",
+        "primaryRole": "Card draw and card velocity",
+        "secondaryRoles": [
+          "One-mana sacrifice effect",
+          "Instant-speed interaction"
+        ],
+        "packageMembership": [
+          "Card-advantage package",
+          "Sacrifice package"
+        ],
+        "whyInThisDeck": "Plumb the Forbidden converts a large token board into a substantial instant-speed refill and scales with multiple sacrifices, while also triggering the deck's death payoffs. This better supports post-wipe recovery and lethal aristocrat turns.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "457af74a-02b3-4659-846d-63e482667f34",
+        "name": "Deadly Dispute",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "token_card_advantage",
+        "primaryRole": "Card draw and card velocity",
+        "secondaryRoles": [
+          "Treasure production",
+          "Instant-speed sacrifice"
+        ],
+        "packageMembership": [
+          "Card-advantage package",
+          "Sacrifice package",
+          "Manufactor package"
+        ],
+        "whyInThisDeck": "Draws two cards while creating a Treasure, which Chatterfang and Manufactor turn into a much larger token event.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "322f44f0-e6da-4ee0-b474-e7d5e9a461c5",
+        "name": "Morbid Opportunist",
+        "typeLine": "Creature — Human Rogue",
+        "primaryArchitectRequirement": "token_card_advantage",
+        "primaryRole": "Card draw and card velocity",
+        "secondaryRoles": [
+          "Death-trigger engine",
+          "Creature body"
+        ],
+        "packageMembership": [
+          "Card-advantage package",
+          "Aristocrats package"
+        ],
+        "whyInThisDeck": "Provides dependable once-per-turn card draw from the frequent creature deaths generated by combat and sacrifice.",
+        "structuralNecessity": "FLEX"
+      },
+      {
+        "oracleId": "310f141c-7f37-4729-aed6-dd9c09db448d",
+        "name": "Blood Artist",
+        "typeLine": "Creature — Vampire",
+        "primaryArchitectRequirement": "aristocrat_payoffs",
+        "primaryRole": "Damage and life-total conversion from creature deaths",
+        "secondaryRoles": [
+          "Life gain",
+          "Targeted drain"
+        ],
+        "packageMembership": [
+          "Aristocrats package",
+          "Sacrifice package"
+        ],
+        "whyInThisDeck": "A cheap, efficient death payoff that converts every sacrificed Squirrel into damage and stabilizing life gain.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "76b003e0-15af-4f22-bdf2-1ade5430964a",
+        "name": "Zulaport Cutthroat",
+        "typeLine": "Creature — Human Rogue Ally",
+        "primaryArchitectRequirement": "aristocrat_payoffs",
+        "primaryRole": "Damage and life-total conversion from creature deaths",
+        "secondaryRoles": [
+          "Life gain",
+          "Multi-opponent drain"
+        ],
+        "packageMembership": [
+          "Aristocrats package",
+          "Sacrifice package"
+        ],
+        "whyInThisDeck": "Its each-opponent drain makes a large finite sacrifice turn lethal across the table.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "c7f33cea-2ec8-4081-9208-a5b1d86721b3",
+        "name": "Bastion of Remembrance",
+        "typeLine": "Enchantment",
+        "primaryArchitectRequirement": "aristocrat_payoffs",
+        "primaryRole": "Damage and life-total conversion from creature deaths",
+        "secondaryRoles": [
+          "Token generation",
+          "Life gain"
+        ],
+        "packageMembership": [
+          "Aristocrats package",
+          "Token package"
+        ],
+        "whyInThisDeck": "Adds an initial Soldier and remains a resilient enchantment payoff that drains for every creature death.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "0636b6c3-0662-420a-b30d-f0a14e7c512d",
+        "name": "Mirkwood Bats",
+        "typeLine": "Creature — Bat",
+        "primaryArchitectRequirement": "aristocrat_payoffs",
+        "primaryRole": "Damage and life-total conversion from token creation and sacrifice",
+        "secondaryRoles": [
+          "Flying body",
+          "Token-event payoff"
+        ],
+        "packageMembership": [
+          "Aristocrats package",
+          "Token package",
+          "Manufactor package"
+        ],
+        "whyInThisDeck": "Rewards both halves of the Chatterfang engine: creating tokens and sacrificing them, including artifact tokens from Manufactor.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "d0e810bb-5f38-4045-a718-30d423c05659",
+        "name": "Poison-Tip Archer",
+        "typeLine": "Creature — Elf Archer",
+        "primaryArchitectRequirement": "aristocrat_payoffs",
+        "primaryRole": "Damage and life-total conversion from creature deaths",
+        "secondaryRoles": [
+          "Deathtouch",
+          "Reach"
+        ],
+        "packageMembership": [
+          "Aristocrats package",
+          "Creature interaction"
+        ],
+        "whyInThisDeck": "Adds another global death-drain effect while functioning as a useful defensive creature with reach and deathtouch.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "391978f6-0bbc-41e8-9246-f7d0e21c7900",
+        "name": "Nadier's Nightblade",
+        "typeLine": "Creature — Elf Warrior",
+        "primaryArchitectRequirement": "aristocrat_payoffs",
+        "primaryRole": "Damage and life-total conversion from tokens leaving the battlefield",
+        "secondaryRoles": [
+          "Life gain",
+          "Token-sacrifice payoff"
+        ],
+        "packageMembership": [
+          "Aristocrats package",
+          "Token package"
+        ],
+        "whyInThisDeck": "Triggers when Squirrels, Treasures, Clues, Foods, or other tokens leave, broadening the deck's drain redundancy.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "726d9d2c-736a-4852-9938-a0f50d8fd89f",
+        "name": "Marionette Apprentice",
+        "typeLine": "Creature — Human Artificer",
+        "primaryArchitectRequirement": "aristocrat_payoffs",
+        "primaryRole": "Damage and life-total conversion from permanents entering the graveyard",
+        "secondaryRoles": [
+          "Token generation",
+          "Artifact-death payoff"
+        ],
+        "packageMembership": [
+          "Aristocrats package",
+          "Manufactor package"
+        ],
+        "whyInThisDeck": "Fabricate supplies either a body or Servo, while every sacrificed creature or artifact adds another opponent-loss trigger.",
+        "structuralNecessity": "FLEX"
+      },
+      {
+        "oracleId": "ac10d218-f9a6-4058-9cda-a15ca1b0b7b5",
+        "name": "Assassin's Trophy",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "interaction_and_chatterfang_removal",
+        "primaryRole": "Efficient interaction",
+        "secondaryRoles": [
+          "Universal permanent removal",
+          "Instant speed"
+        ],
+        "packageMembership": [
+          "Interaction package"
+        ],
+        "whyInThisDeck": "Answers any opposing permanent type at instant speed, covering threats Chatterfang's -X/-X cannot handle.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "1c747fe2-289e-492a-a846-aa77707e2dc3",
+        "name": "Abrupt Decay",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "interaction_and_chatterfang_removal",
+        "primaryRole": "Efficient interaction",
+        "secondaryRoles": [
+          "Uncounterable removal",
+          "Artifact and enchantment removal"
+        ],
+        "packageMembership": [
+          "Interaction package"
+        ],
+        "whyInThisDeck": "Efficiently answers most early engines and commanders while being uncounterable.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "7735eeba-693b-47e2-bd51-414379cf1016",
+        "name": "Beast Within",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "interaction_and_chatterfang_removal",
+        "primaryRole": "Efficient interaction",
+        "secondaryRoles": [
+          "Universal permanent removal",
+          "Token generation"
+        ],
+        "packageMembership": [
+          "Interaction package",
+          "Token package"
+        ],
+        "whyInThisDeck": "Removes any permanent and gives the opponent a Beast that can be managed or exploited as part of the token-focused plan.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "6d4e558e-9109-4918-a082-fdcbaffd516b",
+        "name": "Nature's Claim",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "interaction_and_chatterfang_removal",
+        "primaryRole": "Efficient interaction",
+        "secondaryRoles": [
+          "Artifact removal",
+          "Enchantment removal"
+        ],
+        "packageMembership": [
+          "Interaction package"
+        ],
+        "whyInThisDeck": "One-mana instant-speed coverage for the artifact and enchantment engines most likely to outscale this deck.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "5825997b-10d7-4a36-972c-a80ddd90b8ed",
+        "name": "Feed the Swarm",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "interaction_and_chatterfang_removal",
+        "primaryRole": "Efficient interaction",
+        "secondaryRoles": [
+          "Creature removal",
+          "Enchantment removal"
+        ],
+        "packageMembership": [
+          "Interaction package"
+        ],
+        "whyInThisDeck": "Provides black access to enchantment removal while also answering creatures at low mana cost.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "afaef788-34d1-460b-b884-9d7ae6ddeb18",
+        "name": "Toxic Deluge",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "interaction_and_chatterfang_removal",
+        "primaryRole": "Efficient interaction",
+        "secondaryRoles": [
+          "Board wipe",
+          "Commander removal"
+        ],
+        "packageMembership": [
+          "Interaction package",
+          "Aristocrats package"
+        ],
+        "whyInThisDeck": "A scalable, low-cost sweeper that can clear larger creatures and preserve selected indestructible or noncreature engines.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "5f627e45-deee-4a4f-8128-57b0d8ebc553",
+        "name": "Force of Vigor",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "interaction_and_chatterfang_removal",
+        "primaryRole": "Efficient interaction",
+        "secondaryRoles": [
+          "Free interaction",
+          "Artifact removal",
+          "Enchantment removal"
+        ],
+        "packageMembership": [
+          "Interaction package"
+        ],
+        "whyInThisDeck": "Its alternate cost lets the deck interact through an opposing explosive turn without sacrificing development.",
+        "structuralNecessity": "FLEX"
+      },
+      {
+        "oracleId": "038519b9-bca8-4b27-b5ac-2409595469d0",
+        "name": "Diabolic Intent",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "synergistic_tutors_and_access",
+        "primaryRole": "Access to missing engine pieces or finishers",
+        "secondaryRoles": [
+          "Sacrifice outlet",
+          "Universal tutor"
+        ],
+        "packageMembership": [
+          "Tutor package",
+          "Sacrifice package"
+        ],
+        "whyInThisDeck": "Turns an expendable token into any needed engine, payoff, protection spell, or finisher while advancing the sacrifice plan.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "69872a9a-fe54-4e58-940c-89395af71acd",
+        "name": "Finale of Devastation",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "synergistic_tutors_and_access",
+        "primaryRole": "Access to creature engines and utility",
+        "secondaryRoles": [
+          "Ramp access",
+          "Creature toolbox",
+          "Late-game reshuffle"
+        ],
+        "packageMembership": [
+          "Tutor package",
+          "Creature toolbox"
+        ],
+        "whyInThisDeck": "Finale retains creature-tutor access while also serving as a scalable win condition that grants a large team-wide pump and haste at high X. It increases access to engines and finishers without changing the fair, finite game plan.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "6789a170-f2c5-4fc0-8a45-2b2361e67410",
+        "name": "Chord of Calling",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "synergistic_tutors_and_access",
+        "primaryRole": "Access to creature engines and finishers",
+        "secondaryRoles": [
+          "Instant-speed tutor",
+          "Convoke",
+          "Creature toolbox"
+        ],
+        "packageMembership": [
+          "Tutor package",
+          "Creature toolbox"
+        ],
+        "whyInThisDeck": "Convoke makes the token board a resource and permits instant-speed access to an outlet, payoff, protection creature, or finisher.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "30b24e8e-3b0e-4d8e-90f3-f66eb7c1858c",
+        "name": "Eternal Witness",
+        "typeLine": "Creature — Human Shaman",
+        "primaryArchitectRequirement": "recursion_and_rebuild",
+        "primaryRole": "Recovery from key-piece removal",
+        "secondaryRoles": [
+          "Creature body",
+          "Spell recursion"
+        ],
+        "packageMembership": [
+          "Recursion package",
+          "Creature toolbox"
+        ],
+        "whyInThisDeck": "Returns any card, including a destroyed engine, tutor, protection spell, or finisher, while remaining creature-tutorable and recurrable.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "240e85d3-e495-4877-8609-4b4056c402f7",
+        "name": "Victimize",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "recursion_and_rebuild",
+        "primaryRole": "Recovery from board wipes and key-piece removal",
+        "secondaryRoles": [
+          "Sacrifice effect",
+          "Two-creature reanimation"
+        ],
+        "packageMembership": [
+          "Recursion package",
+          "Sacrifice package"
+        ],
+        "whyInThisDeck": "Exchanges a disposable token for two important creatures, rebuilding multiple engine pieces efficiently after disruption.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "9e6a3df4-67a3-452e-a6ef-f04dbadb21ef",
+        "name": "Living Death",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "recursion_and_rebuild",
+        "primaryRole": "Broad rebuild and recovery",
+        "secondaryRoles": [
+          "Mass creature reset",
+          "Aristocrat finisher"
+        ],
+        "packageMembership": [
+          "Recursion package",
+          "Aristocrats package"
+        ],
+        "whyInThisDeck": "Stocks the graveyard through sacrifice and milling, then returns a dense suite of creatures while forcing a table-wide creature exchange.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "0310dfdb-0498-488d-9f1a-279f8239e024",
+        "name": "Meren of Clan Nel Toth",
+        "typeLine": "Legendary Creature — Human Shaman",
+        "primaryArchitectRequirement": "recursion_and_rebuild",
+        "primaryRole": "Recovery from key-piece removal",
+        "secondaryRoles": [
+          "Universal card recovery"
+        ],
+        "packageMembership": [
+          "Recursion package"
+        ],
+        "whyInThisDeck": "Meren supplies repeatable creature recursion, experience counters, and a creature body that can be found by the deck's tutors. It better exploits the sacrifice shell and improves recovery from targeted removal and sweepers than a single Regrowth.",
+        "structuralNecessity": "FLEX"
+      },
+      {
+        "oracleId": "24882fa2-3fe9-4c1b-aa3d-0e6488b9db27",
+        "name": "Heroic Intervention",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "engine_protection",
+        "primaryRole": "Protection for Chatterfang and critical engines",
+        "secondaryRoles": [
+          "Sweeper protection",
+          "Indestructible",
+          "Hexproof"
+        ],
+        "packageMembership": [
+          "Protection package"
+        ],
+        "whyInThisDeck": "Protects Chatterfang, token engines, payoffs, and lands from both targeted removal and most sweepers.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "002965be-a36f-4a09-9ce0-c6535bca1703",
+        "name": "Veil of Summer",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "engine_protection",
+        "primaryRole": "Protection for Chatterfang and critical engines",
+        "secondaryRoles": [
+          "Card draw",
+          "Counterspell protection"
+        ],
+        "packageMembership": [
+          "Protection package"
+        ],
+        "whyInThisDeck": "Efficiently protects the engine from blue and black interaction while replacing itself when relevant.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "bb2b324c-970a-4920-884e-c92ba49669f0",
+        "name": "Tamiyo's Safekeeping",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "engine_protection",
+        "primaryRole": "Protection for Chatterfang and critical engines",
+        "secondaryRoles": [
+          "Life gain",
+          "One-mana interaction"
+        ],
+        "packageMembership": [
+          "Protection package"
+        ],
+        "whyInThisDeck": "A cheap protection spell for Chatterfang or a key permanent that also offsets the deck's life-payment costs.",
+        "structuralNecessity": "FLEX"
+      },
+      {
+        "oracleId": "8c52bd39-0586-48ca-b263-17210cf9feb6",
+        "name": "Craterhoof Behemoth",
+        "typeLine": "Creature — Beast",
+        "primaryArchitectRequirement": "go_wide_finishers",
+        "primaryRole": "Combat-based closing effect",
+        "secondaryRoles": [
+          "Haste",
+          "Trample",
+          "Creature tutor target"
+        ],
+        "packageMembership": [
+          "Go-wide package",
+          "Tutor package"
+        ],
+        "whyInThisDeck": "The strongest creature-based finisher for a wide Squirrel board and a premium target for Finale-like creature access effects.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "3ded0c0c-40ce-4d14-a9a6-b023bc19ee0e",
+        "name": "Triumph of the Hordes",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "go_wide_finishers",
+        "primaryRole": "Combat-based closing effect",
+        "secondaryRoles": [
+          "Trample",
+          "Infect",
+          "Low-mana finisher"
+        ],
+        "packageMembership": [
+          "Go-wide package"
+        ],
+        "whyInThisDeck": "Ends games with a moderate board and costs substantially less than the largest creature finishers.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "11b5308d-5bc0-4782-875f-a28be36e665d",
+        "name": "Beastmaster Ascension",
+        "typeLine": "Enchantment",
+        "primaryArchitectRequirement": "go_wide_finishers",
+        "primaryRole": "Combat-based closing effect",
+        "secondaryRoles": [
+          "Persistent anthem",
+          "Token synergy"
+        ],
+        "packageMembership": [
+          "Go-wide package",
+          "Token package"
+        ],
+        "whyInThisDeck": "A low-cost permanent that quickly turns a token attack into a massive pump effect and remains useful over multiple combat steps.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "1ff25f67-36a7-4cfa-a2b1-2135b5b6fb67",
+        "name": "Scavenging Ooze",
+        "typeLine": "Creature — Ooze",
+        "primaryArchitectRequirement": "graveyard_and_flexible_utility",
+        "primaryRole": "Graveyard interaction and flexible utility",
+        "secondaryRoles": [
+          "Life gain",
+          "Growing creature"
+        ],
+        "packageMembership": [
+          "Graveyard package",
+          "Creature toolbox"
+        ],
+        "whyInThisDeck": "Provides repeatable graveyard disruption while growing into a threat and improving life totals in sacrifice-heavy games.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "1b5e6560-ff2e-4475-96cb-63f64c8a86db",
+        "name": "Soul-Guide Lantern",
+        "typeLine": "Artifact",
+        "primaryArchitectRequirement": "graveyard_and_flexible_utility",
+        "primaryRole": "Graveyard interaction and flexible utility",
+        "secondaryRoles": [
+          "Card draw",
+          "Artifact sacrifice",
+          "Broad graveyard exile"
+        ],
+        "packageMembership": [
+          "Graveyard package",
+          "Card-advantage package"
+        ],
+        "whyInThisDeck": "Covers a graveyard card immediately, can exile an entire opposing graveyard, or replaces itself when the effect is unnecessary.",
+        "structuralNecessity": "FLEX"
+      },
+      {
+        "oracleId": "62511d43-8eaf-405a-9c81-7bd593d3a01e",
+        "name": "Ygra, Eater of All",
+        "typeLine": "Legendary Creature — Elemental Cat",
+        "primaryArchitectRequirement": "role_compression_value_permanents",
+        "primaryRole": "Flexible token and sacrifice engine",
+        "secondaryRoles": [
+          "Food conversion",
+          "Ward",
+          "Large threat"
+        ],
+        "packageMembership": [
+          "Role-compression package",
+          "Sacrifice package",
+          "Manufactor package"
+        ],
+        "whyInThisDeck": "Makes creatures into Foods that can be sacrificed, protects itself with Food, and grows rapidly as Food permanents reach the graveyard.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "127de52b-df75-4342-95a0-20d84c5bf916",
+        "name": "The Meathook Massacre",
+        "typeLine": "Legendary Enchantment",
+        "primaryArchitectRequirement": "role_compression_value_permanents",
+        "primaryRole": "Flexible aristocrat and removal engine",
+        "secondaryRoles": [
+          "Board wipe",
+          "Life gain",
+          "Life drain"
+        ],
+        "packageMembership": [
+          "Role-compression package",
+          "Aristocrats package",
+          "Interaction package"
+        ],
+        "whyInThisDeck": "Combines scalable creature control with a durable death payoff that drains from the deck's own sacrifice waves.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "44cf5ef4-2b0f-4d9d-bf87-8835424721d0",
+        "name": "Evolutionary Leap",
+        "typeLine": "Enchantment",
+        "primaryArchitectRequirement": "role_compression_value_permanents",
+        "primaryRole": "Flexible sacrifice and creature-access engine",
+        "secondaryRoles": [
+          "Sacrifice outlet",
+          "Card selection"
+        ],
+        "packageMembership": [
+          "Role-compression package",
+          "Sacrifice package",
+          "Creature toolbox"
+        ],
+        "whyInThisDeck": "Turns every expendable token into a creature card, increasing resilience and finding whichever creature role is missing.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "e0420f2c-d578-421e-ae75-e7dc5f70661a",
+        "name": "Mazirek, Kraul Death Priest",
+        "typeLine": "Legendary Creature — Insect Shaman",
+        "primaryArchitectRequirement": "role_compression_value_permanents",
+        "primaryRole": "Flexible sacrifice and combat engine",
+        "secondaryRoles": [
+          "Team-wide counters",
+          "Combat finisher",
+          "Permanent-sacrifice payoff"
+        ],
+        "packageMembership": [
+          "Role-compression package",
+          "Sacrifice package",
+          "Go-wide package"
+        ],
+        "whyInThisDeck": "Turns the deck's creature, artifact, Clue, Food, and Treasure sacrifices into a large permanent team-wide power boost.",
+        "structuralNecessity": "REQUIRED"
+      }
+    ],
+    "primaryWinPaths": [
+      "Finite aristocrat finish: establish Blood Artist, Zulaport Cutthroat, Bastion of Remembrance, Mirkwood Bats, Poison-Tip Archer, Nadier's Nightblade, or Marionette Apprentice alongside a sacrifice outlet and a substantial token board, then sacrifice tokens in waves for lethal drain.",
+      "Go-wide combat finish: develop a wide Squirrel and supporting-token board, then resolve Beastmaster Ascension, Triumph of the Hordes, or Craterhoof Behemoth and attack through blockers.",
+      "Resource-conversion finish: use Chatterfang, Manufactor, Tireless Provisioner, Skullclamp, and sacrifice outlets to convert token events into cards and mana until repeated drain triggers or a combat finisher becomes decisive."
+    ],
+    "secondaryWinPaths": [
+      "Mazirek can turn a large sacrifice sequence into a lethal counter-enhanced attack even if aristocrat payoffs are absent.",
+      "Westvale Abbey can convert expendable creatures into Ormendahl as a resilient alternate combat threat.",
+      "The Meathook Massacre and Mirkwood Bats can close games through incremental token creation, sacrifice, and board control without requiring a single large attack."
+    ],
+    "expectedPlayPattern": "Use Forest-heavy opening hands to deploy one-mana creatures or Sol Ring, then cast efficient land ramp or an early token engine. Chatterfang is best cast when a token event is immediately available or when expendable Squirrels can fuel creature removal. In the midgame, maintain at least one outlet, one card engine, and one payoff while using tokens as cards, mana, removal, and protection from opposing attacks. Tutors find the missing creature or finisher rather than assembling a deterministic combo. After disruption, Eternal Witness, Victimize, Living Death, Regrowth, and creature-based engines rebuild the shell. Finish with a finite drain wave or a supported go-wide attack.",
+    "structuralNecessities": [
+      "36 lands with ten Forests and six Swamps to support early green ramp, black activated abilities, and basic-land resilience.",
+      "Nine early ramp and fixing cards to cast Chatterfang and three-to-five-mana engines on schedule.",
+      "Eight independent token engines, including both Squirrel producers and non-Squirrel artifact or creature token producers for Chatterfang conversion.",
+      "Six sacrifice outlets with multiple free or instant-speed options so token deaths can be converted into value on demand.",
+      "Seven card-advantage effects and seven aristocrat payoffs to sustain the board and make finite sacrifice turns lethal.",
+      "Seven flexible interaction spells covering permanents, sweepers, artifacts, enchantments, and graveyards.",
+      "Three moderate tutors, four recursion effects, and three protection spells to support resilience without creating a dedicated combo shell.",
+      "Three credible combat finishers that remain useful with a normal large token board.",
+      "The selected list avoids Pitiless Plunderer plus Ashnod's Altar and does not include any prohibited deterministic combo package."
+    ],
+    "replaceableFlex": [
+      "Dowsing Dagger // Lost Vale",
+      "Birthing Ritual",
+      "Morbid Opportunist",
+      "Regrowth",
+      "Tamiyo's Safekeeping",
+      "Soul-Guide Lantern"
+    ]
+  }
+}

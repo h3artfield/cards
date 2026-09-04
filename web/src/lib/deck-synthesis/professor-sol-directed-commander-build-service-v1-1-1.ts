@@ -8,6 +8,19 @@ import { runSolDirectedArchitectV11 } from "./professor-sol-directed-architect-v
 import { evaluateArchitectIngestionGateV111 } from "./professor-sol-directed-ingestion-gate-v1-1-1";
 import { runSolDirectedRetrievalV11 } from "./professor-sol-directed-retrieval-v1-1";
 import {
+  isProfessorSolDirectedBracketAttainmentEnabled,
+  isProfessorSolDirectedBracketCeilingEnabled,
+  isProfessorSolDirectedBracketPowerRankingEnabled,
+  isProfessorSolDirectedNeighborExpansionEnabled,
+} from "./professor-sol-directed-gui-flag-v1-1-1";
+import { loadSemanticMapNeighbors } from "@/lib/semantic-visualization/artifact-loader";
+import {
+  gameChangerOracleIdSet,
+  loadCommanderGameChangerSnapshot,
+} from "@/lib/commander-strategy/model-c/game-changer-snapshot-v1";
+import { loadPlayRateIndex } from "@/lib/deck-swap/v1/play-rate-server";
+import type { CommanderBracket } from "@/lib/bracket-policy/bracket-policy-v1";
+import {
   evaluateConstructorSupplyGateMandatoryV11,
 } from "./professor-sol-directed-supply-gate-v1-1";
 import { buildConstructorInputBundleV11 } from "./professor-sol-directed-constructor-input-v1-1";
@@ -19,6 +32,9 @@ import {
   evaluatePreHeadProfessorGateV111,
   validateSolDirectedDeckV111,
 } from "./professor-sol-directed-pre-head-professor-gate-v1-1-1";
+import { applyBracketAttainmentV111 } from "./professor-sol-directed-bracket-attainment-apply-v1-1-1";
+import { applyBracketCeilingV111 } from "./professor-sol-directed-bracket-ceiling-apply-v1-1-1";
+import { createDeckValidatorV111 } from "./professor-sol-directed-validated-deck-v1-1-1";
 import {
   formatHeadProfessorQualityFailureDetailV111,
   isSolDirectedHeadProfessorShippableV111,
@@ -133,6 +149,22 @@ export type RunSolDirectedCommanderBuildArgs = {
   mode?: "build" | "optimize";
   importedCards?: ProfessorImportedDeckCardV111[];
 };
+
+/**
+ * The requested bracket arrives as a plain number from the GUI. Anything
+ * outside 1-5 has no policy to consult, so power ranking simply stays off.
+ */
+function asCommanderBracketV111(bracket: number): CommanderBracket | null {
+  return bracket === 1 || bracket === 2 || bracket === 3 || bracket === 4 || bracket === 5
+    ? bracket
+    : null;
+}
+
+function loadPlayRateMapV111(): ReadonlyMap<string, number> {
+  return new Map(
+    Object.entries(loadPlayRateIndex().cards).map(([oracleId, stat]) => [oracleId, stat.rate]),
+  );
+}
 
 function userFacingFailure(code: string, detail?: string): string {
   const base = SOL_DIRECTED_BUILD_FAILURE_MESSAGES[code] ?? detail ?? "Professor couldn't finish this deck build.";
@@ -288,6 +320,16 @@ function applyLandBaseRepairStepV111(args: {
   validation: SolDirectedValidationV111;
   repairs: string[];
 } {
+  const priorValidation = validateSolDirectedDeckV111({
+    deck: args.deck,
+    catalog: args.catalog,
+    contract: args.contract,
+    candidateDictionary: args.candidateDictionary,
+    landPool: args.landPool,
+    identityLedger: args.identityLedger,
+    prohibitedOracleIds: args.prohibitedOracleIds,
+  });
+
   const landRepair = repairSolDirectedLandBaseV111({
     deck: args.deck,
     landPool: args.landPool,
@@ -296,16 +338,7 @@ function applyLandBaseRepairStepV111(args: {
     professorVerdict: args.professorVerdict,
   });
   if (landRepair.repairs.length === 0) {
-    const validation = validateSolDirectedDeckV111({
-      deck: args.deck,
-      catalog: args.catalog,
-      contract: args.contract,
-      candidateDictionary: args.candidateDictionary,
-      landPool: args.landPool,
-      identityLedger: args.identityLedger,
-      prohibitedOracleIds: args.prohibitedOracleIds,
-    });
-    return { deck: args.deck, validation, repairs: [] };
+    return { deck: args.deck, validation: priorValidation, repairs: [] };
   }
 
   const countRepair = repairSolDirectedConstructedDeckCountsV111({
@@ -334,6 +367,10 @@ function applyLandBaseRepairStepV111(args: {
     identityLedger: args.identityLedger,
     prohibitedOracleIds: args.prohibitedOracleIds,
   });
+  // A mana-base tune is discretionary; it may never turn a legal deck into an illegal one.
+  if (!validation.pass && priorValidation.pass) {
+    return { deck: args.deck, validation: priorValidation, repairs: [] };
+  }
   return {
     deck: architectCountRepair.deck,
     validation,
@@ -625,12 +662,24 @@ export async function runSolDirectedCommanderBuild(
     retrievalContract = ingestion.ingested.retrievalContract;
 
     await setStatus("RETRIEVING_CANDIDATES");
+    const neighborExpansionEnabled = isProfessorSolDirectedNeighborExpansionEnabled();
+    const requestedBracket = asCommanderBracketV111(args.bracket);
+    const bracketPowerRankingEnabled =
+      isProfessorSolDirectedBracketPowerRankingEnabled() && requestedBracket != null;
     const retrieval = runSolDirectedRetrievalV11({
       contract: retrievalContract,
       catalog: args.catalog,
       commander,
       deckPreferences: userInputs.deckPreferences,
       userSemanticPreferences: userInputs.userSemanticPreferences,
+      semanticNeighborExpansionEnabled: neighborExpansionEnabled,
+      semanticNeighbors: neighborExpansionEnabled ? await loadSemanticMapNeighbors() : null,
+      bracketPowerRankingEnabled,
+      requestedBracket,
+      gameChangerOracleIds: bracketPowerRankingEnabled
+        ? gameChangerOracleIdSet(loadCommanderGameChangerSnapshot())
+        : null,
+      playRateByOracleId: bracketPowerRankingEnabled ? loadPlayRateMapV111() : null,
     });
 
     const supplyGate = evaluateConstructorSupplyGateMandatoryV11({
@@ -1266,6 +1315,113 @@ export async function runSolDirectedCommanderBuild(
       }
     }
 
+    // One validator over the build's context, so the terminal gate and anything
+    // that mutates ahead of it cannot disagree about which cards are allowed.
+    // It holds the candidate dictionary by reference, which is what lets the
+    // bracket attainment pass register an addition and have it accepted.
+    const deckValidator = createDeckValidatorV111({
+      catalog: args.catalog,
+      contract: retrievalContract,
+      candidateDictionary: retrieval.candidateDictionary,
+      landPool: retrieval.landPool,
+      identityLedger: constructorIdentityLedger,
+      prohibitedOracleIds: retrieval.prohibitedOracleIds,
+    });
+
+    // Last mutation before the terminal gate, deliberately. An earlier placement
+    // measured a deck that later repair passes went on to change, so the pass
+    // silently did nothing while the shipped deck stayed a bracket short. Here
+    // it measures what actually ships, and nothing can undo it.
+    if (isProfessorSolDirectedBracketAttainmentEnabled() && requestedBracket != null) {
+      const attainment = await applyBracketAttainmentV111({
+        deck: deckForReview,
+        catalog: args.catalog,
+        candidateDictionary: retrieval.candidateDictionary,
+        requestedBracket,
+        prohibitedOracleIds: retrieval.prohibitedOracleIds,
+      });
+      if (attainment.changes.length > 0) {
+        deckForReview = attainment.deck;
+        // Registered in place so every later consumer — validation, the proof
+        // chain, the saved artifacts — sees the same allowed-card set. The
+        // validator rejects any nonland missing from this dictionary.
+        for (const [oracleId, facts] of Object.entries(attainment.candidateDictionary)) {
+          retrieval.candidateDictionary[oracleId] = facts;
+        }
+        await appendSolDirectedBuildActivityV111({
+          buildId: job.buildId,
+          status: "CRITIC_REFINING",
+          message: `Bracket ${requestedBracket} reached: ${attainment.changes.slice(0, 3).join("; ")}${attainment.changes.length > 3 ? "…" : ""}`,
+        });
+      } else if (attainment.outcome && !attainment.outcome.attained) {
+        // A silent no-op is how the first live run hid a real placement bug.
+        const why =
+          attainment.skipped.join("; ") ||
+          attainment.outcome.notes.join("; ") ||
+          "no eligible swap was available";
+        console.warn(
+          `[bracket-attainment] measured ${attainment.outcome.measuredBefore.assignedBracket} against a request of ${requestedBracket} and changed nothing: ${why}`,
+        );
+      }
+    }
+
+    // The opposite correction, and mutually exclusive with the one above: a deck
+    // is either under the requested bracket or over it, never both. Attainment
+    // runs first so that if it overshoots, this pass sees the overshoot and
+    // trims it, rather than the two passes disagreeing about the final deck.
+    if (isProfessorSolDirectedBracketCeilingEnabled() && requestedBracket != null) {
+      const ceiling = await applyBracketCeilingV111({
+        deck: deckForReview,
+        catalog: args.catalog,
+        candidateDictionary: retrieval.candidateDictionary,
+        requestedBracket,
+      });
+      if (ceiling.changes.length > 0) {
+        // No dictionary registration: every replacement came from the dictionary.
+        deckForReview = ceiling.deck;
+        await appendSolDirectedBuildActivityV111({
+          buildId: job.buildId,
+          status: "CRITIC_REFINING",
+          message: `Trimmed to bracket ${requestedBracket}: ${ceiling.changes.slice(0, 3).join("; ")}${ceiling.changes.length > 3 ? "…" : ""}`,
+        });
+      } else if (ceiling.outcome && !ceiling.outcome.contained) {
+        const why =
+          ceiling.skipped.join("; ") ||
+          ceiling.outcome.notes.join("; ") ||
+          "no eligible swap was available";
+        console.warn(
+          `[bracket-ceiling] measured ${ceiling.outcome.measuredBefore.assignedBracket} against a request of ${requestedBracket} and changed nothing: ${why}`,
+        );
+      }
+    }
+
+    const shippable = deckValidator.validate(deckForReview);
+    validation = shippable.validation;
+    if (!validation.pass) {
+      const nonlandCount = shippable.deck.nonlands.length;
+      const landCount = shippable.deck.lands.reduce((s, l) => s + l.copies, 0);
+      return fail("VALIDATION_FAILED", validation.violations.join("; "), {
+        architectPlan: architectRawPlan,
+        retrievalSummary: {
+          uniqueCandidateCount: retrieval.uniqueNonlandCount,
+          requirementPoolCounts: Object.fromEntries(
+            retrieval.requirementPools.map((p) => [p.requirementId, p.oracleIds.length]),
+          ),
+          supplyGatePass: supplyGate.pass,
+        },
+        constructedDeck: shippable.deck,
+        validation,
+        retrievalContract,
+        critic: criticVerdict,
+        headProfessor: headProfessor.verdict,
+        telemetryPatch: {
+          candidateUniqueCount: retrieval.uniqueNonlandCount,
+          nonlandCount,
+          landCount,
+        },
+      });
+    }
+
     const proofChain = buildProofChainV111({
       buildInput: userInputs,
       architectRaw: architectRawPlan,
@@ -1276,18 +1432,18 @@ export async function runSolDirectedCommanderBuild(
         userPrompt: bundle.userPrompt,
       },
       constructorRaw: constructor.record.rawResponse,
-      canonicalizedDeck: deckForReview,
+      canonicalizedDeck: shippable.deck,
       validation,
-      headProfessorInputDeck: deckForReview,
+      headProfessorInputDeck: shippable.deck,
       headProfessorResponse: headProfessor.verdict,
     });
 
-    const nonlandCount = deckForReview.nonlands.length;
-    const landCount = deckForReview.lands.reduce((s, l) => s + l.copies, 0);
+    const nonlandCount = shippable.deck.nonlands.length;
+    const landCount = shippable.deck.lands.reduce((s, l) => s + l.copies, 0);
 
     const deckEnrichmentPromise = enrichSolDirectedDeckForDisplayV111({
       storeSlug: args.storeSlug,
-      deck: deckForReview,
+      deck: shippable.deck,
     });
 
     const result: SolDirectedBuildResultV111 = {
@@ -1303,7 +1459,7 @@ export async function runSolDirectedCommanderBuild(
         ),
         supplyGatePass: supplyGate.pass,
       },
-      constructedDeck: deckForReview,
+      constructedDeck: shippable.deck,
       validation,
       critic: criticVerdict,
       headProfessor: headProfessor.verdict,
@@ -1345,7 +1501,7 @@ export async function runSolDirectedCommanderBuild(
             user: bundle.userPrompt,
           },
           "constructor-response.json": constructor.record.rawResponse,
-          "canonicalized-deck.json": deckForReview,
+          "canonicalized-deck.json": shippable.deck,
           "identity-resolution-ledger.json": constructor.identityLedger,
           "validation.json": validation,
           "critic-response.json": criticVerdict,

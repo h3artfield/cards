@@ -76,6 +76,9 @@ export type CanonicalCardFactsV11 = {
   isLand: boolean;
 };
 
+/** RC8 precomputed nearest neighbors keyed by oracle id — see loadSemanticMapNeighbors(). */
+export type SemanticNeighborIndexV11 = Map<string, Array<{ oracleId: string; distance: number }>>;
+
 export type RequirementPoolV11 = {
   requirementId: string;
   primaryRole: string;
@@ -84,6 +87,8 @@ export type RequirementPoolV11 = {
   oracleIds: string[];
   seedOracleIds: string[];
   semanticOracleIds: string[];
+  /** Absent unless RC8 neighbor expansion contributed ids, so disabled builds serialize unchanged. */
+  neighborOracleIds?: string[];
 };
 
 export type LandPoolEntryV11 = {

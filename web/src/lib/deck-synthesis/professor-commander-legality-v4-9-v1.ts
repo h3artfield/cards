@@ -9,7 +9,7 @@ import { isBasicLandName } from "./professor-basic-land-name-v1";
 
 export const PROFESSOR_COMMANDER_LEGALITY_V4_9_V1_VERSION = "professor-commander-legality-v4-9-v1";
 
-export { isBasicLandName } from "./professor-basic-land-name-v1";
+export { basicLandColorIdentity, isBasicLandName } from "./professor-basic-land-name-v1";
 
 export function isCommanderBasicLand(args: {
   name: string;

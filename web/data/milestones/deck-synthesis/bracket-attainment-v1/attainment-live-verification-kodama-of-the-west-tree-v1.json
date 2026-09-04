@@ -1,0 +1,1211 @@
+{
+  "generatedAt": "2026-09-04T01:01:49.617Z",
+  "spec": {
+    "commanderName": "Kodama of the West Tree",
+    "bracket": 4,
+    "playstyle": "balanced value with meaningful interaction",
+    "commanderStyle": "lean into what makes this commander unique"
+  },
+  "status": "COMPLETE",
+  "failureCode": null,
+  "validationPass": true,
+  "violations": [],
+  "assignedBracket": 4,
+  "gameChangerNames": [
+    "Ancient Tomb",
+    "Chrome Mox",
+    "Mana Vault",
+    "Worldly Tutor"
+  ],
+  "elapsedMs": 391922,
+  "constructedDeck": {
+    "commander": {
+      "oracleId": "d69b1e68-8d8e-460b-9eb4-6a68be886197",
+      "name": "Kodama of the West Tree",
+      "colorIdentity": [
+        "G"
+      ],
+      "manaValue": 3,
+      "oracleText": "Reach\nModified creatures you control have trample. (Equipment, Auras you control, and counters are modifications.)\nWhenever a modified creature you control deals combat damage to a player, search your library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+      "semanticFunctions": [
+        "COMBAT",
+        "TUTOR"
+      ],
+      "mechanics": [
+        "combat",
+        "tutor"
+      ],
+      "resourcesProduced": [],
+      "resourcesConsumed": [],
+      "triggeredEvents": [],
+      "zoneRelationships": [],
+      "exploitOpportunities": [
+        "combat",
+        "tutor"
+      ],
+      "provenance": [
+        "golden_catalog"
+      ]
+    },
+    "landCount": 35,
+    "lands": [
+      {
+        "name": "Forest",
+        "copies": 24
+      },
+      {
+        "name": "Misty Rainforest",
+        "copies": 1
+      },
+      {
+        "name": "Windswept Heath",
+        "copies": 1
+      },
+      {
+        "name": "Wooded Foothills",
+        "copies": 1
+      },
+      {
+        "name": "Verdant Catacombs",
+        "copies": 1
+      },
+      {
+        "name": "Prismatic Vista",
+        "copies": 1
+      },
+      {
+        "name": "Ancient Tomb",
+        "copies": 1
+      },
+      {
+        "name": "Boseiju, Who Endures",
+        "copies": 1
+      },
+      {
+        "name": "Nykthos, Shrine to Nyx",
+        "copies": 1
+      },
+      {
+        "name": "Strip Mine",
+        "copies": 1
+      },
+      {
+        "name": "Wasteland",
+        "copies": 1
+      },
+      {
+        "name": "Karn's Bastion",
+        "copies": 1
+      }
+    ],
+    "nonlands": [
+      {
+        "oracleId": "6ad8011d-3471-4369-9d68-b264cc027487",
+        "name": "Sol Ring",
+        "typeLine": "Artifact",
+        "primaryArchitectRequirement": "mono_green_acceleration_and_basic_land_ramp",
+        "primaryRole": "Mana acceleration",
+        "secondaryRoles": [
+          "Early Kodama deployment",
+          "Colorless ramp"
+        ],
+        "packageMembership": [
+          "Ramp package"
+        ],
+        "whyInThisDeck": "The most efficient available acceleration, enabling turn-two Kodama and powering expensive equipment and finishers.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "d3a0b660-358c-41bd-9cd2-41fbf3491b1a",
+        "name": "Birds of Paradise",
+        "typeLine": "Creature — Bird",
+        "primaryArchitectRequirement": "mono_green_acceleration_and_basic_land_ramp",
+        "primaryRole": "One-mana creature ramp",
+        "secondaryRoles": [
+          "Color fixing",
+          "Evasive equipment carrier"
+        ],
+        "packageMembership": [
+          "Ramp package",
+          "Modified-creature package"
+        ],
+        "whyInThisDeck": "Accelerates Kodama while also becoming a modified evasive attacker or carrier for equipment.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "68954295-54e3-4303-a6bc-fc4547a4e3a3",
+        "name": "Llanowar Elves",
+        "typeLine": "Creature — Elf Druid",
+        "primaryArchitectRequirement": "mono_green_acceleration_and_basic_land_ramp",
+        "primaryRole": "One-mana creature ramp",
+        "secondaryRoles": [
+          "Early board development"
+        ],
+        "packageMembership": [
+          "Ramp package"
+        ],
+        "whyInThisDeck": "Reliable turn-one acceleration that supports the deck's low-curve sequencing.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "3f3b2c10-21f8-4e13-be83-4ef3fa36e123",
+        "name": "Elvish Mystic",
+        "typeLine": "Creature — Elf Druid",
+        "primaryArchitectRequirement": "mono_green_acceleration_and_basic_land_ramp",
+        "primaryRole": "One-mana creature ramp",
+        "secondaryRoles": [
+          "Early attacker",
+          "Creature tutor target"
+        ],
+        "packageMembership": [
+          "Ramp package"
+        ],
+        "whyInThisDeck": "Redundant turn-one mana creature that improves the odds of casting Kodama on turn two or three.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "78826359-fe63-44ad-adc4-a17ffcd710e4",
+        "name": "Nature's Lore",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "mono_green_acceleration_and_basic_land_ramp",
+        "primaryRole": "Basic land ramp",
+        "secondaryRoles": [
+          "Mana fixing",
+          "Post-wipe rebuilding"
+        ],
+        "packageMembership": [
+          "Ramp package"
+        ],
+        "whyInThisDeck": "Efficiently puts an untapped Forest onto the battlefield and preserves land-based recovery after creature removal.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "1b882a0e-0ede-4d1a-bd1a-9b7cffbcde8e",
+        "name": "Three Visits",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "mono_green_acceleration_and_basic_land_ramp",
+        "primaryRole": "Basic land ramp",
+        "secondaryRoles": [
+          "Mana fixing",
+          "Kodama setup"
+        ],
+        "packageMembership": [
+          "Ramp package"
+        ],
+        "whyInThisDeck": "A second premium two-mana Forest tutor that accelerates the commander and increases basic density.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "e3afc704-220f-498f-9eaa-0821b17dc24c",
+        "name": "Sakura-Tribe Elder",
+        "typeLine": "Creature — Snake Shaman",
+        "primaryArchitectRequirement": "mono_green_acceleration_and_basic_land_ramp",
+        "primaryRole": "Creature-based basic land ramp",
+        "secondaryRoles": [
+          "Board-wipe resilience",
+          "Sacrifice utility"
+        ],
+        "packageMembership": [
+          "Ramp package",
+          "Recovery package"
+        ],
+        "whyInThisDeck": "Functions as an early blocker and guaranteed basic land while retaining value through sweepers.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "8b755881-a72d-4e21-a369-d2924eb4585a",
+        "name": "Cultivate",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "mono_green_acceleration_and_basic_land_ramp",
+        "primaryRole": "Basic land ramp",
+        "secondaryRoles": [
+          "Card advantage",
+          "Post-wipe rebuilding"
+        ],
+        "packageMembership": [
+          "Ramp package"
+        ],
+        "whyInThisDeck": "Adds a battlefield land and a land to hand, supporting both Kodama's snowball and later land drops.",
+        "structuralNecessity": "FLEX"
+      },
+      {
+        "oracleId": "4567a528-75f0-4ea6-b927-3a500caf76ac",
+        "name": "Arbor Elf",
+        "typeLine": "Creature — Elf Druid",
+        "primaryArchitectRequirement": "mono_green_acceleration_and_basic_land_ramp",
+        "primaryRole": "Large-scale basic land ramp",
+        "secondaryRoles": [
+          "Creature body",
+          "Additional mana source"
+        ],
+        "packageMembership": [
+          "Ramp package",
+          "Threat package"
+        ],
+        "whyInThisDeck": "Arbor Elf better satisfies the plan's priority on one- and two-mana acceleration, enabling earlier Kodama and allowing the deck to begin attacking sooner. The current ramp package retains substantial land-ramp density through Nature's Lore, Three Visits, Sakura-Tribe Elder, and Cultivate.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "ca204b66-8d0c-431a-8d34-282f7c2d17da",
+        "name": "Lightning Greaves",
+        "typeLine": "Artifact — Equipment",
+        "primaryArchitectRequirement": "cheap_equipment_and_repeatable_modifiers",
+        "primaryRole": "Haste and protection equipment",
+        "secondaryRoles": [
+          "Zero-cost equip",
+          "Commander protection"
+        ],
+        "packageMembership": [
+          "Equipment package",
+          "Protection package"
+        ],
+        "whyInThisDeck": "Immediately modifies a creature, gives Kodama or a threat haste, and protects the deck's most important permanent.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "c8b143ad-43ec-4e0d-a440-e348daa31391",
+        "name": "Swiftfoot Boots",
+        "typeLine": "Artifact — Equipment",
+        "primaryArchitectRequirement": "cheap_equipment_and_repeatable_modifiers",
+        "primaryRole": "Hexproof and haste equipment",
+        "secondaryRoles": [
+          "Reusable modification",
+          "Commander protection"
+        ],
+        "packageMembership": [
+          "Equipment package",
+          "Protection package"
+        ],
+        "whyInThisDeck": "Provides a second reliable cheap protection effect without preventing the equipped creature from receiving further modifications.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "8b27326f-e7b8-4a4d-b589-df459246d19a",
+        "name": "Shadowspear",
+        "typeLine": "Legendary Artifact — Equipment",
+        "primaryArchitectRequirement": "cheap_equipment_and_repeatable_modifiers",
+        "primaryRole": "Trample and lifelink equipment",
+        "secondaryRoles": [
+          "Life stabilization",
+          "Indestructible and hexproof suppression"
+        ],
+        "packageMembership": [
+          "Equipment package",
+          "Combat package"
+        ],
+        "whyInThisDeck": "Adds modification, trample, and lifelink while its activated ability answers otherwise difficult opposing permanents.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "d79cbc61-6c15-48ea-bbba-3cffb819ccba",
+        "name": "Sword of the Animist",
+        "typeLine": "Legendary Artifact — Equipment",
+        "primaryArchitectRequirement": "cheap_equipment_and_repeatable_modifiers",
+        "primaryRole": "Land-scaling equipment",
+        "secondaryRoles": [
+          "High-power threat support",
+          "Kodama combat damage"
+        ],
+        "packageMembership": [
+          "Equipment package",
+          "Land-ramp package"
+        ],
+        "whyInThisDeck": "Sword of the Animist is a cheaper, repeatable equipment-based modifier with a much lower equip cost and directly advances the deck's land-ramp plan whenever an equipped creature attacks. Blackblade's seven-mana equip cost is too clunky for the early modification package.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "d0901053-6de0-46d0-9ee3-8d40510236c1",
+        "name": "Sword of Feast and Famine",
+        "typeLine": "Artifact — Equipment",
+        "primaryArchitectRequirement": "cheap_equipment_and_repeatable_modifiers",
+        "primaryRole": "Combat-scaling equipment",
+        "secondaryRoles": [
+          "Protection",
+          "Land untap",
+          "Hand disruption"
+        ],
+        "packageMembership": [
+          "Equipment package",
+          "Combat package"
+        ],
+        "whyInThisDeck": "Protection and a successful attack both increase pressure and untap lands for interaction, equip costs, or a second main phase.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "04c7f4fe-2098-4311-866d-6733c08d5178",
+        "name": "Nettlecyst",
+        "typeLine": "Artifact — Equipment",
+        "primaryArchitectRequirement": "cheap_equipment_and_repeatable_modifiers",
+        "primaryRole": "Living-weapon power equipment",
+        "secondaryRoles": [
+          "Token generation",
+          "Artifact and enchantment scaling"
+        ],
+        "packageMembership": [
+          "Equipment package",
+          "Artifact package"
+        ],
+        "whyInThisDeck": "Creates an immediate modified body and scales naturally with the deck's large equipment and enchantment count.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "1946ded1-5f53-409f-b0a6-5433bb0357d2",
+        "name": "The Ozolith",
+        "typeLine": "Legendary Artifact",
+        "primaryArchitectRequirement": "cheap_equipment_and_repeatable_modifiers",
+        "primaryRole": "Counter-preservation modifier",
+        "secondaryRoles": [
+          "Board-wipe resilience",
+          "Counter transfer"
+        ],
+        "packageMembership": [
+          "Equipment package",
+          "Counter package",
+          "Recovery package"
+        ],
+        "whyInThisDeck": "Preserves accumulated counters through creature removal and converts them into a fresh attacker at the next combat.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "a1f3da21-af6d-450e-bf0b-985d158418e6",
+        "name": "Hardened Scales",
+        "typeLine": "Enchantment",
+        "primaryArchitectRequirement": "cheap_equipment_and_repeatable_modifiers",
+        "primaryRole": "Counter multiplication modifier",
+        "secondaryRoles": [
+          "Modified-creature enabler",
+          "Scaling engine"
+        ],
+        "packageMembership": [
+          "Equipment package",
+          "Counter package"
+        ],
+        "whyInThisDeck": "Turns nearly every counter source into a stronger modification while costing only one mana.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "65986c1b-8e51-4604-b685-d82fa7d1263a",
+        "name": "Skullclamp",
+        "typeLine": "Artifact — Equipment",
+        "primaryArchitectRequirement": "cheap_equipment_and_repeatable_modifiers",
+        "primaryRole": "Combat-value equipment",
+        "secondaryRoles": [
+          "Protection",
+          "Graveyard spell recursion",
+          "Card selection"
+        ],
+        "packageMembership": [
+          "Equipment package",
+          "Protection package"
+        ],
+        "whyInThisDeck": "Skullclamp is a cheap Equipment that modifies creatures while providing efficient repeatable card draw, especially with Hangarback Walker and other token-producing cards. This improves the deck's draw package without sacrificing an equipment slot.",
+        "structuralNecessity": "FLEX"
+      },
+      {
+        "oracleId": "9d2d6479-531c-4ce1-b52b-00e36fa63b64",
+        "name": "Rancor",
+        "typeLine": "Enchantment — Aura",
+        "primaryArchitectRequirement": "cheap_equipment_and_repeatable_modifiers",
+        "primaryRole": "Multi-modification equipment",
+        "secondaryRoles": [
+          "Ward protection",
+          "Power scaling"
+        ],
+        "packageMembership": [
+          "Equipment package"
+        ],
+        "whyInThisDeck": "Rancor is a one-mana, reusable modification effect that supplies power and trample, returns to hand when the creature dies, and remains useful across multiple attackers. It is substantially more reliable than the conditional payoff of stacking several Auras and Equipment.",
+        "structuralNecessity": "FLEX"
+      },
+      {
+        "oracleId": "28fe909b-06e0-424c-9f75-c824a25f5865",
+        "name": "Branching Evolution",
+        "typeLine": "Enchantment",
+        "primaryArchitectRequirement": "counter_scaling_and_modified_creature_payoffs",
+        "primaryRole": "Counter multiplication engine",
+        "secondaryRoles": [
+          "Threat scaling",
+          "Board-wide modification"
+        ],
+        "packageMembership": [
+          "Counter package"
+        ],
+        "whyInThisDeck": "Doubles the output of the deck's many counter sources and rapidly increases both combat damage and Kodama triggers.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "ec3d4466-547c-4e02-b1b5-a156ec4637e9",
+        "name": "Chrome Mox",
+        "typeLine": "Artifact",
+        "primaryArchitectRequirement": "counter_scaling_and_modified_creature_payoffs",
+        "primaryRole": "Counter amplifier and creature ramp",
+        "secondaryRoles": [
+          "Power-based mana generation",
+          "Modified attacker"
+        ],
+        "packageMembership": [
+          "Counter package",
+          "Ramp package"
+        ],
+        "whyInThisDeck": "Chrome Mox replaces Kami of Whispered Hopes, which does the same job (ramp, mana_generation), and raises the deck toward bracket 4.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "b45fdeab-00cc-4422-af9f-66f30a880a7c",
+        "name": "Evolution Sage",
+        "typeLine": "Creature — Elf Druid",
+        "primaryArchitectRequirement": "counter_scaling_and_modified_creature_payoffs",
+        "primaryRole": "Landfall proliferate engine",
+        "secondaryRoles": [
+          "Creature body",
+          "Kodama synergy"
+        ],
+        "packageMembership": [
+          "Counter package",
+          "Land-ramp package"
+        ],
+        "whyInThisDeck": "Kodama and fetchlands repeatedly trigger proliferate, multiplying counters and accelerating every counter-based engine.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "2ef75cf3-30dc-4852-a6d1-1d6391fad022",
+        "name": "Forgotten Ancient",
+        "typeLine": "Creature — Elemental",
+        "primaryArchitectRequirement": "counter_scaling_and_modified_creature_payoffs",
+        "primaryRole": "Repeatable counter generation",
+        "secondaryRoles": [
+          "Counter redistribution",
+          "Growing attacker"
+        ],
+        "packageMembership": [
+          "Counter package",
+          "Threat package"
+        ],
+        "whyInThisDeck": "Accumulates counters from the entire table and distributes them to the creatures best positioned to attack.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "736892cb-a34b-4bb9-b56c-e26e3db207a2",
+        "name": "Mana Vault",
+        "typeLine": "Artifact",
+        "primaryArchitectRequirement": "counter_scaling_and_modified_creature_payoffs",
+        "primaryRole": "Counter distribution and creature ramp",
+        "secondaryRoles": [
+          "Mana acceleration",
+          "Early board development"
+        ],
+        "packageMembership": [
+          "Counter package",
+          "Ramp package"
+        ],
+        "whyInThisDeck": "Mana Vault replaces Rishkar, Peema Renegade, which does the same job (ramp, mana_generation), and raises the deck toward bracket 4.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "5a3fdf5a-bff8-4896-b288-3f43f9a72d9b",
+        "name": "Vorinclex, Monstrous Raider",
+        "typeLine": "Legendary Creature — Phyrexian Praetor",
+        "primaryArchitectRequirement": "counter_scaling_and_modified_creature_payoffs",
+        "primaryRole": "Counter doubling payoff",
+        "secondaryRoles": [
+          "Hasty trampling threat",
+          "Opponent counter suppression"
+        ],
+        "packageMembership": [
+          "Counter package",
+          "Threat package"
+        ],
+        "whyInThisDeck": "Doubles the deck's counter engines and is itself a high-impact hasty trampler when the board is developed.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "dde55256-5259-44e7-a267-fca45a7f0d04",
+        "name": "Hangarback Walker",
+        "typeLine": "Artifact Creature — Construct",
+        "primaryArchitectRequirement": "counter_scaling_and_modified_creature_payoffs",
+        "primaryRole": "Scalable counter creature",
+        "secondaryRoles": [
+          "Token generation",
+          "Sweeper resilience"
+        ],
+        "packageMembership": [
+          "Counter package",
+          "Threat package"
+        ],
+        "whyInThisDeck": "Can be cast at any stage, grows with available mana, and leaves evasive artifact bodies after removal.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "b3f2265b-dd65-4b74-8b74-35ee0b147617",
+        "name": "Managorger Hydra",
+        "typeLine": "Creature — Hydra",
+        "primaryArchitectRequirement": "counter_scaling_and_modified_creature_payoffs",
+        "primaryRole": "Repeatable counter threat",
+        "secondaryRoles": [
+          "Trample",
+          "Scaling board presence"
+        ],
+        "packageMembership": [
+          "Counter package",
+          "Threat package"
+        ],
+        "whyInThisDeck": "Grows from every spell cast at the table and naturally becomes a large trampling modified attacker.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "090018e0-4dcb-4b3c-b4e0-7ba62de0484d",
+        "name": "Bloated Contaminator",
+        "typeLine": "Creature — Phyrexian Beast",
+        "primaryArchitectRequirement": "counter_scaling_and_modified_creature_payoffs",
+        "primaryRole": "Combat proliferate threat",
+        "secondaryRoles": [
+          "Trample",
+          "Poison pressure"
+        ],
+        "packageMembership": [
+          "Counter package",
+          "Threat package"
+        ],
+        "whyInThisDeck": "A cheap trampling attacker that proliferates counters whenever it connects, reinforcing the deck's snowball.",
+        "structuralNecessity": "FLEX"
+      },
+      {
+        "oracleId": "b685757b-521e-4353-a233-97052359723d",
+        "name": "Questing Beast",
+        "typeLine": "Legendary Creature — Beast",
+        "primaryArchitectRequirement": "high_quality_modified_combat_threats",
+        "primaryRole": "Efficient evasive attacker",
+        "secondaryRoles": [
+          "Haste",
+          "Vigilance",
+          "Planeswalker pressure"
+        ],
+        "packageMembership": [
+          "Threat package",
+          "Combat package"
+        ],
+        "whyInThisDeck": "Applies immediate pressure, bypasses small blockers, and ensures combat damage also answers planeswalkers.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "95be5f72-1f81-4ec6-9bd9-f0b07bfc874b",
+        "name": "Surrak and Goreclaw",
+        "typeLine": "Legendary Creature — Human Bear",
+        "primaryArchitectRequirement": "high_quality_modified_combat_threats",
+        "primaryRole": "Creature-entering combat engine",
+        "secondaryRoles": [
+          "Trample anthem",
+          "Counter placement",
+          "Haste granting"
+        ],
+        "packageMembership": [
+          "Threat package",
+          "Counter package"
+        ],
+        "whyInThisDeck": "Turns every nontoken creature into a modified hasty attacker and grants trample to the rest of the board.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "befb211f-37ca-4083-98d4-9ff1f28be3f2",
+        "name": "Goreclaw, Terror of Qal Sisma",
+        "typeLine": "Legendary Creature — Bear",
+        "primaryArchitectRequirement": "high_quality_modified_combat_threats",
+        "primaryRole": "Threat cost reduction",
+        "secondaryRoles": [
+          "Trample combat boost",
+          "Power-based creature support"
+        ],
+        "packageMembership": [
+          "Threat package",
+          "Ramp package"
+        ],
+        "whyInThisDeck": "Makes the deck's large creatures substantially cheaper and improves attacks with power-four bodies.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "90379825-1894-4b79-bf72-445175e97ffb",
+        "name": "Ulvenwald Oddity // Ulvenwald Behemoth",
+        "typeLine": "Creature — Beast // Creature — Beast Horror",
+        "primaryArchitectRequirement": "high_quality_modified_combat_threats",
+        "primaryRole": "Hasty trampling threat and finisher",
+        "secondaryRoles": [
+          "Team haste",
+          "Team trample",
+          "Anthem"
+        ],
+        "packageMembership": [
+          "Threat package",
+          "Combat package"
+        ],
+        "whyInThisDeck": "Starts as an efficient attacker and later transforms into a powerful team-wide combat closer.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "397b9dcf-690a-4a58-8637-bb9baab7cc2f",
+        "name": "Elder Gargaroth",
+        "typeLine": "Creature — Beast",
+        "primaryArchitectRequirement": "high_quality_modified_combat_threats",
+        "primaryRole": "Resilient combat engine",
+        "secondaryRoles": [
+          "Card draw",
+          "Token generation",
+          "Life gain",
+          "Reach"
+        ],
+        "packageMembership": [
+          "Threat package",
+          "Draw package"
+        ],
+        "whyInThisDeck": "Vigilance, reach, and trample make it an excellent carrier while every attack or block generates the needed resource.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "ff8f5a4b-112a-425e-b489-7ee26d1d9fb3",
+        "name": "Voracious Hydra",
+        "typeLine": "Creature — Hydra",
+        "primaryArchitectRequirement": "high_quality_modified_combat_threats",
+        "primaryRole": "Scalable creature threat",
+        "secondaryRoles": [
+          "Creature removal",
+          "Counter doubling",
+          "Trample"
+        ],
+        "packageMembership": [
+          "Threat package",
+          "Counter package",
+          "Interaction package"
+        ],
+        "whyInThisDeck": "Scales with Kodama-generated mana and can either remove a creature or become a very large modified trampler.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "1c36ed3a-c806-47e5-83f9-e44999c67fe5",
+        "name": "Primordial Hydra",
+        "typeLine": "Creature — Hydra",
+        "primaryArchitectRequirement": "high_quality_modified_combat_threats",
+        "primaryRole": "Scalable counter threat",
+        "secondaryRoles": [
+          "Counter doubling",
+          "Trample payoff"
+        ],
+        "packageMembership": [
+          "Threat package",
+          "Counter package"
+        ],
+        "whyInThisDeck": "Uses excess mana to create an exponentially growing threat that eventually gains trample independently of Kodama.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "c549b0fd-1e08-4873-952e-a14dc45a0fd2",
+        "name": "Champion of Lambholt",
+        "typeLine": "Creature — Human Warrior",
+        "primaryArchitectRequirement": "high_quality_modified_combat_threats",
+        "primaryRole": "Team evasion engine",
+        "secondaryRoles": [
+          "Counter generation",
+          "Wide-board payoff"
+        ],
+        "packageMembership": [
+          "Threat package",
+          "Counter package"
+        ],
+        "whyInThisDeck": "Grows whenever creatures enter and eventually makes the entire modified board difficult or impossible to block.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "86ef2ceb-b7e6-4451-92ec-8528ea191d3a",
+        "name": "Old One Eye",
+        "typeLine": "Legendary Creature — Tyranid",
+        "primaryArchitectRequirement": "high_quality_modified_combat_threats",
+        "primaryRole": "Resilient board-building threat",
+        "secondaryRoles": [
+          "Trample anthem",
+          "Token generation",
+          "Self-recursion"
+        ],
+        "packageMembership": [
+          "Threat package",
+          "Recovery package"
+        ],
+        "whyInThisDeck": "Creates a 5/5 immediately, grants team trample, and can return from the graveyard after a wipe.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "e38e3723-05f5-4a51-8364-1cda19f9cc49",
+        "name": "Steelbane Hydra",
+        "typeLine": "Creature — Turtle Hydra",
+        "primaryArchitectRequirement": "high_quality_modified_combat_threats",
+        "primaryRole": "Scalable utility threat",
+        "secondaryRoles": [
+          "Artifact and enchantment removal",
+          "Counter sink"
+        ],
+        "packageMembership": [
+          "Threat package",
+          "Interaction package",
+          "Counter package"
+        ],
+        "whyInThisDeck": "Converts excess mana and counters into repeatable permanent removal while remaining a scalable creature.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "92eed395-62ca-4293-882b-8565c40daab5",
+        "name": "Sylvan Library",
+        "typeLine": "Enchantment",
+        "primaryArchitectRequirement": "green_creature_and_power_based_card_advantage",
+        "primaryRole": "Early card selection and draw",
+        "secondaryRoles": [
+          "Life-to-card conversion",
+          "Combo-piece access"
+        ],
+        "packageMembership": [
+          "Draw package"
+        ],
+        "whyInThisDeck": "Improves early hand quality and can generate multiple cards to find equipment, lands, or protection.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "dc0593c2-ccb4-4648-a592-c5bcd121dc72",
+        "name": "Greater Good",
+        "typeLine": "Enchantment",
+        "primaryArchitectRequirement": "green_creature_and_power_based_card_advantage",
+        "primaryRole": "Power-based card draw",
+        "secondaryRoles": [
+          "Sacrifice outlet",
+          "Graveyard setup",
+          "Board-wipe insurance"
+        ],
+        "packageMembership": [
+          "Draw package",
+          "Recovery package"
+        ],
+        "whyInThisDeck": "Turns oversized modified creatures into deep card selection and protects value from exile or theft effects.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "3127ae9b-a7a7-43ec-89d7-688f8445b33d",
+        "name": "Garruk's Uprising",
+        "typeLine": "Enchantment",
+        "primaryArchitectRequirement": "green_creature_and_power_based_card_advantage",
+        "primaryRole": "Power-based draw engine",
+        "secondaryRoles": [
+          "Team trample",
+          "Entry-triggered draw"
+        ],
+        "packageMembership": [
+          "Draw package",
+          "Combat package"
+        ],
+        "whyInThisDeck": "Most of the creature base meets its power threshold, making this a repeatable draw engine that also supplies trample.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "5da7eea8-bb9e-47ce-a554-8a1ee058bd7a",
+        "name": "Beast Whisperer",
+        "typeLine": "Creature — Elf Druid",
+        "primaryArchitectRequirement": "green_creature_and_power_based_card_advantage",
+        "primaryRole": "Creature-cast draw engine",
+        "secondaryRoles": [
+          "Elf body",
+          "Sustained resource generation"
+        ],
+        "packageMembership": [
+          "Draw package",
+          "Creature package"
+        ],
+        "whyInThisDeck": "The high creature density lets it refill the hand through normal development and rebuild after interaction.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "a8e707ec-ce77-4bc5-8c76-5ea3e81e8c7f",
+        "name": "Toski, Bearer of Secrets",
+        "typeLine": "Legendary Creature — Squirrel",
+        "primaryArchitectRequirement": "green_creature_and_power_based_card_advantage",
+        "primaryRole": "Combat-damage draw engine",
+        "secondaryRoles": [
+          "Indestructible threat",
+          "Uncounterable spell"
+        ],
+        "packageMembership": [
+          "Draw package",
+          "Combat package"
+        ],
+        "whyInThisDeck": "Pairs with Kodama's trample plan to draw for every creature that connects and is exceptionally resilient to removal.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "b99ada26-9a61-4175-9fb8-15a106960220",
+        "name": "Ohran Frostfang",
+        "typeLine": "Snow Creature — Snake",
+        "primaryArchitectRequirement": "green_creature_and_power_based_card_advantage",
+        "primaryRole": "Combat-damage draw engine",
+        "secondaryRoles": [
+          "Deathtouch anthem",
+          "Combat deterrence"
+        ],
+        "packageMembership": [
+          "Draw package",
+          "Combat package"
+        ],
+        "whyInThisDeck": "Makes attacks profitable even through blockers and draws for every creature that deals combat damage.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "97407cd0-2bd2-4074-94d3-4ec3d243fa78",
+        "name": "Rishkar's Expertise",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "green_creature_and_power_based_card_advantage",
+        "primaryRole": "Large power-based refill",
+        "secondaryRoles": [
+          "Free follow-up spell",
+          "Late-game recovery"
+        ],
+        "packageMembership": [
+          "Draw package",
+          "Finisher package"
+        ],
+        "whyInThisDeck": "Converts the deck's largest creature into a full hand while allowing a powerful follow-up permanent or finisher for free.",
+        "structuralNecessity": "FLEX"
+      },
+      {
+        "oracleId": "0d96b60b-a060-48ee-bb83-93f1c4a10669",
+        "name": "Green Sun's Zenith",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "green_access_and_creature_toolbox_tutors",
+        "primaryRole": "Green creature tutor",
+        "secondaryRoles": [
+          "Mana-efficient access",
+          "Late-game threat search"
+        ],
+        "packageMembership": [
+          "Tutor package"
+        ],
+        "whyInThisDeck": "Finds early ramp, counter engines, interaction creatures, draw engines, or a finisher while remaining useful at every mana value.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "69872a9a-fe54-4e58-940c-89395af71acd",
+        "name": "Finale of Devastation",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "green_access_and_creature_toolbox_tutors",
+        "primaryRole": "Creature and graveyard tutor",
+        "secondaryRoles": [
+          "Recovery",
+          "Combat finisher"
+        ],
+        "packageMembership": [
+          "Tutor package",
+          "Finisher package"
+        ],
+        "whyInThisDeck": "Accesses creatures from the library or graveyard and becomes a lethal team-wide combat spell when Kodama has generated enough mana.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "e8863518-0bfa-49c3-8c6e-6c9116a81051",
+        "name": "Worldly Tutor",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "green_access_and_creature_toolbox_tutors",
+        "primaryRole": "Instant-speed creature tutor",
+        "secondaryRoles": [
+          "Topdeck selection",
+          "Protection timing"
+        ],
+        "packageMembership": [
+          "Tutor package"
+        ],
+        "whyInThisDeck": "Finds the exact creature needed before a turn, attack, or draw step while costing only one mana.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "6789a170-f2c5-4fc0-8a45-2b2361e67410",
+        "name": "Chord of Calling",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "green_access_and_creature_toolbox_tutors",
+        "primaryRole": "Instant-speed creature tutor",
+        "secondaryRoles": [
+          "Convoke",
+          "Board-state flexibility"
+        ],
+        "packageMembership": [
+          "Tutor package"
+        ],
+        "whyInThisDeck": "Uses expendable creatures or tokens to search directly onto the battlefield at instant speed.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "6d4e558e-9109-4918-a082-fdcbaffd516b",
+        "name": "Nature's Claim",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "mono_green_flexible_permanent_interaction",
+        "primaryRole": "Cheap artifact and enchantment removal",
+        "secondaryRoles": [
+          "Instant-speed interaction"
+        ],
+        "packageMembership": [
+          "Interaction package"
+        ],
+        "whyInThisDeck": "Efficiently answers fast mana, opposing equipment, and problematic enchantments for only one mana.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "3e39224c-72ce-4ecc-aa17-12c071ea1f3e",
+        "name": "Krosan Grip",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "mono_green_flexible_permanent_interaction",
+        "primaryRole": "Uncounterable artifact and enchantment removal",
+        "secondaryRoles": [
+          "Combo disruption",
+          "Instant-speed interaction"
+        ],
+        "packageMembership": [
+          "Interaction package"
+        ],
+        "whyInThisDeck": "Split second reliably removes a key artifact or enchantment when ordinary interaction may be answered.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "5f627e45-deee-4a4f-8128-57b0d8ebc553",
+        "name": "Force of Vigor",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "mono_green_flexible_permanent_interaction",
+        "primaryRole": "Free multi-permanent removal",
+        "secondaryRoles": [
+          "Non-turn interaction",
+          "Artifact and enchantment sweep"
+        ],
+        "packageMembership": [
+          "Interaction package"
+        ],
+        "whyInThisDeck": "Can answer two opposing permanents without using mana, preserving pressure and protecting the deck from explosive opposing starts.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "7735eeba-693b-47e2-bd51-414379cf1016",
+        "name": "Beast Within",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "mono_green_flexible_permanent_interaction",
+        "primaryRole": "Universal permanent removal",
+        "secondaryRoles": [
+          "Instant speed",
+          "Token generation"
+        ],
+        "packageMembership": [
+          "Interaction package"
+        ],
+        "whyInThisDeck": "Answers any permanent type, including planeswalkers and lands that green's narrower removal cannot handle.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "7c3944fa-7c86-4979-85a9-86196aa94594",
+        "name": "Song of the Dryads",
+        "typeLine": "Enchantment — Aura",
+        "primaryArchitectRequirement": "mono_green_flexible_permanent_interaction",
+        "primaryRole": "Permanent neutralization",
+        "secondaryRoles": [
+          "Indestructible answer",
+          "Commander answer"
+        ],
+        "packageMembership": [
+          "Interaction package"
+        ],
+        "whyInThisDeck": "Turns an opposing creature, commander, or difficult permanent into a harmless Forest rather than destroying it.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "4b1befff-48fa-47a3-832e-bdaf43495c02",
+        "name": "Ram Through",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "mono_green_flexible_permanent_interaction",
+        "primaryRole": "Creature-based removal",
+        "secondaryRoles": [
+          "Combat damage",
+          "Trample synergy"
+        ],
+        "packageMembership": [
+          "Interaction package",
+          "Combat package"
+        ],
+        "whyInThisDeck": "Uses the deck's oversized trampling creatures as efficient instant-speed removal and can push excess damage to a player.",
+        "structuralNecessity": "FLEX"
+      },
+      {
+        "oracleId": "24882fa2-3fe9-4c1b-aa3d-0e6488b9db27",
+        "name": "Heroic Intervention",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "combat_deck_protection_and_stack_resilience",
+        "primaryRole": "Board-wide protection",
+        "secondaryRoles": [
+          "Sweeper protection",
+          "Combat insurance"
+        ],
+        "packageMembership": [
+          "Protection package"
+        ],
+        "whyInThisDeck": "Protects the board from both targeted removal and destroy-based sweepers during the deck's commitment turns.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "002965be-a36f-4a09-9ce0-c6535bca1703",
+        "name": "Veil of Summer",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "combat_deck_protection_and_stack_resilience",
+        "primaryRole": "Stack and targeted protection",
+        "secondaryRoles": [
+          "Card draw",
+          "Blue and black defense"
+        ],
+        "packageMembership": [
+          "Protection package"
+        ],
+        "whyInThisDeck": "Protects critical spells and permanents from blue or black interaction while replacing itself when relevant.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "bb2b324c-970a-4920-884e-c92ba49669f0",
+        "name": "Tamiyo's Safekeeping",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "combat_deck_protection_and_stack_resilience",
+        "primaryRole": "Cheap permanent protection",
+        "secondaryRoles": [
+          "Indestructible",
+          "Life gain"
+        ],
+        "packageMembership": [
+          "Protection package"
+        ],
+        "whyInThisDeck": "Protects Kodama, an important equipment, or a lethal attacker for one mana while offsetting incidental life loss.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "4247b667-a0a8-4995-97c7-622d20132f7d",
+        "name": "Tyvar's Stand",
+        "typeLine": "Instant",
+        "primaryArchitectRequirement": "combat_deck_protection_and_stack_resilience",
+        "primaryRole": "Creature protection and combat trick",
+        "secondaryRoles": [
+          "Power boost",
+          "Hexproof",
+          "Indestructible"
+        ],
+        "packageMembership": [
+          "Protection package",
+          "Combat package"
+        ],
+        "whyInThisDeck": "Protects a key attacker from removal and can convert excess Kodama mana into lethal combat damage.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "30b24e8e-3b0e-4d8e-90f3-f66eb7c1858c",
+        "name": "Eternal Witness",
+        "typeLine": "Creature — Human Shaman",
+        "primaryArchitectRequirement": "graveyard_recovery_and_post_wipe_rebuilding",
+        "primaryRole": "Universal recursion creature",
+        "secondaryRoles": [
+          "Creature tutor target",
+          "Board development"
+        ],
+        "packageMembership": [
+          "Recovery package",
+          "Creature package"
+        ],
+        "whyInThisDeck": "Returns any lost card, including a finisher, protection spell, land-ramp spell, or key equipment, while adding a creature body.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "a52a06aa-56fc-4845-bbcd-a54f16369b34",
+        "name": "Timeless Witness",
+        "typeLine": "Creature — Human Shaman",
+        "primaryArchitectRequirement": "graveyard_recovery_and_post_wipe_rebuilding",
+        "primaryRole": "Recursion and late-game recovery",
+        "secondaryRoles": [
+          "Creature body",
+          "Eternalize value"
+        ],
+        "packageMembership": [
+          "Recovery package",
+          "Creature package"
+        ],
+        "whyInThisDeck": "Provides a second universal recovery effect and can become a 4/4 body after the graveyard is stocked.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "e1e96802-fd0c-41f1-aa21-3287d75a0e88",
+        "name": "Overwhelming Stampede",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "combat_lethal_finishers",
+        "primaryRole": "Power-based team finisher",
+        "secondaryRoles": [
+          "Team trample",
+          "Wide-board conversion"
+        ],
+        "packageMembership": [
+          "Finisher package",
+          "Combat package"
+        ],
+        "whyInThisDeck": "Uses the deck's largest modified creature to turn a developed board into a lethal trampling attack.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "3ded0c0c-40ce-4d14-a9a6-b023bc19ee0e",
+        "name": "Triumph of the Hordes",
+        "typeLine": "Sorcery",
+        "primaryArchitectRequirement": "combat_lethal_finishers",
+        "primaryRole": "One-turn combat finisher",
+        "secondaryRoles": [
+          "Team trample",
+          "Alternate poison victory"
+        ],
+        "packageMembership": [
+          "Finisher package",
+          "Combat package"
+        ],
+        "whyInThisDeck": "Provides a compact alternate lethal route when life totals are high or conventional damage is blocked.",
+        "structuralNecessity": "REQUIRED"
+      },
+      {
+        "oracleId": "8c52bd39-0586-48ca-b263-17210cf9feb6",
+        "name": "Craterhoof Behemoth",
+        "typeLine": "Creature — Beast",
+        "primaryArchitectRequirement": "combat_lethal_finishers",
+        "primaryRole": "Creature-based team finisher",
+        "secondaryRoles": [
+          "Haste",
+          "Team trample",
+          "Scalable power boost"
+        ],
+        "packageMembership": [
+          "Finisher package",
+          "Creature package"
+        ],
+        "whyInThisDeck": "The strongest creature-based closer available, converting tokens and accumulated creatures into immediate lethal damage.",
+        "structuralNecessity": "REQUIRED"
+      }
+    ],
+    "primaryWinPaths": [
+      "Kodama attacks with modified creatures, generating repeated basic Forests and enough mana to overwhelm the table through ordinary trampling combat.",
+      "A developed board plus Overwhelming Stampede, Triumph of the Hordes, or Craterhoof Behemoth produces a decisive lethal attack.",
+      "An equipped evasive threat uses trample, protection, and combat-triggered value from swords or draw engines to maintain pressure until combat becomes lethal."
+    ],
+    "secondaryWinPaths": [
+      "Large counter creatures such as Primordial Hydra, Managorger Hydra, and Voracious Hydra remain dangerous without Kodama.",
+      "Ulvenwald Oddity, Surrak and Goreclaw, and Old One Eye provide independent team-wide trample or haste pressure.",
+      "Equipment and draw engines allow the deck to rebuild into a conventional mono-green midrange board after commander removal."
+    ],
+    "expectedPlayPattern": "Lead with a one-mana accelerator or cheap setup permanent, then cast Kodama on turn two or three with a modified attacker ready. Use equipment, counters, and landfall proliferate to make several creatures connect, converting attacks into Forests and escalating mana. Deploy draw engines and efficient threats while holding up protection or instant interaction, then close with a scalable combat finisher once the board is safely developed.",
+    "structuralNecessities": [
+      "35 lands with 24 Forests preserve Kodama's repeatable basic-land engine while maintaining reliable early green mana.",
+      "Nine acceleration cards support early Kodama and the deck's expensive equipment, draw engines, and finishers.",
+      "The equipment and counter packages provide redundant, reusable ways to make creatures modified.",
+      "Creature density supports combat, creature tutors, Beast Whisperer, Chord of Calling, and Finale of Devastation.",
+      "Six interaction spells and four protection spells preserve a proactive but meaningfully interactive Bracket 4 play pattern.",
+      "The three finisher package provides distinct combat closes without relying on deterministic infinite combos."
+    ],
+    "replaceableFlex": [
+      "Cultivate",
+      "Thran Power Suit",
+      "Bloated Contaminator",
+      "Rishkar's Expertise",
+      "Ram Through"
+    ]
+  }
+}

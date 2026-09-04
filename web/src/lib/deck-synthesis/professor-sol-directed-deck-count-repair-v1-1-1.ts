@@ -1,7 +1,8 @@
 /**
  * Deterministic 99-card slot repair after Constructor / Critic output.
  */
-import { isBasicLandName } from "./professor-commander-legality-v4-9-v1";
+import { commanderLegalInIdentity } from "@/lib/semantic-visualization/filters-v1";
+import { basicLandColorIdentity, isBasicLandName } from "./professor-commander-legality-v4-9-v1";
 import { normalizeCardNameForMatch } from "./professor-canonical-card-identity-v4-15-1-v1";
 import type {
   LandPoolV11,
@@ -60,7 +61,12 @@ function addLandCopies(args: {
 }): number {
   let added = 0;
   const candidates = [...args.landPool.entries]
-    .filter((entry) => entry.isBasic && entry.maxCopies > 0)
+    .filter(
+      (entry) =>
+        entry.isBasic &&
+        entry.maxCopies > 0 &&
+        commanderLegalInIdentity(basicLandColorIdentity(entry.name), args.colorIdentity),
+    )
     .sort(
       (a, b) =>
         basicLandPreferenceScore(b, args.colorIdentity) - basicLandPreferenceScore(a, args.colorIdentity) ||

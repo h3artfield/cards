@@ -1,0 +1,237 @@
+{
+  "generatedAt": "2026-09-04T03:56:13.644Z",
+  "rows": [
+    {
+      "commander": "Chatterfang, Squirrel General",
+      "requestedBracket": 2,
+      "status": "COMPLETE",
+      "failureCode": null,
+      "validationPass": true,
+      "candidateTracePass": true,
+      "architectCountsPass": true,
+      "measuredBracket": 2,
+      "measuredName": "Core",
+      "gameChangers": [],
+      "determiningSignals": [],
+      "attainmentFired": false,
+      "attainmentChanges": [],
+      "ceilingFired": false,
+      "ceilingChanges": [],
+      "attainmentSkipped": [],
+      "nonlandCount": 64,
+      "landCount": 35,
+      "elapsedMs": 387885
+    },
+    {
+      "commander": "Chatterfang, Squirrel General",
+      "requestedBracket": 3,
+      "status": "COMPLETE",
+      "failureCode": null,
+      "validationPass": true,
+      "candidateTracePass": true,
+      "architectCountsPass": true,
+      "measuredBracket": 3,
+      "measuredName": "Upgraded",
+      "gameChangers": [
+        "Demonic Tutor",
+        "Vampiric Tutor"
+      ],
+      "determiningSignals": [
+        "Game Changers",
+        "Infinite combos",
+        "Tutors"
+      ],
+      "attainmentFired": false,
+      "attainmentChanges": [],
+      "ceilingFired": false,
+      "ceilingChanges": [],
+      "attainmentSkipped": [],
+      "nonlandCount": 64,
+      "landCount": 35,
+      "elapsedMs": 249782
+    },
+    {
+      "commander": "Chatterfang, Squirrel General",
+      "requestedBracket": 4,
+      "status": "COMPLETE",
+      "failureCode": null,
+      "validationPass": true,
+      "candidateTracePass": true,
+      "architectCountsPass": true,
+      "measuredBracket": 4,
+      "measuredName": "Optimized",
+      "gameChangers": [
+        "Demonic Tutor",
+        "Necropotence",
+        "Vampiric Tutor",
+        "Worldly Tutor"
+      ],
+      "determiningSignals": [
+        "Game Changers"
+      ],
+      "attainmentFired": false,
+      "attainmentChanges": [],
+      "ceilingFired": false,
+      "ceilingChanges": [],
+      "attainmentSkipped": [],
+      "nonlandCount": 63,
+      "landCount": 36,
+      "elapsedMs": 257608
+    },
+    {
+      "commander": "Omnath, Locus of Rage",
+      "requestedBracket": 2,
+      "status": "COMPLETE",
+      "failureCode": null,
+      "validationPass": true,
+      "candidateTracePass": true,
+      "architectCountsPass": true,
+      "measuredBracket": 2,
+      "measuredName": "Core",
+      "gameChangers": [],
+      "determiningSignals": [],
+      "attainmentFired": false,
+      "attainmentChanges": [],
+      "ceilingFired": true,
+      "ceilingChanges": [
+        "Veil of Summer",
+        "Ragavan, Nimble Pilferer",
+        "Birds of Paradise"
+      ],
+      "attainmentSkipped": [],
+      "nonlandCount": 63,
+      "landCount": 36,
+      "elapsedMs": 417393
+    },
+    {
+      "commander": "Omnath, Locus of Rage",
+      "requestedBracket": 3,
+      "status": "COMPLETE",
+      "failureCode": null,
+      "validationPass": true,
+      "candidateTracePass": true,
+      "architectCountsPass": true,
+      "measuredBracket": 3,
+      "measuredName": "Upgraded",
+      "gameChangers": [],
+      "determiningSignals": [
+        "Infinite combos"
+      ],
+      "attainmentFired": false,
+      "attainmentChanges": [],
+      "ceilingFired": true,
+      "ceilingChanges": [
+        "Birds of Paradise"
+      ],
+      "attainmentSkipped": [],
+      "nonlandCount": 64,
+      "landCount": 35,
+      "elapsedMs": 318636
+    },
+    {
+      "commander": "Omnath, Locus of Rage",
+      "requestedBracket": 4,
+      "status": "COMPLETE",
+      "failureCode": null,
+      "validationPass": true,
+      "candidateTracePass": true,
+      "architectCountsPass": true,
+      "measuredBracket": 4,
+      "measuredName": "Optimized",
+      "gameChangers": [
+        "Ancient Tomb",
+        "Worldly Tutor"
+      ],
+      "determiningSignals": [
+        "Two-card infinite combos"
+      ],
+      "attainmentFired": false,
+      "attainmentChanges": [],
+      "ceilingFired": false,
+      "ceilingChanges": [],
+      "attainmentSkipped": [],
+      "nonlandCount": 63,
+      "landCount": 36,
+      "elapsedMs": 310439
+    },
+    {
+      "commander": "Kodama of the West Tree",
+      "requestedBracket": 2,
+      "status": "COMPLETE",
+      "failureCode": null,
+      "validationPass": true,
+      "candidateTracePass": true,
+      "architectCountsPass": true,
+      "measuredBracket": 2,
+      "measuredName": "Core",
+      "gameChangers": [],
+      "determiningSignals": [],
+      "attainmentFired": false,
+      "attainmentChanges": [],
+      "ceilingFired": false,
+      "ceilingChanges": [],
+      "attainmentSkipped": [],
+      "nonlandCount": 64,
+      "landCount": 35,
+      "elapsedMs": 269477
+    },
+    {
+      "commander": "Kodama of the West Tree",
+      "requestedBracket": 3,
+      "status": "COMPLETE",
+      "failureCode": null,
+      "validationPass": true,
+      "candidateTracePass": true,
+      "architectCountsPass": true,
+      "measuredBracket": 3,
+      "measuredName": "Upgraded",
+      "gameChangers": [
+        "Chrome Mox"
+      ],
+      "determiningSignals": [
+        "Game Changers"
+      ],
+      "attainmentFired": true,
+      "attainmentChanges": [
+        "Chrome Mox"
+      ],
+      "ceilingFired": false,
+      "ceilingChanges": [],
+      "attainmentSkipped": [],
+      "nonlandCount": 63,
+      "landCount": 36,
+      "elapsedMs": 236885
+    },
+    {
+      "commander": "Kodama of the West Tree",
+      "requestedBracket": 4,
+      "status": "COMPLETE",
+      "failureCode": null,
+      "validationPass": true,
+      "candidateTracePass": true,
+      "architectCountsPass": true,
+      "measuredBracket": 4,
+      "measuredName": "Optimized",
+      "gameChangers": [
+        "Chrome Mox",
+        "Crop Rotation",
+        "Mana Vault",
+        "Worldly Tutor"
+      ],
+      "determiningSignals": [
+        "Game Changers"
+      ],
+      "attainmentFired": true,
+      "attainmentChanges": [
+        "Chrome Mox",
+        "Mana Vault"
+      ],
+      "ceilingFired": false,
+      "ceilingChanges": [],
+      "attainmentSkipped": [],
+      "nonlandCount": 64,
+      "landCount": 35,
+      "elapsedMs": 261701
+    }
+  ]
+}

@@ -9,7 +9,7 @@ import {
   resolveCanonicalCardTruthV4164,
 } from "./professor-canonical-card-truth-v4-16-4-v1";
 import { isCanonicalLandForDeckPartition } from "./professor-canonical-deck-partition-v1";
-import { isBasicLandName, evaluateSingletonPool } from "./professor-commander-legality-v4-9-v1";
+import { basicLandColorIdentity, isBasicLandName, evaluateSingletonPool } from "./professor-commander-legality-v4-9-v1";
 import { normalizeCardNameForMatch } from "./professor-canonical-card-identity-v4-15-1-v1";
 import { COMMANDER_DECK_LIBRARY_SIZE_V47 } from "./professor-deck-completion-v4-7-v1";
 import {
@@ -52,24 +52,6 @@ export type SolDirectedValidationV111 = SolDirectedValidationV1 & {
   candidateTracePass: boolean;
   identityLedgerErrors: string[];
 };
-
-function basicLandColorIdentity(name: string): string[] {
-  const normalized = name.trim().toLowerCase().replace(/^snow-covered /, "");
-  switch (normalized) {
-    case "plains":
-      return ["W"];
-    case "island":
-      return ["U"];
-    case "swamp":
-      return ["B"];
-    case "mountain":
-      return ["R"];
-    case "forest":
-      return ["G"];
-    default:
-      return [];
-  }
-}
 
 function computeArchitectRequirementRealization(args: {
   deck: SolDirectedConstructedDeckV11;

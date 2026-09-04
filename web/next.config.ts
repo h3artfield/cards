@@ -2,6 +2,14 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  outputFileTracingIncludes: {
+    "/api/commander-optimization-score": [
+      "./data/milestones/mechanical-space/commander-optimization-score-v1/**",
+      "./data/milestones/mechanical-space/spellbook-win-architecture-space-v1/normalized-combo-dictionary.jsonl",
+      "./data/milestones/catalog-shadow/catalog-semantic-visualization-v1-points.json.gz",
+      "./data/milestones/catalog-shadow/catalog-shadow-parse-rc8-firestore-v2.jsonl.gz",
+    ],
+  },
   typescript: {
     // Milestone snapshot TS under data/ and legacy parser strictness gaps — app routes typecheck in CI separately.
     ignoreBuildErrors: true,
