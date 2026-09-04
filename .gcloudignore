@@ -10,27 +10,36 @@ web/.cache/
 # Offline training snapshots — not needed at runtime (~10GB).
 web/data/milestones/topdeck/
 
-# Mechanical-space research dumps. Explicit paths only — gcloudignore
-# negation does not keep COS v1 artifacts in the upload.
-web/data/milestones/mechanical-space/commanderspellbook-exact-deck-detector-v1/
-web/data/milestones/mechanical-space/outcome-derived-strategic-geometry-v1/
-web/data/milestones/mechanical-space/deck-pressure-v4/
-web/data/milestones/mechanical-space/topdeck-holdout-outcome-validation-v1/
-web/data/milestones/mechanical-space/commanderspellbook-full-mirror-v1/
-web/data/milestones/mechanical-space/external-gameplay-validation-v1/
-web/data/milestones/mechanical-space/oracle-neural-semantic-space-v1/
+# Mechanical-space research dumps — roughly 5GB across 70-odd experiment
+# directories, of which the deployed app reads two.
+#
+# Excluding each child entry rather than the directory itself is what makes the
+# re-includes below work: gitignore rules cannot re-include anything under an
+# excluded parent directory, which is why an earlier attempt at negation here
+# dropped the COS v1 artifacts. Listing children keeps the parent walkable.
+#
+# The upshot is that a new research directory is excluded by default, so this
+# does not need revisiting every time an experiment lands.
+web/data/milestones/mechanical-space/*
+!web/data/milestones/mechanical-space/commander-optimization-score-v1/
+!web/data/milestones/mechanical-space/spellbook-win-architecture-space-v1/
+# Kept directory, but this one file is a 200MB training artifact.
 web/data/milestones/mechanical-space/spellbook-win-architecture-space-v1/architecture-fingerprints.jsonl
-web/data/milestones/mechanical-space/deck-pressure-v3/
-web/data/milestones/mechanical-space/mechanical-pressure-k-v3.0/
-web/data/milestones/mechanical-space/mechanical-pressure-k-v2.7/
-web/data/milestones/mechanical-space/mechanical-pressure-k-v2.6/
-web/data/milestones/mechanical-space/mechanical-pressure-k-v2.5/
-web/data/milestones/mechanical-space/mechanical-pressure-k-v2.4/
-web/data/milestones/mechanical-space/mechanical-pressure-k-v2.3/
-web/data/milestones/mechanical-space/mechanical-pressure-k-v2.2/
-web/data/milestones/mechanical-space/mechanical-pressure-k-v2.1/
-web/data/milestones/mechanical-space/mechanical-pressure-k-v2.0/
-web/data/milestones/mechanical-space/commander-optimization-score-v2/
+
+# Phase 6A.1 professor plan experiments — ~550MB of saved model runs. The
+# deployed app reads only loose files at the deck-synthesis root, never these.
+web/data/milestones/deck-synthesis/phase6a1-professor-plan-experiment-v3*/
+
+# Archived experiment output. Nothing unzips anything at runtime.
+web/data/milestones/**/*.zip
+
+# Local caches and audit output. Already gitignored, never read at runtime.
+web/.data/
+web/reports/
+web/tsconfig.tsbuildinfo
+
+# PriceCharting raw archives embed subscription URLs — keep them out of builds.
+data/pricecharting/
 
 **/.env.local
 **/.env*.local
