@@ -238,7 +238,7 @@ function PageShell({ children }: { children: React.ReactNode }) {
   // brand mark it used pairs dark text with a white glow for light grounds and
   // would have disappeared here, so it moves to the shared `auth` lockup.
   return (
-    <div className="min-h-screen bg-[var(--ink-850)] text-[var(--text)]">
+    <div className="storefront-theme min-h-screen bg-[var(--ink-850)] text-[var(--text)]">
       <div className="mx-auto max-w-lg px-6 py-10">
         <StoreBrandMark
           storeName={branding.storeName}

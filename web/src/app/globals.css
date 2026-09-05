@@ -26,6 +26,12 @@
   --color-neutral-950: #0a0c10;
 }
 
+/* Lets a component opt a declaration into the storefront scope. Needed because
+   the scoped override below changes what `bg-indigo-600` paints but cannot
+   change the `text-white` sitting next to it, and shared primitives like
+   <Button> are also used in admin, where the indigo stays. */
+@custom-variant storefront (&:where(.storefront-theme, .storefront-theme *));
+
 /* Scoped accent override — customer storefront surfaces only.
    Tailwind v4 compiles every colour utility to var(--color-*), so redefining
    those variables on a wrapper repoints all the indigo utilities inside it

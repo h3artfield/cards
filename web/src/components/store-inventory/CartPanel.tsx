@@ -186,7 +186,7 @@ export function CartPanel({ slug }: { slug: string }) {
             type="button"
             disabled={checkingOut}
             onClick={() => void checkout()}
-            className="mt-3 w-full rounded-lg bg-white px-3 py-2 text-[12px] font-semibold uppercase tracking-wide text-black transition hover:bg-neutral-200 disabled:opacity-50"
+            className="mt-3 w-full rounded-lg bg-[var(--ink-800)] px-3 py-2 text-[12px] font-semibold uppercase tracking-wide text-black transition hover:bg-neutral-200 disabled:opacity-50"
           >
             {checkingOut ? "Opening checkout…" : "Check out"}
           </button>

@@ -53,10 +53,10 @@ export function OrderSubmittedScreen({
 
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center px-6 py-16 text-center">
-      <h1 className="text-2xl font-bold text-gray-900">Thank you!</h1>
-      <p className="mt-3 max-w-sm text-sm leading-relaxed text-gray-700">
+      <h1 className="text-2xl font-bold text-[var(--text-hi)]">Thank you!</h1>
+      <p className="mt-3 max-w-sm text-sm leading-relaxed text-[var(--text)]">
         We will notify you at{" "}
-        <span className="font-semibold text-gray-900">{emailLine}</span> when
+        <span className="font-semibold text-[var(--text-hi)]">{emailLine}</span> when
         your order has finished processing.
       </p>
 

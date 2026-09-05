@@ -11,14 +11,14 @@ export function OrderGeneratingScreen({
         className="h-12 w-12 animate-spin rounded-full border-4 border-indigo-200 border-t-indigo-600"
         aria-hidden
       />
-      <h1 className="mt-6 text-xl font-bold text-gray-900">
+      <h1 className="mt-6 text-xl font-bold text-[var(--text-hi)]">
         Generating your order
       </h1>
       {orderNumber && (
         <p className="mt-2 text-sm font-medium text-indigo-700">{orderNumber}</p>
       )}
-      <p className="mt-3 max-w-sm text-sm text-gray-600">{subtitle}</p>
-      <p className="mt-6 text-xs text-gray-500">
+      <p className="mt-3 max-w-sm text-sm text-[var(--text)]">{subtitle}</p>
+      <p className="mt-6 text-xs text-[var(--text-lo)]">
         Please keep this page open — you&apos;ll see your cards once processing
         finishes.
       </p>
