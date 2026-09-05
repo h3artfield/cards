@@ -266,6 +266,18 @@ function ceilingRequirements(requested: CommanderBracket): {
  * Picks the replacement for a cut card: same narrow job where possible, and
  * never one that reintroduces the signal being removed.
  */
+/** Does this candidate carry the signal named? */
+function candidateCarriesSignal(
+  candidate: CeilingAddCandidateV1,
+  signalId: CeilingSignalIdV1,
+): boolean {
+  if (signalId === "game_changers") return candidate.isGameChanger;
+  if (signalId === "mass_land_denial") return candidate.isMassLandDenial;
+  if (signalId === "extra_turns") return candidate.isExtraTurn;
+  if (signalId === "tutor_density") return candidate.isUnrestrictedTutor;
+  return false;
+}
+
 function chooseReplacement(args: {
   cut: CeilingRemovalV1;
   cutRoles: string[];
@@ -273,9 +285,21 @@ function chooseReplacement(args: {
   used: Set<string>;
   requirements: ReturnType<typeof ceilingRequirements>;
   survivingComboSignatures: Set<string>;
+  /**
+   * Signals this pass is actively bringing down. A replacement carrying one of
+   * them undoes the cut that was just made, which is how a Florian build cut a
+   * Game Changer and shipped another one in its place: the bracket-3 allowance
+   * of three is greater than zero, so the old `maxGameChangers <= 0` guard let
+   * a fourth straight back in and the deck still measured bracket 4. Anything
+   * being reduced is off the table entirely, whatever the bracket allows.
+   */
+  reducedSignals: ReadonlySet<CeilingSignalIdV1>;
 }): { add: CeilingAddCandidateV1 | null; roleMatched: boolean } {
   const eligible = args.candidates.filter((candidate) => {
     if (args.used.has(candidate.oracleId)) return false;
+    for (const signalId of args.reducedSignals) {
+      if (candidateCarriesSignal(candidate, signalId)) return false;
+    }
     if (candidate.isGameChanger && args.requirements.maxGameChangers <= 0) return false;
     if (candidate.isMassLandDenial && !args.requirements.allowMassLandDenial) return false;
     if (candidate.isExtraTurn && args.requirements.maxExtraTurns <= 0) return false;
@@ -357,6 +381,9 @@ export function planBracketCeilingV1(input: {
     }
   };
 
+  // Signals this run is bringing down, so replacements cannot reintroduce them.
+  const reducedSignals = new Set<CeilingSignalIdV1>();
+
   const countdown = (
     signalId: CeilingSignalIdV1,
     cards: CeilingDeckCardV1[],
@@ -364,6 +391,7 @@ export function planBracketCeilingV1(input: {
     blockedReason: string,
   ) => {
     if (!Number.isFinite(maxAllowed) || cards.length <= maxAllowed) return;
+    reducedSignals.add(signalId);
     const removals = reduceToAtMost({ cards, maxAllowed, basicAvailable });
     for (const card of removals) noteRemoval(card, signalId);
     const stillOver = cards.length - removals.length > maxAllowed;
@@ -466,6 +494,7 @@ export function planBracketCeilingV1(input: {
       used,
       requirements,
       survivingComboSignatures,
+      reducedSignals,
     });
     if (add) used.add(add.oracleId);
     swaps.push({ cut, add, roleMatched, isLandSwap: false, basicLand: null });

@@ -476,4 +476,66 @@ check("a combo already broken by another signal's cut is not cut twice", () => {
   assert.ok(plan.notes.some((note) => note.includes("already broken")));
 });
 
+// Built from a real shipped failure: a Florian, Voldaren Scion build asked for
+// bracket 3, ran four Game Changers (Ragavan, Vampiric Tutor, Demonic Tutor,
+// Imperial Seal), and shipped measuring bracket 4. The pass had cut one and
+// replaced it with another Game Changer, because bracket 3 allows three and the
+// old guard only rejected Game Changer replacements when the allowance was 0.
+check("cutting a Game Changer never replaces it with another Game Changer", () => {
+  const plan = planBracketCeilingV1({
+    requestedBracket: 3,
+    measuredBracket: 4,
+    deckCards: [
+      card({ oracleId: "ragavan", name: "Ragavan, Nimble Pilferer", isGameChanger: true, playRate: 0.62 }),
+      card({ oracleId: "vamp", name: "Vampiric Tutor", isGameChanger: true, playRate: 0.55 }),
+      card({ oracleId: "demonic", name: "Demonic Tutor", isGameChanger: true, playRate: 0.7 }),
+      // Cheapest of the four, so this is the one the planner should cut.
+      card({ oracleId: "seal", name: "Imperial Seal", isGameChanger: true, playRate: 0.12, specificRoles: ["tutor"] }),
+    ],
+    comboSets: [],
+    // The trap: the most-played replacement available is itself a Game Changer,
+    // and the ranker prefers the highest play rate.
+    addCandidates: [
+      add({ oracleId: "citadel", name: "Bolas's Citadel", isGameChanger: true, playRate: 0.9, specificRoles: ["tutor"] }),
+      add({ oracleId: "whisper", name: "Night's Whisper", playRate: 0.3, specificRoles: ["tutor"] }),
+    ],
+  });
+
+  assert.equal(plan.swaps.length, 1, "one Game Changer over the bracket-3 cap of three");
+  assert.equal(plan.swaps[0].cut.name, "Imperial Seal", "cuts the least-played offender");
+  assert.ok(plan.swaps[0].add, "the slot is refilled so the deck stays at 99");
+  assert.equal(
+    plan.swaps[0].add?.isGameChanger,
+    false,
+    "the replacement must not put the count straight back to four",
+  );
+  assert.equal(plan.swaps[0].add?.name, "Night's Whisper");
+  assert.equal(plan.unresolved.length, 0);
+  assert.equal(plan.projectedBracket, 3);
+});
+
+check("a reduced signal is barred from replacements even when the bracket allows some", () => {
+  // Bracket 3 permits unlimited tutors, but a deck being trimmed for tutor
+  // density at bracket 2 must not take another tutor as the replacement.
+  const plan = planBracketCeilingV1({
+    requestedBracket: 2,
+    measuredBracket: 3,
+    deckCards: [
+      card({ oracleId: "t1", name: "Tutor One", isUnrestrictedTutor: true, playRate: 0.1 }),
+      card({ oracleId: "t2", name: "Tutor Two", isUnrestrictedTutor: true, playRate: 0.2 }),
+      card({ oracleId: "t3", name: "Tutor Three", isUnrestrictedTutor: true, playRate: 0.3 }),
+    ],
+    comboSets: [],
+    addCandidates: [
+      add({ oracleId: "t4", name: "Tutor Four", isUnrestrictedTutor: true, playRate: 0.95 }),
+      add({ oracleId: "plain", name: "Plain Card", playRate: 0.05 }),
+    ],
+  });
+  assert.ok(plan.swaps.length > 0, "tutor density above the bracket-2 threshold is trimmed");
+  assert.ok(
+    plan.swaps.every((swap) => swap.add === null || swap.add.isUnrestrictedTutor === false),
+    "no replacement reintroduces the tutor signal being reduced",
+  );
+});
+
 console.log(`\nprofessor-sol-directed-bracket-ceiling-v1 selftest passed (${n} checks)`);

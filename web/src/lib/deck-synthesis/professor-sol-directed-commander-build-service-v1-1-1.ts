@@ -34,6 +34,10 @@ import {
 } from "./professor-sol-directed-pre-head-professor-gate-v1-1-1";
 import { applyBracketAttainmentV111 } from "./professor-sol-directed-bracket-attainment-apply-v1-1-1";
 import { applyBracketCeilingV111 } from "./professor-sol-directed-bracket-ceiling-apply-v1-1-1";
+import {
+  describeUnresolvedStaleReviewV1,
+  restateVerdictForFinalDeckV1,
+} from "./professor-sol-directed-verdict-restatement-v1";
 import { createDeckValidatorV111 } from "./professor-sol-directed-validated-deck-v1-1-1";
 import {
   formatHeadProfessorQualityFailureDetailV111,
@@ -1395,6 +1399,10 @@ export async function runSolDirectedCommanderBuild(
       prohibitedOracleIds: retrieval.prohibitedOracleIds,
     });
 
+    // Because the two passes below run after the review, whatever they swap can
+    // leave the review describing cards the shipped deck no longer holds.
+    const finalBracketSwaps: string[] = [];
+
     // Last mutation before the terminal gate, deliberately. An earlier placement
     // measured a deck that later repair passes went on to change, so the pass
     // silently did nothing while the shipped deck stayed a bracket short. Here
@@ -1408,6 +1416,7 @@ export async function runSolDirectedCommanderBuild(
         prohibitedOracleIds: retrieval.prohibitedOracleIds,
       });
       if (attainment.changes.length > 0) {
+        finalBracketSwaps.push(...attainment.changes);
         deckForReview = attainment.deck;
         // Registered in place so every later consumer — validation, the proof
         // chain, the saved artifacts — sees the same allowed-card set. The
@@ -1444,6 +1453,7 @@ export async function runSolDirectedCommanderBuild(
         requestedBracket,
       });
       if (ceiling.changes.length > 0) {
+        finalBracketSwaps.push(...ceiling.changes);
         // No dictionary registration: every replacement came from the dictionary.
         deckForReview = ceiling.deck;
         await appendSolDirectedBuildActivityV111({
@@ -1451,6 +1461,18 @@ export async function runSolDirectedCommanderBuild(
           status: "CRITIC_REFINING",
           message: `Trimmed to bracket ${requestedBracket}: ${ceiling.changes.slice(0, 3).join("; ")}${ceiling.changes.length > 3 ? "…" : ""}`,
         });
+        // Swapping and still being over is the failure mode that shipped a
+        // bracket-4 Florian against a request of 3: the old code only warned on
+        // a no-op, so an applied-but-useless swap said nothing at all.
+        if (ceiling.outcome && !ceiling.outcome.contained) {
+          console.warn(
+            `[bracket-ceiling] applied ${ceiling.changes.length} swap(s) but still measures ${
+              ceiling.outcome.measuredAfter?.assignedBracket ?? "unknown"
+            } against a request of ${requestedBracket}: ${
+              ceiling.outcome.notes.join("; ") || "no reason reported"
+            }`,
+          );
+        }
       } else if (ceiling.outcome && !ceiling.outcome.contained) {
         const why =
           ceiling.skipped.join("; ") ||
@@ -1459,6 +1481,43 @@ export async function runSolDirectedCommanderBuild(
         console.warn(
           `[bracket-ceiling] measured ${ceiling.outcome.measuredBefore.assignedBracket} against a request of ${requestedBracket} and changed nothing: ${why}`,
         );
+      }
+    }
+
+    // The review was written before the swaps above, so it can now be wrong
+    // about the deck. Restate only what went stale; a build whose swaps touched
+    // nothing the review mentioned makes no model call here.
+    // Wrapped because this is cosmetic relative to the deck: a graded, valid 99
+    // must still ship if the restatement misbehaves. An early version threw here
+    // and discarded an otherwise finished B+ build.
+    if (finalBracketSwaps.length > 0) {
+      try {
+        const restatement = await restateVerdictForFinalDeckV1({
+          verdict: headProfessor.verdict,
+          finalDeck: deckForReview,
+          swaps: finalBracketSwaps,
+          catalog: args.catalog,
+          onFeed: createSolDirectedAgentFeed({ buildId: job.buildId, status: "HEAD_PROFESSOR_REVIEW" }),
+        });
+        if (restatement) {
+          headProfessor = { ...headProfessor, verdict: restatement.verdict, grounding: restatement.grounding };
+          await appendSolDirectedBuildActivityV111({
+            buildId: job.buildId,
+            status: "HEAD_PROFESSOR_REVIEW",
+            message: `Review restated for the final decklist: ${restatement.staleCards.join(", ")} had been replaced after grading.`,
+          });
+        } else {
+          const stale = headProfessor.grounding?.descriptiveViolations ?? [];
+          if (stale.length > 0) {
+            await appendSolDirectedBuildActivityV111({
+              buildId: job.buildId,
+              status: "HEAD_PROFESSOR_REVIEW",
+              message: describeUnresolvedStaleReviewV1([...new Set(stale.map((v) => v.cited))]),
+            });
+          }
+        }
+      } catch (err) {
+        console.warn(`[verdict-restatement] skipped after ${finalBracketSwaps.length} swap(s):`, err);
       }
     }
 
