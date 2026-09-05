@@ -10,8 +10,8 @@ import {
 import { scryfallNamedArtCropUrl } from "@/lib/deck-synthesis/professor-brew-scryfall-images-v1";
 
 function stageIcon(state: "active" | "done" | "pending"): string {
-  if (state === "done") return "✦";
-  if (state === "active") return "◈";
+  if (state === "done") return "✓";
+  if (state === "active") return "◆";
   return "○";
 }
 
@@ -37,24 +37,28 @@ export function ProfessorSolDirectedBuildProgressPanel({
     <div className="professor-mtg-chamber mb-8">
       <div className="professor-mtg-chamber__inner professor-mtg-chamber__inner--art">
         {artUrl ? (
-          <div className="professor-mtg-chamber__art" aria-hidden>
+          <div className="professor-mtg-chamber__hero">
             <img
               src={artUrl}
               alt=""
-              className="professor-mtg-chamber__art-img"
+              aria-hidden
+              className="professor-mtg-chamber__hero-img"
               fetchPriority="high"
               decoding="async"
             />
-            <div className="professor-mtg-chamber__art-veil" />
+            <div className="professor-mtg-chamber__hero-scrim" aria-hidden />
+            {commanderName ? (
+              <p className="professor-mtg-title professor-mtg-chamber__hero-name">{commanderName}</p>
+            ) : null}
           </div>
         ) : null}
 
         <div className="professor-mtg-chamber__content">
           <div className="text-center">
-            {commanderName ? (
+            {commanderName && !artUrl ? (
               <p className="professor-mtg-title text-xl sm:text-2xl">{commanderName}</p>
             ) : null}
-            <p className="professor-mtg-label mt-3">{label}</p>
+            <p className="professor-mtg-label">{label}</p>
             <p className="professor-mtg-percent mt-2 text-3xl font-semibold">{percent}%</p>
           </div>
 
@@ -88,7 +92,7 @@ export function ProfessorSolDirectedBuildProgressPanel({
           </ol>
 
           {buildId ? (
-            <p className="professor-mtg-muted mt-8 text-center text-[10px] tracking-wider opacity-60">
+            <p className="professor-mtg-muted mt-8 text-center text-[10px] tracking-wider">
               {buildId}
             </p>
           ) : null}

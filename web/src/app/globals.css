@@ -756,10 +756,10 @@ button {
 }
 
 .professor-mtg-stat {
-  border: 1px solid rgba(74, 64, 53, 0.65);
-  background: rgba(20, 17, 14, 0.55);
+  border: 1px solid var(--line-subtle);
+  background: var(--ink-750);
   padding: 0.55rem 0.65rem;
-  border-radius: 2px;
+  border-radius: 6px;
 }
 
 .professor-mtg-stat-value {
@@ -811,7 +811,7 @@ button {
 }
 
 .professor-mtg-card-row {
-  border-bottom: 1px solid rgba(74, 64, 53, 0.45);
+  border-bottom: 1px solid rgba(36, 42, 51, 0.45);
 }
 
 .professor-mtg-divider {
@@ -847,17 +847,68 @@ button {
   max-width: none;
 }
 
+/* Build progress panel.
+   The commander art used to sit full-bleed behind the entire panel at 78%
+   brightness under a 22% veil, which is why the headings needed three stacked
+   text-shadows to stay legible — a scrim doing its job needs no such help. It is
+   now a hero band that dissolves into the surface, so the art is shown larger
+   and sharper than before while the progress UI below it sits on solid ground.
+   Padding moves to the content element so the band can bleed to the edges. */
 .professor-mtg-chamber__inner--art {
   overflow: hidden;
-  background: var(--ink-900);
+  padding: 0;
+  background: var(--ink-800);
   isolation: isolate;
-  border-color: rgba(61, 53, 44, 0.95);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 230, 180, 0.09),
-    inset 0 2px 16px rgba(255, 160, 60, 0.04),
-    inset 0 -2px 8px rgba(0, 0, 0, 0.55),
-    0 20px 56px rgba(0, 0, 0, 0.75),
-    0 0 48px rgba(255, 100, 20, 0.05);
+}
+
+.professor-mtg-chamber__hero {
+  position: relative;
+  height: 12rem;
+}
+
+.professor-mtg-chamber__hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Art crops put the subject above centre far more often than not. */
+  object-position: center 32%;
+  filter: saturate(0.9) brightness(0.85);
+}
+
+/* Transparent at the top so the art reads at full strength, opaque at the
+   bottom so it merges into the panel with no visible seam and gives the name
+   a ground to sit on. */
+.professor-mtg-chamber__hero-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 12, 16, 0.06) 0%,
+    rgba(10, 12, 16, 0.28) 44%,
+    rgba(17, 20, 26, 0.86) 80%,
+    var(--ink-800) 100%
+  );
+}
+
+.professor-mtg-chamber__hero-name {
+  position: absolute;
+  inset: auto 1.25rem 0.85rem;
+  text-align: center;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  text-shadow: 0 1px 12px rgba(7, 8, 11, 0.8);
+}
+
+@media (min-width: 640px) {
+  .professor-mtg-chamber__hero {
+    height: 14rem;
+  }
+
+  .professor-mtg-chamber__hero-name {
+    font-size: 1.7rem;
+  }
 }
 
 .professor-mtg-chamber__inner--art::after {
@@ -867,6 +918,13 @@ button {
 .professor-mtg-chamber__content {
   position: relative;
   z-index: 3;
+  padding: 1.5rem 1.25rem 1.75rem;
+}
+
+@media (min-width: 640px) {
+  .professor-mtg-chamber__content {
+    padding: 1.5rem 2rem 2rem;
+  }
 }
 
 @media (min-width: 640px) {
@@ -879,40 +937,8 @@ button {
    device — correct for the old parchment theme, wrong for this one, where a
    single crisp edge does the work. */
 
-.professor-mtg-chamber__inner--art .professor-mtg-title,
-.professor-mtg-chamber__inner--art .professor-mtg-label,
-.professor-mtg-chamber__inner--art .professor-mtg-percent {
-  text-shadow:
-    0 0 28px rgba(255, 130, 40, 0.14),
-    0 1px 4px rgba(0, 0, 0, 0.92),
-    0 2px 12px rgba(0, 0, 0, 0.65);
-}
-
-.professor-mtg-chamber__art {
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.professor-mtg-chamber__art-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  filter: brightness(0.78) contrast(1.04);
-}
-
-.professor-mtg-chamber__art-veil {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: rgba(4, 3, 2, 0.22);
-  pointer-events: none;
-}
+/* The stacked text-shadows that used to be needed here are gone with the
+   full-bleed art: every heading below the hero band now sits on solid surface. */
 
 .professor-mtg-link {
   color: var(--mtg-gold);
@@ -952,89 +978,82 @@ button {
 }
 
 .professor-mtg-percent {
-  color: var(--mtg-gold-bright);
+  color: var(--accent-hi);
   font-family: var(--font-display), Georgia, serif;
   font-variant-numeric: tabular-nums;
-  font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 20px rgba(201, 162, 39, 0.25);
+  text-shadow: 0 0 24px var(--accent-glow);
 }
 
 .professor-mtg-bar {
-  height: 0.625rem;
-  border: 1px solid rgba(61, 53, 44, 0.9);
-  background: linear-gradient(180deg, rgba(8, 6, 5, 0.95) 0%, rgba(14, 11, 9, 0.92) 100%);
-  box-shadow:
-    inset 0 2px 5px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 230, 180, 0.05);
-  border-radius: 2px;
+  height: 0.5rem;
+  border: 1px solid var(--line-subtle);
+  background: var(--ink-900);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  border-radius: 999px;
   overflow: hidden;
 }
 
 .professor-mtg-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--mtg-gold-dim) 0%, var(--mtg-gold) 45%, var(--mtg-gold-bright) 100%);
-  box-shadow: 0 0 10px rgba(201, 162, 39, 0.35);
+  background: linear-gradient(90deg, var(--accent-lo) 0%, var(--accent) 55%, var(--accent-hi) 100%);
+  box-shadow: 0 0 14px -2px var(--accent-glow);
   transition: width 0.7s ease-out;
-  border-radius: 1px;
+  border-radius: 999px;
 }
 
 .professor-mtg-stage {
-  border: 1px solid rgba(61, 53, 44, 0.85);
-  background: linear-gradient(180deg, rgba(18, 14, 11, 0.94) 0%, rgba(10, 8, 6, 0.92) 100%);
+  border: 1px solid var(--line-subtle);
+  background: var(--ink-750);
   padding: 0.5rem 0.7rem;
   font-size: 0.72rem;
   letter-spacing: 0.04em;
-  color: var(--mtg-parchment-muted);
-  border-radius: 2px;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 230, 180, 0.07),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.35),
-    0 2px 8px rgba(0, 0, 0, 0.28);
+  color: var(--text);
+  border-radius: 6px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .professor-mtg-stage--active {
-  border-color: rgba(201, 162, 39, 0.55);
-  color: var(--mtg-parchment-bright);
-  background: linear-gradient(180deg, rgba(28, 22, 14, 0.96) 0%, rgba(16, 12, 8, 0.94) 100%);
+  border-color: var(--accent-lo);
+  color: var(--text-hi);
+  background: var(--accent-wash);
   box-shadow:
-    inset 0 1px 0 rgba(255, 220, 140, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
-    0 0 18px rgba(255, 130, 40, 0.1),
-    0 0 12px rgba(201, 162, 39, 0.08);
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 22px -6px var(--accent-glow);
 }
 
+/* Finished steps recede. Previously they were the brightest chips in the list —
+   a full green fill against the active step's dimmer brown — so the eye landed
+   on work already done instead of on what the build is currently doing. The
+   tick keeps the green; the chip gives up the emphasis. */
 .professor-mtg-stage--done {
-  border-color: rgba(74, 155, 109, 0.4);
-  color: var(--mtg-emerald);
-  background: linear-gradient(180deg, rgba(14, 20, 16, 0.94) 0%, rgba(10, 14, 12, 0.92) 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(120, 200, 160, 0.06),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
-    0 2px 6px rgba(0, 0, 0, 0.22);
+  border-color: var(--line-subtle);
+  color: var(--text-lo);
+  background: var(--ink-800);
+  box-shadow: none;
 }
 
 .professor-mtg-stage--pending {
   color: var(--text-lo);
+  background: var(--ink-800);
 }
 
 .professor-mtg-stage-icon {
-  color: var(--mtg-gold-dim);
+  color: var(--text-lo);
 }
 
 .professor-mtg-stage--active .professor-mtg-stage-icon {
-  color: var(--mtg-gold);
+  color: var(--accent);
 }
 
 .professor-mtg-stage--done .professor-mtg-stage-icon {
-  color: var(--mtg-emerald);
+  color: var(--ok);
 }
 
 .professor-mtg-scroll {
-  border: 1px solid var(--mtg-stone-border);
-  background:
-    linear-gradient(180deg, rgba(30, 25, 20, 0.95) 0%, rgba(20, 17, 14, 0.98) 100%);
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.45);
-  border-radius: 2px;
+  border: 1px solid var(--line-subtle);
+  background: var(--ink-900);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
   font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
   font-size: 0.68rem;
   line-height: 1.55;
@@ -1096,12 +1115,12 @@ button {
 
 .professor-mtg-tab:hover {
   color: var(--mtg-parchment-bright);
-  background: rgba(201, 162, 39, 0.05);
+  background: rgba(224, 180, 76, 0.05);
 }
 
 .professor-mtg-tab--active {
   border-color: var(--mtg-stone-border);
-  background: linear-gradient(180deg, rgba(42, 35, 28, 0.95) 0%, rgba(26, 22, 18, 0.95) 100%);
+  background: linear-gradient(180deg, rgba(29, 34, 43, 0.95) 0%, rgba(22, 26, 33, 0.95) 100%);
   color: var(--mtg-gold-bright);
 }
 
@@ -1113,7 +1132,7 @@ button {
   right: 0;
   bottom: -1px;
   height: 1px;
-  background: linear-gradient(180deg, rgba(42, 35, 28, 0.95), rgba(26, 22, 18, 0.95));
+  background: linear-gradient(180deg, rgba(29, 34, 43, 0.95), rgba(22, 26, 33, 0.95));
 }
 
 .professor-mtg-tab-count {
@@ -1132,8 +1151,8 @@ button {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  border: 1px solid rgba(92, 79, 66, 0.7);
-  background: rgba(20, 17, 14, 0.75);
+  border: 1px solid rgba(49, 56, 69, 0.7);
+  background: rgba(17, 20, 26, 0.75);
   color: var(--mtg-parchment-muted);
   border-radius: 2px;
   padding: 0.05rem 0.32rem;
@@ -1143,25 +1162,25 @@ button {
 }
 
 .professor-mtg-chip--in-stock {
-  border-color: rgba(110, 231, 168, 0.4);
-  background: rgba(74, 155, 109, 0.1);
+  border-color: rgba(70, 209, 138, 0.4);
+  background: rgba(70, 209, 138, 0.1);
   color: var(--ok);
 }
 
 .professor-mtg-chip--owned {
-  border-color: rgba(122, 162, 214, 0.4);
-  background: rgba(74, 108, 155, 0.12);
+  border-color: rgba(107, 166, 255, 0.4);
+  background: rgba(44, 74, 122, 0.12);
   color: var(--cool);
 }
 
 .professor-mtg-chip--game-changer {
-  border-color: rgba(232, 197, 71, 0.55);
-  background: rgba(201, 162, 39, 0.12);
+  border-color: rgba(246, 209, 120, 0.55);
+  background: rgba(224, 180, 76, 0.12);
   color: var(--mtg-gold-bright);
 }
 
 .professor-mtg-chip--role {
-  border-color: rgba(92, 79, 66, 0.85);
+  border-color: rgba(49, 56, 69, 0.85);
   color: var(--mtg-parchment);
 }
 
@@ -1172,8 +1191,8 @@ button {
 }
 
 .professor-mtg-chip--warn {
-  border-color: rgba(220, 120, 110, 0.5);
-  background: rgba(160, 60, 55, 0.14);
+  border-color: rgba(255, 107, 97, 0.5);
+  background: rgba(255, 107, 97, 0.14);
   color: var(--bad);
 }
 
@@ -1184,13 +1203,13 @@ button {
 }
 
 .professor-mtg-chip-btn:hover {
-  border-color: rgba(201, 162, 39, 0.5);
+  border-color: rgba(224, 180, 76, 0.5);
   color: var(--mtg-parchment-bright);
 }
 
 .professor-mtg-chip-btn--on {
   border-color: var(--mtg-gold);
-  background: rgba(201, 162, 39, 0.16);
+  background: rgba(224, 180, 76, 0.16);
   color: var(--mtg-gold-bright);
 }
 
@@ -1198,7 +1217,7 @@ button {
 .professor-mtg-pop {
   border: 1px solid var(--mtg-stone-border-hi);
   background: linear-gradient(180deg, var(--mtg-stone-raised) 0%, var(--mtg-stone) 100%);
-  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(107, 93, 77, 0.2);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   border-radius: 2px;
 }
 
@@ -1208,7 +1227,7 @@ button {
   text-align: left;
   padding: 0.4rem 0.6rem;
   border: none;
-  border-bottom: 1px solid rgba(74, 64, 53, 0.35);
+  border-bottom: 1px solid rgba(36, 42, 51, 0.35);
   background: transparent;
   color: var(--mtg-parchment);
   cursor: pointer;
@@ -1221,7 +1240,7 @@ button {
 
 .professor-mtg-pop-item:hover,
 .professor-mtg-pop-item--active {
-  background: rgba(201, 162, 39, 0.1);
+  background: rgba(224, 180, 76, 0.1);
   color: var(--mtg-parchment-bright);
 }
 
@@ -1239,7 +1258,7 @@ button {
   height: 1.35rem;
   padding: 0 0.3rem;
   border: 1px solid var(--mtg-stone-border);
-  background: rgba(26, 22, 18, 0.9);
+  background: rgba(22, 26, 33, 0.9);
   color: var(--mtg-parchment-muted);
   border-radius: 2px;
   font-size: 0.62rem;
@@ -1249,14 +1268,14 @@ button {
 }
 
 .professor-mtg-icon-btn:hover:not(:disabled) {
-  border-color: rgba(201, 162, 39, 0.55);
-  background: rgba(201, 162, 39, 0.08);
+  border-color: rgba(224, 180, 76, 0.55);
+  background: rgba(224, 180, 76, 0.08);
   color: var(--mtg-gold-bright);
 }
 
 .professor-mtg-icon-btn--danger:hover:not(:disabled) {
-  border-color: rgba(220, 120, 110, 0.6);
-  background: rgba(160, 60, 55, 0.14);
+  border-color: rgba(255, 107, 97, 0.6);
+  background: rgba(255, 107, 97, 0.14);
   color: var(--bad);
 }
 
@@ -1313,31 +1332,31 @@ button {
 
 .professor-mtg-alert {
   border: 1px solid var(--mtg-stone-border-hi);
-  background: rgba(20, 17, 14, 0.8);
+  background: rgba(17, 20, 26, 0.8);
   border-radius: 2px;
   padding: 0.6rem 0.75rem;
 }
 
 .professor-mtg-alert--illegal {
-  border-color: rgba(220, 120, 110, 0.55);
-  background: rgba(120, 45, 40, 0.14);
+  border-color: rgba(255, 107, 97, 0.55);
+  background: rgba(255, 107, 97, 0.14);
 }
 
 .professor-mtg-alert--edited {
-  border-color: rgba(201, 162, 39, 0.45);
-  background: rgba(201, 162, 39, 0.07);
+  border-color: rgba(224, 180, 76, 0.45);
+  background: rgba(224, 180, 76, 0.07);
 }
 
 /* Save state and undo, anchored bottom-right so it never covers the list. */
 .professor-mtg-toast {
   border: 1px solid var(--mtg-stone-border-hi);
-  background: linear-gradient(180deg, rgba(42, 35, 28, 0.98) 0%, rgba(24, 20, 16, 0.98) 100%);
+  background: linear-gradient(180deg, rgba(29, 34, 43, 0.98) 0%, rgba(22, 26, 33, 0.98) 100%);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
   border-radius: 2px;
   color: var(--mtg-parchment);
 }
 
 .professor-mtg-toast--error {
-  border-color: rgba(220, 120, 110, 0.6);
+  border-color: rgba(255, 107, 97, 0.6);
 }
 
