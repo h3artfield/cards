@@ -40,7 +40,7 @@ export default function OrderPage() {
   if (loading) {
     return (
       <Shell>
-        <p className="text-center text-gray-600">Loading your order…</p>
+        <p className="text-center text-[var(--text)]">Loading your order…</p>
       </Shell>
     );
   }
@@ -55,7 +55,7 @@ export default function OrderPage() {
     return (
       <Shell>
         <h1 className="text-2xl font-bold">{order.orderNumber}</h1>
-        <p className="mt-2 text-sm text-gray-600">Continue scanning your cards.</p>
+        <p className="mt-2 text-sm text-[var(--text)]">Continue scanning your cards.</p>
         <Link href={`/order/${id}/scan`} className="mt-6 block">
           <Button fullWidth>Continue Scanning</Button>
         </Link>
@@ -73,8 +73,12 @@ export default function OrderPage() {
   );
 }
 
+// Like the account page, this had no background of its own and so rendered on
+// the browser-default light body in the middle of a dark customer journey.
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mx-auto min-h-screen max-w-lg px-6 py-10">{children}</div>
+    <div className="storefront-theme min-h-screen bg-[var(--ink-850)] text-[var(--text)]">
+      <div className="mx-auto max-w-lg px-6 py-10">{children}</div>
+    </div>
   );
 }

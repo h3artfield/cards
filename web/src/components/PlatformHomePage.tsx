@@ -27,28 +27,28 @@ export function PlatformHomePage() {
 
   return (
     <BrandedPageShell card={false}>
-      <div className="space-y-4">
+      <div className="storefront-theme space-y-4">
         <div className={`${glassPanel} px-8 py-10 text-center`}>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-600">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--text-lo)]">
             Card buyback platform
           </p>
-          <h1 className="mt-3 text-2xl font-black uppercase tracking-tight text-gray-950">
+          <h1 className="mt-3 text-2xl font-black uppercase tracking-tight text-[var(--text-hi)]">
             Trade-in
           </h1>
-          <p className="mt-3 text-sm font-medium text-gray-700">
+          <p className="mt-3 text-sm font-medium text-[var(--text)]">
             Customers: scan the QR code at your local shop, or pick your store
             below.
           </p>
         </div>
 
         <div className={`${glassPanel} px-6 py-5`}>
-          <p className="text-xs font-bold uppercase tracking-[0.15em] text-gray-600">
+          <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--text-lo)]">
             Stores
           </p>
           {loading ? (
-            <p className="mt-4 text-sm text-gray-600">Loading stores…</p>
+            <p className="mt-4 text-sm text-[var(--text-lo)]">Loading stores…</p>
           ) : stores.length === 0 ? (
-            <p className="mt-4 text-sm text-gray-600">No stores configured yet.</p>
+            <p className="mt-4 text-sm text-[var(--text-lo)]">No stores configured yet.</p>
           ) : (
             <ul className="mt-3 space-y-2">
               {stores.map((store) => (
@@ -73,7 +73,7 @@ export function PlatformHomePage() {
         </div>
 
         <div className={`${glassPanel} px-6 py-5`}>
-          <p className="text-xs font-bold uppercase tracking-[0.15em] text-gray-600">
+          <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--text-lo)]">
             Staff sign in
           </p>
           <div className="mt-3 space-y-2">

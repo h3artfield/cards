@@ -60,13 +60,21 @@ export function StoreBrandMark({
     </div>
   );
 
+  // Used by both the light admin header and the dark store picker, so the type
+  // colour follows the surrounding theme rather than picking a side.
   if (variant === "header") {
     return (
       <div className="flex items-center gap-3">
         {logo}
         <div className="min-w-0 text-left">
-          <p className="truncate text-lg font-bold text-gray-900">{storeName}</p>
-          {subtitle && <p className="text-xs text-gray-500">{subtitle}</p>}
+          <p className="truncate text-lg font-bold text-gray-900 storefront:text-[var(--text-hi)]">
+            {storeName}
+          </p>
+          {subtitle && (
+            <p className="text-xs text-gray-500 storefront:text-[var(--text-lo)]">
+              {subtitle}
+            </p>
+          )}
         </div>
       </div>
     );

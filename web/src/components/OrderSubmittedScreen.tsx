@@ -60,14 +60,14 @@ export function OrderSubmittedScreen({
         your order has finished processing.
       </p>
 
-      <div className="mt-8 w-full max-w-xs rounded-2xl border-2 border-indigo-200 bg-indigo-50 px-6 py-5">
-        <p className="text-xs font-semibold uppercase tracking-wider text-indigo-800">
+      <div className="mt-8 w-full max-w-xs rounded-2xl border border-[var(--accent-lo)] bg-[var(--accent-wash)] px-6 py-5">
+        <p className="text-xs font-semibold uppercase tracking-wider text-[var(--accent-hi)]">
           Your order number
         </p>
-        <p className="mt-2 font-mono text-2xl font-bold tracking-tight text-indigo-950">
+        <p className="mt-2 font-mono text-2xl font-bold tracking-tight text-[var(--text-hi)]">
           {orderNumber}
         </p>
-        <p className="mt-2 text-xs leading-relaxed text-indigo-900/80">
+        <p className="mt-2 text-xs leading-relaxed text-[var(--text)]">
           Give this number to a store associate when you hand in your cards.
         </p>
       </div>
@@ -81,12 +81,14 @@ export function OrderSubmittedScreen({
           {creating ? "Starting…" : "Create another order"}
         </Button>
         <Link href="/orders">
-          <Button fullWidth variant="secondary">
+          {/* `secondary` is the light-ground white button, which this page no
+              longer is; glassSecondary is its dark counterpart. */}
+          <Button fullWidth variant="glassSecondary">
             Account
           </Button>
         </Link>
         {createError ? (
-          <p className="text-xs text-red-600">{createError}</p>
+          <p className="text-xs text-[var(--bad)]">{createError}</p>
         ) : null}
       </div>
     </div>
