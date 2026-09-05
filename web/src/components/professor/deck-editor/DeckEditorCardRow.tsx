@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { DECK_BOARD_LABELS_V1 } from "@/lib/professor-deck-editor/types-v1";
 import type { DeckBoardV1, DeckMarkerV1 } from "@/lib/professor-deck-editor/types-v1";
 import type { ProfessorDeckInventoryEntryV43 } from "@/lib/deck-synthesis/professor-brew-inventory-match-v4-3-v1";
@@ -64,6 +65,13 @@ export function DeckEditorCardRow({
   const shopPrice =
     inStock && inventory?.listPrice != null && inventory.listPrice > 0 ? inventory.listPrice : null;
 
+  // The Professor's reasoning for this exact card. It is the one thing this
+  // editor has that Moxfield and Archidekt cannot show, and it is what makes a
+  // cut an informed decision rather than a guess — so it gets a real disclosure
+  // on the row, not a tooltip that vanishes when the pointer moves.
+  const [whyOpen, setWhyOpen] = useState(false);
+  const why = card.professor?.whyInThisDeck?.trim();
+
   return (
     <div
       className={`professor-mtg-card-row professor-mtg-editor-row group flex flex-col gap-1 py-1.5 last:border-b-0 ${
@@ -108,6 +116,7 @@ export function DeckEditorCardRow({
           imageUrl={imageUrl}
           inStock={inStock}
           className="min-w-0 max-w-[13rem] shrink"
+          onClick={why ? () => setWhyOpen((open) => !open) : undefined}
         />
         <ManaCost cost={card.display?.manaCost} />
 
@@ -127,6 +136,17 @@ export function DeckEditorCardRow({
         ) : null}
 
         <span className="professor-mtg-row-actions flex shrink-0 items-center gap-1">
+          {why ? (
+            <button
+              type="button"
+              className="professor-mtg-icon-btn"
+              aria-expanded={whyOpen}
+              title={`Why the Professor picked ${card.name}`}
+              onClick={() => setWhyOpen((open) => !open)}
+            >
+              Why
+            </button>
+          ) : null}
           {destinations(card.board).map((board) => (
             <button
               key={board}
@@ -156,6 +176,18 @@ export function DeckEditorCardRow({
           ) : null}
         </span>
       </div>
+
+      {whyOpen && why ? (
+        <div className="border-l border-[var(--mtg-gold-dim)] pb-1 pl-2.5 pt-0.5 ml-6">
+          {card.professor?.primaryRole ? (
+            <p className="professor-mtg-label text-[9px]">
+              {card.professor.primaryRole.replace(/[_-]+/g, " ")}
+              {card.professor.structuralNecessity === "REQUIRED" ? " · load-bearing" : null}
+            </p>
+          ) : null}
+          <p className="professor-mtg-muted mt-1 text-[11px] leading-snug">{why}</p>
+        </div>
+      ) : null}
 
       {illegalReason ? (
         <p className="pl-6 text-[11px] leading-snug text-[#f0a8a0]">{illegalReason}</p>
