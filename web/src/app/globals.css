@@ -854,7 +854,10 @@ button {
    now a hero band that dissolves into the surface, so the art is shown larger
    and sharper than before while the progress UI below it sits on solid ground.
    Padding moves to the content element so the band can bleed to the edges. */
-.professor-mtg-chamber__inner--art {
+/* Doubled class deliberately: the responsive padding on the base .__inner is
+   declared later in this file at equal specificity, so a single class here
+   loses and the art stops short of the panel edges. */
+.professor-mtg-chamber__inner.professor-mtg-chamber__inner--art {
   overflow: hidden;
   padding: 0;
   background: var(--ink-800);
@@ -903,7 +906,7 @@ button {
 
 @media (min-width: 640px) {
   .professor-mtg-chamber__hero {
-    height: 14rem;
+    height: 15rem;
   }
 
   .professor-mtg-chamber__hero-name {
