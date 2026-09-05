@@ -38,8 +38,12 @@ export function BrandedPageShell({
           aria-hidden
         />
       )}
+      {/* The artwork behind this is bright, and the surfaces on top are now dark
+          with light type. This scrim was a gentle 10-15% vignette meant to sit
+          under dark type on light glass; it has to actually carry the field dark
+          so the page reads as a dark surface with artwork showing through. */}
       <div
-        className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/15"
+        className="absolute inset-0 bg-black/60 bg-gradient-to-b from-black/40 via-black/25 to-black/55"
         aria-hidden
       />
 

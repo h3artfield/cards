@@ -29,7 +29,7 @@ export function PlatformHomePage() {
     <BrandedPageShell card={false}>
       <div className="storefront-theme space-y-4">
         <div className={`${glassPanel} px-8 py-10 text-center`}>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--text-lo)]">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--text)]">
             Card buyback platform
           </p>
           <h1 className="mt-3 text-2xl font-black uppercase tracking-tight text-[var(--text-hi)]">
@@ -42,13 +42,13 @@ export function PlatformHomePage() {
         </div>
 
         <div className={`${glassPanel} px-6 py-5`}>
-          <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--text-lo)]">
+          <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--text)]">
             Stores
           </p>
           {loading ? (
-            <p className="mt-4 text-sm text-[var(--text-lo)]">Loading stores…</p>
+            <p className="mt-4 text-sm text-[var(--text)]">Loading stores…</p>
           ) : stores.length === 0 ? (
-            <p className="mt-4 text-sm text-[var(--text-lo)]">No stores configured yet.</p>
+            <p className="mt-4 text-sm text-[var(--text)]">No stores configured yet.</p>
           ) : (
             <ul className="mt-3 space-y-2">
               {stores.map((store) => (
@@ -73,7 +73,7 @@ export function PlatformHomePage() {
         </div>
 
         <div className={`${glassPanel} px-6 py-5`}>
-          <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--text-lo)]">
+          <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--text)]">
             Staff sign in
           </p>
           <div className="mt-3 space-y-2">
