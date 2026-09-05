@@ -6,6 +6,8 @@ import type { CommanderBracket } from "@/lib/bracket-policy/commander-bracket-sn
 import { bracketLabel } from "@/lib/deck-synthesis/professor-brew-bracket-v4-v1";
 import { ProfessorDeckBracketPanel } from "./ProfessorDeckBracketPanel";
 import { ProfessorDeckSwapPanel } from "./ProfessorDeckSwapPanel";
+import { CardNameHoverPreview } from "./CardNameHoverPreview";
+import { ProfessorDeckEditorPanel } from "./deck-editor/ProfessorDeckEditorPanel";
 import { scryfallNamedImageUrl } from "@/lib/deck-synthesis/professor-brew-scryfall-images-v1";
 import type { ProfessorDeckInventoryEntryV43 } from "@/lib/deck-synthesis/professor-brew-inventory-match-v4-3-v1";
 import { computeSolDirectedDeckGradeV111, formatProfessorVerdictForCustomer, parseHeadProfessorGradeText, headProfessorClassificationHint, headProfessorDisplayLetter } from "@/lib/deck-synthesis/professor-sol-directed-deck-grade-v1-1-1";
@@ -103,9 +105,6 @@ const COLUMN_GROUPS: SolDirectedDeckDisplayCategory[][] = [
   ["land"],
 ];
 
-const PREVIEW_W = 220;
-const PREVIEW_H = 308;
-
 function downloadTextFile(filename: string, content: string) {
   const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
   const url = URL.createObjectURL(blob);
@@ -114,97 +113,6 @@ function downloadTextFile(filename: string, content: string) {
   anchor.download = filename;
   anchor.click();
   URL.revokeObjectURL(url);
-}
-
-function CardNameHoverPreview({
-  name,
-  imageUrl,
-  inStock,
-}: {
-  name: string;
-  imageUrl?: string;
-  inStock?: boolean;
-}) {
-  const [visible, setVisible] = useState(false);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-  const [failedPrimary, setFailedPrimary] = useState(false);
-  const [failedFallback, setFailedFallback] = useState(false);
-
-  const primaryUrl = imageUrl ?? scryfallNamedImageUrl(name);
-  const fallbackUrl = scryfallNamedImageUrl(name, true);
-  const previewUrl = failedPrimary ? fallbackUrl : primaryUrl;
-  const showImage = !failedFallback;
-
-  useEffect(() => {
-    setFailedPrimary(false);
-    setFailedFallback(false);
-  }, [name, imageUrl]);
-
-  const updatePos = useCallback((clientX: number, clientY: number) => {
-    const pad = 12;
-    let x = clientX + 18;
-    let y = clientY - PREVIEW_H / 2;
-    if (typeof window !== "undefined") {
-      if (x + PREVIEW_W + pad > window.innerWidth) x = clientX - PREVIEW_W - 18;
-      if (y < pad) y = pad;
-      if (y + PREVIEW_H + pad > window.innerHeight) y = window.innerHeight - PREVIEW_H - pad;
-    }
-    setPos({ x, y });
-  }, []);
-
-  const preview =
-    visible && typeof document !== "undefined"
-      ? createPortal(
-          <div
-            className="pointer-events-none fixed z-[100] overflow-hidden border border-[var(--mtg-gold-dim)] bg-[var(--mtg-stone-deep)] shadow-[0_0_20px_rgba(201,162,39,0.2)]"
-            style={{ left: pos.x, top: pos.y, width: PREVIEW_W, height: PREVIEW_H }}
-          >
-            {showImage ? (
-              <img
-                src={previewUrl}
-                alt={name}
-                className="h-full w-full object-cover"
-                loading="lazy"
-                onError={() => {
-                  if (!failedPrimary) setFailedPrimary(true);
-                  else setFailedFallback(true);
-                }}
-              />
-            ) : (
-              <div className="flex h-full items-center justify-center bg-[var(--mtg-stone-deep)] p-3 text-center text-xs text-[var(--mtg-parchment-muted)]">
-                {name}
-              </div>
-            )}
-          </div>,
-          document.body,
-        )
-      : null;
-
-  return (
-    <>
-      <button
-        type="button"
-        className={`professor-mtg-card-name min-w-0 flex-1 text-left underline decoration-transparent transition ${
-          inStock ? "professor-mtg-card-name--in-stock" : ""
-        }`}
-        title={name}
-        onMouseEnter={(e) => {
-          setVisible(true);
-          updatePos(e.clientX, e.clientY);
-        }}
-        onMouseMove={(e) => updatePos(e.clientX, e.clientY)}
-        onMouseLeave={() => setVisible(false)}
-        onFocus={(e) => {
-          setVisible(true);
-          updatePos(e.currentTarget.getBoundingClientRect().right, e.currentTarget.getBoundingClientRect().top);
-        }}
-        onBlur={() => setVisible(false)}
-      >
-        {name}
-      </button>
-      {preview}
-    </>
-  );
 }
 
 function DeckCardRow({
@@ -611,6 +519,7 @@ function ScorePlaystyleModal({
 
 export function ProfessorSolDirectedDeckListPanel({
   slug,
+  buildId,
   commander,
   constructedDeck,
   userInputs,
@@ -625,6 +534,8 @@ export function ProfessorSolDirectedDeckListPanel({
   professorRepairApplied,
 }: {
   slug: string;
+  /** Required to edit. Without it the panel stays read-only. */
+  buildId?: string;
   commander: { name: string; oracleId: string; colorIdentity: string[] };
   constructedDeck: Record<string, unknown> | null;
   userInputs: UserInputs;
@@ -665,6 +576,10 @@ export function ProfessorSolDirectedDeckListPanel({
     [deck],
   );
   const [scoreOpen, setScoreOpen] = useState(false);
+  // The editor is a mode of this panel rather than a separate page, so a player
+  // who came here to read their deck and decided to change one card does not
+  // lose the grade, the score, and the bracket read-out to do it.
+  const [mode, setMode] = useState<"list" | "edit">("list");
   const [pdfBusy, setPdfBusy] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [cos, setCos] = useState<CosV1Score | null>(null);
@@ -1039,6 +954,31 @@ export function ProfessorSolDirectedDeckListPanel({
           </div>
         </div>
 
+        {buildId ? (
+          <div className="professor-mtg-tabs px-4 sm:px-5">
+            <button
+              type="button"
+              className={`professor-mtg-tab ${mode === "list" ? "professor-mtg-tab--active" : ""}`}
+              aria-current={mode === "list"}
+              onClick={() => setMode("list")}
+            >
+              Decklist
+            </button>
+            <button
+              type="button"
+              className={`professor-mtg-tab ${mode === "edit" ? "professor-mtg-tab--active" : ""}`}
+              aria-current={mode === "edit"}
+              onClick={() => setMode("edit")}
+            >
+              Edit deck
+            </button>
+          </div>
+        ) : null}
+
+        {mode === "edit" && buildId ? (
+          <ProfessorDeckEditorPanel slug={slug} buildId={buildId} />
+        ) : (
+          <>
         <div className="professor-mtg-panel-status flex items-center justify-between gap-3 px-4 py-2 sm:px-5">
           <div className="flex min-w-0 items-center gap-2">
             <span className="text-[var(--mtg-emerald)] text-xs">✦</span>
@@ -1111,6 +1051,8 @@ export function ProfessorSolDirectedDeckListPanel({
             </ul>
           </div>
         ) : null}
+          </>
+        )}
       </div>
       </div>
 

@@ -1,12 +1,5 @@
 import { NextRequest } from "next/server";
 import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
-import { getCustomerSession, loadCustomer } from "@/lib/auth/customer-auth";
-import {
-  boundStoreName,
-  customerCanActAtStore,
-  storeMismatchResponse,
-} from "@/lib/auth/customer-store-binding";
-import { resolveStoreBySlug } from "@/lib/deck-builder/deck-builder-service";
 import { getDeckResolutionCatalogRuntime } from "@/lib/deck-synthesis/professor-brew-catalog-runtime-v1";
 import { getSolDirectedBuildJobV111 } from "@/lib/deck-synthesis/professor-sol-directed-build-job-store-v1-1-1";
 import { matchProfessorDeckCardsInStoreInventory } from "@/lib/deck-synthesis/professor-brew-inventory-match-v4-3-v1";
@@ -22,6 +15,10 @@ import {
 import type { DerivedMarkerFactsV1 } from "@/lib/professor-deck-editor/derived-markers-v1";
 import { normalizeDeckCardNameV1 } from "@/lib/professor-deck-editor/types-v1";
 import {
+  createCatalogDisplayFactsLookupV1,
+  withDisplayFactsV1,
+} from "@/lib/professor-deck-editor/display-facts-v1";
+import {
   createCatalogCardFactsLookupV1,
   createLandOracleIdResolverV1,
 } from "@/lib/professor-deck-editor/catalog-lookup-v1";
@@ -34,6 +31,7 @@ import {
 } from "@/lib/professor-deck-editor/store-v1";
 import { parseDeckEditOpsV1 } from "@/lib/professor-deck-editor/parse-ops-v1";
 import type { EditableDeckV1 } from "@/lib/professor-deck-editor/types-v1";
+import { authorizeDeckEditorV1 } from "./authorize";
 
 /**
  * The editable-deck surface: GET to open a deck, PATCH to change it.
@@ -98,7 +96,13 @@ async function deckWithLegality(deck: EditableDeckV1) {
   ]);
 
   return {
-    deck: { ...deck, cards: withDerivedMarkersV1(deck, facts) },
+    deck: {
+      ...deck,
+      cards: withDisplayFactsV1(
+        withDerivedMarkersV1(deck, facts),
+        createCatalogDisplayFactsLookupV1(catalog),
+      ),
+    },
     legality: checkEditableDeckLegalityV1({
       deck,
       lookup: createCatalogCardFactsLookupV1(catalog),
@@ -107,30 +111,10 @@ async function deckWithLegality(deck: EditableDeckV1) {
   };
 }
 
-/**
- * Confirms the caller is signed in, bound to this store, and owns the deck.
- *
- * Ownership is checked against the stored `customerId` rather than the request,
- * so a guessed deck id gets a 404 and not somebody else's decklist.
- */
-async function authorize(req: NextRequest, slug: string) {
-  const store = await resolveStoreBySlug(slug);
-  if (!store) return { error: jsonError("Store not found", 404) };
-
-  const session = getCustomerSession(req);
-  if (!session) return { error: jsonError("Sign in to edit a deck", 401) };
-
-  const customer = await loadCustomer(session.customerId);
-  if (customer && !customerCanActAtStore(customer, store.id)) {
-    return { error: storeMismatchResponse(await boundStoreName(customer)) };
-  }
-  return { customerId: session.customerId, storeId: store.id };
-}
-
 export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
     const { slug } = await params;
-    const auth = await authorize(req, slug);
+    const auth = await authorizeDeckEditorV1(req, slug);
     if (auth.error) return auth.error;
 
     const buildId = req.nextUrl.searchParams.get("buildId");
@@ -170,7 +154,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
     const { slug } = await params;
-    const auth = await authorize(req, slug);
+    const auth = await authorizeDeckEditorV1(req, slug);
     if (auth.error) return auth.error;
 
     const body = (await req.json()) as {

@@ -1123,3 +1123,274 @@ button {
   }
 }
 
+/* ==========================================================================
+   Deck editor
+   Built from the same stone-and-gold tokens as the read-only deck panel, so
+   switching into edit mode changes what you can do and not where you are.
+   ========================================================================== */
+
+.professor-mtg-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--mtg-stone-border);
+}
+
+.professor-mtg-tab {
+  position: relative;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid transparent;
+  border-bottom: none;
+  background: transparent;
+  color: var(--mtg-parchment-muted);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: color 0.12s ease, background 0.12s ease;
+}
+
+.professor-mtg-tab:hover {
+  color: var(--mtg-parchment-bright);
+  background: rgba(201, 162, 39, 0.05);
+}
+
+.professor-mtg-tab--active {
+  border-color: var(--mtg-stone-border);
+  background: linear-gradient(180deg, rgba(42, 35, 28, 0.95) 0%, rgba(26, 22, 18, 0.95) 100%);
+  color: var(--mtg-gold-bright);
+}
+
+/* Covers the container border, so the active tab reads as joined to the panel. */
+.professor-mtg-tab--active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(180deg, rgba(42, 35, 28, 0.95), rgba(26, 22, 18, 0.95));
+}
+
+.professor-mtg-tab-count {
+  margin-left: 0.4rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.72;
+}
+
+/* Marker chips. Each kind gets its own colour because the whole point is
+   telling them apart at a glance in a list of ninety-nine rows. */
+.professor-mtg-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22rem;
+  max-width: 11rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  border: 1px solid rgba(92, 79, 66, 0.7);
+  background: rgba(20, 17, 14, 0.75);
+  color: var(--mtg-parchment-muted);
+  border-radius: 2px;
+  padding: 0.05rem 0.32rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+}
+
+.professor-mtg-chip--in-stock {
+  border-color: rgba(110, 231, 168, 0.4);
+  background: rgba(74, 155, 109, 0.1);
+  color: #6ee7a8;
+}
+
+.professor-mtg-chip--owned {
+  border-color: rgba(122, 162, 214, 0.4);
+  background: rgba(74, 108, 155, 0.12);
+  color: #9dbfe8;
+}
+
+.professor-mtg-chip--game-changer {
+  border-color: rgba(232, 197, 71, 0.55);
+  background: rgba(201, 162, 39, 0.12);
+  color: var(--mtg-gold-bright);
+}
+
+.professor-mtg-chip--role {
+  border-color: rgba(92, 79, 66, 0.85);
+  color: var(--mtg-parchment);
+}
+
+.professor-mtg-chip--user {
+  border-color: rgba(186, 138, 216, 0.4);
+  background: rgba(140, 96, 178, 0.12);
+  color: #d0a9e8;
+}
+
+.professor-mtg-chip--warn {
+  border-color: rgba(220, 120, 110, 0.5);
+  background: rgba(160, 60, 55, 0.14);
+  color: #f0a8a0;
+}
+
+/* Toggleable filter chip. */
+.professor-mtg-chip-btn {
+  cursor: pointer;
+  transition: border-color 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+
+.professor-mtg-chip-btn:hover {
+  border-color: rgba(201, 162, 39, 0.5);
+  color: var(--mtg-parchment-bright);
+}
+
+.professor-mtg-chip-btn--on {
+  border-color: var(--mtg-gold);
+  background: rgba(201, 162, 39, 0.16);
+  color: var(--mtg-gold-bright);
+}
+
+/* Popover surface, shared by the search results and the marker menu. */
+.professor-mtg-pop {
+  border: 1px solid var(--mtg-stone-border-hi);
+  background: linear-gradient(180deg, var(--mtg-stone-raised) 0%, var(--mtg-stone) 100%);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(107, 93, 77, 0.2);
+  border-radius: 2px;
+}
+
+.professor-mtg-pop-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.4rem 0.6rem;
+  border: none;
+  border-bottom: 1px solid rgba(74, 64, 53, 0.35);
+  background: transparent;
+  color: var(--mtg-parchment);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.professor-mtg-pop-item:last-child {
+  border-bottom: none;
+}
+
+.professor-mtg-pop-item:hover,
+.professor-mtg-pop-item--active {
+  background: rgba(201, 162, 39, 0.1);
+  color: var(--mtg-parchment-bright);
+}
+
+.professor-mtg-pop-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Small square row action. Kept unobtrusive until the row is hovered. */
+.professor-mtg-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.55rem;
+  height: 1.35rem;
+  padding: 0 0.3rem;
+  border: 1px solid var(--mtg-stone-border);
+  background: rgba(26, 22, 18, 0.9);
+  color: var(--mtg-parchment-muted);
+  border-radius: 2px;
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+}
+
+.professor-mtg-icon-btn:hover:not(:disabled) {
+  border-color: rgba(201, 162, 39, 0.55);
+  background: rgba(201, 162, 39, 0.08);
+  color: var(--mtg-gold-bright);
+}
+
+.professor-mtg-icon-btn--danger:hover:not(:disabled) {
+  border-color: rgba(220, 120, 110, 0.6);
+  background: rgba(160, 60, 55, 0.14);
+  color: #f0a8a0;
+}
+
+.professor-mtg-icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Row actions appear on hover, and always once anything inside is focused, so
+   the row stays fully operable from the keyboard. */
+.professor-mtg-editor-row .professor-mtg-row-actions {
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.professor-mtg-editor-row:hover .professor-mtg-row-actions,
+.professor-mtg-editor-row:focus-within .professor-mtg-row-actions {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .professor-mtg-editor-row .professor-mtg-row-actions {
+    opacity: 1;
+  }
+}
+
+.professor-mtg-editor-row--dimmed {
+  opacity: 0.55;
+}
+
+/* Mana pips. */
+.professor-mtg-mana {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.95rem;
+  height: 0.95rem;
+  border-radius: 999px;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: #1a1509;
+  background: #cdc4b4;
+  box-shadow: inset 0 -1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.professor-mtg-mana--W { background: #f6f0dc; }
+.professor-mtg-mana--U { background: #98c1e0; }
+.professor-mtg-mana--B { background: #9b8f9e; }
+.professor-mtg-mana--R { background: #e29184; }
+.professor-mtg-mana--G { background: #97c69b; }
+.professor-mtg-mana--C { background: #c6bfb4; }
+
+.professor-mtg-alert {
+  border: 1px solid var(--mtg-stone-border-hi);
+  background: rgba(20, 17, 14, 0.8);
+  border-radius: 2px;
+  padding: 0.6rem 0.75rem;
+}
+
+.professor-mtg-alert--illegal {
+  border-color: rgba(220, 120, 110, 0.55);
+  background: rgba(120, 45, 40, 0.14);
+}
+
+.professor-mtg-alert--edited {
+  border-color: rgba(201, 162, 39, 0.45);
+  background: rgba(201, 162, 39, 0.07);
+}
+
+/* Save state and undo, anchored bottom-right so it never covers the list. */
+.professor-mtg-toast {
+  border: 1px solid var(--mtg-stone-border-hi);
+  background: linear-gradient(180deg, rgba(42, 35, 28, 0.98) 0%, rgba(24, 20, 16, 0.98) 100%);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
+  border-radius: 2px;
+  color: var(--mtg-parchment);
+}
+
+.professor-mtg-toast--error {
+  border-color: rgba(220, 120, 110, 0.6);
+}
+

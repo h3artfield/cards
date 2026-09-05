@@ -261,6 +261,7 @@ export function ProfessorSolDirectedBuildApp({ slug }: { slug: string }) {
         {isComplete && view?.result ? (
           <ProfessorSolDirectedDeckListPanel
             slug={slug}
+            buildId={buildId ?? view.job.buildId}
             commander={view.result.commander}
             constructedDeck={view.result.constructedDeck}
             userInputs={view.result.userInputs}

@@ -61,6 +61,21 @@ function categorizeTypeLine(typeLine?: string, isCommander = false): SolDirected
   return "artifact";
 }
 
+/**
+ * The same type-to-section rule the read-only deck panel uses, exposed so the
+ * deck editor groups a card into the identical section. Two views of one deck
+ * disagreeing about whether Dryad Arbor is a creature or a land would look
+ * like a bug in both.
+ */
+export function solDirectedDisplayCategoryForTypeLineV1(
+  typeLine?: string,
+): SolDirectedDeckDisplayCategory {
+  return categorizeTypeLine(typeLine);
+}
+
+export const SOL_DIRECTED_DECK_DISPLAY_ORDER_V1: readonly SolDirectedDeckDisplayCategory[] =
+  DISPLAY_ORDER;
+
 function compareCardNames(a: string, b: string): number {
   return a.localeCompare(b, undefined, { sensitivity: "base" });
 }
