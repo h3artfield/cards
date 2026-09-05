@@ -514,7 +514,10 @@ button {
      which is most of why copy read muddy no matter the contrast ratio. */
   --text-hi: #f3f5f8;
   --text: #a9b1bd;
-  --text-lo: #6b7482;
+  /* Lightened off #6b7482, which measured 4.14:1 on the page ground and so
+     missed AA for body text -- and this is the default muted colour as well as
+     the input placeholder. Now 4.90:1. */
+  --text-lo: #767f8d;
 
   --accent: #e0b44c;
   --accent-hi: #f6d178;
