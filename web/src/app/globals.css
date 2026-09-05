@@ -143,9 +143,9 @@ button {
   padding: 0;
   overflow: hidden;
   border-radius: 0.75rem;
-  border: 1px solid #404040;
-  background: #171717;
-  color: #ffffff;
+  border: 1px solid var(--line);
+  background: var(--ink-800);
+  color: var(--text-hi);
   text-align: left;
   cursor: default;
   -webkit-appearance: none;
@@ -157,7 +157,7 @@ button {
   position: relative;
   width: 100%;
   aspect-ratio: 5 / 7;
-  background: #0a0a0a;
+  background: var(--ink-900);
 }
 
 .inventory-card-image-wrap img {
@@ -175,7 +175,7 @@ button {
   padding: 0.5rem;
   text-align: center;
   font-size: 0.75rem;
-  color: #a3a3a3;
+  color: var(--text);
 }
 
 .inventory-card-body {
@@ -187,19 +187,19 @@ button {
   font-size: 0.75rem;
   font-weight: 600;
   line-height: 1.25;
-  color: #ffffff;
+  color: var(--text-hi);
 }
 
 .inventory-card-price {
   font-size: 0.6875rem;
   font-weight: 600;
-  color: #34d399;
+  color: var(--ok);
 }
 
 .inventory-card-set {
   margin: 0.25rem 0 0;
   font-size: 0.625rem;
-  color: #a3a3a3;
+  color: var(--text);
 }
 
 .inventory-filter-chip {
@@ -209,22 +209,23 @@ button {
   font-weight: 500;
   -webkit-appearance: none;
   appearance: none;
-  border: 1px solid #404040;
-  background: #171717;
-  color: #d4d4d4;
+  border: 1px solid var(--line);
+  background: var(--ink-800);
+  color: var(--text);
 }
 
 .inventory-filter-chip-active {
-  border-color: #4f46e5;
-  background: #4f46e5;
-  color: #ffffff;
+  border-color: var(--accent);
+  background: var(--accent);
+  /* Near-black, not near-white: this fill is now light. */
+  color: var(--ink-900);
 }
 
 .inventory-filter-input {
   border-radius: 0.5rem;
-  border: 1px solid #404040;
-  background: #171717;
-  color: #ffffff;
+  border: 1px solid var(--line);
+  background: var(--ink-800);
+  color: var(--text-hi);
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
 }
