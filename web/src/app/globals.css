@@ -1,5 +1,54 @@
 @import "tailwindcss";
 
+/* Cool-tinted neutral ramp.
+   Around 150 `neutral-*` utilities across the storefront and dashboards were
+   painting those surfaces in pure grey while the rest of the app moved to a
+   cool-cast ink ramp, which is what made the two halves of the product look
+   unrelated. Remapping the scale reaches all of them at once instead of
+   rewriting every class string.
+
+   Each step keeps Tailwind's original lightness and only gains hue, so every
+   existing foreground/background pairing keeps the contrast ratio it was
+   designed against — including on light surfaces, which still read as light.
+   The dark end is deliberately identical to the --ink/--line/--text tokens
+   below, so `bg-neutral-950` and `bg-[var(--ink-850)]` are the same colour. */
+@theme {
+  --color-neutral-50: #f8f9fb;
+  --color-neutral-100: #f1f3f7;
+  --color-neutral-200: #e2e6ec;
+  --color-neutral-300: #cfd5de;
+  --color-neutral-400: #a9b1bd;
+  --color-neutral-500: #767f8d;
+  --color-neutral-600: #56606e;
+  --color-neutral-700: #3a4250;
+  --color-neutral-800: #242a33;
+  --color-neutral-900: #11141a;
+  --color-neutral-950: #0a0c10;
+}
+
+/* Scoped accent override — customer storefront surfaces only.
+   Tailwind v4 compiles every colour utility to var(--color-*), so redefining
+   those variables on a wrapper repoints all the indigo utilities inside it
+   without touching a single class string.
+
+   Scoped rather than global on purpose: indigo is also the admin and marketing
+   accent (~180 further uses) and those are not being restyled, and a global
+   remap would silently turn ~20 white-on-indigo buttons across them into
+   white-on-gold, which is unreadable. Steps stay monotonic in Tailwind's
+   direction so existing `hover:bg-indigo-500` on a `bg-indigo-600` element
+   still lightens. */
+.storefront-theme {
+  --color-indigo-200: #f8dc9a;
+  --color-indigo-300: #f2cd73;
+  --color-indigo-400: #e9c05a;
+  --color-indigo-500: #e0b44c;
+  --color-indigo-600: #cfa23f;
+  --color-indigo-700: #a8811f;
+  --color-indigo-800: #7e6426;
+  --color-indigo-900: #4a3a12;
+  --color-indigo-950: #2a2109;
+}
+
 body {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   -webkit-tap-highlight-color: transparent;
@@ -493,14 +542,19 @@ button {
 }
 
 /* Professor — MTG dungeon chamber (warm stone, gold trim, pixel torches) */
-.professor-mtg-page {
-  /* Cool-neutral ground, one warm accent, one cool secondary.
-     The previous palette put every neutral on hue ~35 and the gold accent on
-     hue 45, so the accent shared a hue family with its own background and could
-     not read as an accent at all — which is what made the whole surface look
-     brown and rustic rather than deliberate. Rotating the neutrals to ~220
-     leaves roughly 175 degrees between ground and accent, so gold finally
-     registers, and gold on cool near-black is the standard luxury pairing. */
+/* Application palette.
+   Cool-neutral ground, one warm accent, one cool secondary.
+
+   An earlier palette put every neutral on hue ~35 and the gold accent on hue
+   45, so the accent shared a hue family with its own background and could not
+   read as an accent at all — which is what made those surfaces look brown and
+   rustic rather than deliberate. Rotating the neutrals to ~220 leaves roughly
+   175 degrees between ground and accent, so gold finally registers, and gold on
+   cool near-black is the standard luxury pairing.
+
+   These live at :root rather than on a page class so every surface —
+   storefront, auth, dashboards — can share one source of truth. */
+:root {
   --ink-900: #07080b;
   --ink-850: #0a0c10;
   --ink-800: #11141a;
@@ -510,8 +564,8 @@ button {
   --line: #313845;
   --line-strong: #454e5e;
 
-  /* Neutral text. The old beige body colour was tinted at ~21% saturation,
-     which is most of why copy read muddy no matter the contrast ratio. */
+  /* Neutral text. A tinted body colour reads muddy no matter what its contrast
+     ratio measures, so these carry only as much hue as the ground does. */
   --text-hi: #f3f5f8;
   --text: #a9b1bd;
   /* Lightened off #6b7482, which measured 4.14:1 on the page ground and so
@@ -535,6 +589,16 @@ button {
   --warn: #e3b341;
   --bad: #ff6b61;
 
+  /* Pre-mixed alpha companions. Tailwind v4 can derive these from an arbitrary
+     var with color-mix, but naming them keeps error and success surfaces
+     identical everywhere instead of each caller picking its own opacity. */
+  --ok-wash: rgba(70, 209, 138, 0.1);
+  --ok-line: rgba(70, 209, 138, 0.35);
+  --bad-wash: rgba(255, 107, 97, 0.1);
+  --bad-line: rgba(255, 107, 97, 0.4);
+}
+
+.professor-mtg-page {
   /* Legacy aliases. The --mtg-* names are referenced throughout the professor
      components and in Tailwind arbitrary values, so aliasing keeps this a
      palette change rather than a rename. The names now outlive their meaning

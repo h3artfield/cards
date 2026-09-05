@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCustomer } from "@/context/CustomerContext";
 import {
@@ -136,6 +136,21 @@ export function StoreInventoryApp({
       prev.filter((c) => c.inventoryItemId !== inventoryItemId),
     );
   }, []);
+
+  // Touch devices never fire HTML5 drag, so tapping a card is the only way in
+  // on a tablet. Toggling rather than adding keeps a second tap meaningful.
+  const toggleGathering = useCallback((card: GatheringCard) => {
+    setGatheredCards((prev) =>
+      prev.some((c) => c.inventoryItemId === card.inventoryItemId)
+        ? prev.filter((c) => c.inventoryItemId !== card.inventoryItemId)
+        : [...prev, card],
+    );
+  }, []);
+
+  const gatheredIds = useMemo(
+    () => new Set(gatheredCards.map((c) => c.inventoryItemId)),
+    [gatheredCards],
+  );
 
   const apiBase = `/api/store/${encodeURIComponent(slug)}`;
 
@@ -300,22 +315,30 @@ export function StoreInventoryApp({
 
   return (
     <div
-      className="min-h-screen bg-neutral-950 text-white"
-      style={{ backgroundColor: "#0a0a0a", color: "#fff" }}
+      className="storefront-theme min-h-screen bg-neutral-950 text-[var(--text)]"
+      // The inline background/colour that used to sit here was a hard-coded
+      // pure grey, which overrode the themed class and pinned this page to the
+      // old palette. The class alone is enough; the belt-and-braces literal was
+      // added for an iPad Safari CSS-chunk failure that the plain-CSS grid
+      // rules above already cover.
+      style={{ backgroundColor: "var(--ink-850)" }}
     >
       <header className="border-b border-neutral-800 px-4 py-4">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <StoreBrandMark
-                storeName={storeName}
-                logoUrl={logoUrl}
-                variant="auth"
-                subtitle="Inventory"
-              />
-              <p className="mt-1 text-center text-xs text-neutral-500 sm:text-left">
+            {/* A left-aligned app header, so this deliberately does not use the
+                shared `auth` lockup: that variant centres itself, which is why
+                the old header read as off-axis against the "Store home" link. */}
+            <div className="min-w-0">
+              <h1 className="truncate text-xl font-semibold tracking-tight text-[var(--text-hi)] sm:text-2xl">
+                {storeName}
+              </h1>
+              <p className="mt-0.5 text-[11px] uppercase tracking-[0.18em] text-[var(--text-lo)]">
+                Inventory
+              </p>
+              <p className="mt-2 text-xs text-[var(--text-lo)]">
                 Powered by{" "}
-                <Link href="/" className="text-neutral-400 hover:text-white">
+                <Link href="/" className="transition hover:text-[var(--accent-hi)]">
                   Card Scanner 9000
                 </Link>
               </p>
@@ -517,6 +540,8 @@ export function StoreInventoryApp({
                 <InventoryCardGrid
                   cards={data?.items ?? []}
                   highlightIds={highlightIds}
+                  pileIds={gatheredIds}
+                  onSelect={toggleGathering}
                   draggable
                   size="large"
                   emptyMessage={

@@ -320,7 +320,7 @@ export function StoreClerkChat({
           type="button"
           disabled={loading}
           onClick={() => void send()}
-          className="flex shrink-0 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium disabled:opacity-50"
+          className="flex shrink-0 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-[var(--ink-900)] disabled:opacity-50"
         >
           {loading ? (
             <>

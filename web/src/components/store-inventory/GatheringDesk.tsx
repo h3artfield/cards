@@ -97,7 +97,7 @@ export function GatheringDesk({
         <div>
           <p className="text-sm font-semibold text-white">Your card pile</p>
           <p className="mt-0.5 text-[11px] text-neutral-400">
-            Drag cards here from the clerk or browse grid
+            Tap a card to add it, or drag it here
           </p>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-1">
@@ -106,7 +106,7 @@ export function GatheringDesk({
               <button
                 type="button"
                 onClick={handleBuildDeck}
-                className="rounded-lg bg-indigo-600 px-2.5 py-1 text-[11px] font-semibold text-white hover:bg-indigo-500"
+                className="rounded-lg bg-indigo-600 px-2.5 py-1 text-[11px] font-semibold text-[var(--ink-900)] hover:bg-indigo-500"
               >
                 Build deck
               </button>
@@ -136,7 +136,7 @@ export function GatheringDesk({
           }`}
         >
           <p className="text-xs text-neutral-500">
-            {dragOver ? "Drop to add" : "Drop zone — gather cards while you shop"}
+            {dragOver ? "Drop to add" : "Tap cards above to gather them while you shop"}
           </p>
         </div>
       ) : (

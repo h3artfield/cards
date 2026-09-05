@@ -91,18 +91,25 @@ export function StoreBrandMark({
     );
   }
 
+  /**
+   * Typographic lockup, no mark. This variant used to lead with a 208px logo
+   * that pushed the actual content of every page using it below the fold; the
+   * store is already identified by the name, and a short accent rule gives the
+   * block the visual anchor the badge was providing. The `header` and `compact`
+   * variants still render the logo at a size that earns its place.
+   */
   if (variant === "auth") {
     return (
-      <div className="mb-10 flex flex-col items-center text-center">
-        {logo}
-        <h1 className="mt-8 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+      <div className="mb-8 flex flex-col items-center text-center">
+        <h1 className="text-2xl font-semibold tracking-tight text-[var(--text-hi)] sm:text-3xl">
           {storeName}
         </h1>
         {subtitle && (
-          <p className="mt-3 text-sm uppercase tracking-[0.12em] text-neutral-400">
+          <p className="mt-2 text-xs uppercase tracking-[0.18em] text-[var(--text-lo)]">
             {subtitle}
           </p>
         )}
+        <span className="mt-4 h-px w-10 bg-[var(--accent-lo)]" aria-hidden />
       </div>
     );
   }

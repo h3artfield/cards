@@ -144,7 +144,7 @@ export function InventoryDecklistImport({
               type="button"
               disabled={loading || !text.trim()}
               onClick={() => void runMatch(text)}
-              className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
+              className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-[var(--ink-900)] hover:bg-indigo-500 disabled:opacity-50"
             >
               {loading ? "Checking…" : "Check stock"}
             </button>

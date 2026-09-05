@@ -192,7 +192,7 @@ function RadioPill({
       onClick={onClick}
       className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
         active
-          ? "bg-indigo-600 text-white"
+          ? "bg-indigo-600 text-[var(--ink-900)]"
           : "border border-neutral-700 bg-neutral-900 text-neutral-300 hover:border-neutral-500"
       }`}
     >
@@ -440,7 +440,7 @@ export function InventoryFilterBar({
               </span>
               <span aria-hidden>{showAdvanced ? "▾" : "▸"}</span>
               {!showAdvanced && advancedActiveCount > 0 ? (
-                <span className="rounded-full bg-indigo-600/80 px-2 py-0.5 text-[10px] text-white">
+                <span className="rounded-full bg-indigo-600/80 px-2 py-0.5 text-[10px] text-[var(--ink-900)]">
                   {advancedActiveCount} active
                 </span>
               ) : null}
@@ -630,7 +630,7 @@ function FilterChip({
         active ? "inventory-filter-chip-active" : ""
       } rounded-full px-3 py-1 text-xs font-medium ${
         active
-          ? "bg-indigo-600 text-white"
+          ? "bg-indigo-600 text-[var(--ink-900)]"
           : "border border-neutral-700 bg-neutral-900 text-neutral-300 hover:border-neutral-500"
       }`}
     >
@@ -704,6 +704,7 @@ export function InventoryCardGrid({
   selectable = false,
   emptyMessage = "No cards match your filters.",
   highlightIds,
+  pileIds,
   draggable = false,
   size = "default",
 }: {
@@ -712,6 +713,8 @@ export function InventoryCardGrid({
   selectable?: boolean;
   emptyMessage?: string;
   highlightIds?: Set<string>;
+  /** Cards already in the shopper's pile, so a tap has visible confirmation. */
+  pileIds?: Set<string>;
   draggable?: boolean;
   size?: "default" | "large";
 }) {
@@ -730,6 +733,7 @@ export function InventoryCardGrid({
     <ul className={gridClass}>
       {cards.map((card) => {
         const highlighted = highlightIds?.has(card.inventoryItemId);
+        const inPile = pileIds?.has(card.inventoryItemId) ?? false;
         return (
         <li key={card.inventoryItemId}>
           <div
@@ -754,10 +758,13 @@ export function InventoryCardGrid({
                 onSelect(card);
               }
             }}
+            aria-pressed={onSelect ? inPile : undefined}
             className={`inventory-card-tile group w-full overflow-hidden rounded-xl border bg-neutral-900/80 text-left transition ${
-              highlighted
-                ? "border-emerald-500 ring-1 ring-emerald-500/50"
-                : "border-neutral-800"
+              inPile
+                ? "border-indigo-400 ring-2 ring-indigo-400/60"
+                : highlighted
+                  ? "border-emerald-500 ring-1 ring-emerald-500/50"
+                  : "border-neutral-800"
             } ${
               draggable
                 ? "cursor-grab active:cursor-grabbing hover:border-indigo-500"
@@ -768,6 +775,15 @@ export function InventoryCardGrid({
           >
             <div className="inventory-card-image-wrap relative aspect-[5/7] w-full bg-neutral-950">
               <InventoryCardImage card={card} />
+              {inPile ? (
+                <span
+                  className={`absolute left-1.5 top-1.5 rounded bg-indigo-500 px-1.5 py-0.5 font-semibold uppercase tracking-wide text-[var(--ink-900)] ${
+                    size === "large" ? "text-[10px]" : "text-[9px]"
+                  }`}
+                >
+                  In pile
+                </span>
+              ) : null}
               {card.qty > 1 ? (
                 <span
                   className={`absolute right-1.5 top-1.5 rounded bg-black/75 px-1.5 py-0.5 font-semibold text-white ${
