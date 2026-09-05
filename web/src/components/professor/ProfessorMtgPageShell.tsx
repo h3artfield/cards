@@ -1,20 +1,24 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { ProfessorMtgTorch } from "./ProfessorMtgTorch";
 
-/** MTG dungeon page wrapper — warm stone bg + fixed 16-bit torches on viewport edges. */
+/**
+ * Page wrapper for the Professor surfaces.
+ *
+ * The backdrop is a masked dot matrix plus two static accent glows and a floor
+ * vignette. It replaced a pair of animated pixel-art torches, which were both
+ * the most dated element on the page and the only reason these screens needed
+ * a reduced-motion exemption. Nothing here moves.
+ */
 export function ProfessorMtgPageShell({ children }: { children: ReactNode }) {
   return (
     <div className="professor-mtg-page flex min-h-screen flex-col">
-      <div className="professor-mtg-page-ambient" aria-hidden>
-        <div className="professor-mtg-page-ambient__pool professor-mtg-page-ambient__pool--left" />
-        <div className="professor-mtg-page-ambient__pool professor-mtg-page-ambient__pool--right" />
-        <div className="professor-mtg-page-ambient__floor" />
-      </div>
-      <div className="professor-mtg-page-torches" aria-hidden>
-        <ProfessorMtgTorch side="left" />
-        <ProfessorMtgTorch side="right" />
+      <div className="professor-mtg-backdrop" aria-hidden>
+        <div className="professor-mtg-backdrop__grid" />
+        <div className="professor-mtg-backdrop__glow professor-mtg-backdrop__glow--accent" />
+        <div className="professor-mtg-backdrop__glow professor-mtg-backdrop__glow--cool" />
+        <div className="professor-mtg-backdrop__floor" />
+        <div className="professor-mtg-backdrop__grain" />
       </div>
       {children}
     </div>

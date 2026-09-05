@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 body {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
@@ -12,7 +12,7 @@ button {
   touch-action: manipulation;
 }
 
-/* Store inventory — plain CSS so iPad Safari renders grid/cards if a JS CSS chunk fails */
+/* Store inventory â€” plain CSS so iPad Safari renders grid/cards if a JS CSS chunk fails */
 .inventory-card-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -46,7 +46,7 @@ button {
   }
 }
 
-/* Large browse grid — match clerk picks (2 → 2 → 3 cols, readable card art) */
+/* Large browse grid â€” match clerk picks (2 â†’ 2 â†’ 3 cols, readable card art) */
 .inventory-card-grid-large {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -180,7 +180,7 @@ button {
   font-size: 0.875rem;
 }
 
-/* Professor — MS-DOS shell × modern phosphor (minimal, no grid) */
+/* Professor â€” MS-DOS shell Ã— modern phosphor (minimal, no grid) */
 .professor-brew-brutal {
   --pb-paper: #c8c8d0;
   --pb-ink: #050508;
@@ -478,7 +478,7 @@ button {
   box-shadow: var(--pb-shadow), 0 0 14px rgba(94, 234, 212, 0.12);
 }
 
-/* Light paper surface — DOS dialog on dark (modals) */
+/* Light paper surface â€” DOS dialog on dark (modals) */
 .professor-brew-brutal-on-paper {
   --pb-paper: #0a0a10;
   --pb-ink: #e5e7eb;
@@ -492,36 +492,80 @@ button {
   color: var(--pb-dos-text-bright);
 }
 
-/* Professor — MTG dungeon chamber (warm stone, gold trim, pixel torches) */
+/* Professor â€” MTG dungeon chamber (warm stone, gold trim, pixel torches) */
 .professor-mtg-page {
-  --mtg-stone-deep: #0a0806;
-  --mtg-stone: #12100d;
-  --mtg-stone-raised: #1a1612;
-  --mtg-stone-border: #3d352c;
-  --mtg-stone-border-hi: #5c4f42;
-  --mtg-gold: #c9a227;
-  --mtg-gold-bright: #e8c547;
-  --mtg-gold-dim: #8b6914;
-  --mtg-parchment: #d4c4a8;
-  --mtg-parchment-muted: #9a8b72;
-  --mtg-parchment-bright: #ede4d3;
-  --mtg-flame: #ff8800;
-  --mtg-emerald: #4a9b6d;
-  --mtg-glow: rgba(201, 162, 39, 0.35);
+  /* Cool-neutral ground, one warm accent, one cool secondary.
+     The previous palette put every neutral on hue ~35 and the gold accent on
+     hue 45, so the accent shared a hue family with its own background and could
+     not read as an accent at all â€” which is what made the whole surface look
+     brown and rustic rather than deliberate. Rotating the neutrals to ~220
+     leaves roughly 175 degrees between ground and accent, so gold finally
+     registers, and gold on cool near-black is the standard luxury pairing. */
+  --ink-900: #07080b;
+  --ink-850: #0a0c10;
+  --ink-800: #11141a;
+  --ink-750: #161a21;
+  --ink-700: #1d222b;
+  --line-subtle: #242a33;
+  --line: #313845;
+  --line-strong: #454e5e;
+
+  /* Neutral text. The old beige body colour was tinted at ~21% saturation,
+     which is most of why copy read muddy no matter the contrast ratio. */
+  --text-hi: #f3f5f8;
+  --text: #a9b1bd;
+  --text-lo: #6b7482;
+
+  --accent: #e0b44c;
+  --accent-hi: #f6d178;
+  --accent-lo: #7e6426;
+  --accent-wash: rgba(224, 180, 76, 0.08);
+  --accent-glow: rgba(224, 180, 76, 0.26);
+
+  /* Split-complementary partner, for interactive and informational states and
+     the second backdrop glow. Two hues is the entire scheme on purpose. */
+  --cool: #6ba6ff;
+  --cool-lo: #2c4a7a;
+  --cool-glow: rgba(107, 166, 255, 0.2);
+
+  --ok: #46d18a;
+  --warn: #e3b341;
+  --bad: #ff6b61;
+
+  /* Legacy aliases. The --mtg-* names are referenced throughout the professor
+     components and in Tailwind arbitrary values, so aliasing keeps this a
+     palette change rather than a rename. The names now outlive their meaning
+     ("parchment" is near-white) and are worth migrating separately. */
+  --mtg-stone-deep: var(--ink-900);
+  --mtg-stone: var(--ink-800);
+  --mtg-stone-raised: var(--ink-750);
+  --mtg-stone-border: var(--line-subtle);
+  --mtg-stone-border-hi: var(--line);
+  --mtg-gold: var(--accent);
+  --mtg-gold-bright: var(--accent-hi);
+  --mtg-gold-dim: var(--accent-lo);
+  --mtg-parchment: var(--text);
+  --mtg-parchment-muted: var(--text-lo);
+  --mtg-parchment-bright: var(--text-hi);
+  --mtg-flame: var(--accent);
+  --mtg-emerald: var(--ok);
+  --mtg-glow: var(--accent-glow);
 
   position: relative;
   isolation: isolate;
   min-height: 100vh;
-  background-color: #040302;
-  background-image:
-    radial-gradient(ellipse 120% 80% at 50% 100%, rgba(0, 0, 0, 0.55), transparent 55%),
-    radial-gradient(ellipse 90% 60% at 50% 0%, rgba(0, 0, 0, 0.35), transparent 50%),
-    linear-gradient(180deg, #030302 0%, #060504 38%, #040302 100%);
-  color: var(--mtg-parchment-muted);
+  background-color: var(--ink-850);
+  color: var(--text);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
 
-.professor-mtg-page-ambient {
+
+/* Backdrop.
+   Replaces the animated firelight. Everything here is static: depth comes from
+   the mask, the two accent glows and the grain, not from motion, so there is no
+   repaint cost, nothing to exempt from prefers-reduced-motion, and no game
+   asset to date the page. */
+.professor-mtg-backdrop {
   pointer-events: none;
   position: fixed;
   inset: 0;
@@ -529,121 +573,99 @@ button {
   overflow: hidden;
 }
 
-/* Ambient firelight.
-   These are near-fullscreen elements, so the animation is deliberately slow,
-   shallow, and set to three mutually indivisible periods: the pools never
-   resync, which is what stops the room reading as a pulsing CSS demo rather
-   than distant firelight. Opacity only, so it composites without repainting. */
-.professor-mtg-page-ambient__pool {
+/* Dot matrix, masked so it fades out well before it reaches the content. */
+.professor-mtg-backdrop__grid {
   position: absolute;
-  top: -5%;
-  width: min(62vw, 640px);
-  height: 105%;
-  will-change: opacity;
-  animation: professor-mtg-ambient-pulse 13s ease-in-out infinite;
+  inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(169, 177, 189, 0.14) 1px, transparent 0);
+  background-size: 34px 34px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 0%, transparent 72%);
+  mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 0%, transparent 72%);
 }
 
-.professor-mtg-page-ambient__pool--left {
-  left: -8%;
-  background:
-    radial-gradient(ellipse 90% 70% at 0% 12%, rgba(255, 130, 40, 0.22) 0%, rgba(255, 90, 10, 0.08) 32%, transparent 68%),
-    radial-gradient(ellipse 60% 45% at 8% 35%, rgba(255, 170, 60, 0.1) 0%, transparent 70%);
-  animation-delay: -4s;
+.professor-mtg-backdrop__glow {
+  position: absolute;
+  width: min(72vw, 820px);
+  height: min(62vh, 640px);
 }
 
-.professor-mtg-page-ambient__pool--right {
-  right: -8%;
-  background:
-    radial-gradient(ellipse 90% 70% at 100% 12%, rgba(255, 130, 40, 0.22) 0%, rgba(255, 90, 10, 0.08) 32%, transparent 68%),
-    radial-gradient(ellipse 60% 45% at 92% 35%, rgba(255, 170, 60, 0.1) 0%, transparent 70%);
-  animation-duration: 17s;
+.professor-mtg-backdrop__glow--accent {
+  top: -20%;
+  left: -14%;
+  background: radial-gradient(ellipse at 32% 34%, var(--accent-glow) 0%, transparent 62%);
 }
 
-.professor-mtg-page-ambient__floor {
+.professor-mtg-backdrop__glow--cool {
+  top: -24%;
+  right: -16%;
+  background: radial-gradient(ellipse at 68% 34%, var(--cool-glow) 0%, transparent 62%);
+}
+
+/* Grounds the page so the content does not float on an even field. */
+.professor-mtg-backdrop__floor {
   position: absolute;
   inset: auto 0 0;
-  height: 42%;
-  background: radial-gradient(ellipse 85% 100% at 50% 100%, rgba(255, 100, 20, 0.06) 0%, transparent 62%);
-  will-change: opacity;
-  animation: professor-mtg-ambient-pulse 23s ease-in-out infinite;
-  animation-delay: -9s;
+  height: 48%;
+  background: linear-gradient(180deg, transparent 0%, rgba(7, 8, 11, 0.85) 100%);
 }
 
-@keyframes professor-mtg-ambient-pulse {
-  0%,
-  100% {
-    opacity: 0.78;
-  }
-  50% {
-    opacity: 0.96;
-  }
+/* Fine grain. Its real job is killing the banding that large low-opacity
+   gradients show on 8-bit panels; the material quality is a side effect. */
+.professor-mtg-backdrop__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.professor-mtg-page > *:not(.professor-mtg-page-torches):not(.professor-mtg-page-ambient) {
+.professor-mtg-page > *:not(.professor-mtg-backdrop) {
   position: relative;
   z-index: 1;
 }
 
-.professor-mtg-page-torches {
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  display: none;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 5rem 1.25rem 0;
-}
-
-@media (min-width: 768px) {
-  .professor-mtg-page-torches {
-    display: flex;
-  }
-
-  .professor-mtg-page-torches .professor-mtg-torch {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 0;
-  }
-}
-
 .professor-mtg-input {
-  border: 1px solid var(--mtg-stone-border);
-  background: var(--mtg-stone-deep);
-  color: var(--mtg-parchment-bright);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
-  border-radius: 2px;
+  border: 1px solid var(--line-subtle);
+  background: var(--ink-900);
+  color: var(--text-hi);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+  border-radius: 6px;
   font-family: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .professor-mtg-input:focus {
-  outline: 1px solid var(--mtg-gold-dim);
-  outline-offset: 0;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(201, 162, 39, 0.2);
+  outline: none;
+  border-color: var(--accent-lo);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4), 0 0 0 3px var(--accent-wash);
 }
 
 .professor-mtg-input::placeholder {
-  color: #6b6155;
+  color: var(--text-lo);
 }
 
 .professor-mtg-btn {
-  border: 1px solid var(--mtg-gold-dim);
-  background: linear-gradient(180deg, #3d3220 0%, #2a2318 100%);
-  color: var(--mtg-gold-bright);
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--ink-700) 0%, var(--ink-750) 100%);
+  color: var(--accent-hi);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: none;
-  border-radius: 2px;
+  border-radius: 6px;
   font-family: var(--font-display), Georgia, serif;
-  box-shadow: inset 0 1px 0 rgba(201, 162, 39, 0.15), 0 2px 8px rgba(0, 0, 0, 0.35);
-  transition: background 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+  /* Hairline top edge: one pixel of light from above is what makes a surface
+     read as a physical object rather than a filled rectangle. */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 1px 2px rgba(0, 0, 0, 0.4);
+  transition: background 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
 .professor-mtg-btn:hover:not(:disabled) {
-  background: linear-gradient(180deg, #4a3d28 0%, #322a1e 100%);
-  color: var(--mtg-parchment-bright);
-  box-shadow: inset 0 1px 0 rgba(201, 162, 39, 0.25), 0 0 16px rgba(201, 162, 39, 0.12);
+  border-color: var(--accent-lo);
+  background: linear-gradient(180deg, #232935 0%, var(--ink-700) 100%);
+  color: var(--accent-hi);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 0 24px -6px var(--accent-glow);
 }
 
 .professor-mtg-btn:disabled {
@@ -652,56 +674,58 @@ button {
 }
 
 .professor-mtg-option {
-  border: 1px solid var(--mtg-stone-border);
-  background: rgba(20, 17, 14, 0.85);
-  color: var(--mtg-parchment);
+  border: 1px solid var(--line-subtle);
+  background: var(--ink-750);
+  color: var(--text);
   text-align: left;
-  border-radius: 2px;
+  border-radius: 6px;
   font-family: inherit;
-  transition: border-color 0.12s ease, background 0.12s ease;
+  transition: border-color 0.12s ease, background 0.12s ease, color 0.12s ease;
 }
 
 .professor-mtg-option:hover {
-  border-color: rgba(201, 162, 39, 0.45);
-  background: rgba(201, 162, 39, 0.05);
+  border-color: var(--line-strong);
+  background: var(--ink-700);
+  color: var(--text-hi);
 }
 
 .professor-mtg-option--selected {
-  border-color: var(--mtg-gold);
-  background: rgba(201, 162, 39, 0.08);
+  border-color: var(--accent-lo);
+  background: var(--accent-wash);
+  color: var(--text-hi);
 }
 
 .professor-mtg-tag {
-  border: 1px solid var(--mtg-stone-border-hi);
-  background: rgba(201, 162, 39, 0.08);
-  color: var(--mtg-gold);
+  border: 1px solid var(--line);
+  background: var(--accent-wash);
+  color: var(--accent);
   font-size: 0.62rem;
   padding: 0.15rem 0.45rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 600;
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 .professor-mtg-tag--ok {
-  border-color: rgba(74, 155, 109, 0.45);
-  background: rgba(74, 155, 109, 0.08);
-  color: var(--mtg-emerald);
+  border-color: rgba(70, 209, 138, 0.35);
+  background: rgba(70, 209, 138, 0.08);
+  color: var(--ok);
 }
 
 .professor-mtg-tag--grade {
-  border-color: rgba(201, 162, 39, 0.55);
-  color: var(--mtg-gold-bright);
+  border-color: rgba(224, 180, 76, 0.45);
+  color: var(--accent-hi);
 }
 
 .professor-mtg-panel-header {
-  border-bottom: 1px solid var(--mtg-stone-border);
-  background: linear-gradient(180deg, rgba(42, 35, 28, 0.95) 0%, rgba(30, 25, 20, 0.95) 100%);
+  border-bottom: 1px solid var(--line-subtle);
+  background: linear-gradient(180deg, var(--ink-750) 0%, var(--ink-800) 100%);
 }
 
 .professor-mtg-panel-status {
-  border-bottom: 1px solid var(--mtg-stone-border);
-  background: rgba(20, 17, 14, 0.75);
+  border-bottom: 1px solid var(--line-subtle);
+  background: var(--ink-850);
 }
 
 .professor-mtg-modal.professor-mtg-page {
@@ -718,7 +742,7 @@ button {
 }
 
 .professor-mtg-modal .professor-mtg-muted {
-  color: #e8dcc8;
+  color: var(--text);
 }
 
 .professor-mtg-modal .professor-mtg-label {
@@ -756,15 +780,15 @@ button {
 }
 
 .professor-mtg-card-name--in-stock {
-  color: #6ee7a8;
+  color: var(--ok);
 }
 
 .professor-mtg-card-name--in-stock:hover {
-  color: #86efac;
+  color: var(--ok);
 }
 
 .professor-mtg-card-price {
-  color: #6ee7a8;
+  color: var(--ok);
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -803,12 +827,13 @@ button {
   width: 100%;
   max-width: 42rem;
   position: relative;
-  border: 2px solid var(--mtg-stone-border);
-  background: linear-gradient(180deg, var(--mtg-stone-raised) 0%, var(--mtg-stone) 100%);
+  border: 1px solid var(--line-subtle);
+  border-radius: 12px;
+  background: var(--ink-800);
   box-shadow:
-    inset 0 1px 0 rgba(107, 93, 77, 0.25),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
-    0 8px 32px rgba(0, 0, 0, 0.45);
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.5),
+    0 16px 48px -16px rgba(0, 0, 0, 0.8);
   padding: 1.75rem 1.25rem;
 }
 
@@ -818,7 +843,7 @@ button {
 
 .professor-mtg-chamber__inner--art {
   overflow: hidden;
-  background: #080604;
+  background: var(--ink-900);
   isolation: isolate;
   border-color: rgba(61, 53, 44, 0.95);
   box-shadow:
@@ -844,14 +869,9 @@ button {
   }
 }
 
-.professor-mtg-chamber__inner::before {
-  content: "";
-  pointer-events: none;
-  position: absolute;
-  inset: 6px;
-  border: 1px solid rgba(201, 162, 39, 0.12);
-  z-index: 2;
-}
+/* The inset gold hairline that used to sit here was a classical framing
+   device â€” correct for the old parchment theme, wrong for this one, where a
+   single crisp edge does the work. */
 
 .professor-mtg-chamber__inner--art .professor-mtg-title,
 .professor-mtg-chamber__inner--art .professor-mtg-label,
@@ -988,7 +1008,7 @@ button {
 }
 
 .professor-mtg-stage--pending {
-  color: #6b6155;
+  color: var(--text-lo);
 }
 
 .professor-mtg-stage-icon {
@@ -1015,7 +1035,7 @@ button {
 }
 
 .professor-mtg-scroll-out {
-  color: #c4a574;
+  color: var(--accent);
 }
 
 .professor-mtg-scroll-in {
@@ -1027,124 +1047,20 @@ button {
 }
 
 .professor-mtg-scroll-time {
-  color: #6b6155;
-}
-
-.professor-mtg-torch--compact {
-  display: flex;
-  width: 32px;
-  padding-top: 0;
-}
-
-@media (min-width: 768px) {
-  .professor-mtg-torch--compact {
-    display: none;
-  }
+  color: var(--text-lo);
 }
 
 .professor-mtg-card {
-  border: 1px solid var(--mtg-stone-border);
-  background: var(--mtg-stone-raised);
-  color: var(--mtg-parchment);
-  box-shadow: inset 0 1px 0 rgba(107, 93, 77, 0.15);
+  border: 1px solid var(--line-subtle);
+  background: var(--ink-800);
+  color: var(--text);
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
-/* 16-bit wall torches */
-.professor-mtg-torch {
-  display: none;
-  flex-shrink: 0;
-  position: relative;
-  width: 48px;
-  padding-top: 1.5rem;
-  align-self: stretch;
-}
-
-@media (min-width: 768px) {
-  .professor-mtg-torch:not(.professor-mtg-torch--compact) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-  }
-}
-
-.professor-mtg-torch__sprite {
-  image-rendering: pixelated;
-  filter: drop-shadow(0 0 10px rgba(255, 120, 0, 0.55)) drop-shadow(0 0 24px rgba(255, 80, 0, 0.25));
-}
-
-.professor-mtg-torch__flame {
-  transform-origin: 8px 14px;
-  animation: professor-mtg-flame-flicker 0.55s steps(3) infinite;
-}
-
-.professor-mtg-torch__flame--ghost {
-  animation: professor-mtg-flame-flicker 0.75s steps(3) infinite reverse;
-  animation-delay: -0.2s;
-}
-
-.professor-mtg-torch__glow {
-  position: absolute;
-  top: 0.25rem;
-  left: 50%;
-  width: 120px;
-  height: 120px;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle, rgba(255, 150, 50, 0.38) 0%, rgba(255, 100, 0, 0.14) 38%, rgba(255, 70, 0, 0.04) 58%, transparent 72%);
-  animation: professor-mtg-glow-pulse 7s ease-in-out infinite;
-  pointer-events: none;
-}
-
-.professor-mtg-torch--left .professor-mtg-torch__glow {
-  animation-duration: 9s;
-  animation-delay: -3s;
-}
-
-@keyframes professor-mtg-flame-flicker {
-  0% {
-    transform: scale(1, 1) translateY(0);
-    opacity: 1;
-  }
-  33% {
-    transform: scale(1.06, 1.12) translateY(-1px);
-    opacity: 0.92;
-  }
-  66% {
-    transform: scale(0.96, 0.94) translateY(1px);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.02, 1.05) translateY(-0.5px);
-    opacity: 0.95;
-  }
-}
-
-@keyframes professor-mtg-glow-pulse {
-  0%,
-  100% {
-    opacity: 0.82;
-    transform: translateX(-50%) scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: translateX(-50%) scale(1.04);
-  }
-}
-
-/* The theme leans on five infinite animations. Honour the OS setting and stop
-   all of them — the lighting is decorative, so nothing is lost by holding it
-   at its resting frame. */
-@media (prefers-reduced-motion: reduce) {
-  .professor-mtg-page-ambient__pool,
-  .professor-mtg-page-ambient__floor,
-  .professor-mtg-torch__flame,
-  .professor-mtg-torch__flame--ghost,
-  .professor-mtg-torch__glow {
-    animation: none !important;
-  }
-}
+/* The torches and their five infinite animations used to live here. The
+   backdrop that replaced them is entirely static, so there is no longer
+   anything on these pages to exempt from prefers-reduced-motion. */
 
 /* ==========================================================================
    Deck editor
@@ -1223,13 +1139,13 @@ button {
 .professor-mtg-chip--in-stock {
   border-color: rgba(110, 231, 168, 0.4);
   background: rgba(74, 155, 109, 0.1);
-  color: #6ee7a8;
+  color: var(--ok);
 }
 
 .professor-mtg-chip--owned {
   border-color: rgba(122, 162, 214, 0.4);
   background: rgba(74, 108, 155, 0.12);
-  color: #9dbfe8;
+  color: var(--cool);
 }
 
 .professor-mtg-chip--game-changer {
@@ -1252,7 +1168,7 @@ button {
 .professor-mtg-chip--warn {
   border-color: rgba(220, 120, 110, 0.5);
   background: rgba(160, 60, 55, 0.14);
-  color: #f0a8a0;
+  color: var(--bad);
 }
 
 /* Toggleable filter chip. */
@@ -1335,7 +1251,7 @@ button {
 .professor-mtg-icon-btn--danger:hover:not(:disabled) {
   border-color: rgba(220, 120, 110, 0.6);
   background: rgba(160, 60, 55, 0.14);
-  color: #f0a8a0;
+  color: var(--bad);
 }
 
 .professor-mtg-icon-btn:disabled {
@@ -1375,8 +1291,10 @@ button {
   border-radius: 999px;
   font-size: 0.55rem;
   font-weight: 700;
-  color: #1a1509;
-  background: #cdc4b4;
+  /* Generic pip. The five coloured pips below override this and keep their
+     canonical Magic hues; only the neutral base is cooled to match the theme. */
+  color: #0e1116;
+  background: #c3c8d0;
   box-shadow: inset 0 -1px 1px rgba(0, 0, 0, 0.25);
 }
 
