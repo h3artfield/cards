@@ -531,7 +531,7 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
                   })}
                 </ul>
               </div>
-            ) : (
+            ) : commander ? null : (
               <p className="professor-mtg-muted mt-3 text-xs">
                 Click the search bar to browse paper-eligible commanders A–Z
               </p>
