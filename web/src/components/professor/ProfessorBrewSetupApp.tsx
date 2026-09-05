@@ -29,6 +29,7 @@ import {
   DEFAULT_PROFESSOR_BREW_BRACKET,
   PROFESSOR_BREW_BRACKET_OPTIONS,
 } from "@/lib/deck-synthesis/professor-brew-bracket-v4-v1";
+import { scryfallNamedArtCropUrl } from "@/lib/deck-synthesis/professor-brew-scryfall-images-v1";
 import { isProfessorSolDirectedGuiEnabledClient } from "@/lib/deck-synthesis/professor-sol-directed-gui-flag-v1-1-1";
 import { saveSolDirectedPendingBuild } from "@/lib/deck-synthesis/professor-sol-directed-pending-build-v1-1-1";
 import {
@@ -539,6 +540,24 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
             {commander ? (
               <div className="mt-6 grid gap-x-10 gap-y-5 border-t border-[var(--mtg-stone-border)] pt-6 lg:grid-cols-2">
                 <div className="space-y-4">
+                {/* Confirms the pick with the card's own art, and gives the
+                    selects column something to sit under so it does not
+                    dead-end against the taller theme column. */}
+                <div className="professor-mtg-card relative overflow-hidden">
+                  <img
+                    src={scryfallNamedArtCropUrl(commander.name, true)}
+                    alt=""
+                    aria-hidden
+                    className="h-28 w-full object-cover object-center"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--mtg-stone-deep)] via-[var(--mtg-stone-deep)]/25 to-transparent" />
+                  <p className="professor-mtg-title absolute bottom-2 left-3 right-3 truncate text-sm">
+                    {commander.name}
+                  </p>
+                </div>
+
                 <label className="block">
                   <span className="professor-mtg-label">Target bracket</span>
                   <select
