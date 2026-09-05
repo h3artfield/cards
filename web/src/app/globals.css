@@ -518,7 +518,7 @@ button {
     radial-gradient(ellipse 90% 60% at 50% 0%, rgba(0, 0, 0, 0.35), transparent 50%),
     linear-gradient(180deg, #030302 0%, #060504 38%, #040302 100%);
   color: var(--mtg-parchment-muted);
-  font-family: var(--font-geist-sans), Georgia, "Times New Roman", serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
 
 .professor-mtg-page-ambient {
@@ -529,12 +529,18 @@ button {
   overflow: hidden;
 }
 
+/* Ambient firelight.
+   These are near-fullscreen elements, so the animation is deliberately slow,
+   shallow, and set to three mutually indivisible periods: the pools never
+   resync, which is what stops the room reading as a pulsing CSS demo rather
+   than distant firelight. Opacity only, so it composites without repainting. */
 .professor-mtg-page-ambient__pool {
   position: absolute;
   top: -5%;
   width: min(62vw, 640px);
   height: 105%;
-  animation: professor-mtg-ambient-pulse 1.2s ease-in-out infinite;
+  will-change: opacity;
+  animation: professor-mtg-ambient-pulse 13s ease-in-out infinite;
 }
 
 .professor-mtg-page-ambient__pool--left {
@@ -542,7 +548,7 @@ button {
   background:
     radial-gradient(ellipse 90% 70% at 0% 12%, rgba(255, 130, 40, 0.22) 0%, rgba(255, 90, 10, 0.08) 32%, transparent 68%),
     radial-gradient(ellipse 60% 45% at 8% 35%, rgba(255, 170, 60, 0.1) 0%, transparent 70%);
-  animation-delay: -0.35s;
+  animation-delay: -4s;
 }
 
 .professor-mtg-page-ambient__pool--right {
@@ -550,6 +556,7 @@ button {
   background:
     radial-gradient(ellipse 90% 70% at 100% 12%, rgba(255, 130, 40, 0.22) 0%, rgba(255, 90, 10, 0.08) 32%, transparent 68%),
     radial-gradient(ellipse 60% 45% at 92% 35%, rgba(255, 170, 60, 0.1) 0%, transparent 70%);
+  animation-duration: 17s;
 }
 
 .professor-mtg-page-ambient__floor {
@@ -557,17 +564,18 @@ button {
   inset: auto 0 0;
   height: 42%;
   background: radial-gradient(ellipse 85% 100% at 50% 100%, rgba(255, 100, 20, 0.06) 0%, transparent 62%);
-  animation: professor-mtg-ambient-pulse 1.2s ease-in-out infinite;
-  animation-delay: -0.6s;
+  will-change: opacity;
+  animation: professor-mtg-ambient-pulse 23s ease-in-out infinite;
+  animation-delay: -9s;
 }
 
 @keyframes professor-mtg-ambient-pulse {
   0%,
   100% {
-    opacity: 0.62;
+    opacity: 0.78;
   }
   50% {
-    opacity: 1;
+    opacity: 0.96;
   }
 }
 
@@ -627,7 +635,7 @@ button {
   letter-spacing: 0.06em;
   text-transform: none;
   border-radius: 2px;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display), Georgia, serif;
   box-shadow: inset 0 1px 0 rgba(201, 162, 39, 0.15), 0 2px 8px rgba(0, 0, 0, 0.35);
   transition: background 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
 }
@@ -895,9 +903,9 @@ button {
 
 .professor-mtg-title {
   color: var(--mtg-parchment-bright);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display), Georgia, serif;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-transform: none;
 }
 
@@ -919,7 +927,8 @@ button {
 
 .professor-mtg-percent {
   color: var(--mtg-gold-bright);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display), Georgia, serif;
+  font-variant-numeric: tabular-nums;
   font-variant-numeric: tabular-nums;
   text-shadow: 0 0 20px rgba(201, 162, 39, 0.25);
 }
@@ -1084,12 +1093,13 @@ button {
   border-radius: 50%;
   background:
     radial-gradient(circle, rgba(255, 150, 50, 0.38) 0%, rgba(255, 100, 0, 0.14) 38%, rgba(255, 70, 0, 0.04) 58%, transparent 72%);
-  animation: professor-mtg-glow-pulse 1.2s ease-in-out infinite;
+  animation: professor-mtg-glow-pulse 7s ease-in-out infinite;
   pointer-events: none;
 }
 
 .professor-mtg-torch--left .professor-mtg-torch__glow {
-  animation-delay: -0.35s;
+  animation-duration: 9s;
+  animation-delay: -3s;
 }
 
 @keyframes professor-mtg-flame-flicker {
@@ -1114,12 +1124,25 @@ button {
 @keyframes professor-mtg-glow-pulse {
   0%,
   100% {
-    opacity: 0.75;
+    opacity: 0.82;
     transform: translateX(-50%) scale(1);
   }
   50% {
     opacity: 1;
-    transform: translateX(-50%) scale(1.08);
+    transform: translateX(-50%) scale(1.04);
+  }
+}
+
+/* The theme leans on five infinite animations. Honour the OS setting and stop
+   all of them — the lighting is decorative, so nothing is lost by holding it
+   at its resting frame. */
+@media (prefers-reduced-motion: reduce) {
+  .professor-mtg-page-ambient__pool,
+  .professor-mtg-page-ambient__floor,
+  .professor-mtg-torch__flame,
+  .professor-mtg-torch__flame--ghost,
+  .professor-mtg-torch__glow {
+    animation: none !important;
   }
 }
 
@@ -1142,7 +1165,7 @@ button {
   border-bottom: none;
   background: transparent;
   color: var(--mtg-parchment-muted);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display), Georgia, serif;
   font-size: 0.78rem;
   letter-spacing: 0.06em;
   cursor: pointer;

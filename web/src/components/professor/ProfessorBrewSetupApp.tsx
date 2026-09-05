@@ -361,7 +361,13 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
 
   return (
     <ProfessorMtgPageShell>
-      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col px-4 pb-16 pt-10">
+      {/* Width follows content: a lone search box does not want 1400px, but the
+          configured form is two columns and a 42rem ribbon wastes the screen. */}
+      <main
+        className={`mx-auto flex w-full flex-1 flex-col px-4 pb-16 pt-10 transition-[max-width] duration-300 ${
+          commander ? "max-w-5xl" : "max-w-2xl"
+        }`}
+      >
         <div className="text-center">
           <h1 className="professor-mtg-title text-3xl leading-none sm:text-4xl">
             {setupMode === "optimize" ? "Optimize a Deck" : "Build a Deck"}
@@ -377,7 +383,11 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
         </div>
 
         <div className="professor-mtg-chamber mt-10">
-          <div className="professor-mtg-chamber__inner relative">
+          <div
+            className={`professor-mtg-chamber__inner relative ${
+              commander ? "professor-mtg-chamber__inner--wide" : ""
+            }`}
+          >
             <div className="mb-6 grid grid-cols-2 gap-2">
               <button
                 type="button"
@@ -527,7 +537,8 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
             )}
 
             {commander ? (
-              <div className="mt-6 space-y-4 border-t border-[var(--mtg-stone-border)] pt-6">
+              <div className="mt-6 grid gap-x-10 gap-y-5 border-t border-[var(--mtg-stone-border)] pt-6 lg:grid-cols-2">
+                <div className="space-y-4">
                 <label className="block">
                   <span className="professor-mtg-label">Target bracket</span>
                   <select
@@ -567,6 +578,43 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
                   </p>
                 </label>
 
+                <label className="block">
+                  <span className="professor-mtg-label">Win preference</span>
+                  <select
+                    value={winPreferenceId}
+                    onChange={(e) => setWinPreferenceId(e.target.value)}
+                    className="professor-mtg-input mt-2 w-full px-3 py-3 text-sm"
+                  >
+                    <option value="">Let Professor choose (default)</option>
+                    {PROFESSOR_WIN_PREFERENCE_CHOICES_V111.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="block">
+                  <span className="professor-mtg-label">Commander style</span>
+                  <select
+                    value={commanderStyleId}
+                    onChange={(e) => setCommanderStyleId(e.target.value)}
+                    className="professor-mtg-input mt-2 w-full px-3 py-3 text-sm"
+                  >
+                    <option value="">Let Professor decide (default)</option>
+                    {PROFESSOR_COMMANDER_STYLE_CHOICES_V111.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.label}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="professor-mtg-muted mt-2 text-[11px] leading-relaxed">
+                    How much should the deck depend on and revolve around the commander?
+                  </p>
+                </label>
+                </div>
+
+                <div className="space-y-4">
                 <div className="block">
                   <span className="professor-mtg-label">Strategy / theme</span>
                   <p className="professor-mtg-muted mt-1 text-[11px] leading-relaxed">
@@ -602,41 +650,6 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
                     ) : null}
                   </div>
                 </div>
-
-                <label className="block">
-                  <span className="professor-mtg-label">Win preference</span>
-                  <select
-                    value={winPreferenceId}
-                    onChange={(e) => setWinPreferenceId(e.target.value)}
-                    className="professor-mtg-input mt-2 w-full px-3 py-3 text-sm"
-                  >
-                    <option value="">Let Professor choose (default)</option>
-                    {PROFESSOR_WIN_PREFERENCE_CHOICES_V111.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-
-                <label className="block">
-                  <span className="professor-mtg-label">Commander style</span>
-                  <select
-                    value={commanderStyleId}
-                    onChange={(e) => setCommanderStyleId(e.target.value)}
-                    className="professor-mtg-input mt-2 w-full px-3 py-3 text-sm"
-                  >
-                    <option value="">Let Professor decide (default)</option>
-                    {PROFESSOR_COMMANDER_STYLE_CHOICES_V111.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.label}
-                      </option>
-                    ))}
-                  </select>
-                  <p className="professor-mtg-muted mt-2 text-[11px] leading-relaxed">
-                    How much should the deck depend on and revolve around the commander?
-                  </p>
-                </label>
 
                 {solDirectedEnabled ? (
                   <label className="block">
@@ -714,6 +727,7 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
                     ) : null}
                   </div>
                 ) : null}
+                </div>
               </div>
             ) : null}
 
