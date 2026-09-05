@@ -1,4 +1,4 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
 body {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
@@ -12,7 +12,7 @@ button {
   touch-action: manipulation;
 }
 
-/* Store inventory â€” plain CSS so iPad Safari renders grid/cards if a JS CSS chunk fails */
+/* Store inventory — plain CSS so iPad Safari renders grid/cards if a JS CSS chunk fails */
 .inventory-card-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -46,7 +46,7 @@ button {
   }
 }
 
-/* Large browse grid â€” match clerk picks (2 â†’ 2 â†’ 3 cols, readable card art) */
+/* Large browse grid — match clerk picks (2 → 2 → 3 cols, readable card art) */
 .inventory-card-grid-large {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -180,7 +180,7 @@ button {
   font-size: 0.875rem;
 }
 
-/* Professor â€” MS-DOS shell Ã— modern phosphor (minimal, no grid) */
+/* Professor — MS-DOS shell × modern phosphor (minimal, no grid) */
 .professor-brew-brutal {
   --pb-paper: #c8c8d0;
   --pb-ink: #050508;
@@ -478,7 +478,7 @@ button {
   box-shadow: var(--pb-shadow), 0 0 14px rgba(94, 234, 212, 0.12);
 }
 
-/* Light paper surface â€” DOS dialog on dark (modals) */
+/* Light paper surface — DOS dialog on dark (modals) */
 .professor-brew-brutal-on-paper {
   --pb-paper: #0a0a10;
   --pb-ink: #e5e7eb;
@@ -492,12 +492,12 @@ button {
   color: var(--pb-dos-text-bright);
 }
 
-/* Professor â€” MTG dungeon chamber (warm stone, gold trim, pixel torches) */
+/* Professor — MTG dungeon chamber (warm stone, gold trim, pixel torches) */
 .professor-mtg-page {
   /* Cool-neutral ground, one warm accent, one cool secondary.
      The previous palette put every neutral on hue ~35 and the gold accent on
      hue 45, so the accent shared a hue family with its own background and could
-     not read as an accent at all â€” which is what made the whole surface look
+     not read as an accent at all — which is what made the whole surface look
      brown and rustic rather than deliberate. Rotating the neutrals to ~220
      leaves roughly 175 degrees between ground and accent, so gold finally
      registers, and gold on cool near-black is the standard luxury pairing. */
@@ -520,13 +520,13 @@ button {
   --accent-hi: #f6d178;
   --accent-lo: #7e6426;
   --accent-wash: rgba(224, 180, 76, 0.08);
-  --accent-glow: rgba(224, 180, 76, 0.26);
+  --accent-glow: rgba(224, 180, 76, 0.17);
 
   /* Split-complementary partner, for interactive and informational states and
      the second backdrop glow. Two hues is the entire scheme on purpose. */
   --cool: #6ba6ff;
   --cool-lo: #2c4a7a;
-  --cool-glow: rgba(107, 166, 255, 0.2);
+  --cool-glow: rgba(107, 166, 255, 0.13);
 
   --ok: #46d18a;
   --warn: #e3b341;
@@ -577,28 +577,31 @@ button {
 .professor-mtg-backdrop__grid {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(169, 177, 189, 0.14) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, rgba(169, 177, 189, 0.22) 1px, transparent 0);
   background-size: 34px 34px;
-  -webkit-mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 0%, transparent 72%);
-  mask-image: radial-gradient(ellipse 80% 55% at 50% 0%, #000 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 6%, #000 0%, transparent 74%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 6%, #000 0%, transparent 74%);
 }
 
+/* Sized well past the viewport and anchored mostly off-canvas, so only the
+   soft outer falloff is ever on screen. Kept on screen, a gradient this large
+   reads as a blob; kept off, it reads as light. */
 .professor-mtg-backdrop__glow {
   position: absolute;
-  width: min(72vw, 820px);
-  height: min(62vh, 640px);
+  width: min(85vw, 1100px);
+  height: min(75vh, 820px);
 }
 
 .professor-mtg-backdrop__glow--accent {
-  top: -20%;
-  left: -14%;
-  background: radial-gradient(ellipse at 32% 34%, var(--accent-glow) 0%, transparent 62%);
+  top: -32%;
+  left: -22%;
+  background: radial-gradient(ellipse at 34% 36%, var(--accent-glow) 0%, transparent 60%);
 }
 
 .professor-mtg-backdrop__glow--cool {
-  top: -24%;
-  right: -16%;
-  background: radial-gradient(ellipse at 68% 34%, var(--cool-glow) 0%, transparent 62%);
+  top: -36%;
+  right: -24%;
+  background: radial-gradient(ellipse at 66% 36%, var(--cool-glow) 0%, transparent 60%);
 }
 
 /* Grounds the page so the content does not float on an even field. */
@@ -870,7 +873,7 @@ button {
 }
 
 /* The inset gold hairline that used to sit here was a classical framing
-   device â€” correct for the old parchment theme, wrong for this one, where a
+   device — correct for the old parchment theme, wrong for this one, where a
    single crisp edge does the work. */
 
 .professor-mtg-chamber__inner--art .professor-mtg-title,

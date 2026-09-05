@@ -70,7 +70,7 @@ function ThemeChip({
       onClick={onClick}
       className={`rounded-full border px-3 py-1.5 text-xs transition ${
         selected
-          ? "border-[var(--mtg-gold)] bg-[var(--mtg-gold)]/15 text-[var(--mtg-parchment)]"
+          ? "border-[var(--accent-lo)] bg-[var(--accent-wash)] text-[var(--text-hi)]"
           : inactive
             ? "border-[var(--mtg-stone-border)]/70 text-[var(--mtg-parchment-muted)]/70 hover:border-[var(--mtg-gold)]/60 hover:text-[var(--mtg-parchment-muted)]"
             : "border-[var(--mtg-stone-border)] text-[var(--mtg-parchment-muted)] hover:border-[var(--mtg-gold)]/60"
@@ -398,7 +398,7 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
                 }}
                 className={`rounded-lg border px-3 py-2.5 text-sm transition ${
                   setupMode === "build"
-                    ? "border-[var(--mtg-gold)] bg-[var(--mtg-gold)]/15 text-[var(--mtg-parchment)]"
+                    ? "border-[var(--accent-lo)] bg-[var(--accent-wash)] text-[var(--text-hi)]"
                     : "border-[var(--mtg-stone-border)] text-[var(--mtg-parchment-muted)] hover:border-[var(--mtg-gold)]/60"
                 }`}
               >
@@ -409,7 +409,7 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
                 onClick={() => setSetupMode("optimize")}
                 className={`rounded-lg border px-3 py-2.5 text-sm transition ${
                   setupMode === "optimize"
-                    ? "border-[var(--mtg-gold)] bg-[var(--mtg-gold)]/15 text-[var(--mtg-parchment)]"
+                    ? "border-[var(--accent-lo)] bg-[var(--accent-wash)] text-[var(--text-hi)]"
                     : "border-[var(--mtg-stone-border)] text-[var(--mtg-parchment-muted)] hover:border-[var(--mtg-gold)]/60"
                 }`}
               >
@@ -646,7 +646,7 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
                       onClick={enableProfessorThemes}
                       className={`w-full rounded-lg border px-4 py-2.5 text-left text-sm transition ${
                         professorChoosesThemes
-                          ? "border-[var(--mtg-gold)] bg-[var(--mtg-gold)]/15 text-[var(--mtg-parchment)]"
+                          ? "border-[var(--accent-lo)] bg-[var(--accent-wash)] text-[var(--text-hi)]"
                           : "border-[var(--mtg-stone-border)] text-[var(--mtg-parchment-muted)] hover:border-[var(--mtg-gold)]/60"
                       }`}
                     >
