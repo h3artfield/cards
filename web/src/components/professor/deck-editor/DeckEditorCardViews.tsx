@@ -68,13 +68,34 @@ function imageFor(card: DeckEditorCard, imageUrls: Record<string, string>): stri
   return imageUrls[card.name] ?? imageUrls[card.name.toLowerCase()] ?? null;
 }
 
-function cardStateClass(
+/** Whether a synergy or filter selection is pushing this card into the background. */
+function dimClass(
   card: DeckEditorCard,
   { dimmed, selectedKey }: Pick<CardViewProps, "dimmed" | "selectedKey">,
 ): string {
-  if (selectedKey === card.cardKey) return "ring-2 ring-[var(--accent)] opacity-100";
+  if (selectedKey === card.cardKey) return "opacity-100";
   if (dimmed?.has(card.cardKey)) return "opacity-25 saturate-50";
   return "opacity-100";
+}
+
+function inStockFor(
+  card: DeckEditorCard,
+  inventoryByName: CardViewProps["inventoryByName"],
+): boolean {
+  return (inventoryByName?.[card.name]?.quantity ?? 0) > 0;
+}
+
+/**
+ * The outline on a card image.
+ *
+ * Green means the shop has it on the shelf — the same promise the legend and
+ * the text views make, which the image views were quietly not keeping. A gold
+ * selection ring wins, since it is transient and green is a standing fact.
+ */
+function ringClass(selected: boolean, inStock: boolean): string {
+  if (selected) return "ring-2 ring-[var(--accent)]";
+  if (inStock) return "ring-1 ring-[var(--ok)]";
+  return "";
 }
 
 /** A plain placeholder so a missing image never collapses the layout. */
@@ -106,14 +127,16 @@ function CardTile({
 }: CardViewProps & { card: DeckEditorCard }) {
   const url = imageFor(card, imageUrls);
   const showMenu = Boolean(slug && onMove);
+  const inStock = inStockFor(card, inventoryByName);
+  const selected = selectedKey === card.cardKey;
 
   return (
-    <div className={`group relative transition ${cardStateClass(card, { dimmed, selectedKey })}`}>
+    <div className={`group relative transition ${dimClass(card, { dimmed, selectedKey })}`}>
       <button
         type="button"
         onClick={() => onSelect?.(card)}
-        title={`${card.name} — click to show what it works with`}
-        className={`${TILE_BUTTON_CLASS} aspect-[5/7]`}
+        title={`${card.name}${inStock ? " — in shop stock" : ""} — click to show what it works with`}
+        className={`${TILE_BUTTON_CLASS} aspect-[5/7] ${ringClass(selected, inStock)}`}
       >
         {url ? (
           <img
@@ -178,6 +201,8 @@ export function CardStackView(props: CardViewProps) {
       {cards.map((card, index) => {
         const url = imageFor(card, imageUrls);
         const last = index === cards.length - 1;
+        const inStock = inStockFor(card, inventoryByName);
+        const selected = selectedKey === card.cardKey;
         const menu = showMenu ? (
           <CardTileMenu
             card={card}
@@ -200,13 +225,13 @@ export function CardStackView(props: CardViewProps) {
           return (
             <li
               key={card.cardKey}
-              className={`group relative transition ${cardStateClass(card, { dimmed, selectedKey })}`}
+              className={`group relative transition ${dimClass(card, { dimmed, selectedKey })}`}
             >
               <button
                 type="button"
                 onClick={() => onSelect?.(card)}
-                title={`${card.name} — click to show what it works with`}
-                className={`${TILE_BUTTON_CLASS} rounded-b-[3.5%] rounded-t-none`}
+                title={`${card.name}${inStock ? " — in shop stock" : ""} — click to show what it works with`}
+                className={`${TILE_BUTTON_CLASS} rounded-b-[3.5%] rounded-t-none ${ringClass(selected, inStock)}`}
               >
                 {url ? (
                   <img src={url} alt={card.name} loading="lazy" decoding="async" className="block w-full" />
@@ -229,13 +254,15 @@ export function CardStackView(props: CardViewProps) {
         return (
           <li
             key={card.cardKey}
-            className={`group relative transition ${cardStateClass(card, { dimmed, selectedKey })}`}
+            className={`group relative transition ${dimClass(card, { dimmed, selectedKey })}`}
           >
             <button
               type="button"
               onClick={() => onSelect?.(card)}
-              title={`${card.name} — click to show what it works with`}
-              className="relative block h-[1.75rem] w-full overflow-hidden border-b border-black/50 transition hover:ring-2 hover:ring-[var(--accent-lo)]"
+              title={`${card.name}${inStock ? " — in shop stock" : ""} — click to show what it works with`}
+              className={`relative block h-[1.75rem] w-full overflow-hidden border-b border-black/50 transition hover:ring-2 hover:ring-[var(--accent-lo)] ${
+                selected ? "ring-2 ring-[var(--accent)]" : ""
+              }`}
             >
               {url ? (
                 <img
@@ -249,7 +276,11 @@ export function CardStackView(props: CardViewProps) {
               ) : null}
               <span className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/40" />
               <span className="absolute inset-0 flex items-center gap-1.5 pl-2 pr-7">
-                <span className="min-w-0 flex-1 truncate text-left text-[11px] text-[var(--text-hi)]">
+                <span
+                  className={`min-w-0 flex-1 truncate text-left text-[11px] ${
+                    inStock ? "text-[var(--ok)]" : "text-[var(--text-hi)]"
+                  }`}
+                >
                   {card.name}
                 </span>
                 {card.copies > 1 ? (
@@ -292,7 +323,13 @@ export function CardSpoilerView(props: CardViewProps) {
  * One line per card: count, name, cost. No actions and no markers, for when the
  * question is the shape of the list rather than any individual card.
  */
-export function CardCondensedView({ cards, dimmed, selectedKey, onSelect }: CardViewProps) {
+export function CardCondensedView({
+  cards,
+  dimmed,
+  selectedKey,
+  onSelect,
+  inventoryByName,
+}: CardViewProps) {
   return (
     <ul className="text-sm">
       {cards.map((card) => (
@@ -310,7 +347,11 @@ export function CardCondensedView({ cards, dimmed, selectedKey, onSelect }: Card
             {card.copies}
           </span>
           <span className="min-w-0 flex-1 truncate">
-            <CardNameHoverPreview name={card.name} onClick={() => onSelect?.(card)} />
+            <CardNameHoverPreview
+              name={card.name}
+              inStock={inStockFor(card, inventoryByName)}
+              onClick={() => onSelect?.(card)}
+            />
           </span>
           {card.display?.manaCost ? <ManaCost cost={card.display.manaCost} /> : null}
         </li>
