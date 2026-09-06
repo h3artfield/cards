@@ -36,48 +36,54 @@ export function useCardEnrichment(slug: string, cardNames: readonly string[]): C
     names.forEach((name) => requested.current.add(name));
 
     let cancelled = false;
-    const post = (path: string) =>
-      fetch(`/api/store/${slug}/professor/${path}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cardNames: names }),
-      });
 
-    void (async () => {
-      const [images, inventory, prices] = await Promise.allSettled([
-        post("card-images"),
-        post("brew/inventory-match"),
-        post("card-prices"),
-      ]);
-      if (cancelled) return;
-
-      if (images.status === "fulfilled" && images.value.ok) {
-        const data = (await images.value.json().catch(() => null)) as {
-          imageUrls?: Record<string, string>;
-        } | null;
-        if (data?.imageUrls && !cancelled) {
-          setImageUrls((prev) => ({ ...prev, ...data.imageUrls }));
-        }
+    /**
+     * Each source is applied the moment it lands.
+     *
+     * These used to share one `Promise.allSettled`, which quietly tied the
+     * fastest source to the slowest: images come back in a few seconds and
+     * prices can take a minute, so a whole deck of card art waited on the
+     * price lookup. That was survivable when images were only used for hover
+     * previews and invisible when they were not there, but the image-led views
+     * render nothing at all until the map arrives.
+     */
+    const load = async <T,>(
+      path: string,
+      apply: (data: T) => void,
+    ): Promise<void> => {
+      try {
+        const response = await fetch(`/api/store/${slug}/professor/${path}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cardNames: names }),
+        });
+        if (!response.ok) throw new Error(`${path} returned ${response.status}`);
+        const data = (await response.json()) as T;
+        if (!cancelled) apply(data);
+      } catch {
+        // Let these names be asked for again. Marking them up front stops two
+        // requests racing for the same cards, but keeping them marked after a
+        // failure would mean a single blip costs the deck its art until reload.
+        for (const name of names) requested.current.delete(name);
       }
+    };
 
-      if (inventory.status === "fulfilled" && inventory.value.ok) {
-        const data = (await inventory.value.json().catch(() => null)) as {
-          inventoryByName?: Record<string, ProfessorDeckInventoryEntryV43>;
-        } | null;
-        if (data?.inventoryByName && !cancelled) {
+    void load<{ imageUrls?: Record<string, string> }>("card-images", (data) => {
+      if (data.imageUrls) setImageUrls((prev) => ({ ...prev, ...data.imageUrls }));
+    });
+    void load<{ inventoryByName?: Record<string, ProfessorDeckInventoryEntryV43> }>(
+      "brew/inventory-match",
+      (data) => {
+        if (data.inventoryByName) {
           setInventoryByName((prev) => ({ ...prev, ...data.inventoryByName }));
         }
+      },
+    );
+    void load<{ tcgPricesByName?: Record<string, number> }>("card-prices", (data) => {
+      if (data.tcgPricesByName) {
+        setTcgPricesByName((prev) => ({ ...prev, ...data.tcgPricesByName }));
       }
-
-      if (prices.status === "fulfilled" && prices.value.ok) {
-        const data = (await prices.value.json().catch(() => null)) as {
-          tcgPricesByName?: Record<string, number>;
-        } | null;
-        if (data?.tcgPricesByName && !cancelled) {
-          setTcgPricesByName((prev) => ({ ...prev, ...data.tcgPricesByName }));
-        }
-      }
-    })();
+    });
 
     return () => {
       cancelled = true;

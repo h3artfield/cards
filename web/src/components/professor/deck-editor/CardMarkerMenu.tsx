@@ -16,14 +16,20 @@ export function CardMarkerMenu({
   markers,
   onToggle,
   onCreateAndAssign,
+  onDeleteMarker,
 }: {
   card: DeckEditorCard;
   markers: readonly DeckMarkerV1[];
   onToggle: (markerId: string, assign: boolean) => void;
   onCreateAndAssign: (label: string, scope: "deck" | "global") => void;
+  /** Removes a tag from every card in the deck, not just this one. */
+  onDeleteMarker: (markerId: string) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [label, setLabel] = useState("");
+  const [scope, setScope] = useState<"deck" | "global">("deck");
+  // Deleting a tag affects every card that carries it, so it takes two clicks.
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -42,10 +48,14 @@ export function CardMarkerMenu({
     };
   }, [open]);
 
+  useEffect(() => {
+    if (!open) setConfirmDelete(null);
+  }, [open]);
+
   const create = () => {
     const trimmed = label.trim();
     if (!trimmed) return;
-    onCreateAndAssign(trimmed, "deck");
+    onCreateAndAssign(trimmed, scope);
     setLabel("");
   };
 
@@ -71,40 +81,64 @@ export function CardMarkerMenu({
             <div className="max-h-44 overflow-y-auto" role="menu">
               {markers.map((marker) => {
                 const assigned = card.markerIds.includes(marker.id);
+                const confirming = confirmDelete === marker.id;
                 return (
-                  <button
-                    key={marker.id}
-                    type="button"
-                    role="menuitemcheckbox"
-                    aria-checked={assigned}
-                    className="professor-mtg-pop-item text-xs"
-                    onClick={() => onToggle(marker.id, !assigned)}
-                  >
-                    {/* The flex row is an inner element: `.professor-mtg-pop-item`
-                        sets `display: block` and is declared after Tailwind, so a
-                        `flex` utility on the button itself would lose. */}
-                    <span className="flex items-center gap-2">
-                      <span
-                        aria-hidden="true"
-                        className={
-                          assigned
-                            ? "text-[var(--mtg-gold-bright)]"
-                            : "text-[var(--mtg-parchment-muted)] opacity-40"
-                        }
-                      >
-                        {assigned ? "✔" : "○"}
-                      </span>
-                      <span className="min-w-0 flex-1 truncate">{marker.label}</span>
-                      {marker.scope === "global" ? (
+                  <div key={marker.id} className="flex items-stretch">
+                    <button
+                      type="button"
+                      role="menuitemcheckbox"
+                      aria-checked={assigned}
+                      className="professor-mtg-pop-item min-w-0 flex-1 text-xs"
+                      onClick={() => onToggle(marker.id, !assigned)}
+                    >
+                      {/* The flex row is an inner element: `.professor-mtg-pop-item`
+                          sets `display: block` and is declared after Tailwind, so a
+                          `flex` utility on the button itself would lose. */}
+                      <span className="flex items-center gap-2">
                         <span
-                          className="professor-mtg-muted text-[10px]"
-                          title="Follows this card into every deck"
+                          aria-hidden="true"
+                          className={
+                            assigned
+                              ? "text-[var(--mtg-gold-bright)]"
+                              : "text-[var(--mtg-parchment-muted)] opacity-40"
+                          }
                         >
-                          all decks
+                          {assigned ? "✔" : "○"}
                         </span>
-                      ) : null}
-                    </span>
-                  </button>
+                        <span className="min-w-0 flex-1 truncate">{marker.label}</span>
+                        {marker.scope === "global" ? (
+                          <span
+                            className="professor-mtg-muted text-[10px]"
+                            title="Follows this card into every deck"
+                          >
+                            all decks
+                          </span>
+                        ) : null}
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      tabIndex={-1}
+                      className={`shrink-0 px-2 text-[11px] ${
+                        confirming ? "text-[var(--bad)]" : "text-[var(--text-lo)]"
+                      }`}
+                      title={
+                        confirming
+                          ? `Delete "${marker.label}" from every card in this deck`
+                          : `Delete the tag "${marker.label}"`
+                      }
+                      onClick={() => {
+                        if (confirming) {
+                          onDeleteMarker(marker.id);
+                          setConfirmDelete(null);
+                        } else {
+                          setConfirmDelete(marker.id);
+                        }
+                      }}
+                    >
+                      {confirming ? "Sure?" : "✕"}
+                    </button>
+                  </div>
                 );
               })}
             </div>
@@ -114,29 +148,56 @@ export function CardMarkerMenu({
             </p>
           )}
 
-          <div className="flex items-center gap-1.5 border-t border-[var(--mtg-stone-border)] p-2">
-            <input
-              type="text"
-              className="professor-mtg-input min-w-0 flex-1 px-2 py-1 text-xs"
-              placeholder="New marker…"
-              maxLength={40}
-              value={label}
-              onChange={(event) => setLabel(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  event.preventDefault();
-                  create();
-                }
-              }}
-            />
-            <button
-              type="button"
-              className="professor-mtg-icon-btn"
-              disabled={!label.trim()}
-              onClick={create}
-            >
-              Add
-            </button>
+          <div className="border-t border-[var(--mtg-stone-border)] p-2">
+            <div className="flex items-center gap-1.5">
+              <input
+                type="text"
+                className="professor-mtg-input min-w-0 flex-1 px-2 py-1 text-xs"
+                placeholder="New tag…"
+                maxLength={40}
+                value={label}
+                onChange={(event) => setLabel(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    create();
+                  }
+                }}
+              />
+              <button
+                type="button"
+                className="professor-mtg-icon-btn"
+                disabled={!label.trim()}
+                onClick={create}
+              >
+                Add
+              </button>
+            </div>
+            {/* A tag scoped to all decks is how "I do not own this card" stays
+                true everywhere, rather than being re-entered per deck. */}
+            <div className="mt-1.5 flex items-center gap-2">
+              {(["deck", "global"] as const).map((option) => (
+                <button
+                  key={option}
+                  type="button"
+                  tabIndex={-1}
+                  aria-pressed={scope === option}
+                  className={`text-[10px] ${
+                    scope === option
+                      ? "text-[var(--accent-hi)]"
+                      : "professor-mtg-muted hover:text-[var(--text)]"
+                  }`}
+                  title={
+                    option === "deck"
+                      ? "The tag exists only in this deck"
+                      : "The tag follows these cards into every deck you build"
+                  }
+                  onClick={() => setScope(option)}
+                >
+                  {option === "deck" ? "This deck" : "All decks"}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       ) : null}

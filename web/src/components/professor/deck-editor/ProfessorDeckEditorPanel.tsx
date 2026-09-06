@@ -17,87 +17,31 @@ import { CardNameHoverPreview } from "../CardNameHoverPreview";
 import { DeckEditorCardRow } from "./DeckEditorCardRow";
 import { DeckEditorCardSearch } from "./DeckEditorCardSearch";
 import { DeckEditorStatus } from "./DeckEditorStatus";
-import { DECK_EDITOR_GROUP_LABELS } from "./types";
-import type { DeckEditorCard, DeckEditorGroupMode, DeckEditorSearchHit } from "./types";
+import {
+  CardCondensedView,
+  CardGridView,
+  CardSpoilerView,
+  CardStackView,
+} from "./DeckEditorCardViews";
+import {
+  DECK_EDITOR_GROUP_LABELS_V1,
+  DECK_EDITOR_SORT_LABELS_V1,
+  DECK_EDITOR_VIEW_LABELS_V1,
+  groupKeysForV1,
+  sortCardsV1,
+  sortGroupsV1,
+} from "./grouping-v1";
+import type {
+  DeckEditorGroupModeV1,
+  DeckEditorSortModeV1,
+  DeckEditorViewModeV1,
+  GroupingContextV1,
+} from "./grouping-v1";
+import type { DeckEditorCard, DeckEditorSearchHit } from "./types";
+import { DeckSynergyBar } from "./DeckSynergyBar";
 import { useCardEnrichment } from "./useCardEnrichment";
 import { useDeckEditor } from "./useDeckEditor";
-
-const UNRECOGNISED_GROUP = "Not in the catalog";
-
-function titleCase(value: string): string {
-  return value
-    .replace(/[_-]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim()
-    .replace(/^\w/, (character) => character.toUpperCase());
-}
-
-/**
- * The section a card belongs to under each grouping.
- *
- * Grouping by type reuses the read-only panel's rule, so a card lands in the
- * same section in both views. The other three exist because this deck knows
- * things a generic deck editor does not: the Professor's role for each card,
- * the customer's own markers, and the curve.
- */
-function groupKeyFor(card: DeckEditorCard, mode: DeckEditorGroupMode, markerLabels: Map<string, string>): string {
-  switch (mode) {
-    case "type": {
-      const category = card.display?.category;
-      return category ? SOL_DIRECTED_DECK_DISPLAY_SECTION_LABELS[category] : UNRECOGNISED_GROUP;
-    }
-    case "role": {
-      if (card.professor?.primaryRole?.trim()) return titleCase(card.professor.primaryRole);
-      if (card.isLand) return "Mana base";
-      return card.origin === "user" ? "Your additions" : "Unassigned";
-    }
-    case "marker": {
-      const primary = card.primaryMarkerId ?? card.markerIds[0];
-      if (primary) return markerLabels.get(primary) ?? primary;
-      return "Unmarked";
-    }
-    case "mana": {
-      if (card.isLand) return "Lands";
-      const manaValue = card.display?.manaValue;
-      if (manaValue == null) return "Unknown cost";
-      if (manaValue >= 7) return "Mana value 7+";
-      return `Mana value ${manaValue}`;
-    }
-  }
-}
-
-/**
- * Section order per grouping.
- *
- * Type follows the printed-card convention the deck panel and every deck site
- * uses. Mana value sorts numerically, since "Mana value 10" sorting before
- * "Mana value 2" is the classic way a curve view becomes unreadable. The rest
- * are sorted by size, largest first, because under those groupings the big
- * sections are the ones describing the deck.
- */
-function sortGroups(mode: DeckEditorGroupMode, groups: Array<[string, DeckEditorCard[]]>) {
-  if (mode === "type") {
-    const order = new Map(
-      SOL_DIRECTED_DECK_DISPLAY_ORDER_V1.map((category, index) => [
-        SOL_DIRECTED_DECK_DISPLAY_SECTION_LABELS[category],
-        index,
-      ]),
-    );
-    return groups.sort(
-      (a, b) => (order.get(a[0]) ?? 99) - (order.get(b[0]) ?? 99) || a[0].localeCompare(b[0]),
-    );
-  }
-  if (mode === "mana") {
-    const rank = (label: string) => {
-      if (label === "Lands") return -1;
-      if (label === "Unknown cost") return 100;
-      if (label === "Mana value 7+") return 7;
-      return Number(label.replace(/\D+/g, "")) || 0;
-    };
-    return groups.sort((a, b) => rank(a[0]) - rank(b[0]));
-  }
-  return groups.sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
-}
+import { useDeckSynergy } from "./useDeckSynergy";
 
 export function ProfessorDeckEditorPanel({
   slug,
@@ -110,8 +54,11 @@ export function ProfessorDeckEditorPanel({
   const { payload, applyOps } = editor;
 
   const [board, setBoard] = useState<DeckBoardV1>("mainboard");
-  const [groupMode, setGroupMode] = useState<DeckEditorGroupMode>("type");
+  const [viewMode, setViewMode] = useState<DeckEditorViewModeV1>("text");
+  const [groupMode, setGroupMode] = useState<DeckEditorGroupModeV1>("type");
+  const [sortMode, setSortMode] = useState<DeckEditorSortModeV1>("name");
   const [activeFacets, setActiveFacets] = useState<string[]>([]);
+  const [synergyKey, setSynergyKey] = useState<string | null>(null);
   const [filter, setFilter] = useState("");
   const [nameDraft, setNameDraft] = useState<string | null>(null);
   const searchRef = useRef<HTMLInputElement | null>(null);
@@ -122,6 +69,31 @@ export function ProfessorDeckEditorPanel({
     [deck],
   );
   const enrichment = useCardEnrichment(slug, cardNames);
+  const synergy = useDeckSynergy({ slug, buildId, revision: deck?.revision ?? null });
+
+  // Selecting a card is what triggers the synergy fetch, so a player who never
+  // uses the feature never pays for it.
+  const selectForSynergy = (cardKey: string) => {
+    synergy.enable();
+    setSynergyKey((current) => (current === cardKey ? null : cardKey));
+  };
+
+  const synergyLinks = synergyKey ? (synergy.synergy?.linksByCardKey[synergyKey] ?? null) : null;
+
+  /**
+   * Cards to fade while a synergy selection is active: everything that is
+   * neither the selected card nor one of its partners. Left empty until the
+   * links have actually arrived, so the deck does not flash grey on click.
+   */
+  const dimmedKeys = useMemo(() => {
+    if (!synergyKey || !synergy.synergy) return undefined;
+    const keep = new Set<string>([synergyKey, ...(synergyLinks ?? []).map((link) => link.cardKey)]);
+    const dimmed = new Set<string>();
+    for (const card of deck?.cards ?? []) {
+      if (!keep.has(card.cardKey)) dimmed.add(card.cardKey);
+    }
+    return dimmed;
+  }, [deck?.cards, synergy.synergy, synergyKey, synergyLinks]);
 
   // Focus the add-card box from the keyboard, the way every deck site does.
   useEffect(() => {
@@ -173,20 +145,36 @@ export function ProfessorDeckEditorPanel({
           ...card.markerIds,
         ]);
         return activeFacets.some((facet) => ids.has(facet));
-      })
-      .sort((a, b) => a.name.localeCompare(b.name));
+      });
   }, [activeFacets, board, deck?.cards, filter]);
+
+  // Prices come from the enrichment pass, so grouping and sorting by price only
+  // becomes available as those responses land. Cards without a price sort last
+  // rather than sorting as free.
+  const groupingContext = useMemo<GroupingContextV1>(() => {
+    const priceByName = new Map<string, number>();
+    for (const [name, price] of Object.entries(enrichment.tcgPricesByName ?? {})) {
+      if (price > 0) priceByName.set(name.toLowerCase(), price);
+    }
+    return { markerLabels, priceByName };
+  }, [enrichment.tcgPricesByName, markerLabels]);
 
   const groups = useMemo(() => {
     const buckets = new Map<string, DeckEditorCard[]>();
     for (const card of visibleCards) {
-      const key = groupKeyFor(card, groupMode, markerLabels);
-      const bucket = buckets.get(key);
-      if (bucket) bucket.push(card);
-      else buckets.set(key, [card]);
+      // A card can land in several sections at once — two tags means two
+      // columns — so this pushes into every key it belongs to.
+      for (const key of groupKeysForV1(card, groupMode, groupingContext)) {
+        const bucket = buckets.get(key);
+        if (bucket) bucket.push(card);
+        else buckets.set(key, [card]);
+      }
     }
-    return sortGroups(groupMode, [...buckets.entries()]);
-  }, [groupMode, markerLabels, visibleCards]);
+    const sorted = sortGroupsV1(groupMode, [...buckets.entries()]);
+    return sorted.map(
+      ([label, cards]) => [label, sortCardsV1(cards, sortMode, groupingContext)] as const,
+    );
+  }, [groupMode, groupingContext, sortMode, visibleCards]);
 
   const boardOf = (hit: DeckEditorSearchHit): DeckBoardV1 | null => {
     const match = deck?.cards.find(
@@ -232,6 +220,99 @@ export function ProfessorDeckEditorPanel({
   }
 
   const facets = payload.markerFacets;
+
+  /** One full-detail row: costs, markers, prices and the edit actions. */
+  const renderTextRow = (card: DeckEditorCard) => (
+    <DeckEditorCardRow
+        key={card.cardKey}
+        card={card}
+        markers={deck.markers}
+        imageUrl={enrichment.imageUrls[card.name]}
+        inventory={enrichment.inventoryByName[card.name]}
+        tcgPrice={tcgPriceForCardName(enrichment.tcgPricesByName, card.name)}
+        illegalReason={illegalByCardKey.get(card.cardKey)}
+        onMove={(destination) => move(card, destination)}
+        onRemove={() =>
+          applyOps([{ op: "removeCard", cardKey: card.cardKey }], {
+            // Only user additions can be removed, so re-adding the
+            // card restores it exactly. Its markers have to be put
+            // back by hand, hence the second half of the batch.
+            undo: [
+              {
+                op: "addCard",
+                oracleId: card.oracleId,
+                name: card.name,
+                board: card.board,
+                copies: card.copies,
+                isLand: card.isLand,
+              },
+              ...card.markerIds.map((markerId) => ({
+                op: "assignMarker" as const,
+                cardKey: card.cardKey,
+                markerId,
+              })),
+            ],
+          })
+        }
+        onSetCopies={(copies) =>
+          applyOps([{ op: "setCopies", cardKey: card.cardKey, copies }], {
+            undo: [{ op: "setCopies", cardKey: card.cardKey, copies: card.copies }],
+          })
+        }
+        onToggleMarker={(markerId, assign) =>
+          applyOps([
+            assign
+              ? { op: "assignMarker", cardKey: card.cardKey, markerId }
+              : { op: "unassignMarker", cardKey: card.cardKey, markerId },
+          ])
+        }
+        onCreateAndAssignMarker={(markerLabel, scope) => {
+          // The id is derived, not returned, so it has to be computed
+          // with the same function the reducer uses — otherwise the
+          // assignment half of the batch names a marker that the
+          // create half did not make.
+          const ops: DeckEditOpV1[] = [
+            { op: "createMarker", label: markerLabel, scope },
+            {
+              op: "assignMarker",
+              cardKey: card.cardKey,
+              markerId: deckMarkerIdV1(markerLabel, scope),
+            },
+                    ];
+                    applyOps(ops);
+                  }}
+                  onDeleteMarker={(markerId) => applyOps([{ op: "deleteMarker", markerId }])}
+                  onSynergy={() => selectForSynergy(card.cardKey)}
+                  synergySelected={synergyKey === card.cardKey}
+                  synergyDimmed={dimmedKeys?.has(card.cardKey)}
+                />
+  );
+
+  /**
+   * How one section draws. Only the presentation changes here — every view is
+   * handed the same grouped, sorted cards, so switching view can never alter
+   * which cards a player is looking at.
+   */
+  const sectionBody = (cards: DeckEditorCard[]) => {
+    if (viewMode === "text") return cards.map(renderTextRow);
+    const shared = {
+      cards,
+      imageUrls: enrichment.imageUrls,
+      dimmed: dimmedKeys,
+      selectedKey: synergyKey,
+      onSelect: (card: DeckEditorCard) => selectForSynergy(card.cardKey),
+      slug,
+      inventoryByName: enrichment.inventoryByName,
+      onMove: (card: DeckEditorCard, board: DeckBoardV1) =>
+        applyOps([{ op: "moveCard", cardKey: card.cardKey, board }]),
+      onRemove: (card: DeckEditorCard) =>
+        applyOps([{ op: "removeCard", cardKey: card.cardKey }]),
+    };
+    if (viewMode === "condensed") return <CardCondensedView {...shared} />;
+    if (viewMode === "grid") return <CardGridView {...shared} />;
+    if (viewMode === "stacks") return <CardStackView {...shared} />;
+    return <CardSpoilerView {...shared} />;
+  };
 
   return (
     <div className="relative">
@@ -306,14 +387,45 @@ export function ProfessorDeckEditorPanel({
         ))}
       </div>
 
-      <div className="professor-mtg-panel-status px-4 py-2 sm:px-5">
-        <p className="professor-mtg-muted text-[10px]">
-          Click a card name for the Professor&rsquo;s reasoning · green = shop stock · hover a row
-          for its actions · press / to add a card
-        </p>
-      </div>
+      {synergyKey ? (
+        <DeckSynergyBar
+          cardName={
+            deck.cards.find((card) => card.cardKey === synergyKey)?.name ?? "This card"
+          }
+          links={synergyLinks}
+          loading={synergy.loading}
+          error={synergy.error}
+          semanticUnavailable={Boolean(synergy.synergy?.semanticUnavailable)}
+          imageUrls={enrichment.imageUrls}
+          onClear={() => setSynergyKey(null)}
+          onSelectCard={selectForSynergy}
+        />
+      ) : (
+        <div className="professor-mtg-panel-status px-4 py-2 sm:px-5">
+          <p className="professor-mtg-muted text-[10px]">
+            Click a card name for the Professor&rsquo;s reasoning · use Synergy on a row to light up
+            what it works with · green = shop stock · press / to add a card
+          </p>
+        </div>
+      )}
 
       <div className="flex flex-wrap items-center gap-2 border-b border-[var(--mtg-stone-border)] px-4 py-3 sm:px-5">
+        <label className="professor-mtg-label text-[10px]" htmlFor="deck-editor-view">
+          View
+        </label>
+        <select
+          id="deck-editor-view"
+          className="professor-mtg-input px-2 py-1 text-xs"
+          value={viewMode}
+          onChange={(event) => setViewMode(event.target.value as DeckEditorViewModeV1)}
+        >
+          {(Object.keys(DECK_EDITOR_VIEW_LABELS_V1) as DeckEditorViewModeV1[]).map((mode) => (
+            <option key={mode} value={mode}>
+              {DECK_EDITOR_VIEW_LABELS_V1[mode]}
+            </option>
+          ))}
+        </select>
+
         <label className="professor-mtg-label text-[10px]" htmlFor="deck-editor-group">
           Group by
         </label>
@@ -321,11 +433,30 @@ export function ProfessorDeckEditorPanel({
           id="deck-editor-group"
           className="professor-mtg-input px-2 py-1 text-xs"
           value={groupMode}
-          onChange={(event) => setGroupMode(event.target.value as DeckEditorGroupMode)}
+          onChange={(event) => setGroupMode(event.target.value as DeckEditorGroupModeV1)}
         >
-          {(Object.keys(DECK_EDITOR_GROUP_LABELS) as DeckEditorGroupMode[]).map((mode) => (
+          {(Object.keys(DECK_EDITOR_GROUP_LABELS_V1) as DeckEditorGroupModeV1[]).map((mode) => (
             <option key={mode} value={mode}>
-              {DECK_EDITOR_GROUP_LABELS[mode]}
+              {DECK_EDITOR_GROUP_LABELS_V1[mode]}
+            </option>
+          ))}
+        </select>
+
+        {/* Sort is deliberately separate from grouping: sorting by colour while
+            grouped by type is the combination Moxfield users ask for and cannot
+            get, because there the two controls are the same control. */}
+        <label className="professor-mtg-label text-[10px]" htmlFor="deck-editor-sort">
+          Sort by
+        </label>
+        <select
+          id="deck-editor-sort"
+          className="professor-mtg-input px-2 py-1 text-xs"
+          value={sortMode}
+          onChange={(event) => setSortMode(event.target.value as DeckEditorSortModeV1)}
+        >
+          {(Object.keys(DECK_EDITOR_SORT_LABELS_V1) as DeckEditorSortModeV1[]).map((mode) => (
+            <option key={mode} value={mode}>
+              {DECK_EDITOR_SORT_LABELS_V1[mode]}
             </option>
           ))}
         </select>
@@ -394,7 +525,20 @@ export function ProfessorDeckEditorPanel({
       ) : (
         // CSS columns rather than a grid: sections vary in height, and a grid
         // would leave a tall Creatures section sitting next to a wall of space.
-        <div className="columns-1 gap-6 px-4 pb-6 sm:px-5 md:columns-2 xl:columns-3">
+        //
+        // The column width is per view because the right answer differs. The
+        // tiling views pack their own cards and want the full width to do it
+        // in. Stacks are single-file by nature, so they want many narrow
+        // columns side by side. The text views sit in between.
+        <div
+          className={`gap-6 px-4 pb-6 sm:px-5 ${
+            viewMode === "grid" || viewMode === "spoiler"
+              ? "columns-1"
+              : viewMode === "stacks"
+                ? "columns-[9rem] gap-4"
+                : "columns-1 md:columns-2 xl:columns-3"
+          }`}
+        >
           {/* The commander is stored outside the card list, because it is the one
               card in the deck that cannot be swapped here — changing it would
               invalidate the whole build. It is still shown, since a deck editor
@@ -428,67 +572,7 @@ export function ProfessorDeckEditorPanel({
                   {cards.reduce((sum, card) => sum + card.copies, 0)}
                 </span>
               </div>
-              {cards.map((card) => (
-                <DeckEditorCardRow
-                  key={card.cardKey}
-                  card={card}
-                  markers={deck.markers}
-                  imageUrl={enrichment.imageUrls[card.name]}
-                  inventory={enrichment.inventoryByName[card.name]}
-                  tcgPrice={tcgPriceForCardName(enrichment.tcgPricesByName, card.name)}
-                  illegalReason={illegalByCardKey.get(card.cardKey)}
-                  onMove={(destination) => move(card, destination)}
-                  onRemove={() =>
-                    applyOps([{ op: "removeCard", cardKey: card.cardKey }], {
-                      // Only user additions can be removed, so re-adding the
-                      // card restores it exactly. Its markers have to be put
-                      // back by hand, hence the second half of the batch.
-                      undo: [
-                        {
-                          op: "addCard",
-                          oracleId: card.oracleId,
-                          name: card.name,
-                          board: card.board,
-                          copies: card.copies,
-                          isLand: card.isLand,
-                        },
-                        ...card.markerIds.map((markerId) => ({
-                          op: "assignMarker" as const,
-                          cardKey: card.cardKey,
-                          markerId,
-                        })),
-                      ],
-                    })
-                  }
-                  onSetCopies={(copies) =>
-                    applyOps([{ op: "setCopies", cardKey: card.cardKey, copies }], {
-                      undo: [{ op: "setCopies", cardKey: card.cardKey, copies: card.copies }],
-                    })
-                  }
-                  onToggleMarker={(markerId, assign) =>
-                    applyOps([
-                      assign
-                        ? { op: "assignMarker", cardKey: card.cardKey, markerId }
-                        : { op: "unassignMarker", cardKey: card.cardKey, markerId },
-                    ])
-                  }
-                  onCreateAndAssignMarker={(markerLabel, scope) => {
-                    // The id is derived, not returned, so it has to be computed
-                    // with the same function the reducer uses — otherwise the
-                    // assignment half of the batch names a marker that the
-                    // create half did not make.
-                    const ops: DeckEditOpV1[] = [
-                      { op: "createMarker", label: markerLabel, scope },
-                      {
-                        op: "assignMarker",
-                        cardKey: card.cardKey,
-                        markerId: deckMarkerIdV1(markerLabel, scope),
-                      },
-                    ];
-                    applyOps(ops);
-                  }}
-                />
-              ))}
+              {sectionBody(cards)}
             </section>
           ))}
         </div>

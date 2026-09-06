@@ -47,6 +47,10 @@ export function DeckEditorCardRow({
   onSetCopies,
   onToggleMarker,
   onCreateAndAssignMarker,
+  onDeleteMarker,
+  onSynergy,
+  synergySelected,
+  synergyDimmed,
 }: {
   card: DeckEditorCard;
   markers: readonly DeckMarkerV1[];
@@ -60,6 +64,13 @@ export function DeckEditorCardRow({
   onSetCopies: (copies: number) => void;
   onToggleMarker: (markerId: string, assign: boolean) => void;
   onCreateAndAssignMarker: (label: string, scope: "deck" | "global") => void;
+  onDeleteMarker: (markerId: string) => void;
+  /** Light up what this card works with. */
+  onSynergy: () => void;
+  /** True while this is the card whose synergies are being shown. */
+  synergySelected?: boolean;
+  /** True when a synergy selection is active and this card is not part of it. */
+  synergyDimmed?: boolean;
 }) {
   const inStock = Boolean(inventory && inventory.quantity > 0);
   const shopPrice =
@@ -74,8 +85,10 @@ export function DeckEditorCardRow({
 
   return (
     <div
-      className={`professor-mtg-card-row professor-mtg-editor-row group flex flex-col gap-1 py-1.5 last:border-b-0 ${
+      className={`professor-mtg-card-row professor-mtg-editor-row group flex flex-col gap-1 py-1.5 last:border-b-0 transition-opacity ${
         card.board === "cut" ? "professor-mtg-editor-row--dimmed" : ""
+      } ${synergyDimmed ? "opacity-30" : ""} ${
+        synergySelected ? "bg-[var(--accent-wash)]" : ""
       }`}
     >
       <div className="flex items-center gap-2">
@@ -147,6 +160,15 @@ export function DeckEditorCardRow({
               Why
             </button>
           ) : null}
+          <button
+            type="button"
+            className="professor-mtg-icon-btn"
+            aria-pressed={Boolean(synergySelected)}
+            title={`Show what ${card.name} works with`}
+            onClick={onSynergy}
+          >
+            Synergy
+          </button>
           {destinations(card.board).map((board) => (
             <button
               key={board}
@@ -163,6 +185,7 @@ export function DeckEditorCardRow({
             markers={markers}
             onToggle={onToggleMarker}
             onCreateAndAssign={onCreateAndAssignMarker}
+            onDeleteMarker={onDeleteMarker}
           />
           {card.origin === "user" ? (
             <button
