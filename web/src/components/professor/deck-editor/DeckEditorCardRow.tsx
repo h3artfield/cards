@@ -87,7 +87,7 @@ export function DeckEditorCardRow({
     <div
       className={`professor-mtg-card-row professor-mtg-editor-row group flex flex-col gap-1 py-1.5 last:border-b-0 transition-opacity ${
         card.board === "cut" ? "professor-mtg-editor-row--dimmed" : ""
-      } ${synergyDimmed ? "opacity-30" : ""} ${
+      } ${synergyDimmed ? "professor-mtg-editor-row--muted" : ""} ${
         synergySelected ? "bg-[var(--accent-wash)]" : ""
       }`}
     >

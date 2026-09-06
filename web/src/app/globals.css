@@ -1374,8 +1374,13 @@ button {
 .professor-mtg-editor-row .professor-mtg-row-actions {
   position: absolute;
   right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  /* Stretched and centred by its own flex rather than translated. A transform
+     would create a stacking context, and that trapped the marker popover's
+     z-index inside the row: the next row painted straight over the top of it,
+     so clicking Mark opened a menu you could not see. The element is already
+     `flex items-center`, so full height centres the buttons on its own. */
+  top: 0;
+  bottom: 0;
   opacity: 0;
   pointer-events: none;
   padding-left: 1.5rem;
@@ -1389,12 +1394,22 @@ button {
   pointer-events: auto;
 }
 
+/* An open menu holds its own cluster visible.
+   The menu hangs below the row, so moving the pointer onto it leaves the row
+   and drops :hover, and a re-render can drop :focus-within with it. Since the
+   cluster is what carries the opacity, losing both hid the menu that had just
+   been opened - and opacity: 0 is also a stacking context, which is what let
+   the next row paint over it. This one rule settles both. */
+.professor-mtg-editor-row:has(.professor-mtg-pop) .professor-mtg-row-actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 /* Without hover there is nothing to reveal them, so they stay in flow and the
    name simply shares the row. */
 @media (hover: none) {
   .professor-mtg-editor-row .professor-mtg-row-actions {
     position: static;
-    transform: none;
     opacity: 1;
     pointer-events: auto;
     padding-left: 0;
@@ -1402,8 +1417,18 @@ button {
   }
 }
 
-.professor-mtg-editor-row--dimmed {
+/* Dimming applies to the row's content, never the row itself.
+   An opacity on the row created a stacking context around the action cluster,
+   which trapped the marker popover's z-index inside it - the following row
+   painted straight over an open menu. It also rendered the menu at the row's
+   own opacity, so even when it won the stacking fight it was unreadable. The
+   action cluster is excluded from the dimming for both reasons. */
+.professor-mtg-editor-row--dimmed > * > *:not(.professor-mtg-row-actions) {
   opacity: 0.55;
+}
+
+.professor-mtg-editor-row--muted > * > *:not(.professor-mtg-row-actions) {
+  opacity: 0.3;
 }
 
 /* Mana pips. */
