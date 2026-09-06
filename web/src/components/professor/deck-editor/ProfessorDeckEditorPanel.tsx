@@ -23,6 +23,8 @@ import {
   CardSpoilerView,
   CardStackView,
 } from "./DeckEditorCardViews";
+import { DeckDistributionStrip } from "./DeckDistributionStrip";
+import { buildDeckDistributionV1, deckDistributionChartableV1 } from "./distribution-v1";
 import {
   DECK_EDITOR_GROUP_LABELS_V1,
   DECK_EDITOR_SORT_LABELS_V1,
@@ -59,6 +61,8 @@ export function ProfessorDeckEditorPanel({
   const [sortMode, setSortMode] = useState<DeckEditorSortModeV1>("name");
   const [activeFacets, setActiveFacets] = useState<string[]>([]);
   const [synergyKey, setSynergyKey] = useState<string | null>(null);
+  /** The group a distribution bar has been clicked to focus, if any. */
+  const [focusGroup, setFocusGroup] = useState<string | null>(null);
   const [filter, setFilter] = useState("");
   const [nameDraft, setNameDraft] = useState<string | null>(null);
   const searchRef = useRef<HTMLInputElement | null>(null);
@@ -175,6 +179,36 @@ export function ProfessorDeckEditorPanel({
       ([label, cards]) => [label, sortCardsV1(cards, sortMode, groupingContext)] as const,
     );
   }, [groupMode, groupingContext, sortMode, visibleCards]);
+
+  /**
+   * The distribution is measured over the whole board, not the filtered view.
+   *
+   * If it followed the filter, clicking a bar would narrow the board and the
+   * chart would collapse to the single bar you just clicked — the control
+   * would destroy its own context. Measuring the board keeps the shape stable
+   * while you drill into it, and the focused bar stays lit to show where you
+   * are.
+   */
+  const distribution = useMemo(() => {
+    if (!deckDistributionChartableV1(groupMode)) return null;
+    const buckets = new Map<string, DeckEditorCard[]>();
+    for (const card of deck?.cards ?? []) {
+      if (card.board !== board) continue;
+      for (const key of groupKeysForV1(card, groupMode, groupingContext)) {
+        const bucket = buckets.get(key);
+        if (bucket) bucket.push(card);
+        else buckets.set(key, [card]);
+      }
+    }
+    return buildDeckDistributionV1(groupMode, sortGroupsV1(groupMode, [...buckets.entries()]));
+  }, [board, deck?.cards, groupMode, groupingContext]);
+
+  // A focus is a claim about a group that exists on the current axis, so it
+  // cannot survive a change of axis or board.
+  const visibleGroups = useMemo(
+    () => (focusGroup ? groups.filter(([label]) => label === focusGroup) : groups),
+    [focusGroup, groups],
+  );
 
   const boardOf = (hit: DeckEditorSearchHit): DeckBoardV1 | null => {
     const match = deck?.cards.find(
@@ -379,7 +413,10 @@ export function ProfessorDeckEditorPanel({
             type="button"
             className={`professor-mtg-tab ${option === board ? "professor-mtg-tab--active" : ""}`}
             aria-current={option === board}
-            onClick={() => setBoard(option)}
+              onClick={() => {
+                setBoard(option);
+                setFocusGroup(null);
+              }}
           >
             {DECK_BOARD_LABELS_V1[option]}
             <span className="professor-mtg-tab-count">{boardCounts[option]}</span>
@@ -433,7 +470,10 @@ export function ProfessorDeckEditorPanel({
           id="deck-editor-group"
           className="professor-mtg-input px-2 py-1 text-xs"
           value={groupMode}
-          onChange={(event) => setGroupMode(event.target.value as DeckEditorGroupModeV1)}
+          onChange={(event) => {
+            setGroupMode(event.target.value as DeckEditorGroupModeV1);
+            setFocusGroup(null);
+          }}
         >
           {(Object.keys(DECK_EDITOR_GROUP_LABELS_V1) as DeckEditorGroupModeV1[]).map((mode) => (
             <option key={mode} value={mode}>
@@ -502,6 +542,21 @@ export function ProfessorDeckEditorPanel({
         ) : null}
       </div>
 
+      {/* Sticky, because a curve's whole job is to inform the cut you are about
+          to make — and at the foot of a 99-card board it would sit permanently
+          below the fold. It only appears on axes whose distribution means
+          something; see distribution-v1. */}
+      {distribution ? (
+        <div className="sticky top-0 z-20">
+          <DeckDistributionStrip
+            distribution={distribution}
+            axisLabel={DECK_EDITOR_GROUP_LABELS_V1[groupMode]}
+            focused={focusGroup}
+            onFocus={setFocusGroup}
+          />
+        </div>
+      ) : null}
+
       <div className="px-4 py-4 sm:px-5">
         <DeckEditorStatus
           legality={payload.legality}
@@ -564,7 +619,7 @@ export function ProfessorDeckEditorPanel({
               </div>
             </section>
           ) : null}
-          {groups.map(([label, cards]) => (
+          {visibleGroups.map(([label, cards]) => (
             <section key={label} className="mb-5 break-inside-avoid">
               <div className="mb-1.5 flex items-baseline justify-between gap-2 border-b border-[var(--mtg-stone-border)] pb-1.5">
                 <h3 className="professor-mtg-label text-[12px]">{label}</h3>

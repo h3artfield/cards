@@ -215,7 +215,10 @@
     "mechanical-space:candidates": "npx --yes tsx scripts/mechanical-space/run-candidate-generation-v1.ts",
     "mechanical-space:milestone": "npx --yes tsx scripts/mechanical-space/run-milestone-v1.ts",
     "discord:inventory-bot": "npx --yes tsx scripts/discord-inventory-bot.ts",
-    "test:discord-inventory-bot-reply": "npx --yes tsx src/lib/discord-inventory/discord-inventory-reply-v1.selftest.ts"
+    "test:discord-inventory-bot-reply": "npx --yes tsx src/lib/discord-inventory/discord-inventory-reply-v1.selftest.ts",
+    "test:professor-deck-editor-distribution-v1": "tsx src/components/professor/deck-editor/distribution-v1.selftest.ts",
+    "test:professor-deck-editor-grouping-v1": "npx --yes tsx src/components/professor/deck-editor/grouping-v1.selftest.ts",
+    "test:professor-deck-editor-synergy-v1": "npx --yes tsx src/lib/professor-deck-editor/synergy-v1.selftest.ts"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
