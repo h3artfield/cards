@@ -1360,19 +1360,45 @@ button {
 
 /* Row actions appear on hover, and always once anything inside is focused, so
    the row stays fully operable from the keyboard. */
+/* The row actions are revealed on hover, and must not reserve width while
+   hidden. They used to sit in flow at opacity 0, which quietly spent about
+   170px of every row on invisible buttons - and in the three-column layout a
+   row is only ~430px wide, so the card name, the one element allowed to
+   shrink, absorbed the whole shortfall and rendered as "D...". Lifting them
+   out of flow gives that width back to the name and costs no layout shift on
+   hover, since the name never has to give the space back.
+
+   pointer-events matter as much as opacity here: while hidden these buttons
+   were invisible but still clickable, so a click at the right end of a row
+   could remove a card with no visible control under the cursor. */
 .professor-mtg-editor-row .professor-mtg-row-actions {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   opacity: 0;
+  pointer-events: none;
+  padding-left: 1.5rem;
+  background: linear-gradient(to right, transparent, var(--ink-800) 1.5rem);
   transition: opacity 0.12s ease;
 }
 
 .professor-mtg-editor-row:hover .professor-mtg-row-actions,
 .professor-mtg-editor-row:focus-within .professor-mtg-row-actions {
   opacity: 1;
+  pointer-events: auto;
 }
 
+/* Without hover there is nothing to reveal them, so they stay in flow and the
+   name simply shares the row. */
 @media (hover: none) {
   .professor-mtg-editor-row .professor-mtg-row-actions {
+    position: static;
+    transform: none;
     opacity: 1;
+    pointer-events: auto;
+    padding-left: 0;
+    background: none;
   }
 }
 

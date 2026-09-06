@@ -91,7 +91,9 @@ export function DeckEditorCardRow({
         synergySelected ? "bg-[var(--accent-wash)]" : ""
       }`}
     >
-      <div className="flex items-center gap-2">
+      {/* `relative` anchors the action cluster, which is lifted out of flow so
+          it stops reserving width from the card name. */}
+      <div className="relative flex items-center gap-2">
         {card.isBasicLand ? (
           <span className="flex shrink-0 items-center">
             <button
@@ -123,17 +125,26 @@ export function DeckEditorCardRow({
 
         {/* No `flex-1` here: the spacer below takes the slack, and two growing
             elements in one row make the name column jump about as chips and
-            prices come and go. The class already clips with an ellipsis. */}
+            prices come and go. The class already clips with an ellipsis.
+
+            The floor matters more than the ceiling. `min-w-0` alone let the
+            name shrink to nothing whenever the rest of the row asked for more
+            than the column had, which is how names became single letters. A
+            name clipped at 8rem is still a name; clipped at 2rem it is not. */}
         <CardNameHoverPreview
           name={card.name}
           imageUrl={imageUrl}
           inStock={inStock}
-          className="min-w-0 max-w-[13rem] shrink"
+          className="min-w-[6rem] max-w-[17rem] shrink sm:min-w-[8rem]"
           onClick={why ? () => setWhyOpen((open) => !open) : undefined}
         />
         <ManaCost cost={card.display?.manaCost} />
 
-        <MarkerChips card={card} markers={markers} />
+        {/* Chips yield before the name does: which tags a card carries is
+            worth less than knowing which card it is. */}
+        <span className="min-w-0 shrink overflow-hidden">
+          <MarkerChips card={card} markers={markers} />
+        </span>
 
         <span className="flex-1" />
 
