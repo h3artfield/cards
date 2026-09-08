@@ -1,8 +1,8 @@
 "use client";
 
 import { Suspense } from "react";
-import Link from "next/link";
 import { useParams } from "next/navigation";
+import { CustomerDeckNavV1 } from "@/components/professor/CustomerDeckNavV1";
 import { ProfessorMtgPageShell } from "@/components/professor/ProfessorMtgPageShell";
 import { ProfessorDeckEditorPanel } from "@/components/professor/deck-editor/ProfessorDeckEditorPanel";
 import { RequireCustomerForDeckBuild } from "@/components/store-inventory/RequireCustomerForDeckBuild";
@@ -33,14 +33,7 @@ function Content() {
     <RequireCustomerForDeckBuild slug={slug} returnPath={`/s/${slug}/decks/${deckId}`}>
       <ProfessorMtgPageShell>
         <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <Link href={`/s/${slug}/decks`} className="professor-mtg-link text-xs">
-              ← My decks
-            </Link>
-            <Link href={`/s/${slug}`} className="professor-mtg-link text-xs">
-              Dashboard
-            </Link>
-          </div>
+          <CustomerDeckNavV1 slug={slug} />
           <div className="professor-mtg-chamber__inner mt-4 overflow-hidden">
             <ProfessorDeckEditorPanel slug={slug} deckId={deckId} />
           </div>

@@ -19,6 +19,7 @@ export function DeckEditorStatus({
   hasBaseline,
   stale,
   onRevert,
+  onRegrade,
 }: {
   legality: DeckEditorLegalityReportV1;
   editedByUser: boolean;
@@ -26,6 +27,8 @@ export function DeckEditorStatus({
   /** True while an edit is in flight, when this verdict is a moment behind. */
   stale: boolean;
   onRevert: () => void;
+  /** Omitted when the deck is too far from 99 for a measurement to mean much. */
+  onRegrade?: () => void;
 }) {
   // A revert throws away every edit and cannot be undone, so it asks twice.
   // The confirmation lapses on its own, because a button left reading "Confirm"
@@ -83,22 +86,36 @@ export function DeckEditorStatus({
               the original build rather than this deck.
             </p>
           </div>
-          <button
-            type="button"
-            className="professor-mtg-btn shrink-0 px-3 py-1.5 text-[11px]"
-            onClick={() => {
-              if (!confirmRevert) {
-                setConfirmRevert(true);
-                return;
-              }
-              setConfirmRevert(false);
-              onRevert();
-            }}
-          >
-            {confirmRevert
-              ? "Confirm — this discards your edits"
-              : "Restore the Professor\u2019s deck"}
-          </button>
+          <div className="flex shrink-0 flex-wrap items-center gap-2">
+            {/* The notice says the grade and score are stale. Offering the
+                measurement next to the complaint is more use than the
+                complaint on its own. */}
+            {onRegrade ? (
+              <button
+                type="button"
+                className="professor-mtg-btn px-3 py-1.5 text-[11px]"
+                onClick={onRegrade}
+              >
+                Regrade deck
+              </button>
+            ) : null}
+            <button
+              type="button"
+              className="professor-mtg-btn px-3 py-1.5 text-[11px]"
+              onClick={() => {
+                if (!confirmRevert) {
+                  setConfirmRevert(true);
+                  return;
+                }
+                setConfirmRevert(false);
+                onRevert();
+              }}
+            >
+              {confirmRevert
+                ? "Confirm — this discards your edits"
+                : "Restore the Professor\u2019s deck"}
+            </button>
+          </div>
         </div>
       ) : null}
 

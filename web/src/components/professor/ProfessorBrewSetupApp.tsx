@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { howCosWorksPath } from "@/lib/commander-optimization-score/v1/public-path";
@@ -48,6 +48,7 @@ import {
 } from "@/lib/deck-synthesis/professor-imported-decklist-v1-1-1";
 import { CommanderPickerV1 } from "./CommanderPickerV1";
 import type { CommanderPickResultV1 } from "./CommanderPickerV1";
+import { CustomerDeckNavV1 } from "./CustomerDeckNavV1";
 import { ProfessorMtgPageShell } from "./ProfessorMtgPageShell";
 
 type CommanderResult = CommanderPickResultV1;
@@ -87,7 +88,6 @@ function ThemeChip({
 export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
   const router = useRouter();
   const apiBase = `/api/store/${slug}/professor/brew`;
-  const commanderSearchApi = `/api/store/${slug}/deck-builder/commanders/search`;
 
   const [commander, setCommander] = useState<CommanderResult | null>(null);
   const [bracket, setBracket] = useState<CommanderBracket>(DEFAULT_PROFESSOR_BREW_BRACKET);
@@ -317,7 +317,9 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
           commander ? "max-w-5xl" : "max-w-2xl"
         }`}
       >
-        <div className="text-center">
+        <CustomerDeckNavV1 slug={slug} />
+
+        <div className="mt-6 text-center">
           <h1 className="professor-mtg-title text-3xl leading-none sm:text-4xl">
             {setupMode === "optimize" ? "Optimize a Deck" : "Build a Deck"}
           </h1>

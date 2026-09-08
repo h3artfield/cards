@@ -40,7 +40,7 @@ import { CardGrabProviderV1 } from "./card-grab-v1";
 import { planMarkerCreateV1 } from "./marker-create-v1";
 import { CardRevealOverlay } from "./CardRevealOverlay";
 import { DeckInsightDrawer } from "./DeckInsightDrawer";
-import { ProfessorDeckBracketPanel } from "../ProfessorDeckBracketPanel";
+import { DeckRegradePanelV1 } from "./DeckRegradePanelV1";
 import type { DeckEditorKeyV1 } from "./deck-key-v1";
 import { useCardEnrichment } from "./useCardEnrichment";
 import { useCart } from "@/hooks/useCart";
@@ -85,8 +85,8 @@ export function ProfessorDeckEditorPanel({
   const [cartFlash, setCartFlash] = useState<string | null>(null);
   /** Whether the cut cards are on show. See the disclosure at the foot of the list. */
   const [showCut, setShowCut] = useState(false);
-  /** Whether the measured-bracket drawer is open. */
-  const [bracketOpen, setBracketOpen] = useState(false);
+  /** Whether the measured bracket-and-score drawer is open. */
+  const [regradeOpen, setRegradeOpen] = useState(false);
   const [filter, setFilter] = useState("");
   const [nameDraft, setNameDraft] = useState<string | null>(null);
   const searchRef = useRef<HTMLInputElement | null>(null);
@@ -197,12 +197,9 @@ export function ProfessorDeckEditorPanel({
   const libraryCount = payload?.legality.mainboardLibraryCount ?? 0;
   const readyToGrade = libraryCount >= COMMANDER_LIBRARY_SIZE_V1;
 
-  /** The mainboard as the bracket endpoint wants it: names and copies. */
-  const bracketCards = useMemo(
-    () =>
-      (deck?.cards ?? [])
-        .filter((card) => card.board === "mainboard")
-        .map((card) => ({ name: card.name, copies: card.copies })),
+  /** The mainboard, which is the only board the bracket and the score read. */
+  const mainboardCards = useMemo(
+    () => (deck?.cards ?? []).filter((card) => card.board === "mainboard"),
     [deck?.cards],
   );
 
@@ -756,7 +753,7 @@ export function ProfessorDeckEditorPanel({
               type="button"
               className="professor-mtg-btn px-3 py-1.5 text-[11px]"
               disabled={!readyToGrade}
-              onClick={() => setBracketOpen(true)}
+              onClick={() => setRegradeOpen(true)}
             >
               Check bracket
             </button>
@@ -777,6 +774,7 @@ export function ProfessorDeckEditorPanel({
             hasBaseline={deck.baselineCards.length > 0}
             stale={editor.saving}
             onRevert={() => applyOps([{ op: "revertToBaseline" }])}
+            onRegrade={readyToGrade ? () => setRegradeOpen(true) : undefined}
           />
         </div>
 
@@ -916,15 +914,16 @@ export function ProfessorDeckEditorPanel({
         ) : null}
 
         <DeckInsightDrawer
-          open={bracketOpen}
-          title="Measured bracket"
-          subtitle={`Where ${deck.commander.name} and these ${libraryCount} cards land on the Commander bracket rubric.`}
-          onClose={() => setBracketOpen(false)}
+          open={regradeOpen}
+          title="This deck, measured"
+          subtitle={`Bracket and score for ${deck.commander.name} and the ${libraryCount} cards in the deck right now — not for the list as it was built.`}
+          onClose={() => setRegradeOpen(false)}
         >
-          <ProfessorDeckBracketPanel
-            storeSlug={slug}
+          <DeckRegradePanelV1
+            slug={slug}
             commanderName={deck.commander.name}
-            cards={bracketCards}
+            commanderOracleId={deck.commander.oracleId}
+            cards={mainboardCards}
             requestedBracket={deck.bracket}
           />
         </DeckInsightDrawer>

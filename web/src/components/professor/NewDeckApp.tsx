@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CommanderPickerV1 } from "./CommanderPickerV1";
 import type { CommanderPickResultV1 } from "./CommanderPickerV1";
+import { CustomerDeckNavV1 } from "./CustomerDeckNavV1";
 import { ProfessorMtgPageShell } from "./ProfessorMtgPageShell";
 
 /**
@@ -67,9 +68,7 @@ export function NewDeckApp({ slug }: { slug: string }) {
   return (
     <ProfessorMtgPageShell>
       <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-10 sm:px-6">
-        <Link href={`/s/${encodeURIComponent(slug)}/decks`} className="professor-mtg-link text-xs">
-          ← My decks
-        </Link>
+        <CustomerDeckNavV1 slug={slug} />
 
         <h1 className="professor-mtg-title mt-4 text-3xl">Start a deck</h1>
         <p className="professor-mtg-muted mt-2 text-sm">

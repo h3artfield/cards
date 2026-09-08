@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { CustomerDeckListEntryV1 } from "@/lib/professor-deck-editor/deck-list-v1";
+import { CustomerDeckNavV1 } from "./CustomerDeckNavV1";
 import { ProfessorMtgPageShell } from "./ProfessorMtgPageShell";
 
 /**
@@ -45,9 +46,7 @@ export function MyDecksApp({ slug }: { slug: string }) {
   return (
     <ProfessorMtgPageShell>
       <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-10 sm:px-6">
-        <Link href={`/s/${encodeURIComponent(slug)}`} className="professor-mtg-link text-xs">
-          ← Dashboard
-        </Link>
+        <CustomerDeckNavV1 slug={slug} showDecks={false} />
 
         <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
           <div>

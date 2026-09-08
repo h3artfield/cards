@@ -13,6 +13,7 @@ import {
 import { ProfessorSolDirectedBuildProgressPanel } from "./ProfessorSolDirectedBuildProgressPanel";
 import { ProfessorSolDirectedDeckListPanel } from "./ProfessorSolDirectedDeckListPanel";
 import { ProfessorMtgPageShell } from "./ProfessorMtgPageShell";
+import { CustomerDeckNavV1 } from "./CustomerDeckNavV1";
 
 type BuildView = {
   solDirected: true;
@@ -202,13 +203,14 @@ export function ProfessorSolDirectedBuildApp({ slug }: { slug: string }) {
 
   return (
     <ProfessorMtgPageShell>
-      <header className="flex items-center px-5 py-4 sm:px-8">
+      <header className="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-4 sm:px-8">
+        <CustomerDeckNavV1 slug={slug} />
         <button
           type="button"
-          className="professor-mtg-link"
+          className="professor-mtg-link text-xs"
           onClick={() => router.push(`/s/${slug}/inventory/professor`)}
         >
-          ← {view?.job.userInputs?.mode === "optimize" ? "New optimization" : "New build"}
+          {view?.job.userInputs?.mode === "optimize" ? "New optimization" : "New build"}
         </button>
       </header>
 
