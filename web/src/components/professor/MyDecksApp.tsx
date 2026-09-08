@@ -17,6 +17,8 @@ export function MyDecksApp({ slug }: { slug: string }) {
   const [decks, setDecks] = useState<CustomerDeckListEntryV1[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  /** Set when one of the two deck collections loaded and the other did not. */
+  const [partial, setPartial] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -24,7 +26,11 @@ export function MyDecksApp({ slug }: { slug: string }) {
       try {
         const res = await fetch(`/api/store/${encodeURIComponent(slug)}/decks`);
         const data = (await res.json().catch(() => null)) as
-          | { decks?: CustomerDeckListEntryV1[]; error?: string }
+          | {
+              decks?: CustomerDeckListEntryV1[];
+              error?: string;
+              partialFailure?: string | null;
+            }
           | null;
         if (cancelled) return;
         if (!res.ok || !data?.decks) {
@@ -32,6 +38,7 @@ export function MyDecksApp({ slug }: { slug: string }) {
           return;
         }
         setDecks(data.decks);
+        setPartial(data.partialFailure ?? null);
       } catch {
         if (!cancelled) setError("We couldn't reach the server. Check your connection.");
       } finally {
@@ -62,6 +69,12 @@ export function MyDecksApp({ slug }: { slug: string }) {
             Start a deck
           </Link>
         </div>
+
+        {partial ? (
+          <p className="mt-6 text-sm text-[var(--bad)]">
+            {partial} Some of your decks may be missing from this list.
+          </p>
+        ) : null}
 
         {loading ? (
           <p className="professor-mtg-muted mt-8 text-sm italic">Loading your decks…</p>

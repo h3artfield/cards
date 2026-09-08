@@ -17,12 +17,40 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
     const auth = await authorizeDeckEditorV1(req, slug);
     if (auth.error) return auth.error;
 
-    const [editableDecks, savedDecks] = await Promise.all([
+    /**
+     * Settled rather than all: these are two independent collections, and a
+     * missing index on one of them used to take down the whole page. A customer
+     * losing sight of decks they could see yesterday is far worse than a
+     * customer seeing most of them with a note about the rest.
+     */
+    const [editable, saved] = await Promise.allSettled([
       listEditableDecksV1({ customerId: auth.customerId!, storeSlug: slug }),
       listCustomerSavedDecks({ customerId: auth.customerId!, storeSlug: slug }),
     ]);
 
-    return jsonOk({ decks: mergeCustomerDeckListV1({ editableDecks, savedDecks }) });
+    const partial: string[] = [];
+    if (editable.status === "rejected") {
+      console.error("[decks] editable deck query failed", editable.reason);
+      partial.push("decks you started by hand");
+    }
+    if (saved.status === "rejected") {
+      console.error("[decks] saved deck query failed", saved.reason);
+      partial.push("decks the Professor built");
+    }
+
+    // Both gone means the failure is not partial, and pretending otherwise
+    // would show an empty shelf as though the customer owned nothing.
+    if (editable.status === "rejected" && saved.status === "rejected") {
+      throw editable.reason;
+    }
+
+    return jsonOk({
+      decks: mergeCustomerDeckListV1({
+        editableDecks: editable.status === "fulfilled" ? editable.value : [],
+        savedDecks: saved.status === "fulfilled" ? saved.value : [],
+      }),
+      partialFailure: partial.length ? `Could not load ${partial.join(" or ")}.` : null,
+    });
   } catch (err) {
     return handleRouteError(err);
   }
