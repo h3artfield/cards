@@ -43,7 +43,13 @@ export function DeckEditorStatus({
     (violation) => violation.kind === "unresolved_card",
   );
 
-  const nothingToSay = illegal.length === 0 && !sizeNote && !editedByUser && unresolved.length === 0;
+  // A deck built by hand has no Professor list to have drifted from, so the
+  // whole notice is meaningless there — it would be telling someone their
+  // grade is stale for a deck that was never graded.
+  const driftedFromProfessor = editedByUser && hasBaseline;
+
+  const nothingToSay =
+    illegal.length === 0 && !sizeNote && !driftedFromProfessor && unresolved.length === 0;
   if (nothingToSay) return null;
 
   return (
@@ -68,7 +74,7 @@ export function DeckEditorStatus({
         </div>
       ) : null}
 
-      {editedByUser ? (
+      {driftedFromProfessor ? (
         <div className="professor-mtg-alert professor-mtg-alert--edited flex flex-wrap items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="professor-mtg-label">Your edits</p>
@@ -77,24 +83,22 @@ export function DeckEditorStatus({
               the original build rather than this deck.
             </p>
           </div>
-          {hasBaseline ? (
-            <button
-              type="button"
-              className="professor-mtg-btn shrink-0 px-3 py-1.5 text-[11px]"
-              onClick={() => {
-                if (!confirmRevert) {
-                  setConfirmRevert(true);
-                  return;
-                }
-                setConfirmRevert(false);
-                onRevert();
-              }}
-            >
-              {confirmRevert
-                ? "Confirm — this discards your edits"
-                : "Restore the Professor\u2019s deck"}
-            </button>
-          ) : null}
+          <button
+            type="button"
+            className="professor-mtg-btn shrink-0 px-3 py-1.5 text-[11px]"
+            onClick={() => {
+              if (!confirmRevert) {
+                setConfirmRevert(true);
+                return;
+              }
+              setConfirmRevert(false);
+              onRevert();
+            }}
+          >
+            {confirmRevert
+              ? "Confirm — this discards your edits"
+              : "Restore the Professor\u2019s deck"}
+          </button>
         </div>
       ) : null}
 

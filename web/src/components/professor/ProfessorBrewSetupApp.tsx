@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { howCosWorksPath } from "@/lib/commander-optimization-score/v1/public-path";
@@ -46,9 +46,11 @@ import {
   parseProfessorImportedDecklistV111,
   type ProfessorImportedDeckPreviewV111,
 } from "@/lib/deck-synthesis/professor-imported-decklist-v1-1-1";
+import { CommanderPickerV1 } from "./CommanderPickerV1";
+import type { CommanderPickResultV1 } from "./CommanderPickerV1";
 import { ProfessorMtgPageShell } from "./ProfessorMtgPageShell";
 
-type CommanderResult = { slug: string; name: string };
+type CommanderResult = CommanderPickResultV1;
 
 function ThemeChip({
   label,
@@ -87,11 +89,6 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
   const apiBase = `/api/store/${slug}/professor/brew`;
   const commanderSearchApi = `/api/store/${slug}/deck-builder/commanders/search`;
 
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState<CommanderResult[]>([]);
-  const [listOpen, setListOpen] = useState(false);
-  const [searchLoading, setSearchLoading] = useState(false);
-  const [browseLoading, setBrowseLoading] = useState(true);
   const [commander, setCommander] = useState<CommanderResult | null>(null);
   const [bracket, setBracket] = useState<CommanderBracket>(DEFAULT_PROFESSOR_BREW_BRACKET);
   const [playstyleId, setPlaystyleId] = useState("");
@@ -122,7 +119,6 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
 
     if (prefill.commanderName) {
       setCommander({ slug: prefill.commanderName.toLowerCase().replace(/\s+/g, "-"), name: prefill.commanderName });
-      setQuery(prefill.commanderName);
     }
     if (prefill.deckPreferences) {
       setDeckPreferencesText(prefill.deckPreferences);
@@ -134,50 +130,6 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
     );
     clearProfessorSetupPrefill(slug);
   }, [slug]);
-
-  useEffect(() => {
-    let cancelled = false;
-    void (async () => {
-      setBrowseLoading(true);
-      try {
-        const res = await fetch(commanderSearchApi);
-        const data = await res.json();
-        if (!cancelled && res.ok) setResults(data.results ?? []);
-      } catch {
-        // ignore
-      } finally {
-        if (!cancelled) setBrowseLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [commanderSearchApi]);
-
-  useEffect(() => {
-    if (!listOpen && !query.trim()) return;
-    if (!query.trim() && results.length > 0) return;
-
-    const t = setTimeout(async () => {
-      setSearchLoading(true);
-      try {
-        const params = new URLSearchParams();
-        if (query.trim()) params.set("q", query.trim());
-        const res = await fetch(`${commanderSearchApi}?${params.toString()}`);
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error ?? "Commander search failed");
-        setResults(data.results ?? []);
-      } catch {
-        setResults([]);
-      } finally {
-        setSearchLoading(false);
-      }
-    }, query.trim() ? 200 : 0);
-
-    return () => clearTimeout(t);
-  }, [commanderSearchApi, listOpen, query, results.length]);
-
-  const commanderListLoading = query.trim() ? searchLoading : browseLoading && results.length === 0;
 
   function toggleTheme(themeId: string) {
     setProfessorChoosesThemes(false);
@@ -232,7 +184,6 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
           slug: data.preview.commanderName.toLowerCase().replace(/\s+/g, "-"),
           name: data.preview.commanderName,
         });
-        setQuery(data.preview.commanderName);
       }
     } catch (e) {
       setImportPreview(null);
@@ -335,9 +286,6 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
       setLoading(false);
     }
   }
-
-  const commanderLocked = commander !== null && query.trim() === commander.name;
-  const showResults = !commanderLocked && (listOpen || Boolean(query.trim()));
 
   function renderThemeGrid(themes: typeof PROFESSOR_DECK_THEME_CHOICES_V111) {
     return (
@@ -475,67 +423,16 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
             <label className="professor-mtg-label" htmlFor="commander-search">
               Commander
             </label>
-            <div className="relative mt-2">
-              <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg text-[var(--mtg-gold)]">
-                ⌕
-              </span>
-              <input
-                id="commander-search"
-                type="search"
-                placeholder="Search commanders by name…"
-                value={query}
-                autoComplete="off"
-                onFocus={() => setListOpen(true)}
-                onBlur={() => {
-                  window.setTimeout(() => setListOpen(false), 150);
+            <div className="mt-2">
+              <CommanderPickerV1
+                slug={slug}
+                value={commander}
+                onChange={(picked) => {
+                  setCommander(picked);
+                  if (picked) setError(null);
                 }}
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                  setListOpen(true);
-                  if (commander && e.target.value !== commander.name) {
-                    setCommander(null);
-                  }
-                }}
-                className="professor-mtg-input w-full py-4 pl-11 pr-4 text-base"
               />
             </div>
-
-            {showResults ? (
-              <div className="mt-3">
-                {commanderListLoading ? (
-                  <p className="professor-mtg-muted px-1 py-2 text-xs italic">Loading commanders…</p>
-                ) : null}
-                {!commanderListLoading && results.length === 0 ? (
-                  <p className="professor-mtg-muted px-1 py-2 text-xs">No paper-eligible commanders found</p>
-                ) : null}
-                <ul className="max-h-64 space-y-2 overflow-y-auto">
-                  {results.map((c) => {
-                    const selected = commander?.name === c.name;
-                    return (
-                      <li key={`${c.slug}-${c.name}`}>
-                        <button
-                          type="button"
-                          onMouseDown={(e) => e.preventDefault()}
-                          onClick={() => {
-                            setCommander(c);
-                            setQuery(c.name);
-                            setError(null);
-                            setListOpen(false);
-                          }}
-                          className={`professor-mtg-option w-full px-4 py-2.5 ${selected ? "professor-mtg-option--selected" : ""}`}
-                        >
-                          <span className="block text-left font-medium">{c.name}</span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ) : commander ? null : (
-              <p className="professor-mtg-muted mt-3 text-xs">
-                Click the search bar to browse paper-eligible commanders A–Z
-              </p>
-            )}
 
             {commander ? (
               <div className="mt-6 grid gap-x-10 gap-y-5 border-t border-[var(--mtg-stone-border)] pt-6 lg:grid-cols-2">

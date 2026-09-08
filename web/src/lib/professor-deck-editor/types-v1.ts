@@ -33,8 +33,10 @@ export function boardCountsTowardDeckV1(board: DeckBoardV1): boolean {
 
 export const DECK_BOARD_LABELS_V1: Record<DeckBoardV1, string> = {
   mainboard: "Deck",
-  // Archidekt's clearer name for what Moxfield calls a Maybeboard.
-  considering: "Considering",
+  // What Moxfield calls a Maybeboard and Archidekt calls Considering. "Bench"
+  // beats both as a drop target: it is one short word, and a bench is a place
+  // you can picture setting a card down on while you decide.
+  considering: "Bench",
   cut: "Cut",
 };
 
@@ -106,7 +108,8 @@ export type EditableDeckV1 = {
   storeId: string;
   storeSlug: string;
   deckName: string;
-  bracket: number;
+  /** The bracket the build was asked for, or null for a deck started by hand. */
+  bracket: number | null;
   commander: EditableDeckCommanderV1;
   cards: EditableDeckCardV1[];
   /** Marker definitions available on this deck, including cached global ones. */

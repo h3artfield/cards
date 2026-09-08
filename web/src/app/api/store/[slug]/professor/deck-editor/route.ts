@@ -1,6 +1,9 @@
+import { randomUUID } from "node:crypto";
 import { NextRequest } from "next/server";
 import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
 import { getDeckResolutionCatalogRuntime } from "@/lib/deck-synthesis/professor-brew-catalog-runtime-v1";
+import { previewProfessorImportedDeckV111 } from "@/lib/deck-synthesis/professor-imported-deck-hydrate-v1-1-1";
+import type { ProfessorImportedDeckPreviewV111 } from "@/lib/deck-synthesis/professor-imported-decklist-v1-1-1";
 import { getSolDirectedBuildJobV111 } from "@/lib/deck-synthesis/professor-sol-directed-build-job-store-v1-1-1";
 import { matchProfessorDeckCardsInStoreInventory } from "@/lib/deck-synthesis/professor-brew-inventory-match-v4-3-v1";
 import {
@@ -18,11 +21,20 @@ import {
   createCatalogDisplayFactsLookupV1,
   withDisplayFactsV1,
 } from "@/lib/professor-deck-editor/display-facts-v1";
+import { withSemanticFactsV1 } from "@/lib/professor-deck-editor/semantic-facts-v1";
 import {
   createCatalogCardFactsLookupV1,
   createLandOracleIdResolverV1,
 } from "@/lib/professor-deck-editor/catalog-lookup-v1";
 import { createEditableDeckFromBuildV1, editableDeckIdV1 } from "@/lib/professor-deck-editor/from-build-v1";
+import {
+  createEditableDeckFromScratchV1,
+  handDeckIdV1,
+} from "@/lib/professor-deck-editor/from-scratch-v1";
+import { resolveHandDeckCommanderV1 } from "@/lib/professor-deck-editor/hand-deck-commander-v1";
+import { handDeckImportOpsV1 } from "@/lib/professor-deck-editor/import-ops-v1";
+import { applyDeckEditOpsV1 } from "@/lib/professor-deck-editor/ops-v1";
+import type { DeckEditRejectionV1 } from "@/lib/professor-deck-editor/ops-v1";
 import { checkEditableDeckLegalityV1 } from "@/lib/professor-deck-editor/legality-v1";
 import {
   createEditableDeckIfAbsentV1,
@@ -98,9 +110,16 @@ async function deckWithLegality(deck: EditableDeckV1) {
   return {
     deck: {
       ...deck,
-      cards: withDisplayFactsV1(
-        withDerivedMarkersV1(deck, facts),
-        createCatalogDisplayFactsLookupV1(catalog),
+      // Semantic facts ride along on the same response as the display facts:
+      // both are read-time lookups into caches this process already holds, and
+      // grouping the deck by what its cards actually do should not cost a
+      // second round trip. Synergy is the expensive relative of this and lives
+      // on its own endpoint, fetched only once a player asks for it.
+      cards: withSemanticFactsV1(
+        withDisplayFactsV1(
+          withDerivedMarkersV1(deck, facts),
+          createCatalogDisplayFactsLookupV1(catalog),
+        ),
       ),
     },
     legality: checkEditableDeckLegalityV1({
@@ -117,8 +136,20 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
     const auth = await authorizeDeckEditorV1(req, slug);
     if (auth.error) return auth.error;
 
+    // A deck started by hand has no build behind it, so it is opened by its own
+    // id. Ownership comes from the stored record rather than the id, which is
+    // client-supplied and therefore proves nothing.
+    const deckIdParam = req.nextUrl.searchParams.get("deckId")?.trim();
+    if (deckIdParam) {
+      const deck = await getEditableDeckV1(deckIdParam);
+      if (!deck || deck.customerId !== auth.customerId || deck.storeSlug !== slug) {
+        return jsonError("Deck not found", 404);
+      }
+      return jsonOk(await deckWithLegality(deck));
+    }
+
     const buildId = req.nextUrl.searchParams.get("buildId");
-    if (!buildId) return jsonError("buildId required", 400);
+    if (!buildId) return jsonError("buildId or deckId required", 400);
 
     const deckId = editableDeckIdV1({ customerId: auth.customerId!, buildId });
     const existing = await getEditableDeckV1(deckId);
@@ -146,6 +177,78 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
 
     const stored = await createEditableDeckIfAbsentV1(created.deck);
     return jsonOk(await deckWithLegality(stored));
+  } catch (err) {
+    return handleRouteError(err);
+  }
+}
+
+/**
+ * Starts a deck by hand.
+ *
+ * Takes a commander, and optionally a decklist to seed it with. When only a
+ * list is supplied the commander is inferred from it, because a customer
+ * pasting an export from Moxfield has already said who leads the deck and
+ * asking again would be a step that exists purely to satisfy the data model.
+ *
+ * The seeded cards go through the ordinary edit reducer rather than being
+ * written straight into the record, so an import cannot put a deck into a state
+ * that adding cards one at a time could not.
+ */
+export async function POST(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
+  try {
+    const { slug } = await params;
+    const auth = await authorizeDeckEditorV1(req, slug);
+    if (auth.error) return auth.error;
+
+    const body = (await req.json().catch(() => ({}))) as {
+      commanderName?: string;
+      deckName?: string;
+      decklist?: string;
+    };
+
+    const decklist = body.decklist?.trim();
+    let preview: ProfessorImportedDeckPreviewV111 | null = null;
+
+    if (decklist) {
+      preview = previewProfessorImportedDeckV111({
+        decklist,
+        selectedCommanderName: body.commanderName?.trim() || undefined,
+        catalog: await getDeckResolutionCatalogRuntime(),
+      });
+    }
+
+    const commanderName = body.commanderName?.trim() || preview?.commanderName || "";
+    const resolved = await resolveHandDeckCommanderV1(commanderName);
+    if (!resolved.ok) {
+      return jsonError(
+        commanderName ? resolved.message : "Pick a commander, or paste a list that names one",
+        400,
+      );
+    }
+
+    const now = new Date().toISOString();
+    let deck = createEditableDeckFromScratchV1({
+      deckId: handDeckIdV1({ customerId: auth.customerId!, handle: randomUUID() }),
+      customerId: auth.customerId!,
+      storeId: auth.storeId!,
+      storeSlug: slug,
+      commander: resolved.commander,
+      deckName: body.deckName,
+      now,
+    });
+
+    let rejected: DeckEditRejectionV1[] = [];
+    if (preview) {
+      const ops = handDeckImportOpsV1({ cards: preview.cards });
+      if (ops.length > 0) {
+        const outcome = applyDeckEditOpsV1({ deck, ops, now });
+        deck = outcome.deck;
+        rejected = outcome.rejected;
+      }
+    }
+
+    const stored = await createEditableDeckIfAbsentV1(deck);
+    return jsonOk({ ...(await deckWithLegality(stored)), rejected });
   } catch (err) {
     return handleRouteError(err);
   }

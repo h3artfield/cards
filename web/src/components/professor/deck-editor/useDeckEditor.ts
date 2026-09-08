@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { applyDeckEditOpsV1 } from "@/lib/professor-deck-editor/ops-v1";
 import type { DeckEditOpV1, DeckEditRejectionV1 } from "@/lib/professor-deck-editor/ops-v1";
 import type { EditableDeckV1 } from "@/lib/professor-deck-editor/types-v1";
+import { deckEditorKeyQueryV1 } from "./deck-key-v1";
 import type { DeckEditorDeck, DeckEditorPayload } from "./types";
 
 export type DeckEditorNotice = {
@@ -26,7 +27,11 @@ export type DeckEditorState = {
   saving: boolean;
   notice: DeckEditorNotice | null;
   dismissNotice: () => void;
-  applyOps: (ops: DeckEditOpV1[], options?: { undo?: DeckEditOpV1[] }) => void;
+  applyOps: (
+    ops: DeckEditOpV1[],
+    /** `message` replaces the bare "Saved." when the caller can say more. */
+    options?: { undo?: DeckEditOpV1[]; message?: string },
+  ) => void;
   reload: () => void;
 };
 
@@ -76,8 +81,14 @@ function rejectionMessage(rejected: readonly DeckEditRejectionV1[]): string {
  * made after it, and being briefly wrong is much better than being quietly
  * wrong.
  */
-export function useDeckEditor(args: { slug: string; buildId: string }): DeckEditorState {
-  const { slug, buildId } = args;
+export function useDeckEditor(args: {
+  slug: string;
+  /** A deck handed over by the Professor. */
+  buildId?: string;
+  /** A deck started by hand, which has no build to be keyed by. */
+  deckId?: string;
+}): DeckEditorState {
+  const { slug, buildId, deckId } = args;
   const [payload, setPayload] = useState<DeckEditorPayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -85,6 +96,7 @@ export function useDeckEditor(args: { slug: string; buildId: string }): DeckEdit
   const [notice, setNotice] = useState<DeckEditorNotice | null>(null);
 
   const endpoint = `/api/store/${slug}/professor/deck-editor`;
+  const query = deckEditorKeyQueryV1({ buildId, deckId });
 
   // The deck an edit is computed against, held in a ref so `applyOps` can read
   // it without being rebuilt on every keystroke elsewhere in the tree.
@@ -114,7 +126,7 @@ export function useDeckEditor(args: { slug: string; buildId: string }): DeckEdit
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${endpoint}?buildId=${encodeURIComponent(buildId)}`);
+      const res = await fetch(`${endpoint}?${query}`);
       const data = (await res.json().catch(() => null)) as
         | (DeckEditorPayload & { error?: string })
         | null;
@@ -128,14 +140,14 @@ export function useDeckEditor(args: { slug: string; buildId: string }): DeckEdit
     } finally {
       if (mounted.current) setLoading(false);
     }
-  }, [acceptPayload, buildId, endpoint]);
+  }, [acceptPayload, endpoint, query]);
 
   useEffect(() => {
     void load();
   }, [load]);
 
   const applyOps = useCallback(
-    (ops: DeckEditOpV1[], options?: { undo?: DeckEditOpV1[] }) => {
+    (ops: DeckEditOpV1[], options?: { undo?: DeckEditOpV1[]; message?: string }) => {
       const current = payloadRef.current;
       if (!current || ops.length === 0) return;
 
@@ -166,7 +178,7 @@ export function useDeckEditor(args: { slug: string; buildId: string }): DeckEdit
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              buildId,
+              ...(deckId ? { deckId } : { buildId }),
               expectedRevision: serverRevision.current ?? undefined,
               ops,
             }),
@@ -201,7 +213,7 @@ export function useDeckEditor(args: { slug: string; buildId: string }): DeckEdit
           if (data.rejected?.length) {
             setNotice({ kind: "error", message: rejectionMessage(data.rejected) });
           } else if (options?.undo?.length) {
-            setNotice({ kind: "info", message: "Saved.", undo: options.undo });
+            setNotice({ kind: "info", message: options.message ?? "Saved.", undo: options.undo });
           }
         } catch {
           setNotice({
@@ -214,7 +226,7 @@ export function useDeckEditor(args: { slug: string; buildId: string }): DeckEdit
         }
       });
     },
-    [acceptPayload, buildId, endpoint, load],
+    [acceptPayload, buildId, deckId, endpoint, load],
   );
 
   const dismissNotice = useCallback(() => setNotice(null), []);

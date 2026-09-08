@@ -89,7 +89,11 @@
     "test:professor-deck-editor-ops-v1": "npx --yes tsx src/lib/professor-deck-editor/ops-v1.selftest.ts",
     "test:professor-deck-editor-parse-ops-v1": "npx --yes tsx src/lib/professor-deck-editor/parse-ops-v1.selftest.ts",
     "test:professor-deck-editor-derived-markers-v1": "npx --yes tsx src/lib/professor-deck-editor/derived-markers-v1.selftest.ts",
+    "test:professor-deck-editor-from-scratch-v1": "npx --yes tsx src/lib/professor-deck-editor/from-scratch-v1.selftest.ts",
     "test:professor-deck-editor-card-search-v1": "npx --yes tsx src/lib/professor-deck-editor/card-search-v1.selftest.ts",
+    "test:professor-commander-search-service-v1": "npx --yes tsx src/lib/deck-synthesis/professor-commander-search-service-v1.selftest.ts",
+    "test:professor-commander-picker-sort-v1": "npx --yes tsx src/lib/deck-synthesis/professor-commander-picker-sort-v1.selftest.ts",
+    "audit:professor-commander-pool-v1": "npx --yes tsx scripts/audit-professor-commander-pool-v1.ts",
     "test:cos-v1-universal-coverage": "npx --yes tsx src/lib/commander-optimization-score/v1/universal-coverage.selftest.ts",
     "test:commander-bracket-rubric-v1": "npx --yes tsx src/lib/commander-bracket-rubric/v1/commander-bracket-rubric-v1.selftest.ts",
     "test:deck-swap-v1": "npx --yes tsx src/lib/deck-swap/v1/deck-swap-v1.selftest.ts",
@@ -216,8 +220,9 @@
     "mechanical-space:milestone": "npx --yes tsx scripts/mechanical-space/run-milestone-v1.ts",
     "discord:inventory-bot": "npx --yes tsx scripts/discord-inventory-bot.ts",
     "test:discord-inventory-bot-reply": "npx --yes tsx src/lib/discord-inventory/discord-inventory-reply-v1.selftest.ts",
-    "test:professor-deck-editor-distribution-v1": "tsx src/components/professor/deck-editor/distribution-v1.selftest.ts",
+    "test:professor-deck-editor-distribution-v1": "npx --yes tsx src/components/professor/deck-editor/distribution-v1.selftest.ts",
     "test:professor-deck-editor-grouping-v1": "npx --yes tsx src/components/professor/deck-editor/grouping-v1.selftest.ts",
+    "test:professor-deck-editor-marker-create-v1": "npx --yes tsx src/components/professor/deck-editor/marker-create-v1.selftest.ts",
     "test:professor-deck-editor-synergy-v1": "npx --yes tsx src/lib/professor-deck-editor/synergy-v1.selftest.ts"
   },
   "dependencies": {

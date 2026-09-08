@@ -13,10 +13,7 @@ import {
 } from "@/lib/customer-auth-ui";
 import { googleAuthErrorMessage } from "@/lib/customer-auth-config";
 import { STORE_SLUG_SESSION_KEY } from "@/lib/store-slug";
-import {
-  deckBuildReturnPath,
-  deckBuildSignInHref,
-} from "@/lib/store-inventory/deck-build-auth";
+import { deckBuildSignInHref } from "@/lib/store-inventory/deck-build-auth";
 
 type StoreAuthConfig = {
   googleEnabled: boolean;
@@ -154,10 +151,16 @@ export function StoreHomePage({
               Browse store inventory
             </Link>
             <Link
-              href={deckBuildSignInHref(slug, deckBuildReturnPath(slug, "professor"))}
+              href={`/s/${slug}/decks/new`}
               className={`block ${authButtonSecondary} text-center no-underline`}
             >
               Build a Commander deck
+            </Link>
+            <Link
+              href={`/s/${slug}/decks`}
+              className={`block ${authButtonSecondary} text-center no-underline`}
+            >
+              My decks
             </Link>
             {!customer?.emailVerified ? (
               <p className={`mb-2 ${authSubtext}`}>
@@ -198,7 +201,7 @@ export function StoreHomePage({
               Browse store inventory
             </Link>
             <Link
-              href={deckBuildSignInHref(slug, deckBuildReturnPath(slug, "professor"))}
+              href={deckBuildSignInHref(slug, `/s/${slug}/decks/new`)}
               className={`block ${authButtonSecondary} text-center no-underline`}
             >
               Build a Commander deck

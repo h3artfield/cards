@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { DECK_BOARD_LABELS_V1, DECK_BOARDS_V1 } from "@/lib/professor-deck-editor/types-v1";
 import type { DeckBoardV1 } from "@/lib/professor-deck-editor/types-v1";
+import { deckEditorKeyQueryV1 } from "./deck-key-v1";
+import type { DeckEditorKeyV1 } from "./deck-key-v1";
 import { ManaCost } from "./ManaCost";
 import type { DeckEditorSearchHit, DeckEditorSearchResponse } from "./types";
 
@@ -22,14 +24,14 @@ const MIN_QUERY = 2;
 export function DeckEditorCardSearch({
   slug,
   buildId,
+  deckId,
   boardOf,
   onAdd,
   onMove,
   disabled,
   inputRef,
-}: {
+}: DeckEditorKeyV1 & {
   slug: string;
-  buildId: string;
   /** The live deck's answer for where a card sits, which beats the server's. */
   boardOf: (hit: DeckEditorSearchHit) => DeckBoardV1 | null;
   onAdd: (hit: DeckEditorSearchHit, board: DeckBoardV1) => void;
@@ -62,7 +64,7 @@ export function DeckEditorCardSearch({
     const timer = setTimeout(() => {
       const url =
         `/api/store/${slug}/professor/deck-editor/search` +
-        `?buildId=${encodeURIComponent(buildId)}&q=${encodeURIComponent(trimmed)}`;
+        `?${deckEditorKeyQueryV1({ buildId, deckId })}&q=${encodeURIComponent(trimmed)}`;
       void fetch(url, { signal: controller.signal })
         .then(async (res) => (res.ok ? ((await res.json()) as DeckEditorSearchResponse) : null))
         .then((data) => {
@@ -83,7 +85,7 @@ export function DeckEditorCardSearch({
       clearTimeout(timer);
       controller.abort();
     };
-  }, [buildId, query, slug]);
+  }, [buildId, deckId, query, slug]);
 
   // Closes on an outside click. Focus loss alone is not enough, because
   // clicking a result inside the list briefly moves focus out of the input.

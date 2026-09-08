@@ -3,11 +3,11 @@ import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
 import { getDeckResolutionCatalogRuntime } from "@/lib/deck-synthesis/professor-brew-catalog-runtime-v1";
 import { matchProfessorDeckCardsInStoreInventory } from "@/lib/deck-synthesis/professor-brew-inventory-match-v4-3-v1";
 import { searchDeckEditorCardsV1 } from "@/lib/professor-deck-editor/card-search-v1";
-import { editableDeckIdV1 } from "@/lib/professor-deck-editor/from-build-v1";
 import { getEditableDeckV1 } from "@/lib/professor-deck-editor/store-v1";
 import { normalizeDeckCardNameV1 } from "@/lib/professor-deck-editor/types-v1";
 import type { DeckBoardV1 } from "@/lib/professor-deck-editor/types-v1";
 import { authorizeDeckEditorV1 } from "../authorize";
+import { deckIdFromRequestV1 } from "../deck-key";
 
 /**
  * Card search for the deck editor's add-card box.
@@ -23,10 +23,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
     if (auth.error) return auth.error;
 
     const query = req.nextUrl.searchParams.get("q")?.trim() ?? "";
-    const buildId = req.nextUrl.searchParams.get("buildId")?.trim();
-    const deckIdParam = req.nextUrl.searchParams.get("deckId")?.trim();
-    const deckId =
-      deckIdParam || (buildId ? editableDeckIdV1({ customerId: auth.customerId, buildId }) : null);
+    const deckId = deckIdFromRequestV1(req, auth.customerId);
     if (!deckId) return jsonError("buildId or deckId required", 400);
 
     const deck = await getEditableDeckV1(deckId);

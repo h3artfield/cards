@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { deckEditorKeyQueryV1 } from "./deck-key-v1";
+import type { DeckEditorKeyV1 } from "./deck-key-v1";
 import type { DeckEditorSynergy } from "./types";
 
 /**
@@ -14,10 +16,10 @@ import type { DeckEditorSynergy } from "./types";
 export function useDeckSynergy({
   slug,
   buildId,
+  deckId,
   revision,
-}: {
+}: DeckEditorKeyV1 & {
   slug: string;
-  buildId: string;
   revision: number | null;
 }) {
   const [synergy, setSynergy] = useState<DeckEditorSynergy | null>(null);
@@ -35,7 +37,9 @@ export function useDeckSynergy({
     let cancelled = false;
     setLoading(true);
     setError(null);
-    const url = `/api/store/${encodeURIComponent(slug)}/professor/deck-editor/synergy?buildId=${encodeURIComponent(buildId)}`;
+    const url =
+      `/api/store/${encodeURIComponent(slug)}/professor/deck-editor/synergy` +
+      `?${deckEditorKeyQueryV1({ buildId, deckId })}`;
     fetch(url)
       .then(async (response) => {
         const data = (await response.json().catch(() => null)) as
@@ -63,7 +67,7 @@ export function useDeckSynergy({
     return () => {
       cancelled = true;
     };
-  }, [buildId, enabled, revision, slug]);
+  }, [buildId, deckId, enabled, revision, slug]);
 
   return { synergy, loading, error, enabled, enable };
 }
