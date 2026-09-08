@@ -117,11 +117,26 @@ export function MyDecksApp({ slug }: { slug: string }) {
                       {new Date(deck.updatedAt).toLocaleDateString()}
                     </span>
                   </span>
-                  {deck.grade ? (
-                    <span className="professor-mtg-tag professor-mtg-tag--grade shrink-0">
-                      {deck.grade.split(/[\s(]/)[0]}
-                    </span>
-                  ) : null}
+                  <span className="flex shrink-0 items-center gap-2">
+                    {deck.measuredBracket !== null ? (
+                      <span
+                        className="professor-mtg-tag shrink-0"
+                        title={
+                          deck.measuredBracketStale
+                            ? "Measured before the most recent edits to this deck."
+                            : "The bracket this deck measured."
+                        }
+                      >
+                        B{deck.measuredBracket}
+                        {deck.measuredBracketStale ? "?" : ""}
+                      </span>
+                    ) : null}
+                    {deck.grade ? (
+                      <span className="professor-mtg-tag professor-mtg-tag--grade shrink-0">
+                        {deck.grade.split(/[\s(]/)[0]}
+                      </span>
+                    ) : null}
+                  </span>
                 </Link>
               </li>
             ))}

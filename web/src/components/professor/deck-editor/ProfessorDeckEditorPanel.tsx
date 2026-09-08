@@ -925,6 +925,8 @@ export function ProfessorDeckEditorPanel({
             commanderOracleId={deck.commander.oracleId}
             cards={mainboardCards}
             requestedBracket={deck.bracket}
+            deckKey={{ buildId, deckId }}
+            revision={deck.revision}
           />
         </DeckInsightDrawer>
 

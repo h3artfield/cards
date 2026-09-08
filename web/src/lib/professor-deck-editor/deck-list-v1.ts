@@ -11,7 +11,7 @@
  * been opened in the editor exists in *both* collections and would otherwise be
  * listed twice.
  */
-import { mainboardLibraryCountV1 } from "./types-v1";
+import { mainboardLibraryCountV1, measuredBracketIsStaleV1 } from "./types-v1";
 import type { EditableDeckV1 } from "./types-v1";
 import type { CustomerSavedDeck } from "../customer-saved-decks/customer-saved-deck-store";
 
@@ -28,6 +28,14 @@ export type CustomerDeckListEntryV1 = {
   origin: CustomerDeckOriginV1;
   /** The bracket the Professor was asked for. Null for a deck built by hand. */
   requestedBracket: number | null;
+  /**
+   * The bracket the deck actually measured, if it has ever been checked. This
+   * is what tournament eligibility reads: asking for bracket 3 says nothing
+   * about what was built.
+   */
+  measuredBracket: number | null;
+  /** True when the deck changed after that measurement was taken. */
+  measuredBracketStale: boolean;
   grade: string | null;
   /** Mainboard size, known only for decks we hold a card list for. */
   libraryCount: number | null;
@@ -42,6 +50,8 @@ export function deckListEntryFromHandDeckV1(deck: EditableDeckV1): CustomerDeckL
     commanderName: deck.commander.name,
     origin: "hand",
     requestedBracket: deck.bracket,
+    measuredBracket: deck.measuredBracket?.bracket ?? null,
+    measuredBracketStale: measuredBracketIsStaleV1(deck),
     grade: null,
     libraryCount: mainboardLibraryCountV1(deck),
     updatedAt: deck.updatedAt,
@@ -58,6 +68,10 @@ export function deckListEntryFromSavedDeckV1(deck: CustomerSavedDeck): CustomerD
     commanderName: deck.commanderName,
     origin: "professor",
     requestedBracket: deck.bracket,
+    // Saved Professor decks predate measurement being recorded; the editor
+    // stamps the editable copy, which this row is not reading.
+    measuredBracket: null,
+    measuredBracketStale: false,
     grade: deck.grade,
     libraryCount: null,
     updatedAt: deck.updatedAt,

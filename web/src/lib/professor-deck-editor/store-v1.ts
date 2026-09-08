@@ -63,6 +63,53 @@ export async function createEditableDeckIfAbsentV1(
   });
 }
 
+/**
+ * Records what the deck measured, which is not an edit to the deck.
+ *
+ * Deliberately outside `mutateEditableDeckV1`: measuring must not bump the
+ * revision or set `editedByUser`, or checking a bracket would itself make the
+ * deck look edited and invalidate the very measurement being stored.
+ */
+export async function recordMeasuredBracketV1(args: {
+  deckId: string;
+  customerId: string;
+  bracket: number;
+  /** The revision the measurement was taken against. */
+  atRevision: number;
+  now?: string;
+}): Promise<EditableDeckV1 | null> {
+  const measuredBracket = {
+    bracket: args.bracket,
+    atRevision: args.atRevision,
+    measuredAt: args.now ?? new Date().toISOString(),
+  };
+
+  const stamp = (current: EditableDeckV1 | null): EditableDeckV1 | null => {
+    if (!current || current.customerId !== args.customerId) return null;
+    // A measurement of a list that has already moved on is not worth keeping.
+    if (current.revision !== args.atRevision) return current;
+    return { ...current, measuredBracket };
+  };
+
+  const col = collection();
+  if (!col) {
+    const next = stamp(memoryDecks.get(args.deckId) ?? null);
+    if (next) memoryDecks.set(args.deckId, next);
+    return next;
+  }
+
+  const db = getAdminFirestore();
+  if (!db) return null;
+
+  const ref = col.doc(args.deckId);
+  return db.runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    const next = stamp(snap.exists ? (snap.data() as EditableDeckV1) : null);
+    if (next) tx.set(ref, next);
+    return next;
+  });
+}
+
 export type EditableDeckMutationV1 =
   | {
       ok: true;

@@ -5,6 +5,8 @@ import type { CosV1Score } from "@/lib/commander-optimization-score/v1/types";
 import { ordinalPercentile } from "@/lib/commander-optimization-score/v1/player-report";
 import { CosV1PlayerReportView } from "../CosV1PlayerReportView";
 import { ProfessorDeckBracketPanel } from "../ProfessorDeckBracketPanel";
+import { deckEditorKeyQueryV1 } from "./deck-key-v1";
+import type { DeckEditorKeyV1 } from "./deck-key-v1";
 import type { DeckEditorCard } from "./types";
 
 /**
@@ -27,6 +29,8 @@ export function DeckRegradePanelV1({
   commanderOracleId,
   cards,
   requestedBracket,
+  deckKey,
+  revision,
 }: {
   slug: string;
   commanderName: string;
@@ -34,6 +38,10 @@ export function DeckRegradePanelV1({
   /** The mainboard, as the deck currently stands. */
   cards: readonly DeckEditorCard[];
   requestedBracket: number | null;
+  /** Identifies the deck the measurement should be remembered against. */
+  deckKey: DeckEditorKeyV1;
+  /** The revision being measured, so a later edit can outdate the result. */
+  revision: number;
 }) {
   const bracketCards = useMemo(
     () => cards.map((card) => ({ name: card.name, copies: card.copies })),
@@ -91,6 +99,20 @@ export function DeckRegradePanelV1({
         commanderName={commanderName}
         cards={bracketCards}
         requestedBracket={requestedBracket}
+        onMeasured={(bracket) => {
+          // Best effort: the number is on screen either way, and failing to
+          // remember it is not worth an error over the result itself.
+          void fetch(
+            `/api/store/${encodeURIComponent(slug)}/professor/deck-editor/measured-bracket?${deckEditorKeyQueryV1(
+              deckKey,
+            )}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ bracket, atRevision: revision }),
+            },
+          ).catch(() => {});
+        }}
       />
 
       <div className="mt-6 border-t border-[var(--mtg-stone-border)] pt-6">

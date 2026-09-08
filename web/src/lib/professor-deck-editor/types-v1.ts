@@ -123,9 +123,28 @@ export type EditableDeckV1 = {
   editedByUser: boolean;
   /** Incremented per accepted edit batch. Used for optimistic concurrency. */
   revision: number;
+  /**
+   * The last bracket this deck actually measured, as opposed to the bracket a
+   * build was asked for. Absent until someone checks, and stamped with the
+   * revision it was taken at so a later edit can be shown to have outdated it
+   * rather than silently invalidating it.
+   */
+  measuredBracket?: MeasuredBracketV1 | null;
   createdAt: string;
   updatedAt: string;
 };
+
+export type MeasuredBracketV1 = {
+  bracket: number;
+  /** The deck revision the measurement describes. */
+  atRevision: number;
+  measuredAt: string;
+};
+
+/** True when the deck has changed since its bracket was last measured. */
+export function measuredBracketIsStaleV1(deck: EditableDeckV1): boolean {
+  return deck.measuredBracket != null && deck.measuredBracket.atRevision !== deck.revision;
+}
 
 const BASIC_LAND_NAMES_V1 = new Set([
   "plains",

@@ -37,11 +37,14 @@ export function ProfessorDeckBracketPanel({
   commanderName,
   cards,
   requestedBracket,
+  onMeasured,
 }: {
   storeSlug: string;
   commanderName: string;
   cards: Array<{ name: string; copies?: number }>;
   requestedBracket?: number | null;
+  /** Called with the assigned bracket so an owner of this list can keep it. */
+  onMeasured?: (bracket: number) => void;
 }) {
   const [fetched, setFetched] = useState<Fetched>({
     status: "loading",
@@ -74,6 +77,7 @@ export function ProfessorDeckBracketPanel({
           unresolved?: string[];
         };
         setFetched({ status: "ready", result: data.bracket, unresolved: data.unresolved ?? [] });
+        if (data.bracket) onMeasured?.(data.bracket.assignedBracket);
       } catch (err) {
         if ((err as Error)?.name === "AbortError") return;
         setFetched({ status: "error", result: null, unresolved: [] });
