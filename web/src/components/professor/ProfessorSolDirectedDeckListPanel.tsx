@@ -7,6 +7,7 @@ import { bracketLabel } from "@/lib/deck-synthesis/professor-brew-bracket-v4-v1"
 import { ProfessorDeckBracketPanel } from "./ProfessorDeckBracketPanel";
 import { ProfessorDeckSwapPanel } from "./ProfessorDeckSwapPanel";
 import { CardNameHoverPreview } from "./CardNameHoverPreview";
+import { DeckInsightDrawer } from "./deck-editor/DeckInsightDrawer";
 import { ProfessorDeckEditorPanel } from "./deck-editor/ProfessorDeckEditorPanel";
 import { scryfallNamedImageUrl } from "@/lib/deck-synthesis/professor-brew-scryfall-images-v1";
 import type { ProfessorDeckInventoryEntryV43 } from "@/lib/deck-synthesis/professor-brew-inventory-match-v4-3-v1";
@@ -576,10 +577,8 @@ export function ProfessorSolDirectedDeckListPanel({
     [deck],
   );
   const [scoreOpen, setScoreOpen] = useState(false);
-  // The editor is a mode of this panel rather than a separate page, so a player
-  // who came here to read their deck and decided to change one card does not
-  // lose the grade, the score, and the bracket read-out to do it.
-  const [mode, setMode] = useState<"list" | "edit">("list");
+  // Which reference panel is open over the editor, if any.
+  const [insight, setInsight] = useState<null | "bracket" | "swaps" | "changes">(null);
   const [pdfBusy, setPdfBusy] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [cos, setCos] = useState<CosV1Score | null>(null);
@@ -840,6 +839,18 @@ export function ProfessorSolDirectedDeckListPanel({
                   {validationPass ? "Commander OK" : "Review"}
                 </span>
                 <span className="professor-mtg-tag shrink-0">B{userInputs.bracket}</span>
+                {/* The grade and the score below are computed from the list as
+                    the Professor shipped it, and the editor underneath can
+                    change that list. Saying so keeps these from silently
+                    contradicting the editor's own measurement. */}
+                {headProfessor || cos?.competitiveStrength != null ? (
+                  <span
+                    className="professor-mtg-muted shrink-0 text-[10px] uppercase tracking-wide"
+                    title="The grade and score describe the list as it was built. Use Regrade deck in the editor to measure the deck as it stands now."
+                  >
+                    as built
+                  </span>
+                ) : null}
                 {headProfessor ? (
                   <span className="professor-mtg-tag professor-mtg-tag--grade shrink-0" title={headProfessor.grade}>
                     {headProfessorDisplayLetter(headProfessor.grade) ?? parseHeadProfessorGradeText(headProfessor.grade).shortLabel}
@@ -955,28 +966,104 @@ export function ProfessorSolDirectedDeckListPanel({
         </div>
 
         {buildId ? (
-          <div className="professor-mtg-tabs px-4 sm:px-5">
-            <button
-              type="button"
-              className={`professor-mtg-tab ${mode === "list" ? "professor-mtg-tab--active" : ""}`}
-              aria-current={mode === "list"}
-              onClick={() => setMode("list")}
-            >
-              Decklist
-            </button>
-            <button
-              type="button"
-              className={`professor-mtg-tab ${mode === "edit" ? "professor-mtg-tab--active" : ""}`}
-              aria-current={mode === "edit"}
-              onClick={() => setMode("edit")}
-            >
-              Edit deck
-            </button>
-          </div>
-        ) : null}
+          <>
+            {/* One view, not two. The old Decklist tab was a read-only copy of a
+                deck the editor already renders live, and splitting them meant a
+                player reading their list had to change tabs — and lose their
+                place — to change one card. What the tab genuinely owned beyond
+                that list was reference material, so it moves behind these
+                buttons rather than being deleted. */}
+            <div className="professor-mtg-panel-status flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2 sm:px-5">
+              <span className="text-xs text-[var(--ok)]">✦</span>
+              <span className="text-xs tracking-wide text-[var(--ok)]">Deck complete</span>
+              <span className="professor-mtg-muted hidden text-[10px] lg:inline">
+                Green = shop stock · TCG = market price
+              </span>
+              <div className="ml-auto flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  className="professor-mtg-link text-[11px]"
+                  onClick={() => setScoreOpen(true)}
+                >
+                  Results
+                </button>
+                <button
+                  type="button"
+                  className="professor-mtg-link text-[11px]"
+                  onClick={() => setInsight("bracket")}
+                >
+                  Bracket
+                </button>
+                <button
+                  type="button"
+                  className="professor-mtg-link text-[11px]"
+                  onClick={() => setInsight("swaps")}
+                >
+                  Suggested swaps
+                </button>
+                {critic?.appliedSwaps?.length ? (
+                  <button
+                    type="button"
+                    className="professor-mtg-link text-[11px]"
+                    onClick={() => setInsight("changes")}
+                  >
+                    Professor&rsquo;s changes ({critic.appliedSwaps.length})
+                  </button>
+                ) : null}
+              </div>
+            </div>
 
-        {mode === "edit" && buildId ? (
-          <ProfessorDeckEditorPanel slug={slug} buildId={buildId} />
+            <ProfessorDeckEditorPanel slug={slug} buildId={buildId} />
+
+            <DeckInsightDrawer
+              open={insight === "bracket"}
+              title="Bracket"
+              subtitle={`How this deck measures against the bracket ${userInputs.bracket} you asked for.`}
+              onClose={() => setInsight(null)}
+            >
+              <ProfessorDeckBracketPanel
+                storeSlug={slug}
+                commanderName={commander.name}
+                cards={bracketCards}
+                requestedBracket={userInputs.bracket}
+              />
+            </DeckInsightDrawer>
+
+            <DeckInsightDrawer
+              open={insight === "swaps"}
+              title="Suggested swaps"
+              subtitle="Changes that would move the deck toward the bracket and playstyle you asked for."
+              onClose={() => setInsight(null)}
+            >
+              <ProfessorDeckSwapPanel
+                storeSlug={slug}
+                commanderName={commander.name}
+                commanderColorIdentity={commander.colorIdentity}
+                cards={bracketCards}
+                requestedBracket={userInputs.bracket}
+              />
+            </DeckInsightDrawer>
+
+            <DeckInsightDrawer
+              open={insight === "changes"}
+              title="Professor's changes"
+              subtitle={critic?.summary ?? undefined}
+              onClose={() => setInsight(null)}
+            >
+              <ul className="professor-mtg-body space-y-1 text-sm">
+                {(critic?.appliedSwaps ?? []).map((swap) => (
+                  <li key={`${swap.cut}->${swap.add}`}>
+                    <span className="text-[var(--text-lo)]">{swap.cut}</span>
+                    {" → "}
+                    <span className="text-[var(--accent-hi)]">{swap.add}</span>
+                    {swap.reason ? (
+                      <span className="professor-mtg-muted"> — {swap.reason}</span>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            </DeckInsightDrawer>
+          </>
         ) : (
           <>
         <div className="professor-mtg-panel-status flex items-center justify-between gap-3 px-4 py-2 sm:px-5">
