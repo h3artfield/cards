@@ -101,6 +101,10 @@ export function EventSignupsPanel({
         <div>
           <h3 className="text-sm font-semibold text-gray-900">Signups</h3>
           <p className="mt-1 text-xs text-gray-600">{event.title}</p>
+          <p className="mt-1 text-[11px] text-gray-500">
+            Commander and bracket shown when a player registered a deck. Use the spread to
+            build pods.
+          </p>
         </div>
         <p className="text-xs font-medium text-gray-700">{capacityLabel}</p>
       </div>

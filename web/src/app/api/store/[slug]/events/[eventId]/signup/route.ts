@@ -12,6 +12,39 @@ import { resolveSignupDeckV1 } from "@/lib/store-calendar/signup-deck-v1";
 import { DEFAULT_CALENDAR_SETTINGS } from "@/lib/store-calendar/types";
 import type { StoreEventSignupDeck } from "@/lib/store-calendar/types";
 
+export async function GET(
+  request: NextRequest,
+  context: { params: Promise<{ slug: string; eventId: string }> },
+) {
+  try {
+    const { slug, eventId } = await context.params;
+    const session = getCustomerSession(request);
+    if (!session) return jsonOk({ signup: null });
+
+    const store = await dataStore.getStoreBySlug(slug);
+    if (!store) return jsonError("Store not found", 404);
+
+    const customer = await loadCustomer(session.customerId);
+    const email = (customer?.email ?? session.email ?? "").trim().toLowerCase();
+    if (!email) return jsonOk({ signup: null });
+
+    const signup = await dataStore.getEventSignupByEmail(eventId, email);
+    if (!signup || signup.storeId !== store.id) return jsonOk({ signup: null });
+
+    return jsonOk({
+      signup: {
+        id: signup.id,
+        firstName: signup.firstName,
+        lastName: signup.lastName,
+        email: signup.email,
+        deck: signup.deck ?? null,
+      },
+    });
+  } catch (err) {
+    return handleRouteError(err);
+  }
+}
+
 export async function POST(
   request: NextRequest,
   context: { params: Promise<{ slug: string; eventId: string }> },
@@ -97,11 +130,73 @@ export async function POST(
           firstName: result.signup.firstName,
           lastName: result.signup.lastName,
           email: result.signup.email,
+          deck: result.signup.deck ?? null,
         },
         spotsRemaining: result.spotsRemaining,
       },
       201,
     );
+  } catch (err) {
+    return handleRouteError(err);
+  }
+}
+
+/** Attach or change the deck on an existing signup for the signed-in customer. */
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<{ slug: string; eventId: string }> },
+) {
+  try {
+    const { slug, eventId } = await context.params;
+    const store = await dataStore.getStoreBySlug(slug);
+    if (!store) return jsonError("Store not found", 404);
+
+    const session = getCustomerSession(request);
+    if (!session) return jsonError("Sign in to register a deck for this event", 401);
+
+    const customer = await loadCustomer(session.customerId);
+    if (customer && !customerCanActAtStore(customer, store.id)) {
+      return storeMismatchResponse(await boundStoreName(customer));
+    }
+
+    const event = await dataStore.getStoreEvent(eventId);
+    if (!event || event.storeId !== store.id) {
+      return jsonError("Event not found", 404);
+    }
+
+    const body = (await request.json()) as { deckId?: string };
+    const requestedDeckId = body.deckId?.trim();
+    if (!requestedDeckId) return jsonError("deckId required", 400);
+
+    const resolved = await resolveSignupDeckV1({
+      deckId: requestedDeckId,
+      customerId: session.customerId,
+      storeId: store.id,
+    });
+    if (!resolved.ok) {
+      return jsonError(resolved.error, resolved.status);
+    }
+
+    const email = (customer?.email ?? session.email ?? "").trim().toLowerCase();
+    const signup = email
+      ? await dataStore.getEventSignupByEmail(eventId, email)
+      : null;
+    if (!signup) {
+      return jsonError("You are not signed up for this event yet", 404);
+    }
+
+    const updated = { ...signup, deck: resolved.deck };
+    await dataStore.saveEventSignup(updated);
+
+    return jsonOk({
+      signup: {
+        id: updated.id,
+        firstName: updated.firstName,
+        lastName: updated.lastName,
+        email: updated.email,
+        deck: updated.deck ?? null,
+      },
+    });
   } catch (err) {
     return handleRouteError(err);
   }

@@ -23,6 +23,8 @@ import {
 import { DEFAULT_CALENDAR_SETTINGS } from "@/lib/store-calendar/types";
 import { EventDeckPickerV1 } from "@/components/calendar/EventDeckPickerV1";
 import { CustomerStoreNavV1 } from "@/components/CustomerStoreNavV1";
+import { eventWantsDeckRegistrationV1 } from "@/lib/store-calendar/event-wants-deck-registration-v1";
+import type { StoreEventSignupDeck } from "@/lib/store-calendar/types";
 
 type Props = {
   slug: string;
@@ -335,6 +337,7 @@ function EventModal({
 }) {
   const { customer } = useCustomer();
   const meta = categoryMeta(event.category, categories);
+  const wantsDeck = eventWantsDeckRegistrationV1(event);
   const [firstName, setFirstName] = useState(customer?.firstName ?? "");
   const [lastName, setLastName] = useState(customer?.lastName ?? "");
   const [email, setEmail] = useState(customer?.email ?? "");
@@ -344,6 +347,8 @@ function EventModal({
   const [success, setSuccess] = useState(false);
   /** The deck being registered, for Commander events. */
   const [deckId, setDeckId] = useState<string | null>(null);
+  const [registeredDeck, setRegisteredDeck] = useState<StoreEventSignupDeck | null>(null);
+  const [addingDeck, setAddingDeck] = useState(false);
 
   useEffect(() => {
     if (customer) {
@@ -353,6 +358,25 @@ function EventModal({
       setPhone(customer.phone ?? "");
     }
   }, [customer]);
+
+  useEffect(() => {
+    if (!customer) return;
+    let cancelled = false;
+    void fetch(
+      `/api/store/${encodeURIComponent(slug)}/events/${encodeURIComponent(event.id)}/signup`,
+      { credentials: "include" },
+    )
+      .then(async (res) => (res.ok ? await res.json() : null))
+      .then((data: { signup?: { deck?: StoreEventSignupDeck | null } | null } | null) => {
+        if (cancelled || !data?.signup) return;
+        setSuccess(true);
+        setRegisteredDeck(data.signup.deck ?? null);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [customer, slug, event.id]);
 
   const isFull = event.spotsRemaining === 0;
 
@@ -372,12 +396,37 @@ function EventModal({
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Could not sign up");
+      setRegisteredDeck((data.signup?.deck as StoreEventSignupDeck | undefined) ?? null);
       setSuccess(true);
       onSignedUp();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not sign up");
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function attachDeckAfterSignup() {
+    if (!deckId) return;
+    setAddingDeck(true);
+    setError(null);
+    try {
+      const res = await fetch(
+        `/api/store/${encodeURIComponent(slug)}/events/${encodeURIComponent(event.id)}/signup`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ deckId }),
+        },
+      );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Could not save your deck");
+      setRegisteredDeck((data.signup?.deck as StoreEventSignupDeck | undefined) ?? null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not save your deck");
+    } finally {
+      setAddingDeck(false);
     }
   }
 
@@ -434,9 +483,44 @@ function EventModal({
         ) : null}
 
         {success ? (
-          <p className="mt-5 rounded-lg bg-green-50 px-3 py-2 text-sm text-green-800">
-            You&apos;re signed up! A confirmation email is on its way.
-          </p>
+          <div className="mt-5 space-y-3">
+            <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-800">
+              You&apos;re signed up! A confirmation email is on its way.
+            </p>
+            {registeredDeck ? (
+              <p className="rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-800">
+                Registered deck:{" "}
+                <span className="font-semibold">{registeredDeck.commanderName}</span> · bracket{" "}
+                {registeredDeck.bracket}
+              </p>
+            ) : wantsDeck && customer ? (
+              <div className="space-y-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-3">
+                <p className="text-sm text-amber-950">
+                  You did not register a deck yet. The shop uses this to seat balanced pods.
+                </p>
+                <EventDeckPickerV1 slug={slug} value={deckId} onChange={setDeckId} />
+                {error ? <p className="text-sm text-red-600">{error}</p> : null}
+                <button
+                  type="button"
+                  disabled={!deckId || addingDeck}
+                  onClick={() => void attachDeckAfterSignup()}
+                  className="inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60"
+                >
+                  {addingDeck ? "Saving…" : "Save deck for this event"}
+                </button>
+              </div>
+            ) : wantsDeck && !customer ? (
+              <p className="text-sm text-gray-600">
+                <Link
+                  href={`/sign-in?store=${encodeURIComponent(slug)}&return=${encodeURIComponent(`/s/${slug}/calendar`)}`}
+                  className="font-semibold text-indigo-600 hover:underline"
+                >
+                  Sign in
+                </Link>{" "}
+                to register which deck you are bringing.
+              </p>
+            ) : null}
+          </div>
         ) : isFull ? null : (
           <form onSubmit={submitSignup} className="mt-5 space-y-3">
             <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
@@ -480,9 +564,18 @@ function EventModal({
                 className="mt-1 w-full rounded-lg border px-3 py-2"
               />
             </label>
-            {/* Only Commander nights have brackets to balance, so this stays
-                out of the way of every other kind of event. */}
-            {customer && event.category === "commander" ? (
+            {wantsDeck && !customer ? (
+              <p className="rounded-lg bg-indigo-50 px-3 py-2 text-sm text-indigo-950">
+                <Link
+                  href={`/sign-in?store=${encodeURIComponent(slug)}&return=${encodeURIComponent(`/s/${slug}/calendar`)}`}
+                  className="font-semibold underline"
+                >
+                  Sign in
+                </Link>{" "}
+                to tell the shop which deck you are bringing and its bracket.
+              </p>
+            ) : null}
+            {wantsDeck && customer ? (
               <EventDeckPickerV1 slug={slug} value={deckId} onChange={setDeckId} />
             ) : null}
             {error ? <p className="text-sm text-red-600">{error}</p> : null}

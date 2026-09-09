@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "@/components/Button";
 import { EventSignupsPanel } from "@/components/EventSignupsPanel";
+import { adminFetch } from "@/lib/api-client";
 import type { StoreEventCategoryMeta } from "@/lib/store-calendar/categories";
 import { WEEKDAY_LABELS } from "@/lib/store-calendar/recurrence";
 import type { StoreEvent } from "@/lib/store-calendar/types";
@@ -109,13 +110,29 @@ export function AdminEventEditorDialog({
 }: Props) {
   const [form, setForm] = useState(initialForm);
   const [tab, setTab] = useState<"details" | "signups">("details");
+  const [signupCount, setSignupCount] = useState<number | null>(null);
 
   useEffect(() => {
     if (open) {
       setForm(initialForm);
       setTab("details");
+      setSignupCount(null);
     }
   }, [open, initialForm]);
+
+  useEffect(() => {
+    if (!open || mode !== "edit" || !editingEvent) return;
+    let cancelled = false;
+    void adminFetch(`/api/admin/store-events/${encodeURIComponent(editingEvent.id)}/signups`)
+      .then(async (res) => (res.ok ? await res.json() : null))
+      .then((data: { signupCount?: number } | null) => {
+        if (!cancelled && data) setSignupCount(data.signupCount ?? 0);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [open, mode, editingEvent]);
 
   if (!open) return null;
 
@@ -173,7 +190,7 @@ export function AdminEventEditorDialog({
                   : "border-transparent text-gray-600"
               }`}
             >
-              Signups
+              Signups{signupCount != null ? ` (${signupCount})` : ""}
             </button>
           </div>
         ) : null}
