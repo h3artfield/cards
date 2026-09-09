@@ -32,6 +32,9 @@ export function CustomerDeckNavV1({
       <Link href={`/s/${store}/inventory`} className="professor-mtg-link text-xs">
         Shop
       </Link>
+      <Link href={`/s/${store}/calendar`} className="professor-mtg-link text-xs">
+        Events
+      </Link>
     </nav>
   );
 }

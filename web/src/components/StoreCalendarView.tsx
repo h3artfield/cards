@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import type { CalendarSettings, StoreEvent, StoreEventPublic } from "@/lib/store-calendar/types";
 import { useCustomer } from "@/context/CustomerContext";
 import {
@@ -21,6 +22,7 @@ import {
 } from "@/lib/store-calendar/categories";
 import { DEFAULT_CALENDAR_SETTINGS } from "@/lib/store-calendar/types";
 import { EventDeckPickerV1 } from "@/components/calendar/EventDeckPickerV1";
+import { CustomerStoreNavV1 } from "@/components/CustomerStoreNavV1";
 
 type Props = {
   slug: string;
@@ -30,6 +32,7 @@ type Props = {
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
 
 export function StoreCalendarView({ slug, embed = false }: Props) {
+  const { customer } = useCustomer();
   const [month, setMonth] = useState(() => startOfMonth(new Date()));
   const [events, setEvents] = useState<StoreEventPublic[]>([]);
   const [calendarSettings, setCalendarSettings] = useState<CalendarSettings>(
@@ -89,10 +92,24 @@ export function StoreCalendarView({ slug, embed = false }: Props) {
 
   if (!published && !loading) {
     return (
-      <div className={embed ? "p-4" : "mx-auto max-w-6xl px-4 py-10"}>
-        <p className="text-center text-sm text-gray-600">
-          This store&apos;s event calendar is not published yet.
-        </p>
+      <div
+        className={
+          embed ? "min-h-[480px] bg-white p-3 sm:p-4" : "min-h-screen bg-white"
+        }
+      >
+        <div className={embed ? "" : "mx-auto max-w-6xl px-4 py-8"}>
+          {!embed ? (
+            <CustomerStoreNavV1
+              slug={slug}
+              active="events"
+              loggedIn={Boolean(customer)}
+              variant="light"
+            />
+          ) : null}
+          <p className="mt-10 text-center text-sm text-gray-600">
+            This store&apos;s event calendar is not published yet.
+          </p>
+        </div>
       </div>
     );
   }
@@ -106,10 +123,18 @@ export function StoreCalendarView({ slug, embed = false }: Props) {
       }
     >
       <div className={embed ? "" : "mx-auto max-w-6xl px-4 py-8"}>
-        {!embed && storeName ? (
-          <p className="mb-2 text-center text-sm font-medium text-gray-500">
-            {storeName}
-          </p>
+        {!embed ? (
+          <div className="mb-6">
+            <CustomerStoreNavV1
+              slug={slug}
+              active="events"
+              loggedIn={Boolean(customer)}
+              variant="light"
+            />
+            {storeName ? (
+              <p className="mt-3 text-center text-sm font-medium text-gray-500">{storeName}</p>
+            ) : null}
+          </div>
         ) : null}
 
         <h1 className="text-center text-xl font-semibold text-gray-900 sm:text-2xl">

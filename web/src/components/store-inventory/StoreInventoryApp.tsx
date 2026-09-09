@@ -9,12 +9,15 @@ import {
   deckBuildSignInHref,
 } from "@/lib/store-inventory/deck-build-auth";
 import { StoreBrandMark } from "@/components/StoreBrandMark";
+import { CustomerStoreNavV1 } from "@/components/CustomerStoreNavV1";
 import {
   DEFAULT_INVENTORY_FILTERS,
+  INVENTORY_GAME_LABELS,
   InventoryCardGrid,
   InventoryFilterBar,
   InventoryGameSourceBar,
   appendInventoryColorParams,
+  catalogSupportsGame,
   inventoryColorFiltersActive,
   legacyColorToFilterPatch,
   type InventoryFilterState,
@@ -75,6 +78,25 @@ function clerkGameToBrowseGame(game?: string): InventoryFilterState["game"] {
   if (game === "pokemon") return "pokemon";
   if (game === "riftbound") return "riftbound";
   return "magic";
+}
+
+function browseEmptyMessage(
+  filters: InventoryFilterState,
+  data: BrowseResponse | null,
+): string {
+  if (filters.source === "catalog") return "No printings match your search.";
+  if (data?.facets?.inStock === 0) {
+    return "No catalog inventory linked yet. Import TCGplayer or Shopify stock in admin, then run the inventory crosswalk.";
+  }
+  // facets.games omits games with no browseable rows instead of reporting 0, so
+  // a missing key means the store has nothing of that game in stock.
+  if (data && (data.facets?.games?.[filters.game] ?? 0) === 0) {
+    return `This store has no ${INVENTORY_GAME_LABELS[filters.game]} cards in stock right now.`;
+  }
+  if (inventoryColorFiltersActive(filters) && data?.total === 0) {
+    return "No cards match this color filter yet. Color data comes from Scryfall — run Admin → Deck Builder → Inventory crosswalk sync to link more cards.";
+  }
+  return "No cards match your search.";
 }
 
 export function StoreInventoryApp({
@@ -279,7 +301,13 @@ export function StoreInventoryApp({
   }, []);
 
   function patchFilters(next: Partial<InventoryFilterState>) {
-    setFilters((f) => ({ ...f, ...next }));
+    setFilters((f) => {
+      const merged = { ...f, ...next };
+      // The clerk switches games without touching the source, which would
+      // otherwise strand a catalog browse on a game the catalog has no data for.
+      if (!catalogSupportsGame(merged.game)) merged.source = "inventory";
+      return merged;
+    });
     if (next.q != null) {
       setCommittedQ(next.q.trim());
     }
@@ -343,12 +371,14 @@ export function StoreInventoryApp({
                 </Link>
               </p>
             </div>
-            <Link
-              href={`/s/${slug}`}
-              className="text-sm text-neutral-400 hover:text-white"
-            >
-              ← Store home
-            </Link>
+          </div>
+
+          <div className="mt-4">
+            <CustomerStoreNavV1
+              slug={slug}
+              active="shop"
+              loggedIn={Boolean(customer)}
+            />
           </div>
 
           <div className="mt-4 flex gap-2 border-b border-neutral-800 pb-0">
@@ -544,13 +574,7 @@ export function StoreInventoryApp({
                   onSelect={toggleGathering}
                   draggable
                   size="large"
-                  emptyMessage={
-                    data?.facets?.inStock === 0
-                      ? "No catalog inventory linked yet. Import TCGplayer or Shopify stock in admin, then run the inventory crosswalk."
-                      : inventoryColorFiltersActive(filters) && data?.total === 0
-                        ? "No cards match this color filter yet. Color data comes from Scryfall — run Admin → Deck Builder → Inventory crosswalk sync to link more cards."
-                        : "No cards match your search."
-                  }
+                  emptyMessage={browseEmptyMessage(filters, data)}
                 />
 
                 {data && data.totalPages > 1 ? (

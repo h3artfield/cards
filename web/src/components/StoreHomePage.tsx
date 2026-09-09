@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CustomerAuthShell } from "@/components/CustomerAuthShell";
+import { CustomerStoreNavV1 } from "@/components/CustomerStoreNavV1";
 import { StoreBrandMark } from "@/components/StoreBrandMark";
 import { useCustomer } from "@/context/CustomerContext";
 import {
@@ -118,7 +119,9 @@ export function StoreHomePage({
   const loggedIn = Boolean(customer);
 
   return (
-    <CustomerAuthShell>
+    <CustomerAuthShell wide>
+      <CustomerStoreNavV1 slug={slug} active="dashboard" loggedIn={loggedIn} />
+
       <StoreBrandMark
         storeName={storeName}
         logoUrl={logoUrl}
