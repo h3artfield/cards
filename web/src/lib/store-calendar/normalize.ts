@@ -6,6 +6,7 @@ import type {
   StoreEventFlyer,
   StoreEventFlyers,
   StoreEventSignup,
+  StoreEventSignupDeck,
 } from "./types";
 import { DEFAULT_CALENDAR_SETTINGS } from "./types";
 import {
@@ -252,7 +253,30 @@ export function normalizeStoreEventSignup(
       raw.phone != null
         ? String(raw.phone).trim()
         : undefined,
+    deck: normalizeStoreEventSignupDeck(raw.deck),
     createdAt: String(raw.createdAt ?? raw.created_at ?? now),
+  };
+}
+
+/**
+ * Only ever called with a snapshot the server already resolved from the
+ * player's own deck, so this validates shape rather than trust.
+ */
+function normalizeStoreEventSignupDeck(raw: unknown): StoreEventSignupDeck | undefined {
+  if (!raw || typeof raw !== "object") return undefined;
+  const deck = raw as Record<string, unknown>;
+
+  const deckId = String(deck.deckId ?? "").trim();
+  const bracket = Number(deck.bracket);
+  if (!deckId || !Number.isInteger(bracket)) return undefined;
+
+  return {
+    deckId,
+    deckName: String(deck.deckName ?? "").trim(),
+    commanderName: String(deck.commanderName ?? "").trim(),
+    bracket,
+    atRevision: Number(deck.atRevision ?? 0),
+    registeredAt: String(deck.registeredAt ?? new Date().toISOString()),
   };
 }
 

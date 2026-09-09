@@ -75,6 +75,21 @@ export function EventSignupsPanel({
     setMessage(`Sent ${json.sent} of ${json.total} customer emails.`);
   }
 
+  /**
+   * How many of each bracket are coming, which is the number an organiser
+   * actually seats pods from. Four to a pod is the Commander default.
+   */
+  const bracketSpread = (() => {
+    const counts = new Map<number, number>();
+    for (const signup of data?.signups ?? []) {
+      if (!signup.deck) continue;
+      counts.set(signup.deck.bracket, (counts.get(signup.deck.bracket) ?? 0) + 1);
+    }
+    return [...counts.entries()].sort((a, b) => a[0] - b[0]);
+  })();
+
+  const undeclared = (data?.signups ?? []).filter((s) => !s.deck).length;
+
   const capacityLabel =
     data?.capacity != null
       ? `${data.signupCount} / ${data.capacity} signed up`
@@ -98,6 +113,28 @@ export function EventSignupsPanel({
         </p>
       ) : null}
 
+      {bracketSpread.length ? (
+        <div className="mt-3 rounded-lg border bg-gray-50 px-3 py-2">
+          <p className="text-xs font-medium text-gray-700">Brackets registered</p>
+          <div className="mt-1 flex flex-wrap gap-2">
+            {bracketSpread.map(([bracket, count]) => (
+              <span key={bracket} className="text-xs text-gray-700">
+                <span className="font-semibold">B{bracket}</span> × {count}
+                {count >= 4 ? ` · ${Math.floor(count / 4)} full pod${
+                  Math.floor(count / 4) === 1 ? "" : "s"
+                }` : ""}
+              </span>
+            ))}
+          </div>
+          {undeclared > 0 ? (
+            <p className="mt-1 text-xs text-gray-500">
+              {undeclared} {undeclared === 1 ? "player has" : "players have"} not said what
+              they are bringing.
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+
       {data?.signups.length ? (
         <ul className="mt-3 max-h-48 divide-y overflow-y-auto rounded-lg border">
           {data.signups.map((signup) => (
@@ -112,6 +149,14 @@ export function EventSignupsPanel({
                 <p className="text-xs text-gray-600">{signup.email}</p>
                 {signup.phone ? (
                   <p className="text-xs text-gray-500">{signup.phone}</p>
+                ) : null}
+                {signup.deck ? (
+                  <p className="mt-1 text-xs text-gray-700">
+                    <span className="rounded bg-gray-900 px-1.5 py-0.5 font-semibold text-white">
+                      B{signup.deck.bracket}
+                    </span>{" "}
+                    {signup.deck.commanderName}
+                  </p>
                 ) : null}
               </div>
               <button

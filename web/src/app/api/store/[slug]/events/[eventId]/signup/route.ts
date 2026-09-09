@@ -8,7 +8,9 @@ import {
   storeMismatchResponse,
 } from "@/lib/auth/customer-store-binding";
 import { registerEventSignup } from "@/lib/store-calendar/register-signup";
+import { resolveSignupDeckV1 } from "@/lib/store-calendar/signup-deck-v1";
 import { DEFAULT_CALENDAR_SETTINGS } from "@/lib/store-calendar/types";
+import type { StoreEventSignupDeck } from "@/lib/store-calendar/types";
 
 export async function POST(
   request: NextRequest,
@@ -40,6 +42,31 @@ export async function POST(
       }
     }
 
+    /**
+     * A deck can only be registered by the signed-in owner of that deck. The
+     * request supplies an id and nothing else; the commander and the bracket
+     * are read from the stored deck, so a player cannot register a cEDH list
+     * as bracket 2 by editing the request.
+     */
+    const requestedDeckId =
+      typeof body.deckId === "string" ? body.deckId.trim() : "";
+    let signupDeck: StoreEventSignupDeck | undefined;
+
+    if (requestedDeckId) {
+      if (!session) {
+        return jsonError("Sign in to register a deck for this event", 401);
+      }
+      const resolved = await resolveSignupDeckV1({
+        deckId: requestedDeckId,
+        customerId: session.customerId,
+        storeId: store.id,
+      });
+      if (!resolved.ok) {
+        return jsonError(resolved.error, resolved.status);
+      }
+      signupDeck = resolved.deck;
+    }
+
     const timeZone =
       calendar?.timezone ?? DEFAULT_CALENDAR_SETTINGS.timezone;
 
@@ -54,6 +81,7 @@ export async function POST(
         email: String(body.email ?? session?.email ?? ""),
         phone: body.phone != null ? String(body.phone) : undefined,
         customerId: session?.customerId,
+        deck: signupDeck,
       },
       timeZone,
     );

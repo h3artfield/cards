@@ -20,6 +20,7 @@ import {
   type StoreEventCategoryMeta,
 } from "@/lib/store-calendar/categories";
 import { DEFAULT_CALENDAR_SETTINGS } from "@/lib/store-calendar/types";
+import { EventDeckPickerV1 } from "@/components/calendar/EventDeckPickerV1";
 
 type Props = {
   slug: string;
@@ -316,6 +317,8 @@ function EventModal({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  /** The deck being registered, for Commander events. */
+  const [deckId, setDeckId] = useState<string | null>(null);
 
   useEffect(() => {
     if (customer) {
@@ -339,7 +342,7 @@ function EventModal({
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ firstName, lastName, email, phone }),
+          body: JSON.stringify({ firstName, lastName, email, phone, deckId }),
         },
       );
       const data = await res.json();
@@ -452,6 +455,11 @@ function EventModal({
                 className="mt-1 w-full rounded-lg border px-3 py-2"
               />
             </label>
+            {/* Only Commander nights have brackets to balance, so this stays
+                out of the way of every other kind of event. */}
+            {customer && event.category === "commander" ? (
+              <EventDeckPickerV1 slug={slug} value={deckId} onChange={setDeckId} />
+            ) : null}
             {error ? <p className="text-sm text-red-600">{error}</p> : null}
             <button
               type="submit"

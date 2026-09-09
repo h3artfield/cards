@@ -4,7 +4,11 @@ import {
   eventAcceptsSignups,
   spotsRemaining,
 } from "@/lib/store-calendar/signup-utils";
-import type { StoreEvent, StoreEventSignup } from "@/lib/store-calendar/types";
+import type {
+  StoreEvent,
+  StoreEventSignup,
+  StoreEventSignupDeck,
+} from "@/lib/store-calendar/types";
 import { sendEventSignupConfirmationEmail } from "@/lib/store-calendar/event-email";
 
 export type RegisterEventSignupInput = {
@@ -13,6 +17,9 @@ export type RegisterEventSignupInput = {
   email: string;
   phone?: string;
   customerId?: string;
+  /** Already resolved from the player's own deck by the caller, never trusted
+   *  from the request body. */
+  deck?: StoreEventSignupDeck;
 };
 
 export type RegisterEventSignupResult =
@@ -56,6 +63,7 @@ export async function registerEventSignup(
       email,
       phone: input.phone?.trim() || undefined,
       customerId: input.customerId,
+      deck: input.deck,
     },
     { storeId, eventId: event.id, customerId: input.customerId },
   );

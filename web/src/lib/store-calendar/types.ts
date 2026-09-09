@@ -74,6 +74,31 @@ export interface StoreEvent {
   flyers?: StoreEventFlyers;
 }
 
+/**
+ * What a player said they are bringing, recorded at the moment they registered.
+ *
+ * A snapshot rather than a live read of the deck. The organiser needs to know
+ * what was registered even if the player rebuilds the deck afterwards, and
+ * snapshotting means the store reads this row instead of reading somebody's
+ * private decklist — there is no "the shop can see my deck" permission here,
+ * and this feature does not need one.
+ *
+ * The commander and bracket are resolved server-side from the player's own
+ * deck. They are never taken from the request: a table where anyone can type
+ * "bracket 1" next to a cEDH list is worse than no brackets at all.
+ */
+export interface StoreEventSignupDeck {
+  /** The deck this describes, so later edits can be detected. */
+  deckId: string;
+  deckName: string;
+  commanderName: string;
+  /** The bracket the deck measured when it was registered. */
+  bracket: number;
+  /** Deck revision at registration; a change means the snapshot has aged. */
+  atRevision: number;
+  registeredAt: string;
+}
+
 export interface StoreEventSignup {
   id: string;
   storeId: string;
@@ -84,6 +109,8 @@ export interface StoreEventSignup {
   lastName: string;
   email: string;
   phone?: string;
+  /** Present only for signed-in players who chose a deck. */
+  deck?: StoreEventSignupDeck;
   createdAt: string;
 }
 

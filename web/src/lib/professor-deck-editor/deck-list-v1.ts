@@ -22,6 +22,12 @@ export type CustomerDeckOriginV1 = "professor" | "hand";
 export type CustomerDeckListEntryV1 = {
   /** Unique across both sources, so React keys and lookups are safe. */
   key: string;
+  /**
+   * The editable deck this row refers to, where one is being read. Null for
+   * Professor rows, which are read from the saved-deck record rather than the
+   * editable copy — so there is no id here to register or measure against.
+   */
+  deckId: string | null;
   href: string;
   deckName: string;
   commanderName: string;
@@ -45,6 +51,7 @@ export type CustomerDeckListEntryV1 = {
 export function deckListEntryFromHandDeckV1(deck: EditableDeckV1): CustomerDeckListEntryV1 {
   return {
     key: deck.deckId,
+    deckId: deck.deckId,
     href: `/s/${encodeURIComponent(deck.storeSlug)}/decks/${encodeURIComponent(deck.deckId)}`,
     deckName: deck.deckName,
     commanderName: deck.commander.name,
@@ -61,6 +68,7 @@ export function deckListEntryFromHandDeckV1(deck: EditableDeckV1): CustomerDeckL
 export function deckListEntryFromSavedDeckV1(deck: CustomerSavedDeck): CustomerDeckListEntryV1 {
   return {
     key: deck.id,
+    deckId: null,
     href:
       `/s/${encodeURIComponent(deck.storeSlug)}/inventory/professor/build` +
       `?buildId=${encodeURIComponent(deck.buildId)}`,
