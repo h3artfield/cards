@@ -500,14 +500,16 @@ function EventModal({
                 </p>
                 <EventDeckPickerV1 slug={slug} value={deckId} onChange={setDeckId} />
                 {error ? <p className="text-sm text-red-600">{error}</p> : null}
-                <button
-                  type="button"
-                  disabled={!deckId || addingDeck}
-                  onClick={() => void attachDeckAfterSignup()}
-                  className="inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60"
-                >
-                  {addingDeck ? "Saving…" : "Save deck for this event"}
-                </button>
+                {deckId ? (
+                  <button
+                    type="button"
+                    disabled={addingDeck}
+                    onClick={() => void attachDeckAfterSignup()}
+                    className="inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60"
+                  >
+                    {addingDeck ? "Saving…" : "Save deck for this event"}
+                  </button>
+                ) : null}
               </div>
             ) : wantsDeck && !customer ? (
               <p className="text-sm text-gray-600">
