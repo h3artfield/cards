@@ -16,6 +16,7 @@ import {
 } from "@/lib/customer-auth-ui";
 import { CollectionBinderImport } from "@/components/collection/CollectionBinderImport";
 import { CollectionCardSearch } from "@/components/collection/CollectionCardSearch";
+import { CollectionChangePrinting } from "@/components/collection/CollectionChangePrinting";
 import { importCandidatesFromCard } from "@/lib/collection/collection-import-parse";
 import type { BuybackOrder, CollectionCard } from "@/lib/types";
 
@@ -257,33 +258,48 @@ export default function CollectionPage() {
 
           <ul className="divide-y divide-neutral-800">
             {owned.map((card) => (
-              <li key={card.id} className="flex items-center gap-3 py-3">
-                <input
-                  type="checkbox"
-                  checked={selected.has(card.id)}
-                  onChange={() => toggle(card.id)}
-                  className="h-4 w-4 shrink-0"
-                  aria-label={`Select ${card.displayName}`}
-                />
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={card.frontImageUrl}
-                  alt={card.displayName}
-                  className="h-16 w-12 shrink-0 object-cover"
-                />
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm text-white">
-                    {card.displayName}
-                  </p>
-                  <p className="truncate text-xs text-neutral-500">
-                    {cardSubtitle(card)}
-                  </p>
+              <li key={card.id} className="py-3">
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={selected.has(card.id)}
+                    onChange={() => toggle(card.id)}
+                    className="h-4 w-4 shrink-0"
+                    aria-label={`Select ${card.displayName}`}
+                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={card.frontImageUrl}
+                    alt={card.displayName}
+                    className="h-16 w-12 shrink-0 object-cover"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm text-white">
+                      {card.displayName}
+                    </p>
+                    <p className="truncate text-xs text-neutral-500">
+                      {cardSubtitle(card)}
+                    </p>
+                  </div>
+                  {card.scryfallId ? (
+                    <span className="shrink-0 border border-neutral-700 px-2 py-0.5 text-[10px] uppercase tracking-wide text-neutral-400">
+                      Deck ready
+                    </span>
+                  ) : null}
                 </div>
-                {card.scryfallId && (
-                  <span className="shrink-0 border border-neutral-700 px-2 py-0.5 text-[10px] uppercase tracking-wide text-neutral-400">
-                    Deck ready
-                  </span>
-                )}
+                <CollectionChangePrinting
+                  slug={slug}
+                  card={card}
+                  onChanged={(next) => {
+                    setCards((current) =>
+                      current.map((row) => (row.id === next.id ? next : row)),
+                    );
+                    setNotice(
+                      `${next.displayName} updated to ${next.setName ?? "that printing"}.`,
+                    );
+                    setError(null);
+                  }}
+                />
               </li>
             ))}
           </ul>

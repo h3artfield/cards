@@ -13,11 +13,11 @@ import {
   searchScryfallPrintings,
   type ScryfallPrintingSearchHit,
 } from "../deck-builder/scryfall-printing-search";
-import { scryfallFetch } from "../processing/scryfall-client";
-import { catalogCardFromScryfall } from "../deck-builder/scryfall-catalog";
 import { dataStore } from "../storage/data-store";
 import type { CollectionCard } from "../types";
 import type { CollectionImportLine } from "./collection-import-parse";
+
+const IMPORT_PRINTING_LIMIT = 48;
 
 export {
   COLLECTION_IMPORT_CANDIDATES_KEY,
@@ -37,23 +37,14 @@ export type CollectionImportSummary = {
   cards: CollectionCard[];
 };
 
-async function namedExact(name: string): Promise<ScryfallPrintingSearchHit | null> {
-  const res = await scryfallFetch(
-    `https://api.scryfall.com/cards/named?exact=${encodeURIComponent(name)}`,
-  );
-  if (!res.ok) return null;
-  const card = catalogCardFromScryfall((await res.json()) as Record<string, unknown>);
-  if (!card) return null;
-  return {
-    scryfallId: card.id,
-    name: card.name,
-    setName: card.setName,
-    setCode: card.set,
-    collectorNumber: card.collectorNumber,
-    rarity: card.rarity,
-    imageNormal: card.imageNormal,
-    typeLine: card.typeLine,
-  };
+function lockOrReview(hits: ScryfallPrintingSearchHit[]): {
+  status: "locked" | "needs_review" | "unmatched";
+  hit?: ScryfallPrintingSearchHit;
+  candidates?: ScryfallPrintingSearchHit[];
+} {
+  if (hits.length === 0) return { status: "unmatched" };
+  if (hits.length === 1) return { status: "locked", hit: hits[0] };
+  return { status: "needs_review", candidates: hits };
 }
 
 export async function resolveCollectionImportLine(line: CollectionImportLine): Promise<{
@@ -69,26 +60,21 @@ export async function resolveCollectionImportLine(line: CollectionImportLine): P
     ]
       .filter(Boolean)
       .join(" ");
-    const hits = await searchScryfallPrintings({ query: q, limit: 8 });
-    if (hits.length === 1) return { status: "locked", hit: hits[0] };
-    if (hits.length > 1) {
-      const names = new Set(hits.map((h) => h.name.toLowerCase()));
-      if (names.size === 1) return { status: "locked", hit: hits[0] };
-      return { status: "needs_review", candidates: hits };
-    }
+    const hits = await searchScryfallPrintings({ query: q, limit: IMPORT_PRINTING_LIMIT });
+    if (hits.length) return lockOrReview(hits);
   }
 
-  const exact = await namedExact(line.name);
-  if (exact) return { status: "locked", hit: exact };
+  const exactPrints = await searchScryfallPrintings({
+    query: `!"${line.name}"`,
+    limit: IMPORT_PRINTING_LIMIT,
+  });
+  if (exactPrints.length) return lockOrReview(exactPrints);
 
   const fuzzy = await searchScryfallPrintings({
-    query: `"${line.name}"`,
-    limit: 8,
+    query: line.name,
+    limit: 16,
   });
   if (!fuzzy.length) return { status: "unmatched" };
-
-  const names = new Set(fuzzy.map((h) => h.name.toLowerCase()));
-  if (names.size === 1) return { status: "locked", hit: fuzzy[0] };
   return { status: "needs_review", candidates: fuzzy };
 }
 

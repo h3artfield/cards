@@ -8,6 +8,7 @@ import {
   authError,
   authSubtext,
 } from "@/lib/customer-auth-ui";
+import { CollectionPrintingPicker } from "@/components/collection/CollectionPrintingPicker";
 import { importCandidatesFromCard } from "@/lib/collection/collection-import-parse";
 import type { CollectionCard } from "@/lib/types";
 
@@ -187,36 +188,14 @@ export function CollectionBinderImport({
             {current.quantity && current.quantity > 1 ? ` · ×${current.quantity}` : ""}
           </p>
           <p className={`mt-1 ${authSubtext}`}>
-            This line is not owned on decks until you pick a printing.
+            Pick the set and art, same as adding a card by name. This line is
+            not owned on decks until you do.
           </p>
-          <ul className="mt-3 space-y-2">
-            {candidates.map((hit) => (
-              <li key={hit.scryfallId}>
-                <button
-                  type="button"
-                  disabled={resolvingId !== null}
-                  onClick={() => void pickPrinting(hit.scryfallId)}
-                  className="flex w-full items-center gap-3 border border-neutral-800 px-2 py-2 text-left hover:border-neutral-600 disabled:opacity-60"
-                >
-                  {hit.imageNormal ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={hit.imageNormal}
-                      alt=""
-                      className="h-14 w-10 shrink-0 object-cover"
-                    />
-                  ) : null}
-                  <span className="min-w-0">
-                    <span className="block truncate text-sm text-white">{hit.name}</span>
-                    <span className="block truncate text-xs text-neutral-500">
-                      {(hit.setName ?? hit.setCode.toUpperCase()) +
-                        (hit.collectorNumber ? ` #${hit.collectorNumber}` : "")}
-                    </span>
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
+          <CollectionPrintingPicker
+            candidates={candidates}
+            busyId={resolvingId}
+            onPick={(scryfallId) => void pickPrinting(scryfallId)}
+          />
           <button
             type="button"
             className={`mt-3 ${authButtonSecondary}`}

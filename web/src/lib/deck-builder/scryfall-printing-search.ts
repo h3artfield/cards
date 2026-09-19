@@ -34,22 +34,28 @@ export async function searchScryfallPrintings(input: {
   const query = input.query.trim();
   if (!query) return [];
 
-  const limit = Math.min(24, Math.max(1, input.limit ?? 12));
+  const limit = Math.min(80, Math.max(1, input.limit ?? 12));
 
   try {
-    const res = await scryfallFetch(
-      `https://api.scryfall.com/cards/search?q=${encodeURIComponent(`${query} game:paper`)}`,
-    );
-    if (!res.ok) return [];
-    const body = (await res.json()) as {
-      data?: Record<string, unknown>[];
-    };
+    // unique:prints is required: Scryfall defaults to one result per name.
+    let url: string | null =
+      `https://api.scryfall.com/cards/search?q=${encodeURIComponent(`${query} game:paper unique:prints`)}`;
     const hits: ScryfallPrintingSearchHit[] = [];
-    for (const raw of body.data ?? []) {
-      const card = catalogCardFromScryfall(raw);
-      if (!card) continue;
-      hits.push(toHit(card));
-      if (hits.length >= limit) break;
+    while (url && hits.length < limit) {
+      const res = await scryfallFetch(url);
+      if (!res.ok) break;
+      const body = (await res.json()) as {
+        data?: Record<string, unknown>[];
+        has_more?: boolean;
+        next_page?: string;
+      };
+      for (const raw of body.data ?? []) {
+        const card = catalogCardFromScryfall(raw);
+        if (!card) continue;
+        hits.push(toHit(card));
+        if (hits.length >= limit) break;
+      }
+      url = body.has_more && body.next_page && hits.length < limit ? body.next_page : null;
     }
     return hits;
   } catch {
