@@ -21,7 +21,7 @@ export function CollectionPrintingPicker({
   }
 
   return (
-    <ul className="mt-3 max-h-80 space-y-1 overflow-y-auto">
+    <ul className="mt-3 max-h-[36rem] space-y-2 overflow-y-auto">
       {candidates.map((hit) => (
         <li key={hit.scryfallId}>
           <button
@@ -35,10 +35,10 @@ export function CollectionPrintingPicker({
               <img
                 src={hit.imageNormal}
                 alt=""
-                className="h-16 w-12 shrink-0 object-cover"
+                className="h-40 w-[7.15rem] shrink-0 object-cover"
               />
             ) : (
-              <span className="h-16 w-12 shrink-0 bg-neutral-900" />
+              <span className="h-40 w-[7.15rem] shrink-0 bg-neutral-900" />
             )}
             <span className="min-w-0">
               <span className="block truncate text-sm text-white">{hit.name}</span>

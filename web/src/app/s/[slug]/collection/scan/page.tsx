@@ -89,6 +89,21 @@ export default function CollectionScanPage() {
     );
   }
 
+  if (!customer.emailVerified) {
+    return (
+      <CustomerAuthShell>
+        <h1 className={authHeading}>Verify your email</h1>
+        <p className={`mt-3 ${authSubtext}`}>
+          Check your inbox for the verification link before scanning cards
+          into your collection.
+        </p>
+        <Link href={`/s/${slug}/collection`} className={`mt-6 block text-center ${authLink}`}>
+          Back to collection
+        </Link>
+      </CustomerAuthShell>
+    );
+  }
+
   const capturing = step === "front" || step === "back";
 
   if (capturing) {
@@ -221,7 +236,7 @@ export default function CollectionScanPage() {
                 <img
                   src={card.frontImageUrl}
                   alt={card.displayName}
-                  className="h-16 w-12 shrink-0 object-cover"
+                  className="h-40 w-[7.15rem] shrink-0 object-cover"
                 />
                 <div className="min-w-0">
                   <p className="truncate text-sm text-white">
@@ -253,10 +268,10 @@ export default function CollectionScanPage() {
       )}
 
       <Link
-        href={`/s/${slug}/scan`}
+        href={`/s/${slug}/collection`}
         className={`mt-8 block text-center ${authLink}`}
       >
-        Back to scan options
+        Back to collection
       </Link>
     </CustomerAuthShell>
   );

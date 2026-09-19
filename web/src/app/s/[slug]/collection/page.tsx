@@ -271,7 +271,7 @@ export default function CollectionPage() {
                   <img
                     src={card.frontImageUrl}
                     alt={card.displayName}
-                    className="h-16 w-12 shrink-0 object-cover"
+                    className="h-40 w-[7.15rem] shrink-0 object-cover"
                   />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm text-white">
