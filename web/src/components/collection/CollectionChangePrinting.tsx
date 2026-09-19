@@ -73,13 +73,13 @@ export function CollectionChangePrinting({
     <div className="mt-2">
       <button
         type="button"
-        className="text-[10px] uppercase tracking-wide text-neutral-400 underline underline-offset-4"
+        className="text-xs text-neutral-400 underline underline-offset-4"
         onClick={() => setOpen((current) => !current)}
       >
         {open ? "Cancel" : "Change printing"}
       </button>
       {open ? (
-        <div className="mt-2 w-[min(100%,22rem)] border border-neutral-800 bg-neutral-950 p-3">
+        <div className="mt-2 w-full border border-neutral-800 bg-neutral-950 p-3">
           <p className={authSubtext}>
             Pick the set and art for {card.displayName}.
           </p>

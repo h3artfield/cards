@@ -138,7 +138,7 @@ export function CollectionCardSearch({
                   setError(null);
                   setQuery(hit.name);
                 }}
-                className="flex w-full items-center gap-3 rounded-md border border-[var(--line-subtle)] bg-[var(--ink-850)] p-2 text-left hover:border-[var(--accent-lo)]"
+                className="flex w-full items-start gap-3 rounded-md border border-[var(--line-subtle)] bg-[var(--ink-850)] p-2 text-left hover:border-[var(--accent-lo)]"
               >
                 {hit.imageNormal ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -150,9 +150,9 @@ export function CollectionCardSearch({
                 ) : (
                   <span className="h-40 w-[7.15rem] shrink-0 rounded bg-[var(--ink-750)]" />
                 )}
-                <span className="min-w-0">
-                  <span className="block truncate text-sm text-[var(--text-hi)]">{hit.name}</span>
-                  <span className="block truncate text-xs text-[var(--text-lo)]">
+                <span className="min-w-0 text-left">
+                  <span className="block text-sm leading-snug text-[var(--text-hi)]">{hit.name}</span>
+                  <span className="mt-1 block text-xs leading-snug text-[var(--text-lo)]">
                     {printingMeta(hit)}
                   </span>
                 </span>

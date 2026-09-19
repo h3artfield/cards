@@ -28,7 +28,7 @@ export function CollectionPrintingPicker({
             type="button"
             disabled={busyId != null}
             onClick={() => onPick(hit.scryfallId)}
-            className="flex w-full items-center gap-3 border border-neutral-800 px-2 py-2 text-left hover:border-neutral-600 disabled:opacity-60"
+            className="flex w-full items-start gap-3 border border-neutral-800 px-2 py-2 text-left hover:border-neutral-600 disabled:opacity-60"
           >
             {hit.imageNormal ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -40,9 +40,9 @@ export function CollectionPrintingPicker({
             ) : (
               <span className="h-40 w-[7.15rem] shrink-0 bg-neutral-900" />
             )}
-            <span className="min-w-0">
-              <span className="block truncate text-sm text-white">{hit.name}</span>
-              <span className="block truncate text-xs text-neutral-500">
+            <span className="min-w-0 text-left">
+              <span className="block text-sm leading-snug text-white">{hit.name}</span>
+              <span className="mt-1 block text-xs leading-snug text-neutral-500">
                 {printingMeta(hit)}
               </span>
             </span>

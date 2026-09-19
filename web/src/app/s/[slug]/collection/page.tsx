@@ -175,7 +175,7 @@ export default function CollectionPage() {
   }
 
   return (
-    <CustomerAuthShell>
+    <CustomerAuthShell roomy>
       <h1 className={authHeading}>Collection</h1>
       <p className={`mt-3 ${authSubtext}`}>
         This is your binder — cards you already own. The shop pile on the
@@ -259,12 +259,12 @@ export default function CollectionPage() {
           <ul className="divide-y divide-neutral-800">
             {owned.map((card) => (
               <li key={card.id} className="py-3">
-                <div className="flex items-center gap-3">
+                <div className="flex items-start gap-3">
                   <input
                     type="checkbox"
                     checked={selected.has(card.id)}
                     onChange={() => toggle(card.id)}
-                    className="h-4 w-4 shrink-0"
+                    className="mt-2 h-4 w-4 shrink-0"
                     aria-label={`Select ${card.displayName}`}
                   />
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -274,10 +274,10 @@ export default function CollectionPage() {
                     className="h-40 w-[7.15rem] shrink-0 object-cover"
                   />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm text-white">
+                    <p className="text-sm leading-snug text-white">
                       {card.displayName}
                     </p>
-                    <p className="truncate text-xs text-neutral-500">
+                    <p className="mt-1 text-xs leading-snug text-neutral-500">
                       {cardSubtitle(card)}
                     </p>
                   </div>
@@ -336,7 +336,7 @@ export default function CollectionPage() {
                 key={card.id}
                 className="flex items-center justify-between py-2 text-sm"
               >
-                <span className="truncate text-neutral-400">
+                <span className="min-w-0 text-neutral-400">
                   {card.displayName}
                 </span>
                 {card.buybackOrderId && (
