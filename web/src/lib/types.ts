@@ -316,6 +316,8 @@ export interface CollectionCard {
   identityLocked?: boolean;
   /** Set when identification could not name the card. */
   needsReview?: boolean;
+  /** Copies of this printing in the binder. Unset means 1. */
+  quantity?: number;
   visionJson?: Record<string, unknown>;
   status: CollectionCardStatus;
   buybackOrderId?: string;
@@ -372,7 +374,12 @@ export type InventorySalesChannel =
   | "other";
 
 /** Where this inventory row originated. Legacy rows omit source (buyback). */
-export type InventorySource = "buyback" | "tcgplayer_import" | "shopify_import";
+export type InventorySource =
+  | "buyback"
+  | "tcgplayer_import"
+  | "shopify_import"
+  /** Entered by a clerk — cards from packs we opened or an off-flow trade. */
+  | "manual";
 
 /** Shopify listing metadata stored on inventory (canonical for sold detection). */
 export interface InventoryShopifyListing {
@@ -387,6 +394,11 @@ export interface InventoryShopifyListing {
   productOnlineUrl?: string;
   /** Units last pushed to Shopify — compared against CSV quantity on re-import. */
   syncedQuantity?: number;
+  /**
+   * Product status last pushed to Shopify. Sold-out rows go to DRAFT so they
+   * leave the storefront, and return to ACTIVE if a later CSV restocks the SKU.
+   */
+  syncedStatus?: "ACTIVE" | "DRAFT";
   syncedAt?: string;
   syncError?: string;
 }
@@ -400,6 +412,8 @@ export interface InventoryItem {
   storeId: string;
   /** buyback when unset (legacy). */
   source?: InventorySource;
+  /** Clerk who entered a manual row, for audit. */
+  addedBy?: string;
   orderId?: string;
   orderNumber?: string;
   cardId?: string;
@@ -454,6 +468,8 @@ export interface InventoryItem {
   lastShopifyImportAt?: string;
   /** When product image was copied to Firebase Storage. */
   imageCachedAt?: string;
+  /** Bumped when proxy persist pipeline changes; old cross-game caches are ignored. */
+  imageCacheVersion?: number;
   /** Set when CDN + fallbacks could not resolve an image (skip re-try). */
   imageCacheFailedAt?: string;
   /** Defaults to on_hand when unset (legacy records). */

@@ -1,10 +1,13 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { CardNameHoverPreview } from "../CardNameHoverPreview";
 import { CardTileMenu } from "./CardTileMenu";
 import { ManaCost } from "./ManaCost";
+import { useCardGrabV1 } from "./card-grab-v1";
 import type { DeckBoardV1 } from "@/lib/professor-deck-editor/types-v1";
 import type { ProfessorDeckInventoryEntryV43 } from "@/lib/deck-synthesis/professor-brew-inventory-match-v4-3-v1";
+import { overlayTone, type OverlayTone } from "@/lib/collection/owned-index";
 import type { DeckEditorCard } from "./types";
 
 /**
@@ -23,10 +26,16 @@ export type CardViewProps = {
   dimmed?: Set<string>;
   /** The card the player has selected, if any. */
   selectedKey?: string | null;
+  /** Light up what a card works with. Reached from the tile's actions menu. */
   onSelect?: (card: DeckEditorCard) => void;
+  /** Hold a card up: the printed card plus the Professor's reasoning. */
+  onReveal?: (card: DeckEditorCard) => void;
   /** Everything the hover menu needs. Omitted in read-only contexts. */
   slug?: string;
   inventoryByName?: Record<string, ProfessorDeckInventoryEntryV43>;
+  /** Whether a card can go in the shop cart — on our shelf, at a real price. */
+  cartEligible?: (card: DeckEditorCard) => boolean;
+  onCart?: (card: DeckEditorCard) => void;
   onMove?: (card: DeckEditorCard, board: DeckBoardV1) => void;
   onRemove?: (card: DeckEditorCard) => void;
 };
@@ -43,7 +52,6 @@ export type CardViewProps = {
  */
 const GRID_TILE_MIN = "5.5rem";
 const SPOILER_TILE_MIN = "9.5rem";
-const STACK_COLUMN_MIN = "8.5rem";
 
 /** Shared hover chrome: a ring on hover so a tile reads as clickable. */
 const TILE_BUTTON_CLASS =
@@ -68,6 +76,42 @@ function imageFor(card: DeckEditorCard, imageUrls: Record<string, string>): stri
   return imageUrls[card.name] ?? imageUrls[card.name.toLowerCase()] ?? null;
 }
 
+/** Decode art only when the tile is near the viewport. */
+function LazyCardImage({ src, alt }: { src: string; alt: string }) {
+  const ref = useRef<HTMLImageElement | null>(null);
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || active) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        setActive(true);
+        observer.disconnect();
+      },
+      { rootMargin: "160px" },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [active]);
+
+  return (
+    <img
+      ref={ref}
+      src={active ? src : undefined}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      draggable={false}
+      className="h-full w-full object-cover"
+    />
+  );
+}
+
+/** How many cards under the featured face still get a strip. The rest are a count. */
+const STACK_PEEK_LIMIT = 8;
+
 /** Whether a synergy or filter selection is pushing this card into the background. */
 function dimClass(
   card: DeckEditorCard,
@@ -78,24 +122,46 @@ function dimClass(
   return "opacity-100";
 }
 
-function inStockFor(
+function overlayFor(
   card: DeckEditorCard,
   inventoryByName: CardViewProps["inventoryByName"],
-): boolean {
-  return (inventoryByName?.[card.name]?.quantity ?? 0) > 0;
+): OverlayTone {
+  if (card.copyOwnership) return overlayTone(card.copyOwnership);
+  return (inventoryByName?.[card.name]?.quantity ?? 0) > 0 ? "buy_here" : "none";
 }
 
 /**
  * The outline on a card image.
  *
- * Green means the shop has it on the shelf — the same promise the legend and
- * the text views make, which the image views were quietly not keeping. A gold
- * selection ring wins, since it is transient and green is a standing fact.
+ * Blue is already in the binder, green is buy-here, and the warning ring is
+ * need-elsewhere. A gold selection ring wins, since it is transient.
  */
-function ringClass(selected: boolean, inStock: boolean): string {
+function ringClass(selected: boolean, tone: OverlayTone): string {
   if (selected) return "ring-2 ring-[var(--accent)]";
-  if (inStock) return "ring-1 ring-[var(--ok)]";
+  if (tone === "owned" || tone === "mixed") return "ring-1 ring-[var(--cool)]";
+  if (tone === "buy_here") return "ring-1 ring-[var(--ok)]";
+  if (tone === "need_elsewhere") return "ring-1 ring-[var(--warn)]";
   return "";
+}
+
+function stackToneClass(tone: OverlayTone): string {
+  if (tone === "owned" || tone === "mixed") return " deck-card-stack__face--owned";
+  if (tone === "buy_here") return " deck-card-stack__face--stock";
+  if (tone === "need_elsewhere") return " deck-card-stack__face--need";
+  return "";
+}
+
+function overlayTitle(tone: OverlayTone): string {
+  if (tone === "owned") return " — in your binder";
+  if (tone === "mixed") return " — some copies in your binder";
+  if (tone === "buy_here") return " — buy here";
+  if (tone === "need_elsewhere") return " — need elsewhere";
+  return "";
+}
+
+/** Both things you can do to a card, in the order you discover them. */
+function tileTitle(card: DeckEditorCard, tone: OverlayTone): string {
+  return `${card.name}${overlayTitle(tone)} — click to look, hold to pick it up`;
 }
 
 /** A plain placeholder so a missing image never collapses the layout. */
@@ -107,65 +173,66 @@ function CardFallback({ name }: { name: string }) {
   );
 }
 
+/** The actions menu for a tile, with the cart entry resolved. */
+function tileMenu(props: CardViewProps, card: DeckEditorCard) {
+  const { slug, inventoryByName, selectedKey, onSelect, onReveal, onCart, onMove, onRemove, cartEligible } =
+    props;
+  if (!slug || !onMove) return null;
+  return (
+    <CardTileMenu
+      card={card}
+      slug={slug}
+      inventory={inventoryByName?.[card.name]}
+      synergySelected={selectedKey === card.cardKey}
+      onSynergy={() => onSelect?.(card)}
+      onReveal={onReveal ? () => onReveal(card) : undefined}
+      onCart={onCart && cartEligible?.(card) ? () => onCart(card) : undefined}
+      onMove={(board) => onMove(card, board)}
+      onRemove={removable(card, onRemove)}
+    />
+  );
+}
+
 /**
  * A single image tile: the card, a copies badge, and the hover menu.
  *
  * The tile is a div rather than a button so the menu can live inside it
  * without nesting interactive elements; the card image carries its own button
- * for the synergy toggle.
+ * for the reveal.
  */
-function CardTile({
-  card,
-  imageUrls,
-  dimmed,
-  selectedKey,
-  onSelect,
-  slug,
-  inventoryByName,
-  onMove,
-  onRemove,
-}: CardViewProps & { card: DeckEditorCard }) {
+function CardTile(props: CardViewProps & { card: DeckEditorCard }) {
+  const { card, imageUrls, dimmed, selectedKey, onReveal, inventoryByName } = props;
   const url = imageFor(card, imageUrls);
-  const showMenu = Boolean(slug && onMove);
-  const inStock = inStockFor(card, inventoryByName);
+  const tone = overlayFor(card, inventoryByName);
   const selected = selectedKey === card.cardKey;
+  const grab = useCardGrabV1();
+  const held = grab?.heldKey === card.cardKey;
 
   return (
-    <div className={`group relative transition ${dimClass(card, { dimmed, selectedKey })}`}>
+    <div
+      onPointerDown={(event) => grab?.beginPress(card, event)}
+      className={`group relative transition ${dimClass(card, { dimmed, selectedKey })} ${
+        held ? "professor-mtg-grab-source" : ""
+      }`}
+    >
       <button
         type="button"
-        onClick={() => onSelect?.(card)}
-        title={`${card.name}${inStock ? " — in shop stock" : ""} — click to show what it works with`}
-        className={`${TILE_BUTTON_CLASS} aspect-[5/7] ${ringClass(selected, inStock)}`}
+        onClick={() => onReveal?.(card)}
+        title={tileTitle(card, tone)}
+        // Named explicitly rather than relying on the image's alt text: the
+        // images load lazily, so until one arrives the button would have no
+        // accessible name at all.
+        aria-label={card.name}
+        className={`${TILE_BUTTON_CLASS} aspect-[5/7] ${ringClass(selected, tone)}`}
       >
-        {url ? (
-          <img
-            src={url}
-            alt={card.name}
-            loading="lazy"
-            decoding="async"
-            className="h-full w-full object-cover"
-          />
-        ) : (
-          <CardFallback name={card.name} />
-        )}
+        {url ? <LazyCardImage src={url} alt={card.name} /> : <CardFallback name={card.name} />}
         {card.copies > 1 ? (
           <span className="absolute bottom-1 right-1 rounded bg-black/80 px-1.5 py-0.5 text-[10px] font-semibold text-[var(--text-hi)]">
             ×{card.copies}
           </span>
         ) : null}
       </button>
-      {showMenu ? (
-        <CardTileMenu
-          card={card}
-          slug={slug!}
-          inventory={inventoryByName?.[card.name]}
-          synergySelected={selectedKey === card.cardKey}
-          onSynergy={() => onSelect?.(card)}
-          onMove={(board) => onMove!(card, board)}
-          onRemove={removable(card, onRemove)}
-        />
-      ) : null}
+      {tileMenu(props, card)}
     </div>
   );
 }
@@ -187,113 +254,69 @@ export function CardGridView(props: CardViewProps) {
 }
 
 /**
- * Overlapping cards, clipped to their title bars, with the last of a run shown
- * whole — the way a pile of cards looks fanned out on a table. This is the
- * densest of the visual views: it fits a section in roughly the height of one
- * card plus a name plate each.
+ * Featured face on top, every other card peeking beneath it.
+ *
+ * In-stock copies get a green ring — the same shop language as the stock count
+ * in the hero — so you can scan a column without opening each card.
  */
 export function CardStackView(props: CardViewProps) {
-  const { cards, imageUrls, dimmed, selectedKey, onSelect, slug, inventoryByName, onMove, onRemove } =
-    props;
-  const showMenu = Boolean(slug && onMove);
+  const { cards, imageUrls, dimmed, selectedKey, onReveal, inventoryByName } = props;
+  const grab = useCardGrabV1();
+  const featured = cards[0];
+  if (!featured) return null;
+
+  const peeks = cards.slice(1, STACK_PEEK_LIMIT + 1);
+  const hidden = Math.max(0, cards.length - 1 - peeks.length);
+
+  const renderLayer = (card: DeckEditorCard, featuredLayer: boolean, z: number) => {
+    const url = featuredLayer ? imageFor(card, imageUrls) : null;
+    const tone = overlayFor(card, inventoryByName);
+    const selected = selectedKey === card.cardKey;
+    const held = grab?.heldKey === card.cardKey;
+    return (
+      <li
+        key={card.cardKey}
+        onPointerDown={(event) => grab?.beginPress(card, event)}
+        className={`deck-card-stack__layer ${featuredLayer ? "deck-card-stack__layer--featured" : "deck-card-stack__layer--peek"} ${dimClass(card, {
+          dimmed,
+          selectedKey,
+        })} ${held ? "professor-mtg-grab-source" : ""}`}
+        style={{ zIndex: z }}
+      >
+        <button
+          type="button"
+          onClick={() => onReveal?.(card)}
+          title={tileTitle(card, tone)}
+          aria-label={card.name}
+          className={`deck-card-stack__face${selected ? " deck-card-stack__face--selected" : ""}${stackToneClass(tone)}`}
+        >
+          {featuredLayer ? (
+            url ? (
+              <img src={url} alt={card.name} loading="lazy" decoding="async" draggable={false} />
+            ) : (
+              <CardFallback name={card.name} />
+            )
+          ) : (
+            <span className="deck-card-stack__peek-name">{card.name}</span>
+          )}
+          {card.copies > 1 ? (
+            <span className="deck-card-stack__copies">×{card.copies}</span>
+          ) : null}
+        </button>
+        {tileMenu(props, card)}
+      </li>
+    );
+  };
+
   return (
-    <ol className="relative">
-      {cards.map((card, index) => {
-        const url = imageFor(card, imageUrls);
-        const last = index === cards.length - 1;
-        const inStock = inStockFor(card, inventoryByName);
-        const selected = selectedKey === card.cardKey;
-        const menu = showMenu ? (
-          <CardTileMenu
-            card={card}
-            slug={slug!}
-            inventory={inventoryByName?.[card.name]}
-            synergySelected={selectedKey === card.cardKey}
-            onSynergy={() => onSelect?.(card)}
-            onMove={(board) => onMove!(card, board)}
-            onRemove={removable(card, onRemove)}
-          />
-        ) : null;
-
-        // The bottom card of a run is shown whole; the rest are clipped to a
-        // name plate. The plate carries the name as real text rather than
-        // relying on the sliver of card art that happens to fall inside it —
-        // at column widths the printed title is only a few pixels tall and
-        // scaling makes it illegible, which turns the whole stack into a row
-        // of coloured bars.
-        if (last) {
-          return (
-            <li
-              key={card.cardKey}
-              className={`group relative transition ${dimClass(card, { dimmed, selectedKey })}`}
-            >
-              <button
-                type="button"
-                onClick={() => onSelect?.(card)}
-                title={`${card.name}${inStock ? " — in shop stock" : ""} — click to show what it works with`}
-                className={`${TILE_BUTTON_CLASS} rounded-b-[3.5%] rounded-t-none ${ringClass(selected, inStock)}`}
-              >
-                {url ? (
-                  <img src={url} alt={card.name} loading="lazy" decoding="async" className="block w-full" />
-                ) : (
-                  <span className="block aspect-[5/7] w-full">
-                    <CardFallback name={card.name} />
-                  </span>
-                )}
-                {card.copies > 1 ? (
-                  <span className="absolute bottom-1 right-1 rounded bg-black/80 px-1.5 py-0.5 text-[10px] font-semibold text-[var(--text-hi)]">
-                    ×{card.copies}
-                  </span>
-                ) : null}
-              </button>
-              {menu}
-            </li>
-          );
-        }
-
-        return (
-          <li
-            key={card.cardKey}
-            className={`group relative transition ${dimClass(card, { dimmed, selectedKey })}`}
-          >
-            <button
-              type="button"
-              onClick={() => onSelect?.(card)}
-              title={`${card.name}${inStock ? " — in shop stock" : ""} — click to show what it works with`}
-              className={`relative block h-[1.75rem] w-full overflow-hidden border-b border-black/50 transition hover:ring-2 hover:ring-[var(--accent-lo)] ${
-                selected ? "ring-2 ring-[var(--accent)]" : ""
-              }`}
-            >
-              {url ? (
-                <img
-                  src={url}
-                  alt=""
-                  aria-hidden="true"
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover object-top"
-                />
-              ) : null}
-              <span className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/40" />
-              <span className="absolute inset-0 flex items-center gap-1.5 pl-2 pr-7">
-                <span
-                  className={`min-w-0 flex-1 truncate text-left text-[11px] ${
-                    inStock ? "text-[var(--ok)]" : "text-[var(--text-hi)]"
-                  }`}
-                >
-                  {card.name}
-                </span>
-                {card.copies > 1 ? (
-                  <span className="shrink-0 text-[10px] font-semibold text-[var(--text-hi)]">
-                    ×{card.copies}
-                  </span>
-                ) : null}
-              </span>
-            </button>
-            {menu}
-          </li>
-        );
-      })}
+    <ol className="deck-card-stack">
+      {renderLayer(featured, true, peeks.length + 2)}
+      {peeks.map((card, index) => renderLayer(card, false, peeks.length - index))}
+      {hidden > 0 ? (
+        <li className="deck-card-stack__more">
+          +{hidden} more
+        </li>
+      ) : null}
     </ol>
   );
 }
@@ -327,21 +350,23 @@ export function CardCondensedView({
   cards,
   dimmed,
   selectedKey,
-  onSelect,
+  onReveal,
   inventoryByName,
 }: CardViewProps) {
+  const grab = useCardGrabV1();
   return (
     <ul className="text-sm">
       {cards.map((card) => (
         <li
           key={card.cardKey}
+          onPointerDown={(event) => grab?.beginPress(card, event)}
           className={`flex items-center gap-2 py-0.5 transition ${
             selectedKey === card.cardKey
               ? "text-[var(--accent-hi)]"
               : dimmed?.has(card.cardKey)
                 ? "opacity-30"
                 : ""
-          }`}
+          } ${grab?.heldKey === card.cardKey ? "professor-mtg-grab-source" : ""}`}
         >
           <span className="w-5 shrink-0 text-right text-[11px] tabular-nums text-[var(--text-lo)]">
             {card.copies}
@@ -349,8 +374,8 @@ export function CardCondensedView({
           <span className="min-w-0 flex-1 truncate">
             <CardNameHoverPreview
               name={card.name}
-              inStock={inStockFor(card, inventoryByName)}
-              onClick={() => onSelect?.(card)}
+              overlay={overlayFor(card, inventoryByName)}
+              onClick={() => onReveal?.(card)}
             />
           </span>
           {card.display?.manaCost ? <ManaCost cost={card.display.manaCost} /> : null}

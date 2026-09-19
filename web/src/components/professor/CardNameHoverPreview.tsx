@@ -14,18 +14,39 @@ const PREVIEW_H = 308;
  * the deck panel's overflow and column clipping instead of being cut off at the
  * edge of whatever list it happens to sit in.
  */
+export type CardNameOverlayTone =
+  | "owned"
+  | "buy_here"
+  | "need_elsewhere"
+  | "mixed"
+  | "none";
+
+function nameToneClass(tone: CardNameOverlayTone | undefined, inStock?: boolean): string {
+  const resolved = tone ?? (inStock ? "buy_here" : "none");
+  if (resolved === "owned" || resolved === "mixed") return "professor-mtg-card-name--owned";
+  if (resolved === "buy_here") return "professor-mtg-card-name--in-stock";
+  if (resolved === "need_elsewhere") return "professor-mtg-card-name--need-elsewhere";
+  return "";
+}
+
 export function CardNameHoverPreview({
   name,
   imageUrl,
   inStock,
+  overlay,
   className,
   onClick,
+  onDoubleClick,
+  onHoverChange,
 }: {
   name: string;
   imageUrl?: string;
   inStock?: boolean;
+  overlay?: CardNameOverlayTone;
   className?: string;
   onClick?: () => void;
+  onDoubleClick?: () => void;
+  onHoverChange?: (over: boolean) => void;
 }) {
   const [visible, setVisible] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
@@ -87,24 +108,33 @@ export function CardNameHoverPreview({
       <button
         type="button"
         className={`professor-mtg-card-name text-left underline decoration-transparent transition ${
-          inStock ? "professor-mtg-card-name--in-stock" : ""
+          nameToneClass(overlay, inStock)
         } ${className ?? "min-w-0 flex-1"}`}
         title={name}
         onMouseEnter={(e) => {
           setVisible(true);
+          onHoverChange?.(true);
           updatePos(e.clientX, e.clientY);
         }}
         onMouseMove={(e) => updatePos(e.clientX, e.clientY)}
-        onMouseLeave={() => setVisible(false)}
+        onMouseLeave={() => {
+          setVisible(false);
+          onHoverChange?.(false);
+        }}
         onFocus={(e) => {
           setVisible(true);
+          onHoverChange?.(true);
           updatePos(
             e.currentTarget.getBoundingClientRect().right,
             e.currentTarget.getBoundingClientRect().top,
           );
         }}
-        onBlur={() => setVisible(false)}
+        onBlur={() => {
+          setVisible(false);
+          onHoverChange?.(false);
+        }}
         onClick={onClick}
+        onDoubleClick={onDoubleClick}
       >
         {name}
       </button>

@@ -14,10 +14,17 @@ import {
   authLink,
   authSubtext,
 } from "@/lib/customer-auth-ui";
+import { CollectionBinderImport } from "@/components/collection/CollectionBinderImport";
+import { CollectionCardSearch } from "@/components/collection/CollectionCardSearch";
+import { importCandidatesFromCard } from "@/lib/collection/collection-import-parse";
 import type { BuybackOrder, CollectionCard } from "@/lib/types";
 
 function cardSubtitle(card: CollectionCard): string {
-  const parts = [card.setName, card.cardNumber ? `#${card.cardNumber}` : null]
+  const parts = [
+    card.setName,
+    card.cardNumber ? `#${card.cardNumber}` : null,
+    card.quantity && card.quantity > 1 ? `×${card.quantity}` : null,
+  ]
     .filter(Boolean)
     .join(" · ");
   if (parts) return parts;
@@ -68,7 +75,12 @@ export default function CollectionPage() {
   }, [slug, customer, customerLoading]);
 
   const owned = useMemo(
-    () => cards.filter((c) => c.status === "owned"),
+    () =>
+      cards.filter(
+        (c) =>
+          c.status === "owned" &&
+          !(c.needsReview && importCandidatesFromCard(c).length > 0),
+      ),
     [cards],
   );
   const sent = useMemo(
@@ -163,8 +175,16 @@ export default function CollectionPage() {
 
   return (
     <CustomerAuthShell>
-      <h1 className={authHeading}>My collection</h1>
+      <h1 className={authHeading}>Collection</h1>
       <p className={`mt-3 ${authSubtext}`}>
+        This is your binder — cards you already own. The shop pile on the
+        store page is only a maybe-buy list and is not this binder.
+      </p>
+      <p className={`mt-2 ${authSubtext}`}>
+        Scan a card, add it by name, or upload a list. Then select what you
+        want to sell to the store.
+      </p>
+      <p className={`mt-2 ${authSubtext}`}>
         {owned.length} card{owned.length === 1 ? "" : "s"} in your binder at
         this store.
       </p>
@@ -176,21 +196,48 @@ export default function CollectionPage() {
         </p>
       )}
 
+      <div className="mt-8 space-y-3">
+        <Link
+          href={`/s/${slug}/collection/scan`}
+          className={`block ${authButton} no-underline`}
+        >
+          Scan cards
+        </Link>
+        <CollectionCardSearch
+          slug={slug}
+          onAdded={(card) => {
+            setCards((current) => [card, ...current.filter((row) => row.id !== card.id)]);
+            setNotice(`${card.displayName} added to your collection.`);
+            setError(null);
+          }}
+        />
+        <CollectionBinderImport
+          slug={slug}
+          cards={cards}
+          onCards={(incoming) => {
+            if (!incoming.length) {
+              void reload();
+              return;
+            }
+            setCards((current) => {
+              const byId = new Map(current.map((row) => [row.id, row]));
+              for (const card of incoming) byId.set(card.id, card);
+              return [...byId.values()];
+            });
+            setError(null);
+          }}
+          onNotice={setNotice}
+          onError={setError}
+        />
+      </div>
+
       {loading ? (
         <p className={`mt-8 ${authSubtext}`}>Loading your cards…</p>
       ) : owned.length === 0 ? (
-        <div className="mt-8 space-y-3">
-          <p className={authSubtext}>
-            Nothing here yet. Scan a card and choose &ldquo;Add to my
-            collection&rdquo;.
-          </p>
-          <Link
-            href={`/s/${slug}/collection/scan`}
-            className={`block ${authButton} no-underline`}
-          >
-            Scan into my collection
-          </Link>
-        </div>
+        <p className={`mt-8 ${authSubtext}`}>
+          Nothing in your binder yet. Scan a card, add one by name, or upload a
+          list.
+        </p>
       ) : (
         <>
           <div className="mt-8 flex items-center justify-between border-b border-neutral-800 pb-3">
@@ -248,7 +295,7 @@ export default function CollectionPage() {
               disabled={busy || selected.size === 0}
               onClick={() => void sendSelected()}
             >
-              {busy ? "Working…" : "Send selected to the store"}
+              {busy ? "Working…" : "Sell selected to the store"}
             </button>
             <button
               type="button"
@@ -258,12 +305,6 @@ export default function CollectionPage() {
             >
               Remove selected
             </button>
-            <Link
-              href={`/s/${slug}/collection/scan`}
-              className={`block ${authButtonSecondary} no-underline`}
-            >
-              Scan another card
-            </Link>
           </div>
         </>
       )}

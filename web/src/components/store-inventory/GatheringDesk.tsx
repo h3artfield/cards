@@ -95,9 +95,9 @@ export function GatheringDesk({
     >
       <div className="flex items-start justify-between gap-2">
         <div>
-          <p className="text-sm font-semibold text-white">Your card pile</p>
+          <p className="text-sm font-semibold text-white">Shop pile</p>
           <p className="mt-0.5 text-[11px] text-neutral-400">
-            Tap a card to add it, or drag it here
+            Cards you might buy here — stays in this browser. Not your binder.
           </p>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-1">

@@ -1,6 +1,10 @@
 import type { CardSearchHitV1 } from "@/lib/professor-deck-editor/card-search-v1";
 import type { DeckEditorDisplayFactsV1 } from "@/lib/professor-deck-editor/display-facts-v1";
-import type { DerivedMarkerV1, MarkerFacetV1 } from "@/lib/professor-deck-editor/derived-markers-v1";
+import type {
+  CopyOwnershipSplit,
+  DerivedMarkerV1,
+  MarkerFacetV1,
+} from "@/lib/professor-deck-editor/derived-markers-v1";
 import type { DeckEditorLegalityReportV1 } from "@/lib/professor-deck-editor/legality-v1";
 import type { DeckEditorSemanticFactsV1 } from "@/lib/professor-deck-editor/semantic-facts-v1";
 import type { SynergyLinkV1 } from "@/lib/professor-deck-editor/synergy-v1";
@@ -17,6 +21,7 @@ import type { EditableDeckCardV1, EditableDeckV1 } from "@/lib/professor-deck-ed
  */
 export type DeckEditorCard = EditableDeckCardV1 & {
   derivedMarkers?: DerivedMarkerV1[];
+  copyOwnership?: CopyOwnershipSplit;
   display?: DeckEditorDisplayFactsV1;
   semantic?: DeckEditorSemanticFactsV1;
 };

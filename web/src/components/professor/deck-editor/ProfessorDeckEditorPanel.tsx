@@ -5,8 +5,17 @@ import {
   SOL_DIRECTED_DECK_DISPLAY_ORDER_V1,
   SOL_DIRECTED_DECK_DISPLAY_SECTION_LABELS,
 } from "@/lib/deck-synthesis/professor-sol-directed-deck-display-v1-1-1";
+import { scryfallNamedImageUrl } from "@/lib/deck-synthesis/professor-brew-scryfall-images-v1";
 import { tcgPriceForCardName } from "@/lib/deck-synthesis/professor-brew-scryfall-prices-v1";
+import { eventRegistrationBracketV1 } from "@/lib/professor-deck-editor/event-registration-bracket-v1";
 import { COMMANDER_LIBRARY_SIZE_V1 } from "@/lib/professor-deck-editor/legality-v1";
+import { DeckWorkspaceSummary } from "../DeckWorkspaceSummary";
+import { ColorBalanceStrip } from "./ColorBalanceStrip";
+import { pickDistinctRoleHeadlinesV1 } from "@/lib/professor-deck-editor/semantic-labels-v1";
+import { computeDeckColorBalanceV1 } from "@/lib/professor-deck-editor/color-balance-v1";
+import type { DeckColorBalanceV1 } from "@/lib/professor-deck-editor/color-balance-v1";
+import type { DeckDistributionV1 } from "./distribution-v1";
+import type { DeckProfileSpokeV1 } from "./DeckProfileWheel";
 import type { DeckBoardV1, DeckMarkerScopeV1 } from "@/lib/professor-deck-editor/types-v1";
 import { CardNameHoverPreview } from "../CardNameHoverPreview";
 import { DeckEditorCardRow } from "./DeckEditorCardRow";
@@ -46,10 +55,17 @@ import { useCardEnrichment } from "./useCardEnrichment";
 import { useCart } from "@/hooks/useCart";
 import { useDeckEditor } from "./useDeckEditor";
 import { useDeckSynergy } from "./useDeckSynergy";
+import type { CosV1Score } from "@/lib/commander-optimization-score/v1/types";
 
 /** Physical cards, not rows: basic lands collapse into one row carrying a count. */
 function copiesOfV1(cards: readonly DeckEditorCard[]): number {
   return cards.reduce((sum, card) => sum + card.copies, 0);
+}
+
+function playstyleFromDeckName(commanderName: string, deckName: string): string {
+  const prefix = `${commanderName} — `;
+  if (deckName.startsWith(prefix)) return deckName.slice(prefix.length);
+  return "";
 }
 
 /**
@@ -62,31 +78,53 @@ function copiesOfV1(cards: readonly DeckEditorCard[]): number {
  * themselves are untouched, so the 100-count and legality still read only the
  * mainboard and a cut card is still sitting there to be brought back.
  */
+export type DeckWorkspaceProfileV1 = {
+  spokes: DeckProfileSpokeV1[];
+  distribution: DeckDistributionV1 | null;
+  colorBalance: DeckColorBalanceV1 | null;
+};
+
 export function ProfessorDeckEditorPanel({
   slug,
   buildId,
   deckId,
+  hideHeroTitle = false,
+  onWorkspaceProfile,
+  externalFocus,
+  onFocusGroupChange,
 }: DeckEditorKeyV1 & {
   slug: string;
+  /** Workspace chrome already names the commander. */
+  hideHeroTitle?: boolean;
+  onWorkspaceProfile?: (profile: DeckWorkspaceProfileV1) => void;
+  externalFocus?: string | null;
+  onFocusGroupChange?: (key: string | null) => void;
 }) {
   const editor = useDeckEditor({ slug, buildId, deckId });
   const { payload, applyOps } = editor;
 
   const [viewMode, setViewMode] = useState<DeckEditorViewModeV1>("text");
-  const [groupMode, setGroupMode] = useState<DeckEditorGroupModeV1>("type");
+  const [groupMode, setGroupMode] = useState<DeckEditorGroupModeV1>("semanticRole");
   const [sortMode, setSortMode] = useState<DeckEditorSortModeV1>("name");
   const [activeFacets, setActiveFacets] = useState<string[]>([]);
   const [synergyKey, setSynergyKey] = useState<string | null>(null);
   /** The group a distribution bar has been clicked to focus, if any. */
-  const [focusGroup, setFocusGroup] = useState<string | null>(null);
+  const [localFocus, setLocalFocus] = useState<string | null>(null);
+  const focusGroup = onFocusGroupChange ? (externalFocus ?? null) : localFocus;
+  const setFocusGroup = (key: string | null) => {
+    if (onFocusGroupChange) onFocusGroupChange(key);
+    else setLocalFocus(key);
+  };
   /** The card being held up for a proper look, if any. */
   const [revealKey, setRevealKey] = useState<string | null>(null);
+  const [heroCos, setHeroCos] = useState<CosV1Score | null>(null);
   /** Last card dropped into the cart, shown briefly so the drop is confirmed. */
   const [cartFlash, setCartFlash] = useState<string | null>(null);
   /** Whether the cut cards are on show. See the disclosure at the foot of the list. */
   const [showCut, setShowCut] = useState(false);
   /** Whether the measured bracket-and-score drawer is open. */
   const [regradeOpen, setRegradeOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [filter, setFilter] = useState("");
   const [nameDraft, setNameDraft] = useState<string | null>(null);
   const searchRef = useRef<HTMLInputElement | null>(null);
@@ -96,7 +134,11 @@ export function ProfessorDeckEditorPanel({
     () => (deck ? [deck.commander.name, ...deck.cards.map((card) => card.name)] : []),
     [deck],
   );
-  const enrichment = useCardEnrichment(slug, cardNames);
+  const enrichment = useCardEnrichment(slug, cardNames, {
+    images: viewMode === "grid" || viewMode === "stacks" || viewMode === "spoiler",
+    inventory: true,
+    prices: groupMode === "price" || sortMode === "price",
+  });
   const synergy = useDeckSynergy({ slug, buildId, deckId, revision: deck?.revision ?? null });
   // The same cart the shop's inventory page uses — it is keyed by store slug in
   // localStorage, so a card dropped in here is waiting on the inventory page.
@@ -111,14 +153,26 @@ export function ProfessorDeckEditorPanel({
    * nowhere else — a bucket that rejects the card you dropped in it is worse
    * than no bucket.
    */
+  const buyHereCopies = (card: DeckEditorCard): number => {
+    if (card.copyOwnership) return card.copyOwnership.buyHere;
+    const entry = enrichment.inventoryByName[card.name];
+    const owned = card.derivedMarkers?.some((marker) => marker.kind === "owned");
+    if (owned) return 0;
+    return entry?.quantity && entry.quantity > 0 ? card.copies : 0;
+  };
+
   const cartEligible = (card: DeckEditorCard): boolean => {
     const entry = enrichment.inventoryByName[card.name];
     return Boolean(
-      entry?.inventoryItemId && entry.quantity > 0 && entry.listPrice != null && entry.listPrice > 0,
+      buyHereCopies(card) > 0 &&
+        entry?.inventoryItemId &&
+        entry.quantity > 0 &&
+        entry.listPrice != null &&
+        entry.listPrice > 0,
     );
   };
 
-  const addToCart = (card: DeckEditorCard) => {
+  const addToCart = (card: DeckEditorCard, quantity = buyHereCopies(card) || 1) => {
     const entry = enrichment.inventoryByName[card.name];
     if (!entry?.inventoryItemId) return;
     cart.add({
@@ -129,8 +183,34 @@ export function ProfessorDeckEditorPanel({
       unitPrice: entry.listPrice ?? 0,
       // Never offer more copies than are on the shelf.
       maxQuantity: Math.max(1, entry.quantity),
+      quantity: Math.min(Math.max(1, quantity), Math.max(1, entry.quantity)),
     });
     setCartFlash(card.name);
+  };
+
+  const addBuyHereToCart = () => {
+    if (!deck) return;
+    const copiesByItem = new Map<string, { card: DeckEditorCard; copies: number }>();
+    for (const card of deck.cards) {
+      if (card.board !== "mainboard" || !cartEligible(card)) continue;
+      const itemId = enrichment.inventoryByName[card.name]?.inventoryItemId;
+      if (!itemId) continue;
+      const copies = buyHereCopies(card);
+      if (copies <= 0) continue;
+      const existing = copiesByItem.get(itemId);
+      if (existing) existing.copies += copies;
+      else copiesByItem.set(itemId, { card, copies });
+    }
+    if (copiesByItem.size === 0) return;
+    for (const { card, copies } of copiesByItem.values()) {
+      addToCart(card, copies);
+    }
+    const added = copiesByItem.size;
+    setCartFlash(
+      added === 1
+        ? [...copiesByItem.values()][0]!.card.name
+        : `${added} buy-here cards`,
+    );
   };
 
   useEffect(() => {
@@ -138,6 +218,17 @@ export function ProfessorDeckEditorPanel({
     const timer = setTimeout(() => setCartFlash(null), 2600);
     return () => clearTimeout(timer);
   }, [cartFlash]);
+
+  const openReveal = (card: DeckEditorCard) => {
+    setRevealKey(card.cardKey);
+  };
+
+  const inspectImageUrl = (card: DeckEditorCard): string => {
+    const raw = enrichment.imageUrls[card.name] ?? scryfallNamedImageUrl(card.name);
+    // Reuse the face already on the tile. Promoting to /large/ on click
+    // decoded a fresh megabyte PNG under a CSS filter and crashed Chrome.
+    return raw.replace("/small/", "/normal/").replace("version=small", "version=normal");
+  };
 
   // Selecting a card is what triggers the synergy fetch, so a player who never
   // uses the feature never pays for it.
@@ -192,16 +283,63 @@ export function ProfessorDeckEditorPanel({
     return counts;
   }, [deck?.cards]);
 
-  /** A deck nobody built for them, so this panel is the whole workspace. */
-  const handBuilt = deck !== null && !deck.buildId;
   const libraryCount = payload?.legality.mainboardLibraryCount ?? 0;
   const readyToGrade = libraryCount >= COMMANDER_LIBRARY_SIZE_V1;
+
+  const ownershipTally = useMemo(() => {
+    const tally = { owned: 0, buyHere: 0, needElsewhere: 0 };
+    if (!deck) return tally;
+    for (const card of deck.cards) {
+      if (card.board !== "mainboard") continue;
+      if (card.copyOwnership) {
+        tally.owned += card.copyOwnership.owned;
+        tally.buyHere += card.copyOwnership.buyHere;
+        tally.needElsewhere += card.copyOwnership.needElsewhere;
+        continue;
+      }
+      const entry = enrichment.inventoryByName[card.name];
+      if (entry?.quantity && entry.quantity > 0) tally.buyHere += card.copies;
+      else tally.needElsewhere += card.copies;
+    }
+    return tally;
+  }, [deck, enrichment.inventoryByName]);
 
   /** The mainboard, which is the only board the bracket and the score read. */
   const mainboardCards = useMemo(
     () => (deck?.cards ?? []).filter((card) => card.board === "mainboard"),
     [deck?.cards],
   );
+
+  const heroCosPayload = useMemo(() => {
+    if (hideHeroTitle || !deck?.commander.oracleId || mainboardCards.length === 0) return null;
+    return JSON.stringify({
+      commanderOracleIds: [deck.commander.oracleId],
+      mainboard: mainboardCards.map((card) => ({
+        oracleId: card.oracleId ?? undefined,
+        name: card.name,
+        quantity: card.copies,
+      })),
+    });
+  }, [deck?.commander.oracleId, hideHeroTitle, mainboardCards]);
+
+  useEffect(() => {
+    if (!heroCosPayload) return;
+    const controller = new AbortController();
+    void fetch("/api/commander-optimization-score", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: heroCosPayload,
+      signal: controller.signal,
+    })
+      .then(async (res) => (res.ok ? ((await res.json()) as CosV1Score) : null))
+      .then((cos) => {
+        if (!controller.signal.aborted) setHeroCos(cos);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setHeroCos(null);
+      });
+    return () => controller.abort();
+  }, [heroCosPayload]);
 
   const illegalByCardKey = useMemo(() => {
     const map = new Map<string, string>();
@@ -302,10 +440,59 @@ export function ProfessorDeckEditorPanel({
     return sortGroupsV1(groupMode, [...buckets.entries()]);
   }, [deck?.cards, groupMode, groupingContext]);
 
-  const distribution = useMemo(
-    () => buildDeckDistributionV1(groupMode, boardGroups),
-    [boardGroups, groupMode],
+  const roleBoardGroups = useMemo(() => {
+    const buckets = new Map<string, DeckEditorCard[]>();
+    for (const card of deck?.cards ?? []) {
+      if (card.board !== "mainboard") continue;
+      for (const key of groupKeysForV1(card, "semanticRole", groupingContext)) {
+        const bucket = buckets.get(key);
+        if (bucket) bucket.push(card);
+        else buckets.set(key, [card]);
+      }
+    }
+    return sortGroupsV1("semanticRole", [...buckets.entries()]);
+  }, [deck?.cards, groupingContext]);
+
+  const roleDistribution = useMemo(
+    () => buildDeckDistributionV1("semanticRole", roleBoardGroups),
+    [roleBoardGroups],
   );
+
+  const profileSpokes = useMemo<DeckProfileSpokeV1[]>(() => {
+    if (!roleDistribution) return [];
+    return pickDistinctRoleHeadlinesV1(
+      roleDistribution.bars.filter((bar) => bar.key !== "__other__"),
+      (bar) => bar.label,
+      6,
+    ).map((bar) => ({ key: bar.key, label: bar.label, count: bar.count }));
+  }, [roleDistribution]);
+
+  const colorBalance = useMemo(
+    () =>
+      deck
+        ? computeDeckColorBalanceV1({
+            commanderColors: deck.commander.colorIdentity,
+            cards: (deck.cards ?? [])
+              .filter((card) => card.board === "mainboard")
+              .map((card) => ({
+                copies: card.copies,
+                isLand: card.isLand,
+                manaCost: card.display?.manaCost,
+                producedMana: card.display?.producedMana,
+                colorIdentity: card.display?.colorIdentity,
+              })),
+          })
+        : null,
+    [deck],
+  );
+
+  useEffect(() => {
+    onWorkspaceProfile?.({
+      spokes: profileSpokes,
+      distribution: roleDistribution,
+      colorBalance,
+    });
+  }, [colorBalance, onWorkspaceProfile, profileSpokes, roleDistribution]);
 
   /**
    * The focus, if it still names a group.
@@ -317,13 +504,28 @@ export function ProfessorDeckEditorPanel({
    * at all. Checked against the unfiltered board, so typing in the filter box
    * narrows the focused group instead of throwing the focus away.
    */
+  useEffect(() => {
+    if (!focusGroup) return;
+    if (
+      groupMode !== "semanticRole" &&
+      roleBoardGroups.some(([label]) => label === focusGroup)
+    ) {
+      setGroupMode("semanticRole");
+    }
+  }, [focusGroup, groupMode, roleBoardGroups]);
+
   const activeFocus =
-    focusGroup && boardGroups.some(([label]) => label === focusGroup) ? focusGroup : null;
+    focusGroup &&
+    (groupMode === "semanticRole" ? roleBoardGroups : boardGroups).some(([label]) => label === focusGroup)
+      ? focusGroup
+      : null;
 
   const visibleGroups = useMemo(
     () => (activeFocus ? groups.filter(([label]) => label === activeFocus) : groups),
     [activeFocus, groups],
   );
+
+  const shownGroups = visibleGroups;
 
   const boardOf = (hit: DeckEditorSearchHit): DeckBoardV1 | null => {
     const match = deck?.cards.find(
@@ -464,6 +666,7 @@ export function ProfessorDeckEditorPanel({
         onSynergy={() => selectForSynergy(card.cardKey)}
         synergySelected={synergyKey === card.cardKey}
         synergyDimmed={dimmedKeys?.has(card.cardKey)}
+        onReveal={openReveal}
       />
   );
 
@@ -480,7 +683,7 @@ export function ProfessorDeckEditorPanel({
       dimmed: dimmedKeys,
       selectedKey: synergyKey,
       onSelect: (card: DeckEditorCard) => selectForSynergy(card.cardKey),
-      onReveal: (card: DeckEditorCard) => setRevealKey(card.cardKey),
+      onReveal: openReveal,
       slug,
       inventoryByName: enrichment.inventoryByName,
       cartEligible,
@@ -494,6 +697,11 @@ export function ProfessorDeckEditorPanel({
     if (viewMode === "stacks") return <CardStackView {...shared} />;
     return <CardSpoilerView {...shared} />;
   };
+
+  // Bench and Cut sit in a full-width strip. Visual stacks show the last card
+  // whole, so two benched cards would paint a page-wide face — the commander
+  // problem all over again. Rows keep those lists compact.
+  const offDeckBody = (cards: DeckEditorCard[]) => cards.map(renderTextRow);
 
   /**
    * The header every section wears.
@@ -520,9 +728,8 @@ export function ProfessorDeckEditorPanel({
   const benchCards = sortCardsV1(partition.benchCards, sortMode, groupingContext);
   const cutCards = sortCardsV1(partition.cutCards, sortMode, groupingContext);
 
-  // The commander is not a card you can filter for, so it steps out of the way
-  // while a filter is on rather than sitting above a list it is not part of.
-  const showCommander = !filtering;
+  // Commander art and name live in the deck hero header — not duplicated in the list.
+  const showCommander = false;
 
   /** A count that admits it is a subset, so a filtered section never overstates itself. */
   const sectionCount = (shown: readonly DeckEditorCard[], total: number) =>
@@ -541,17 +748,47 @@ export function ProfessorDeckEditorPanel({
       onCreateTag={(card, label) => createAndAssignMarker(card, label, "deck", true)}
     >
       <div className="relative">
-        <div className="border-b border-[var(--mtg-stone-border)] px-4 py-4 sm:px-5">
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-            <div className="min-w-0">
-              <label className="professor-mtg-label" htmlFor="deck-editor-name">
-                Deck name
-              </label>
+        {hideHeroTitle ? null : (
+          <DeckWorkspaceSummary
+            commanderName={deck.commander.name}
+            commanderImageUrl={
+              enrichment.imageUrls[deck.commander.name] ??
+              scryfallNamedImageUrl(deck.commander.name)
+            }
+            playstyle={playstyleFromDeckName(deck.commander.name, deck.deckName)}
+            bracket={eventRegistrationBracketV1(deck).bracket ?? deck.bracket}
+            grade={null}
+            libraryCount={libraryCount}
+            libraryLegal={payload.legality.commanderLegal}
+            inStockCount={ownershipTally.buyHere}
+            ownedCount={
+              ownershipTally.owned > 0 || ownershipTally.needElsewhere > 0
+                ? ownershipTally.owned
+                : undefined
+            }
+            buyHereCount={ownershipTally.buyHere}
+            needElsewhereCount={
+              ownershipTally.owned > 0 || ownershipTally.needElsewhere > 0
+                ? ownershipTally.needElsewhere
+                : undefined
+            }
+            changeCount={0}
+            reportLabel="Check bracket"
+            onOpenReport={readyToGrade ? () => setRegradeOpen(true) : undefined}
+            onAddBuyHereToCart={
+              ownershipTally.buyHere > 0 ? addBuyHereToCart : undefined
+            }
+            profileSpokes={profileSpokes}
+            focusedProfile={activeFocus}
+            onFocusProfile={setFocusGroup}
+            cosProfile={heroCos?.profile}
+            colorBalance={colorBalance}
+            nameSlot={
               <input
-                id="deck-editor-name"
-                className="professor-mtg-input mt-1.5 w-full px-2.5 py-1.5 text-sm sm:w-80"
+                className="deck-workspace-summary__name professor-mtg-input"
                 value={nameDraft ?? deck.deckName}
                 maxLength={120}
+                placeholder="Name this deck…"
                 onChange={(event) => setNameDraft(event.target.value)}
                 onBlur={() => {
                   const next = (nameDraft ?? "").trim();
@@ -568,7 +805,143 @@ export function ProfessorDeckEditorPanel({
                   }
                 }}
               />
+            }
+          />
+        )}
+
+        {synergyKey ? (
+          <DeckSynergyBar
+            cardName={
+              deck.cards.find((card) => card.cardKey === synergyKey)?.name ?? "This card"
+            }
+            links={synergyLinks}
+            loading={synergy.loading}
+            error={synergy.error}
+            semanticUnavailable={Boolean(synergy.synergy?.semanticUnavailable)}
+            imageUrls={enrichment.imageUrls}
+            onClear={() => setSynergyKey(null)}
+            onSelectCard={selectForSynergy}
+          />
+        ) : (
+          <div className="sr-only">
+            Click a card to look at it. Press and hold to pick it up, then drop it on Cart, Bench,
+            or Cut.
+          </div>
+        )}
+
+        <div className="deck-editor-toolbar border-b border-[var(--mtg-stone-border)] px-4 py-2.5 sm:px-5 lg:px-8">
+          <div className="deck-editor-toolbar__controls">
+            <label className="sr-only" htmlFor="deck-editor-view">
+              View
+            </label>
+            <select
+              id="deck-editor-view"
+              className="professor-mtg-input px-2 py-1 text-xs"
+              title="View"
+              value={viewMode}
+              onChange={(event) => setViewMode(event.target.value as DeckEditorViewModeV1)}
+            >
+              {(Object.keys(DECK_EDITOR_VIEW_LABELS_V1) as DeckEditorViewModeV1[]).map((mode) => (
+                <option key={mode} value={mode}>
+                  {DECK_EDITOR_VIEW_LABELS_V1[mode]}
+                </option>
+              ))}
+            </select>
+
+            <label className="sr-only" htmlFor="deck-editor-group">
+              Group by
+            </label>
+            <select
+              id="deck-editor-group"
+              className="professor-mtg-input px-2 py-1 text-xs"
+              title="Group by"
+              value={groupMode}
+              onChange={(event) => {
+                setGroupMode(event.target.value as DeckEditorGroupModeV1);
+                setFocusGroup(null);
+              }}
+            >
+              {(Object.keys(DECK_EDITOR_GROUP_LABELS_V1) as DeckEditorGroupModeV1[]).map((mode) => (
+                <option key={mode} value={mode}>
+                  {DECK_EDITOR_GROUP_LABELS_V1[mode]}
+                </option>
+              ))}
+            </select>
+
+            <label className="sr-only" htmlFor="deck-editor-sort">
+              Sort by
+            </label>
+            <select
+              id="deck-editor-sort"
+              className="professor-mtg-input px-2 py-1 text-xs"
+              title="Sort by"
+              value={sortMode}
+              onChange={(event) => setSortMode(event.target.value as DeckEditorSortModeV1)}
+            >
+              {(Object.keys(DECK_EDITOR_SORT_LABELS_V1) as DeckEditorSortModeV1[]).map((mode) => (
+                <option key={mode} value={mode}>
+                  {DECK_EDITOR_SORT_LABELS_V1[mode]}
+                </option>
+              ))}
+            </select>
+
+            {facets.length > 0 ? (
+              <button
+                type="button"
+                className={`professor-mtg-chip professor-mtg-chip-btn ${filtersOpen || activeFacets.length ? "professor-mtg-chip-btn--on" : ""}`}
+                aria-expanded={filtersOpen}
+                onClick={() => setFiltersOpen((open) => !open)}
+              >
+                Filters{activeFacets.length ? ` · ${activeFacets.length}` : ""}
+              </button>
+            ) : null}
+          </div>
+
+          {filtersOpen && facets.length > 0 ? (
+            <div className="deck-editor-toolbar__facets">
+              {facets.slice(0, 12).map((facet) => {
+                const on = activeFacets.includes(facet.id);
+                return (
+                  <button
+                    key={facet.id}
+                    type="button"
+                    aria-pressed={on}
+                    className={`professor-mtg-chip professor-mtg-chip-btn shrink-0 ${on ? "professor-mtg-chip-btn--on" : ""}`}
+                    onClick={() =>
+                      setActiveFacets((current) =>
+                        on ? current.filter((id) => id !== facet.id) : [...current, facet.id],
+                      )
+                    }
+                  >
+                    {facet.label} {facet.count}
+                  </button>
+                );
+              })}
+              {activeFacets.length > 0 ? (
+                <button
+                  type="button"
+                  className="professor-mtg-link shrink-0 text-[10px]"
+                  onClick={() => setActiveFacets([])}
+                >
+                  Clear
+                </button>
+              ) : null}
             </div>
+          ) : null}
+
+          <div className="deck-editor-toolbar__search">
+            <label className="sr-only" htmlFor="deck-editor-filter">
+              Search cards
+            </label>
+            <input
+              id="deck-editor-filter"
+              type="search"
+              className="professor-mtg-input w-28 shrink-0 px-2 py-1 text-xs sm:w-36"
+              placeholder="Search cards…"
+              value={filter}
+              onChange={(event) => setFilter(event.target.value)}
+            />
+            <div className="min-w-0 flex-1">
             <DeckEditorCardSearch
               slug={slug}
               buildId={buildId}
@@ -595,179 +968,22 @@ export function ProfessorDeckEditorPanel({
                 if (card) move(card, destination);
               }}
             />
-          </div>
-        </div>
-
-        {synergyKey ? (
-          <DeckSynergyBar
-            cardName={
-              deck.cards.find((card) => card.cardKey === synergyKey)?.name ?? "This card"
-            }
-            links={synergyLinks}
-            loading={synergy.loading}
-            error={synergy.error}
-            semanticUnavailable={Boolean(synergy.synergy?.semanticUnavailable)}
-            imageUrls={enrichment.imageUrls}
-            onClear={() => setSynergyKey(null)}
-            onSelectCard={selectForSynergy}
-          />
-        ) : (
-          <div className="professor-mtg-panel-status px-4 py-2 sm:px-5">
-            <p className="professor-mtg-muted text-[10px]">
-              Click a card to look at it · press and hold to pick it up, then drop it on Cart,
-              Bench or Cut · cut cards leave the list but are kept at the foot of it · green =
-              shop stock · press / to add a card
-            </p>
-          </div>
-        )}
-
-        <div className="flex flex-wrap items-center gap-2 border-b border-[var(--mtg-stone-border)] px-4 py-3 sm:px-5">
-          <label className="professor-mtg-label text-[10px]" htmlFor="deck-editor-view">
-            View
-          </label>
-          <select
-            id="deck-editor-view"
-            className="professor-mtg-input px-2 py-1 text-xs"
-            value={viewMode}
-            onChange={(event) => setViewMode(event.target.value as DeckEditorViewModeV1)}
-          >
-            {(Object.keys(DECK_EDITOR_VIEW_LABELS_V1) as DeckEditorViewModeV1[]).map((mode) => (
-              <option key={mode} value={mode}>
-                {DECK_EDITOR_VIEW_LABELS_V1[mode]}
-              </option>
-            ))}
-          </select>
-
-          <label className="professor-mtg-label text-[10px]" htmlFor="deck-editor-group">
-            Group by
-          </label>
-          <select
-            id="deck-editor-group"
-            className="professor-mtg-input px-2 py-1 text-xs"
-            value={groupMode}
-            onChange={(event) => {
-              setGroupMode(event.target.value as DeckEditorGroupModeV1);
-              setFocusGroup(null);
-            }}
-          >
-            {(Object.keys(DECK_EDITOR_GROUP_LABELS_V1) as DeckEditorGroupModeV1[]).map((mode) => (
-              <option key={mode} value={mode}>
-                {DECK_EDITOR_GROUP_LABELS_V1[mode]}
-              </option>
-            ))}
-          </select>
-
-          {/* Sort is deliberately separate from grouping: sorting by colour while
-              grouped by type is the combination Moxfield users ask for and cannot
-              get, because there the two controls are the same control. */}
-          <label className="professor-mtg-label text-[10px]" htmlFor="deck-editor-sort">
-            Sort by
-          </label>
-          <select
-            id="deck-editor-sort"
-            className="professor-mtg-input px-2 py-1 text-xs"
-            value={sortMode}
-            onChange={(event) => setSortMode(event.target.value as DeckEditorSortModeV1)}
-          >
-            {(Object.keys(DECK_EDITOR_SORT_LABELS_V1) as DeckEditorSortModeV1[]).map((mode) => (
-              <option key={mode} value={mode}>
-                {DECK_EDITOR_SORT_LABELS_V1[mode]}
-              </option>
-            ))}
-          </select>
-
-          <input
-            type="search"
-            className="professor-mtg-input w-40 px-2 py-1 text-xs"
-            placeholder="Filter these cards…"
-            value={filter}
-            onChange={(event) => setFilter(event.target.value)}
-          />
-
-          {facets.length > 0 ? (
-            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-              {facets.slice(0, 12).map((facet) => {
-                const on = activeFacets.includes(facet.id);
-                return (
-                  <button
-                    key={facet.id}
-                    type="button"
-                    aria-pressed={on}
-                    className={`professor-mtg-chip professor-mtg-chip-btn ${on ? "professor-mtg-chip-btn--on" : ""}`}
-                    onClick={() =>
-                      setActiveFacets((current) =>
-                        on ? current.filter((id) => id !== facet.id) : [...current, facet.id],
-                      )
-                    }
-                  >
-                    {facet.label} {facet.count}
-                  </button>
-                );
-              })}
-              {activeFacets.length > 0 ? (
-                <button
-                  type="button"
-                  className="professor-mtg-link text-[10px]"
-                  onClick={() => setActiveFacets([])}
-                >
-                  Clear
-                </button>
-              ) : null}
             </div>
-          ) : null}
-
-          {/* Dropping a card on Cart is only useful if the cart is somewhere a
-              player can see. It is the shop's own cart, so this points at the
-              inventory page that owns the checkout. */}
-          {cart.count > 0 ? (
-            <a
-              href={`/s/${encodeURIComponent(slug)}/inventory`}
-              className="professor-mtg-btn ml-auto px-2.5 py-1 text-[11px] text-[var(--ok)]"
-            >
-              Cart {cart.count} · ${cart.subtotal.toFixed(2)}
-            </a>
-          ) : null}
-        </div>
-
-        {/* Sticky, because a curve's whole job is to inform the cut you are about
-            to make — and at the foot of a 99-card board it would sit permanently
-            below the fold. It only appears on axes whose distribution means
-            something; see distribution-v1. */}
-        {distribution ? (
-          <div className="sticky top-0 z-20">
-            <DeckDistributionStrip
-              distribution={distribution}
-              axisLabel={DECK_EDITOR_GROUP_LABELS_V1[groupMode]}
-              focused={activeFocus}
-              onFocus={setFocusGroup}
-            />
+            {cart.count > 0 ? (
+              <a
+                href={`/s/${encodeURIComponent(slug)}/inventory`}
+                className="professor-mtg-btn shrink-0 px-2.5 py-1 text-[11px] text-[var(--ok)]"
+              >
+                Cart {cart.count} · ${cart.subtotal.toFixed(2)}
+              </a>
+            ) : null}
           </div>
-        ) : null}
+        </div>
 
         {/* Only for decks built by hand. A deck the Professor built already has
             a bracket read-out in the panel around this one, and two buttons
             called the same thing on one screen is worse than none. */}
-        {handBuilt ? (
-          <div className="flex flex-wrap items-center gap-3 px-4 pt-4 sm:px-5">
-            <button
-              type="button"
-              className="professor-mtg-btn px-3 py-1.5 text-[11px]"
-              disabled={!readyToGrade}
-              onClick={() => setRegradeOpen(true)}
-            >
-              Check bracket
-            </button>
-            <p className="professor-mtg-muted text-[11px]">
-              {readyToGrade
-                ? "Measures this list against the Commander bracket rubric."
-                : `${COMMANDER_LIBRARY_SIZE_V1 - libraryCount} more card${
-                    COMMANDER_LIBRARY_SIZE_V1 - libraryCount === 1 ? "" : "s"
-                  } before the bracket means anything.`}
-            </p>
-          </div>
-        ) : null}
-
-        <div className="px-4 py-4 sm:px-5">
+        <div className="px-4 py-2 sm:px-5 lg:px-8 empty:hidden">
           <DeckEditorStatus
             legality={payload.legality}
             editedByUser={deck.editedByUser}
@@ -802,7 +1018,7 @@ export function ProfessorDeckEditorPanel({
             )}
             {benchCards.length > 0 ? (
               <div className="professor-mtg-offdeck-cards max-h-[11rem] overflow-y-auto pr-1">
-                {sectionBody(benchCards)}
+                {offDeckBody(benchCards)}
               </div>
             ) : (
               <p className="professor-mtg-muted text-xs italic">
@@ -812,7 +1028,7 @@ export function ProfessorDeckEditorPanel({
           </section>
         ) : null}
 
-        {showCommander || visibleGroups.length > 0 ? (
+        {showCommander || shownGroups.length > 0 ? (
           // CSS columns rather than a grid: sections vary in height, and a grid
           // would leave a tall Creatures section sitting next to a wall of space.
           //
@@ -821,12 +1037,12 @@ export function ProfessorDeckEditorPanel({
           // in. Stacks are single-file by nature, so they want many narrow
           // columns side by side. The text views sit in between.
           <div
-            className={`gap-6 px-4 pb-6 sm:px-5 ${
+            className={`px-4 pb-6 sm:px-5 lg:px-8 ${
               viewMode === "grid" || viewMode === "spoiler"
-                ? "columns-1"
+                ? "columns-1 gap-6"
                 : viewMode === "stacks"
-                  ? "columns-[9rem] gap-4"
-                  : "columns-1 md:columns-2 xl:columns-3"
+                  ? "deck-editor-role-scroller"
+                  : "columns-1 gap-6 md:columns-2 xl:columns-3 2xl:columns-4"
             }`}
           >
             {/* The commander is stored outside the card list, because it is the one
@@ -851,7 +1067,7 @@ export function ProfessorDeckEditorPanel({
                 </div>
               </section>
             ) : null}
-            {visibleGroups.map(([label, cards]) => (
+            {shownGroups.map(([label, cards]) => (
               <section key={label} className="mb-5 break-inside-avoid">
                 {sectionHeader(label, String(copiesOfV1(cards)))}
                 {sectionBody(cards)}
@@ -902,7 +1118,7 @@ export function ProfessorDeckEditorPanel({
                   "move one to Deck to put it back",
                 )}
                 {cutCards.length > 0 ? (
-                  <div className="professor-mtg-offdeck-cards">{sectionBody(cutCards)}</div>
+                  <div className="professor-mtg-offdeck-cards">{offDeckBody(cutCards)}</div>
                 ) : (
                   <p className="professor-mtg-muted text-xs italic">
                     No cut card matches that filter.
@@ -919,6 +1135,22 @@ export function ProfessorDeckEditorPanel({
           subtitle={`Bracket and score for ${deck.commander.name} and the ${libraryCount} cards in the deck right now — not for the list as it was built.`}
           onClose={() => setRegradeOpen(false)}
         >
+          {roleDistribution ? (
+            <div className="mb-5">
+              <DeckDistributionStrip
+                embedded
+                distribution={roleDistribution}
+                axisLabel="What it does"
+                focused={activeFocus}
+                onFocus={setFocusGroup}
+              />
+              {colorBalance ? (
+                <div className="mt-3">
+                  <ColorBalanceStrip balance={colorBalance} />
+                </div>
+              ) : null}
+            </div>
+          ) : null}
           <DeckRegradePanelV1
             slug={slug}
             commanderName={deck.commander.name}
@@ -934,7 +1166,7 @@ export function ProfessorDeckEditorPanel({
           <CardRevealOverlay
             card={revealCard}
             markers={deck.markers}
-            imageUrl={enrichment.imageUrls[revealCard.name]}
+            imageUrl={inspectImageUrl(revealCard)}
             inventory={enrichment.inventoryByName[revealCard.name]}
             tcgPrice={tcgPriceForCardName(enrichment.tcgPricesByName, revealCard.name)}
             cartEligible={cartEligible(revealCard)}

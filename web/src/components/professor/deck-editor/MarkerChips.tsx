@@ -6,6 +6,7 @@ const CHIP_CLASS: Record<DerivedMarkerKindV1 | "user", string> = {
   game_changer: "professor-mtg-chip--game-changer",
   in_stock: "professor-mtg-chip--in-stock",
   owned: "professor-mtg-chip--owned",
+  need_elsewhere: "professor-mtg-chip--need-elsewhere",
   professor_role: "professor-mtg-chip--role",
   professor_package: "professor-mtg-chip--role",
   structural: "professor-mtg-chip--role",
@@ -20,8 +21,9 @@ const PRIORITY: Record<DerivedMarkerKindV1 | "user", number> = {
   user_added: 3,
   structural: 4,
   in_stock: 5,
-  professor_role: 6,
-  professor_package: 7,
+  need_elsewhere: 6,
+  professor_role: 7,
+  professor_package: 8,
 };
 
 /**

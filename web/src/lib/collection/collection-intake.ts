@@ -8,6 +8,7 @@ import { runCardEvidenceV2 } from "../card-flow-v2/run-card-evidence-v2";
 import { runCardIdentityV2 } from "../card-flow-v2/run-card-identity-v2";
 import type { CardCandidateBundle } from "../card-flow-v2/types";
 import { deckBuilderStore } from "../deck-builder/deck-builder-store";
+import { lookupScryfallPrintingById } from "../deck-builder/scryfall-printing-search";
 import { analyzeCardImages } from "../processing/vision";
 import { dataStore } from "../storage/data-store";
 import type {
@@ -178,6 +179,57 @@ export function buildCollectionCard(args: {
     createdAt: now,
     updatedAt: now,
   };
+}
+
+export async function addPrintingToCollection(args: {
+  storeId: string;
+  customerId: string;
+  scryfallId: string;
+  quantity?: number;
+}): Promise<CollectionCard> {
+  const printing = await lookupScryfallPrintingById(args.scryfallId);
+  if (!printing) {
+    throw new CollectionPrintingNotFoundError();
+  }
+
+  const catalog = await deckBuilderStore.getCatalogCard(printing.scryfallId);
+  const frontImageUrl = printing.imageNormal;
+  if (!frontImageUrl) {
+    throw new CollectionPrintingNotFoundError();
+  }
+
+  const identity: CollectionScanIdentity = {
+    displayName: printing.name,
+    category: "magic",
+    setName: printing.setName ?? printing.setCode.toUpperCase(),
+    cardNumber: printing.collectorNumber,
+    catalogSource: "scryfall",
+    catalogId: printing.scryfallId,
+    identityConfidence: 1,
+    identityLocked: true,
+    itemType: "raw",
+    needsReview: false,
+  };
+
+  const quantity = Math.max(1, Math.floor(args.quantity ?? 1) || 1);
+  const card = buildCollectionCard({
+    storeId: args.storeId,
+    customerId: args.customerId,
+    frontImageUrl,
+    identity,
+    magic: {
+      scryfallId: printing.scryfallId,
+      oracleId: catalog?.oracleId,
+    },
+  });
+  return dataStore.saveCollectionCard(quantity > 1 ? { ...card, quantity } : card);
+}
+
+export class CollectionPrintingNotFoundError extends Error {
+  constructor() {
+    super("That printing could not be found");
+    this.name = "CollectionPrintingNotFoundError";
+  }
 }
 
 export async function addScanToCollection(args: {

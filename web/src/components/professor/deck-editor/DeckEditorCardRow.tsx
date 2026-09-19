@@ -8,6 +8,8 @@ import { CardNameHoverPreview } from "../CardNameHoverPreview";
 import { CardMarkerMenu } from "./CardMarkerMenu";
 import { ManaCost } from "./ManaCost";
 import { MarkerChips } from "./MarkerChips";
+import { useCardGrabV1 } from "./card-grab-v1";
+import { overlayTone } from "@/lib/collection/owned-index";
 import type { DeckEditorCard } from "./types";
 
 /**
@@ -31,7 +33,7 @@ function destinations(board: DeckBoardV1): DeckBoardV1[] {
 
 const MOVE_LABEL: Record<DeckBoardV1, string> = {
   mainboard: "To deck",
-  considering: "Consider",
+  considering: "Bench",
   cut: "Cut",
 };
 
@@ -51,6 +53,7 @@ export function DeckEditorCardRow({
   onSynergy,
   synergySelected,
   synergyDimmed,
+  onReveal,
 }: {
   card: DeckEditorCard;
   markers: readonly DeckMarkerV1[];
@@ -71,10 +74,16 @@ export function DeckEditorCardRow({
   synergySelected?: boolean;
   /** True when a synergy selection is active and this card is not part of it. */
   synergyDimmed?: boolean;
+  onReveal?: (card: DeckEditorCard) => void;
 }) {
-  const inStock = Boolean(inventory && inventory.quantity > 0);
+  const overlay = card.copyOwnership
+    ? overlayTone(card.copyOwnership)
+    : inventory && inventory.quantity > 0
+      ? "buy_here"
+      : "none";
+  const buyHere = overlay === "buy_here" || overlay === "mixed";
   const shopPrice =
-    inStock && inventory?.listPrice != null && inventory.listPrice > 0 ? inventory.listPrice : null;
+    buyHere && inventory?.listPrice != null && inventory.listPrice > 0 ? inventory.listPrice : null;
 
   // The Professor's reasoning for this exact card. It is the one thing this
   // editor has that Moxfield and Archidekt cannot show, and it is what makes a
@@ -83,19 +92,24 @@ export function DeckEditorCardRow({
   const [whyOpen, setWhyOpen] = useState(false);
   const why = card.professor?.whyInThisDeck?.trim();
 
+  // A row can be picked up too. The buttons at either end mark themselves
+  // `data-grab-ignore`, so pressing one does not also lift the card.
+  const grab = useCardGrabV1();
+
   return (
     <div
+      onPointerDown={(event) => grab?.beginPress(card, event)}
       className={`professor-mtg-card-row professor-mtg-editor-row group flex flex-col gap-1 py-1.5 last:border-b-0 transition-opacity ${
         card.board === "cut" ? "professor-mtg-editor-row--dimmed" : ""
       } ${synergyDimmed ? "professor-mtg-editor-row--muted" : ""} ${
         synergySelected ? "bg-[var(--accent-wash)]" : ""
-      }`}
+      } ${grab?.heldKey === card.cardKey ? "professor-mtg-grab-source" : ""}`}
     >
       {/* `relative` anchors the action cluster, which is lifted out of flow so
           it stops reserving width from the card name. */}
       <div className="relative flex items-center gap-2">
         {card.isBasicLand ? (
-          <span className="flex shrink-0 items-center">
+          <span data-grab-ignore className="flex shrink-0 items-center">
             <button
               type="button"
               className="professor-mtg-icon-btn"
@@ -134,9 +148,9 @@ export function DeckEditorCardRow({
         <CardNameHoverPreview
           name={card.name}
           imageUrl={imageUrl}
-          inStock={inStock}
+          overlay={overlay}
           className="min-w-[6rem] max-w-[17rem] shrink sm:min-w-[8rem]"
-          onClick={why ? () => setWhyOpen((open) => !open) : undefined}
+          onClick={() => onReveal?.(card)}
         />
         <ManaCost cost={card.display?.manaCost} />
 
@@ -159,7 +173,10 @@ export function DeckEditorCardRow({
           </span>
         ) : null}
 
-        <span className="professor-mtg-row-actions flex shrink-0 items-center gap-1">
+        <span
+          data-grab-ignore
+          className="professor-mtg-row-actions flex shrink-0 items-center gap-1"
+        >
           {why ? (
             <button
               type="button"

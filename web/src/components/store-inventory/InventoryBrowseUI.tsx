@@ -60,7 +60,7 @@ export type LegacyInventoryColorFilter =
   | ManaColor
   | Exclude<ColorCountFilter, "all">;
 
-export type InventoryBrowseGame = "magic" | "pokemon" | "riftbound";
+export type InventoryBrowseGame = string;
 export type InventoryBrowseSource = "inventory" | "catalog";
 
 export type InventorySortBy =
@@ -86,6 +86,7 @@ export type InventoryFilterState = {
   semanticOwners: string[];
   manaValuePreset: "all" | "0-2" | "3-4" | "5+";
   sortBy: InventorySortBy;
+  finish: "all" | "foil" | "nonfoil";
 };
 
 export const DEFAULT_INVENTORY_FILTERS: InventoryFilterState = {
@@ -104,6 +105,7 @@ export const DEFAULT_INVENTORY_FILTERS: InventoryFilterState = {
   semanticOwners: [],
   manaValuePreset: "all",
   sortBy: "name",
+  finish: "all",
 };
 
 export function inventoryColorFiltersActive(
@@ -160,6 +162,9 @@ function toggleSelectedColor(
 
 import { InventorySearchAutocomplete } from "./InventorySearchAutocomplete";
 import {
+  inventoryBrowseGameLabel,
+} from "@/lib/inventory/inventory-browse-game-v1";
+import {
   INVENTORY_CARD_TYPE_OPTIONS,
   INVENTORY_ORACLE_ACTION_CHIPS,
   INVENTORY_PRIMITIVE_ACTION_OPTIONS,
@@ -169,31 +174,44 @@ import {
   type InventoryManaValuePreset,
 } from "@/lib/store-inventory/inventory-browse-filter-params";
 
-const GAME_OPTIONS: Array<{ id: InventoryBrowseGame; label: string }> = [
-  { id: "magic", label: "Magic" },
-  { id: "pokemon", label: "Pokémon" },
-  { id: "riftbound", label: "Riftbound" },
-];
+/** The printings catalog only holds Magic data, so catalog browse for any other
+ *  game can only ever return zero rows. */
+export function catalogSupportsGame(game: InventoryBrowseGame): boolean {
+  return game === "magic";
+}
+
+export function inventoryGameLabel(game: InventoryBrowseGame): string {
+  return inventoryBrowseGameLabel(game);
+}
 
 function RadioPill({
   active,
   onClick,
   children,
+  disabled = false,
+  title,
 }: {
   active: boolean;
   onClick: () => void;
   children: React.ReactNode;
+  disabled?: boolean;
+  title?: string;
 }) {
   return (
     <button
       type="button"
       role="radio"
       aria-checked={active}
-      onClick={onClick}
+      aria-disabled={disabled || undefined}
+      disabled={disabled}
+      title={title}
+      onClick={disabled ? undefined : onClick}
       className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
-        active
-          ? "bg-indigo-600 text-[var(--ink-900)]"
-          : "border border-neutral-700 bg-neutral-900 text-neutral-300 hover:border-neutral-500"
+        disabled
+          ? "cursor-not-allowed border border-neutral-800 bg-neutral-900 text-neutral-500 opacity-50"
+          : active
+            ? "bg-indigo-600 text-[var(--ink-900)]"
+            : "border border-neutral-700 bg-neutral-900 text-neutral-300 hover:border-neutral-500"
       }`}
     >
       {children}
@@ -210,32 +228,45 @@ export function InventoryGameSourceBar({
   onChange: (next: Partial<InventoryFilterState>) => void;
   facets?: { games: Record<string, number>; inStock: number };
 }) {
-  const inStockCount =
-    filters.game === "magic"
-      ? facets?.games.magic ?? 0
-      : filters.game === "pokemon"
-        ? facets?.games.pokemon ?? 0
-        : facets?.games.riftbound ?? 0;
+  const gameOptions = useMemo(() => {
+    const entries = Object.entries(facets?.games ?? {})
+      .filter(([, count]) => count > 0)
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    return entries.map(([id, count]) => ({
+      id,
+      label: inventoryBrowseGameLabel(id),
+      count,
+    }));
+  }, [facets?.games]);
+
+  const inStockCount = facets?.games?.[filters.game] ?? 0;
+  const catalogAvailable = catalogSupportsGame(filters.game);
 
   return (
     <div className="space-y-3 rounded-xl border border-neutral-800 bg-neutral-900/50 p-3">
       <div>
         <p className="text-[11px] font-medium uppercase tracking-wide text-neutral-500">Game</p>
         <div className="mt-2 flex flex-wrap gap-2" role="radiogroup" aria-label="Game">
-          {GAME_OPTIONS.map((option) => (
-            <RadioPill
-              key={option.id}
-              active={filters.game === option.id}
-              onClick={() =>
-                onChange({
-                  game: option.id,
-                  cardType: option.id === "magic" ? filters.cardType : "all",
-                })
-              }
-            >
-              {option.label}
-            </RadioPill>
-          ))}
+          {gameOptions.length ? (
+            gameOptions.map((option) => (
+              <RadioPill
+                key={option.id}
+                active={filters.game === option.id}
+                onClick={() =>
+                  onChange({
+                    game: option.id,
+                    cardType: option.id === "magic" ? filters.cardType : "all",
+                    source: catalogSupportsGame(option.id) ? filters.source : "inventory",
+                  })
+                }
+              >
+                {option.label}
+                <span className="ml-1 opacity-70">({option.count.toLocaleString()})</span>
+              </RadioPill>
+            ))
+          ) : (
+            <span className="text-xs text-neutral-500">No in-stock inventory yet</span>
+          )}
         </div>
       </div>
 
@@ -250,6 +281,12 @@ export function InventoryGameSourceBar({
           </RadioPill>
           <RadioPill
             active={filters.source === "catalog"}
+            disabled={!catalogAvailable}
+            title={
+              catalogAvailable
+                ? undefined
+                : "All printings is only available for Magic"
+            }
             onClick={() => onChange({ source: "catalog" })}
           >
             All printings
@@ -356,6 +393,34 @@ export function InventoryFilterBar({
           ) : null}
         </select>
       </div>
+
+      {filters.source === "inventory" ? (
+        <div>
+          <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-neutral-500">
+            Finish
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            <FilterChip
+              active={filters.finish === "all"}
+              onClick={() => onChange({ finish: "all" })}
+            >
+              All finishes
+            </FilterChip>
+            <FilterChip
+              active={filters.finish === "foil"}
+              onClick={() => onChange({ finish: "foil" })}
+            >
+              Foils
+            </FilterChip>
+            <FilterChip
+              active={filters.finish === "nonfoil"}
+              onClick={() => onChange({ finish: "nonfoil" })}
+            >
+              Nonfoil
+            </FilterChip>
+          </div>
+        </div>
+      ) : null}
 
       {filters.game === "magic" ? (
         <>
@@ -649,11 +714,14 @@ export type InventoryGridCard = {
   listPrice?: number;
   tcgLowPrice?: number;
   setName?: string;
+  gameLabel?: string;
   colorIdentity: string[];
   isCommander?: boolean;
   typeLine?: string;
   slug?: string;
   themes?: Array<{ slug: string; label: string; count: number }>;
+  isFoil?: boolean;
+  finishLabel?: string;
 };
 
 function InventoryCardImage({
@@ -665,10 +733,10 @@ function InventoryCardImage({
     () =>
       [
         ...(card.imageUrl?.includes("scryfall.io") ? [card.imageUrl] : []),
-        card.imageProxyUrl,
-        ...(card.imageUrl && !card.imageUrl.includes("scryfall.io")
+        ...(card.imageUrl?.includes("firebasestorage.googleapis.com")
           ? [card.imageUrl]
           : []),
+        card.imageProxyUrl,
       ].filter(Boolean) as string[],
     [card.imageProxyUrl, card.imageUrl],
   );
@@ -781,7 +849,16 @@ export function InventoryCardGrid({
                     size === "large" ? "text-[10px]" : "text-[9px]"
                   }`}
                 >
-                  In pile
+                  In shop pile
+                </span>
+              ) : null}
+              {card.finishLabel ? (
+                <span
+                  className={`absolute bottom-1.5 left-1.5 rounded bg-amber-400/95 px-1.5 py-0.5 font-semibold uppercase tracking-wide text-amber-950 ${
+                    size === "large" ? "text-[10px]" : "text-[9px]"
+                  }`}
+                >
+                  {card.finishLabel}
                 </span>
               ) : null}
               {card.qty > 1 ? (
@@ -828,13 +905,13 @@ export function InventoryCardGrid({
                       : ""}
                 </span>
               </div>
-              {card.setName ? (
+              {card.gameLabel || card.setName ? (
                 <p
                   className={`inventory-card-set truncate text-neutral-500 ${
                     size === "large" ? "text-xs" : "text-[10px]"
                   }`}
                 >
-                  {card.setName}
+                  {[card.gameLabel, card.setName].filter(Boolean).join(" · ")}
                 </p>
               ) : null}
             </div>

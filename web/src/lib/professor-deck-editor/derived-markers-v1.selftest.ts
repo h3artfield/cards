@@ -121,6 +121,41 @@ function testRoleLabelsAreReadable() {
   console.log("PASS  snake_case roles become readable labels");
 }
 
+function testOwnedBeatsStoreAndCopyAwareSplit() {
+  const frostfang = card({ copies: 2 });
+  const markers = derivedMarkersForCardV1(frostfang, {
+    ownedQtyByOracleId: new Map([["o-ohran", 1]]),
+    ownedQtyByName: new Map(),
+    inStockQtyByName: new Map([["ohran frostfang", 4]]),
+    inStockNames: new Set(["ohran frostfang"]),
+  });
+  const kinds = markers.map((m) => m.kind);
+  assert.equal(kinds.includes("owned"), true);
+  assert.equal(kinds.includes("in_stock"), true, "the extra copy is still buy-here");
+  assert.equal(kinds.includes("need_elsewhere"), false);
+
+  const fullyOwned = derivedMarkersForCardV1(frostfang, {
+    ownedQtyByOracleId: new Map([["o-ohran", 2]]),
+    inStockQtyByName: new Map([["ohran frostfang", 4]]),
+    inStockNames: new Set(["ohran frostfang"]),
+  });
+  assert.equal(
+    fullyOwned.some((m) => m.kind === "in_stock"),
+    false,
+    "owned copies must not ask the shopper to buy them",
+  );
+
+  const missing = derivedMarkersForCardV1(card({ name: "Sol Ring", oracleId: "o-ring", professor: null }), {
+    ownedQtyByOracleId: new Map(),
+    ownedQtyByName: new Map(),
+    inStockQtyByName: new Map(),
+    inStockNames: new Set(),
+  });
+  assert.ok(missing.some((m) => m.kind === "need_elsewhere"));
+  assert.equal(missing.find((m) => m.kind === "need_elsewhere")!.label, "Need elsewhere");
+  console.log("PASS  owned beats store, leftover copies stay buy-here or need-elsewhere");
+}
+
 function testFacetsCountMainboardOnlyAndSortByUse() {
   const cards = [
     card({ name: "A", oracleId: "o-a" }),
@@ -161,6 +196,7 @@ const tests = [
   testGameChangerNeedsAnOracleId,
   testUserAdditionIsFlaggedAndExplained,
   testRoleLabelsAreReadable,
+  testOwnedBeatsStoreAndCopyAwareSplit,
   testFacetsCountMainboardOnlyAndSortByUse,
 ];
 

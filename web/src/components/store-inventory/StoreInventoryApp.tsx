@@ -12,8 +12,8 @@ import { StoreBrandMark } from "@/components/StoreBrandMark";
 import { CustomerStoreNavV1 } from "@/components/CustomerStoreNavV1";
 import {
   DEFAULT_INVENTORY_FILTERS,
-  INVENTORY_GAME_LABELS,
   InventoryCardGrid,
+  inventoryGameLabel,
   InventoryFilterBar,
   InventoryGameSourceBar,
   appendInventoryColorParams,
@@ -34,6 +34,7 @@ import { InventoryDecklistImport } from "@/components/store-inventory/InventoryD
 import type { GatheringCard } from "@/components/store-inventory/clerk-gathering";
 import type { ClerkDeckList } from "@/lib/store-inventory/clerk-types";
 import { appendInventoryBrowseParams } from "@/lib/store-inventory/inventory-browse-filter-params";
+import { usePile } from "@/hooks/usePile";
 
 const BROWSE_PAGE_SIZE = 100;
 
@@ -91,7 +92,7 @@ function browseEmptyMessage(
   // facets.games omits games with no browseable rows instead of reporting 0, so
   // a missing key means the store has nothing of that game in stock.
   if (data && (data.facets?.games?.[filters.game] ?? 0) === 0) {
-    return `This store has no ${INVENTORY_GAME_LABELS[filters.game]} cards in stock right now.`;
+    return `This store has no ${inventoryGameLabel(filters.game)} cards in stock right now.`;
   }
   if (inventoryColorFiltersActive(filters) && data?.total === 0) {
     return "No cards match this color filter yet. Color data comes from Scryfall — run Admin → Deck Builder → Inventory crosswalk sync to link more cards.";
@@ -127,47 +128,17 @@ export function StoreInventoryApp({
   const [clerkFilterNote, setClerkFilterNote] = useState<string | null>(null);
   const [clerkDeck, setClerkDeck] = useState<ClerkDeckList | null>(null);
   const [clerkPicks, setClerkPicks] = useState<ClerkPickCard[]>([]);
-  const [gatheredCards, setGatheredCards] = useState<GatheringCard[]>([]);
+  const {
+    cards: piledCards,
+    add: addToGathering,
+    addMany: addManyToGathering,
+    remove: removeFromGathering,
+    toggle: toggleGathering,
+    clear: clearPile,
+  } = usePile(slug);
+  const gatheredCards = piledCards as GatheringCard[];
   const [retryNonce, setRetryNonce] = useState(0);
   const [pasteListOpen, setPasteListOpen] = useState(false);
-
-  const addToGathering = useCallback((card: GatheringCard) => {
-    setGatheredCards((prev) => {
-      if (prev.some((c) => c.inventoryItemId === card.inventoryItemId)) {
-        return prev;
-      }
-      return [...prev, card];
-    });
-  }, []);
-
-  const addManyToGathering = useCallback((cards: GatheringCard[]) => {
-    setGatheredCards((prev) => {
-      const seen = new Set(prev.map((c) => c.inventoryItemId));
-      const next = [...prev];
-      for (const card of cards) {
-        if (seen.has(card.inventoryItemId)) continue;
-        seen.add(card.inventoryItemId);
-        next.push(card);
-      }
-      return next;
-    });
-  }, []);
-
-  const removeFromGathering = useCallback((inventoryItemId: string) => {
-    setGatheredCards((prev) =>
-      prev.filter((c) => c.inventoryItemId !== inventoryItemId),
-    );
-  }, []);
-
-  // Touch devices never fire HTML5 drag, so tapping a card is the only way in
-  // on a tablet. Toggling rather than adding keeps a second tap meaningful.
-  const toggleGathering = useCallback((card: GatheringCard) => {
-    setGatheredCards((prev) =>
-      prev.some((c) => c.inventoryItemId === card.inventoryItemId)
-        ? prev.filter((c) => c.inventoryItemId !== card.inventoryItemId)
-        : [...prev, card],
-    );
-  }, []);
 
   const gatheredIds = useMemo(
     () => new Set(gatheredCards.map((c) => c.inventoryItemId)),
@@ -207,6 +178,22 @@ export function StoreInventoryApp({
     setCommittedQ(debouncedQ);
     setPage(1);
   }, [debouncedQ]);
+
+  useEffect(() => {
+    if (!data?.facets?.games) return;
+    if ((data.facets.games[filters.game] ?? 0) > 0) return;
+    const first = Object.entries(data.facets.games)
+      .filter(([, count]) => count > 0)
+      .sort((a, b) => b[1] - a[1])[0]?.[0];
+    if (!first || first === filters.game) return;
+    setFilters((f) => ({
+      ...f,
+      game: first,
+      source: first === "magic" ? f.source : "inventory",
+      cardType: first === "magic" ? f.cardType : "all",
+    }));
+    setPage(1);
+  }, [data?.facets?.games, filters.game]);
 
   useEffect(() => {
     const query = committedQ.trim();
@@ -291,6 +278,7 @@ export function StoreInventoryApp({
     filters.colorCount,
     filters.cardType,
     filters.sortBy,
+    filters.finish,
     committedQ,
     retryNonce,
   ]);
@@ -326,7 +314,8 @@ export function StoreInventoryApp({
       next.zones != null ||
       next.semanticOwners != null ||
       next.manaValuePreset != null ||
-      next.sortBy != null
+      next.sortBy != null ||
+      next.finish != null
     ) {
       setPage(1);
     }
@@ -523,7 +512,9 @@ export function StoreInventoryApp({
             {data?.facets ? (
               <p className="text-xs text-neutral-500">
                 {data.total.toLocaleString()} cards shown
-                {filters.source === "catalog" ? " (all printings)" : ` (${filters.game})`}{" "}
+                {filters.source === "catalog"
+                  ? " (all printings)"
+                  : ` (${inventoryGameLabel(filters.game)})`}{" "}
                 {filters.source === "inventory" ? (
                   <>
                     · {data.facets.inStock.toLocaleString()} total in stock at {storeName}
@@ -609,7 +600,7 @@ export function StoreInventoryApp({
                 cards={gatheredCards}
                 onAdd={addToGathering}
                 onRemove={removeFromGathering}
-                onClear={() => setGatheredCards([])}
+                onClear={clearPile}
               />
             </div>
           </div>
@@ -620,7 +611,7 @@ export function StoreInventoryApp({
               cards={gatheredCards}
               onAdd={addToGathering}
               onRemove={removeFromGathering}
-              onClear={() => setGatheredCards([])}
+              onClear={clearPile}
             />
           </aside>
         </div>

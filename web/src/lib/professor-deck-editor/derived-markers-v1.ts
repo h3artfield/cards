@@ -11,6 +11,13 @@
  * Game Changer flag is wrong the next time the bracket list is revised. So they
  * are computed on read, every read, from whatever the current truth is.
  */
+import {
+  overlayTone,
+  splitCopyOwnership,
+  type CopyOwnershipSplit,
+} from "../collection/owned-index";
+
+export type { CopyOwnershipSplit };
 import { normalizeDeckCardNameV1 } from "./types-v1";
 import type { EditableDeckCardV1, EditableDeckV1 } from "./types-v1";
 
@@ -21,6 +28,7 @@ export type DerivedMarkerKindV1 =
   | "game_changer"
   | "in_stock"
   | "owned"
+  | "need_elsewhere"
   | "professor_role"
   | "professor_package"
   | "structural"
@@ -53,8 +61,11 @@ export type DerivedMarkerFactsV1 = {
   gameChangerOracleIds?: ReadonlySet<string>;
   /** Store inventory is keyed by card name, so this is too. */
   inStockNames?: ReadonlySet<string>;
+  inStockQtyByName?: ReadonlyMap<string, number>;
   ownedOracleIds?: ReadonlySet<string>;
   ownedNames?: ReadonlySet<string>;
+  ownedQtyByOracleId?: ReadonlyMap<string, number>;
+  ownedQtyByName?: ReadonlyMap<string, number>;
 };
 
 function titleCaseRole(role: string): string {
@@ -65,9 +76,56 @@ function titleCaseRole(role: string): string {
     .replace(/^\w/, (c) => c.toUpperCase());
 }
 
-function isOwned(card: EditableDeckCardV1, facts: DerivedMarkerFactsV1): boolean {
-  if (card.oracleId && facts.ownedOracleIds?.has(card.oracleId)) return true;
-  return facts.ownedNames?.has(normalizeDeckCardNameV1(card.name)) ?? false;
+function collectionKnown(facts: DerivedMarkerFactsV1): boolean {
+  return Boolean(
+    facts.ownedQtyByOracleId ||
+      facts.ownedQtyByName ||
+      facts.ownedOracleIds ||
+      facts.ownedNames,
+  );
+}
+
+function inventoryKnown(facts: DerivedMarkerFactsV1): boolean {
+  return Boolean(facts.inStockQtyByName || facts.inStockNames);
+}
+
+function ownedQtyForCard(card: EditableDeckCardV1, facts: DerivedMarkerFactsV1): number | null {
+  if (!collectionKnown(facts)) return null;
+  if (facts.ownedQtyByOracleId || facts.ownedQtyByName) {
+    if (card.oracleId && facts.ownedQtyByOracleId?.has(card.oracleId)) {
+      return facts.ownedQtyByOracleId.get(card.oracleId) ?? 0;
+    }
+    return facts.ownedQtyByName?.get(normalizeDeckCardNameV1(card.name)) ?? 0;
+  }
+  if (card.oracleId && facts.ownedOracleIds?.has(card.oracleId)) return Number.POSITIVE_INFINITY;
+  if (facts.ownedNames?.has(normalizeDeckCardNameV1(card.name))) return Number.POSITIVE_INFINITY;
+  return 0;
+}
+
+function shopQtyForCard(card: EditableDeckCardV1, facts: DerivedMarkerFactsV1): number | null {
+  if (!inventoryKnown(facts)) return null;
+  const name = normalizeDeckCardNameV1(card.name);
+  if (facts.inStockQtyByName) return facts.inStockQtyByName.get(name) ?? 0;
+  return facts.inStockNames?.has(name) ? Number.POSITIVE_INFINITY : 0;
+}
+
+export function copyOwnershipForCardV1(
+  card: EditableDeckCardV1,
+  facts: DerivedMarkerFactsV1 = {},
+): CopyOwnershipSplit | undefined {
+  const ownedQty = ownedQtyForCard(card, facts);
+  const shopQty = shopQtyForCard(card, facts);
+  if (ownedQty === null && shopQty === null) return undefined;
+  const owned = ownedQty ?? 0;
+  const shop = shopQty ?? 0;
+  const split = splitCopyOwnership(card.copies, owned, shop);
+  if (ownedQty === null) {
+    return { owned: 0, buyHere: split.buyHere, needElsewhere: 0 };
+  }
+  if (shopQty === null) {
+    return { owned: split.owned, buyHere: 0, needElsewhere: 0 };
+  }
+  return split;
 }
 
 export function derivedMarkersForCardV1(
@@ -85,21 +143,31 @@ export function derivedMarkersForCardV1(
     });
   }
 
-  if (isOwned(card, facts)) {
+  const ownership = copyOwnershipForCardV1(card, facts);
+  if (ownership && ownership.owned > 0) {
     markers.push({
       id: "owned",
       kind: "owned",
       label: "Owned",
-      detail: "Already in your collection",
+      detail: "Already in your binder",
     });
   }
 
-  if (facts.inStockNames?.has(normalizeDeckCardNameV1(card.name))) {
+  if (ownership && ownership.buyHere > 0) {
     markers.push({
       id: "in-stock",
       kind: "in_stock",
-      label: "In stock",
-      detail: "Available at this store right now",
+      label: "Buy here",
+      detail: "Not in your binder, and this store has it on the shelf",
+    });
+  }
+
+  if (ownership && ownership.needElsewhere > 0) {
+    markers.push({
+      id: "need-elsewhere",
+      kind: "need_elsewhere",
+      label: "Need elsewhere",
+      detail: "Not in your binder, and not on this store's shelf",
     });
   }
 
@@ -149,6 +217,7 @@ export function derivedMarkersForCardV1(
 
 export type EditableDeckCardWithMarkersV1 = EditableDeckCardV1 & {
   derivedMarkers: DerivedMarkerV1[];
+  copyOwnership?: CopyOwnershipSplit;
 };
 
 export function withDerivedMarkersV1(
@@ -158,8 +227,11 @@ export function withDerivedMarkersV1(
   return deck.cards.map((card) => ({
     ...card,
     derivedMarkers: derivedMarkersForCardV1(card, facts),
+    copyOwnership: copyOwnershipForCardV1(card, facts),
   }));
 }
+
+export { overlayTone as overlayToneV1 };
 
 export type MarkerFacetV1 = {
   id: string;

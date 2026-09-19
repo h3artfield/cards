@@ -82,18 +82,33 @@ async function derivedMarkerFacts(deck: EditableDeckV1): Promise<DerivedMarkerFa
     facts.inStockNames = new Set(
       inventory.value.inStockNames.map((name) => normalizeDeckCardNameV1(name)),
     );
+    const qtyByName = new Map<string, number>();
+    for (const [name, entry] of Object.entries(inventory.value.inventoryByName)) {
+      qtyByName.set(normalizeDeckCardNameV1(name), entry.quantity);
+    }
+    facts.inStockQtyByName = qtyByName;
   } else {
     console.warn("[deck-editor] store inventory unavailable:", inventory.reason);
   }
 
   if (collection.status === "fulfilled") {
-    const owned = collection.value.filter((card) => card.status === "owned");
-    facts.ownedOracleIds = new Set(
-      owned.map((card) => card.oracleId).filter((id): id is string => Boolean(id)),
+    const owned = collection.value.filter(
+      (card) => card.status === "owned" && !card.needsReview,
     );
-    facts.ownedNames = new Set(
-      owned.map((card) => normalizeDeckCardNameV1(card.displayName)).filter(Boolean),
-    );
+    const qtyByOracleId = new Map<string, number>();
+    const qtyByName = new Map<string, number>();
+    for (const card of owned) {
+      const qty = Math.max(1, Math.floor(card.quantity ?? 1) || 1);
+      if (card.oracleId) {
+        qtyByOracleId.set(card.oracleId, (qtyByOracleId.get(card.oracleId) ?? 0) + qty);
+      }
+      const name = normalizeDeckCardNameV1(card.displayName);
+      if (name) qtyByName.set(name, (qtyByName.get(name) ?? 0) + qty);
+    }
+    facts.ownedQtyByOracleId = qtyByOracleId;
+    facts.ownedQtyByName = qtyByName;
+    facts.ownedOracleIds = new Set(qtyByOracleId.keys());
+    facts.ownedNames = new Set(qtyByName.keys());
   } else {
     console.warn("[deck-editor] customer collection unavailable:", collection.reason);
   }
