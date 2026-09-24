@@ -123,20 +123,38 @@ export function useDeckEditor(args: {
   }, []);
 
   const load = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+    const hadDeck = Boolean(payloadRef.current);
+    if (!hadDeck) {
+      setLoading(true);
+      setError(null);
+    }
     try {
       const res = await fetch(`${endpoint}?${query}`);
       const data = (await res.json().catch(() => null)) as
         | (DeckEditorPayload & { error?: string })
         | null;
       if (!res.ok || !data?.deck) {
-        setError(data?.error ?? "Could not open this deck for editing.");
+        const message = data?.error ?? "Could not open this deck for editing.";
+        // A later fetch must not take down a list that already rendered.
+        // Imported 99s do a heavy second read (React Strict Mode, param
+        // refresh, enrichment). When that one fails, hiding the deck looks
+        // like it vanished half a second after it appeared.
+        if (payloadRef.current) {
+          setNotice({ kind: "error", message });
+        } else {
+          setError(message);
+        }
         return;
       }
+      setError(null);
       acceptPayload(data);
     } catch {
-      setError("Could not reach the server. Check your connection and try again.");
+      const message = "Could not reach the server. Check your connection and try again.";
+      if (payloadRef.current) {
+        setNotice({ kind: "error", message });
+      } else {
+        setError(message);
+      }
     } finally {
       if (mounted.current) setLoading(false);
     }

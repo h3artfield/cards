@@ -30,13 +30,39 @@ function collection() {
   return db ? db.collection(EDITABLE_DECKS_COLLECTION_V1) : null;
 }
 
+function normalizeEditableDeckV1(deck: EditableDeckV1): EditableDeckV1 {
+  return {
+    ...deck,
+    commander: {
+      ...deck.commander,
+      colorIdentity: [...(deck.commander?.colorIdentity ?? [])],
+    },
+    cards: (deck.cards ?? []).map((card) => ({
+      ...card,
+      markerIds: card.markerIds ?? [],
+      professor: card.professor
+        ? {
+            ...card.professor,
+            secondaryRoles: card.professor.secondaryRoles ?? [],
+            packageMembership: card.professor.packageMembership ?? [],
+          }
+        : null,
+    })),
+    markers: deck.markers ?? [],
+    baselineCards: deck.baselineCards ?? [],
+  };
+}
+
 export async function getEditableDeckV1(deckId: string): Promise<EditableDeckV1 | null> {
   const col = collection();
-  if (!col) return memoryDecks.get(deckId) ?? null;
+  if (!col) {
+    const deck = memoryDecks.get(deckId);
+    return deck ? normalizeEditableDeckV1(deck) : null;
+  }
 
   const snap = await col.doc(deckId).get();
   if (!snap.exists) return null;
-  return snap.data() as EditableDeckV1;
+  return normalizeEditableDeckV1(snap.data() as EditableDeckV1);
 }
 
 /** First write for a deck. Never overwrites, so a re-open cannot wipe edits. */
@@ -179,7 +205,8 @@ export async function mutateEditableDeckV1(args: {
 
   const db = getAdminFirestore();
   if (!db) {
-    const result = attempt(memoryDecks.get(args.deckId) ?? null);
+    const stored = memoryDecks.get(args.deckId);
+    const result = attempt(stored ? normalizeEditableDeckV1(stored) : null);
     if (result.ok) memoryDecks.set(args.deckId, result.deck);
     return result;
   }
@@ -187,7 +214,9 @@ export async function mutateEditableDeckV1(args: {
   const ref = db.collection(EDITABLE_DECKS_COLLECTION_V1).doc(args.deckId);
   return db.runTransaction(async (tx) => {
     const snap = await tx.get(ref);
-    const result = attempt(snap.exists ? (snap.data() as EditableDeckV1) : null);
+    const result = attempt(
+      snap.exists ? normalizeEditableDeckV1(snap.data() as EditableDeckV1) : null,
+    );
     if (result.ok) tx.set(ref, result.deck);
     return result;
   });
@@ -203,6 +232,7 @@ export async function listEditableDecksV1(args: {
 
   if (!col) {
     return [...memoryDecks.values()]
+      .map(normalizeEditableDeckV1)
       .filter(
         (deck) =>
           deck.customerId === args.customerId &&
@@ -221,9 +251,31 @@ export async function listEditableDecksV1(args: {
     .get();
 
   return snap.docs
-    .map((doc) => doc.data() as EditableDeckV1)
+    .map((doc) => normalizeEditableDeckV1(doc.data() as EditableDeckV1))
     .filter((deck) => !args.storeSlug || deck.storeSlug === args.storeSlug)
     .slice(0, limit);
+}
+
+export async function deleteEditableDeckV1(args: {
+  deckId: string;
+  customerId: string;
+}): Promise<"deleted" | "not_found" | "forbidden"> {
+  const col = collection();
+  if (!col) {
+    const deck = memoryDecks.get(args.deckId);
+    if (!deck) return "not_found";
+    if (deck.customerId !== args.customerId) return "forbidden";
+    memoryDecks.delete(args.deckId);
+    return "deleted";
+  }
+
+  const ref = col.doc(args.deckId);
+  const snap = await ref.get();
+  if (!snap.exists) return "not_found";
+  const deck = snap.data() as EditableDeckV1;
+  if (deck.customerId !== args.customerId) return "forbidden";
+  await ref.delete();
+  return "deleted";
 }
 
 /** Test hook. Firestore-backed runs never touch the memory map. */

@@ -2,9 +2,10 @@ import Link from "next/link";
 import type { CosV1PlayerReport, CosV1PlayerReportBand } from "@/lib/commander-optimization-score/v1/types";
 import { ordinalPercentile } from "@/lib/commander-optimization-score/v1/player-report";
 import { howCosWorksPath } from "@/lib/commander-optimization-score/v1/public-path";
+import { CosProfileDecagon } from "./CosProfileDecagon";
 
 function bandOf(report: CosV1PlayerReport, band: CosV1PlayerReportBand) {
-  return report.profile.filter((axis) => axis.band === band);
+  return (report.profile ?? []).filter((axis) => axis.band === band);
 }
 
 function AxisRow({
@@ -60,13 +61,21 @@ function AxisRow({
 export function CosV1PlayerReportView({
   report,
   storeSlug,
+  competitiveStrength,
 }: {
   report: CosV1PlayerReport;
   storeSlug?: string;
+  competitiveStrength?: number | null;
 }) {
   const drivers = bandOf(report, "Strength drivers");
   const traits = bandOf(report, "Deck characteristics");
-  const extraCombos = report.knownComboCount - report.knownCombos.length;
+  const knownCombos = report.knownCombos ?? [];
+  const extraCombos = (report.knownComboCount ?? knownCombos.length) - knownCombos.length;
+  const decagonProfile = (report.profile ?? []).map((axis) => ({
+    id: axis.id,
+    percentile: axis.percentile,
+    measurable: axis.measurable,
+  }));
 
   return (
     <div className="mt-6 space-y-6">
@@ -76,6 +85,15 @@ export function CosV1PlayerReportView({
           Percentiles versus comparable decks. Strength drivers are associated with the frozen model.
           Deck characteristics are descriptive. None of these numbers are averaged into Competitive Strength.
         </p>
+        <div className="cos-profile-hero mt-4">
+          <CosProfileDecagon profile={decagonProfile} size={140} className="cos-profile-hero__decagon" />
+          {competitiveStrength != null ? (
+            <div className="cos-profile-hero__cs">
+              <p className="cos-profile-hero__cs-value">{Math.round(competitiveStrength)}</p>
+              <p className="cos-profile-hero__cs-label">Competitive Strength</p>
+            </div>
+          ) : null}
+        </div>
         <div className="mt-4 grid gap-6 sm:grid-cols-2">
           <div className="space-y-3">
             <p className="professor-mtg-muted text-xs uppercase tracking-wide">Strength drivers</p>
@@ -113,11 +131,11 @@ export function CosV1PlayerReportView({
         <p className="professor-mtg-body mt-2 text-sm leading-relaxed">{report.howThisDeckWorks}</p>
       </section>
 
-      {report.keySynergies.length ? (
+      {(report.keySynergies ?? []).length ? (
         <section>
           <p className="professor-mtg-label">Key synergies</p>
           <ul className="professor-mtg-body mt-2 list-disc space-y-1 pl-5 text-sm">
-            {report.keySynergies.map((line) => (
+            {(report.keySynergies ?? []).map((line) => (
               <li key={line}>{line}</li>
             ))}
           </ul>
@@ -126,10 +144,10 @@ export function CosV1PlayerReportView({
 
       <section>
         <p className="professor-mtg-label">Verified CommanderSpellbook combos</p>
-        {report.knownCombos.length ? (
+        {knownCombos.length ? (
           <>
             <ul className="professor-mtg-body mt-2 space-y-2 text-sm">
-              {report.knownCombos.map((combo) => (
+              {knownCombos.map((combo) => (
                 <li key={combo.pieces.join("|")}>
                   <span className="font-medium">{combo.pieces.join(" + ")}</span>
                   <span className="professor-mtg-muted ml-2 text-xs">
@@ -156,7 +174,7 @@ export function CosV1PlayerReportView({
       <section>
         <p className="professor-mtg-label">Win conditions</p>
         <ul className="professor-mtg-body mt-2 space-y-2 text-sm">
-          {report.winConditions.map((wc) => (
+          {(report.winConditions ?? []).map((wc) => (
             <li key={`${wc.rank}-${wc.title}`}>
               <span className="professor-mtg-muted text-xs uppercase tracking-wide">{wc.rank}</span>
               <p className="font-medium">{wc.title}</p>
@@ -169,7 +187,7 @@ export function CosV1PlayerReportView({
       <section>
         <p className="professor-mtg-label">Why it received these scores</p>
         <ul className="professor-mtg-body mt-2 list-disc space-y-1 pl-5 text-sm">
-          {report.whyTheScore.map((line) => (
+          {(report.whyTheScore ?? []).map((line) => (
             <li key={line}>{line}</li>
           ))}
         </ul>
@@ -178,7 +196,7 @@ export function CosV1PlayerReportView({
       <section>
         <p className="professor-mtg-label">Where the build has the most optimization headroom</p>
         <ul className="professor-mtg-body mt-2 list-disc space-y-1 pl-5 text-sm">
-          {report.optimizationHeadroom.map((line) => (
+          {(report.optimizationHeadroom ?? []).map((line) => (
             <li key={line}>{line}</li>
           ))}
         </ul>

@@ -122,6 +122,18 @@ async function deckWithLegality(deck: EditableDeckV1) {
     derivedMarkerFacts(deck),
   ]);
 
+  let cards = withDerivedMarkersV1(deck, facts);
+  try {
+    cards = withDisplayFactsV1(cards, createCatalogDisplayFactsLookupV1(catalog));
+  } catch (err) {
+    console.warn("[deck-editor] display facts unavailable:", err);
+  }
+  try {
+    cards = withSemanticFactsV1(cards);
+  } catch (err) {
+    console.warn("[deck-editor] semantic facts unavailable:", err);
+  }
+
   return {
     deck: {
       ...deck,
@@ -130,12 +142,7 @@ async function deckWithLegality(deck: EditableDeckV1) {
       // grouping the deck by what its cards actually do should not cost a
       // second round trip. Synergy is the expensive relative of this and lives
       // on its own endpoint, fetched only once a player asks for it.
-      cards: withSemanticFactsV1(
-        withDisplayFactsV1(
-          withDerivedMarkersV1(deck, facts),
-          createCatalogDisplayFactsLookupV1(catalog),
-        ),
-      ),
+      cards,
     },
     legality: checkEditableDeckLegalityV1({
       deck,

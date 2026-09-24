@@ -34,7 +34,8 @@ function avg(nums: number[]): number {
   return nums.reduce((a, b) => a + b, 0) / nums.length;
 }
 
-function textAssessmentToScore(text: string, baseline = 72): number {
+function textAssessmentToScore(text: string | null | undefined, baseline = 72): number {
+  if (typeof text !== "string" || !text.trim()) return baseline;
   const t = text.toLowerCase();
   let score = baseline;
   if (/excellent|strong|solid|coherent|well-built|robust|clear|tight|exemplary/.test(t)) score += 12;
@@ -52,7 +53,8 @@ function classificationBaseline(classification: SolDirectedHeadProfessorWholeDec
   return 58;
 }
 
-export function parseLetterFromGradeText(grade: string): string | null {
+export function parseLetterFromGradeText(grade: string | null | undefined): string | null {
+  if (typeof grade !== "string" || !grade.trim()) return null;
   const asSubmitted = grade.match(/^([A-F][+-]?)\s+as submitted/i)?.[1];
   if (asSubmitted) return asSubmitted;
   const leading = grade.trim().match(/^([A-F](?:\+|-)?)/);
@@ -74,8 +76,10 @@ export type HeadProfessorGradePartsV111 = {
 };
 
 /** Parse dual grades like "F as submitted; approximately B+/A- after correction". */
-export function parseHeadProfessorGradeText(grade: string): HeadProfessorGradePartsV111 {
-  const full = grade.trim();
+export function parseHeadProfessorGradeText(
+  grade: string | null | undefined,
+): HeadProfessorGradePartsV111 {
+  const full = typeof grade === "string" ? grade.trim() : "";
   const asSubmittedLetter = full.match(/^([A-F][+-]?)\s+as submitted/i)?.[1] ?? null;
   const potentialRange =
     full.match(/approximately\s+([A-F][+-]?(?:\s*\/\s*[A-F][+-]?)?)/i)?.[1]?.replace(/\s+/g, "") ?? null;
@@ -167,8 +171,8 @@ export function prepareHeadProfessorVerdictForCustomerV111(
     classification:
       verdict.classification === "CONSTRUCTION_DEFECT" ? "OPTIONAL_REFINEMENT" : verdict.classification,
     optionalChanges: [
-      ...verdict.requiredChanges.map((change) => `Tuning note: ${change}`),
-      ...verdict.optionalChanges,
+      ...(verdict.requiredChanges ?? []).map((change) => `Tuning note: ${change}`),
+      ...(verdict.optionalChanges ?? []),
     ],
     requiredChanges: [],
   };
@@ -191,8 +195,8 @@ export function headProfessorClassificationHint(
 }
 
 /** Strip model-identity phrasing from Head Professor self-build answers for customer UI. */
-export function formatProfessorVerdictForCustomer(raw: string): string {
-  let text = raw.trim();
+export function formatProfessorVerdictForCustomer(raw: string | null | undefined): string {
+  let text = typeof raw === "string" ? raw.trim() : "";
   if (!text) return text;
 
   text = text.replace(
@@ -289,8 +293,8 @@ export function computeSolDirectedDeckGradeV111(args: {
   const landScore =
     args.landCount != null ? clamp(68 + (args.landCount >= 33 && args.landCount <= 38 ? 14 : args.landCount >= 30 ? 6 : -10)) : base;
 
-  const offPlanPenalty = Math.min(18, hp.offPlanCards.length * 4);
-  const requiredPenalty = Math.min(22, hp.requiredChanges.length * 6);
+  const offPlanPenalty = Math.min(18, (hp.offPlanCards ?? []).length * 4);
+  const requiredPenalty = Math.min(22, (hp.requiredChanges ?? []).length * 6);
 
   const categories: ProfessorCategoryGradeV4[] = [
     buildCategory(
@@ -355,7 +359,7 @@ export function computeSolDirectedDeckGradeV111(args: {
         base +
           (args.thesis && args.thesis.length > 80 ? 6 : 0) -
           offPlanPenalty -
-          Math.min(8, hp.optionalChanges.length * 2) +
+          Math.min(8, (hp.optionalChanges ?? []).length * 2) +
           (hp.classification === "CONSTRUCTION_SUCCESS" ? 4 : 0),
       ),
       "Novel synergies vs a generic goodstuff pile.",

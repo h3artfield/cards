@@ -365,6 +365,17 @@ function testBannedCardIsCaught() {
   console.log("PASS  a banned card makes the deck illegal");
 }
 
+function testMissingCommanderColorsDoNotCrashLegality() {
+  const deck = fynnDeck();
+  const stripped = {
+    ...deck,
+    commander: { ...deck.commander, colorIdentity: undefined as unknown as string[] },
+  };
+  const report = checkEditableDeckLegalityV1({ deck: stripped, lookup: lookupAllGreen });
+  assert.equal(typeof report.commanderLegal, "boolean");
+  console.log("PASS  a stored deck missing commander colors still opens");
+}
+
 function testUnknownCardIsUnresolvedRatherThanLegal() {
   const deck = fynnDeck();
   const report = checkEditableDeckLegalityV1({
@@ -519,6 +530,7 @@ const tests = [
   testMidEditCountIsIncompleteNotIllegal,
   testConsideringAndCutAreOutsideTheDeck,
   testBannedCardIsCaught,
+  testMissingCommanderColorsDoNotCrashLegality,
   testUnknownCardIsUnresolvedRatherThanLegal,
   testMarkersAndRenameDoNotBreakEndorsement,
   testHandoffCarriesRationaleAndSeedsTheBaseline,

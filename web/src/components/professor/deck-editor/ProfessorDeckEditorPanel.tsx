@@ -598,7 +598,7 @@ export function ProfessorDeckEditorPanel({
     );
   }
 
-  if (editor.error || !payload || !deck) {
+  if (!payload || !deck) {
     return (
       <div className="px-5 py-8">
         <div className="professor-mtg-alert professor-mtg-alert--illegal mx-auto max-w-xl">

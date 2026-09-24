@@ -181,7 +181,7 @@ export function derivedMarkersForCardV1(
         detail: null,
       });
     }
-    for (const pkg of card.professor.packageMembership) {
+    for (const pkg of card.professor.packageMembership ?? []) {
       const name = pkg.trim();
       if (!name) continue;
       markers.push({

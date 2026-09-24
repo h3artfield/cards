@@ -182,7 +182,10 @@ export function checkEditableDeckLegalityV1(args: {
       });
     }
 
-    const offColor = colorIdentityViolation(facts.colorIdentity, deck.commander.colorIdentity);
+    const offColor = colorIdentityViolation(
+      facts.colorIdentity ?? [],
+      deck.commander?.colorIdentity ?? [],
+    );
     if (offColor.length > 0) {
       violations.push({
         kind: "color_identity",
