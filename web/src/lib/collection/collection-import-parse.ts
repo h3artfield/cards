@@ -1,4 +1,10 @@
 import type { CollectionCard } from "../types";
+import {
+  finishFromCsvCell,
+  finishesFromUnknown,
+  stripFoilMark,
+  type CollectionFinish,
+} from "./collection-finish";
 
 export const COLLECTION_IMPORT_CANDIDATES_KEY = "importCandidates";
 export const MAX_COLLECTION_IMPORT_LINES = 250;
@@ -8,6 +14,7 @@ export type CollectionImportLine = {
   quantity: number;
   setCode?: string;
   collectorNumber?: string;
+  finish?: CollectionFinish;
 };
 
 export type CollectionImportCandidate = {
@@ -19,6 +26,7 @@ export type CollectionImportCandidate = {
   rarity?: string;
   imageNormal?: string;
   typeLine?: string;
+  finishes?: CollectionFinish[];
 };
 
 const SET_IN_PARENS = /^(.*?)\s+\(([A-Za-z0-9]{2,6})\)\s*(\S+)?\s*$/;
@@ -42,9 +50,11 @@ function parseNameSet(rest: string): CollectionImportLine | null {
   if (!qtyWrap || !Number.isFinite(qtyWrap.quantity) || qtyWrap.quantity <= 0) {
     return null;
   }
-  let name = qtyWrap.rest.replace(/\s+#[\w-]+$/, "").trim();
+  const foilMarked = stripFoilMark(qtyWrap.rest.replace(/\s+#[\w-]+$/, "").trim());
+  let name = foilMarked.name;
   let setCode: string | undefined;
   let collectorNumber: string | undefined;
+  const finish = foilMarked.finish;
 
   const parens = name.match(SET_IN_PARENS);
   if (parens) {
@@ -61,7 +71,13 @@ function parseNameSet(rest: string): CollectionImportLine | null {
   }
 
   if (!name || name.length < 2) return null;
-  return { name, quantity: qtyWrap.quantity, setCode, collectorNumber };
+  return {
+    name,
+    quantity: qtyWrap.quantity,
+    setCode,
+    collectorNumber,
+    ...(finish ? { finish } : {}),
+  };
 }
 
 function parseCsvRows(text: string): CollectionImportLine[] {
@@ -79,6 +95,7 @@ function parseCsvRows(text: string): CollectionImportLine[] {
   const numIdx = header.findIndex((h) =>
     ["collector number", "number", "cn", "card number"].includes(h),
   );
+  const foilIdx = header.findIndex((h) => h === "foil" || h === "finish");
 
   const rows: CollectionImportLine[] = [];
   for (const raw of lines.slice(1)) {
@@ -88,7 +105,14 @@ function parseCsvRows(text: string): CollectionImportLine[] {
     const quantity = Math.max(1, Number.parseInt(cols[qtyIdx] ?? "1", 10) || 1);
     const setCode = setIdx >= 0 ? cols[setIdx]?.trim().toLowerCase() : undefined;
     const collectorNumber = numIdx >= 0 ? cols[numIdx]?.trim() : undefined;
-    rows.push({ name, quantity, setCode: setCode || undefined, collectorNumber });
+    const foilMarked = stripFoilMark(name);
+    rows.push({
+      name: foilMarked.name,
+      quantity,
+      setCode: setCode || undefined,
+      collectorNumber,
+      finish: finishFromCsvCell(foilIdx >= 0 ? cols[foilIdx] : undefined) ?? foilMarked.finish,
+    });
   }
   return rows;
 }
@@ -133,6 +157,7 @@ export function parseCollectionImportText(text: string): CollectionImportLine[] 
       parsed.name.toLowerCase(),
       parsed.setCode ?? "",
       parsed.collectorNumber ?? "",
+      parsed.finish ?? "",
     ].join("|");
     const existing = merged.get(key);
     if (existing) existing.quantity += parsed.quantity;
@@ -146,8 +171,13 @@ export function importCandidatesFromCard(
 ): CollectionImportCandidate[] {
   const raw = card.visionJson?.[COLLECTION_IMPORT_CANDIDATES_KEY];
   if (!Array.isArray(raw)) return [];
-  return raw.filter(
-    (row): row is CollectionImportCandidate =>
-      Boolean(row && typeof row === "object" && typeof row.scryfallId === "string"),
-  );
+  return raw
+    .filter(
+      (row): row is CollectionImportCandidate =>
+        Boolean(row && typeof row === "object" && typeof row.scryfallId === "string"),
+    )
+    .map((row) => ({
+      ...row,
+      finishes: finishesFromUnknown(row.finishes),
+    }));
 }

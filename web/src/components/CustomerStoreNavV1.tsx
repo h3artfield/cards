@@ -47,7 +47,7 @@ export function CustomerStoreNavV1({
 
   return (
     <nav
-      className={`flex flex-wrap justify-center gap-x-0.5 gap-y-1 border-b pb-px ${
+      className={`flex flex-wrap justify-center gap-x-2 gap-y-1 border-b pb-1 ${
         variant === "light" ? "border-gray-200" : "border-[var(--line-subtle)]"
       }`}
       aria-label="Store"
@@ -57,7 +57,7 @@ export function CustomerStoreNavV1({
           key={tab.id}
           href={tab.href}
           aria-current={tab.id === active ? "page" : undefined}
-          className={`-mb-px border-b-2 px-2.5 py-2 text-[11px] font-semibold uppercase tracking-wide transition sm:px-3 sm:text-xs ${
+          className={`-mb-px border-b-2 px-3 py-3 text-xs font-semibold uppercase tracking-wide transition sm:px-4 sm:text-sm ${
             tab.id === active ? activeClass : inactiveClass
           }`}
         >

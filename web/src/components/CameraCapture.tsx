@@ -100,7 +100,6 @@ export function CameraCapture({
   const [readyStable, setReadyStable] = useState(false);
   const [captureWarning, setCaptureWarning] = useState<string | null>(null);
   const [focusing, setFocusing] = useState(false);
-  const [useLiveCamera, setUseLiveCamera] = useState(false);
 
   const mode: CaptureMode = captureMode === "graded" ? "graded" : "raw";
   const aspect = OVERLAY_ASPECT[mode];
@@ -343,27 +342,12 @@ export function CameraCapture({
       startGenerationRef.current += 1;
       stopStream();
     };
-    // Mount-only startup on desktop; mobile defaults to native camera upload.
+    // Mount-only startup on desktop. Phones use the native camera app.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (!mobile || !useLiveCamera || previewUrl || captured) return;
-    if (!isSecureCameraContext()) return;
-
-    const timer = window.setTimeout(() => {
-      void startCamera();
-    }, 0);
-
-    return () => {
-      window.clearTimeout(timer);
-      startGenerationRef.current += 1;
-      stopStream();
-    };
-  }, [mobile, useLiveCamera, previewUrl, captured, startCamera, stopStream]);
-
-  useEffect(() => {
-    if (!streamReady || captured || !useLiveCamera) return;
+    if (!streamReady || captured || mobile) return;
 
     const analysisCanvas = analysisCanvasRef.current;
     const video = videoRef.current;
@@ -485,19 +469,7 @@ export function CameraCapture({
       cancelled = true;
       window.clearInterval(id);
     };
-  }, [streamReady, captured, mode, mobile, motionThreshold, performCapture, stableMs, useLiveCamera]);
-
-  useEffect(() => {
-    if (!streamReady || captured || !mobile || !useLiveCamera) return;
-
-    const refocus = () => {
-      const track = streamRef.current?.getVideoTracks()[0];
-      if (track) void applyCardTextFocus(track);
-    };
-
-    const id = window.setInterval(refocus, 3500);
-    return () => window.clearInterval(id);
-  }, [streamReady, captured, mobile, useLiveCamera]);
+  }, [streamReady, captured, mode, mobile, motionThreshold, performCapture, stableMs]);
 
   const handleRetake = () => {
     captureInProgressRef.current = false;
@@ -506,7 +478,7 @@ export function CameraCapture({
     setCaptureWarning(null);
     setCameraError(null);
     onRetake?.();
-    if (useLiveCamera) {
+    if (!mobile) {
       void startCamera(selectedDeviceIdRef.current || undefined);
     }
   };
@@ -573,12 +545,12 @@ export function CameraCapture({
     return <PhotoProcessingScreen label={processingLabel} />;
   }
 
-  if (mobile && !useLiveCamera && !captured && !previewUrl) {
+  if (mobile && !captured && !previewUrl) {
     return (
       <div className="flex h-full min-h-0 flex-col justify-center gap-4 px-1">
         <p className="text-center text-sm font-medium text-gray-800">{label}</p>
         <p className="text-center text-xs text-gray-500">
-          Your phone camera takes sharper, in-focus photos than live preview.
+          Use your phone camera for a sharp, in-focus photo.
         </p>
 
         {cameraError && (
@@ -594,16 +566,6 @@ export function CameraCapture({
         >
           {takePhotoLabel}
         </Button>
-
-        {showLiveCamera && (
-          <button
-            type="button"
-            onClick={() => setUseLiveCamera(true)}
-            className="text-center text-sm text-indigo-600 underline-offset-2 hover:underline"
-          >
-            Use live preview instead
-          </button>
-        )}
 
         {fileInput}
       </div>
@@ -711,84 +673,6 @@ export function CameraCapture({
       )}
     </>
   );
-
-  if (mobile && showLiveCamera && useLiveCamera) {
-    return (
-      <div className="flex h-full min-h-0 flex-col">
-        <p className="mb-2 shrink-0 truncate text-center text-xs text-gray-600">
-          {label}
-          {streamReady ? " · Tap card text to focus" : ""}
-        </p>
-
-        {cameraError && (
-          <div
-            className={`mb-2 shrink-0 rounded-lg border p-3 text-xs ${
-              insecureContext
-                ? "border-amber-200 bg-amber-50 text-amber-950"
-                : "border-red-200 bg-red-50 text-red-800"
-            }`}
-          >
-            <p className="font-semibold">{cameraError.hint}</p>
-          </div>
-        )}
-
-        <div
-          ref={videoContainerRef}
-          className="relative min-h-0 flex-1 overflow-hidden rounded-xl bg-black"
-          onPointerUp={(e) => {
-            if (e.pointerType === "mouse" && e.button !== 0) return;
-            void handleFocusTap(e.clientX, e.clientY);
-          }}
-        >
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            muted
-            className="h-full w-full object-cover"
-          />
-          {(!streamReady || starting) && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/70 text-sm text-white">
-              {starting ? "Starting camera…" : "Waiting for camera…"}
-            </div>
-          )}
-
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <div
-              className={`rounded-lg border-4 transition-colors duration-300 ${overlayBorderClass(overlayColor)}`}
-              style={{
-                height: `${heightPct * 100}%`,
-                aspectRatio: `${aspect}`,
-                maxHeight: "100%",
-                maxWidth: "90%",
-              }}
-            />
-          </div>
-
-          <div
-            className={`pointer-events-none absolute left-1/2 top-3 max-w-[92%] -translate-x-1/2 rounded-lg px-3 py-1.5 text-center text-xs font-medium ${overlayHintClass(overlayColor)}`}
-          >
-            {readyStable
-              ? "Ready — hold steady…"
-              : focusing
-                ? "Focusing…"
-                : feedback.join(" · ")}
-          </div>
-
-          <div className="absolute inset-x-0 bottom-0 space-y-2 bg-gradient-to-t from-black/95 via-black/70 to-transparent px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-10">
-            {captureWarning && (
-              <p className="text-center text-xs text-amber-200">{captureWarning}</p>
-            )}
-            {captureControls}
-          </div>
-        </div>
-
-        <canvas ref={canvasRef} className="hidden" />
-        <canvas ref={analysisCanvasRef} className="hidden" />
-        {fileInput}
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-4">

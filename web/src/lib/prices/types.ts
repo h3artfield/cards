@@ -166,7 +166,7 @@ export type PriceChartingDailyReport = {
 export type CardPriceHistorySeries = {
   source: "pricecharting";
   label: string;
-  points: { date: string; value: number }[];
+  points: { date: string; value: number; volume?: number }[];
 };
 
 export type CardPriceHistoryResponse = {
@@ -186,6 +186,12 @@ export type CardPriceHistoryResponse = {
     ninetyDayChangePct?: number;
     sampleCount: number;
     volatility?: "low" | "medium" | "high";
+    marketTone?: "highly_up" | "up" | "down" | "highly_down";
+    latestSalesVolume?: number;
+    monthlySales?: {
+      kind: "estimated_sales" | "reported_volume";
+      buckets: { month: string; label: string; sales: number }[];
+    };
   };
   lastUpdated?: string;
   sourceNote: string;

@@ -31,7 +31,7 @@ export const PROFESSOR_DECK_EDITOR_FROM_BUILD_V1_VERSION = "professor-deck-edito
 export type LandOracleIdResolverV1 = (name: string) => string | null;
 
 function nonlandCards(deck: SolDirectedConstructedDeckV11): EditableDeckCardV1[] {
-  return deck.nonlands.map((card) => ({
+  return (deck.nonlands ?? []).map((card) => ({
     cardKey: deckCardKeyV1({ oracleId: card.oracleId, name: card.name }),
     oracleId: card.oracleId,
     name: card.name,
@@ -57,7 +57,7 @@ function landCards(
   deck: SolDirectedConstructedDeckV11,
   resolveLandOracleId?: LandOracleIdResolverV1,
 ): EditableDeckCardV1[] {
-  return deck.lands.map((land) => {
+  return (deck.lands ?? []).map((land) => {
     const oracleId = resolveLandOracleId?.(land.name) ?? null;
     return {
       cardKey: deckCardKeyV1({ oracleId, name: land.name }),

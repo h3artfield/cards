@@ -1,99 +1,185 @@
 /**
  * One list of a customer's decks, assembled from two collections.
  *
- * Decks the Professor built are recorded in `customerSavedDecks` when the build
- * completes, and carry the grade and the bracket that was asked for. Decks
- * started by hand exist only as editable decks. Reading both and merging here
- * keeps that split out of the page, which should not have to know which
- * collection a deck happens to live in.
- *
- * Only hand-started editable decks are taken, because a Professor deck that has
- * been opened in the editor exists in *both* collections and would otherwise be
- * listed twice.
+ * Professor builds live in `customerSavedDecks`; their editable copy appears
+ * once someone opens the deck editor. Merging here joins the two so the deck
+ * list and event registration see one row per build, with the right bracket
+ * without making the customer run Check bracket on a list the Professor
+ * already graded.
  */
-import { mainboardLibraryCountV1, measuredBracketIsStaleV1 } from "./types-v1";
+import { professorPlaystyleShortLabelV1 } from "./deck-list-display-v1";
+import { eventRegistrationBracketV1 } from "./event-registration-bracket-v1";
+import { editableDeckIdV1 } from "./from-build-v1";
+import { mainboardLibraryCountV1 } from "./types-v1";
+import type { DeckListCosSnapshotV1 } from "./deck-list-cos-v1";
 import type { EditableDeckV1 } from "./types-v1";
 import type { CustomerSavedDeck } from "../customer-saved-decks/customer-saved-deck-store";
+import type { DeckEventAssignmentV1 } from "../store-calendar/deck-event-assignments-v1";
 
 export const PROFESSOR_DECK_LIST_V1_VERSION = "professor-deck-editor-deck-list-v1";
 
 export type CustomerDeckOriginV1 = "professor" | "hand";
 
 export type CustomerDeckListEntryV1 = {
-  /** Unique across both sources, so React keys and lookups are safe. */
   key: string;
-  /**
-   * The editable deck this row refers to, where one is being read. Null for
-   * Professor rows, which are read from the saved-deck record rather than the
-   * editable copy — so there is no id here to register or measure against.
-   */
-  deckId: string | null;
+  deckId: string;
   href: string;
   deckName: string;
   commanderName: string;
   origin: CustomerDeckOriginV1;
-  /** The bracket the Professor was asked for. Null for a deck built by hand. */
   requestedBracket: number | null;
-  /**
-   * The bracket the deck actually measured, if it has ever been checked. This
-   * is what tournament eligibility reads: asking for bracket 3 says nothing
-   * about what was built.
-   */
+  /** Bracket this deck can register for an event with today. */
+  registrationBracket: number | null;
+  registrationBracketStale: boolean;
+  /** @deprecated Prefer registrationBracket — kept for older UI paths. */
   measuredBracket: number | null;
-  /** True when the deck changed after that measurement was taken. */
   measuredBracketStale: boolean;
   grade: string | null;
-  /** Mainboard size, known only for decks we hold a card list for. */
+  /** Short playstyle label, e.g. "Balanced / Flexible". */
+  playstyleLabel: string | null;
   libraryCount: number | null;
+  /** Competitive Strength + ten-axis profile when the full list is scoreable. */
+  cosSnapshot: DeckListCosSnapshotV1 | null;
+  /** Upcoming events this deck is registered for at this store. */
+  eventAssignments?: DeckEventAssignmentV1[];
+  createdAt: string;
   updatedAt: string;
 };
 
-export function deckListEntryFromHandDeckV1(deck: EditableDeckV1): CustomerDeckListEntryV1 {
+function listEntryFromEditableV1(
+  deck: EditableDeckV1,
+  origin: CustomerDeckOriginV1,
+  href: string,
+  grade: string | null,
+  playstyleLabel: string | null,
+  cosSnapshot: DeckListCosSnapshotV1 | null,
+): CustomerDeckListEntryV1 {
+  const registration = eventRegistrationBracketV1(deck);
   return {
     key: deck.deckId,
     deckId: deck.deckId,
-    href: `/s/${encodeURIComponent(deck.storeSlug)}/decks/${encodeURIComponent(deck.deckId)}`,
+    href,
     deckName: deck.deckName,
     commanderName: deck.commander.name,
-    origin: "hand",
+    origin,
     requestedBracket: deck.bracket,
-    measuredBracket: deck.measuredBracket?.bracket ?? null,
-    measuredBracketStale: measuredBracketIsStaleV1(deck),
-    grade: null,
+    registrationBracket: registration.bracket,
+    registrationBracketStale: registration.stale,
+    measuredBracket: registration.bracket,
+    measuredBracketStale: registration.stale,
+    grade,
+    playstyleLabel,
     libraryCount: mainboardLibraryCountV1(deck),
+    cosSnapshot,
+    createdAt: deck.createdAt,
     updatedAt: deck.updatedAt,
   };
 }
 
-export function deckListEntryFromSavedDeckV1(deck: CustomerSavedDeck): CustomerDeckListEntryV1 {
+export function deckListEntryFromHandDeckV1(deck: EditableDeckV1): CustomerDeckListEntryV1 {
+  return listEntryFromEditableV1(
+    deck,
+    "hand",
+    `/s/${encodeURIComponent(deck.storeSlug)}/decks/${encodeURIComponent(deck.deckId)}`,
+    null,
+    null,
+    null,
+  );
+}
+
+export function deckListEntryFromProfessorV1(
+  saved: CustomerSavedDeck,
+  editable: EditableDeckV1 | null,
+): CustomerDeckListEntryV1 {
+  const deckId = editableDeckIdV1({ customerId: saved.customerId, buildId: saved.buildId });
+  const href =
+    `/s/${encodeURIComponent(saved.storeSlug)}/inventory/professor/build` +
+    `?buildId=${encodeURIComponent(saved.buildId)}`;
+
+  const playstyleLabel = professorPlaystyleShortLabelV1(saved.playstyle);
+
+  if (editable) {
+    return listEntryFromEditableV1(editable, "professor", href, saved.grade, playstyleLabel, null);
+  }
+
+  // Never opened in the editor — the saved build record still carries the
+  // Professor's bracket and the list is still sealed.
   return {
-    key: deck.id,
-    deckId: null,
-    href:
-      `/s/${encodeURIComponent(deck.storeSlug)}/inventory/professor/build` +
-      `?buildId=${encodeURIComponent(deck.buildId)}`,
-    deckName: deck.deckName,
-    commanderName: deck.commanderName,
+    key: saved.id,
+    deckId,
+    href,
+    deckName: saved.deckName,
+    commanderName: saved.commanderName,
     origin: "professor",
-    requestedBracket: deck.bracket,
-    // Saved Professor decks predate measurement being recorded; the editor
-    // stamps the editable copy, which this row is not reading.
-    measuredBracket: null,
+    requestedBracket: saved.bracket,
+    registrationBracket: saved.bracket,
+    registrationBracketStale: false,
+    measuredBracket: saved.bracket,
     measuredBracketStale: false,
-    grade: deck.grade,
+    grade: saved.grade,
+    playstyleLabel,
     libraryCount: null,
-    updatedAt: deck.updatedAt,
+    cosSnapshot: null,
+    createdAt: saved.createdAt,
+    updatedAt: saved.updatedAt,
   };
+}
+
+/** @deprecated Use deckListEntryFromProfessorV1 */
+export function deckListEntryFromSavedDeckV1(deck: CustomerSavedDeck): CustomerDeckListEntryV1 {
+  return deckListEntryFromProfessorV1(deck, null);
 }
 
 export function mergeCustomerDeckListV1(args: {
   editableDecks: readonly EditableDeckV1[];
   savedDecks: readonly CustomerSavedDeck[];
+  cosByDeckId?: ReadonlyMap<string, DeckListCosSnapshotV1>;
 }): CustomerDeckListEntryV1[] {
+  const cosByDeckId = args.cosByDeckId ?? new Map();
+  const editableByBuildId = new Map(
+    args.editableDecks
+      .filter((deck): deck is EditableDeckV1 & { buildId: string } => Boolean(deck.buildId))
+      .map((deck) => [deck.buildId, deck] as const),
+  );
+
   const hand = args.editableDecks
     .filter((deck) => deck.buildId === null)
-    .map(deckListEntryFromHandDeckV1);
-  const professor = args.savedDecks.map(deckListEntryFromSavedDeckV1);
+    .map((deck) =>
+      listEntryFromEditableV1(
+        deck,
+        "hand",
+        `/s/${encodeURIComponent(deck.storeSlug)}/decks/${encodeURIComponent(deck.deckId)}`,
+        null,
+        null,
+        cosByDeckId.get(deck.deckId) ?? null,
+      ),
+    );
+
+  const professor = args.savedDecks.map((saved) => {
+    const editable = editableByBuildId.get(saved.buildId) ?? null;
+    if (editable) {
+      return listEntryFromEditableV1(
+        editable,
+        "professor",
+        `/s/${encodeURIComponent(saved.storeSlug)}/inventory/professor/build` +
+          `?buildId=${encodeURIComponent(saved.buildId)}`,
+        saved.grade,
+        professorPlaystyleShortLabelV1(saved.playstyle),
+        cosByDeckId.get(editable.deckId) ?? null,
+      );
+    }
+    return deckListEntryFromProfessorV1(saved, null);
+  });
 
   return [...hand, ...professor].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+}
+
+export function attachDeckEventAssignmentsV1(
+  decks: readonly CustomerDeckListEntryV1[],
+  byDeckId: ReadonlyMap<string, readonly DeckEventAssignmentV1[]>,
+): CustomerDeckListEntryV1[] {
+  return decks.map((deck) => ({
+    ...deck,
+    eventAssignments: [...(byDeckId.get(deck.deckId) ?? [])],
+  }));
 }

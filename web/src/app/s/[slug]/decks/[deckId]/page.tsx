@@ -3,6 +3,7 @@
 import { Suspense } from "react";
 import { useParams } from "next/navigation";
 import { CustomerDeckNavV1 } from "@/components/professor/CustomerDeckNavV1";
+import { ProfessorClientErrorBoundary } from "@/components/professor/ProfessorClientErrorBoundary";
 import { ProfessorMtgPageShell } from "@/components/professor/ProfessorMtgPageShell";
 import { ProfessorDeckEditorPanel } from "@/components/professor/deck-editor/ProfessorDeckEditorPanel";
 import { RequireCustomerForDeckBuild } from "@/components/store-inventory/RequireCustomerForDeckBuild";
@@ -32,10 +33,15 @@ function Content() {
   return (
     <RequireCustomerForDeckBuild slug={slug} returnPath={`/s/${slug}/decks/${deckId}`}>
       <ProfessorMtgPageShell>
-        <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6">
+        <div className="mx-auto w-full max-w-[90rem] flex-1 px-4 py-6 sm:px-6 lg:px-10">
           <CustomerDeckNavV1 slug={slug} />
-          <div className="professor-mtg-chamber__inner mt-4 overflow-hidden">
-            <ProfessorDeckEditorPanel slug={slug} deckId={deckId} />
+          <div className="professor-mtg-chamber__inner professor-mtg-chamber__inner--wide professor-mtg-chamber__inner--art mt-4 overflow-hidden">
+            <ProfessorClientErrorBoundary
+              fallbackTitle="Could not open the editor"
+              fallbackBody="The deck was saved. Refresh to try opening it again."
+            >
+              <ProfessorDeckEditorPanel slug={slug} deckId={deckId} />
+            </ProfessorClientErrorBoundary>
           </div>
         </div>
       </ProfessorMtgPageShell>

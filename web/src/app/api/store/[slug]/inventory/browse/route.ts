@@ -22,6 +22,7 @@ import {
 } from "@/lib/store-inventory/inventory-browse-filter-params";
 import type { StoreInventorySemanticFilter } from "@/lib/deck-builder/store-inventory-semantic";
 import { resolveStoreBySlug } from "@/lib/deck-builder/deck-builder-service";
+import { parseInventoryFinishFilter } from "@/lib/inventory/inventory-finish-v1";
 
 export const maxDuration = 120;
 
@@ -138,8 +139,13 @@ export async function GET(
       sortRaw === "cmc_desc"
         ? sortRaw
         : "name";
-    const source = sp.get("source") === "catalog" ? "catalog" : "inventory";
+    // The printings catalog is Magic-only, so a catalog request for these games
+    // can only ever return zero rows; a stale deep link falls back to inventory.
+    const catalogRequestable = game === "magic";
+    const source =
+      sp.get("source") === "catalog" && catalogRequestable ? "catalog" : "inventory";
     const semantic = parseBrowseSemanticFromParams(sp);
+    const finish = parseInventoryFinishFilter(sp.get("finish"));
 
     if (source === "catalog") {
       const catalogGame = (["magic", "pokemon", "riftbound"].includes(game)
@@ -171,6 +177,7 @@ export async function GET(
       limit,
       sortBy,
       semantic,
+      finish,
     });
 
     return jsonOk(result);

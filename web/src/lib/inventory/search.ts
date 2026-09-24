@@ -4,14 +4,21 @@ import {
 } from "./image-url";
 import { inventoryEffectiveQuantity, isInventoryListed } from "./status";
 import type { InventoryItem } from "../types";
+import {
+  inventoryItemMatchesFinishFilter,
+  parseInventoryFinishFilter,
+  type InventoryFinishFilter,
+} from "./inventory-finish-v1";
 
 export type InventoryStockFilter = "all" | "in_stock" | "catalog";
 export type InventoryListedFilter = "all" | "listed" | "unlisted";
+export type { InventoryFinishFilter };
 
 export interface InventoryBrowseQuery {
   q?: string;
   stock?: InventoryStockFilter;
   listed?: InventoryListedFilter;
+  finish?: InventoryFinishFilter;
   page?: number;
   limit?: number;
   /** Raise cap for store browse (default 100 for admin UI). */
@@ -76,11 +83,13 @@ export function browseInventoryItems(
   const limit = Math.min(cap, Math.max(1, query.limit ?? 48));
   const stock = query.stock ?? "all";
   const listed = query.listed ?? "all";
+  const finish = parseInventoryFinishFilter(query.finish);
 
   const filtered = items
     .filter((item) => matchesStock(item, stock))
     .filter((item) => matchesListed(item, listed))
-    .filter((item) => matchesSearch(item, query.q ?? ""));
+    .filter((item) => matchesSearch(item, query.q ?? ""))
+    .filter((item) => inventoryItemMatchesFinishFilter(item, finish));
 
   filtered.sort((a, b) => {
     const qtyDiff = inventoryEffectiveQuantity(b) - inventoryEffectiveQuantity(a);

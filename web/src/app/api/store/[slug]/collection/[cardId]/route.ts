@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
 import { requireCustomerAtStore } from "@/lib/auth/customer-store-binding";
 import { CollectionPrintingNotFoundError } from "@/lib/collection/collection-intake";
+import { withBinderDeckHint } from "@/lib/collection/collection-binder-hints";
 import { applyPrintingToCollectionCard } from "@/lib/collection/collection-import";
 import { dataStore } from "@/lib/storage/data-store";
 
@@ -60,13 +61,38 @@ export async function PATCH(
       );
     }
 
-    const body = (await req.json().catch(() => ({}))) as { scryfallId?: string };
+    const body = (await req.json().catch(() => ({}))) as {
+      scryfallId?: string;
+      quantity?: number;
+      finish?: string;
+    };
+    if (body.quantity != null) {
+      const quantity = Math.floor(Number(body.quantity));
+      if (!Number.isFinite(quantity) || quantity < 0) {
+        return jsonError("Quantity must be a whole number");
+      }
+      if (quantity === 0) {
+        await dataStore.deleteCollectionCard(cardId);
+        return jsonOk({ removed: cardId });
+      }
+      const updated = await dataStore.saveCollectionCard({
+        ...card,
+        quantity,
+        updatedAt: new Date().toISOString(),
+      });
+      return jsonOk({ card: await withBinderDeckHint(updated) });
+    }
+
     const scryfallId = body.scryfallId?.trim();
     if (!scryfallId) return jsonError("Pick a printing");
 
     try {
-      const resolved = await applyPrintingToCollectionCard({ card, scryfallId });
-      return jsonOk({ card: resolved });
+      const resolved = await applyPrintingToCollectionCard({
+        card,
+        scryfallId,
+        finish: body.finish === "foil" || body.finish === "etched" ? body.finish : "nonfoil",
+      });
+      return jsonOk({ card: await withBinderDeckHint(resolved) });
     } catch (err) {
       if (err instanceof CollectionPrintingNotFoundError) {
         return jsonError(err.message, 404);

@@ -1,6 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
+import { hasTrustedFirebaseImageCache } from "../inventory/image-cache-trust";
 import { isTcgplayerImportItem } from "../inventory/status";
 import type { InventoryItem } from "../types";
+import {
+  buildCsvProductLineScope,
+  isItemInCsvScope,
+  listCsvProductLines,
+} from "./import-guard";
 import { parseTcgplayerInventoryExportCsv } from "./parse-export-csv";
 import { resolveTcgplayerProductImageUrl } from "./product-image";
 import type {
@@ -177,12 +183,23 @@ export function buildTcgplayerImportPreview(
   }
 
   const missingFromCsv: TcgplayerImportPreview["missingFromCsv"] = [];
+  const productLineScope = buildCsvProductLineScope(csvRows);
+  let outOfScopeRows = 0;
+  let outOfScopeUnits = 0;
 
   for (const item of importItems) {
     if (!item.tcgplayerListingKey || seenKeys.has(item.tcgplayerListingKey)) {
       continue;
     }
     if (item.status === "sold") continue;
+
+    /* A file covering only some product lines says nothing about the rest —
+       leave those rows alone instead of reading absence as "sold out". */
+    if (!isItemInCsvScope(item, productLineScope)) {
+      outOfScopeRows += 1;
+      outOfScopeUnits += Math.max(0, item.quantity ?? 0);
+      continue;
+    }
 
     if (hasChannelListing(item)) {
       missingFromCsv.push({
@@ -211,9 +228,34 @@ export function buildTcgplayerImportPreview(
 
   const createRows = previewRows.filter((r) => r.action === "create");
 
+  const inStockRowsBefore = importItems.filter(
+    (i) => i.status !== "sold" && (i.quantity ?? 0) > 0,
+  ).length;
+
+  let withdrawnInStockRows = 0;
+  let withdrawnUnits = 0;
+  for (const row of previewRows) {
+    if (row.action !== "withdraw") continue;
+    const previous = row.previousQuantity ?? 0;
+    if (previous <= 0) continue;
+    withdrawnInStockRows += 1;
+    withdrawnUnits += previous;
+  }
+  for (const missing of missingFromCsv) {
+    if (missing.action !== "withdraw" || missing.quantity <= 0) continue;
+    withdrawnInStockRows += 1;
+    withdrawnUnits += missing.quantity;
+  }
+
   return {
     parsedCount: csvRows.length,
     skippedCount: skipped,
+    csvProductLines: listCsvProductLines(csvRows),
+    outOfScopeRows,
+    outOfScopeUnits,
+    inStockRowsBefore,
+    withdrawnInStockRows,
+    withdrawnUnits,
     creates: createRows.length,
     createsInStock: createRows.filter((r) => r.quantity > 0).length,
     createsCatalog: createRows.filter((r) => r.quantity <= 0).length,
@@ -278,6 +320,7 @@ export function inventoryItemFromCsvRow(
     tcgLowPriceAt: csvRow.tcgLowPrice > 0 ? now : undefined,
     lastTcgplayerImportAt: now,
     status: csvRow.quantity > 0 ? "on_hand" : "withdrawn",
+    imageCacheFailedAt: undefined,
   };
 }
 
@@ -295,15 +338,22 @@ export function mergeCsvIntoInventoryItem(
           : "on_hand"
         : "withdrawn";
 
+  const productChanged =
+    existing.tcgplayerProductId !== csvRow.tcgplayerProductId ||
+    existing.tcgplayerListingKey !== csvRow.listingKey;
+
+  const keepCachedImage =
+    !productChanged && hasTrustedFirebaseImageCache(existing);
+
   return {
     ...existing,
     displayName: csvRow.displayName,
     category: csvRow.category,
     setName: csvRow.setName || undefined,
     cardNumber: csvRow.number || undefined,
-    frontImageUrl:
-      existing.frontImageUrl ||
-      resolveTcgplayerProductImageUrl(csvRow.tcgplayerProductId),
+    frontImageUrl: keepCachedImage
+      ? existing.frontImageUrl
+      : resolveTcgplayerProductImageUrl(csvRow.tcgplayerProductId),
     marketPrice: csvRow.tcgMarketPrice > 0 ? csvRow.tcgMarketPrice : existing.marketPrice,
     tcgplayerProductId: csvRow.tcgplayerProductId,
     tcgplayerCondition: csvRow.condition,
@@ -325,5 +375,9 @@ export function mergeCsvIntoInventoryItem(
       csvRow.tcgLowPrice > 0 ? now : existing.tcgLowPriceAt,
     lastTcgplayerImportAt: now,
     status: nextStatus,
+    imageCacheFailedAt: undefined,
+    ...(productChanged
+      ? { imageCachedAt: undefined, imageCacheVersion: undefined }
+      : {}),
   };
 }

@@ -18,6 +18,8 @@ export type EventEditorFormState = {
   allDay: boolean;
   signupUrl: string;
   capacity: string;
+  cost: string;
+  requiredBracket: string;
   published: boolean;
   repeatWeekly: boolean;
   repeatWeekday: string;
@@ -58,6 +60,8 @@ export function emptyEventForm(day?: Date): EventEditorFormState {
     allDay: false,
     signupUrl: "",
     capacity: "",
+    cost: "",
+    requiredBracket: "",
     published: true,
     repeatWeekly: false,
     repeatWeekday: weekday,
@@ -76,6 +80,9 @@ export function formFromEvent(event: StoreEvent): EventEditorFormState {
     allDay: event.allDay ?? false,
     signupUrl: event.signupUrl ?? "",
     capacity: event.capacity != null ? String(event.capacity) : "",
+    cost: event.cost != null ? String(event.cost) : "",
+    requiredBracket:
+      event.requiredBracket != null ? String(event.requiredBracket) : "",
     published: event.published,
     repeatWeekly: false,
     repeatWeekday: String(new Date(event.startAt).getDay()),
@@ -276,7 +283,7 @@ export function AdminEventEditorDialog({
               {mode === "edit" ? (
                 <span className="mt-1 block text-xs text-gray-500">
                   To change a recurring series, edit individual occurrences or
-                  delete and recreate.
+                  delete the whole series and recreate.
                 </span>
               ) : null}
             </label>
@@ -332,6 +339,41 @@ export function AdminEventEditorDialog({
             </label>
 
             <div className="grid gap-3 sm:grid-cols-2">
+              <label className="block text-sm">
+                <span className="font-medium">Commander bracket</span>
+                <select
+                  value={form.requiredBracket}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, requiredBracket: e.target.value }))
+                  }
+                  className="mt-1 w-full rounded-lg border px-3 py-2"
+                >
+                  <option value="">Open / not bracketed</option>
+                  <option value="1">Bracket 1</option>
+                  <option value="2">Bracket 2</option>
+                  <option value="3">Bracket 3</option>
+                  <option value="4">Bracket 4</option>
+                  <option value="5">Bracket 5</option>
+                </select>
+                <span className="mt-1 block text-xs text-gray-500">
+                  Players can only register decks at this bracket
+                </span>
+              </label>
+              <label className="block text-sm">
+                <span className="font-medium">Cost</span>
+                <input
+                  type="number"
+                  min={0}
+                  step={0.01}
+                  value={form.cost}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, cost: e.target.value }))
+                  }
+                  placeholder="Optional"
+                  className="mt-1 w-full rounded-lg border px-3 py-2"
+                />
+                <span className="mt-1 block text-xs text-gray-500">Dollars · 0 = free</span>
+              </label>
               <label className="block text-sm">
                 <span className="font-medium">Capacity</span>
                 <input

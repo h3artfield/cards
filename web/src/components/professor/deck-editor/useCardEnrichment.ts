@@ -9,48 +9,52 @@ export type CardEnrichment = {
   tcgPricesByName: Record<string, number>;
 };
 
+export type CardEnrichmentNeedV1 = {
+  images?: boolean;
+  inventory?: boolean;
+  prices?: boolean;
+};
+
 /**
  * Images, shop stock, and market prices for a set of card names.
  *
- * Fetched incrementally: only names not asked for before are sent, so adding
- * one card to a ninety-nine card deck costs a request about one card. Every
- * source is optional — a failure costs a price or a hover image, and the deck
- * still renders.
+ * Each source is fetched only when asked for. The text list does not need art,
+ * and fetching ninety-nine Scryfall faces in the background was crashing the
+ * tab a few seconds after the names appeared.
  */
-export function useCardEnrichment(slug: string, cardNames: readonly string[]): CardEnrichment {
+export function useCardEnrichment(
+  slug: string,
+  cardNames: readonly string[],
+  need: CardEnrichmentNeedV1 = {},
+): CardEnrichment {
+  const wantImages = need.images === true;
+  const wantInventory = need.inventory !== false;
+  const wantPrices = need.prices === true;
+
   const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
   const [inventoryByName, setInventoryByName] = useState<
     Record<string, ProfessorDeckInventoryEntryV43>
   >({});
   const [tcgPricesByName, setTcgPricesByName] = useState<Record<string, number>>({});
-  const requested = useRef(new Set<string>());
+  const requestedImages = useRef(new Set<string>());
+  const requestedInventory = useRef(new Set<string>());
+  const requestedPrices = useRef(new Set<string>());
 
-  // Sorted and joined, so this effect re-runs when the deck's contents change
-  // but not when the same cards arrive in a different order.
   const nameKey = useMemo(() => [...cardNames].sort().join("\u0001"), [cardNames]);
 
   useEffect(() => {
     if (!slug || nameKey.length === 0) return;
-    const names = nameKey.split("\u0001").filter((name) => !requested.current.has(name));
-    if (names.length === 0) return;
-    names.forEach((name) => requested.current.add(name));
-
+    const all = nameKey.split("\u0001");
     let cancelled = false;
 
-    /**
-     * Each source is applied the moment it lands.
-     *
-     * These used to share one `Promise.allSettled`, which quietly tied the
-     * fastest source to the slowest: images come back in a few seconds and
-     * prices can take a minute, so a whole deck of card art waited on the
-     * price lookup. That was survivable when images were only used for hover
-     * previews and invisible when they were not there, but the image-led views
-     * render nothing at all until the map arrives.
-     */
     const load = async <T,>(
       path: string,
+      names: string[],
+      requested: Set<string>,
       apply: (data: T) => void,
     ): Promise<void> => {
+      if (names.length === 0) return;
+      names.forEach((name) => requested.add(name));
       try {
         const response = await fetch(`/api/store/${slug}/professor/${path}`, {
           method: "POST",
@@ -61,34 +65,49 @@ export function useCardEnrichment(slug: string, cardNames: readonly string[]): C
         const data = (await response.json()) as T;
         if (!cancelled) apply(data);
       } catch {
-        // Let these names be asked for again. Marking them up front stops two
-        // requests racing for the same cards, but keeping them marked after a
-        // failure would mean a single blip costs the deck its art until reload.
-        for (const name of names) requested.current.delete(name);
+        for (const name of names) requested.delete(name);
       }
     };
 
-    void load<{ imageUrls?: Record<string, string> }>("card-images", (data) => {
-      if (data.imageUrls) setImageUrls((prev) => ({ ...prev, ...data.imageUrls }));
-    });
-    void load<{ inventoryByName?: Record<string, ProfessorDeckInventoryEntryV43> }>(
-      "brew/inventory-match",
-      (data) => {
-        if (data.inventoryByName) {
-          setInventoryByName((prev) => ({ ...prev, ...data.inventoryByName }));
-        }
-      },
-    );
-    void load<{ tcgPricesByName?: Record<string, number> }>("card-prices", (data) => {
-      if (data.tcgPricesByName) {
-        setTcgPricesByName((prev) => ({ ...prev, ...data.tcgPricesByName }));
-      }
-    });
+    if (wantImages) {
+      void load<{ imageUrls?: Record<string, string> }>(
+        "card-images",
+        all.filter((name) => !requestedImages.current.has(name)),
+        requestedImages.current,
+        (data) => {
+          if (data.imageUrls) setImageUrls((prev) => ({ ...prev, ...data.imageUrls }));
+        },
+      );
+    }
+    if (wantInventory) {
+      void load<{ inventoryByName?: Record<string, ProfessorDeckInventoryEntryV43> }>(
+        "brew/inventory-match",
+        all.filter((name) => !requestedInventory.current.has(name)),
+        requestedInventory.current,
+        (data) => {
+          if (data.inventoryByName) {
+            setInventoryByName((prev) => ({ ...prev, ...data.inventoryByName }));
+          }
+        },
+      );
+    }
+    if (wantPrices) {
+      void load<{ tcgPricesByName?: Record<string, number> }>(
+        "card-prices",
+        all.filter((name) => !requestedPrices.current.has(name)),
+        requestedPrices.current,
+        (data) => {
+          if (data.tcgPricesByName) {
+            setTcgPricesByName((prev) => ({ ...prev, ...data.tcgPricesByName }));
+          }
+        },
+      );
+    }
 
     return () => {
       cancelled = true;
     };
-  }, [slug, nameKey]);
+  }, [nameKey, slug, wantImages, wantInventory, wantPrices]);
 
   return useMemo(
     () => ({ imageUrls, inventoryByName, tcgPricesByName }),

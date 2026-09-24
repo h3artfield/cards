@@ -3,6 +3,10 @@
  * Run: npm run test:tcgplayer-inventory-import
  */
 import { applyTcgplayerInventoryImport } from "../src/lib/tcgplayer-inventory/apply-import";
+import {
+  assessTcgplayerWithdrawalRisk,
+  TcgplayerImportWithdrawalBlockedError,
+} from "../src/lib/tcgplayer-inventory/import-guard";
 import { buildTcgplayerImportPreview } from "../src/lib/tcgplayer-inventory/import-preview";
 import { parseTcgplayerInventoryExportCsv } from "../src/lib/tcgplayer-inventory/parse-export-csv";
 import type { InventoryItem } from "../src/lib/types";
@@ -165,6 +169,120 @@ const preview3 = buildTcgplayerImportPreview(SAMPLE_CSV, [soldItem, ...apply1.it
 assert(
   preview3.rows.some((r) => r.action === "conflict"),
   "flags conflict when sold item reappears with qty in CSV",
+);
+
+console.log("\nPartial export must not withdraw absent product lines");
+const MAGIC_ONLY_CSV = `TCGplayer Id,Product Line,Set Name,Product Name,Title,Number,Rarity,Condition,TCG Market Price,TCG Direct Low,TCG Low Price,Total Quantity,Add to Quantity,TCG Marketplace Price,My Store Reserve Qty,My Store Price
+100,Magic,Modern Horizons 3,Magic Card,Magic Card,001,Rare,Near Mint,5,,4,3,0,5,0,4.50`;
+
+function stockedItem(
+  id: string,
+  productLine: string,
+  category: InventoryItem["category"],
+  quantity: number,
+): InventoryItem {
+  return {
+    id,
+    storeId: "store-1",
+    source: "tcgplayer_import",
+    displayName: `${productLine} ${id}`,
+    acquiredAt: new Date().toISOString(),
+    tcgplayerProductId: id,
+    tcgplayerListingKey: `${id}|near mint`,
+    productLine,
+    category,
+    quantity,
+    status: "on_hand",
+  };
+}
+
+const mixedInventory: InventoryItem[] = [
+  stockedItem("100", "Magic", "magic", 1),
+  stockedItem("200", "Pokemon", "pokemon", 4),
+  stockedItem("201", "Pokemon", "pokemon", 6),
+  stockedItem("300", "Riftbound", "other", 2),
+];
+
+const partialPreview = buildTcgplayerImportPreview(MAGIC_ONLY_CSV, mixedInventory);
+assert(
+  partialPreview.csvProductLines.join(",") === "Magic",
+  "preview reports the product lines the file covers",
+);
+assert(
+  partialPreview.missingFromCsv.length === 0,
+  "Pokemon and Riftbound rows are not queued for withdrawal",
+);
+assert(partialPreview.outOfScopeRows === 3, "three rows reported out of scope");
+assert(partialPreview.outOfScopeUnits === 12, "out-of-scope units reported");
+
+const partialApply = applyTcgplayerInventoryImport({
+  csvText: MAGIC_ONLY_CSV,
+  storeId: "store-1",
+  existingInventory: mixedInventory,
+});
+assert(partialApply.withdrawn === 0, "Magic-only file withdraws nothing else");
+assert(
+  partialApply.items.every((i) => i.productLine === "Magic"),
+  "only Magic rows are written",
+);
+assert(
+  partialApply.csvProductLines.join(",") === "Magic",
+  "apply result carries the file's product lines",
+);
+
+console.log("\nSame product line still reconciles");
+const magicPairInventory: InventoryItem[] = [
+  stockedItem("100", "Magic", "magic", 1),
+  stockedItem("101", "Magic", "magic", 2),
+];
+const samePreview = buildTcgplayerImportPreview(MAGIC_ONLY_CSV, magicPairInventory);
+assert(
+  samePreview.missingFromCsv.length === 1 &&
+    samePreview.missingFromCsv[0]!.inventoryItemId === "101",
+  "Magic row absent from a Magic file is still withdrawn",
+);
+assert(samePreview.outOfScopeRows === 0, "nothing out of scope for a same-line file");
+
+console.log("\nMass withdrawal needs confirmation");
+const bigInventory: InventoryItem[] = [
+  stockedItem("100", "Magic", "magic", 1),
+  ...Array.from({ length: 60 }, (_, i) =>
+    stockedItem(`9${i.toString().padStart(3, "0")}`, "Magic", "magic", 2),
+  ),
+];
+const bigPreview = buildTcgplayerImportPreview(MAGIC_ONLY_CSV, bigInventory);
+assert(bigPreview.inStockRowsBefore === 61, "counts in-stock rows before import");
+assert(bigPreview.withdrawnInStockRows === 60, "counts rows dropping to zero");
+assert(bigPreview.withdrawnUnits === 120, "counts units dropping to zero");
+
+const bigRisk = assessTcgplayerWithdrawalRisk(bigPreview);
+assert(bigRisk.requiresConfirmation, "large withdrawal flagged for confirmation");
+
+let blocked = false;
+try {
+  applyTcgplayerInventoryImport({
+    csvText: MAGIC_ONLY_CSV,
+    storeId: "store-1",
+    existingInventory: bigInventory,
+  });
+} catch (err) {
+  blocked = err instanceof TcgplayerImportWithdrawalBlockedError;
+}
+assert(blocked, "apply refuses an unconfirmed mass withdrawal");
+
+const confirmed = applyTcgplayerInventoryImport({
+  csvText: MAGIC_ONLY_CSV,
+  storeId: "store-1",
+  existingInventory: bigInventory,
+  confirmLargeWithdrawal: true,
+});
+assert(confirmed.withdrawn === 60, "explicit confirmation lets the import through");
+
+assert(
+  !assessTcgplayerWithdrawalRisk(
+    buildTcgplayerImportPreview(MAGIC_ONLY_CSV, magicPairInventory),
+  ).requiresConfirmation,
+  "small withdrawals apply without confirmation",
 );
 
 assert(

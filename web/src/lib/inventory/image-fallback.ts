@@ -1,3 +1,12 @@
+import {
+  isPokemonInventoryItem,
+  isPokemonJapanInventoryItem,
+} from "./image-cache-trust";
+import { fetchGameCatalogInventoryImage } from "./game-catalog-images";
+import {
+  fetchEnglishPokemonTcgImage,
+  fetchPokemonJapanInventoryImage,
+} from "./pokemon-inventory-images";
 import { classifyInventoryGame } from "./analytics";
 import { isEnrichableMagicSingle } from "./magic-items";
 import { fetchTcgplayerProductDetails } from "../card-flow-v2/tcgplayer-japan-catalog";
@@ -31,8 +40,15 @@ export function scryfallLookupNames(item: InventoryItem): string[] {
   if (raw) names.add(raw);
 
   let stripped = raw;
+  // Each pass must shorten the string. Matching a tag anywhere while only
+  // stripping one at the end spins forever on names like "Foo (Inks) - Bar".
   while (/\([^)]*\)/.test(stripped)) {
-    stripped = stripped.replace(/\s*\([^)]*\)\s*$/, "").trim();
+    const next = stripped
+      .replace(/\s*\([^)]*\)\s*/, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (next === stripped) break;
+    stripped = next;
     if (stripped) names.add(stripped);
   }
 
@@ -42,7 +58,29 @@ export function scryfallLookupNames(item: InventoryItem): string[] {
   const productName = item.productName?.trim();
   if (productName && productName !== raw) names.add(productName);
 
+  // TCGplayer dual-face titles use "Front - Back"; Scryfall uses "Front // Back".
+  // Do not also add the short front name here — "Bag End" is too loose for
+  // PriceCharting / TCGplayer search and can match Pokémon "Adventure Bag".
+  for (const candidate of [...names]) {
+    const dual = dualFaceScryfallName(candidate);
+    if (dual) names.add(dual);
+  }
+
   return [...names].filter(Boolean);
+}
+
+const NON_CARD_HYPHEN_TAIL =
+  /\b(foil|etched|edition|unopened|near mint|showcase|borderless|extended|promo)\b/i;
+
+/** "Bag End - Horizon Canopy" → "Bag End // Horizon Canopy", or null. */
+export function dualFaceScryfallName(name: string): string | null {
+  const match = name.match(/^(.+?)\s+-\s+(.+)$/);
+  if (!match) return null;
+  const left = match[1]?.trim() ?? "";
+  const right = match[2]?.trim() ?? "";
+  if (!left || !right) return null;
+  if (NON_CARD_HYPHEN_TAIL.test(right)) return null;
+  return `${left} // ${right}`;
 }
 
 const MAGIC_TCGPLAYER_LINES = [
@@ -60,7 +98,19 @@ const POKEMON_TCGPLAYER_LINES = ["Pokemon", "Pokémon"];
 function tcgplayerProductLinesForGame(game: string): string[] | undefined {
   if (game === "Magic") return MAGIC_TCGPLAYER_LINES;
   if (game === "Pokémon") return POKEMON_TCGPLAYER_LINES;
+  if (game === "Flesh & Blood") return ["Flesh & Blood TCG", "Flesh & Blood"];
+  if (game === "Lorcana") return ["Lorcana TCG", "Disney Lorcana"];
+  if (game === "One Piece") return ["One Piece Card Game", "One Piece"];
+  if (game === "Star Wars") return ["Star Wars Unlimited", "Star Wars"];
+  if (game === "Riftbound") return ["Riftbound"];
+  if (game === "Gundam") return ["Gundam Card Game"];
   return undefined;
+}
+
+function tcgplayerProductLinesForItem(item: InventoryItem): string[] | undefined {
+  const line = item.productLine?.trim();
+  if (line) return [line];
+  return tcgplayerProductLinesForGame(classifyInventoryGame(item));
 }
 
 /** Reject cross-game TCGplayer hits (e.g. Pokémon "Survival Brace" for MTG "Survival of the Fittest"). */
@@ -69,11 +119,29 @@ export function tcgplayerProductLineMatchesGame(
   game: string,
 ): boolean {
   const line = (productLineName ?? "").toLowerCase();
-  if (!line) return true;
+  if (!line) return false;
   if (game === "Magic") return line.includes("magic");
   if (game === "Pokémon") return line.includes("pokemon") || line.includes("pokémon");
   if (game === "Yu-Gi-Oh!") return line.includes("yugioh") || line.includes("yu-gi-oh");
-  return true;
+  if (game === "Flesh & Blood") return line.includes("flesh") && line.includes("blood");
+  if (game === "Lorcana") return line.includes("lorcana");
+  if (game === "One Piece") return line.includes("one piece");
+  if (game === "Star Wars") return line.includes("star wars");
+  if (game === "Riftbound") return line.includes("riftbound");
+  if (game === "Gundam") return line.includes("gundam");
+  return false;
+}
+
+export function tcgplayerProductLineMatchesItem(
+  productLineName: string | undefined,
+  item: InventoryItem,
+): boolean {
+  const expected = item.productLine?.trim().toLowerCase();
+  const hit = (productLineName ?? "").toLowerCase();
+  if (expected && hit) {
+    return hit.includes(expected) || expected.includes(hit);
+  }
+  return tcgplayerProductLineMatchesGame(productLineName, classifyInventoryGame(item));
 }
 
 /** Extra search queries for Secret Lair sealed SKUs on TCGplayer. */
@@ -266,54 +334,72 @@ async function fetchScryfallImage(
   return fetchRemoteImage(img);
 }
 
-async function fetchPokemonTcgImage(
+/**
+ * Loose token overlap, so PriceCharting's fuzzy search cannot hand back a
+ * different product entirely (it will happily answer any query with something).
+ */
+export function priceChartingNameMatches(
+  query: string,
+  productName: string | undefined,
+): boolean {
+  if (!productName?.trim()) return false;
+  const tokens = (value: string) =>
+    new Set(
+      value
+        .toLowerCase()
+        .replace(/[^a-z0-9 ]+/g, " ")
+        .split(/\s+/)
+        .filter((token) => token.length > 2),
+    );
+  const wanted = tokens(query);
+  const got = tokens(productName);
+  if (!wanted.size || !got.size) return false;
+  let hits = 0;
+  for (const token of wanted) if (got.has(token)) hits += 1;
+  // Short queries like "Bag End" must not match "Adventure Bag" (1/2 = 50%).
+  const needed = wanted.size <= 2 ? wanted.size : Math.ceil(wanted.size * (2 / 3));
+  return hits >= needed;
+}
+
+function priceChartingProductMatchesItem(
   item: InventoryItem,
-): Promise<{ buffer: Buffer; contentType: string } | null> {
-  const names = [
-    cardNameFromInventoryItem(item),
-    item.productName?.trim(),
-    item.displayName.split(" — ")[0]?.trim(),
-  ].filter(Boolean) as string[];
+  query: string,
+  product: Record<string, unknown>,
+): boolean {
+  const productName = product["product-name"] as string | undefined;
+  if (!priceChartingNameMatches(query, productName)) return false;
 
-  const setName = item.setName?.trim();
-  const number = item.cardNumber?.trim();
-
-  const unique = [...new Set(names)];
-  for (const name of unique) {
-    const queries = [
-      number && setName ? `name:"${name}" number:${number} set.name:"${setName}"` : null,
-      number ? `name:"${name}" number:${number}` : null,
-      setName ? `name:"${name}" set.name:"${setName}"` : null,
-      `name:"${name}"`,
-    ].filter(Boolean) as string[];
-
-    for (const q of queries) {
-      const res = await fetch(
-        `https://api.pokemontcg.io/v2/cards?q=${encodeURIComponent(q)}&pageSize=1&select=id,images`,
-        {
-          headers: { Accept: "application/json" },
-          signal: AbortSignal.timeout(8_000),
-        },
-      );
-      if (!res.ok) continue;
-
-      const body = (await res.json()) as {
-        data?: Array<{ images?: { large?: string; small?: string } }>;
-      };
-      const img =
-        body.data?.[0]?.images?.large ?? body.data?.[0]?.images?.small;
-      if (img) return fetchRemoteImage(img);
-    }
+  const blob = [
+    product["console-name"],
+    product.genre,
+    product["product-name"],
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  const line = `${item.productLine ?? ""} ${item.setName ?? ""}`.toLowerCase();
+  if (line.includes("lorcana") && !blob.includes("lorcana")) return false;
+  if (line.includes("one piece") && !blob.includes("one piece")) return false;
+  if (line.includes("flesh") && line.includes("blood") && !blob.includes("flesh")) {
+    return false;
   }
-  return null;
+  if (line.includes("riftbound") && !blob.includes("riftbound")) return false;
+  if (line.includes("pokemon") && !blob.includes("pokemon")) return false;
+  if (
+    (line.includes("magic") || classifyInventoryGame(item) === "Magic") &&
+    !/\bmagic\b|\bmtg\b|gathering/.test(blob)
+  ) {
+    return false;
+  }
+  return true;
 }
 
 async function fetchPriceChartingImage(
   item: InventoryItem,
-): Promise<{ buffer: Buffer; contentType: string } | null> {
+): Promise<{ buffer: Buffer; contentType: string; tcgLowPrice?: number } | null> {
   const game = classifyInventoryGame(item);
-  // PriceCharting fuzzy search routinely cross-matches games (e.g. Pokémon for MTG names).
-  if (game === "Magic" || game === "Pokémon") return null;
+  if (isPokemonInventoryItem(item)) return null;
+  if (game === "Magic" && isEnrichableMagicSingle(item)) return null;
 
   const apiKey = process.env.PRICECHARTING_API_KEY?.trim();
   if (!apiKey) return null;
@@ -327,11 +413,23 @@ async function fetchPriceChartingImage(
 
     const product = (await res.json()) as Record<string, unknown>;
     if (product.status === "error") continue;
+    if (!priceChartingProductMatchesItem(item, query, product)) continue;
 
     const img =
       (product["image-url"] as string | undefined) ??
       (product.imageUrl as string | undefined);
-    if (img?.trim()) return fetchRemoteImage(img.trim());
+    if (img?.trim()) {
+      return fetchRemoteImage(img.trim());
+    }
+
+    const tcgId = product["tcg-id"] ?? product.tcgId;
+    if (tcgId != null && String(tcgId).trim()) {
+      const fetched = await fetchTcgplayerProductImageById(
+        item,
+        String(tcgId).trim(),
+      );
+      if (fetched) return fetched;
+    }
   }
   return null;
 }
@@ -345,21 +443,22 @@ async function fetchTcgplayerProductImageById(
   contentType: string;
   tcgLowPrice?: number;
 } | null> {
-  const game = classifyInventoryGame(item);
   const details = await fetchTcgplayerProductDetails(productId);
   if (
     details?.productLineName &&
-    !tcgplayerProductLineMatchesGame(details.productLineName, game)
+    !tcgplayerProductLineMatchesItem(details.productLineName, item)
   ) {
     return null;
   }
+  const lineMatches = Boolean(details?.productLineName);
 
-  const tcgLowPrice =
-    details?.lowestPrice != null && details.lowestPrice > 0
+  const tcgLowPrice = lineMatches
+    ? details?.lowestPrice != null && details.lowestPrice > 0
       ? details.lowestPrice
       : details?.marketPrice != null && details.marketPrice > 0
         ? details.marketPrice
-        : undefined;
+        : undefined
+    : undefined;
 
   try {
     const fetched = await fetchTcgplayerCdnImage(productId, existingUrl);
@@ -384,11 +483,41 @@ async function fetchTcgplayerCatalogImage(
   return fetchTcgplayerProductImageById(item, item.tcgplayerProductId);
 }
 
+async function fetchTcgplayerSearchImageByProductId(
+  item: InventoryItem,
+): Promise<{ buffer: Buffer; contentType: string; tcgLowPrice?: number } | null> {
+  const preferredId = item.tcgplayerProductId?.trim();
+  if (!preferredId) return null;
+
+  const hits = await searchTcgplayerInventoryProducts({
+    q: preferredId,
+    productLineNames: tcgplayerProductLinesForItem(item),
+    limit: 6,
+  });
+  const match = hits.find((hit) => String(hit.productId) === preferredId);
+  if (!match?.productId) return null;
+  if (
+    match.productLineName &&
+    !tcgplayerProductLineMatchesItem(match.productLineName, item)
+  ) {
+    return null;
+  }
+
+  if (match.imageUrl?.trim()) {
+    try {
+      return await fetchRemoteImage(match.imageUrl.trim());
+    } catch {
+      /* try CDN next */
+    }
+  }
+
+  return fetchTcgplayerProductImageById(item, String(match.productId));
+}
+
 async function fetchTcgplayerSearchImage(
   item: InventoryItem,
 ): Promise<{ buffer: Buffer; contentType: string } | null> {
-  const game = classifyInventoryGame(item);
-  const productLineNames = tcgplayerProductLinesForGame(game);
+  const productLineNames = tcgplayerProductLinesForItem(item);
   const queries = inventoryImageSearchQueries(item).slice(0, 6);
   const preferredId = item.tcgplayerProductId?.trim();
 
@@ -398,8 +527,10 @@ async function fetchTcgplayerSearchImage(
       productLineNames,
       limit: 8,
     });
-    const gameFiltered = hits.filter((hit) =>
-      tcgplayerProductLineMatchesGame(hit.productLineName, game),
+    const gameFiltered = hits.filter(
+      (hit) =>
+        tcgplayerProductLineMatchesItem(hit.productLineName, item) &&
+        priceChartingNameMatches(query, hit.productName),
     );
     const ordered = preferredId
       ? [
@@ -438,19 +569,43 @@ export async function fetchInventoryImageBuffer(
   sourceUrl: string,
 ): Promise<{ buffer: Buffer; contentType: string; tcgLowPrice?: number }> {
   const game = classifyInventoryGame(item);
-  const magicSingle = game === "Magic" && isEnrichableMagicSingle(item);
 
-  if (magicSingle) {
+  if (game === "Magic") {
     const scryfall = await fetchScryfallImage(item);
     if (scryfall) return scryfall;
   }
 
-  if (game === "Pokémon") {
-    const pokemon = await fetchPokemonTcgImage(item);
-    if (pokemon) return pokemon;
+  if (isPokemonJapanInventoryItem(item)) {
+    const japan = await fetchPokemonJapanInventoryImage(item);
+    if (japan) {
+      return {
+        buffer: japan.buffer,
+        contentType: japan.contentType,
+        tcgLowPrice: japan.tcgLowPrice,
+      };
+    }
+  }
+
+  if (isPokemonInventoryItem(item)) {
+    const pokemon = await fetchEnglishPokemonTcgImage(item);
+    if (pokemon) {
+      return {
+        buffer: pokemon.buffer,
+        contentType: pokemon.contentType,
+      };
+    }
   }
 
   if (item.tcgplayerProductId) {
+    const byId = await fetchTcgplayerSearchImageByProductId(item);
+    if (byId) {
+      return {
+        buffer: byId.buffer,
+        contentType: byId.contentType,
+        tcgLowPrice: byId.tcgLowPrice,
+      };
+    }
+
     const fetched = await fetchTcgplayerProductImageById(
       item,
       item.tcgplayerProductId,
@@ -465,27 +620,22 @@ export async function fetchInventoryImageBuffer(
     }
   }
 
-  const tcgCatalog = await fetchTcgplayerCatalogImage(item);
-  if (tcgCatalog) {
-    return {
-      buffer: tcgCatalog.buffer,
-      contentType: tcgCatalog.contentType,
-      tcgLowPrice: tcgCatalog.tcgLowPrice,
-    };
-  }
+  const gameCatalog = await fetchGameCatalogInventoryImage(item);
+  if (gameCatalog) return gameCatalog;
 
   const tcgSearch = await fetchTcgplayerSearchImage(item);
   if (tcgSearch) return tcgSearch;
 
-  if (game === "Magic") {
-    const scryfall = await fetchScryfallImage(item);
-    if (scryfall) return scryfall;
+  const priceCharting = await fetchPriceChartingImage(item);
+  if (priceCharting) {
+    return {
+      buffer: priceCharting.buffer,
+      contentType: priceCharting.contentType,
+      tcgLowPrice: priceCharting.tcgLowPrice,
+    };
   }
 
-  const priceCharting = await fetchPriceChartingImage(item);
-  if (priceCharting) return priceCharting;
-
-  if (game !== "Magic") {
+  if (game === "Magic") {
     const scryfall = await fetchScryfallImage(item);
     if (scryfall) return scryfall;
   }

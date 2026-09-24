@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { CustomerDeckListEntryV1 } from "@/lib/professor-deck-editor/deck-list-v1";
 import { CustomerStoreNavV1 } from "@/components/CustomerStoreNavV1";
+import { DeckDeleteConfirmDialog } from "./DeckDeleteConfirmDialog";
+import { MyDeckShelf } from "./MyDeckShelf";
 import { ProfessorMtgPageShell } from "./ProfessorMtgPageShell";
 
 /**
@@ -19,6 +21,9 @@ export function MyDecksApp({ slug }: { slug: string }) {
   const [error, setError] = useState<string | null>(null);
   /** Set when one of the two deck collections loaded and the other did not. */
   const [partial, setPartial] = useState<string | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<CustomerDeckListEntryV1 | null>(null);
+  const [deleteBusy, setDeleteBusy] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -50,9 +55,39 @@ export function MyDecksApp({ slug }: { slug: string }) {
     };
   }, [slug]);
 
+  const confirmDelete = async () => {
+    if (!pendingDelete) return;
+    setDeleteBusy(true);
+    setDeleteError(null);
+    try {
+      const res = await fetch(
+        `/api/store/${encodeURIComponent(slug)}/decks/${encodeURIComponent(pendingDelete.deckId)}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            origin: pendingDelete.origin,
+            listKey: pendingDelete.key,
+          }),
+        },
+      );
+      const data = (await res.json().catch(() => null)) as { error?: string } | null;
+      if (!res.ok) {
+        setDeleteError(data?.error ?? "We could not delete that deck just now.");
+        return;
+      }
+      setDecks((current) => current.filter((deck) => deck.key !== pendingDelete.key));
+      setPendingDelete(null);
+    } catch {
+      setDeleteError("We could not reach the server. Check your connection.");
+    } finally {
+      setDeleteBusy(false);
+    }
+  };
+
   return (
     <ProfessorMtgPageShell>
-      <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-10 sm:px-6">
+      <div className="mx-auto w-full max-w-[90rem] flex-1 px-4 py-10 sm:px-6 lg:px-10">
         <CustomerStoreNavV1 slug={slug} active="decks" />
 
         <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
@@ -66,7 +101,7 @@ export function MyDecksApp({ slug }: { slug: string }) {
             href={`/s/${encodeURIComponent(slug)}/decks/new`}
             className="professor-mtg-btn shrink-0 px-4 py-2 text-xs no-underline"
           >
-            Start a deck
+            Create new deck
           </Link>
         </div>
 
@@ -91,57 +126,26 @@ export function MyDecksApp({ slug }: { slug: string }) {
               href={`/s/${encodeURIComponent(slug)}/decks/new`}
               className="professor-mtg-btn mt-4 inline-block px-4 py-2 text-xs no-underline"
             >
-              Start a deck
+              Create new deck
             </Link>
           </div>
         ) : (
-          <ul className="mt-8 space-y-3">
-            {decks.map((deck) => (
-              <li key={deck.key}>
-                <Link
-                  href={deck.href}
-                  className="professor-mtg-card flex items-center justify-between gap-4 px-5 py-4 no-underline transition hover:border-[var(--mtg-gold)]/60"
-                >
-                  <span className="min-w-0">
-                    <span className="professor-mtg-body block truncate text-sm font-semibold">
-                      {deck.deckName}
-                    </span>
-                    <span className="professor-mtg-muted mt-1 block text-[11px]">
-                      {deck.origin === "hand" ? "Built by you" : "Built by the Professor"}
-                      {deck.libraryCount !== null
-                        ? ` · ${deck.libraryCount} of 99 cards`
-                        : deck.requestedBracket !== null
-                          ? ` · bracket ${deck.requestedBracket}`
-                          : ""}
-                      {" · "}
-                      {new Date(deck.updatedAt).toLocaleDateString()}
-                    </span>
-                  </span>
-                  <span className="flex shrink-0 items-center gap-2">
-                    {deck.measuredBracket !== null ? (
-                      <span
-                        className="professor-mtg-tag shrink-0"
-                        title={
-                          deck.measuredBracketStale
-                            ? "Measured before the most recent edits to this deck."
-                            : "The bracket this deck measured."
-                        }
-                      >
-                        B{deck.measuredBracket}
-                        {deck.measuredBracketStale ? "?" : ""}
-                      </span>
-                    ) : null}
-                    {deck.grade ? (
-                      <span className="professor-mtg-tag professor-mtg-tag--grade shrink-0">
-                        {deck.grade.split(/[\s(]/)[0]}
-                      </span>
-                    ) : null}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <MyDeckShelf slug={slug} decks={decks} onRequestDelete={setPendingDelete} />
         )}
+
+        {pendingDelete ? (
+          <DeckDeleteConfirmDialog
+            deck={pendingDelete}
+            busy={deleteBusy}
+            error={deleteError}
+            onCancel={() => {
+              if (deleteBusy) return;
+              setPendingDelete(null);
+              setDeleteError(null);
+            }}
+            onConfirm={() => void confirmDelete()}
+          />
+        ) : null}
       </div>
     </ProfessorMtgPageShell>
   );

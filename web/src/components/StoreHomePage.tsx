@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CustomerAuthShell } from "@/components/CustomerAuthShell";
-import { CustomerStoreNavV1 } from "@/components/CustomerStoreNavV1";
 import { StoreBrandMark } from "@/components/StoreBrandMark";
 import { useCustomer } from "@/context/CustomerContext";
 import {
@@ -14,7 +13,6 @@ import {
 } from "@/lib/customer-auth-ui";
 import { googleAuthErrorMessage } from "@/lib/customer-auth-config";
 import { STORE_SLUG_SESSION_KEY } from "@/lib/store-slug";
-import { deckBuildSignInHref } from "@/lib/store-inventory/deck-build-auth";
 
 type StoreAuthConfig = {
   googleEnabled: boolean;
@@ -120,8 +118,6 @@ export function StoreHomePage({
 
   return (
     <CustomerAuthShell wide>
-      <CustomerStoreNavV1 slug={slug} active="dashboard" loggedIn={loggedIn} />
-
       <StoreBrandMark
         storeName={storeName}
         logoUrl={logoUrl}
@@ -129,66 +125,47 @@ export function StoreHomePage({
         subtitle={loggedIn ? "Welcome back" : "Sell your cards"}
       />
 
-      <p className={`-mt-4 mb-8 text-center text-sm text-neutral-400`}>
-        Selling cards to {storeName}
-      </p>
-
       {loggedIn && customer && (
-        <div className="mb-8 text-center">
+        <div className="mt-8 text-center">
           <p className="text-sm text-white">
             {customer.firstName} {customer.lastName}
           </p>
-          <p className="text-xs text-neutral-500">{customer.email}</p>
+          <p className="mt-1 text-xs text-neutral-500">{customer.email}</p>
         </div>
       )}
 
-      {actionError && <p className={`mb-4 ${authError}`}>{actionError}</p>}
+      {actionError && <p className={`mt-8 ${authError}`}>{actionError}</p>}
 
-      <div className="space-y-3">
+      <div className="mt-10 space-y-3">
         {loggedIn ? (
           <>
             <Link
               href={`/s/${slug}/inventory`}
               className={`block ${authButtonSecondary} text-center no-underline`}
             >
-              Browse store inventory
+              Shop
             </Link>
             <Link
-              href={`/s/${slug}/decks/new`}
+              href={`/s/${slug}/calendar`}
               className={`block ${authButtonSecondary} text-center no-underline`}
             >
-              Build a Commander deck
+              Events
             </Link>
             <Link
               href={`/s/${slug}/decks`}
               className={`block ${authButtonSecondary} text-center no-underline`}
             >
-              My decks
+              Decks
             </Link>
-            {!customer?.emailVerified ? (
-              <p className={`mb-2 ${authSubtext}`}>
-                Verify your email before scanning. Check your inbox for the
-                verification link.
-              </p>
-            ) : (
-              <>
-                <Link
-                  href={`/s/${slug}/scan`}
-                  className={`block ${authButton} text-center no-underline`}
-                >
-                  Scan cards
-                </Link>
-                <Link
-                  href={`/s/${slug}/collection`}
-                  className={`block ${authButtonSecondary} text-center no-underline`}
-                >
-                  My collection
-                </Link>
-              </>
-            )}
-            {canViewOrderHistory && customer?.emailVerified && (
+            <Link
+              href={`/s/${slug}/collection`}
+              className={`block ${authButtonSecondary} text-center no-underline`}
+            >
+              Collection
+            </Link>
+            {canViewOrderHistory && (
               <Link href="/orders" className={`block ${authButtonSecondary} text-center no-underline`}>
-                My account — orders &amp; saved decks
+                Orders
               </Link>
             )}
             <button type="button" className={authButtonSecondary} onClick={() => void logout()}>
@@ -201,13 +178,13 @@ export function StoreHomePage({
               href={`/s/${slug}/inventory`}
               className={`block ${authButtonSecondary} text-center no-underline`}
             >
-              Browse store inventory
+              Shop
             </Link>
             <Link
-              href={deckBuildSignInHref(slug, `/s/${slug}/decks/new`)}
+              href={`/s/${slug}/calendar`}
               className={`block ${authButtonSecondary} text-center no-underline`}
             >
-              Build a Commander deck
+              Events
             </Link>
             {authConfig.googleEnabled && (
               <Link

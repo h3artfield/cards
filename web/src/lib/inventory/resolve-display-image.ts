@@ -3,6 +3,10 @@ import {
   cardNameFromInventoryItem,
   fetchInventoryImageBuffer,
 } from "./image-fallback";
+import {
+  hasTrustedFirebaseImageCache,
+  trustedFirebaseImageUrl,
+} from "./image-cache-trust";
 import { isEnrichableMagicSingle } from "./magic-items";
 import {
   isFirebaseStorageUrl,
@@ -49,10 +53,14 @@ export function catalogMatchesInventoryItem(
   const invName = normalizeInventoryCardName(cardNameFromInventoryItem(item));
   const catName = normalizeInventoryCardName(catalog.name);
   if (!invName || !catName) return true;
-  return invName === catName || invName.includes(catName) || catName.includes(invName);
+  if (invName === catName) return true;
+  const shorter = invName.length <= catName.length ? invName : catName;
+  const longer = invName.length <= catName.length ? catName : invName;
+  if (shorter.length < 8) return false;
+  return longer.includes(shorter) && shorter.length / longer.length >= 0.55;
 }
 
-/** Best display URL without network — prefer cached Firebase, then catalog, then TCG CDN. */
+/** Best display URL without network — prefer trusted Storage, then Scryfall catalog. */
 export function pickInventoryDisplayImageUrl(
   item: InventoryItem,
   catalog?: CatalogCard | null,
@@ -63,8 +71,9 @@ export function pickInventoryDisplayImageUrl(
   if (catalogMatch && catalog?.imageNormal) return catalog.imageNormal;
 
   if (game === "Magic") {
-    if (catalogMatch && catalog?.imageNormal) return catalog.imageNormal;
-    // TCGplayer CDN blocks browser hotlinks — singles should use Scryfall/proxy instead.
+    const cached = trustedFirebaseImageUrl(item);
+    if (cached) return cached;
+
     if (!isEnrichableMagicSingle(item)) {
       if (item.tcgplayerProductId) {
         return tcgplayerCdnImageCandidates(item.tcgplayerProductId)[0];
@@ -76,22 +85,8 @@ export function pickInventoryDisplayImageUrl(
     return undefined;
   }
 
-  // Never serve cached Firebase art for Magic — bad cross-game caches have slipped in.
-  if (
-    isFirebaseStorageUrl(item.frontImageUrl) &&
-    catalogMatch
-  ) {
-    return item.frontImageUrl!.trim();
-  }
-
-  if (item.tcgplayerProductId) {
-    const candidates = tcgplayerCdnImageCandidates(item.tcgplayerProductId);
-    return candidates[0];
-  }
-
-  if (item.frontImageUrl?.trim() && !isTcgplayerCdnUrl(item.frontImageUrl)) {
-    return item.frontImageUrl.trim();
-  }
+  const cached = trustedFirebaseImageUrl(item);
+  if (cached) return cached;
 
   return undefined;
 }
@@ -102,16 +97,8 @@ export function inventoryImageSrc(input: {
   catalogImageUrl?: string;
   catalogName?: string;
 }): string | undefined {
-  const catalogCard =
-    input.catalogName != null
-      ? ({ name: input.catalogName } as CatalogCard)
-      : null;
-  if (
-    isFirebaseStorageUrl(input.item.frontImageUrl) &&
-    catalogMatchesInventoryItem(input.item, catalogCard)
-  ) {
-    return input.item.frontImageUrl;
-  }
+  const cached = trustedFirebaseImageUrl(input.item);
+  if (cached) return cached;
   if (input.catalogImageUrl) return input.catalogImageUrl;
   if (input.storeSlug) {
     return inventoryImageProxyPath(input.storeSlug, input.item.id);
@@ -123,15 +110,9 @@ export async function resolveInventoryImageBuffer(
   item: InventoryItem,
   catalog?: CatalogCard | null,
 ): Promise<ResolvedInventoryImage> {
-  const direct = pickInventoryDisplayImageUrl(item, catalog);
-  const game = classifyInventoryGame(item);
-  if (
-    direct &&
-    isFirebaseStorageUrl(direct) &&
-    catalogMatchesInventoryItem(item, catalog) &&
-    game !== "Magic"
-  ) {
-    const res = await fetch(direct, {
+  const cached = trustedFirebaseImageUrl(item);
+  if (cached) {
+    const res = await fetch(cached, {
       signal: AbortSignal.timeout(INVENTORY_IMAGE_FETCH_TIMEOUT_MS),
     });
     if (!res.ok) throw new Error("Cached image unavailable");
@@ -142,7 +123,11 @@ export async function resolveInventoryImageBuffer(
     };
   }
 
-  if (catalog?.imageNormal) {
+  if (
+    catalog?.imageNormal &&
+    isEnrichableMagicSingle(item) &&
+    catalogMatchesInventoryItem(item, catalog)
+  ) {
     try {
       const res = await fetch(catalog.imageNormal, {
         signal: AbortSignal.timeout(INVENTORY_IMAGE_FETCH_TIMEOUT_MS),
@@ -162,7 +147,7 @@ export async function resolveInventoryImageBuffer(
 
   const fetched = await fetchInventoryImageBuffer(
     item,
-    direct ?? item.frontImageUrl ?? "",
+    item.tcgplayerProductId ?? "",
   );
   return {
     buffer: fetched.buffer,
@@ -176,10 +161,12 @@ export function inventoryImageProxyPath(
   slug: string,
   inventoryItemId: string,
 ): string {
-  return `/api/store/${encodeURIComponent(slug)}/inventory/image?itemId=${encodeURIComponent(inventoryItemId)}&v=5`;
+  return `/api/store/${encodeURIComponent(slug)}/inventory/image?itemId=${encodeURIComponent(inventoryItemId)}&v=12`;
 }
 
 /** Short label for clerk / search context. */
 export function inventoryCardLabel(item: InventoryItem): string {
   return cardNameFromInventoryItem(item);
 }
+
+export { hasTrustedFirebaseImageCache, trustedFirebaseImageUrl };

@@ -13,11 +13,18 @@ import {
   catalogMatchesInventoryItem,
 } from "../inventory/resolve-display-image";
 import { classifyInventoryGame } from "../inventory/analytics";
-import { isFirebaseStorageUrl } from "../inventory/image-url";
+import { isEnrichableMagicSingle } from "../inventory/magic-items";
+import {
+  inventoryBrowseGameFacets,
+  inventoryBrowseGameKey,
+  inventoryBrowseGameLabel,
+  matchesInventoryBrowseGame,
+} from "../inventory/inventory-browse-game-v1";
 import {
   isRc8SemanticFilterActive,
 } from "../inventory/inventory-rc8-semantic-match";
 import { loadSemanticBrowseIndex } from "../inventory/inventory-semantic-browse-index";
+import { inventoryItemIsSoleCommanderCandidate } from "./commander-pool-eligibility";
 import { deckBuilderStore } from "./deck-builder-store";
 import { getCachedStoreInventory } from "./store-inventory-cache";
 import type { CardCategory, InventoryItem } from "../types";
@@ -27,6 +34,13 @@ import {
   itemMatchesSemanticFilter,
   isSemanticFilterActive,
 } from "../deck-builder/store-inventory-semantic";
+import {
+  inferInventoryFinish,
+  inventoryFinishBadgeLabel,
+  inventoryFinishIsFoil,
+  inventoryItemMatchesFinishFilter,
+  type InventoryFinishFilter,
+} from "../inventory/inventory-finish-v1";
 
 export type { StoreInventorySemanticFilter } from "../deck-builder/store-inventory-semantic";
 
@@ -55,9 +69,14 @@ export interface StoreInventoryCard {
   keywords?: string[];
   oracleTags?: string[];
   rarity?: string;
+  gameKey?: string;
+  gameLabel?: string;
+  isFoil?: boolean;
+  finishLabel?: string;
 }
 
-export type StoreInventoryGameFilter = CardCategory | "all" | "riftbound";
+/** Browse game slug from `inventoryBrowseGameKey`, or `all`. */
+export type StoreInventoryGameFilter = string;
 export type StoreInventoryColorFilter =
   | "all"
   | "W"
@@ -75,27 +94,12 @@ export type StoreInventoryColorFilter =
 export type StoreInventoryTypeFilter = "all" | "commander";
 
 function inferGame(item: InventoryItem): CardCategory {
-  if (item.category) return item.category;
-  const line = (item.productLine ?? "").toLowerCase();
-  if (line.includes("magic") || line.includes("mtg")) return "magic";
-  if (line.includes("pokemon") || line.includes("pokémon")) return "pokemon";
-  if (line.includes("yugioh") || line.includes("yu-gi-oh")) return "yugioh";
-  if (line.includes("sport")) return "sports";
+  const key = inventoryBrowseGameKey(item);
+  if (key === "magic") return "magic";
+  if (key === "pokemon") return "pokemon";
+  if (key === "yugioh") return "yugioh";
+  if (key === "sports") return "sports";
   return "other";
-}
-
-function isRiftboundItem(item: InventoryItem): boolean {
-  const line = (item.productLine ?? "").toLowerCase();
-  const name = (item.productName ?? item.displayName ?? "").toLowerCase();
-  return line.includes("riftbound") || name.includes("riftbound");
-}
-
-function matchesGameFilter(item: InventoryItem, game: StoreInventoryGameFilter): boolean {
-  if (game === "all") return true;
-  if (game === "riftbound") return isRiftboundItem(item);
-  if (game === "magic") return classifyInventoryGame(item) === "Magic";
-  if (game === "pokemon") return classifyInventoryGame(item) === "Pokémon";
-  return inferGame(item) === game;
 }
 
 function matchesColorFilter(
@@ -188,13 +192,16 @@ function cardFromInventoryItemSync(
     item.displayName.split(" — ")[0]?.trim() ??
     item.displayName;
 
-  const scryfallId =
-    item.catalogScryfallId ?? crosswalkByItem.get(item.id);
-  const catalog = scryfallId ? (catalogCache.get(scryfallId) ?? null) : null;
+  const usesScryfall = isEnrichableMagicSingle(item);
+  const scryfallId = usesScryfall
+    ? item.catalogScryfallId ?? crosswalkByItem.get(item.id)
+    : item.catalogScryfallId;
+  const catalog =
+    usesScryfall && scryfallId ? (catalogCache.get(scryfallId) ?? null) : null;
 
   let colorIdentity = item.catalogColorIdentity ?? catalog?.colorIdentity ?? [];
   let typeLine = item.catalogTypeLine ?? catalog?.typeLine;
-  let isCommander = item.catalogCanBeSoleCommander === true;
+  let isCommander = inventoryItemIsSoleCommanderCandidate(item, catalog);
   const cmc = item.catalogCmc ?? catalog?.cmc;
   const manaCost = item.catalogManaCost ?? catalog?.manaCost;
   const oracleText = item.catalogOracleText ?? catalog?.oracleText;
@@ -203,19 +210,19 @@ function cardFromInventoryItemSync(
   const colors = item.catalogColors ?? catalog?.colors;
   const rarity = item.catalogRarity ?? catalog?.rarity;
   const setName = item.setName ?? catalog?.setName;
+  const finishKind = inferInventoryFinish(item);
+  const finishLabel = inventoryFinishBadgeLabel(finishKind);
 
   const catalogMatch = catalog != null && catalogMatchesInventoryItem(item, catalog);
   const scryfallLinked =
     Boolean(scryfallId && catalog?.imageNormal) &&
     catalog?.id === scryfallId;
-  const isMagic = classifyInventoryGame(item) === "Magic";
-
   let imageUrl: string | undefined;
   if ((catalogMatch || scryfallLinked) && catalog?.imageNormal) {
     imageUrl = catalog.imageNormal;
   } else {
     const directImage = pickInventoryDisplayImageUrl(item, catalog);
-    if (directImage && (!isMagic || !isFirebaseStorageUrl(directImage))) {
+    if (directImage) {
       imageUrl = directImage;
     }
   }
@@ -233,6 +240,8 @@ function cardFromInventoryItemSync(
     setName,
     cardNumber: item.cardNumber ?? catalog?.collectorNumber,
     category: inferGame(item),
+    gameKey: inventoryBrowseGameKey(item),
+    gameLabel: inventoryBrowseGameLabel(inventoryBrowseGameKey(item)),
     productLine: item.productLine,
     condition: item.tcgplayerCondition ?? item.condition,
     colorIdentity,
@@ -245,6 +254,8 @@ function cardFromInventoryItemSync(
     keywords,
     oracleTags,
     rarity,
+    isFoil: inventoryFinishIsFoil(finishKind),
+    finishLabel: finishLabel ?? undefined,
   };
 }
 
@@ -255,6 +266,7 @@ function itemMatchesBrowseFilters(
   cardType: StoreInventoryTypeFilter,
   semantic?: StoreInventorySemanticFilter,
   semanticBrowseIndex?: ReturnType<typeof loadSemanticBrowseIndex>,
+  finish?: InventoryFinishFilter,
 ): boolean {
   const identity = item.catalogColorIdentity ?? [];
   if (
@@ -266,8 +278,9 @@ function itemMatchesBrowseFilters(
     }
   }
   if (!itemMatchesSemanticFilter(item, semantic, semanticBrowseIndex)) return false;
+  if (!inventoryItemMatchesFinishFilter(item, finish)) return false;
   if (cardType === "commander") {
-    return item.catalogCanBeSoleCommander === true;
+    return inventoryItemIsSoleCommanderCandidate(item);
   }
   return true;
 }
@@ -294,6 +307,7 @@ export async function browseStoreInventory(input: {
   page?: number;
   limit?: number;
   sortBy?: StoreInventorySortBy;
+  finish?: InventoryFinishFilter;
   /** When true, exclude unlinked / manual-review / unresolved inventory from results. */
   requireClerkEligible?: boolean;
 }): Promise<{
@@ -324,6 +338,7 @@ export async function browseStoreInventory(input: {
       : parsedColors.selectedColors;
   const colorCount = input.colorCount ?? parsedColors.colorCount;
   const cardType = input.cardType ?? "all";
+  const finish = input.finish ?? "all";
   const semantic = input.semantic;
   const textQuery = input.semanticOnly ? undefined : input.q?.trim().toLowerCase();
 
@@ -334,7 +349,7 @@ export async function browseStoreInventory(input: {
   const matchedItems: InventoryItem[] = [];
   for (const item of all) {
     if (requireClerkEligible && !isClerkEligibleInventory(item)) continue;
-    if (!matchesGameFilter(item, game)) continue;
+    if (!matchesInventoryBrowseGame(item, game)) continue;
     if (textQuery && !inventoryItemMatchesSearch(item, textQuery)) continue;
     if (
       !itemMatchesBrowseFilters(
@@ -344,6 +359,7 @@ export async function browseStoreInventory(input: {
         cardType,
         semantic,
         semanticBrowseIndex,
+        finish,
       )
     ) {
       continue;
@@ -394,7 +410,9 @@ export async function browseStoreInventory(input: {
 
   const pageItemIds = new Set(pageItems.map((item) => item.id));
   const crosswalkByItem = new Map<string, string>();
-  const needsCrosswalk = pageItems.some((item) => !item.catalogScryfallId);
+  const needsCrosswalk = pageItems.some(
+    (item) => isEnrichableMagicSingle(item) && !item.catalogScryfallId,
+  );
   if (needsCrosswalk) {
     const crosswalks = await deckBuilderStore.listCrosswalks(input.storeId);
     for (const crosswalk of crosswalks) {
@@ -443,12 +461,11 @@ export async function browseStoreInventory(input: {
 
   const items = enriched;
 
-  const gameCounts: Record<string, number> = {};
   let commanderCount = 0;
+  let inStockRows = 0;
   for (const item of all) {
-    const g = isRiftboundItem(item) ? "riftbound" : inferGame(item);
-    gameCounts[g] = (gameCounts[g] ?? 0) + 1;
-    if (item.catalogCanBeSoleCommander === true) {
+    if (inventoryEffectiveQuantity(item) > 0) inStockRows += 1;
+    if (inventoryItemIsSoleCommanderCandidate(item)) {
       commanderCount += 1;
     }
   }
@@ -460,9 +477,9 @@ export async function browseStoreInventory(input: {
     limit,
     totalPages,
     facets: {
-      games: gameCounts,
+      games: inventoryBrowseGameFacets(all),
       commanders: commanderCount,
-      inStock: all.length,
+      inStock: inStockRows,
     },
     identityTrace: requireClerkEligible
       ? buildInventoryIdentityExclusionTrace({ items: all, magicOnly: game === "magic" || game === "all" })

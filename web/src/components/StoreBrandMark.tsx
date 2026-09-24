@@ -108,16 +108,16 @@ export function StoreBrandMark({
    */
   if (variant === "auth") {
     return (
-      <div className="mb-8 flex flex-col items-center text-center">
+      <div className="mb-2 mt-8 flex flex-col items-center text-center">
         <h1 className="text-2xl font-semibold tracking-tight text-[var(--text-hi)] sm:text-3xl">
           {storeName}
         </h1>
         {subtitle && (
-          <p className="mt-2 text-xs uppercase tracking-[0.18em] text-[var(--text-lo)]">
+          <p className="mt-4 text-xs uppercase tracking-[0.18em] text-[var(--text-lo)]">
             {subtitle}
           </p>
         )}
-        <span className="mt-4 h-px w-10 bg-[var(--accent-lo)]" aria-hidden />
+        <span className="mt-6 h-px w-10 bg-[var(--accent-lo)]" aria-hidden />
       </div>
     );
   }

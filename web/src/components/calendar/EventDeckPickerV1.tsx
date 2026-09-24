@@ -2,7 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { eventDeckPickerLabelV1, deckListPrimaryNameV1 } from "@/lib/professor-deck-editor/deck-list-display-v1";
 import type { CustomerDeckListEntryV1 } from "@/lib/professor-deck-editor/deck-list-v1";
+import {
+  authButton,
+  authInput,
+  authLabel,
+  authLink,
+  authSubtext,
+} from "@/lib/customer-auth-ui";
 
 /**
  * Which deck a player is bringing to a Commander event.
@@ -14,10 +22,13 @@ import type { CustomerDeckListEntryV1 } from "@/lib/professor-deck-editor/deck-l
  */
 export function EventDeckPickerV1({
   slug,
+  requiredBracket,
   value,
   onChange,
 }: {
   slug: string;
+  /** When set, only decks at this bracket appear in the dropdown. */
+  requiredBracket?: number | null;
   value: string | null;
   onChange: (deckId: string | null) => void;
 }) {
@@ -44,42 +55,72 @@ export function EventDeckPickerV1({
   const myDecksHref = `/s/${store}/decks`;
 
   if (decks === null) {
-    return <p className="text-xs text-gray-500">Loading your decks…</p>;
+    return <p className={`text-xs ${authSubtext}`}>Loading your decks…</p>;
   }
 
-  const measured = decks.filter((d) => d.deckId && d.measuredBracket !== null);
-  const ready = measured.filter((d) => !d.measuredBracketStale);
-  const stale = measured.filter((d) => d.measuredBracketStale);
-  const needsBracket = decks.filter((d) => !d.measuredBracket);
+  const measured = decks.filter((d) => d.registrationBracket !== null);
+  const readyAll = measured.filter((d) => !d.registrationBracketStale);
+  const ready =
+    requiredBracket != null
+      ? readyAll.filter((d) => d.registrationBracket === requiredBracket)
+      : readyAll;
+  const wrongBracket =
+    requiredBracket != null
+      ? readyAll.filter((d) => d.registrationBracket !== requiredBracket)
+      : [];
+  const stale = measured.filter((d) => d.registrationBracketStale);
+  const needsBracket = decks.filter((d) => d.registrationBracket === null);
 
   if (ready.length === 0) {
     return (
       <div className="space-y-3">
-        <p className="text-xs text-gray-700">
-          Registering a deck requires a measured bracket — open a deck in My decks, add your
-          list, then use <span className="font-semibold">Check bracket</span> once you have
-          99 cards.
+        <p className={`text-xs ${authSubtext}`}>
+          {requiredBracket != null ? (
+            <>
+              This event is <span className="font-semibold text-[var(--text-hi)]">bracket {requiredBracket}</span>.
+              You need a deck that measures at bracket {requiredBracket} to register.
+            </>
+          ) : (
+            <>
+              Registering a deck requires a bracket. Professor-built decks already have
+              one unless you have edited them. Hand-built decks need{" "}
+              <span className="font-semibold text-[var(--text-hi)]">Check bracket</span> once you reach 99 cards.
+            </>
+          )}
         </p>
 
+        {wrongBracket.length ? (
+          <ul className="space-y-1 rounded-lg border border-[var(--line-subtle)] bg-[var(--ink-800)] px-3 py-2 text-xs">
+            {wrongBracket.slice(0, 6).map((deck) => (
+              <li key={deck.key}>
+                <Link href={deck.href} className={authLink}>
+                  {deckListPrimaryNameV1(deck)}
+                </Link>
+                <span className="text-[var(--text-lo)]">
+                  {" "}
+                  · bracket {deck.registrationBracket} (not eligible)
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+
         {needsBracket.length ? (
-          <ul className="space-y-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs">
+          <ul className="space-y-1 rounded-lg border border-[var(--line-subtle)] bg-[var(--ink-800)] px-3 py-2 text-xs">
             {needsBracket.slice(0, 6).map((deck) => (
               <li key={deck.key}>
-                <Link href={deck.href} className="font-medium text-indigo-600 hover:underline">
-                  {deck.deckName}
+                <Link href={deck.href} className={authLink}>
+                  {deckListPrimaryNameV1(deck)}
                 </Link>
-                <span className="text-gray-500"> · needs a bracket check</span>
+                <span className="text-[var(--text-lo)]"> · needs a bracket check</span>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-xs text-gray-500">You do not have any decks here yet.</p>
+          <p className={`text-xs ${authSubtext}`}>You do not have any decks here yet.</p>
         )}
 
-        <Link
-          href={myDecksHref}
-          className="inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white no-underline hover:bg-indigo-700"
-        >
+        <Link href={myDecksHref} className={`${authButton} no-underline`}>
           Open My decks
         </Link>
       </div>
@@ -88,41 +129,48 @@ export function EventDeckPickerV1({
 
   return (
     <div className="space-y-2">
-      <span className="block text-sm font-medium">Deck you&apos;re bringing</span>
+      <span className={authLabel}>Deck you&apos;re bringing</span>
 
       <select
         value={value ?? ""}
         onChange={(e) => onChange(e.target.value || null)}
-        className="w-full rounded-lg border px-3 py-2 text-sm"
+        className={authInput}
       >
         <option value="">Choose a deck…</option>
         {ready.map((deck) => (
           <option key={deck.key} value={deck.deckId ?? ""}>
-            {deck.deckName} · {deck.commanderName} · bracket {deck.measuredBracket}
+            {eventDeckPickerLabelV1(deck)}
           </option>
         ))}
       </select>
 
-      <p className="text-xs text-gray-500">
-        The shop sees your commander and bracket so it can build even pods — not your decklist.
+      <p className={`text-xs ${authSubtext}`}>
+        {requiredBracket != null
+          ? `Only bracket ${requiredBracket} decks can be registered for this event.`
+          : "The shop sees your commander and bracket so it can build even pods — not your decklist."}
       </p>
 
+      {wrongBracket.length ? (
+        <p className={`text-xs ${authSubtext}`}>
+          {wrongBracket.length === 1
+            ? `${deckListPrimaryNameV1(wrongBracket[0])} is bracket ${wrongBracket[0].registrationBracket} and cannot be used here.`
+            : `${wrongBracket.length} of your decks are a different bracket and are hidden from this list.`}
+        </p>
+      ) : null}
+
       {stale.length ? (
-        <p className="text-xs text-gray-500">
+        <p className={`text-xs ${authSubtext}`}>
           {stale.length === 1
-            ? `${stale[0].deckName} changed since its bracket was measured — open it in My decks and check bracket again.`
+            ? `${deckListPrimaryNameV1(stale[0])} changed since the Professor built it — check bracket again in My decks.`
             : `${stale.length} decks need a fresh bracket check before they can be registered.`}{" "}
-          <Link href={myDecksHref} className="font-medium text-indigo-600 hover:underline">
+          <Link href={myDecksHref} className={authLink}>
             My decks
           </Link>
         </p>
       ) : null}
 
       {!value ? (
-        <Link
-          href={myDecksHref}
-          className="inline-block text-xs font-medium text-indigo-600 hover:underline"
-        >
+        <Link href={myDecksHref} className={authLink}>
           Manage decks in My decks
         </Link>
       ) : null}

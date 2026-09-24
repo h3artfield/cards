@@ -1,7 +1,7 @@
 /**
  * Persist large Sol-directed build artifacts (Firebase Storage or local fallback).
  */
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { getAdminStorage } from "../firebase/admin";
 import { resolveMtgRagBucket } from "../mtg-rag/storage";
@@ -63,6 +63,44 @@ export async function persistSolDirectedBuildArtifactsV111(args: {
     persisted.push(name);
   }
   return { storagePrefix: prefix, persisted };
+}
+
+/** Mirror of the local fallback layout used by uploadJsonObject. */
+function localArtifactPath(objectPath: string): string {
+  const filename = objectPath.split("/").pop() ?? "artifact.json";
+  return join(process.cwd(), ".sol-directed-builds", objectPath.replace(/\//g, "_"), filename);
+}
+
+/**
+ * Reads one persisted artifact back, or null when it is absent.
+ *
+ * Build results are otherwise held only in process memory, so on any instance
+ * that did not run the build — every instance after a deploy or a scale-down —
+ * these files are the only surviving copy of the deck.
+ */
+export async function readSolDirectedBuildArtifactV111(args: {
+  buildId: string;
+  name: SolDirectedBuildArtifactName;
+}): Promise<unknown | null> {
+  const objectPath = `${solDirectedBuildArtifactPrefix(args.buildId)}/${args.name}`;
+  const bucketName = resolveMtgRagBucket();
+  const storage = getAdminStorage();
+
+  if (!bucketName || !storage) {
+    try {
+      return JSON.parse(readFileSync(localArtifactPath(objectPath), "utf8"));
+    } catch {
+      return null;
+    }
+  }
+
+  try {
+    const file = storage.bucket(bucketName).file(objectPath);
+    const [contents] = await file.download();
+    return JSON.parse(contents.toString("utf8"));
+  } catch {
+    return null;
+  }
 }
 
 export { ARTIFACT_NAMES };

@@ -17,6 +17,9 @@ export const PROFESSOR_BREW_INVENTORY_MATCH_V4_3_V1_VERSION =
 export type ProfessorDeckInventoryEntryV43 = {
   listPrice: number | null;
   quantity: number;
+  /** Shelf item backing this match, so the deck editor can add it to the cart. */
+  inventoryItemId?: string;
+  setName?: string;
 };
 
 export type ProfessorBrewInventoryMatchResultV43 = {
@@ -86,6 +89,8 @@ function inventoryEntryFromItem(item: InventoryItem): ProfessorDeckInventoryEntr
   return {
     listPrice: item.listPrice ?? null,
     quantity: Math.max(0, quantity),
+    inventoryItemId: item.id,
+    setName: item.setName,
   };
 }
 

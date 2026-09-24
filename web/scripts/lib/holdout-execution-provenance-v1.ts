@@ -6,6 +6,7 @@ import { createHash } from "node:crypto";
 import { execSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { assertHoldoutNotSpent } from "./holdout-execution-registry-v1";
 import {
   assertCleanRepositoryForHoldoutExecution,
   sha256FileFromDisk,
@@ -78,8 +79,14 @@ export function assertHoldoutExecutionEnvironment(input: {
   expectedManifestContentHash?: string;
   expectedParserBlobClosureHash?: string;
   requireCandidateFrozen?: boolean;
+  benchmarkHash?: string;
+  benchmarkPath?: string;
 }): HoldoutExecutionProvenance {
   const repository = assertCleanRepositoryForHoldoutExecution(input.label);
+
+  if (input.benchmarkHash) {
+    assertHoldoutNotSpent({ benchmarkHash: input.benchmarkHash, label: input.label });
+  }
   const manifestRaw = JSON.parse(readFileSync(resolve(input.candidateManifestPath), "utf8")) as CandidateManifest;
   const manifestContentHashActual = computeManifestContentHash(
     manifestRaw as CandidateManifest & Record<string, unknown>,

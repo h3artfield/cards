@@ -192,9 +192,20 @@ export function groupKeysForV1(
       // hold for cards the player added as well as the ones the Professor
       // picked. A card that does three things appears under all three, which is
       // the honest answer for a card like a removal spell that also draws.
-      const roles = card.semantic?.derivedRoles ?? [];
-      if (roles.length) return roles.map(derivedRoleLabelV1);
-      if (card.isLand) return ["Mana base"];
+      //
+      // `mana_generation` is the oracle twin of Ramp — every tap-for-mana land
+      // gets it — so it is dropped here. Lands that only tap for one sit in
+      // Mana base; lands that actually accelerate stay in Ramp.
+      const roles = (card.semantic?.derivedRoles ?? [])
+        .filter((role) => role !== "mana_generation")
+        .map(derivedRoleLabelV1);
+      if (card.isLand) {
+        if (card.display?.manaAcceleration) {
+          return roles.includes("Ramp") ? roles : ["Ramp", ...roles];
+        }
+        return ["Mana base"];
+      }
+      if (roles.length) return roles;
       return ["No derived role"];
     }
     case "oracleAction": {

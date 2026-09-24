@@ -113,6 +113,8 @@ requiredChanges vs optionalChanges:
 
 When deckPreferences constrain the card pool (for example only Lord of the Rings or Hobbit sets), grade leniently on role-allocation perfection. If slot counts are met, cards are legal, and the list respects deckPreferences, prefer OPTIONAL_REFINEMENT over CONSTRUCTION_DEFECT unless the deck is fundamentally unplayable. Do not require off-preference staples that violate deckPreferences.
 
+reasoningSummary is the customer-facing pilot brief — 2 to 4 short sentences for the player who will sit down with this list. Say how the deck wins, give one or two early/mid piloting tips, and name the key combo or variant lines if they are in the 99. Do not write a construction verdict, allocation recap, or a sentence that starts by describing what the deck "is built to" do.
+
 ${PROFESSOR_PREDICTIVE_LAYER_PROMPT_CLAUSE}`;
 
 function buildCanonicalDeckEvidence(args: {

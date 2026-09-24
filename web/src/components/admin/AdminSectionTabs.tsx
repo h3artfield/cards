@@ -20,8 +20,8 @@ export function AdminSectionTabs({
             onClick={() => onChange(section.id)}
             className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition ${
               isActive
-                ? "bg-indigo-600 text-white shadow-sm"
-                : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50"
+                ? "bg-[var(--accent)] text-[var(--ink-900)]"
+                : "bg-[var(--ink-750)] text-[var(--text)] ring-1 ring-[var(--line)] hover:border-[var(--line-strong)] hover:text-[var(--text-hi)]"
             }`}
           >
             {section.label}

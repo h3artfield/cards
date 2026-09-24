@@ -52,6 +52,16 @@ export interface TcgplayerImportPreviewRow {
 export interface TcgplayerImportPreview {
   parsedCount: number;
   skippedCount: number;
+  /** Raw "Product Line" values present in the file. */
+  csvProductLines: string[];
+  /** Rows reconciliation left alone — their product line is absent from the file. */
+  outOfScopeRows: number;
+  outOfScopeUnits: number;
+  /** TCGplayer-managed rows holding stock before this import. */
+  inStockRowsBefore: number;
+  /** Rows this import would drop from quantity > 0 to 0. */
+  withdrawnInStockRows: number;
+  withdrawnUnits: number;
   creates: number;
   /** New rows with qty > 0. */
   createsInStock: number;
@@ -78,5 +88,8 @@ export interface TcgplayerImportApplyResult {
   withdrawn: number;
   skipped: number;
   conflicts: number;
+  csvRowCount: number;
+  csvProductLines: string[];
+  outOfScopeRows: number;
   items: InventoryItem[];
 }

@@ -9,12 +9,36 @@ import {
   type ShopifyOrderWebhookPayload,
 } from "@/lib/shopify/sold-detection";
 import { resolveStoreIdFromShopDomain } from "@/lib/shopify/resolve-store";
+import { pushShopifyLevelsAfterImport } from "@/lib/shopify/sync-inventory-levels";
 import {
   getShopifyWebhookSecret,
   verifyShopifyWebhookHmac,
 } from "@/lib/shopify/webhook-verify";
 
 export const runtime = "nodejs";
+
+/**
+ * Shopify zeroes its own count when an order is paid, but the product stays
+ * visible as sold out. Push our state back so a card that is gone leaves the
+ * storefront right away instead of waiting for the next CSV import.
+ *
+ * Best effort on purpose: the sale is already recorded, and a non-2xx here
+ * would make Shopify redeliver the whole order.
+ */
+async function withdrawSoldOutListings(
+  storeId: string,
+  inventoryItemIds: string[],
+): Promise<void> {
+  if (!inventoryItemIds.length) return;
+  try {
+    const wanted = new Set(inventoryItemIds);
+    const inventory = await dataStore.getInventory(storeId);
+    const touched = inventory.filter((item) => wanted.has(item.id));
+    if (touched.length) await pushShopifyLevelsAfterImport(storeId, touched);
+  } catch (err) {
+    console.error("[shopify webhook] could not withdraw sold listings:", err);
+  }
+}
 
 export async function POST(req: NextRequest) {
   const shopDomain = req.headers.get("x-shopify-shop-domain");
@@ -75,6 +99,12 @@ export async function POST(req: NextRequest) {
         storeId,
         order: orderPayload,
       });
+
+      await withdrawSoldOutListings(
+        storeId,
+        results.filter((r) => !r.alreadySold).map((r) => r.inventoryItemId),
+      );
+
       return jsonOk({
         received: true,
         topic,

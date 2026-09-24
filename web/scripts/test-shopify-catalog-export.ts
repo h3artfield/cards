@@ -224,6 +224,54 @@ function main() {
     "a sold row must push zero so Shopify stops selling it",
   );
 
+  // Storefront visibility follows stock, so sold-out cards stop being browsable.
+  assert.equal(unchanged.status, "ACTIVE");
+  assert.equal(unchanged.statusChanged, false);
+  assert.equal(soldOut.status, "DRAFT");
+  assert.equal(
+    soldOut.statusChanged,
+    true,
+    "a sold-out row must leave the storefront, not sit there as sold out",
+  );
+
+  // A withdrawn row that a later CSV restocks has to come back on sale.
+  const revived = planCatalogListingSync(
+    {
+      ...listed,
+      status: "listed",
+      quantity: 3,
+      quantityOnHand: 3,
+      quantityAvailable: 3,
+      shopifyListing: { ...listed.shopifyListing!, syncedStatus: "DRAFT" },
+    },
+    INTEGRATION,
+  );
+  assert.equal(revived.status, "ACTIVE");
+  assert.equal(
+    revived.statusChanged,
+    true,
+    "restocking a drafted listing must put it back on the storefront",
+  );
+
+  // Shops that stage exports as drafts keep control of publishing.
+  const draftStore: ShopifyIntegration = {
+    ...INTEGRATION,
+    defaultProductStatus: "DRAFT",
+  };
+  const stagedInStock = planCatalogListingSync(
+    {
+      ...listed,
+      shopifyListing: { ...listed.shopifyListing!, syncedStatus: "DRAFT" },
+    },
+    draftStore,
+  );
+  assert.equal(stagedInStock.status, "DRAFT");
+  assert.equal(
+    stagedInStock.statusChanged,
+    false,
+    "we must never publish for a store that exports as drafts on purpose",
+  );
+
   // A sale of one copy decrements instead of closing the row.
   const partial = applySaleToQuantities(csvItem(), 1);
   assert.equal(partial.remaining, 4);

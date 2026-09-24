@@ -32,14 +32,17 @@ export async function fetchTcgplayerCdnImage(
 ): Promise<{ buffer: Buffer; contentType: string; sourceUrl: string }> {
   const id = productId.trim();
   const headers = {
-    "User-Agent": "CardScanner/1.0.0",
+    "User-Agent":
+      "Mozilla/5.0 (compatible; CardScanner/1.0; +https://cardscanner9000.com)",
+    Accept: "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
     Referer: `https://www.tcgplayer.com/product/${id}`,
+    Origin: "https://www.tcgplayer.com",
   };
 
   for (const url of tcgplayerCdnImageCandidates(id, existingUrl)) {
     const res = await fetch(url, {
       headers,
-      signal: AbortSignal.timeout(2_500),
+      signal: AbortSignal.timeout(8_000),
     });
     if (!res.ok) continue;
 

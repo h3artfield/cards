@@ -6,6 +6,7 @@ import {
   type InventoryListedFilter,
   type InventoryStockFilter,
 } from "@/lib/inventory/search";
+import { parseInventoryFinishFilter } from "@/lib/inventory/inventory-finish-v1";
 import {
   inventoryItemCanRetryImageCache,
   inventoryItemNeedsImageCache,
@@ -26,6 +27,7 @@ export async function GET(req: NextRequest) {
     const q = params.get("q") ?? undefined;
     const stock = (params.get("stock") ?? "all") as InventoryStockFilter;
     const listed = (params.get("listed") ?? "all") as InventoryListedFilter;
+    const finish = parseInventoryFinishFilter(params.get("finish"));
     const page = Number(params.get("page") ?? "1");
     const limit = Number(params.get("limit") ?? "48");
 
@@ -37,7 +39,14 @@ export async function GET(req: NextRequest) {
         item.status !== "sold" &&
         (includeAllSources || isCatalogImportItem(item)),
     );
-    const result = browseInventoryItems(active, { q, stock, listed, page, limit });
+    const result = browseInventoryItems(active, {
+      q,
+      stock,
+      listed,
+      finish,
+      page,
+      limit,
+    });
 
     return jsonOk({
       ...result,

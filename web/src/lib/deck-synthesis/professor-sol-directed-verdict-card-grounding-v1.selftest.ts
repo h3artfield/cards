@@ -201,6 +201,45 @@ check("a clean review is reported as grounded", () => {
   assert.deepEqual(result.descriptiveViolations, []);
 });
 
+// Live build f6f09e1c shipped grade A- and was flagged for citing "Bala Ged
+// Recovery", which the deck held as "Bala Ged Recovery // Bala Ged Sanctuary".
+check("citing one face of a double-faced card in the deck is grounded", () => {
+  const deck = [...FYNN_DECK, "Bala Ged Recovery // Bala Ged Sanctuary"];
+  const faces = ["Bala Ged Recovery", "Bala Ged Sanctuary", "Bala Ged Recovery // Bala Ged Sanctuary"];
+  const resolves = (name: string) => isRealCardName(name) || faces.some((f) => normalize(f) === normalize(name));
+
+  for (const cited of ["Bala Ged Recovery", "Bala Ged Sanctuary"]) {
+    const result = checkVerdictCardGroundingV1({
+      verdict: {
+        resilienceAssessment: `${cited} rebuilds after a sweeper.`,
+        offPlanCards: [],
+        requiredChanges: [],
+        optionalChanges: [],
+      },
+      deckCardNames: deck,
+      isRealCardName: resolves,
+    });
+    assert.equal(result.grounded, true, `citing "${cited}" should be grounded`);
+  }
+});
+
+check("a double-faced card absent from the deck is still caught", () => {
+  const faces = ["Bala Ged Recovery", "Bala Ged Recovery // Bala Ged Sanctuary"];
+  const resolves = (name: string) => isRealCardName(name) || faces.some((f) => normalize(f) === normalize(name));
+  const result = checkVerdictCardGroundingV1({
+    verdict: {
+      resilienceAssessment: "Bala Ged Recovery rebuilds after a sweeper.",
+      offPlanCards: [],
+      requiredChanges: [],
+      optionalChanges: [],
+    },
+    deckCardNames: FYNN_DECK,
+    isRealCardName: resolves,
+  });
+  assert.equal(result.grounded, false);
+  assert.equal(result.descriptiveViolations[0]?.cited, "Bala Ged Recovery");
+});
+
 check("the correction notice names each card and where it appeared", () => {
   const notice = buildGroundingCorrectionNoticeV1(grounding);
   assert.match(notice, /GROUNDING_CORRECTION_REQUIRED/);

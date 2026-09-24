@@ -1,6 +1,10 @@
 import type { InventoryItem } from "../types";
 import { isTcgplayerImportItem } from "../inventory/status";
 import {
+  assessTcgplayerWithdrawalRisk,
+  TcgplayerImportWithdrawalBlockedError,
+} from "./import-guard";
+import {
   buildTcgplayerImportPreview,
   inventoryItemFromCsvRow,
   mergeCsvIntoInventoryItem,
@@ -12,11 +16,18 @@ export function applyTcgplayerInventoryImport(input: {
   storeId: string;
   existingInventory: InventoryItem[];
   skipConflicts?: boolean;
+  /** Operator acknowledged a mass withdrawal after reviewing the preview. */
+  confirmLargeWithdrawal?: boolean;
 }): TcgplayerImportApplyResult {
   const preview = buildTcgplayerImportPreview(
     input.csvText,
     input.existingInventory,
   );
+
+  const risk = assessTcgplayerWithdrawalRisk(preview);
+  if (risk.requiresConfirmation && !input.confirmLargeWithdrawal) {
+    throw new TcgplayerImportWithdrawalBlockedError(risk);
+  }
   const now = new Date().toISOString();
   const byId = new Map(input.existingInventory.map((i) => [i.id, i]));
   const saved: InventoryItem[] = [];
@@ -101,6 +112,9 @@ export function applyTcgplayerInventoryImport(input: {
     withdrawn,
     skipped,
     conflicts,
+    csvRowCount: preview.parsedCount,
+    csvProductLines: preview.csvProductLines,
+    outOfScopeRows: preview.outOfScopeRows,
     items: saved,
   };
 }

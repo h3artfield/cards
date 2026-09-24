@@ -145,6 +145,78 @@ export async function analyzeCardImages(
   return normalizeVisionResult(parsed, declaredItemType);
 }
 
+const COLLECTION_VISION_SYSTEM = `Identify this trading card from the front photo only.
+Return JSON only:
+{
+  "category": "pokemon|magic|yugioh|sports|other",
+  "cardName": string,
+  "setName": string|null,
+  "cardNumber": string|null,
+  "playerName": string|null,
+  "confidence": number
+}
+Read the printed name, set name/symbol, and collector number. If a field is unreadable, use null — do not guess numbers.`;
+
+/** One cheap front-only lookup for the customer binder — not the buyback pipeline. */
+export async function analyzeCollectionFront(
+  frontImageUrl: string,
+): Promise<VisionResult> {
+  const apiKey = process.env.OPENAI_API_KEY?.trim();
+  if (!apiKey) {
+    throw new Error(
+      "OPENAI_API_KEY is required for card identification. Add it to web/.env.local and restart the dev server.",
+    );
+  }
+
+  const model =
+    process.env.OPENAI_COLLECTION_VISION_MODEL ??
+    process.env.OPENAI_VISION_MODEL ??
+    "gpt-4o-mini";
+
+  trackApiCall("openai");
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model,
+      response_format: { type: "json_object" },
+      messages: [
+        { role: "system", content: COLLECTION_VISION_SYSTEM },
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: "What card is this? Name, set, and collector number.",
+            },
+            {
+              type: "image_url",
+              image_url: { url: frontImageUrl, detail: "auto" },
+            },
+          ],
+        },
+      ],
+      max_tokens: 250,
+    }),
+    signal: AbortSignal.timeout(
+      parseInt(process.env.OPENAI_REQUEST_TIMEOUT_MS ?? "30000", 10),
+    ),
+  });
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`OpenAI vision failed: ${err}`);
+  }
+
+  const data = await response.json();
+  const content = data.choices?.[0]?.message?.content;
+  const parsed = JSON.parse(content) as VisionResult;
+  return normalizeVisionResult(parsed, "raw");
+}
+
 function normalizeVisionResult(
   raw: Partial<VisionResult>,
   declaredItemType: string,

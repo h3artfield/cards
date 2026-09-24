@@ -6,7 +6,7 @@ import { resolve } from "node:path";
 import { COLLECTIONS } from "@/lib/firebase/collections";
 import type { GoldenCatalogOracleCard } from "@/lib/deck-builder/golden-catalog/schemas";
 import { normalizeOracleName } from "@/lib/deck-builder/golden-catalog/normalize-name";
-import { deriveCommanderClassification } from "@/lib/deck-builder/commander-classification";
+import { goldenOracleCardIsSoleCommanderPoolCandidate } from "@/lib/deck-builder/commander-pool-eligibility";
 import type {
   DeckResolutionCatalog,
   DeckResolutionSupplement,
@@ -79,12 +79,6 @@ function loadResolutionSupplement(): DeckResolutionSupplement | null {
   return JSON.parse(readFileSync(SUPPLEMENT_PATH, "utf8")) as DeckResolutionSupplement;
 }
 
-function isSoleCommanderCandidate(card: GoldenCatalogOracleCard): boolean {
-  if (card.commanderEligibility?.eligible === false) return false;
-  const classification = deriveCommanderClassification(card);
-  return classification.canBeSoleCommander && classification.commanderFormatStatus === "legal";
-}
-
 async function loadCommanderOracleCards(): Promise<{
   byOracleId: Map<string, GoldenCatalogOracleCard>;
   byNormalizedName: Map<string, GoldenCatalogOracleCard[]>;
@@ -103,7 +97,7 @@ async function loadCommanderOracleCards(): Promise<{
   let catalogVersion = "unknown";
 
   const indexCard = (card: GoldenCatalogOracleCard) => {
-    if (!card.oracleId || !isSoleCommanderCandidate(card)) return;
+    if (!card.oracleId || !goldenOracleCardIsSoleCommanderPoolCandidate(card)) return;
     byOracleId.set(card.oracleId, card);
     const norm = normalizeOracleName(card.canonicalName);
     const bucket = byNormalizedName.get(norm) ?? [];
@@ -112,24 +106,13 @@ async function loadCommanderOracleCards(): Promise<{
     if (card.sourceVersion) catalogVersion = card.sourceVersion;
   };
 
-  try {
-    const snap = await withFirestoreScriptTimeout(
-      "commander-eligible catalogOracleCards query",
-      () => db.collection(COLLECTIONS.catalogOracleCards).where("commanderEligibility.eligible", "==", true).get(),
-      120_000,
-    );
-    for (const doc of snap.docs) {
-      indexCard(doc.data() as GoldenCatalogOracleCard);
-    }
-  } catch {
-    const snap = await withFirestoreScriptTimeout(
-      "catalogOracleCards commander scan",
-      () => db.collection(COLLECTIONS.catalogOracleCards).get(),
-      120_000,
-    );
-    for (const doc of snap.docs) {
-      indexCard(doc.data() as GoldenCatalogOracleCard);
-    }
+  const snap = await withFirestoreScriptTimeout(
+    "catalogOracleCards commander pool scan",
+    () => db.collection(COLLECTIONS.catalogOracleCards).get(),
+    120_000,
+  );
+  for (const doc of snap.docs) {
+    indexCard(doc.data() as GoldenCatalogOracleCard);
   }
 
   return { byOracleId, byNormalizedName, catalogVersion };

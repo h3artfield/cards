@@ -68,7 +68,20 @@ export function clearCustomerSessionCookieHeader(): string {
   return `${COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`;
 }
 
+export function readCustomerBearerToken(req: Request): string | null {
+  const authorization = req.headers.get("authorization");
+  if (!authorization?.toLowerCase().startsWith("bearer ")) return null;
+  const token = authorization.slice(7).trim();
+  return token || null;
+}
+
 export function readCustomerSessionFromRequest(req: Request): CustomerSession | null {
+  const bearer = readCustomerBearerToken(req);
+  if (bearer) {
+    const session = parseCustomerSessionToken(bearer);
+    if (session) return session;
+  }
+
   const cookie = req.headers.get("cookie") ?? "";
   const match = cookie.match(new RegExp(`(?:^|; )${COOKIE_NAME}=([^;]+)`));
   if (!match?.[1]) return null;

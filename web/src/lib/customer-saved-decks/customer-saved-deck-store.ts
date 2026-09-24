@@ -90,3 +90,25 @@ export async function listCustomerSavedDecks(args: {
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
     .slice(0, limit);
 }
+
+export async function deleteCustomerSavedDeckV1(args: {
+  id: string;
+  customerId: string;
+}): Promise<"deleted" | "not_found" | "forbidden"> {
+  const db = getAdminFirestore();
+  if (!db) {
+    const row = memoryDecks.get(args.id);
+    if (!row) return "not_found";
+    if (row.customerId !== args.customerId) return "forbidden";
+    memoryDecks.delete(args.id);
+    return "deleted";
+  }
+
+  const ref = db.collection(COLLECTIONS.customerSavedDecks).doc(args.id);
+  const snap = await ref.get();
+  if (!snap.exists) return "not_found";
+  const row = snap.data() as CustomerSavedDeck;
+  if (row.customerId !== args.customerId) return "forbidden";
+  await ref.delete();
+  return "deleted";
+}

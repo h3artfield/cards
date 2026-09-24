@@ -1,24 +1,50 @@
 import {
   cacheInventoryImageFromBuffer,
   isFirebaseStorageUrl,
-  isTcgplayerCdnUrl,
 } from "../storage/inventory-image";
 import { deckBuilderStore } from "../deck-builder/deck-builder-store";
 import { resolveTcgplayerProductImageUrl } from "../tcgplayer-inventory/product-image";
+import {
+  hasTrustedFirebaseImageCache,
+  inventoryImageCacheVersionForItem,
+  isPokemonJapanInventoryItem,
+  MAGIC_IMAGE_CACHE_VERSION,
+  POKEMON_JAPAN_IMAGE_CACHE_VERSION,
+} from "./image-cache-trust";
+import { isMagicInventoryItem } from "./magic-items";
+import { inventoryEffectiveQuantity } from "./status";
 import { resolveInventoryImageBuffer } from "./resolve-display-image";
 import type { CardCrosswalk, CatalogCard } from "../deck-builder/types";
 import type { InventoryItem } from "../types";
 
+function pokemonJapanNeedsRecache(item: InventoryItem): boolean {
+  return (
+    isPokemonJapanInventoryItem(item) &&
+    (item.imageCacheVersion ?? 0) < POKEMON_JAPAN_IMAGE_CACHE_VERSION
+  );
+}
+
+function magicNeedsRecache(item: InventoryItem): boolean {
+  return (
+    isMagicInventoryItem(item) &&
+    (item.imageCacheVersion ?? 0) < MAGIC_IMAGE_CACHE_VERSION
+  );
+}
+
+/** Rows that should be resolved to Firebase Storage before customers browse. */
 export function inventoryItemNeedsImageCache(item: InventoryItem): boolean {
+  if (item.status === "sold") return false;
+  if (inventoryEffectiveQuantity(item) <= 0) return false;
+  if (hasTrustedFirebaseImageCache(item)) return false;
+  if (pokemonJapanNeedsRecache(item)) return true;
+  if (magicNeedsRecache(item)) return true;
   if (item.imageCacheFailedAt) return false;
-  if (isFirebaseStorageUrl(item.frontImageUrl)) return false;
-  if (isTcgplayerCdnUrl(item.frontImageUrl)) return true;
-  if (item.tcgplayerProductId && !item.frontImageUrl) return true;
-  if (item.catalogScryfallId && !item.frontImageUrl) return true;
-  return false;
+  return true;
 }
 
 export function inventoryItemCanRetryImageCache(item: InventoryItem): boolean {
+  if (pokemonJapanNeedsRecache(item)) return true;
+  if (magicNeedsRecache(item)) return true;
   if (isFirebaseStorageUrl(item.frontImageUrl)) return false;
   return Boolean(item.imageCacheFailedAt);
 }
@@ -48,17 +74,6 @@ async function cacheOneItem(input: {
   const { item, storeId, crosswalkByItemId } = input;
   const now = new Date().toISOString();
 
-  if (
-    !item.tcgplayerProductId &&
-    !item.frontImageUrl?.trim() &&
-    !crosswalkByItemId.has(item.id)
-  ) {
-    return {
-      item: { ...item, imageCacheFailedAt: now },
-      ok: false,
-    };
-  }
-
   try {
     const catalog = await catalogForItem(item, crosswalkByItemId);
     const resolved = await resolveInventoryImageBuffer(item, catalog);
@@ -73,6 +88,7 @@ async function cacheOneItem(input: {
         ...item,
         frontImageUrl: storedUrl,
         imageCachedAt: now,
+        imageCacheVersion: inventoryImageCacheVersionForItem(item),
         imageCacheFailedAt: undefined,
         ...(resolved.tcgLowPrice != null && resolved.tcgLowPrice > 0
           ? { tcgLowPrice: resolved.tcgLowPrice, tcgLowPriceAt: now }

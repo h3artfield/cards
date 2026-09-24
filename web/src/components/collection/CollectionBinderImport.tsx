@@ -9,8 +9,13 @@ import {
   authSubtext,
 } from "@/lib/customer-auth-ui";
 import { CollectionPrintingPicker } from "@/components/collection/CollectionPrintingPicker";
+import {
+  COLLECTION_GAME_LABELS,
+  type CollectionGame,
+} from "@/lib/collection/collection-game";
 import { importCandidatesFromCard } from "@/lib/collection/collection-import-parse";
 import type { CollectionCard } from "@/lib/types";
+import type { CollectionFinish } from "@/lib/collection/collection-finish";
 
 type ImportSummary = {
   locked: number;
@@ -21,10 +26,10 @@ type ImportSummary = {
 
 function recapLine(summary: ImportSummary): string {
   const unmatched = summary.unmatched.length;
-  const parts = [
-    `${summary.locked} locked in your binder`,
-    `${summary.needsReview} need a printing pick`,
-  ];
+  const parts = [`${summary.locked} locked in your binder`];
+  if (summary.needsReview > 0) {
+    parts.push(`${summary.needsReview} need a printing pick`);
+  }
   if (unmatched) {
     const sample = summary.unmatched.slice(0, 3).join(", ");
     parts.push(
@@ -36,14 +41,16 @@ function recapLine(summary: ImportSummary): string {
 
 export function CollectionBinderImport({
   slug,
+  game,
   cards,
   onCards,
   onNotice,
   onError,
 }: {
   slug: string;
+  game: CollectionGame;
   cards: CollectionCard[];
-  onCards: (cards: CollectionCard[]) => void;
+  onCards: (cards: CollectionCard[], options?: { leaveImport?: boolean }) => void;
   onNotice: (message: string) => void;
   onError: (message: string | null) => void;
 }) {
@@ -78,10 +85,10 @@ export function CollectionBinderImport({
         `/api/store/${encodeURIComponent(slug)}/collection/import`,
         {
           method: "POST",
-          body: JSON.stringify({ text: next }),
+          body: JSON.stringify({ text: next, game }),
         },
       );
-      onCards(summary.cards);
+      onCards(summary.cards, { leaveImport: summary.needsReview === 0 });
       onNotice(recapLine(summary));
       setText("");
     } catch (err) {
@@ -98,20 +105,28 @@ export function CollectionBinderImport({
     if (fileRef.current) fileRef.current.value = "";
   }
 
-  async function pickPrinting(scryfallId: string) {
+  async function pickPrinting(scryfallId: string, finish: CollectionFinish) {
     if (!current) return;
-    setResolvingId(scryfallId);
+    setResolvingId(`${scryfallId}:${finish}`);
     onError(null);
     try {
       const data = await apiFetch<{ card: CollectionCard }>(
         `/api/store/${encodeURIComponent(slug)}/collection/${encodeURIComponent(current.id)}`,
         {
           method: "PATCH",
-          body: JSON.stringify({ scryfallId }),
+          body: JSON.stringify({ scryfallId, finish }),
         },
       );
-      onCards([data.card]);
-      onNotice(`${data.card.displayName} locked in your binder.`);
+      onCards([data.card], { leaveImport: queue.length <= 1 });
+      onNotice(
+        `${data.card.displayName}${
+          data.card.finish === "foil"
+            ? " foil"
+            : data.card.finish === "etched"
+              ? " etched"
+              : ""
+        } locked in your binder.`,
+      );
     } catch (err) {
       onError(err instanceof Error ? err.message : "Could not save that printing");
     } finally {
@@ -128,7 +143,7 @@ export function CollectionBinderImport({
         `/api/store/${encodeURIComponent(slug)}/collection/${encodeURIComponent(current.id)}`,
         { method: "DELETE" },
       );
-      onCards([]);
+      onCards([], { leaveImport: queue.length <= 1 });
       onNotice(`Removed ${current.displayName} from the review queue.`);
     } catch (err) {
       onError(err instanceof Error ? err.message : "Could not skip that line");
@@ -141,14 +156,23 @@ export function CollectionBinderImport({
     <div className="space-y-4">
       <div className="space-y-2">
         <p className={authSubtext}>
-          Upload a Moxfield, Archidekt, CSV, or text list into this binder — not
-          the shop pile.
+          {game === "magic"
+            ? "Upload a Moxfield, Archidekt, CSV, or text list into this Magic binder — not the shop pile. We match paper printings."
+            : `Upload a list into your ${COLLECTION_GAME_LABELS[game]} binder. Names are saved as this game — we will not look them up in Magic.`}
         </p>
         <textarea
           value={text}
           onChange={(event) => setText(event.target.value)}
           rows={4}
-          placeholder={"1 Sol Ring\n1 Lightning Bolt (lea) 161"}
+          placeholder={
+            game === "magic"
+              ? "1 Sol Ring\n1 Lightning Bolt (lea) 161"
+              : game === "pokemon"
+                ? "1 Pikachu\n1 Charizard"
+                : game === "yugioh"
+                  ? "1 Dark Magician"
+                  : "1 Card Name"
+          }
           className="w-full resize-y border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm text-white placeholder:text-neutral-600"
         />
         <div className="flex flex-wrap gap-2">
@@ -188,13 +212,13 @@ export function CollectionBinderImport({
             {current.quantity && current.quantity > 1 ? ` · ×${current.quantity}` : ""}
           </p>
           <p className={`mt-1 ${authSubtext}`}>
-            Pick the set and art, same as adding a card by name. This line is
-            not owned on decks until you do.
+            Pick the set, art, and foil. This line is not owned on decks until
+            you do.
           </p>
           <CollectionPrintingPicker
             candidates={candidates}
             busyId={resolvingId}
-            onPick={(scryfallId) => void pickPrinting(scryfallId)}
+            onPick={(scryfallId, finish) => void pickPrinting(scryfallId, finish)}
           />
           <button
             type="button"

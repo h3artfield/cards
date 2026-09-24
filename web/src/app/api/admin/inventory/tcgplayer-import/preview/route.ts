@@ -4,6 +4,7 @@ import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
 import { dataStore } from "@/lib/storage/data-store";
 import { buildTcgplayerImportPreview } from "@/lib/tcgplayer-inventory/apply-import";
 import { computeCsvImportTotals } from "@/lib/tcgplayer-inventory/csv-totals";
+import { assessTcgplayerWithdrawalRisk } from "@/lib/tcgplayer-inventory/import-guard";
 import { parseTcgplayerInventoryExportCsv } from "@/lib/tcgplayer-inventory/parse-export-csv";
 
 export async function POST(req: NextRequest) {
@@ -23,8 +24,9 @@ export async function POST(req: NextRequest) {
     const preview = buildTcgplayerImportPreview(body.csv, inventory);
     const { rows } = parseTcgplayerInventoryExportCsv(body.csv);
     const csvTotals = computeCsvImportTotals(rows);
+    const risk = assessTcgplayerWithdrawalRisk(preview);
 
-    return jsonOk({ preview, csvTotals });
+    return jsonOk({ preview, csvTotals, risk });
   } catch (err) {
     return handleRouteError(err);
   }

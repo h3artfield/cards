@@ -61,6 +61,10 @@ export interface StoreEvent {
   allDay?: boolean;
   /** Max attendees; omit or null for unlimited. */
   capacity?: number | null;
+  /** Entry cost in dollars; 0 = free, omit for no price shown. */
+  cost?: number | null;
+  /** Commander bracket this event seats (1–5). Omit for open-bracket nights. */
+  requiredBracket?: number | null;
   /** External signup URL (Shopify form, Eventbrite, etc.) */
   signupUrl?: string;
   published: boolean;

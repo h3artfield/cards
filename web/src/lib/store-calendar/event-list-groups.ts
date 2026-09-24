@@ -48,11 +48,19 @@ function spansMultipleWeeks(events: StoreEvent[]): boolean {
   return last - first >= 6 * 24 * 60 * 60 * 1000;
 }
 
-function groupKeyForEvent(event: StoreEvent): string {
+export function groupKeyForEvent(event: StoreEvent): string {
   if (event.seriesId?.trim()) {
     return `series:${event.seriesId}`;
   }
   return `slot:${event.title.trim().toLowerCase()}|${timeKey(event.startAt, event.endAt, event.allDay)}`;
+}
+
+export function eventsInSameSeries(
+  event: StoreEvent,
+  allEvents: readonly StoreEvent[],
+): StoreEvent[] {
+  const key = groupKeyForEvent(event);
+  return allEvents.filter((candidate) => groupKeyForEvent(candidate) === key);
 }
 
 export type GroupStoreEventsOptions = {

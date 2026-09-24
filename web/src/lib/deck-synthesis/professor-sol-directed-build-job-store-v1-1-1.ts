@@ -17,6 +17,10 @@ import {
   SOL_DIRECTED_BUILD_STATUS_LABELS,
 } from "./professor-sol-directed-build-types-v1-1-1";
 import { saveCustomerDeckFromBuildJob } from "../customer-saved-decks/customer-saved-deck-store";
+import {
+  jobShouldHaveResultV1,
+  rehydrateSolDirectedBuildResultV1,
+} from "./professor-sol-directed-build-result-rehydrate-v1";
 
 export const PROFESSOR_SOL_DIRECTED_BUILD_JOB_STORE_V1_1_1_VERSION =
   "professor-sol-directed-build-job-store-v1-1-1";
@@ -128,7 +132,27 @@ async function loadJobFromFirestore(buildId: string): Promise<SolDirectedBuildJo
 export async function getSolDirectedBuildJobV111(buildId: string): Promise<SolDirectedBuildJobViewV111 | null> {
   const job = memoryJobs.get(buildId) ?? (await loadJobFromFirestore(buildId));
   if (!job) return null;
-  const result = memoryResults.get(buildId) ?? null;
+
+  let result = memoryResults.get(buildId) ?? null;
+
+  // A completed build whose result is not in this process was almost certainly
+  // built by an instance that has since gone away. Recover the deck from its
+  // artifacts rather than serving a COMPLETE job with no cards.
+  if (!result && jobShouldHaveResultV1(job)) {
+    try {
+      const rehydrated = await rehydrateSolDirectedBuildResultV1({ job });
+      if (rehydrated) {
+        result = rehydrated.result;
+        // Cached so a page that polls does not re-read Storage each time.
+        memoryResults.set(buildId, result);
+      } else {
+        console.warn(`[sol-directed-build] ${buildId} is COMPLETE but its deck could not be recovered`);
+      }
+    } catch (err) {
+      console.warn(`[sol-directed-build] recovery failed for ${buildId}:`, err);
+    }
+  }
+
   return {
     job: { ...job, activityLog: job.activityLog ?? [] },
     result: result ?? undefined,

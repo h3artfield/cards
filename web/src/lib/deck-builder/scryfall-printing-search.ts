@@ -11,6 +11,7 @@ export interface ScryfallPrintingSearchHit {
   rarity?: string;
   imageNormal?: string;
   typeLine?: string;
+  finishes?: Array<"nonfoil" | "foil" | "etched">;
 }
 
 function toHit(card: CatalogCard): ScryfallPrintingSearchHit {
@@ -23,6 +24,7 @@ function toHit(card: CatalogCard): ScryfallPrintingSearchHit {
     rarity: card.rarity,
     imageNormal: card.imageNormal,
     typeLine: card.typeLine,
+    finishes: card.finishes?.length ? card.finishes : ["nonfoil"],
   };
 }
 

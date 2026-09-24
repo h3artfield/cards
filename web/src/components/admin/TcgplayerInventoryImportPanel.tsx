@@ -3,6 +3,8 @@
 import { useRef, useState } from "react";
 import { Button } from "@/components/Button";
 import { adminFetch } from "@/lib/api-client";
+import { runInventoryImageCacheLoop } from "@/lib/inventory/run-image-cache-loop";
+import type { TcgplayerImportWithdrawalRisk } from "@/lib/tcgplayer-inventory/import-guard";
 import type { TcgplayerImportPreview } from "@/lib/tcgplayer-inventory/types";
 
 function actionBadge(action: string): string {
@@ -37,8 +39,12 @@ export function TcgplayerInventoryImportPanel({
     inStockRows: number;
     rows: number;
   } | null>(null);
+  const [risk, setRisk] = useState<TcgplayerImportWithdrawalRisk | null>(null);
+  const [confirmWithdrawal, setConfirmWithdrawal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [applying, setApplying] = useState(false);
+  const [cachingImages, setCachingImages] = useState(false);
+  const [cacheStatus, setCacheStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [applyMessage, setApplyMessage] = useState<string | null>(null);
 
@@ -47,6 +53,8 @@ export function TcgplayerInventoryImportPanel({
     setApplyMessage(null);
     setPreview(null);
     setCsvTotals(null);
+    setRisk(null);
+    setConfirmWithdrawal(false);
     setFileName(file.name);
     const reader = new FileReader();
     reader.onload = () => {
@@ -70,6 +78,8 @@ export function TcgplayerInventoryImportPanel({
       if (!res.ok) throw new Error(data.error ?? "Preview failed");
       setPreview(data.preview);
       setCsvTotals(data.csvTotals ?? null);
+      setRisk(data.risk ?? null);
+      setConfirmWithdrawal(false);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Preview failed");
     } finally {
@@ -85,20 +95,78 @@ export function TcgplayerInventoryImportPanel({
       const res = await adminFetch("/api/admin/inventory/tcgplayer-import/apply", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ csv: csvText, skipConflicts: true }),
+        body: JSON.stringify({
+          csv: csvText,
+          skipConflicts: true,
+          confirmLargeWithdrawal: confirmWithdrawal,
+        }),
       });
       const data = await res.json();
+      if (res.status === 409 && data.risk) {
+        setRisk(data.risk);
+        throw new Error(data.error ?? "Import needs confirmation");
+      }
       if (!res.ok) throw new Error(data.error ?? "Import failed");
       const r = data.result;
+      const scopeNote =
+        r.outOfScopeRows > 0
+          ? ` ${r.outOfScopeRows} rows left untouched (product lines not in this file).`
+          : "";
+      const firstPass = data.imageCache as
+        | { cached: number; failed: number; remaining: number }
+        | undefined;
       setApplyMessage(
-        `Imported: ${r.created} new, ${r.updated} updated, ${r.withdrawn} withdrawn, ${r.skipped} unchanged, ${r.conflicts} conflicts skipped.`,
+        `Imported: ${r.created} new, ${r.updated} updated, ${r.withdrawn} withdrawn, ${r.skipped} unchanged, ${r.conflicts} conflicts skipped.${scopeNote}`,
       );
       setPreview(null);
-    setCsvTotals(null);
+      setCsvTotals(null);
+      setRisk(null);
+      setConfirmWithdrawal(false);
       setCsvText(null);
       setFileName(null);
       if (fileRef.current) fileRef.current.value = "";
       onImported();
+
+      if (firstPass && firstPass.remaining > 0) {
+        setCachingImages(true);
+        setCacheStatus(
+          `First pass cached ${firstPass.cached.toLocaleString()} images (${firstPass.remaining.toLocaleString()} left)…`,
+        );
+        try {
+          const loop = await runInventoryImageCacheLoop({
+            onProgress: ({ run, totalCached, totalFailed, batch }) => {
+              setCacheStatus(
+                `Caching images (run ${run}) — ${totalCached.toLocaleString()} saved, ${totalFailed.toLocaleString()} unavailable, ${batch.remaining.toLocaleString()} left…`,
+              );
+            },
+          });
+          setApplyMessage(
+            (prev) =>
+              `${prev ?? ""} Images: ${loop.totalCached.toLocaleString()} cached to Firebase` +
+              (loop.remaining > 0
+                ? `, ${loop.remaining.toLocaleString()} still pending (sealed/unknown SKUs).`
+                : ", all in-stock rows have art."),
+          );
+        } catch (cacheErr) {
+          setError(
+            cacheErr instanceof Error
+              ? cacheErr.message
+              : "Import succeeded but image cache failed",
+          );
+        } finally {
+          setCachingImages(false);
+          setCacheStatus(null);
+          onImported();
+        }
+      } else if (firstPass) {
+        setApplyMessage(
+          (prev) =>
+            `${prev ?? ""} Images: ${firstPass.cached.toLocaleString()} cached` +
+            (firstPass.remaining > 0
+              ? `, ${firstPass.remaining.toLocaleString()} still pending.`
+              : ", all in-stock rows have art."),
+        );
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Import failed");
     } finally {
@@ -121,9 +189,9 @@ export function TcgplayerInventoryImportPanel({
         from the export (not My Store Reserve Qty). Rows with <strong>0 qty</strong>{" "}
         are kept as catalog placeholders
         (sealed boxes, restock slots) — when you restock in TCGplayer, re-import
-        updates quantity without re-entering the SKU. Product images use each
-        row&apos;s <strong>TCGplayer Id</strong>. Matched by{" "}
-        <strong>TCGplayer Id + Condition</strong>.
+        updates quantity without re-entering the SKU. After apply, card art is
+        fetched and saved to Firebase automatically so customers never see blank
+        tiles. Matched by <strong>TCGplayer Id + Condition</strong>.
       </p>
 
       <div className="mt-4 flex flex-wrap items-center gap-3">
@@ -150,13 +218,19 @@ export function TcgplayerInventoryImportPanel({
             type="button"
             disabled={
               applying ||
+              cachingImages ||
+              (risk?.requiresConfirmation && !confirmWithdrawal) ||
               (preview.creates === 0 &&
                 preview.updates === 0 &&
                 preview.withdrawals === 0)
             }
             onClick={() => void runApply()}
           >
-            {applying ? "Importing…" : "Apply import"}
+            {applying
+              ? "Importing…"
+              : cachingImages
+                ? "Caching images…"
+                : "Apply import"}
           </Button>
         ) : null}
       </div>
@@ -173,9 +247,37 @@ export function TcgplayerInventoryImportPanel({
           {applyMessage}
         </p>
       ) : null}
+      {cacheStatus ? (
+        <p className="mt-2 text-sm text-slate-600">{cacheStatus}</p>
+      ) : null}
+
+      {risk?.requiresConfirmation ? (
+        <div className="mt-3 rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-800">
+          <p className="font-semibold">Unusually large withdrawal</p>
+          <p className="mt-1">{risk.message}</p>
+          <label className="mt-2 flex items-center gap-2 font-medium">
+            <input
+              type="checkbox"
+              checked={confirmWithdrawal}
+              onChange={(e) => setConfirmWithdrawal(e.target.checked)}
+            />
+            I checked the file and these items really are out of stock
+          </label>
+        </div>
+      ) : null}
 
       {preview ? (
         <div className="mt-4 space-y-3">
+          {preview.csvProductLines.length > 0 ? (
+            <p className="text-xs text-slate-600">
+              File covers{" "}
+              <strong>{preview.csvProductLines.join(", ")}</strong>. Rows in
+              other product lines are never touched
+              {preview.outOfScopeRows > 0
+                ? ` — ${preview.outOfScopeRows.toLocaleString()} left as-is.`
+                : "."}
+            </p>
+          ) : null}
           {csvTotals ? (
             <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs text-slate-700">
               <p className="font-semibold text-slate-900">CSV totals (matches Excel)</p>

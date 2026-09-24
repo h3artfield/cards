@@ -165,7 +165,7 @@ export type CreatedShopifyProduct = {
   adminUrl: string;
 };
 
-export async function createShopifyDraftProduct(input: {
+type CreateShopifyProductInput = {
   shopDomain: string;
   accessToken: string;
   title: string;
@@ -179,7 +179,39 @@ export async function createShopifyDraftProduct(input: {
   quantity: number;
   locationId?: string;
   imageUrls: string[];
-}): Promise<CreatedShopifyProduct> {
+};
+
+type CreatedProductShell = { id: string; handle: string };
+type CreatedVariantShell = { id: string; inventoryItem?: { id: string } };
+
+/** Remove a product created by an export that could not be completed. */
+export async function deleteShopifyProduct(input: {
+  shopDomain: string;
+  accessToken: string;
+  productId: string;
+}): Promise<void> {
+  const data = await shopifyGraphql<{
+    productDelete: { userErrors: ShopifyGraphqlError[] };
+  }>(
+    input.shopDomain,
+    input.accessToken,
+    `mutation DeleteProduct($input: ProductDeleteInput!) {
+      productDelete(input: $input) {
+        userErrors { field message }
+      }
+    }`,
+    { input: { id: input.productId } },
+  );
+
+  const errors = collectUserErrors(data.productDelete);
+  if (errors.length) {
+    throw new ShopifyApiError(errors.map((e) => e.message).join("; "), errors);
+  }
+}
+
+export async function createShopifyDraftProduct(
+  input: CreateShopifyProductInput,
+): Promise<CreatedShopifyProduct> {
   const media = input.imageUrls.map((url) => ({
     originalSource: url,
     mediaContentType: "IMAGE" as const,
@@ -236,9 +268,36 @@ export async function createShopifyDraftProduct(input: {
   const product = createResult.product;
   const defaultVariant = product?.variants.nodes[0];
   if (!product?.id || !defaultVariant?.id) {
+    if (product?.id) await rollbackCreatedProduct(input, product.id);
     throw new ShopifyApiError("Product created but missing IDs");
   }
 
+  try {
+    return await configureCreatedProduct(input, product, defaultVariant);
+  } catch (err) {
+    // A half-configured product is unsellable, and since the inventory row stays
+    // unlisted, a retry would create a duplicate rather than repair it.
+    await rollbackCreatedProduct(input, product.id);
+    throw err;
+  }
+}
+
+async function rollbackCreatedProduct(
+  input: CreateShopifyProductInput,
+  productId: string,
+): Promise<void> {
+  await deleteShopifyProduct({
+    shopDomain: input.shopDomain,
+    accessToken: input.accessToken,
+    productId,
+  }).catch(() => undefined);
+}
+
+async function configureCreatedProduct(
+  input: CreateShopifyProductInput,
+  product: CreatedProductShell,
+  defaultVariant: CreatedVariantShell,
+): Promise<CreatedShopifyProduct> {
   const updateData = await shopifyGraphql<{
     productVariantsBulkUpdate: {
       productVariants?: Array<{ id: string; inventoryItem?: { id: string } }>;
@@ -407,6 +466,36 @@ export async function updateShopifyVariantPrice(input: {
       errors.map((e) => e.message).join("; "),
       errors,
     );
+  }
+}
+
+/**
+ * Flip a listing in or out of the storefront. Sold-out rows go to DRAFT rather
+ * than being archived or deleted, so a later restock only needs ACTIVE again
+ * and keeps its product URL, images, and publication channels.
+ */
+export async function setShopifyProductStatus(input: {
+  shopDomain: string;
+  accessToken: string;
+  productId: string;
+  status: "ACTIVE" | "DRAFT";
+}): Promise<void> {
+  const data = await shopifyGraphql<{
+    productUpdate: { userErrors: ShopifyGraphqlError[] };
+  }>(
+    input.shopDomain,
+    input.accessToken,
+    `mutation SetProductStatus($input: ProductInput!) {
+      productUpdate(input: $input) {
+        userErrors { field message }
+      }
+    }`,
+    { input: { id: input.productId, status: input.status } },
+  );
+
+  const errors = collectUserErrors(data.productUpdate);
+  if (errors.length) {
+    throw new ShopifyApiError(errors.map((e) => e.message).join("; "), errors);
   }
 }
 

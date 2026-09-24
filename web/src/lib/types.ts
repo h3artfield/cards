@@ -311,6 +311,10 @@ export interface CollectionCard {
   /** Magic printing + oracle ids — required for deck building. */
   scryfallId?: string;
   oracleId?: string;
+  /** Magic type line — persisted so the binder can highlight commanders. */
+  typeLine?: string;
+  /** Read-time hint from catalog / type line. Not required in storage. */
+  canBeCommander?: boolean;
   conditionEstimate?: ConditionEstimate;
   identityConfidence?: number;
   identityLocked?: boolean;
@@ -318,6 +322,8 @@ export interface CollectionCard {
   needsReview?: boolean;
   /** Copies of this printing in the binder. Unset means 1. */
   quantity?: number;
+  /** Paper finish. Unset means non-foil. */
+  finish?: "nonfoil" | "foil" | "etched";
   visionJson?: Record<string, unknown>;
   status: CollectionCardStatus;
   buybackOrderId?: string;

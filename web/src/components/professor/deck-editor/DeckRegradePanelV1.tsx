@@ -149,7 +149,11 @@ export function DeckRegradePanelV1({
             ) : null}
 
             {cos?.playerReport ? (
-              <CosV1PlayerReportView report={cos.playerReport} storeSlug={slug} />
+              <CosV1PlayerReportView
+                report={cos.playerReport}
+                storeSlug={slug}
+                competitiveStrength={cos.competitiveStrength}
+              />
             ) : null}
           </>
         )}

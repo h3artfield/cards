@@ -20,22 +20,13 @@ import {
 } from "./lib/catalog-shadow-parse-record-v1";
 import { ORACLE_ACTION_RC3_PARSER_VERSION } from "../src/lib/deck-builder/golden-catalog/oracle-semantic-parse-rc3";
 import { CATALOG_COMPLEXITY_BUCKET_DEFINITION_VERSION } from "./lib/catalog-complexity-bucket-v1";
+import { CATALOG_HEALTH_METRIC_DEFINITIONS } from "./lib/catalog-health-metric-definitions-v1";
 
 loadEnvLocal();
 
 const OUT_DIR = "data/milestones/catalog-shadow";
 const FRAME = "firestore";
 const ARTIFACT_STEM = "catalog-shadow-parse-rc8-firestore-v1";
-
-export const CATALOG_HEALTH_METRIC_DEFINITIONS = {
-  cardsWithAnyIntegrityIssue:
-    "semanticInvalid OR idInvalid OR provenanceInvalid OR acceptedActionOutsideOwnerSpanCount > 0 OR forbiddenEmissionCount > 0",
-  cardsWithAnyParserDiagnostic: "semantic.diagnostics.length > 0",
-  cardsWithAnyNeedsReview: "needsReviewActions.length > 0",
-  cardsNonPublishable: "publishable === false (structuralInvalid OR idInvalid OR provenanceInvalid)",
-  cardsWithNoDiagnostics:
-    "semantic.diagnostics.length === 0 (orthogonal to correctness — many valid cards emit zero diagnostics)",
-};
 
 async function main() {
   const { snapshot, eligibleRecords } = await loadFirestoreCatalogPopulationSnapshot();
@@ -89,7 +80,10 @@ async function main() {
   console.log(JSON.stringify({ manifestPath, jsonlPath, cardCount: records.length, digest, populationHash: snapshot.populationHash }, null, 2));
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+const isDirectRun = process.argv[1]?.replace(/\\/g, "/").endsWith("run-firestore-catalog-shadow-parse-rc8-v1.ts");
+if (isDirectRun) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}

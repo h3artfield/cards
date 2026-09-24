@@ -155,6 +155,23 @@ export function findCardNamesInTextV1(args: {
   return found;
 }
 
+/**
+ * Every name a deck entry can legitimately be cited by.
+ *
+ * A decklist stores a double-faced card under its printed name, "Bala Ged
+ * Recovery // Bala Ged Sanctuary", while a review naturally refers to the face
+ * it means. Indexing the printed name alone reported a card the deck genuinely
+ * contained as off-deck, which then spent a corrective re-ask rewriting prose
+ * that was already accurate.
+ */
+function deckNameKeysV1(name: string): string[] {
+  const keys = [normalizeName(name)];
+  if (name.includes("//")) {
+    for (const face of name.split("//")) keys.push(normalizeName(face));
+  }
+  return keys.filter(Boolean);
+}
+
 function fieldText(value: unknown): string[] {
   if (typeof value === "string") return [value];
   if (Array.isArray(value)) return value.filter((entry): entry is string => typeof entry === "string");
@@ -168,7 +185,7 @@ export function checkVerdictCardGroundingV1(args: {
   /** True when the name resolves to a real card in the catalog. */
   isRealCardName: (name: string) => boolean;
 }): VerdictCardGroundingV1 {
-  const deckKeys = new Set(args.deckCardNames.map((name) => normalizeName(name)));
+  const deckKeys = new Set(args.deckCardNames.flatMap((name) => deckNameKeysV1(name)));
   const citations: OffDeckCitationV1[] = [];
   const seen = new Set<string>();
 

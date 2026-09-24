@@ -10,6 +10,7 @@ import {
   readSolDirectedPendingBuild,
   clearSolDirectedPendingBuild,
 } from "@/lib/deck-synthesis/professor-sol-directed-pending-build-v1-1-1";
+import { ProfessorClientErrorBoundary } from "./ProfessorClientErrorBoundary";
 import { ProfessorSolDirectedBuildProgressPanel } from "./ProfessorSolDirectedBuildProgressPanel";
 import { ProfessorSolDirectedDeckListPanel } from "./ProfessorSolDirectedDeckListPanel";
 import { ProfessorMtgPageShell } from "./ProfessorMtgPageShell";
@@ -261,22 +262,24 @@ export function ProfessorSolDirectedBuildApp({ slug }: { slug: string }) {
         ) : null}
 
         {isComplete && view?.result ? (
-          <ProfessorSolDirectedDeckListPanel
-            slug={slug}
-            buildId={buildId ?? view.job.buildId}
-            commander={view.result.commander}
-            constructedDeck={view.result.constructedDeck}
-            userInputs={view.result.userInputs}
-            architectPlan={view.result.architectPlan}
-            critic={view.result.critic}
-            headProfessor={view.result.headProfessor}
-            validation={view.result.validation}
-            retrievalSummary={view.result.retrievalSummary}
-            telemetry={view.result.telemetry}
-            validationPass={view.result.validation?.pass ?? false}
-            deckEnrichment={view.result.deckEnrichment}
-            professorRepairApplied={view.result.professorRepairApplied}
-          />
+          <ProfessorClientErrorBoundary>
+            <ProfessorSolDirectedDeckListPanel
+              slug={slug}
+              buildId={buildId ?? view.job.buildId}
+              commander={view.result.commander}
+              constructedDeck={view.result.constructedDeck}
+              userInputs={view.result.userInputs}
+              architectPlan={view.result.architectPlan}
+              critic={view.result.critic}
+              headProfessor={view.result.headProfessor}
+              validation={view.result.validation}
+              retrievalSummary={view.result.retrievalSummary}
+              telemetry={view.result.telemetry}
+              validationPass={view.result.validation?.pass ?? false}
+              deckEnrichment={view.result.deckEnrichment}
+              professorRepairApplied={view.result.professorRepairApplied}
+            />
+          </ProfessorClientErrorBoundary>
         ) : null}
 
         {loading && !view && !error ? (

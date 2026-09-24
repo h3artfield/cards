@@ -3,6 +3,7 @@ import {
   verifyCustomerPassword,
 } from "@/lib/auth/customer-password";
 import {
+  customerHomeStoreSummary,
   customerSessionResponse,
   resolveStoreForSlug,
   touchCustomerLogin,
@@ -54,7 +55,9 @@ export async function POST(req: NextRequest) {
     }
 
     const loggedIn = await touchCustomerLogin(bound);
-    return customerSessionResponse(loggedIn);
+    return customerSessionResponse(loggedIn, {
+      store: await customerHomeStoreSummary(loggedIn),
+    });
   } catch (err) {
     return handleRouteError(err);
   }

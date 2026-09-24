@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/Button";
+import { ShopifyBulkExportPanel } from "@/components/admin/ShopifyBulkExportPanel";
+import { ShopifyReconcilePanel } from "@/components/admin/ShopifyReconcilePanel";
 import { adminFetch } from "@/lib/api-client";
 import type { CatalogExportResult } from "@/lib/shopify/export-inventory-item";
 
@@ -153,10 +155,28 @@ export function CatalogShopifyExportPanel({
         {summary.eligible > summary.batchSize ? (
           <p className="text-xs text-slate-500">
             Runs {summary.batchSize} at a time to stay inside Shopify rate
-            limits — press again to continue.
+            limits — or start a full run below.
           </p>
         ) : null}
       </div>
+
+      <ShopifyBulkExportPanel
+        onProgress={() => {
+          void loadSummary()
+            .then(setSummary)
+            .catch(() => undefined);
+          onExported();
+        }}
+      />
+
+      <ShopifyReconcilePanel
+        onProgress={() => {
+          void loadSummary()
+            .then(setSummary)
+            .catch(() => undefined);
+          onExported();
+        }}
+      />
 
       {error ? (
         <p className="mt-3 rounded-lg bg-red-50 p-2 text-sm text-red-700">
@@ -187,18 +207,27 @@ export function CatalogShopifyExportPanel({
                   </td>
                   <td className="px-2 py-2">
                     {r.ok ? (
-                      r.productAdminUrl ? (
-                        <a
-                          href={r.productAdminUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-emerald-700 underline"
-                        >
-                          Listed
-                        </a>
-                      ) : (
-                        <span className="text-emerald-700">Listed</span>
-                      )
+                      <>
+                        {r.productAdminUrl ? (
+                          <a
+                            href={r.productAdminUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-emerald-700 underline"
+                          >
+                            Listed
+                          </a>
+                        ) : (
+                          <span className="text-emerald-700">Listed</span>
+                        )}
+                        {/* A listing that never reached a sales channel cannot
+                            be bought, so the warning has to be visible. */}
+                        {r.error ? (
+                          <span className="mt-1 block text-amber-700">
+                            {r.error}
+                          </span>
+                        ) : null}
+                      </>
                     ) : (
                       <span className="text-red-700">
                         {r.error ?? "Failed"}

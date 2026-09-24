@@ -15,6 +15,7 @@ import {
   catalogProductImageUrls,
   resolveCatalogExportPrice,
 } from "./inventory-listing";
+import { getAppBaseUrl } from "../stripe/config";
 import { buildShopifyVendor } from "./product-builder";
 import type { ShopifyIntegration, ShopifyProductStatus } from "./types";
 
@@ -104,7 +105,10 @@ export async function exportInventoryItemToShopify(input: {
       price: price.toFixed(2),
       quantity,
       locationId: integration.defaultLocationId,
-      imageUrls: catalogProductImageUrls(item),
+      imageUrls: catalogProductImageUrls(item, {
+        storeSlug: input.settings.storeSlug,
+        appBaseUrl: getAppBaseUrl(),
+      }),
     });
 
     let publishWarning: string | undefined;
@@ -158,6 +162,7 @@ export async function exportInventoryItemToShopify(input: {
             ? `https://${domain.replace(".myshopify.com", "")}.com/products/${created.handle}`
             : undefined,
         syncedQuantity: integration.defaultLocationId ? quantity : undefined,
+        syncedStatus: status === "ACTIVE" ? "ACTIVE" : "DRAFT",
         syncedAt: integration.defaultLocationId ? now : undefined,
         syncError: publishWarning,
       },

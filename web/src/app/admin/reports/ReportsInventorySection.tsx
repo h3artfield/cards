@@ -6,6 +6,7 @@ import { AdminSectionTabs } from "@/components/admin/AdminSectionTabs";
 import { adminFetch } from "@/lib/api-client";
 import { useAdmin } from "@/context/AdminContext";
 import type { BuybackTransaction, InventoryItem, ScannedCard } from "@/lib/types";
+import { AddCardsPanel } from "@/components/admin/AddCardsPanel";
 import { CatalogShopifyExportPanel } from "@/components/admin/CatalogShopifyExportPanel";
 import { ShopifyInventoryExportPanel } from "@/components/admin/ShopifyInventoryExportPanel";
 import { ShopifyInventoryImportPanel } from "@/components/admin/ShopifyInventoryImportPanel";
@@ -161,6 +162,8 @@ export function ReportsInventorySection({
 
       {view === "stock" ? (
         <div className="mt-4 space-y-4">
+          <AddCardsPanel onAdded={reloadInventory} />
+
           <div className="grid gap-4 lg:grid-cols-2">
             <TcgplayerInventoryImportPanel onImported={reloadInventory} />
             <ShopifyInventoryImportPanel onImported={reloadInventory} />

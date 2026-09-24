@@ -8,8 +8,21 @@ export function isShopifyImportItem(item: InventoryItem): boolean {
   return item.source === "shopify_import" || Boolean(item.shopifyVariantKey);
 }
 
+export function isManualInventoryItem(item: InventoryItem): boolean {
+  return item.source === "manual";
+}
+
+/**
+ * Quantity-tracked catalog stock, as opposed to a legacy one-off buyback
+ * single. This gates the deck builder, storefront browsing, image and price
+ * backfills, and Shopify export, so clerk-entered rows belong here too.
+ */
 export function isCatalogImportItem(item: InventoryItem): boolean {
-  return isTcgplayerImportItem(item) || isShopifyImportItem(item);
+  return (
+    isTcgplayerImportItem(item) ||
+    isShopifyImportItem(item) ||
+    isManualInventoryItem(item)
+  );
 }
 
 export function isBuybackInventoryItem(item: InventoryItem): boolean {
@@ -47,7 +60,7 @@ export function inventoryQuantityAvailable(item: InventoryItem): number {
 /** Effective units available (buyback singles = 1). */
 export function inventoryEffectiveQuantity(item: InventoryItem): number {
   if (inventoryEffectiveStatus(item) === "sold") return 0;
-  if (isTcgplayerImportItem(item) || isShopifyImportItem(item)) {
+  if (isCatalogImportItem(item)) {
     return inventoryQuantityAvailable(item);
   }
   return 1;
@@ -66,7 +79,7 @@ export function isInventoryAvailable(item: InventoryItem): boolean {
   if (isInventorySold(item)) return false;
   const status = inventoryEffectiveStatus(item);
   if (status === "withdrawn") return false;
-  if (isTcgplayerImportItem(item) || isShopifyImportItem(item)) {
+  if (isCatalogImportItem(item)) {
     return inventoryEffectiveQuantity(item) > 0;
   }
   return status === "on_hand" || status === "listed";

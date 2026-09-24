@@ -1399,6 +1399,91 @@ export const dataStore = {
     });
   },
 
+  async deleteStoreEvents(eventIds: readonly string[]): Promise<number> {
+    const unique = [...new Set(eventIds.filter(Boolean))];
+    if (unique.length === 0) return 0;
+
+    const db = dbOrMemory();
+    if (db) {
+      const batch = db.batch();
+      for (const eventId of unique) {
+        batch.delete(db.collection(COLLECTIONS.storeEvents).doc(eventId));
+      }
+      await batch.commit();
+      return unique.length;
+    }
+
+    await mutateDevMemory((state) => {
+      if (!state.storeEvents) return;
+      const drop = new Set(unique);
+      state.storeEvents = state.storeEvents.filter((e) => !drop.has(e.id));
+    });
+    return unique.length;
+  },
+
+  async listEventSignupsForCustomerAtStore(
+    storeId: string,
+    customerId: string,
+    email?: string,
+  ): Promise<StoreEventSignup[]> {
+    const id = resolveStoreId(storeId);
+    const normalizedEmail = email?.trim().toLowerCase();
+    const db = dbOrMemory();
+    const byId = new Map<string, StoreEventSignup>();
+
+    const addSignup = (signup: StoreEventSignup) => {
+      if (signup.storeId !== id) return;
+      byId.set(signup.id, signup);
+    };
+
+    if (db) {
+      const customerSnap = await db
+        .collection(COLLECTIONS.storeEventSignups)
+        .where("storeId", "==", id)
+        .where("customerId", "==", customerId)
+        .get();
+      for (const doc of customerSnap.docs) {
+        addSignup(
+          normalizeStoreEventSignup(
+            doc.id,
+            doc.data() as Record<string, unknown>,
+            id,
+            String((doc.data() as Record<string, unknown>).eventId ?? ""),
+          ),
+        );
+      }
+
+      if (normalizedEmail) {
+        const emailSnap = await db
+          .collection(COLLECTIONS.storeEventSignups)
+          .where("storeId", "==", id)
+          .where("email", "==", normalizedEmail)
+          .get();
+        for (const doc of emailSnap.docs) {
+          addSignup(
+            normalizeStoreEventSignup(
+              doc.id,
+              doc.data() as Record<string, unknown>,
+              id,
+              String((doc.data() as Record<string, unknown>).eventId ?? ""),
+            ),
+          );
+        }
+      }
+    } else {
+      const state = await readDevMemoryState();
+      for (const signup of state.storeEventSignups ?? []) {
+        if (signup.storeId !== id) continue;
+        if (signup.customerId === customerId) addSignup(signup);
+        else if (normalizedEmail && signup.email === normalizedEmail) addSignup(signup);
+      }
+    }
+
+    return [...byId.values()].sort(
+      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    );
+  },
+
   async listEventSignups(eventId: string): Promise<StoreEventSignup[]> {
     const db = dbOrMemory();
     if (db) {

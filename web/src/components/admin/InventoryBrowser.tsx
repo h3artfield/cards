@@ -11,6 +11,11 @@ import {
   isInventoryListed,
 } from "@/lib/inventory/status";
 import type { InventoryItem } from "@/lib/types";
+import {
+  inferInventoryFinish,
+  inventoryFinishBadgeLabel,
+  type InventoryFinishFilter,
+} from "@/lib/inventory/inventory-finish-v1";
 
 type StockFilter = "all" | "in_stock" | "catalog";
 type ListedFilter = "all" | "listed" | "unlisted";
@@ -33,6 +38,7 @@ export function InventoryBrowser({ refreshKey }: { refreshKey: number }) {
   const [debouncedQ, setDebouncedQ] = useState("");
   const [stock, setStock] = useState<StockFilter>("all");
   const [listed, setListed] = useState<ListedFilter>("all");
+  const [finish, setFinish] = useState<InventoryFinishFilter>("all");
   const [page, setPage] = useState(1);
   const [data, setData] = useState<BrowseResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -49,7 +55,7 @@ export function InventoryBrowser({ refreshKey }: { refreshKey: number }) {
 
   useEffect(() => {
     setPage(1);
-  }, [debouncedQ, stock, listed]);
+  }, [debouncedQ, stock, listed, finish]);
 
   const load = useCallback(() => {
     setLoading(true);
@@ -60,6 +66,7 @@ export function InventoryBrowser({ refreshKey }: { refreshKey: number }) {
       stock,
       listed,
     });
+    if (finish !== "all") params.set("finish", finish);
     if (debouncedQ) params.set("q", debouncedQ);
 
     adminFetch(`/api/admin/inventory/browse?${params}`)
@@ -73,7 +80,7 @@ export function InventoryBrowser({ refreshKey }: { refreshKey: number }) {
         setData(null);
       })
       .finally(() => setLoading(false));
-  }, [debouncedQ, stock, listed, page]);
+  }, [debouncedQ, stock, listed, finish, page]);
 
   useEffect(() => {
     load();
@@ -350,6 +357,15 @@ export function InventoryBrowser({ refreshKey }: { refreshKey: number }) {
           <option value="listed">Listed (Shopify)</option>
           <option value="unlisted">Not listed</option>
         </select>
+        <select
+          value={finish}
+          onChange={(e) => setFinish(e.target.value as InventoryFinishFilter)}
+          className="rounded-lg border border-slate-200 px-3 py-2 text-sm"
+        >
+          <option value="all">All finishes</option>
+          <option value="foil">Foils</option>
+          <option value="nonfoil">Nonfoil</option>
+        </select>
       </div>
 
       {error ? (
@@ -372,6 +388,9 @@ export function InventoryBrowser({ refreshKey }: { refreshKey: number }) {
             {data.items.map((item) => {
               const qty = inventoryEffectiveQuantity(item);
               const listedOnShopify = isInventoryListed(item);
+              const finishLabel = inventoryFinishBadgeLabel(
+                inferInventoryFinish(item),
+              );
               return (
                 <li
                   key={item.id}
@@ -412,11 +431,18 @@ export function InventoryBrowser({ refreshKey }: { refreshKey: number }) {
                         ? ` · #${item.tcgplayerProductId}`
                         : ""}
                     </p>
-                    {listedOnShopify ? (
-                      <span className="mt-1 inline-block rounded bg-indigo-100 px-1.5 py-0.5 text-[10px] font-medium text-indigo-800">
-                        Shopify
-                      </span>
-                    ) : null}
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {finishLabel ? (
+                        <span className="inline-block rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-900">
+                          {finishLabel}
+                        </span>
+                      ) : null}
+                      {listedOnShopify ? (
+                        <span className="inline-block rounded bg-indigo-100 px-1.5 py-0.5 text-[10px] font-medium text-indigo-800">
+                          Shopify
+                        </span>
+                      ) : null}
+                    </div>
                   </div>
                 </li>
               );

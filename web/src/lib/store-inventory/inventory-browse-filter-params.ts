@@ -1,7 +1,7 @@
 import type { StoreInventorySemanticFilter } from "@/lib/deck-builder/store-inventory-semantic";
 import { PRIMITIVE_ACTION_TYPES } from "@/lib/deck-builder/golden-catalog/oracle-action-taxonomy";
 
-export type InventoryBrowseGame = "magic" | "pokemon" | "riftbound";
+export type InventoryBrowseGame = string;
 export type InventoryBrowseSource = "inventory" | "catalog";
 export type InventorySortBy =
   | "name"
@@ -9,6 +9,8 @@ export type InventorySortBy =
   | "price_desc"
   | "cmc_asc"
   | "cmc_desc";
+
+export type InventoryFinishFilter = "all" | "foil" | "nonfoil";
 
 export type InventoryBrowseFilterParams = {
   cardTypes: string[];
@@ -20,6 +22,7 @@ export type InventoryBrowseFilterParams = {
   semanticOwners: string[];
   manaValuePreset: "all" | "0-2" | "3-4" | "5+";
   sortBy: InventorySortBy;
+  finish: InventoryFinishFilter;
 };
 
 export const INVENTORY_PRIMITIVE_ACTION_OPTIONS = [...PRIMITIVE_ACTION_TYPES] as const;
@@ -249,5 +252,8 @@ export function appendInventoryBrowseParams(
   }
   if (filters.manaValuePreset !== "all") {
     params.set("mv", filters.manaValuePreset);
+  }
+  if (filters.finish === "foil" || filters.finish === "nonfoil") {
+    params.set("finish", filters.finish);
   }
 }

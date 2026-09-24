@@ -1,39 +1,15 @@
 import { inventoryItemMatchesSearch } from "../inventory/search";
 import { inventoryEffectiveQuantity } from "../inventory/status";
 import { inventoryImageProxyPath } from "../inventory/resolve-display-image";
-import { classifyInventoryGame } from "../inventory/analytics";
 import { isFirebaseStorageUrl } from "../inventory/image-url";
+import { matchesInventoryBrowseGame } from "../inventory/inventory-browse-game-v1";
 import type { InventoryItem } from "../types";
-import type { CardCategory } from "../types";
+import { inventoryItemIsSoleCommanderCandidate } from "./commander-pool-eligibility";
 import { getCachedStoreInventory } from "./store-inventory-cache";
 import type {
   StoreInventoryCard,
   StoreInventoryGameFilter,
 } from "./store-inventory-browse";
-
-function inferGame(item: InventoryItem): CardCategory {
-  if (item.category) return item.category;
-  const line = (item.productLine ?? "").toLowerCase();
-  if (line.includes("magic") || line.includes("mtg")) return "magic";
-  if (line.includes("pokemon") || line.includes("pokémon")) return "pokemon";
-  if (line.includes("yugioh") || line.includes("yu-gi-oh")) return "yugioh";
-  if (line.includes("sport")) return "sports";
-  return "other";
-}
-
-function isRiftboundItem(item: InventoryItem): boolean {
-  const line = (item.productLine ?? "").toLowerCase();
-  const name = (item.productName ?? item.displayName ?? "").toLowerCase();
-  return line.includes("riftbound") || name.includes("riftbound");
-}
-
-function matchesGameFilter(item: InventoryItem, game: StoreInventoryGameFilter): boolean {
-  if (game === "all") return true;
-  if (game === "riftbound") return isRiftboundItem(item);
-  if (game === "magic") return classifyInventoryGame(item) === "Magic";
-  if (game === "pokemon") return classifyInventoryGame(item) === "Pokémon";
-  return inferGame(item) === game;
-}
 
 function itemDisplayName(item: InventoryItem): string {
   return (
@@ -68,7 +44,7 @@ export function suggestFromInventoryItems(
   const seen = new Map<string, StoreInventoryCard>();
 
   for (const item of items) {
-    if (!matchesGameFilter(item, game)) continue;
+    if (!matchesInventoryBrowseGame(item, game)) continue;
     if (!inventoryItemMatchesSearch(item, q)) continue;
 
     const name = itemDisplayName(item);
@@ -93,7 +69,7 @@ export function suggestFromInventoryItems(
       cardNumber: item.cardNumber,
       category: inferGame(item),
       colorIdentity: item.catalogColorIdentity ?? [],
-      isCommander: Boolean(item.catalogCanBeSoleCommander),
+      isCommander: inventoryItemIsSoleCommanderCandidate(item),
     });
   }
 

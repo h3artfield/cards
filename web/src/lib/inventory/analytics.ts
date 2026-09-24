@@ -113,6 +113,11 @@ export function classifyInventoryGame(item: InventoryItem): string {
   if (line.includes("yugioh") || line.includes("yu-gi-oh")) return "Yu-Gi-Oh!";
   if (line.includes("sport")) return "Sports";
   if (line.includes("flesh") && line.includes("blood")) return "Flesh & Blood";
+  if (line.includes("lorcana")) return "Lorcana";
+  if (line.includes("one piece")) return "One Piece";
+  if (line.includes("riftbound")) return "Riftbound";
+  if (line.includes("star wars")) return "Star Wars";
+  if (line.includes("gundam")) return "Gundam";
   if (line.includes("supply") || line.includes("deck box")) return "Supplies";
   return "Other";
 }

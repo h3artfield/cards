@@ -1,43 +1,53 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
+import { CollectionBinderGallery } from "@/components/collection/CollectionBinderGallery";
+import { CollectionBinderValue } from "@/components/collection/CollectionBinderValue";
+import { CollectionBinderImport } from "@/components/collection/CollectionBinderImport";
+import { CollectionCardSearch } from "@/components/collection/CollectionCardSearch";
 import { CustomerAuthShell } from "@/components/CustomerAuthShell";
 import { useCustomer } from "@/context/CustomerContext";
 import { apiFetch } from "@/lib/api-client";
 import {
+  cardNeedsPrintingPick,
+  cardMatchesCollectionGame,
+  collectionDecklistText,
+  defaultBinderMode,
+  isVerifiedBinderCard,
+  pickDeckCommander,
+  type CollectionBinderMode,
+} from "@/lib/collection/collection-binder";
+import {
+  COLLECTION_GAME_LABELS,
+  COLLECTION_GAMES,
+  parseCollectionGame,
+  readCollectionGame,
+  writeCollectionGame,
+  type CollectionGame,
+} from "@/lib/collection/collection-game";
+import {
   authButton,
-  authButtonSecondary,
   authError,
   authHeading,
+  authInput,
+  authLabel,
   authLink,
   authSubtext,
 } from "@/lib/customer-auth-ui";
-import { CollectionBinderImport } from "@/components/collection/CollectionBinderImport";
-import { CollectionCardSearch } from "@/components/collection/CollectionCardSearch";
-import { CollectionChangePrinting } from "@/components/collection/CollectionChangePrinting";
-import { importCandidatesFromCard } from "@/lib/collection/collection-import-parse";
 import type { BuybackOrder, CollectionCard } from "@/lib/types";
-
-function cardSubtitle(card: CollectionCard): string {
-  const parts = [
-    card.setName,
-    card.cardNumber ? `#${card.cardNumber}` : null,
-    card.quantity && card.quantity > 1 ? `×${card.quantity}` : null,
-  ]
-    .filter(Boolean)
-    .join(" · ");
-  if (parts) return parts;
-  return card.needsReview ? "Not identified" : "In your binder";
-}
 
 export default function CollectionPage() {
   const { slug } = useParams<{ slug: string }>();
+  const router = useRouter();
   const { customer, loading: customerLoading } = useCustomer();
 
   const [cards, setCards] = useState<CollectionCard[]>([]);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [game, setGame] = useState<CollectionGame>("magic");
+  const [mode, setMode] = useState<CollectionBinderMode | null>(null);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,6 +58,10 @@ export default function CollectionPage() {
       `/api/store/${encodeURIComponent(slug)}/collection`,
     );
     setCards(data.cards);
+  }, [slug]);
+
+  useEffect(() => {
+    setGame(readCollectionGame(slug));
   }, [slug]);
 
   useEffect(() => {
@@ -75,20 +89,31 @@ export default function CollectionPage() {
     };
   }, [slug, customer, customerLoading]);
 
+  const inGame = useMemo(
+    () => cards.filter((card) => cardMatchesCollectionGame(card, game)),
+    [cards, game],
+  );
   const owned = useMemo(
-    () =>
-      cards.filter(
-        (c) =>
-          c.status === "owned" &&
-          !(c.needsReview && importCandidatesFromCard(c).length > 0),
-      ),
-    [cards],
+    () => inGame.filter(isVerifiedBinderCard),
+    [inGame],
+  );
+  const reviewCount = useMemo(
+    () => inGame.filter(cardNeedsPrintingPick).length,
+    [inGame],
   );
   const sent = useMemo(
     () => cards.filter((c) => c.status !== "owned"),
     [cards],
   );
-  const allSelected = owned.length > 0 && selected.size === owned.length;
+  const resolvedMode = mode ?? defaultBinderMode(inGame);
+
+  function changeGame(next: CollectionGame) {
+    const parsed = parseCollectionGame(next);
+    setGame(parsed);
+    writeCollectionGame(slug, parsed);
+    setSelected(new Set());
+    setMode(null);
+  }
 
   function toggle(id: string) {
     setSelected((prev) => {
@@ -99,8 +124,53 @@ export default function CollectionPage() {
     });
   }
 
-  function toggleAll() {
-    setSelected(allSelected ? new Set() : new Set(owned.map((c) => c.id)));
+  function toggleAll(ids: string[]) {
+    setSelected((prev) => {
+      const allOn = ids.length > 0 && ids.every((id) => prev.has(id));
+      return allOn ? new Set() : new Set(ids);
+    });
+  }
+
+  function mergeCards(incoming: CollectionCard[]) {
+    if (!incoming.length) {
+      void reload();
+      return;
+    }
+    setCards((current) => {
+      const byId = new Map(current.map((row) => [row.id, row]));
+      for (const card of incoming) byId.set(card.id, card);
+      return [...byId.values()];
+    });
+  }
+
+  async function startDeck(seed: CollectionCard[]) {
+    const commander = pickDeckCommander(seed);
+    if (!commander) {
+      setError("Pick a commander in your binder, or include one in the selection.");
+      return;
+    }
+    setBusy(true);
+    setError(null);
+    setNotice(null);
+    try {
+      const decklist = collectionDecklistText(seed, commander.id);
+      const data = await apiFetch<{ deck: { deckId: string } }>(
+        `/api/store/${encodeURIComponent(slug)}/professor/deck-editor`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            commanderName: commander.displayName,
+            decklist: decklist || undefined,
+          }),
+        },
+      );
+      router.push(
+        `/s/${encodeURIComponent(slug)}/decks/${encodeURIComponent(data.deck.deckId)}`,
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not start that deck");
+      setBusy(false);
+    }
   }
 
   async function sendSelected() {
@@ -176,18 +246,73 @@ export default function CollectionPage() {
 
   return (
     <CustomerAuthShell roomy>
-      <h1 className={authHeading}>Collection</h1>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <h1 className={authHeading}>Collection</h1>
+        <Link href={`/s/${slug}/decks`} className={authLink}>
+          My decks
+        </Link>
+      </div>
       <p className={`mt-3 ${authSubtext}`}>
         This is your binder — cards you already own. The shop pile on the
         store page is only a maybe-buy list and is not this binder.
       </p>
+
+      <label className={`mt-6 block ${authLabel}`} htmlFor="collection-game">
+        Game
+      </label>
+      <select
+        id="collection-game"
+        value={game}
+        onChange={(event) => changeGame(parseCollectionGame(event.target.value))}
+        className={authInput}
+      >
+        {COLLECTION_GAMES.map((value) => (
+          <option key={value} value={value}>
+            {COLLECTION_GAME_LABELS[value]}
+          </option>
+        ))}
+      </select>
       <p className={`mt-2 ${authSubtext}`}>
-        Scan a card, add it by name, or upload a list. Then select what you
-        want to sell to the store.
+        Imports and the binder below are for {COLLECTION_GAME_LABELS[game]}
+        {game === "magic"
+          ? " — lists are matched to paper printings, not another game."
+          : " — lists stay in this game and are not looked up in Magic."}
       </p>
-      <p className={`mt-2 ${authSubtext}`}>
-        {owned.length} card{owned.length === 1 ? "" : "s"} in your binder at
-        this store.
+
+      <div className="mt-6 grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          className={`rounded-md px-4 py-3 text-sm font-semibold uppercase tracking-wide ${
+            resolvedMode === "view"
+              ? "bg-[var(--accent)] text-[var(--ink-900)]"
+              : "border border-neutral-700 text-neutral-300"
+          }`}
+          onClick={() => setMode("view")}
+        >
+          View binder
+        </button>
+        <button
+          type="button"
+          className={`rounded-md px-4 py-3 text-sm font-semibold uppercase tracking-wide ${
+            resolvedMode === "import"
+              ? "bg-[var(--accent)] text-[var(--ink-900)]"
+              : "border border-neutral-700 text-neutral-300"
+          }`}
+          onClick={() => setMode("import")}
+        >
+          Import{reviewCount ? ` · ${reviewCount}` : ""}
+        </button>
+      </div>
+
+      <p className={`mt-4 ${authSubtext}`}>
+        {owned.length} card{owned.length === 1 ? "" : "s"} in your{" "}
+        {COLLECTION_GAME_LABELS[game]} binder
+        {reviewCount
+          ? ` · ${reviewCount} still need a printing`
+          : owned.length > 0
+            ? " — printings are locked in"
+            : ""}
+        .
       </p>
 
       {error && <p className={`mt-6 ${authError}`}>{error}</p>}
@@ -197,131 +322,76 @@ export default function CollectionPage() {
         </p>
       )}
 
-      <div className="mt-8 space-y-3">
-        <Link
-          href={`/s/${slug}/collection/scan`}
-          className={`block ${authButton} no-underline`}
-        >
-          Scan cards
-        </Link>
-        <CollectionCardSearch
-          slug={slug}
-          onAdded={(card) => {
-            setCards((current) => [card, ...current.filter((row) => row.id !== card.id)]);
-            setNotice(`${card.displayName} added to your collection.`);
-            setError(null);
-          }}
-        />
-        <CollectionBinderImport
-          slug={slug}
-          cards={cards}
-          onCards={(incoming) => {
-            if (!incoming.length) {
-              void reload();
-              return;
-            }
-            setCards((current) => {
-              const byId = new Map(current.map((row) => [row.id, row]));
-              for (const card of incoming) byId.set(card.id, card);
-              return [...byId.values()];
-            });
-            setError(null);
-          }}
-          onNotice={setNotice}
-          onError={setError}
-        />
-      </div>
-
-      {loading ? (
+      {resolvedMode === "import" ? (
+        <div className="mt-8 space-y-3">
+          <Link
+            href={`/s/${slug}/collection/scan`}
+            className={`block ${authButton} no-underline`}
+          >
+            Scan cards
+          </Link>
+          {game === "magic" ? (
+            <CollectionCardSearch
+              slug={slug}
+              onAdded={(card) => {
+                setCards((current) => [card, ...current.filter((row) => row.id !== card.id)]);
+                setNotice(`${card.displayName} added to your collection.`);
+                setError(null);
+              }}
+            />
+          ) : (
+            <p className={authSubtext}>
+              Add-by-name printing search is Magic-only. Scan a card or paste a
+              list for this game.
+            </p>
+          )}
+          <CollectionBinderImport
+            slug={slug}
+            game={game}
+            cards={inGame}
+            onCards={(incoming, options) => {
+              mergeCards(incoming);
+              setError(null);
+              if (options?.leaveImport) setMode("view");
+            }}
+            onNotice={setNotice}
+            onError={setError}
+          />
+        </div>
+      ) : loading ? (
         <p className={`mt-8 ${authSubtext}`}>Loading your cards…</p>
       ) : owned.length === 0 ? (
         <p className={`mt-8 ${authSubtext}`}>
-          Nothing in your binder yet. Scan a card, add one by name, or upload a
-          list.
+          Nothing in this binder yet. Switch to Import to scan, add by name, or
+          upload a list.
         </p>
       ) : (
         <>
-          <div className="mt-8 flex items-center justify-between border-b border-neutral-800 pb-3">
-            <label className="flex items-center gap-2 text-sm text-neutral-300">
-              <input
-                type="checkbox"
-                checked={allSelected}
-                onChange={toggleAll}
-                className="h-4 w-4"
-              />
-              Select all
-            </label>
-            <span className="text-xs uppercase tracking-wide text-neutral-500">
-              {selected.size} selected
-            </span>
-          </div>
-
-          <ul className="divide-y divide-neutral-800">
-            {owned.map((card) => (
-              <li key={card.id} className="py-3">
-                <div className="flex items-start gap-3">
-                  <input
-                    type="checkbox"
-                    checked={selected.has(card.id)}
-                    onChange={() => toggle(card.id)}
-                    className="mt-2 h-4 w-4 shrink-0"
-                    aria-label={`Select ${card.displayName}`}
-                  />
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={card.frontImageUrl}
-                    alt={card.displayName}
-                    className="h-40 w-[7.15rem] shrink-0 object-cover"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm leading-snug text-white">
-                      {card.displayName}
-                    </p>
-                    <p className="mt-1 text-xs leading-snug text-neutral-500">
-                      {cardSubtitle(card)}
-                    </p>
-                  </div>
-                  {card.scryfallId ? (
-                    <span className="shrink-0 border border-neutral-700 px-2 py-0.5 text-[10px] uppercase tracking-wide text-neutral-400">
-                      Deck ready
-                    </span>
-                  ) : null}
-                </div>
-                <CollectionChangePrinting
-                  slug={slug}
-                  card={card}
-                  onChanged={(next) => {
-                    setCards((current) =>
-                      current.map((row) => (row.id === next.id ? next : row)),
-                    );
-                    setNotice(
-                      `${next.displayName} updated to ${next.setName ?? "that printing"}.`,
-                    );
-                    setError(null);
-                  }}
-                />
-              </li>
-            ))}
-          </ul>
-
-          <div className="mt-8 space-y-3">
-            <button
-              type="button"
-              className={authButton}
-              disabled={busy || selected.size === 0}
-              onClick={() => void sendSelected()}
-            >
-              {busy ? "Working…" : "Sell selected to the store"}
-            </button>
-            <button
-              type="button"
-              className={authButtonSecondary}
-              disabled={busy || selected.size === 0}
-              onClick={() => void removeSelected()}
-            >
-              Remove selected
-            </button>
-          </div>
+        <CollectionBinderValue slug={slug} game={game} />
+        <CollectionBinderGallery
+          slug={slug}
+          game={game}
+          cards={inGame}
+          selected={selected}
+          busy={busy}
+          onToggle={toggle}
+          onToggleAll={toggleAll}
+          onChanged={(next) => {
+            setCards((current) =>
+              current.map((row) => (row.id === next.id ? next : row)),
+            );
+            setNotice(
+              `${next.displayName} updated to ${next.setName ?? "that printing"}.`,
+            );
+            setError(null);
+          }}
+          onBuildCard={(card) => void startDeck([card])}
+          onBuildSelected={() =>
+            void startDeck(inGame.filter((card) => selected.has(card.id)))
+          }
+          onSellSelected={() => void sendSelected()}
+          onRemoveSelected={() => void removeSelected()}
+        />
         </>
       )}
 
