@@ -59,10 +59,8 @@ export function DeckEditorStatus({
     <div className={`space-y-2 ${stale ? "opacity-60 transition-opacity" : "transition-opacity"}`}>
       {illegal.length > 0 ? (
         <div className="professor-mtg-alert professor-mtg-alert--illegal">
-          <p className="professor-mtg-label text-[#f0a8a0]">
-            Not legal in Commander — {illegal.length} problem{illegal.length === 1 ? "" : "s"}
-          </p>
-          <ul className="mt-1.5 space-y-1 text-[12px] leading-snug text-[#f0d0cc]">
+          <p className="professor-mtg-label text-[#f0a8a0]">deck not legal</p>
+          <ul className="mt-1.5 list-disc space-y-1 pl-4 text-[12px] leading-snug text-[#f0d0cc]">
             {illegal.slice(0, 6).map((violation) => (
               <li key={`${violation.kind}-${violation.cardKey ?? violation.message}`}>
                 {violation.message}

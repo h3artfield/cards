@@ -104,6 +104,22 @@ function colorIdentityViolation(
   return cardColors.map((c) => c.toUpperCase()).filter((c) => !allowed.has(c));
 }
 
+const COLOR_IDENTITY_NAMES_V1: Record<string, string> = {
+  W: "White",
+  U: "Blue",
+  B: "Black",
+  R: "Red",
+  G: "Green",
+  C: "Colorless",
+};
+
+/** Full colour names for legality copy — never bare WUBRG letters in the UI. */
+export function colorIdentityDisplayNamesV1(pips: readonly string[]): string {
+  return pips
+    .map((pip) => COLOR_IDENTITY_NAMES_V1[pip.toUpperCase()] ?? pip.toUpperCase())
+    .join(", ");
+}
+
 export function checkEditableDeckLegalityV1(args: {
   deck: EditableDeckV1;
   lookup: DeckEditorCardFactsLookupV1;
@@ -187,12 +203,13 @@ export function checkEditableDeckLegalityV1(args: {
       deck.commander?.colorIdentity ?? [],
     );
     if (offColor.length > 0) {
+      const colours = colorIdentityDisplayNamesV1(offColor);
       violations.push({
         kind: "color_identity",
         severity: "illegal",
         cardKey: card.cardKey,
         cardName: card.name,
-        message: `${card.name} adds ${offColor.join("")} to the deck, which is outside ${deck.commander.name}'s colour identity`,
+        message: `${card.name}: ${colours} — not allowed in deck colour identity`,
       });
     }
   }

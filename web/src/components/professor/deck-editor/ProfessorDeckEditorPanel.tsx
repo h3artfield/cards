@@ -104,7 +104,7 @@ export function ProfessorDeckEditorPanel({
   const { payload, applyOps } = editor;
 
   const [viewMode, setViewMode] = useState<DeckEditorViewModeV1>("text");
-  const [groupMode, setGroupMode] = useState<DeckEditorGroupModeV1>("semanticRole");
+  const [groupMode, setGroupMode] = useState<DeckEditorGroupModeV1>("type");
   const [sortMode, setSortMode] = useState<DeckEditorSortModeV1>("name");
   const [activeFacets, setActiveFacets] = useState<string[]>([]);
   const [synergyKey, setSynergyKey] = useState<string | null>(null);
@@ -547,6 +547,44 @@ export function ProfessorDeckEditorPanel({
     });
   };
 
+  const makeCommander = (args: {
+    oracleId: string | null | undefined;
+    name: string;
+    colorIdentity?: readonly string[] | null;
+  }) => {
+    const oracleId = args.oracleId?.trim();
+    if (!oracleId || !deck) return;
+    applyOps(
+      [
+        {
+          op: "setCommander",
+          oracleId,
+          name: args.name,
+          colorIdentity: [...(args.colorIdentity ?? [])],
+        },
+      ],
+      {
+        undo: [
+          {
+            op: "setCommander",
+            oracleId: deck.commander.oracleId,
+            name: deck.commander.name,
+            colorIdentity: [...deck.commander.colorIdentity],
+          },
+        ],
+        message: `${args.name} is now the commander — ${deck.commander.name} moved into the deck.`,
+      },
+    );
+  };
+
+  const makeCommanderFromCard = (card: DeckEditorCard) => {
+    makeCommander({
+      oracleId: card.oracleId,
+      name: card.name,
+      colorIdentity: card.display?.colorIdentity,
+    });
+  };
+
   // Shared by the Mark menu on a row and by dropping a card on a tag bucket, so
   // the two routes cannot drift into applying a marker differently.
   const toggleMarker = (card: DeckEditorCard, markerId: string, assign: boolean) => {
@@ -653,6 +691,11 @@ export function ProfessorDeckEditorPanel({
             ],
           })
         }
+        onMakeCommander={
+          card.oracleId
+            ? () => makeCommanderFromCard(card)
+            : undefined
+        }
         onSetCopies={(copies) =>
           applyOps([{ op: "setCopies", cardKey: card.cardKey, copies }], {
             undo: [{ op: "setCopies", cardKey: card.cardKey, copies: card.copies }],
@@ -691,6 +734,7 @@ export function ProfessorDeckEditorPanel({
       onMove: move,
       onRemove: (card: DeckEditorCard) =>
         applyOps([{ op: "removeCard", cardKey: card.cardKey }]),
+      onMakeCommander: makeCommanderFromCard,
     };
     if (viewMode === "condensed") return <CardCondensedView {...shared} />;
     if (viewMode === "grid") return <CardGridView {...shared} />;
@@ -967,6 +1011,13 @@ export function ProfessorDeckEditorPanel({
                 );
                 if (card) move(card, destination);
               }}
+              onMakeCommander={(hit) =>
+                makeCommander({
+                  oracleId: hit.oracleId,
+                  name: hit.name,
+                  colorIdentity: hit.colorIdentity,
+                })
+              }
             />
             </div>
             {cart.count > 0 ? (
@@ -1045,10 +1096,8 @@ export function ProfessorDeckEditorPanel({
                   : "columns-1 gap-6 md:columns-2 xl:columns-3 2xl:columns-4"
             }`}
           >
-            {/* The commander is stored outside the card list, because it is the one
-                card in the deck that cannot be swapped here — changing it would
-                invalidate the whole build. It is still shown, since a deck editor
-                that omits the commander looks like it has lost it. */}
+            {/* The commander sits outside the 99. It can be swapped: promoting
+                another card demotes this one into the mainboard. */}
             {showCommander ? (
               <section className="mb-5 break-inside-avoid">
                 {sectionHeader("Commander", "1")}
@@ -1063,7 +1112,7 @@ export function ProfessorDeckEditorPanel({
                     className="min-w-0 shrink"
                   />
                   <span className="flex-1" />
-                  <span className="professor-mtg-muted text-[10px]">fixed</span>
+                  <span className="professor-mtg-muted text-[10px]">command zone</span>
                 </div>
               </section>
             ) : null}

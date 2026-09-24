@@ -207,10 +207,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
 /**
  * Starts a deck by hand.
  *
- * Takes a commander, and optionally a decklist to seed it with. When only a
- * list is supplied the commander is inferred from it, because a customer
- * pasting an export from Moxfield has already said who leads the deck and
- * asking again would be a step that exists purely to satisfy the data model.
+ * Takes a commander (required) and optionally a decklist to seed it with. The
+ * commander must be chosen explicitly — pasting a list alone is not enough —
+ * so colour identity never depends on inferring a name from the paste.
  *
  * The seeded cards go through the ordinary edit reducer rather than being
  * written straight into the record, so an import cannot put a deck into a state
@@ -228,24 +227,24 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
       decklist?: string;
     };
 
-    const decklist = body.decklist?.trim();
-    let preview: ProfessorImportedDeckPreviewV111 | null = null;
+    const commanderName = body.commanderName?.trim() || "";
+    if (!commanderName) {
+      return jsonError("Pick a commander to start the deck", 400);
+    }
 
+    const resolved = await resolveHandDeckCommanderV1(commanderName);
+    if (!resolved.ok) {
+      return jsonError(resolved.message, 400);
+    }
+
+    let preview: ProfessorImportedDeckPreviewV111 | null = null;
+    const decklist = body.decklist?.trim();
     if (decklist) {
       preview = previewProfessorImportedDeckV111({
         decklist,
-        selectedCommanderName: body.commanderName?.trim() || undefined,
+        selectedCommanderName: commanderName,
         catalog: await getDeckResolutionCatalogRuntime(),
       });
-    }
-
-    const commanderName = body.commanderName?.trim() || preview?.commanderName || "";
-    const resolved = await resolveHandDeckCommanderV1(commanderName);
-    if (!resolved.ok) {
-      return jsonError(
-        commanderName ? resolved.message : "Pick a commander, or paste a list that names one",
-        400,
-      );
     }
 
     const now = new Date().toISOString();
@@ -299,10 +298,28 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ sl
     const parsed = parseDeckEditOpsV1(body.ops);
     if (!parsed.ok) return jsonError(parsed.message, 400);
 
+    // Commander swaps must resolve against the commander catalog — a client can
+    // invent colour identity, but it cannot invent eligibility.
+    const ops: typeof parsed.ops = [];
+    for (const op of parsed.ops) {
+      if (op.op !== "setCommander") {
+        ops.push(op);
+        continue;
+      }
+      const resolved = await resolveHandDeckCommanderV1(op.name);
+      if (!resolved.ok) return jsonError(resolved.message, 422);
+      ops.push({
+        op: "setCommander",
+        oracleId: resolved.commander.oracleId,
+        name: resolved.commander.name,
+        colorIdentity: resolved.commander.colorIdentity,
+      });
+    }
+
     const result = await mutateEditableDeckV1({
       deckId,
       customerId: auth.customerId!,
-      ops: parsed.ops,
+      ops,
       expectedRevision: body.expectedRevision,
     });
 

@@ -134,6 +134,24 @@ function parseOne(raw: unknown, index: number): DeckEditOpV1 | string {
       return { op: "renameDeck", deckName };
     }
 
+    case "setCommander": {
+      const name = asString(input.name);
+      if (!name) return `Operation ${index}: setCommander needs a name`;
+      const oracleId = asString(input.oracleId);
+      if (!oracleId) return `Operation ${index}: setCommander needs an oracleId`;
+      if (!Array.isArray(input.colorIdentity)) {
+        return `Operation ${index}: setCommander needs a colorIdentity array`;
+      }
+      const colorIdentity: string[] = [];
+      for (const entry of input.colorIdentity) {
+        if (typeof entry !== "string" || !entry.trim()) {
+          return `Operation ${index}: colorIdentity entries must be colour letters`;
+        }
+        colorIdentity.push(entry.trim().toUpperCase());
+      }
+      return { op: "setCommander", oracleId, name, colorIdentity };
+    }
+
     case "revertToBaseline":
       return { op: "revertToBaseline" };
 

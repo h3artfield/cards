@@ -35,6 +35,12 @@ export type CardSearchHitV1 = {
   isBasicLand: boolean;
   /** Banned or not legal in Commander. Still returned, so the UI can say why. */
   commanderLegal: boolean;
+  /**
+   * True when this card may sit in the command zone (paper-eligible sole
+   * commander). Populated by the search route from the commander catalog; the
+   * pure search itself leaves it undefined.
+   */
+  canBeCommander?: boolean;
   /** Colours this card would add beyond the commander's identity. */
   offColorPips: string[];
   /** Set when the deck already holds this card, naming the board it sits on. */

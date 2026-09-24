@@ -24,6 +24,8 @@ export type DeckEditorDisplayFactsV1 = {
   typeLine: string;
   manaCost: string | null;
   manaValue: number | null;
+  /** Colour identity letters, for promote-to-commander and related edits. */
+  colorIdentity: string[];
   /**
    * Null when the catalog has never heard of the card. The editor gives those
    * their own section rather than filing them under a type they might not be —
@@ -43,6 +45,7 @@ function factsFromCard(card: GoldenCatalogOracleCard): DeckEditorDisplayFactsV1 
     typeLine,
     manaCost: card.manaCost ?? null,
     manaValue: typeof card.manaValue === "number" ? card.manaValue : null,
+    colorIdentity: [...(card.colorIdentity ?? [])].map((c) => c.toUpperCase()),
     category: solDirectedDisplayCategoryForTypeLineV1(typeLine),
   };
 }
@@ -79,6 +82,7 @@ export function displayFactsForCardV1(
     typeLine: card.isLand ? "Land" : "",
     manaCost: null,
     manaValue: null,
+    colorIdentity: [],
     category: card.isLand ? "land" : null,
   };
 }

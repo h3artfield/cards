@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { colorIdentityDisplayNamesV1 } from "@/lib/professor-deck-editor/legality-v1";
 import { DECK_BOARD_LABELS_V1, DECK_BOARDS_V1 } from "@/lib/professor-deck-editor/types-v1";
 import type { DeckBoardV1 } from "@/lib/professor-deck-editor/types-v1";
 import { deckEditorKeyQueryV1 } from "./deck-key-v1";
@@ -28,6 +29,7 @@ export function DeckEditorCardSearch({
   boardOf,
   onAdd,
   onMove,
+  onMakeCommander,
   disabled,
   inputRef,
 }: DeckEditorKeyV1 & {
@@ -36,6 +38,8 @@ export function DeckEditorCardSearch({
   boardOf: (hit: DeckEditorSearchHit) => DeckBoardV1 | null;
   onAdd: (hit: DeckEditorSearchHit, board: DeckBoardV1) => void;
   onMove: (hit: DeckEditorSearchHit, board: DeckBoardV1) => void;
+  /** Promote a search hit into the command zone (demoting the current commander). */
+  onMakeCommander?: (hit: DeckEditorSearchHit) => void;
   disabled?: boolean;
   inputRef?: React.RefObject<HTMLInputElement | null>;
 }) {
@@ -184,6 +188,14 @@ export function DeckEditorCardSearch({
                 active={index === active}
                 onHover={() => setActive(index)}
                 onSelect={() => commit(hit)}
+                onMakeCommander={
+                  onMakeCommander && hit.canBeCommander
+                    ? () => {
+                        onMakeCommander(hit);
+                        setOpen(false);
+                      }
+                    : undefined
+                }
               />
             ))}
           </ul>
@@ -214,6 +226,7 @@ function SearchHitRow({
   active,
   onHover,
   onSelect,
+  onMakeCommander,
 }: {
   id: string;
   hit: DeckEditorSearchHit;
@@ -222,6 +235,7 @@ function SearchHitRow({
   active: boolean;
   onHover: () => void;
   onSelect: () => void;
+  onMakeCommander?: () => void;
 }) {
   const offColor = hit.offColorPips.length > 0;
   const alreadyHere = currentBoard === board;
@@ -233,50 +247,70 @@ function SearchHitRow({
 
   return (
     <li role="option" aria-selected={active} aria-disabled={blocked}>
-      <button
-        type="button"
-        id={id}
-        // Focus stays in the input so `aria-activedescendant` drives the screen
-        // reader; taking these out of the tab order keeps the two in step.
-        tabIndex={-1}
+      <div
         className={`professor-mtg-pop-item ${active ? "professor-mtg-pop-item--active" : ""}`}
-        disabled={blocked}
         onMouseEnter={onHover}
-        onClick={onSelect}
       >
-        <span className="flex items-baseline gap-2">
-          <span className="professor-mtg-card-name min-w-0 flex-1 truncate">{hit.name}</span>
-          <ManaCost cost={hit.manaCost} />
-        </span>
-        <span className="mt-0.5 flex flex-wrap items-center gap-1">
-          <span className="professor-mtg-muted min-w-0 flex-1 truncate text-[11px]">
-            {hit.typeLine}
+        <button
+          type="button"
+          id={id}
+          // Focus stays in the input so `aria-activedescendant` drives the screen
+          // reader; taking these out of the tab order keeps the two in step.
+          tabIndex={-1}
+          className="w-full text-left"
+          disabled={blocked}
+          onClick={onSelect}
+        >
+          <span className="flex items-baseline gap-2">
+            <span className="professor-mtg-card-name min-w-0 flex-1 truncate">{hit.name}</span>
+            <ManaCost cost={hit.manaCost} />
           </span>
-          {hit.inStock ? (
-            <span className="professor-mtg-chip professor-mtg-chip--in-stock">In stock</span>
-          ) : null}
-          {!hit.commanderLegal ? (
-            <span className="professor-mtg-chip professor-mtg-chip--warn" title="Banned or not legal in Commander">
-              Not legal
+          <span className="mt-0.5 flex flex-wrap items-center gap-1">
+            <span className="professor-mtg-muted min-w-0 flex-1 truncate text-[11px]">
+              {hit.typeLine}
             </span>
-          ) : null}
-          {offColor ? (
-            <span
-              className="professor-mtg-chip professor-mtg-chip--warn"
-              title={`Adds ${hit.offColorPips.join("")} to the deck, which is outside your commander's colour identity`}
-            >
-              Off-colour {hit.offColorPips.join("")}
-            </span>
-          ) : null}
-          {currentBoard ? (
-            <span className="professor-mtg-chip professor-mtg-chip--game-changer">
-              {alreadyHere
-                ? `Already on ${DECK_BOARD_LABELS_V1[currentBoard]}`
-                : `On ${DECK_BOARD_LABELS_V1[currentBoard]} — move`}
-            </span>
-          ) : null}
-        </span>
-      </button>
+            {hit.inStock ? (
+              <span className="professor-mtg-chip professor-mtg-chip--in-stock">In stock</span>
+            ) : null}
+            {!hit.commanderLegal ? (
+              <span
+                className="professor-mtg-chip professor-mtg-chip--warn"
+                title="Banned or not legal in Commander"
+              >
+                Not legal
+              </span>
+            ) : null}
+            {offColor ? (
+              <span
+                className="professor-mtg-chip professor-mtg-chip--warn"
+                title={`${hit.name}: ${colorIdentityDisplayNamesV1(hit.offColorPips)} — not allowed in deck colour identity`}
+              >
+                Off-colour
+              </span>
+            ) : null}
+            {currentBoard ? (
+              <span className="professor-mtg-chip professor-mtg-chip--game-changer">
+                {alreadyHere
+                  ? `Already on ${DECK_BOARD_LABELS_V1[currentBoard]}`
+                  : `On ${DECK_BOARD_LABELS_V1[currentBoard]} — move`}
+              </span>
+            ) : null}
+          </span>
+        </button>
+        {onMakeCommander ? (
+          <button
+            type="button"
+            tabIndex={-1}
+            className="professor-mtg-link mt-1 text-[11px]"
+            onClick={(event) => {
+              event.stopPropagation();
+              onMakeCommander();
+            }}
+          >
+            Make this the commander
+          </button>
+        ) : null}
+      </div>
     </li>
   );
 }

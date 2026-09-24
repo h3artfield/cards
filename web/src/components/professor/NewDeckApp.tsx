@@ -17,10 +17,8 @@ import { ProfessorMtgPageShell } from "./ProfessorMtgPageShell";
  * difference is only who chooses the 99.
  *
  * A pasted list is offered alongside the commander rather than as a separate
- * mode. Someone importing an export from Moxfield has already named their
- * commander inside the file, so the picker is optional in that case and the
- * server infers it — asking twice would be a step that exists purely to satisfy
- * the data model.
+ * mode. The commander must still be chosen first — pasting alone is not enough
+ * to start, so colour identity and the command zone are never left ambiguous.
  */
 export function NewDeckApp({ slug }: { slug: string }) {
   const router = useRouter();
@@ -33,7 +31,7 @@ export function NewDeckApp({ slug }: { slug: string }) {
   const [error, setError] = useState<string | null>(null);
 
   const pasted = decklist.trim();
-  const canStart = Boolean(commander) || pasted.length > 0;
+  const canStart = Boolean(commander);
 
   async function start() {
     if (!canStart || busy) return;
@@ -167,7 +165,7 @@ export function NewDeckApp({ slug }: { slug: string }) {
           </button>
           {!canStart ? (
             <p className="professor-mtg-muted mt-2 text-center text-[11px]">
-              Pick a commander, or paste a list that names one.
+              Pick a commander to start the deck.
             </p>
           ) : null}
         </div>

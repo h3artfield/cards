@@ -1,6 +1,10 @@
 import { NextRequest } from "next/server";
 import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
 import { getDeckResolutionCatalogRuntime } from "@/lib/deck-synthesis/professor-brew-catalog-runtime-v1";
+import {
+  getCommanderSearchCatalogRuntime,
+  isPaperEligibleCommanderNameFast,
+} from "@/lib/deck-synthesis/professor-commander-search-catalog-v1";
 import { matchProfessorDeckCardsInStoreInventory } from "@/lib/deck-synthesis/professor-brew-inventory-match-v4-3-v1";
 import { searchDeckEditorCardsV1 } from "@/lib/professor-deck-editor/card-search-v1";
 import { getEditableDeckV1 } from "@/lib/professor-deck-editor/store-v1";
@@ -34,7 +38,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
       if (card.oracleId) boardsByOracleId.set(card.oracleId, card.board);
     }
 
-    const catalog = await getDeckResolutionCatalogRuntime();
+    const [catalog, commanderCatalog] = await Promise.all([
+      getDeckResolutionCatalogRuntime(),
+      getCommanderSearchCatalogRuntime(),
+    ]);
     const result = searchDeckEditorCardsV1({
       catalog,
       query,
@@ -63,6 +70,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
       totalMatches: result.totalMatches,
       hits: result.hits.map((hit) => ({
         ...hit,
+        canBeCommander: isPaperEligibleCommanderNameFast(commanderCatalog, hit.name),
         inStock: inStockNames.has(normalizeDeckCardNameV1(hit.name)),
       })),
     });

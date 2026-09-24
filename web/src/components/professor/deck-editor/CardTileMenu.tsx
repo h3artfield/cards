@@ -46,6 +46,7 @@ export function CardTileMenu({
   onSynergy,
   onMove,
   onRemove,
+  onMakeCommander,
 }: {
   card: DeckEditorCard;
   slug: string;
@@ -54,6 +55,7 @@ export function CardTileMenu({
   onSynergy: () => void;
   onMove: (board: DeckBoardV1) => void;
   onRemove?: () => void;
+  onMakeCommander?: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -191,6 +193,19 @@ export function CardTileMenu({
           </button>
 
           <div className="border-t border-[var(--mtg-stone-border)]">
+            {onMakeCommander ? (
+              <button
+                type="button"
+                role="menuitem"
+                className="professor-mtg-pop-item text-xs"
+                onClick={() => {
+                  onMakeCommander();
+                  setOpen(false);
+                }}
+              >
+                Make this the commander
+              </button>
+            ) : null}
             {MOVE_TARGETS[card.board].map((target) => (
               <button
                 key={target.board}

@@ -305,7 +305,7 @@ function testOffColourAdditionIsIllegalButStillStored() {
   assert.equal(report.commanderLegal, false);
   const violation = report.violations.find((v) => v.kind === "color_identity");
   assert.ok(violation, "an off-colour card must be reported");
-  assert.match(violation!.message, /outside Fynn, the Fangbearer's colour identity/);
+  assert.match(violation!.message, /Blue — not allowed in deck colour identity/);
   // The edit is still stored. Blocking the write would lose the customer's work
   // over a mistake they may be one more edit away from fixing.
   assert.equal(withIsland.applied, 2);
@@ -405,6 +405,64 @@ function testMarkersAndRenameDoNotBreakEndorsement() {
     "annotating a list does not change the list the Professor graded",
   );
   console.log("PASS  markers and renames leave Professor endorsement intact");
+}
+
+function testSetCommanderPromotesAndDemotes() {
+  const deck = fynnDeck();
+  const spell = deck.cards[0]!;
+  const promoted = apply(deck, [
+    {
+      op: "setCommander",
+      oracleId: spell.oracleId!,
+      name: spell.name,
+      colorIdentity: ["G", "U"],
+    },
+  ]);
+
+  assert.equal(promoted.applied, 1);
+  assert.equal(promoted.deck.commander.name, spell.name);
+  assert.deepEqual(promoted.deck.commander.colorIdentity, ["G", "U"]);
+  assert.equal(
+    promoted.deck.cards.some((card) => card.cardKey === spell.cardKey),
+    false,
+    "the new commander leaves the 99",
+  );
+  const demoted = promoted.deck.cards.find((card) => card.name === COMMANDER.name);
+  assert.ok(demoted, "the old commander returns to the mainboard");
+  assert.equal(demoted!.board, "mainboard");
+  assert.equal(demoted!.origin, "user");
+
+  const sameAgain = apply(promoted.deck, [
+    {
+      op: "setCommander",
+      oracleId: spell.oracleId!,
+      name: spell.name,
+      colorIdentity: ["G", "U"],
+    },
+  ]);
+  assert.equal(sameAgain.changed, false);
+  assert.match(sameAgain.rejected[0]!.reason, /already the commander/);
+  console.log("PASS  setCommander promotes a card and demotes the previous commander");
+}
+
+function testSetCommanderFromOutsideTheDeck() {
+  const deck = fynnDeck();
+  const swapped = apply(deck, [
+    {
+      op: "setCommander",
+      oracleId: "cmd-ayara",
+      name: "Ayara, First of Locthwain",
+      colorIdentity: ["B"],
+    },
+  ]);
+
+  assert.equal(swapped.applied, 1);
+  assert.equal(swapped.deck.commander.name, "Ayara, First of Locthwain");
+  assert.ok(
+    swapped.deck.cards.some((card) => card.name === COMMANDER.name && card.board === "mainboard"),
+  );
+  assert.equal(swapped.deck.cards.length, deck.cards.length + 1);
+  console.log("PASS  setCommander can install a card that was not yet in the deck");
 }
 
 // --- handoff from a sealed build -------------------------------------------
@@ -533,6 +591,8 @@ const tests = [
   testMissingCommanderColorsDoNotCrashLegality,
   testUnknownCardIsUnresolvedRatherThanLegal,
   testMarkersAndRenameDoNotBreakEndorsement,
+  testSetCommanderPromotesAndDemotes,
+  testSetCommanderFromOutsideTheDeck,
   testHandoffCarriesRationaleAndSeedsTheBaseline,
   testLandResolverUpgradesLandKeysWhenAvailable,
   testHandoffRefusesWhatCannotBeEdited,

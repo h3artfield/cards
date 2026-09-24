@@ -38,6 +38,7 @@ export type CardViewProps = {
   onCart?: (card: DeckEditorCard) => void;
   onMove?: (card: DeckEditorCard, board: DeckBoardV1) => void;
   onRemove?: (card: DeckEditorCard) => void;
+  onMakeCommander?: (card: DeckEditorCard) => void;
 };
 
 /**
@@ -175,8 +176,7 @@ function CardFallback({ name }: { name: string }) {
 
 /** The actions menu for a tile, with the cart entry resolved. */
 function tileMenu(props: CardViewProps, card: DeckEditorCard) {
-  const { slug, inventoryByName, selectedKey, onSelect, onReveal, onCart, onMove, onRemove, cartEligible } =
-    props;
+  const { slug, inventoryByName, selectedKey, onSelect, onMove, onRemove, onMakeCommander } = props;
   if (!slug || !onMove) return null;
   return (
     <CardTileMenu
@@ -185,10 +185,9 @@ function tileMenu(props: CardViewProps, card: DeckEditorCard) {
       inventory={inventoryByName?.[card.name]}
       synergySelected={selectedKey === card.cardKey}
       onSynergy={() => onSelect?.(card)}
-      onReveal={onReveal ? () => onReveal(card) : undefined}
-      onCart={onCart && cartEligible?.(card) ? () => onCart(card) : undefined}
       onMove={(board) => onMove(card, board)}
       onRemove={removable(card, onRemove)}
+      onMakeCommander={onMakeCommander ? () => onMakeCommander(card) : undefined}
     />
   );
 }

@@ -46,6 +46,7 @@ export function DeckEditorCardRow({
   illegalReason,
   onMove,
   onRemove,
+  onMakeCommander,
   onSetCopies,
   onToggleMarker,
   onCreateAndAssignMarker,
@@ -64,6 +65,7 @@ export function DeckEditorCardRow({
   illegalReason?: string;
   onMove: (board: DeckBoardV1) => void;
   onRemove: () => void;
+  onMakeCommander?: () => void;
   onSetCopies: (copies: number) => void;
   onToggleMarker: (markerId: string, assign: boolean) => void;
   onCreateAndAssignMarker: (label: string, scope: "deck" | "global") => void;
@@ -208,6 +210,16 @@ export function DeckEditorCardRow({
               {MOVE_LABEL[board]}
             </button>
           ))}
+          {onMakeCommander ? (
+            <button
+              type="button"
+              className="professor-mtg-icon-btn"
+              title={`Make ${card.name} the commander`}
+              onClick={onMakeCommander}
+            >
+              Cmd
+            </button>
+          ) : null}
           <CardMarkerMenu
             card={card}
             markers={markers}
