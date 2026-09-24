@@ -1,0 +1,13 @@
+{
+  "artifactType": "CatalogCoverageGoldAdjudicationLedger",
+  "version": "catalog-coverage-gold-adjudication-ledger-v1",
+  "status": "OPEN",
+  "sampleIdentityHash": "8cc44c119302ad8ffb331f5ca8f6761fc0b52fb81bb799ec3f2762276d1931bb",
+  "populationHash": "986c26116efaea45a20bb0cffe388fc20340db47839300ce69127942681dcbc5",
+  "primaryAdjudicatedCount": 0,
+  "secondaryAdjudicatedCount": 0,
+  "disagreementCount": 0,
+  "resolvedDisagreementCount": 0,
+  "records": [],
+  "disagreements": []
+}

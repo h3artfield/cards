@@ -1,0 +1,36 @@
+{
+  "lineage": "COMMANDER_OPTIMIZATION_SCORE_V1",
+  "status": "FORMULA_FROZEN",
+  "frozen": true,
+  "role": "HISTORICAL_EXPLORATORY_CALIBRATION",
+  "confirmatory": false,
+  "COS_FORMULA_FROZEN": true,
+  "outputs": [
+    "competitiveStrength",
+    "buildOptimization",
+    "profile"
+  ],
+  "headline": "commander + Spellbook architecture + access/construction; color excluded",
+  "profileNotAveragedIntoHeadline": true,
+  "heldOut": {
+    "nPods": 38461,
+    "nEvents": 2324,
+    "commanderLogloss": 1.367912172311607,
+    "headlineLogloss": 1.3626262928683515,
+    "deltaVsCommander": 0.005285879443255537,
+    "commanderTop1": 0.30480226723174125,
+    "headlineTop1": 0.31335638698941787
+  },
+  "nUniqueLists": 58835,
+  "nCommandersEligibleForBuildOptimization": 155,
+  "checksums": {
+    "FORMULA.json": "10c4e3ab09d393a98b7921343379c6cc436fed30d01189e805ba98dc1d79882f",
+    "SCHEMA.json": "76f24597ed59578b1d8b8e941cdd896b58deb3c633f668c99e8e63fbbe28490c",
+    "MODEL.json": "5f51e063a848508a1663201cbc7b8d3539872bd37ff8115fc8ed82d86343c9a9",
+    "REFERENCE.json": "b728a42fe81de3ab0abb7488761c95f460a0d0c48cf4d29b144a7f12b4b7d8ab"
+  },
+  "SPELLBOOK_REPRESENTATION_CHANGED": false,
+  "CMMG_SEALED_OUTCOMES_OPENED": false,
+  "PROFESSOR_CHANGED": false,
+  "caveat": "0-100 mapping is a spent-data calibration of the frozen scorer, not a prospective gate. Not wired into Professor."
+}

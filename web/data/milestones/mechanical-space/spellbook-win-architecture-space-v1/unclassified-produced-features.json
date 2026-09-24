@@ -1,0 +1,2945 @@
+{
+  "n": 420,
+  "features": [
+    {
+      "featureId": 12,
+      "name": "Locks out all of your opponents but one, and allows you to choose which of your two neighboring opponents get to have turns",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 29,
+      "name": "Exile all of your opponents' permanents and hands",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 30,
+      "name": "Players can't cast creature spells",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 47,
+      "name": "Opponents can't attack",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 48,
+      "name": "Opponents can't attack with most creatures",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 51,
+      "name": "Put all creature cards from your library onto the battlefield",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 64,
+      "name": "Destroy all permanents each turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 88,
+      "name": "Exile your library",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 94,
+      "name": "Opponents can't cast spells",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 101,
+      "name": "Gain control of all permanents",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 102,
+      "name": "Destroy all permanents opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 103,
+      "name": "Destroy all permanents with mana value 0",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 104,
+      "name": "Destroy all permanents with mana value 0 upon entering",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 105,
+      "name": "Prevent all damage that would be dealt to you by sources you don't control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 106,
+      "name": "Opponents can't resolve any spell for the rest of the game",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 107,
+      "name": "Opponents can only cast one non-artifact spell a turn if they first cast an artifact",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 135,
+      "name": "Opponents sacrifice all their creatures each turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 140,
+      "name": "Put all Equipment cards from your library onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 147,
+      "name": "Gain control of all creatures and lands",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 148,
+      "name": "Most creatures can't attack you",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 149,
+      "name": "You do not draw cards during your draw steps",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 150,
+      "name": "Creatures can't attack you",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 152,
+      "name": "Tap all lands, creatures, and artifacts opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 161,
+      "name": "Return all creature cards from all graveyards to the battlefield under your control",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 163,
+      "name": "Return all nonland permanents to owner's hand each turn",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 168,
+      "name": "Exile all spells players cast from their hands",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 169,
+      "name": "Counter all spells opponents cast that are created by Knowledge Pool",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 171,
+      "name": "Your life total can't change",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 172,
+      "name": "You have protection from everything",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 175,
+      "name": "Return some artifact cards from your graveyard to your hand",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 176,
+      "name": "Return some permanent cards from your graveyard to the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 178,
+      "name": "Lands are 1/1 creatures that can't tap for mana",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 181,
+      "name": "Destroy all creatures, artifacts, and enchantments on each player's turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 184,
+      "name": "Players can't search libraries",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 185,
+      "name": "Opponents can't search libraries",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 192,
+      "name": "You control one opponent on each of their turns",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 195,
+      "name": "Activated abilities can't be activated",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 197,
+      "name": "Creatures can't attack",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 200,
+      "name": "Each opponent shuffles their hand into their library during their draw step",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 201,
+      "name": "Opponents can't draw cards during their turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 204,
+      "name": "Opponents can only have cards in hand when it isn't your turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 206,
+      "name": "Put all lands with a basic land type from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 210,
+      "name": "All creatures die upon entering",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 212,
+      "name": "Opponents put all cards in hand on the bottom of their library on each of their draw steps",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 213,
+      "name": "You can't be attacked",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 214,
+      "name": "Nobody can activate the abilites of any permanent on the battlefield",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 216,
+      "name": "Opponents can only cast the remaining spells in their hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 217,
+      "name": "Destroy all lands",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 218,
+      "name": "Exile all permanents opponents control",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 227,
+      "name": "Exile all creatures opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 228,
+      "name": "Exile all creatures an opponent plays",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 229,
+      "name": "Exile all nonenchantment permanents opponents control each turn until end of turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 232,
+      "name": "Infinite damage to all creatures",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 242,
+      "name": "Put all lands from your hand and library onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 244,
+      "name": "Target opponent skips their draw step",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 246,
+      "name": "Counter all spells opponents cast",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 249,
+      "name": "Prevent all damage that would be dealt to you",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 251,
+      "name": "Destroy any number of target permanents opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 254,
+      "name": "Players skip their untap steps",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 256,
+      "name": "Lands your opponents control do not untap",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 257,
+      "name": "Lands do not untap",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 260,
+      "name": "Exile all spells opponents cast from their hands",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 262,
+      "name": "Players can't draw more than one card per turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 263,
+      "name": "Players shuffle their hands into their libraries during each draw step",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 281,
+      "name": "Players can't draw cards",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 285,
+      "name": "Destroy all x/1 creatures your opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 297,
+      "name": "Destroy all permanents opponents control on each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 300,
+      "name": "Return all land cards from your graveyard to the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 303,
+      "name": "Opponents skip their untap steps",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 304,
+      "name": "Infinite damage to creatures",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 313,
+      "name": "Put most creature cards from your library onto the battlefield",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 335,
+      "name": "Activated abilities of permanents your opponents control can't be activated",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 336,
+      "name": "Destroy any number of creatures opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 343,
+      "name": "Players can't play lands",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 349,
+      "name": "Opponents discard their hands",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 354,
+      "name": "Put all noncreature artifact cards from your library onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 357,
+      "name": "Return some creature cards from your graveyard to the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 359,
+      "name": "Skip your draw steps",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 376,
+      "name": "Lands can't enter the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 390,
+      "name": "Return all nonland permanents from your graveyard to the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 401,
+      "name": "Return all creature cards from each opponent's graveyard to the battlefield under your control",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 402,
+      "name": "Infinite damage to some creatures",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 407,
+      "name": "Exile all nonland permanents opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 425,
+      "name": "Creatures you control can't be dealt damage",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 426,
+      "name": "You can't be dealt damage",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 433,
+      "name": "Your opponents mill cards instead of drawing them",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 434,
+      "name": "Reorder your library, putting a number of cards into your hand equal to the amount of extra cards you had in your hand",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 444,
+      "name": "Return all instant and sorcery cards from your graveyard to your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 445,
+      "name": "Return all instant, sorcery, and creature cards from your graveyard to your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 446,
+      "name": "Return all instant cards from your graveyard to your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 447,
+      "name": "Return all noncreature, nonland cards from your graveyard to your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 448,
+      "name": "Return all cards from your graveyard to your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 449,
+      "name": "Put all cards from your library and graveyard into your hand",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 452,
+      "name": "An opponent returns all cards from their graveyard to their hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 462,
+      "name": "Return all lands you control to your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 466,
+      "name": "Opponents can't cast instants or sorceries",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 476,
+      "name": "Destroy any creature whenever a creature enters the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 477,
+      "name": "Destroy each creature that enters the battlefield under an opponent's control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 478,
+      "name": "Destroy any number of creatures",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 490,
+      "name": "Exile each artifact and creature your opponents control each turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 491,
+      "name": "Destroy all creatures, artifacts, and enchantments opponents control on each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 508,
+      "name": "You control your opponents on each of their turns",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 527,
+      "name": "Destroy all lands, creatures, and artifacts your opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 529,
+      "name": "Exile all cards in hands and graveyards",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 530,
+      "name": "Discard your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 538,
+      "name": "Opponents can't tap lands for mana",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 539,
+      "name": "Opponents can't have lands on the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 541,
+      "name": "Put all lands with a basic land type from your library onto the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 543,
+      "name": "Destroy all creatures opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 544,
+      "name": "From now on, destroy any creatures opponents control at instant speed",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 568,
+      "name": "Gain control of all creatures until end of turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 569,
+      "name": "Players can't cast spells from their hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 577,
+      "name": "Exile a card of your choice from an opponent's library on each opponent's turn and you may cast that card",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 591,
+      "name": "Opponents can only play lands exiled by Omen Machine",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 594,
+      "name": "Exile all nonland cards from opponents' libraries",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 595,
+      "name": "Cast any number of spells from opponents' libraries",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 618,
+      "name": "Return all nonland permanents opponents control to their hand on each of your turns",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 620,
+      "name": "Put all lands from your library onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 623,
+      "name": "Put a selection of permanant cards from your library and graveyard onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 630,
+      "name": "Destroy all noncreature permanents opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 641,
+      "name": "Put all basic Forests from your library onto the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 643,
+      "name": "Put all basic lands from your library onto the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 656,
+      "name": "Return all creature cards from your graveyard to the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 658,
+      "name": "You are unable to lose the game due to damage or lifeloss",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 660,
+      "name": "Permanents your opponents control do not untap",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 665,
+      "name": "Opponents can't cast spells exiled by Shared Fate",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 678,
+      "name": "Return any number of creatures to their owners' hands",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 683,
+      "name": "Exile all permanents",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 684,
+      "name": "Exile all permanents except Near-Death Experience",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 687,
+      "name": "Exile all permanents except Barren Glory",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 696,
+      "name": "Put a selection of cards from your library and graveyard onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 701,
+      "name": "Arrange your library in any order",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 711,
+      "name": "Put a selection of permanent cards from your library onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 729,
+      "name": "Put all lands from your hand and library onto the battlefield tapped",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 749,
+      "name": "Counter all spells players cast from their hands",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 750,
+      "name": "Opponents can't cast creature spells",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 756,
+      "name": "Counter all spells opponents cast from their hands",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 798,
+      "name": "Creatures do not untap",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 800,
+      "name": "You can't lose the game due to having 0 or less life",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 801,
+      "name": "Players can't gain life",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 804,
+      "name": "Each opponent sacrifices all creatures they control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 805,
+      "name": "Each opponent sacrifices any creature that enters under their control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 810,
+      "name": "Gain control of all creatures",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 822,
+      "name": "Return all permanent cards from your graveyard to the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 836,
+      "name": "Opponents can't block creatures you control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 843,
+      "name": "All spells opponents cast using Omen Machine are countered",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 844,
+      "name": "Destroy all artifacts and enchantments opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 856,
+      "name": "Destroy any nontoken creature that enters the battlefield under an opponent's control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 857,
+      "name": "Destroy any number of target nontoken creatures",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 874,
+      "name": "Destroy all lands that enter the battlefield under an opponent's control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 880,
+      "name": "Counter all spells",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 882,
+      "name": "All nonwhite creatures die upon entering",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 883,
+      "name": "All nonblack creatures die upon entering",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 886,
+      "name": "Destroy all nonland permanents opponents control each turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 895,
+      "name": "Opponents can't cast copies made by Eye of the Storm",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 896,
+      "name": "Exile all instants and sorceries opponents cast",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 897,
+      "name": "Exile all instants and sorceries any player casts",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 898,
+      "name": "Counter all copies cast from Eye of the Storm",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 903,
+      "name": "Put all basic lands from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 905,
+      "name": "Gain control of any creatures that enters the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 927,
+      "name": "Return any number of artifacts and/or creatures to their owners' hands",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 928,
+      "name": "Destroy any number of target creatures during each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 947,
+      "name": "Cast all spells in your library",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 955,
+      "name": "Put all creature and land cards from your library into your hand",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 976,
+      "name": "Put all lands from your library onto the battlefield tapped",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 978,
+      "name": "You control one opponent on their turn each turn cycle",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 983,
+      "name": "Destroy all nontoken creatures opponents control whenever a creature enters the battlefield under your control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 993,
+      "name": "Each opponent sacrifices all permanents they control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1007,
+      "name": "Put all creature cards in your library onto the battlefield, then into your graveyard",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1011,
+      "name": "Return all artifact cards from your graveyard to your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1012,
+      "name": "Cast all spells in your library and exile",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1014,
+      "name": "Put all enchant creature Auras in your library onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1047,
+      "name": "Destroy all lands that enter the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1048,
+      "name": "Destroy all noncreature permanents with mana value 0 upon entering",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1049,
+      "name": "Destroy all noncreature permanents with mana value 0",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1062,
+      "name": "Destroy all nontoken creatures opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1068,
+      "name": "Prevent all damage that would be dealt to you and creatures you control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1070,
+      "name": "Infinite damage to most creatures",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1075,
+      "name": "Exile any creature that enters under an opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1091,
+      "name": "Your life total can't be reduced to 0 or less",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1100,
+      "name": "Return all creature cards from your graveyard to your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1101,
+      "name": "Return any number of creatures you control to your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1106,
+      "name": "Opponents can't play cards exiled by Possibility Storm",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1114,
+      "name": "Put all Plains cards from your libary into your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1116,
+      "name": "Destroy any number of creatures opponents control during each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1117,
+      "name": "Opponents can't cast sorcery spells",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1118,
+      "name": "Opponents can't cast instant spells during their turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1150,
+      "name": "Skip your next several turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1162,
+      "name": "You control up to three opponents on each of their turns",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1164,
+      "name": "On each of your turns, you take an extra turn unless an opponent chooses to lose the game",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1170,
+      "name": "Destroy any number of nonblack creatures opponents control during each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1171,
+      "name": "Put all basic Forests, Islands, and Plains from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1172,
+      "name": "Put all basic Forests, Mountains, and Plains from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1173,
+      "name": "Put all basic Swamps, Islands, and Mountains from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1174,
+      "name": "Put all basic Swamps, Islands, and Plains from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1175,
+      "name": "Put all basic Swamps, Forests, and Mountains from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1180,
+      "name": "You can't cast spells",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1196,
+      "name": "Deal lethal damage to all creatures opponents control with power 1 or greater",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1199,
+      "name": "Return most cards from your graveyard to your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1201,
+      "name": "Cast any spell of your choice from your library",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1205,
+      "name": "Exile all artifact and creature cards in opponents' libraries; you may play those cards",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1208,
+      "name": "Put all nonland permanents in your graveyard and library onto the battlefield",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1209,
+      "name": "Put all nonland permanents in your graveyard and library onto the battlefield and give them haste",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1211,
+      "name": "Put a selection of creature cards from your graveyard and library onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1217,
+      "name": "Put all commanders from the command zone onto the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1218,
+      "name": "Gain control of all commanders",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1219,
+      "name": "Players can't cast noncreature spells exiled by Omen Machine",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1220,
+      "name": "Exile all spells players cast from their hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1221,
+      "name": "Players can't cast noncreature spells exiled by Knowledge Pool",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1222,
+      "name": "Exile all instants and sorceries players cast from their hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1223,
+      "name": "Players can't cast spells exiled by Eye of the Storm",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1224,
+      "name": "Players can't cast noncreature spells exiled by Possibility Storm",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1233,
+      "name": "Put all basic Islands, Mountains, and Swamps from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1234,
+      "name": "Put all basic Forests, Mountains, and Swamps from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1239,
+      "name": "Put all basic Plains, Forests, and Mountains from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1240,
+      "name": "Put all basic Plains, Forests, and Islands from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1244,
+      "name": "Put all basic Islands, Forests, and Plains from your library onto the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1245,
+      "name": "Put all basic Mountains, Forests, and Plains from your library onto the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1246,
+      "name": "Put all basic Swamps, Forests, and Mountains from your library onto the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1247,
+      "name": "Put all basic Islands, Swamps, and Mountains from your library onto the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1248,
+      "name": "Put all basic Islands, Swamps, and Plains from your library onto the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1252,
+      "name": "Put all basic Plains from your library onto the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1253,
+      "name": "You can't cast noncreature spells with mana cost equal to X",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1254,
+      "name": "You can't cast noncreature spells with a mana value greater than 3",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1255,
+      "name": "Opponents can't cast creature spells with a mana value of 3 or less",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1256,
+      "name": "Opponents can't cast noncreature spells",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1258,
+      "name": "Destroy all lands opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1265,
+      "name": "Untap all snow permanents you control during each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1266,
+      "name": "Opponents skip their draw steps",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1267,
+      "name": "Play all lands in your library",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1268,
+      "name": "Exile your library with the ability to play the exiled cards until end of turn",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1269,
+      "name": "Destroy all artifacts opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1270,
+      "name": "Create a copy of each artifact an opponent controls",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1277,
+      "name": "Reduce the toughness of most creatures opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1301,
+      "name": "Opponents can't activate abilities of lands or creatures they control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1306,
+      "name": "Destroy any number of nontoken creatures whenever a black creature enters the battlefield under your control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1307,
+      "name": "Destroy any number of nontoken creatures whenever a creature dies",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1308,
+      "name": "Destroy any number of nontoken creatures opponents control whenever a black creature enters the battlefield under your control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1309,
+      "name": "Destroy all nonblack creatures that enter the battlefield under an opponent's control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1310,
+      "name": "Destroy any number of nonblack creatures opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1312,
+      "name": "Players can only cast one spell per turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1314,
+      "name": "Counter the first spell opponents cast each turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1321,
+      "name": "Exile all noncreature spells players cast from their hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1322,
+      "name": "Players can only cast one noncreature spell per turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1325,
+      "name": "Destroy up to 100 creatures during each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1333,
+      "name": "Put all artifact cards and a subset of creature cards from your library onto the battlefield",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1344,
+      "name": "Put all Forests and Plains from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1349,
+      "name": "Destroy all creatures that enter the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1368,
+      "name": "Put all artifact and creature cards from your library onto the battlefield",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1370,
+      "name": "Destroy any number of creatures opponents control whenever you put a counter on a permanent or player",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1382,
+      "name": "Target opponent can only cast one spell per turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1383,
+      "name": "Exile all spells target opponent casts from their hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1384,
+      "name": "Opponents can only cast one spell per turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1394,
+      "name": "Skip all your future turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1397,
+      "name": "Permanently phase out all permanents opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1399,
+      "name": "Exile all lands opponents control during each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1404,
+      "name": "Gain control of most creatures during each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1405,
+      "name": "Gain control of all noncreature permanents",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1413,
+      "name": "Put all Mountains from your library onto the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1415,
+      "name": "Put all land cards from your opponents' libraries onto the battlefield tapped under your control",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1422,
+      "name": "Near-infinite damage to creatures",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1470,
+      "name": "Destroy all noncreature permanents opponents control each turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1476,
+      "name": "Prevent all damage that would be dealt to permanents you control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1479,
+      "name": "Destroy all artifacts that enter the battlefield under an opponent's control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1486,
+      "name": "Permanently phase out all creatures and non-Aura enchantments on the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1492,
+      "name": "Reduce the toughness of creatures opponents control to 0",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1494,
+      "name": "Destroy all creatures opponents control whenever a creature enters the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1497,
+      "name": "Players can't cast noncreature spells",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1499,
+      "name": "Permanents you control phase out during your opponents' turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1500,
+      "name": "Your life total can't change during your opponents' turns",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1501,
+      "name": "You have protection from everything during your opponents' turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1507,
+      "name": "Players can't cast noncreature spells during their turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1508,
+      "name": "Players can't cast sorcery spells",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1512,
+      "name": "Destroy all artifacts and enchantments that enter the battlefield under an opponent's control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1516,
+      "name": "Gain control of all creatures until end of turn during each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1524,
+      "name": "Return any number of permanents to their owner's hand",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1528,
+      "name": "Manifest your entire library",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1534,
+      "name": "Archon creatures with power 3 or greater do not untap",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1535,
+      "name": "Non-Archon creatures do not untap",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1536,
+      "name": "Gain control of all creatures with toughness less than or equal to Dread Slaver's power",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1538,
+      "name": "Remove any number of time counters from suspended cards and/or permanents you control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1557,
+      "name": "Tap all creatures opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1558,
+      "name": "Creatures opponents control do not untap",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1559,
+      "name": "Put all land cards from your library and graveyard onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1581,
+      "name": "Tap all creatures opponents control during each turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1595,
+      "name": "Cast all nonartifact, nonenchantment permanent cards in your graveyard",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1602,
+      "name": "Exile all nonland cards from target opponent's library, with the ability for you to play them from exile",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1612,
+      "name": "Target opponent returns all cards in their graveyard to their hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1613,
+      "name": "Cast all permanent cards in your graveyard",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1619,
+      "name": "Exile all creatures that enter the battlefield under an opponent's control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1623,
+      "name": "Target opponent skips all their future turns",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1631,
+      "name": "Mill all creature cards in your library",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1633,
+      "name": "Destroy any number of artifacts and enchantments",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1638,
+      "name": "Put all land cards from your library into your graveyard",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1647,
+      "name": "Return most creature cards from your graveyard onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1660,
+      "name": "Put all creature cards from your library into your hand",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1675,
+      "name": "Return any number of creatures and/or planeswalkers to their owner's hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1676,
+      "name": "Cast a portion of the cards in your library and hand without paying their mana costs",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1677,
+      "name": "Return most permanents you don't control to their owner's hand",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1682,
+      "name": "Return all permanents opponents control to their owner's hand",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1691,
+      "name": "Exile your library and graveyard",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1693,
+      "name": "Destroy all nonblack creatures opponents control during each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1694,
+      "name": "Near-infinite damage to some creatures",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1701,
+      "name": "Put all instant and sorcery cards from your graveyard and library into your hand",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1702,
+      "name": "Cast all instants and sorceries with mana value 4 or less from your hand and graveyard",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1718,
+      "name": "Put all noncreature cards from your library into your hand",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1719,
+      "name": "Target opponent sacrifices all permanents they control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1721,
+      "name": "An opponent sacrifices all permanents they control",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1722,
+      "name": "Put a selection of creature cards from your library into your hand",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1723,
+      "name": "Cast all Sliver creature cards in your hand and library",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1750,
+      "name": "Cast all colorless artifacts from your graveyard any number of times",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1760,
+      "name": "Opponents can't draw cards",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1761,
+      "name": "Opponents can't activate abilities of creatures they control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1767,
+      "name": "Destroy all creatures except Myojin of Cleansing Fire during each turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1768,
+      "name": "Put all creature cards destroyed by Myojin of Cleansing Fire onto the battlefield under your control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1772,
+      "name": "Destroy all permanents opponents control each turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1780,
+      "name": "Gain control of all creatures opponents control and sacrifice them",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1789,
+      "name": "Put all artifact cards from your library onto the battlefield",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1802,
+      "name": "Return all land cards from all graveyards to the battlefield under their owner's control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1821,
+      "name": "Put a selection of permanent cards from your hand onto the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1871,
+      "name": "Put all lands from your library and graveyard onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1872,
+      "name": "Players skip their upkeep steps",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1873,
+      "name": "Gain control of all artifacts",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1885,
+      "name": "Destroy all creatures opponents control with toughness equal to 1",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1886,
+      "name": "Destroy all creatures that enter the battlefield under an opponent's control with toughness equal to 1",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1891,
+      "name": "Return any number of permanents to their owner's hand during each of your turns",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1899,
+      "name": "Destroy all creatures during each turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1903,
+      "name": "Put all lands with a basic land type from your library into your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1907,
+      "name": "Each opponent sacrifices all planeswalkers they control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1919,
+      "name": "Put all basic lands from your library into your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1923,
+      "name": "Nonbasic lands do not untap",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1926,
+      "name": "Tap all permanents your opponents control each upkeep",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1941,
+      "name": "Gain control of all permanents until end of turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1943,
+      "name": "Return all artifacts from your graveyard to the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1945,
+      "name": "Prevent all damage that would be dealt to creatures you control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1964,
+      "name": "Destroy all creatures, artifacts, and enchantments on each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1972,
+      "name": "Creatures opponents control die upon entering",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1974,
+      "name": "Reduce the toughness of creatures opponents control to 0 on each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1976,
+      "name": "Nonwhite creatures opponents control die upon entering",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1982,
+      "name": "Return all creatures you don't control to their owner's hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 1991,
+      "name": "Destroy all creatures target opponent controls",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2023,
+      "name": "Return some creature cards from your graveyard to your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2042,
+      "name": "Tap all lands and creatures opponents control during each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2043,
+      "name": "Tap all lands and creatures during each opponent's upkeep step",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2047,
+      "name": "Reduce the toughness of each creature opponents control to 0 upon entering",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2119,
+      "name": "Exile your library with the ability to play the exiled cards until your next end step",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2131,
+      "name": "Prevent all damage that would be dealt to you during an opponent's turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2150,
+      "name": "Put all enchantment cards from your library into your hand",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2159,
+      "name": "Destroy all creatures opponents control whenever a creature enters the battlefield under your control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2186,
+      "name": "Return a portion of target creatures to their owner's hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2188,
+      "name": "Target opponent returns some cards in their graveyard to their hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2243,
+      "name": "Put a selection of creature cards from your library onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2250,
+      "name": "Put all lands from your library into your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2297,
+      "name": "Cast a subset of spells in your library",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2298,
+      "name": "Cast a subset of spells in your graveyard",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2335,
+      "name": "Each opponent sacrifices all nontoken creatures they control",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2345,
+      "name": "Shuffle all hands, graveyards and permanents on the battlefield into their owner's library",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2367,
+      "name": "Return any creature to its owner's hand when it enters the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2375,
+      "name": "Exile your library with the ability to play the exiled cards until the end of your next turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2377,
+      "name": "Return all permanents target opponent owns to their hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2385,
+      "name": "Phase out any number of creatures any number of times",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2407,
+      "name": "Creatures without islandwalk cannot attack",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2410,
+      "name": "Draw all noncreature cards from your library",
+      "status": "S",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2436,
+      "name": "Put all Rebels from your library onto the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2440,
+      "name": "Return all nonland cards from your graveyard to your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2441,
+      "name": "Put all nonland cards from your library into your hand",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2451,
+      "name": "Players cannot cast nonlegendary creature spells",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2452,
+      "name": "Destroy all nonartifact lands",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2453,
+      "name": "Destroy all nonartifact lands that enter the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2462,
+      "name": "Destroy all creatures opponents control during each turn",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2468,
+      "name": "Return all creature cards with mana value 3 or less from your graveyard to the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2469,
+      "name": "Return all artifact cards with mana value 3 or less from your graveyard to the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2491,
+      "name": "Put all artifact creature cards with mana value 2 or less from your library onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2492,
+      "name": "Put all artifact creature cards with mana value 2 or less from your graveyard onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2493,
+      "name": "Put all artifact creature cards with mana value 1 or less from your library onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2494,
+      "name": "Put all artifact creature cards with mana value 1 or less from your graveyard onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2496,
+      "name": "Return all noncreature nonland permanents with mana value 5 or less from your graveyard to the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2521,
+      "name": "Put all basic Mountains from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2522,
+      "name": "Put all basic Forests from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2523,
+      "name": "Put all basic Plains from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2524,
+      "name": "Put all basic Islands from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2525,
+      "name": "Put all basic Swamps from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2532,
+      "name": "Put all permanent cards from your graveyard and library onto the battlefield",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2546,
+      "name": "Put all creature cards from each opponent's library onto the battlefield under your control",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2572,
+      "name": "Each opponent returns all creature cards from their graveyard to the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2573,
+      "name": "Destroy all nonblack creatures opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2578,
+      "name": "Players can't attack",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2579,
+      "name": "Creatures can't block",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2581,
+      "name": "Return all enchantment cards from your graveyard to the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2582,
+      "name": "Return all artifact cards you own in exile to your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2586,
+      "name": "Counter all nonlegendary creature spells",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2590,
+      "name": "Destroy all artifacts opponents control during each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2591,
+      "name": "Destroy all creatures during each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2592,
+      "name": "Destroy all enchantments during each of your turns",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2598,
+      "name": "Return all land cards from your graveyard to your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2601,
+      "name": "Return any number of nonland permanents from the battlefield to their owner's hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2611,
+      "name": "Reduce any number of opposing creatures' toughness to 0",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2612,
+      "name": "Reduce any number of opposing creatures' toughness to 0 whenever an Elf enters under your control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2617,
+      "name": "Lock",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2618,
+      "name": "Mass Land Denial",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2622,
+      "name": "Exile a portion of your library with the ability to play the exiled cards until your end step",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2632,
+      "name": "Each opponent returns all creature cards from their graveyard to their hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2656,
+      "name": "Put all creature cards from your library onto the battlefield tapped",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2672,
+      "name": "Put all creature cards from your library and graveyard onto the battlefield with finality counters on them",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2690,
+      "name": "Each player may exile a portion of their library with the ability to play the exiled cards until the end of their next turn",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2710,
+      "name": "Put all instant and sorcery cards from your library into your hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2714,
+      "name": "Destroy any number of nonland permanents",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2735,
+      "name": "Each opponent sacrifices any nontoken creature that enters under their control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2738,
+      "name": "Gain control of all lands opponents control",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2739,
+      "name": "Gain control of some creatures opponents control",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2740,
+      "name": "Destroy some creatures opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2743,
+      "name": "Put most land cards from your library onto the battlefield tapped",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2778,
+      "name": "Destroy all nonbasic lands opponents control",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2781,
+      "name": "Each opponent sacrifices all nontoken creatures they control during each of your turns",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2799,
+      "name": "Exile all nontoken creatures that enter the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2801,
+      "name": "Gain control of all permanents an opponent controls during each of your turns",
+      "status": "C",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2805,
+      "name": "Infnite untap of legendary permanents",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2806,
+      "name": "Return all nonland permanents opponents control to their owner's hand",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2820,
+      "name": "Put a subset of creature cards from your library onto the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    },
+    {
+      "featureId": 2826,
+      "name": "Each opponent puts all basic lands from their library onto the battlefield",
+      "status": "H",
+      "class": "UNCLASSIFIED",
+      "bucket": null
+    }
+  ]
+}

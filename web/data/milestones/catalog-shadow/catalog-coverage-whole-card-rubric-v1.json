@@ -1,0 +1,68 @@
+{
+  "artifactType": "CatalogCoverageWholeCardRubric",
+  "version": "catalog-coverage-whole-card-rubric-v1",
+  "status": "FROZEN_PENDING_CALIBRATION_RESOLUTION",
+  "frozenAt": null,
+  "purpose": "Score RC8 whole-card understanding after human gold is sealed and Gold Policy v1.8 passes.",
+  "classes": {
+    "EXACT": {
+      "definition": "All material semantic structure correct — abilities, boundaries, primitives, ownership, execution context, optionality, and face routing match gold.",
+      "blankTextNote": "Legitimate blank-text cards with expectedCardNativeL2Actions=[] and no invented parser actions qualify as EXACT when RC8 correctly represents card structure and invents nothing."
+    },
+    "MATERIAL_CORRECT": {
+      "definition": "Functionally correct for rules/deckbuilding reasoning with only non-material omissions (minor span granularity, non-functional reminder handling, immaterial metadata)."
+    },
+    "PARTIAL": {
+      "definition": "Important function, condition, relationship, ownership, or face routing missing or wrong while some semantics are captured."
+    },
+    "NEEDS_REVIEW": {
+      "definition": "Parser appropriately declines enough semantics that the card cannot be treated as understood for deterministic reasoning."
+    },
+    "ABSTAINED": {
+      "definition": "Parser explicitly abstains and human gold agrees abstention is appropriate for the card's semantic complexity or ambiguity."
+    },
+    "INCORRECT": {
+      "definition": "Parser asserts a materially false functional model — wrong primitives, wrong ownership, wrong face, or forbidden invented actions."
+    }
+  },
+  "blankTextTreatment": {
+    "rule": "Category-C legitimate blank-text cards must NOT be scored as NEEDS_REVIEW/ABSTAINED/INCORRECT merely because Layer-2 action count is zero.",
+    "requiredGoldFields": {
+      "legitimateCard": true,
+      "oracleRulesTextEmpty": true,
+      "expectedCardNativeL2Actions": []
+    },
+    "exactCondition": "RC8 represents relevant card structure, emits zero accepted card-native L2 actions, and does not invent actions or mis-route faces."
+  },
+  "scoringDimensions": [
+    "ability_boundaries",
+    "ability_type",
+    "layer2_primitive",
+    "evidence_span",
+    "optionality",
+    "condition_dependency",
+    "semantic_owner",
+    "execution_context",
+    "source_card",
+    "granted_object",
+    "created_object",
+    "face_ownership",
+    "modal_option",
+    "zone_transition"
+  ],
+  "forbiddenDuringGoldCreation": [
+    "RC8 semantic AST",
+    "accepted actions",
+    "needs_review",
+    "diagnostics",
+    "structural-invalid status",
+    "shadow parse outputs",
+    "prior benchmark history"
+  ],
+  "allowedDuringGoldCreation": [
+    "card identity",
+    "complete oracle/card-face structure",
+    "taxonomy instructions",
+    "official rulings when genuinely needed"
+  ]
+}

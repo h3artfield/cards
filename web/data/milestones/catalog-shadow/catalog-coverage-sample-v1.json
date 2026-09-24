@@ -1,7 +1,11 @@
 {
   "artifactType": "CatalogCoverageSample",
   "version": "catalog-coverage-sample-v1",
-  "status": "IDENTITIES_SEALED",
+  "status": "IDENTITIES_SEALED_SUPERSEDED",
+  "supersededReason": "Drawn from legacy v1 population frame (35,582 combined-oracle-text eligible). Population audit found 350 legitimate blank-text cards (category C) omitted from v1 frame. Corrected study denominator is v2 (35,932). Do not annotate; await corrected v2 sample.",
+  "supersededByPopulationSnapshot": "data/milestones/catalog-shadow/catalog-population-snapshot-firestore-v2.json",
+  "correctedPopulationHash": "986c26116efaea45a20bb0cffe388fc20340db47839300ce69127942681dcbc5",
+  "correctedPopulationEligibleCount": 35932,
   "sealedAt": "2026-08-11T01:12:40.648Z",
   "samplingAlgorithmVersion": "catalog-coverage-sample-v1",
   "randomSeed": "catalog-coverage-sample-seed-v1-20260811",

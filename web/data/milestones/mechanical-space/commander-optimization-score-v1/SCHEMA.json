@@ -1,0 +1,243 @@
+{
+  "lineage": "COMMANDER_OPTIMIZATION_SCORE_V1",
+  "headlineFeatures": [
+    "logCombos",
+    "logNative",
+    "zeroCombo",
+    "minSize",
+    "logTwo",
+    "logThree",
+    "logFour",
+    "fracCmd",
+    "logCmdInv",
+    "logTermRoutes",
+    "logResLoops",
+    "logSharedCards",
+    "sharedConc",
+    "logPrereq",
+    "logMana",
+    "hasTerminal",
+    "dep_NONE",
+    "dep_COMMANDER_INDEPENDENT",
+    "dep_MIXED",
+    "dep_COMMANDER_DEPENDENT",
+    "term_WIN_THE_GAME",
+    "term_OPPONENT_LOSES_THE_GAME",
+    "term_DRAW_THE_GAME",
+    "term_INFINITE_DAMAGE",
+    "term_INFINITE_LIFELOSS",
+    "term_INFINITE_MILL",
+    "term_EXILE_LIBRARIES",
+    "term_LIFE_TOTAL_MANIPULATION",
+    "enab_MANA",
+    "enab_DRAW",
+    "enab_TOKENS",
+    "enab_ETB",
+    "enab_LTB",
+    "enab_COUNTERS",
+    "enab_STORM",
+    "enab_UNTAP",
+    "enab_SELF_MILL",
+    "enab_CASTS",
+    "enab_LANDFALL",
+    "enab_MAGECRAFT",
+    "enab_SACRIFICE",
+    "enab_OTHER_ENABLING",
+    "zone_B",
+    "zone_H",
+    "zone_G",
+    "zone_E",
+    "zone_L",
+    "zone_C",
+    "meanMvNonland",
+    "fracMvLe2",
+    "landFrac",
+    "instantSorceryFrac",
+    "tutorFrac",
+    "drawFrac",
+    "rampFrac",
+    "interactFrac",
+    "protectFrac",
+    "recurFrac",
+    "roleCompressFrac",
+    "clusterEntropy"
+  ],
+  "colorInHeadline": false,
+  "accessKeys": [
+    "meanMvNonland",
+    "fracMvLe2",
+    "landFrac",
+    "instantSorceryFrac",
+    "tutorFrac",
+    "drawFrac",
+    "rampFrac",
+    "interactFrac",
+    "protectFrac",
+    "recurFrac",
+    "roleCompressFrac",
+    "clusterEntropy"
+  ],
+  "architectureFeatures": [
+    "logCombos",
+    "logNative",
+    "zeroCombo",
+    "minSize",
+    "logTwo",
+    "logThree",
+    "logFour",
+    "fracCmd",
+    "logCmdInv",
+    "logTermRoutes",
+    "logResLoops",
+    "logSharedCards",
+    "sharedConc",
+    "logPrereq",
+    "logMana",
+    "hasTerminal",
+    "dep_NONE",
+    "dep_COMMANDER_INDEPENDENT",
+    "dep_MIXED",
+    "dep_COMMANDER_DEPENDENT",
+    "term_WIN_THE_GAME",
+    "term_OPPONENT_LOSES_THE_GAME",
+    "term_DRAW_THE_GAME",
+    "term_INFINITE_DAMAGE",
+    "term_INFINITE_LIFELOSS",
+    "term_INFINITE_MILL",
+    "term_EXILE_LIBRARIES",
+    "term_LIFE_TOTAL_MANIPULATION",
+    "enab_MANA",
+    "enab_DRAW",
+    "enab_TOKENS",
+    "enab_ETB",
+    "enab_LTB",
+    "enab_COUNTERS",
+    "enab_STORM",
+    "enab_UNTAP",
+    "enab_SELF_MILL",
+    "enab_CASTS",
+    "enab_LANDFALL",
+    "enab_MAGECRAFT",
+    "enab_SACRIFICE",
+    "enab_OTHER_ENABLING",
+    "zone_B",
+    "zone_H",
+    "zone_G",
+    "zone_E",
+    "zone_L",
+    "zone_C"
+  ],
+  "profileAxes": [
+    {
+      "id": "win_architecture",
+      "label": "Win architecture",
+      "role": "load_bearing",
+      "higherIsBetter": true,
+      "measurement": "routes + two-card flag − 0.25×minComboSize; 0 if no CARD_COMPLETE combo"
+    },
+    {
+      "id": "access_consistency",
+      "label": "Access / consistency",
+      "role": "descriptive_only",
+      "higherIsBetter": true,
+      "measurement": "tutorFrac",
+      "note": "Isolation signal only. Not an independent headline weight."
+    },
+    {
+      "id": "mana_efficiency",
+      "label": "Mana efficiency",
+      "role": "load_bearing",
+      "higherIsBetter": true,
+      "measurement": "fracMvLe2 + rampFrac − 0.15×meanMvNonland"
+    },
+    {
+      "id": "redundancy",
+      "label": "Redundancy",
+      "role": "descriptive_only",
+      "higherIsBetter": true,
+      "measurement": "sharedPieceConcentration",
+      "note": "Architecture-slice LOO was ~0. Profile descriptor only."
+    },
+    {
+      "id": "interaction",
+      "label": "Interaction",
+      "role": "load_bearing",
+      "higherIsBetter": true,
+      "measurement": "interactFrac"
+    },
+    {
+      "id": "protection",
+      "label": "Protection",
+      "role": "load_bearing",
+      "higherIsBetter": true,
+      "measurement": "protectFrac"
+    },
+    {
+      "id": "resilience",
+      "label": "Resilience",
+      "role": "descriptive_only",
+      "higherIsBetter": true,
+      "measurement": "recurFrac"
+    },
+    {
+      "id": "card_advantage",
+      "label": "Card advantage",
+      "role": "load_bearing",
+      "higherIsBetter": true,
+      "measurement": "drawFrac"
+    },
+    {
+      "id": "role_compression",
+      "label": "Role compression",
+      "role": "descriptive_only",
+      "higherIsBetter": true,
+      "measurement": "roleCompressFrac"
+    },
+    {
+      "id": "coherence",
+      "label": "Coherence",
+      "role": "load_bearing",
+      "higherIsBetter": true,
+      "measurement": "−clusterEntropy"
+    }
+  ],
+  "minCommanderUnique": 30,
+  "standardize": "per-feature mean/sd over spent seats",
+  "eventFolds": "SWA_V1_EVENT",
+  "seed": 20260821,
+  "epochs": 28,
+  "lamS": 1e-05,
+  "lamW": 0.0001,
+  "accessSplits": {
+    "access_consistency": [
+      "tutorFrac"
+    ],
+    "mana_efficiency": [
+      "meanMvNonland",
+      "fracMvLe2",
+      "landFrac",
+      "rampFrac"
+    ],
+    "card_advantage": [
+      "drawFrac"
+    ],
+    "interaction": [
+      "interactFrac"
+    ],
+    "protection": [
+      "protectFrac"
+    ],
+    "resilience": [
+      "recurFrac"
+    ],
+    "role_compression": [
+      "roleCompressFrac"
+    ],
+    "coherence": [
+      "clusterEntropy"
+    ],
+    "spell_speed": [
+      "instantSorceryFrac"
+    ]
+  }
+}
