@@ -223,7 +223,11 @@
     "test:professor-deck-editor-distribution-v1": "npx --yes tsx src/components/professor/deck-editor/distribution-v1.selftest.ts",
     "test:professor-deck-editor-grouping-v1": "npx --yes tsx src/components/professor/deck-editor/grouping-v1.selftest.ts",
     "test:professor-deck-editor-marker-create-v1": "npx --yes tsx src/components/professor/deck-editor/marker-create-v1.selftest.ts",
-    "test:professor-deck-editor-synergy-v1": "npx --yes tsx src/lib/professor-deck-editor/synergy-v1.selftest.ts"
+    "test:professor-deck-editor-synergy-v1": "npx --yes tsx src/lib/professor-deck-editor/synergy-v1.selftest.ts",
+    "e2e:ux:auth": "playwright test --config=e2e/playwright.config.ts --project=setup --headed",
+    "e2e:ux:mint": "npx --yes tsx e2e/scripts/mint-customer-storage.ts",
+    "e2e:ux": "playwright test --config=e2e/playwright.config.ts",
+    "e2e:ux:report": "npx --yes tsx e2e/scripts/summarize-findings.ts"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
@@ -243,6 +247,7 @@
     "uuid": "^14.0.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/nodemailer": "^8.0.1",

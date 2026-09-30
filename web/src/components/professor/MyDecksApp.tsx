@@ -99,7 +99,7 @@ export function MyDecksApp({ slug }: { slug: string }) {
           </div>
           <Link
             href={`/s/${encodeURIComponent(slug)}/decks/new`}
-            className="professor-mtg-btn shrink-0 px-4 py-2 text-xs no-underline"
+            className="professor-mtg-btn professor-mtg-btn--primary shrink-0 px-4 py-2 text-xs no-underline"
           >
             Create new deck
           </Link>
@@ -124,7 +124,7 @@ export function MyDecksApp({ slug }: { slug: string }) {
             </p>
             <Link
               href={`/s/${encodeURIComponent(slug)}/decks/new`}
-              className="professor-mtg-btn mt-4 inline-block px-4 py-2 text-xs no-underline"
+              className="professor-mtg-btn professor-mtg-btn--primary mt-4 inline-block px-4 py-2 text-xs no-underline"
             >
               Create new deck
             </Link>

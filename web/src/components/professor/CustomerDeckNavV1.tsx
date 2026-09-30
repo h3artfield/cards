@@ -19,21 +19,27 @@ export function CustomerDeckNavV1({
   showDecks?: boolean;
 }) {
   const store = encodeURIComponent(slug);
+  const linkClass =
+    "professor-mtg-link inline-flex min-h-11 items-center text-xs";
+
   return (
-    <nav className="flex flex-wrap items-center gap-x-4 gap-y-1">
-      <Link href={`/s/${store}`} className="professor-mtg-link text-xs">
+    <nav className="flex flex-wrap items-center gap-x-3 gap-y-1">
+      <Link href={`/s/${store}`} className={linkClass}>
         ← Dashboard
       </Link>
       {showDecks ? (
-        <Link href={`/s/${store}/decks`} className="professor-mtg-link text-xs">
+        <Link href={`/s/${store}/decks`} className={linkClass}>
           My decks
         </Link>
       ) : null}
-      <Link href={`/s/${store}/inventory`} className="professor-mtg-link text-xs">
+      <Link href={`/s/${store}/inventory`} className={linkClass}>
         Shop
       </Link>
-      <Link href={`/s/${store}/calendar`} className="professor-mtg-link text-xs">
+      <Link href={`/s/${store}/calendar`} className={linkClass}>
         Events
+      </Link>
+      <Link href={`/s/${store}/collection`} className={linkClass}>
+        My collection
       </Link>
     </nav>
   );

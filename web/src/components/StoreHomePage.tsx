@@ -106,111 +106,128 @@ export function StoreHomePage({
     );
   }
 
-  if (loading || customerLoading) {
-    return (
-      <CustomerAuthShell>
-        <p className={authSubtext}>Loading…</p>
-      </CustomerAuthShell>
-    );
-  }
-
   const loggedIn = Boolean(customer);
+  const shellBusy = loading || customerLoading;
 
   return (
     <CustomerAuthShell wide>
       <StoreBrandMark
-        storeName={storeName}
+        storeName={storeName || "Your store"}
         logoUrl={logoUrl}
         variant="auth"
-        subtitle={loggedIn ? "Welcome back" : "Sell your cards"}
+        subtitle={
+          shellBusy ? "Loading your store…" : loggedIn ? "Welcome back" : "Sell your cards"
+        }
       />
 
-      {loggedIn && customer && (
+      {shellBusy ? (
+        <p className={`mt-10 text-center ${authSubtext}`}>Getting things ready…</p>
+      ) : null}
+
+      {loggedIn && customer && !shellBusy ? (
         <div className="mt-8 text-center">
           <p className="text-sm text-white">
             {customer.firstName} {customer.lastName}
           </p>
           <p className="mt-1 text-xs text-neutral-500">{customer.email}</p>
         </div>
-      )}
+      ) : null}
 
       {actionError && <p className={`mt-8 ${authError}`}>{actionError}</p>}
 
-      <div className="mt-10 space-y-3">
-        {loggedIn ? (
-          <>
-            <Link
-              href={`/s/${slug}/inventory`}
-              className={`block ${authButtonSecondary} text-center no-underline`}
-            >
-              Shop
-            </Link>
-            <Link
-              href={`/s/${slug}/calendar`}
-              className={`block ${authButtonSecondary} text-center no-underline`}
-            >
-              Events
-            </Link>
-            <Link
-              href={`/s/${slug}/decks`}
-              className={`block ${authButtonSecondary} text-center no-underline`}
-            >
-              Decks
-            </Link>
-            <Link
-              href={`/s/${slug}/collection`}
-              className={`block ${authButtonSecondary} text-center no-underline`}
-            >
-              Collection
-            </Link>
-            {canViewOrderHistory && (
-              <Link href="/orders" className={`block ${authButtonSecondary} text-center no-underline`}>
-                Orders
-              </Link>
-            )}
-            <button type="button" className={authButtonSecondary} onClick={() => void logout()}>
-              Sign out
-            </button>
-          </>
-        ) : (
-          <>
-            <Link
-              href={`/s/${slug}/inventory`}
-              className={`block ${authButtonSecondary} text-center no-underline`}
-            >
-              Shop
-            </Link>
-            <Link
-              href={`/s/${slug}/calendar`}
-              className={`block ${authButtonSecondary} text-center no-underline`}
-            >
-              Events
-            </Link>
-            {authConfig.googleEnabled && (
+      {!shellBusy ? (
+        <div className="mt-10 space-y-3">
+          {loggedIn ? (
+            <>
               <Link
-                href={`/api/auth/google?store=${encodeURIComponent(slug)}`}
+                href={`/s/${slug}/decks/new`}
                 className={`block ${authButton} text-center no-underline`}
               >
-                Continue with Google
+                Start a deck
               </Link>
-            )}
-            {authConfig.appleEnabled && (
               <Link
-                href={`/api/auth/apple?store=${encodeURIComponent(slug)}`}
+                href={`/s/${slug}/decks`}
                 className={`block ${authButtonSecondary} text-center no-underline`}
               >
-                Continue with Apple
+                My decks
               </Link>
-            )}
-            <Link href={signInEmail} className={`block ${authButton} text-center no-underline`}>
-              Create account
-            </Link>
-            <Link href={signInReturn} className={`block ${authButtonSecondary} text-center no-underline`}>
-              Sign in
-            </Link>
-          </>
-        )}
-      </div>
+              <Link
+                href={`/s/${slug}/inventory`}
+                className={`block ${authButtonSecondary} text-center no-underline`}
+              >
+                Shop
+              </Link>
+              <Link
+                href={`/s/${slug}/calendar`}
+                className={`block ${authButtonSecondary} text-center no-underline`}
+              >
+                Events
+              </Link>
+              <Link
+                href={`/s/${slug}/collection`}
+                className={`block ${authButtonSecondary} text-center no-underline`}
+              >
+                My collection
+              </Link>
+              {canViewOrderHistory ? (
+                <Link
+                  href="/orders"
+                  className={`block ${authButtonSecondary} text-center no-underline`}
+                >
+                  Orders
+                </Link>
+              ) : null}
+              <button
+                type="button"
+                className="w-full px-4 py-3 text-center text-xs uppercase tracking-wide text-[var(--text-lo)] transition hover:text-[var(--text)]"
+                onClick={() => void logout()}
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href={`/s/${slug}/inventory`}
+                className={`block ${authButtonSecondary} text-center no-underline`}
+              >
+                Shop
+              </Link>
+              <Link
+                href={`/s/${slug}/calendar`}
+                className={`block ${authButtonSecondary} text-center no-underline`}
+              >
+                Events
+              </Link>
+              {authConfig.googleEnabled ? (
+                <Link
+                  href={`/api/auth/google?store=${encodeURIComponent(slug)}`}
+                  className={`block ${authButton} text-center no-underline`}
+                >
+                  Continue with Google
+                </Link>
+              ) : null}
+              {authConfig.appleEnabled ? (
+                <Link
+                  href={`/api/auth/apple?store=${encodeURIComponent(slug)}`}
+                  className={`block ${authButtonSecondary} text-center no-underline`}
+                >
+                  Continue with Apple
+                </Link>
+              ) : null}
+              <Link href={signInEmail} className={`block ${authButton} text-center no-underline`}>
+                Create account
+              </Link>
+              <Link
+                href={signInReturn}
+                className={`block ${authButtonSecondary} text-center no-underline`}
+              >
+                Sign in
+              </Link>
+            </>
+          )}
+        </div>
+      ) : null}
     </CustomerAuthShell>
   );
 }

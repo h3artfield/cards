@@ -4,6 +4,14 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { StoreHomePage } from "@/components/StoreHomePage";
 
+function titleFromSlug(slug: string): string {
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
 export default function StoreEntryPage() {
   const { slug } = useParams<{ slug: string }>();
   const [storeName, setStoreName] = useState<string | null>(null);
@@ -28,9 +36,9 @@ export default function StoreEntryPage() {
   return (
     <StoreHomePage
       slug={slug}
-      storeName={storeName ?? ""}
+      storeName={storeName ?? titleFromSlug(slug)}
       logoUrl={logoUrl}
-      loading={loading || !storeName}
+      loading={loading}
       error={error}
     />
   );

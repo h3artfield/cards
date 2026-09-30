@@ -882,59 +882,59 @@ export function ProfessorDeckEditorPanel({
 
         <div className="deck-editor-toolbar border-b border-[var(--mtg-stone-border)] px-4 py-2.5 sm:px-5 lg:px-8">
           <div className="deck-editor-toolbar__controls">
-            <label className="sr-only" htmlFor="deck-editor-view">
+            <label className="flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-[var(--mtg-parchment-muted)]">
               View
+              <select
+                id="deck-editor-view"
+                className="professor-mtg-input px-2 py-1 text-xs normal-case tracking-normal"
+                title="View"
+                value={viewMode}
+                onChange={(event) => setViewMode(event.target.value as DeckEditorViewModeV1)}
+              >
+                {(Object.keys(DECK_EDITOR_VIEW_LABELS_V1) as DeckEditorViewModeV1[]).map((mode) => (
+                  <option key={mode} value={mode}>
+                    {DECK_EDITOR_VIEW_LABELS_V1[mode]}
+                  </option>
+                ))}
+              </select>
             </label>
-            <select
-              id="deck-editor-view"
-              className="professor-mtg-input px-2 py-1 text-xs"
-              title="View"
-              value={viewMode}
-              onChange={(event) => setViewMode(event.target.value as DeckEditorViewModeV1)}
-            >
-              {(Object.keys(DECK_EDITOR_VIEW_LABELS_V1) as DeckEditorViewModeV1[]).map((mode) => (
-                <option key={mode} value={mode}>
-                  {DECK_EDITOR_VIEW_LABELS_V1[mode]}
-                </option>
-              ))}
-            </select>
 
-            <label className="sr-only" htmlFor="deck-editor-group">
+            <label className="flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-[var(--mtg-parchment-muted)]">
               Group by
+              <select
+                id="deck-editor-group"
+                className="professor-mtg-input px-2 py-1 text-xs normal-case tracking-normal"
+                title="Group by"
+                value={groupMode}
+                onChange={(event) => {
+                  setGroupMode(event.target.value as DeckEditorGroupModeV1);
+                  setFocusGroup(null);
+                }}
+              >
+                {(Object.keys(DECK_EDITOR_GROUP_LABELS_V1) as DeckEditorGroupModeV1[]).map((mode) => (
+                  <option key={mode} value={mode}>
+                    {DECK_EDITOR_GROUP_LABELS_V1[mode]}
+                  </option>
+                ))}
+              </select>
             </label>
-            <select
-              id="deck-editor-group"
-              className="professor-mtg-input px-2 py-1 text-xs"
-              title="Group by"
-              value={groupMode}
-              onChange={(event) => {
-                setGroupMode(event.target.value as DeckEditorGroupModeV1);
-                setFocusGroup(null);
-              }}
-            >
-              {(Object.keys(DECK_EDITOR_GROUP_LABELS_V1) as DeckEditorGroupModeV1[]).map((mode) => (
-                <option key={mode} value={mode}>
-                  {DECK_EDITOR_GROUP_LABELS_V1[mode]}
-                </option>
-              ))}
-            </select>
 
-            <label className="sr-only" htmlFor="deck-editor-sort">
+            <label className="flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-[var(--mtg-parchment-muted)]">
               Sort by
+              <select
+                id="deck-editor-sort"
+                className="professor-mtg-input px-2 py-1 text-xs normal-case tracking-normal"
+                title="Sort by"
+                value={sortMode}
+                onChange={(event) => setSortMode(event.target.value as DeckEditorSortModeV1)}
+              >
+                {(Object.keys(DECK_EDITOR_SORT_LABELS_V1) as DeckEditorSortModeV1[]).map((mode) => (
+                  <option key={mode} value={mode}>
+                    {DECK_EDITOR_SORT_LABELS_V1[mode]}
+                  </option>
+                ))}
+              </select>
             </label>
-            <select
-              id="deck-editor-sort"
-              className="professor-mtg-input px-2 py-1 text-xs"
-              title="Sort by"
-              value={sortMode}
-              onChange={(event) => setSortMode(event.target.value as DeckEditorSortModeV1)}
-            >
-              {(Object.keys(DECK_EDITOR_SORT_LABELS_V1) as DeckEditorSortModeV1[]).map((mode) => (
-                <option key={mode} value={mode}>
-                  {DECK_EDITOR_SORT_LABELS_V1[mode]}
-                </option>
-              ))}
-            </select>
 
             {facets.length > 0 ? (
               <button
@@ -947,6 +947,10 @@ export function ProfessorDeckEditorPanel({
               </button>
             ) : null}
           </div>
+          <p className="mt-2 text-[10px] leading-snug text-[var(--mtg-parchment-muted)]">
+            Tip: open a card or hold one to tag it, move boards, or promote an eligible card to
+            commander.
+          </p>
 
           {filtersOpen && facets.length > 0 ? (
             <div className="deck-editor-toolbar__facets">

@@ -35,6 +35,13 @@ firebase-debug.log
 web/reports/
 web/.cache/
 
+# Customer UX Playwright pack (auth session + run artifacts)
+web/e2e/.auth/
+web/e2e/artifacts/
+web/test-results/
+web/playwright-report/
+web/blob-report/
+
 # Python bytecode from the mechanical-space training scripts
 __pycache__/
 *.pyc

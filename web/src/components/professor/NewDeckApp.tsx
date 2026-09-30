@@ -159,7 +159,7 @@ export function NewDeckApp({ slug }: { slug: string }) {
             type="button"
             disabled={!canStart || busy}
             onClick={() => void start()}
-            className="professor-mtg-btn mt-6 w-full px-6 py-4 text-sm"
+            className="professor-mtg-btn professor-mtg-btn--primary mt-6 w-full px-6 py-4 text-sm"
           >
             {busy ? "Starting…" : "Start deck"}
           </button>

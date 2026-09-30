@@ -9,6 +9,7 @@ import { CollectionBinderValue } from "@/components/collection/CollectionBinderV
 import { CollectionBinderImport } from "@/components/collection/CollectionBinderImport";
 import { CollectionCardSearch } from "@/components/collection/CollectionCardSearch";
 import { CustomerAuthShell } from "@/components/CustomerAuthShell";
+import { CustomerStoreNavV1 } from "@/components/CustomerStoreNavV1";
 import { useCustomer } from "@/context/CustomerContext";
 import { apiFetch } from "@/lib/api-client";
 import {
@@ -246,11 +247,9 @@ export default function CollectionPage() {
 
   return (
     <CustomerAuthShell roomy>
-      <div className="flex flex-wrap items-end justify-between gap-4">
+      <CustomerStoreNavV1 slug={slug} active="collection" />
+      <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
         <h1 className={authHeading}>Collection</h1>
-        <Link href={`/s/${slug}/decks`} className={authLink}>
-          My decks
-        </Link>
       </div>
       <p className={`mt-3 ${authSubtext}`}>
         This is your binder — cards you already own. The shop pile on the

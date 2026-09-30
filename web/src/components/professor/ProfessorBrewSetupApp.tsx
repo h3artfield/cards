@@ -328,6 +328,14 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
               ? "Paste a list you already have · bracket · playstyle"
               : "Paper-legal commanders · bracket · your playstyle"}
           </p>
+          <p className="mt-3">
+            <Link
+              href={`/s/${encodeURIComponent(slug)}/decks/new`}
+              className="professor-mtg-link text-xs"
+            >
+              Build it myself — pick cards or paste a list
+            </Link>
+          </p>
           {pilePrefillNote ? (
             <p className="professor-mtg-body mt-2 text-sm text-[var(--mtg-gold)]">{pilePrefillNote}</p>
           ) : null}
@@ -658,7 +666,7 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
                   (setupMode === "optimize" && !importPreview?.canOptimize)
                 }
                 onClick={() => void buildDeck()}
-                className="professor-mtg-btn w-full px-6 py-4 text-sm"
+                className="professor-mtg-btn professor-mtg-btn--primary w-full px-6 py-4 text-sm"
               >
                 {loading
                   ? setupMode === "optimize"

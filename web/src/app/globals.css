@@ -741,13 +741,13 @@ button {
 .professor-mtg-backdrop__glow--accent {
   top: -32%;
   left: -22%;
-  background: radial-gradient(ellipse at 34% 36%, var(--accent-glow) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 34% 36%, rgba(224, 180, 76, 0.22) 0%, transparent 62%);
 }
 
 .professor-mtg-backdrop__glow--cool {
   top: -36%;
   right: -24%;
-  background: radial-gradient(ellipse at 66% 36%, var(--cool-glow) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 66% 36%, rgba(110, 168, 255, 0.14) 0%, transparent 62%);
 }
 
 /* Grounds the page so the content does not float on an even field. */
@@ -777,7 +777,9 @@ button {
 
 .professor-mtg-input {
   border: 1px solid var(--line-subtle);
-  background: var(--ink-900);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0%, transparent 42%),
+    var(--ink-900);
   color: var(--text-hi);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
   border-radius: 6px;
@@ -795,34 +797,201 @@ button {
   color: var(--text-lo);
 }
 
+/* ——— UI material shaders (CSS-only) ———
+   Foil gold primaries and lit-stone secondaries. Sheen is a one-shot hover
+   sweep, not ambient motion. */
+@keyframes ui-sheen-sweep {
+  from {
+    transform: translateX(-120%) skewX(-18deg);
+  }
+  to {
+    transform: translateX(220%) skewX(-18deg);
+  }
+}
+
+.ui-shader-foil,
+.ui-shader-stone,
+.professor-mtg-btn,
+.professor-mtg-btn--primary {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.ui-shader-foil::after,
+.ui-shader-stone::after,
+.professor-mtg-btn::after,
+.professor-mtg-btn--primary::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: -20% -40%;
+  z-index: 1;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.22) 48%,
+    rgba(255, 248, 220, 0.35) 50%,
+    rgba(255, 255, 255, 0.12) 52%,
+    transparent 65%
+  );
+  transform: translateX(-120%) skewX(-18deg);
+  opacity: 0;
+}
+
+.ui-shader-foil:hover:not(:disabled)::after,
+.ui-shader-stone:hover:not(:disabled)::after,
+.professor-mtg-btn:hover:not(:disabled)::after,
+.professor-mtg-btn--primary:hover:not(:disabled)::after {
+  opacity: 1;
+  animation: ui-sheen-sweep 0.45s ease-out 1;
+}
+
+.ui-shader-foil {
+  border: 1px solid var(--accent-lo);
+  background:
+    linear-gradient(135deg, rgba(255, 248, 220, 0.35) 0%, transparent 42%),
+    linear-gradient(180deg, var(--accent-hi) 0%, var(--accent) 48%, #b8922e 100%);
+  color: var(--ink-900);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+    0 1px 2px rgba(0, 0, 0, 0.35);
+  transition: background 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, filter 0.15s ease;
+}
+
+.ui-shader-foil:hover:not(:disabled) {
+  border-color: var(--accent);
+  background:
+    linear-gradient(135deg, rgba(255, 252, 235, 0.45) 0%, transparent 45%),
+    linear-gradient(180deg, #f8dc9a 0%, var(--accent-hi) 45%, var(--accent) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+    0 2px 8px -2px rgba(0, 0, 0, 0.45);
+}
+
+.ui-shader-stone {
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 38%),
+    linear-gradient(180deg, var(--ink-700) 0%, var(--ink-750) 100%);
+  color: var(--text-hi);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 1px 2px rgba(0, 0, 0, 0.4);
+  transition: background 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.ui-shader-stone:hover:not(:disabled) {
+  border-color: var(--accent-lo);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 40%),
+    linear-gradient(180deg, #232935 0%, var(--ink-700) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 0 1px rgba(224, 180, 76, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
 .professor-mtg-btn {
   border: 1px solid var(--line);
-  background: linear-gradient(180deg, var(--ink-700) 0%, var(--ink-750) 100%);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 38%),
+    linear-gradient(180deg, var(--ink-700) 0%, var(--ink-750) 100%);
   color: var(--accent-hi);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: none;
   border-radius: 6px;
   font-family: var(--font-display), Georgia, serif;
-  /* Hairline top edge: one pixel of light from above is what makes a surface
-     read as a physical object rather than a filled rectangle. */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 1px 2px rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 1px 2px rgba(0, 0, 0, 0.4);
   transition: background 0.15s ease, box-shadow 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
 .professor-mtg-btn:hover:not(:disabled) {
   border-color: var(--accent-lo);
-  background: linear-gradient(180deg, #232935 0%, var(--ink-700) 100%);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 40%),
+    linear-gradient(180deg, #232935 0%, var(--ink-700) 100%);
   color: var(--accent-hi);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.09),
-    0 1px 2px rgba(0, 0, 0, 0.4),
-    0 0 24px -6px var(--accent-glow);
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 0 1px rgba(224, 180, 76, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-.professor-mtg-btn:disabled {
+.professor-mtg-btn--primary {
+  border: 1px solid var(--accent-lo);
+  background:
+    linear-gradient(135deg, rgba(255, 248, 220, 0.35) 0%, transparent 42%),
+    linear-gradient(180deg, var(--accent-hi) 0%, var(--accent) 48%, #b8922e 100%);
+  color: var(--ink-900);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  border-radius: 6px;
+  font-family: var(--font-display), Georgia, serif;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+    0 1px 2px rgba(0, 0, 0, 0.35);
+  transition: background 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.professor-mtg-btn--primary:hover:not(:disabled) {
+  border-color: var(--accent);
+  background:
+    linear-gradient(135deg, rgba(255, 252, 235, 0.45) 0%, transparent 45%),
+    linear-gradient(180deg, #f8dc9a 0%, var(--accent-hi) 45%, var(--accent) 100%);
+  color: var(--ink-900);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+    0 2px 8px -2px rgba(0, 0, 0, 0.45);
+}
+
+.professor-mtg-btn:disabled,
+.professor-mtg-btn--primary:disabled,
+.ui-shader-foil:disabled,
+.ui-shader-stone:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-shader-foil::after,
+  .ui-shader-stone::after,
+  .professor-mtg-btn::after,
+  .professor-mtg-btn--primary::after {
+    display: none;
+  }
+}
+
+/* Auth / storefront shell ground — static dual radial depth, no motion. */
+.auth-page-ground {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse 80% 55% at 8% -10%, rgba(224, 180, 76, 0.1), transparent 58%),
+    radial-gradient(ellipse 70% 50% at 96% 0%, rgba(110, 168, 255, 0.06), transparent 52%),
+    var(--ink-850);
+}
+
+.auth-page-ground::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.028;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.45) 0.4px, transparent 0.5px);
+  background-size: 3px 3px;
+}
+
+.auth-page-ground > * {
+  position: relative;
+  z-index: 1;
 }
 
 .professor-mtg-option {
@@ -995,14 +1164,34 @@ button {
   width: 100%;
   max-width: 42rem;
   position: relative;
+  isolation: isolate;
   border: 1px solid var(--line-subtle);
   border-radius: 12px;
-  background: var(--ink-800);
+  background:
+    radial-gradient(ellipse 90% 55% at 12% 0%, rgba(224, 180, 76, 0.06), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 92% 8%, rgba(110, 168, 255, 0.04), transparent 50%),
+    var(--ink-800);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
     0 1px 2px rgba(0, 0, 0, 0.5),
     0 16px 48px -16px rgba(0, 0, 0, 0.8);
   padding: 1.75rem 1.25rem;
+}
+
+.professor-mtg-chamber__inner::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  opacity: 0.035;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.4) 0.4px, transparent 0.5px);
+  background-size: 3px 3px;
+}
+
+.professor-mtg-chamber__inner--art::before {
+  opacity: 0.02;
 }
 
 .professor-mtg-chamber__inner.professor-mtg-chamber__inner--wide {
@@ -1355,8 +1544,20 @@ button {
 
 .professor-mtg-chip-btn--on {
   border-color: var(--mtg-gold);
-  background: rgba(224, 180, 76, 0.16);
+  background:
+    linear-gradient(135deg, rgba(255, 248, 220, 0.14) 0%, transparent 55%),
+    rgba(224, 180, 76, 0.16);
   color: var(--mtg-gold-bright);
+  box-shadow: inset 0 1px 0 rgba(255, 248, 220, 0.18);
+}
+
+/* Storefront selected filter pills (indigo utilities remapped to gold). */
+.storefront-theme button.bg-indigo-600,
+.storefront-theme [aria-pressed="true"].bg-indigo-600,
+.storefront-theme .bg-indigo-600 {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 220, 0.28),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.12);
 }
 
 /* Popover surface, shared by the search results and the marker menu. */

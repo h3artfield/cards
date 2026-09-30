@@ -2,12 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useCustomer } from "@/context/CustomerContext";
-import {
-  deckBuildReturnPath,
-  deckBuildSignInHref,
-} from "@/lib/store-inventory/deck-build-auth";
 import { StoreBrandMark } from "@/components/StoreBrandMark";
 import { CustomerStoreNavV1 } from "@/components/CustomerStoreNavV1";
 import {
@@ -109,9 +104,7 @@ export function StoreInventoryApp({
   storeName?: string;
   logoUrl?: string | null;
 }) {
-  const router = useRouter();
-  const { customer, loading: customerLoading } = useCustomer();
-  const professorHref = deckBuildReturnPath(slug, "professor");
+  const { customer } = useCustomer();
   const [storeName, setStoreName] = useState(storeNameProp ?? titleFromSlug(slug));
   const [logoUrl, setLogoUrl] = useState<string | null | undefined>(logoUrlProp);
   const [filters, setFilters] = useState<InventoryFilterState>({
@@ -321,15 +314,6 @@ export function StoreInventoryApp({
     }
   }
 
-  function goToDeckBuilder() {
-    if (customerLoading) return;
-    if (!customer) {
-      router.push(deckBuildSignInHref(slug, professorHref));
-      return;
-    }
-    router.push(professorHref);
-  }
-
   return (
     <div
       className="storefront-theme min-h-screen bg-neutral-950 text-[var(--text)]"
@@ -368,11 +352,6 @@ export function StoreInventoryApp({
               active="shop"
               loggedIn={Boolean(customer)}
             />
-          </div>
-
-          <div className="mt-4 flex gap-2 border-b border-neutral-800 pb-0">
-            <TabButton active>Browse inventory</TabButton>
-            <TabNavButton onClick={goToDeckBuilder}>Deck builder</TabNavButton>
           </div>
         </div>
       </header>
@@ -620,40 +599,3 @@ export function StoreInventoryApp({
   );
 }
 
-function TabButton({
-  active,
-  children,
-}: {
-  active: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <span
-      className={`border-b-2 px-4 py-2 text-sm font-medium ${
-        active
-          ? "border-indigo-500 text-white"
-          : "border-transparent text-neutral-400"
-      }`}
-    >
-      {children}
-    </span>
-  );
-}
-
-function TabNavButton({
-  onClick,
-  children,
-}: {
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="border-b-2 border-transparent px-4 py-2 text-sm font-medium text-neutral-400 transition hover:text-neutral-200"
-    >
-      {children}
-    </button>
-  );
-}
