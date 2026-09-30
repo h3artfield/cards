@@ -45,7 +45,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
     const result = searchDeckEditorCardsV1({
       catalog,
       query,
-      commanderColorIdentity: deck.commander.colorIdentity,
+      commanderColorIdentity: deck.commander?.colorIdentity ?? [],
       boardsByOracleId,
     });
 

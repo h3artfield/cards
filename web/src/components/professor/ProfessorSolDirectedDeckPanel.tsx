@@ -166,24 +166,25 @@ export function ProfessorSolDirectedDeckPanel({
       ))}
 
       {headProfessor &&
-      (headProfessor.requiredChanges.length > 0 || headProfessor.optionalChanges.length > 0) ? (
+      ((headProfessor.requiredChanges ?? []).length > 0 ||
+        (headProfessor.optionalChanges ?? []).length > 0) ? (
         <div className="professor-brew-brutal-card p-6">
           <h2 className="text-xs font-black uppercase tracking-[0.18em] text-neutral-500">Professor suggestions</h2>
-          {headProfessor.requiredChanges.length > 0 ? (
+          {(headProfessor.requiredChanges ?? []).length > 0 ? (
             <div className="mt-4">
               <p className="text-[11px] font-black uppercase text-red-400">Required changes</p>
               <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-neutral-300">
-                {headProfessor.requiredChanges.map((c) => (
+                {(headProfessor.requiredChanges ?? []).map((c) => (
                   <li key={c}>{c}</li>
                 ))}
               </ul>
             </div>
           ) : null}
-          {headProfessor.optionalChanges.length > 0 ? (
+          {(headProfessor.optionalChanges ?? []).length > 0 ? (
             <div className="mt-4">
               <p className="text-[11px] font-black uppercase text-neutral-500">Optional changes</p>
               <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-neutral-300">
-                {headProfessor.optionalChanges.map((c) => (
+                {(headProfessor.optionalChanges ?? []).map((c) => (
                   <li key={c}>{c}</li>
                 ))}
               </ul>

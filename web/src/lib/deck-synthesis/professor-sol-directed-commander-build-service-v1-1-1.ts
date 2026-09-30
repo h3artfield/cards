@@ -1080,9 +1080,11 @@ export async function runSolDirectedCommanderBuild(
       professorRepairPass < MAX_PROFESSOR_REPAIR_PASSES
     ) {
       professorRepairPass += 1;
+      const requiredChanges = headProfessor.verdict.requiredChanges ?? [];
+      const offPlanCards = headProfessor.verdict.offPlanCards ?? [];
       const repairReason =
-        headProfessor.verdict.requiredChanges.length > 0
-          ? `${headProfessor.verdict.requiredChanges.length} required fix(es)`
+        requiredChanges.length > 0
+          ? `${requiredChanges.length} required fix(es)`
           : `${headProfessor.verdict.classification} (${headProfessor.verdict.grade})`;
       await appendSolDirectedBuildActivityV111({
         buildId: job.buildId,
@@ -1095,11 +1097,11 @@ export async function runSolDirectedCommanderBuild(
         status: "HEAD_PROFESSOR_REVIEW",
       });
 
-      if (headProfessor.verdict.offPlanCards.length > 0 || headProfessor.verdict.requiredChanges.length > 0) {
+      if (offPlanCards.length > 0 || requiredChanges.length > 0) {
         const offPlanRepair = repairOffPlanNonlandsV111({
           deck: deckForReview,
-          offPlanCards: headProfessor.verdict.offPlanCards,
-          requiredChanges: headProfessor.verdict.requiredChanges,
+          offPlanCards,
+          requiredChanges,
           candidateDictionary: retrieval.candidateDictionary,
           requirementPools: retrieval.requirementPools,
         });
@@ -1199,8 +1201,8 @@ export async function runSolDirectedCommanderBuild(
         landPool: retrieval.landPool,
         maxSwaps: 16,
         repairContext: {
-          requiredChanges: headProfessor.verdict.requiredChanges,
-          offPlanCards: headProfessor.verdict.offPlanCards,
+          requiredChanges,
+          offPlanCards,
           professorSummary: headProfessor.verdict.reasoningSummary,
           priorGrade: headProfessor.verdict.grade,
           classification: headProfessor.verdict.classification,

@@ -643,7 +643,7 @@ export function ProfessorSolDirectedDeckListPanel({
         commander: {
           name: deck.commander.name,
           oracleId: deck.commander.oracleId ?? commander.oracleId,
-          colorIdentity: commander.colorIdentity,
+          colorIdentity: commander.colorIdentity ?? [],
           manaValue: null,
           oracleText: "",
           semanticFunctions: [],
@@ -691,7 +691,7 @@ export function ProfessorSolDirectedDeckListPanel({
     return formatThesisForCustomer({
       thesis: raw,
       deckPreferences: userInputs.deckPreferences,
-      commanderColorIdentity: commander.colorIdentity,
+      commanderColorIdentity: commander.colorIdentity ?? [],
     });
   }, [architectPlan, commander.colorIdentity, userInputs.deckPreferences]);
 
@@ -1102,7 +1102,7 @@ export function ProfessorSolDirectedDeckListPanel({
                 <ProfessorDeckSwapPanel
                   storeSlug={slug}
                   commanderName={commander.name}
-                  commanderColorIdentity={commander.colorIdentity}
+                  commanderColorIdentity={commander.colorIdentity ?? []}
                   cards={bracketCards}
                   requestedBracket={userInputs.bracket}
                 />
@@ -1165,7 +1165,7 @@ export function ProfessorSolDirectedDeckListPanel({
           <ProfessorDeckSwapPanel
             storeSlug={slug}
             commanderName={commander.name}
-            commanderColorIdentity={commander.colorIdentity}
+            commanderColorIdentity={commander.colorIdentity ?? []}
             cards={bracketCards}
             requestedBracket={userInputs.bracket}
           />

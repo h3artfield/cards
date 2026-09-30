@@ -10,6 +10,8 @@ import {
 } from "./professor-sol-directed-build-result-rehydrate-v1";
 import type { ArtifactReaderV1 } from "./professor-sol-directed-build-result-rehydrate-v1";
 import type { SolDirectedBuildJobRecordV111 } from "./professor-sol-directed-build-types-v1-1-1";
+import { computeSolDirectedDeckGradeV111 } from "./professor-sol-directed-deck-grade-v1-1-1";
+import { createEditableDeckFromBuildV1 } from "../professor-deck-editor/from-build-v1";
 
 let n = 0;
 async function check(label: string, fn: () => void | Promise<void>): Promise<void> {
@@ -129,6 +131,42 @@ async function main(): Promise<void> {
     const out = await rehydrateSolDirectedBuildResultV1({ job: JOB, readArtifact: read });
     assert.equal(out!.result.commander.name, "Fynn, the Fangbearer");
     assert.deepEqual(out!.result.commander.colorIdentity, ["G"]);
+  });
+
+  await check("a partial Head Professor artifact is filled in, not served raw", async () => {
+    const { read } = readerFor(ARTIFACTS);
+    const out = await rehydrateSolDirectedBuildResultV1({ job: JOB, readArtifact: read });
+    const hp = out!.result.headProfessor;
+    assert.ok(hp);
+    assert.deepEqual(hp.requiredChanges, []);
+    assert.deepEqual(hp.offPlanCards, []);
+    assert.equal(hp.grade, "B+");
+    assert.doesNotThrow(() =>
+      computeSolDirectedDeckGradeV111({
+        headProfessor: hp,
+        bracket: 4,
+        playstyle: "balanced",
+      }),
+    );
+  });
+
+  await check("a commander missing colorIdentity still opens in the editor", async () => {
+    const { read } = readerFor({
+      ...ARTIFACTS,
+      "canonicalized-deck.json": {
+        ...DECK,
+        commander: { name: "Fynn, the Fangbearer", oracleId: DECK.commander.oracleId },
+      },
+    });
+    const out = await rehydrateSolDirectedBuildResultV1({ job: JOB, readArtifact: read });
+    assert.deepEqual(out!.result.commander.colorIdentity, []);
+    const created = createEditableDeckFromBuildV1({
+      job: JOB,
+      result: out!.result,
+      now: "2026-09-26T00:00:00.000Z",
+    });
+    assert.equal(created.ok, true);
+    if (created.ok) assert.deepEqual(created.deck.commander.colorIdentity, []);
   });
 
   await check("job-level fields are carried across", async () => {

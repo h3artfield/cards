@@ -151,7 +151,54 @@ export function interpretTwoCallConstructionProofV111(
   return isSolDirectedHeadProfessorShippableV111(verdict) ? "PASS" : "FAIL";
 }
 
-function asSubmittedGradeLetter(grade: string): string | null {
+function asString(value: unknown): string {
+  return typeof value === "string" ? value : "";
+}
+
+function asStringArray(value: unknown): string[] {
+  return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
+}
+
+const HEAD_PROFESSOR_CLASSIFICATIONS = new Set<
+  SolDirectedHeadProfessorWholeDeckVerdictV111["classification"]
+>(["CONSTRUCTION_SUCCESS", "OPTIONAL_REFINEMENT", "CONSTRUCTION_DEFECT"]);
+
+/**
+ * Storage artifacts and model retries can omit arrays the UI and repair loop
+ * treat as required. A missing `requiredChanges` used to throw on
+ * `.length` and take down the finished list — or fail the build with
+ * MODEL_FAILURE. Fill the holes here so every caller sees a complete verdict.
+ */
+export function normalizeHeadProfessorVerdictV111(
+  raw: unknown,
+): SolDirectedHeadProfessorWholeDeckVerdictV111 | null {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
+  const rec = raw as Record<string, unknown>;
+  const classification = HEAD_PROFESSOR_CLASSIFICATIONS.has(
+    rec.classification as SolDirectedHeadProfessorWholeDeckVerdictV111["classification"],
+  )
+    ? (rec.classification as SolDirectedHeadProfessorWholeDeckVerdictV111["classification"])
+    : "OPTIONAL_REFINEMENT";
+  return {
+    classification,
+    bracketFit: asString(rec.bracketFit),
+    strategyCoherence: asString(rec.strategyCoherence),
+    manaAssessment: asString(rec.manaAssessment),
+    earlyMidLateGameAssessment: asString(rec.earlyMidLateGameAssessment),
+    winConditionAssessment: asString(rec.winConditionAssessment),
+    interactionAssessment: asString(rec.interactionAssessment),
+    resilienceAssessment: asString(rec.resilienceAssessment),
+    offPlanCards: asStringArray(rec.offPlanCards),
+    requiredChanges: asStringArray(rec.requiredChanges),
+    optionalChanges: asStringArray(rec.optionalChanges),
+    grade: asString(rec.grade),
+    reasoningSummary: asString(rec.reasoningSummary),
+    selfBuildQuestionAnswer: asString(rec.selfBuildQuestionAnswer),
+  };
+}
+
+function asSubmittedGradeLetter(grade: string | null | undefined): string | null {
+  if (typeof grade !== "string") return null;
   return grade.match(/^([A-F][+-]?)\s+as submitted/i)?.[1] ?? null;
 }
 
@@ -170,17 +217,17 @@ export function shouldRunProfessorRepairCriticV111(
   verdict: SolDirectedHeadProfessorWholeDeckVerdictV111,
 ): boolean {
   if (!isSolDirectedHeadProfessorShippableV111(verdict)) return true;
-  return verdict.requiredChanges.length > 0;
+  return (verdict.requiredChanges ?? []).length > 0;
 }
 
 export function formatHeadProfessorQualityFailureDetailV111(
   verdict: SolDirectedHeadProfessorWholeDeckVerdictV111,
 ): string {
   const parts = [verdict.grade, verdict.classification.replace(/_/g, " ")];
-  if (verdict.requiredChanges.length > 0) {
+  if ((verdict.requiredChanges ?? []).length > 0) {
     parts.push(`Required: ${verdict.requiredChanges.slice(0, 4).join("; ")}`);
   }
-  if (verdict.offPlanCards.length > 0) {
+  if ((verdict.offPlanCards ?? []).length > 0) {
     parts.push(`Off-plan: ${verdict.offPlanCards.slice(0, 6).join(", ")}`);
   }
   return parts.join(" · ");
@@ -328,7 +375,7 @@ export async function runSolDirectedHeadProfessorWholeDeckV111(args: {
   }
 
   return {
-    verdict,
+    verdict: normalizeHeadProfessorVerdictV111(verdict) ?? verdict,
     grounding,
     record: {
       purpose: "HEAD_PROFESSOR",

@@ -18,6 +18,7 @@
  * null, since the deck panel already refetches it.
  */
 import { readSolDirectedBuildArtifactV111 } from "./professor-sol-directed-build-artifacts-v1-1-1";
+import { normalizeHeadProfessorVerdictV111 } from "./professor-sol-directed-head-professor-v1-1-1";
 import type {
   SolDirectedBuildJobRecordV111,
   SolDirectedBuildResultV111,
@@ -49,6 +50,32 @@ function usableDeck(value: unknown): SolDirectedConstructedDeckV11 | null {
   const lands = Array.isArray(deck.lands) ? deck.lands : [];
   if (nonlands.length === 0 && lands.length === 0) return null;
   return deck as unknown as SolDirectedConstructedDeckV11;
+}
+
+function asStringArray(value: unknown): string[] {
+  return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
+}
+
+/**
+ * Editor GET and the finished-list header both require a name, oracle id, and
+ * colour identity. Recovered artifacts can omit any of those; falling back to
+ * the job record keeps the first paint from 500ing on `colorIdentity.map`.
+ */
+function publicCommanderFromDeck(
+  deck: SolDirectedConstructedDeckV11,
+  job: SolDirectedBuildJobRecordV111,
+): SolDirectedBuildResultV111["commander"] {
+  const raw = asRecord(deck.commander) ?? {};
+  return {
+    ...(deck.commander as SolDirectedBuildResultV111["commander"]),
+    name:
+      typeof raw.name === "string" && raw.name.trim() ? raw.name.trim() : job.commanderName,
+    oracleId:
+      typeof raw.oracleId === "string" && raw.oracleId
+        ? raw.oracleId
+        : job.commanderOracleId,
+    colorIdentity: asStringArray(raw.colorIdentity),
+  };
 }
 
 export type RehydratedResultV1 = {
@@ -102,14 +129,14 @@ export async function rehydrateSolDirectedBuildResultV1(args: {
     status: args.job.status,
     // The canonicalized deck carries the full commander blueprint, so the job
     // record's name and oracle id are only a fallback.
-    commander: deck.commander,
+    commander: publicCommanderFromDeck(deck, args.job),
     userInputs: args.job.userInputs,
     architectPlan: (architectPlan as SolDirectedBuildResultV111["architectPlan"]) ?? null,
     retrievalSummary: null,
     constructedDeck: deck,
     validation: (validation as SolDirectedBuildResultV111["validation"]) ?? null,
     critic: (critic as SolDirectedBuildResultV111["critic"]) ?? null,
-    headProfessor: (headProfessor as SolDirectedBuildResultV111["headProfessor"]) ?? null,
+    headProfessor: normalizeHeadProfessorVerdictV111(headProfessor),
     retrievalContract: (retrievalContract as SolDirectedBuildResultV111["retrievalContract"]) ?? null,
     professorRepairApplied: undefined,
     // Recomputed by the deck panel on load; not worth storing.

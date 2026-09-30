@@ -381,12 +381,12 @@ export function computeSolDirectedDeckGradeV111(args: {
     mechanicalConfidencePercent: args.validationPass ? 88 : 62,
     verifiedConnections: args.validationPass ? categories.length : Math.max(1, categories.length - 3),
     totalConnections: categories.length,
-    weirdDiscoveries: Math.max(0, 3 - hp.offPlanCards.length),
+    weirdDiscoveries: Math.max(0, 3 - (hp.offPlanCards ?? []).length),
     categories,
     bestArea: sorted[0]!,
     weakestArea: sorted[sorted.length - 1]!,
     professorNotes: [
-      hp.reasoningSummary.slice(0, 240) || hp.grade,
+      (hp.reasoningSummary ?? "").slice(0, 240) || hp.grade,
       `Best area: ${sorted[0]!.label} (${sorted[0]!.letter}).`,
       `Weakest area: ${sorted[sorted.length - 1]!.label} (${sorted[sorted.length - 1]!.letter}).`,
     ],
@@ -394,9 +394,9 @@ export function computeSolDirectedDeckGradeV111(args: {
     improvementProfessorLine: hp.selfBuildQuestionAnswer || hp.reasoningSummary,
     characterSheet: {
       coreEngines: args.primaryWinPaths?.slice(0, 3) ?? [],
-      discoveredSynergies: Math.max(0, 10 - hp.offPlanCards.length),
+      discoveredSynergies: Math.max(0, 10 - (hp.offPlanCards ?? []).length),
       verifiedConnectionsLabel: args.validationPass ? "Commander legal" : "Review needed",
-      weirdDiscoveries: Math.max(0, 2 - hp.requiredChanges.length),
+      weirdDiscoveries: Math.max(0, 2 - (hp.requiredChanges ?? []).length),
       independencePercent: clamp(textAssessmentToScore(hp.resilienceAssessment, 70)),
     },
     bracketAlignment: {

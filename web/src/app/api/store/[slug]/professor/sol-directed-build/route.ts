@@ -100,9 +100,9 @@ function publicJobView(view: SolDirectedBuildJobViewV111) {
           buildId: view.result.buildId,
           status: view.result.status,
           commander: {
-            name: view.result.commander.name,
-            oracleId: view.result.commander.oracleId,
-            colorIdentity: view.result.commander.colorIdentity,
+            name: view.result.commander?.name ?? view.job.commanderName,
+            oracleId: view.result.commander?.oracleId ?? view.job.commanderOracleId,
+            colorIdentity: [...(view.result.commander?.colorIdentity ?? [])],
           },
           userInputs: view.result.userInputs,
           architectPlan: view.result.architectPlan,

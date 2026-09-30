@@ -152,9 +152,9 @@ export function createEditableDeckFromBuildV1(args: {
       deckName: `${job.commanderName} — ${job.playstyle}`,
       bracket: job.bracket,
       commander: {
-        oracleId: result.commander.oracleId,
-        name: result.commander.name,
-        colorIdentity: result.commander.colorIdentity,
+        oracleId: result.commander?.oracleId ?? job.commanderOracleId,
+        name: result.commander?.name ?? job.commanderName,
+        colorIdentity: [...(result.commander?.colorIdentity ?? [])],
       },
       cards,
       markers: [],

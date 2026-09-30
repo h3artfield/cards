@@ -261,6 +261,15 @@ export function ProfessorSolDirectedBuildApp({ slug }: { slug: string }) {
           </div>
         ) : null}
 
+        {isComplete && !view?.result && !error ? (
+          <div className="professor-mtg-card mx-auto max-w-2xl border-red-900/40 p-6">
+            <p className="professor-mtg-label text-red-300/90">The build finished, but the list could not be recovered</p>
+            <p className="mt-2 text-sm text-[var(--mtg-parchment-muted)]">
+              Refresh this page to try again. The job was saved — the cards may still be on My decks.
+            </p>
+          </div>
+        ) : null}
+
         {isComplete && view?.result ? (
           <ProfessorClientErrorBoundary>
             <ProfessorSolDirectedDeckListPanel
