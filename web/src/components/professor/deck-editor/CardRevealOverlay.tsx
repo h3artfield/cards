@@ -35,6 +35,8 @@ function destinations(board: DeckBoardV1): DeckBoardV1[] {
       return ["mainboard", "cut"];
     case "cut":
       return ["mainboard", "considering"];
+    default:
+      return ["considering", "cut"];
   }
 }
 
@@ -50,6 +52,7 @@ export function CardRevealOverlay({
   onSynergy,
   onMove,
   onRemove,
+  onMakeCommander,
   onClose,
 }: {
   card: DeckEditorCard;
@@ -63,6 +66,8 @@ export function CardRevealOverlay({
   onSynergy: () => void;
   onMove: (board: DeckBoardV1) => void;
   onRemove?: () => void;
+  /** Promote this card into the command zone (demoting the current commander). */
+  onMakeCommander?: () => void;
   onClose: () => void;
 }) {
   const closeRef = useRef<HTMLButtonElement | null>(null);
@@ -178,6 +183,19 @@ export function CardRevealOverlay({
               </button>
             ) : null}
 
+            {onMakeCommander ? (
+              <button
+                type="button"
+                className="professor-mtg-btn px-2.5 py-1.5 text-[11px]"
+                onClick={() => {
+                  onMakeCommander();
+                  onClose();
+                }}
+              >
+                Make this the commander
+              </button>
+            ) : null}
+
             {destinations(card.board).map((board) => (
               <button
                 key={board}
@@ -216,7 +234,8 @@ export function CardRevealOverlay({
           </div>
 
           <p className="professor-mtg-reveal-tip">
-            Tip: press and hold a card to pick it up and drop it into Cart, Bench or Cut.
+            Tip: press and hold a card to pick it up. To swap commanders, use Make this the
+            commander here, on a search result, or on a row.
           </p>
         </div>
       </div>

@@ -157,6 +157,10 @@ export function DeckWorkspaceSummary({
       ) : null}
       <div className="deck-workspace-summary__main">
         <h2 className="deck-workspace-summary__commander">{commanderName}</h2>
+        <p className="professor-mtg-muted mt-1 text-[11px] leading-snug">
+          To change commander: search for one and choose Make this the commander, or use Make
+          commander on a card in the list.
+        </p>
         {nameSlot}
         <p className="deck-workspace-summary__facts">
           {libraryCount}/99 {libraryLegal ? "legal" : "needs review"}

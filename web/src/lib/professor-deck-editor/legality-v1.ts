@@ -115,7 +115,8 @@ const COLOR_IDENTITY_NAMES_V1: Record<string, string> = {
 
 /** Full colour names for legality copy — never bare WUBRG letters in the UI. */
 export function colorIdentityDisplayNamesV1(pips: readonly string[]): string {
-  return pips
+  return (pips ?? [])
+    .filter((pip): pip is string => typeof pip === "string" && Boolean(pip.trim()))
     .map((pip) => COLOR_IDENTITY_NAMES_V1[pip.toUpperCase()] ?? pip.toUpperCase())
     .join(", ");
 }

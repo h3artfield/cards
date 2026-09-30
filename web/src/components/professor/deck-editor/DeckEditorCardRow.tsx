@@ -28,6 +28,8 @@ function destinations(board: DeckBoardV1): DeckBoardV1[] {
       return ["mainboard", "cut"];
     case "cut":
       return ["mainboard", "considering"];
+    default:
+      return ["mainboard", "considering", "cut"];
   }
 }
 
@@ -217,7 +219,7 @@ export function DeckEditorCardRow({
               title={`Make ${card.name} the commander`}
               onClick={onMakeCommander}
             >
-              Cmd
+              Make commander
             </button>
           ) : null}
           <CardMarkerMenu

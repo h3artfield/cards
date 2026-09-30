@@ -187,7 +187,9 @@ function tileMenu(props: CardViewProps, card: DeckEditorCard) {
       onSynergy={() => onSelect?.(card)}
       onMove={(board) => onMove(card, board)}
       onRemove={removable(card, onRemove)}
-      onMakeCommander={onMakeCommander ? () => onMakeCommander(card) : undefined}
+      onMakeCommander={
+        onMakeCommander && card.canBeCommander ? () => onMakeCommander(card) : undefined
+      }
     />
   );
 }

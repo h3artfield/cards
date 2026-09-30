@@ -60,13 +60,13 @@ type MarkerBucketIdV1 = `marker:${string}`;
 const NEW_TAG_BUCKET_ID = "new-tag";
 
 /** Where a held card can be dropped: the shop cart, a board, a tag, or a new tag. */
-type BucketIdV1 = "cart" | typeof NEW_TAG_BUCKET_ID | DeckBoardV1 | MarkerBucketIdV1;
+type BucketIdV1 = "cart" | "commander" | typeof NEW_TAG_BUCKET_ID | DeckBoardV1 | MarkerBucketIdV1;
 
 type BucketV1 = {
   id: BucketIdV1;
   label: string;
   hint: string;
-  tone?: "cart" | "cut" | "marker" | "new-tag";
+  tone?: "cart" | "cut" | "marker" | "new-tag" | "commander";
   /** Tags only: the card already carries this one, so a drop takes it off. */
   applied?: boolean;
 };
@@ -84,6 +84,13 @@ const BOARD_BUCKETS: Record<DeckBoardV1, BucketV1> = {
 };
 
 const CART_BUCKET: BucketV1 = { id: "cart", label: "Cart", hint: "buy it here", tone: "cart" };
+
+const COMMANDER_BUCKET: BucketV1 = {
+  id: "commander",
+  label: "Promote to commander",
+  hint: "lead the deck",
+  tone: "commander",
+};
 
 const NEW_TAG_BUCKET: BucketV1 = {
   id: NEW_TAG_BUCKET_ID,
@@ -110,6 +117,8 @@ function boardDestinations(board: DeckBoardV1): DeckBoardV1[] {
       return ["mainboard", "cut"];
     case "cut":
       return ["mainboard", "considering"];
+    default:
+      return ["considering", "cut"];
   }
 }
 
@@ -123,7 +132,7 @@ function boardDestinations(board: DeckBoardV1): DeckBoardV1[] {
  */
 function markerBucketsV1(card: DeckEditorCard, markers: readonly DeckMarkerV1[]): BucketV1[] {
   return markers.slice(0, MARKER_BUCKET_LIMIT).map((marker) => {
-    const applied = card.markerIds.includes(marker.id);
+    const applied = (card.markerIds ?? []).includes(marker.id);
     return {
       id: `${MARKER_BUCKET_PREFIX}${marker.id}` as MarkerBucketIdV1,
       label: marker.label,
@@ -219,10 +228,12 @@ export function CardGrabProviderV1({
   imageUrls,
   markers,
   cartEligible,
+  canBeCommander,
   onCart,
   onMove,
   onToggleMarker,
   onCreateTag,
+  onMakeCommander,
   children,
 }: {
   imageUrls: Record<string, string>;
@@ -230,11 +241,15 @@ export function CardGrabProviderV1({
   markers: readonly DeckMarkerV1[];
   /** Whether the Cart bucket is offered — only for cards on our own shelf. */
   cartEligible: (card: DeckEditorCard) => boolean;
+  /** Whether Promote to commander is offered — paper-eligible sole commanders only. */
+  canBeCommander?: (card: DeckEditorCard) => boolean;
   onCart: (card: DeckEditorCard) => void;
   onMove: (card: DeckEditorCard, board: DeckBoardV1) => void;
   onToggleMarker: (card: DeckEditorCard, markerId: string, assign: boolean) => void;
   /** Makes the named tag if the deck has not got it, and puts it on the card. */
   onCreateTag: (card: DeckEditorCard, label: string) => void;
+  /** Promote the held card into the command zone. */
+  onMakeCommander?: (card: DeckEditorCard) => void;
   children: React.ReactNode;
 }) {
   const [held, setHeld] = useState<HeldV1 | null>(null);
@@ -255,12 +270,26 @@ export function CardGrabProviderV1({
   /** Read by the ref callback that places the name field, which cannot close over state. */
   const namingRef = useRef<NamingV1 | null>(null);
   const pointer = useRef({ x: 0, y: 0 });
-  const actions = useRef({ cartEligible, onCart, onMove, onToggleMarker });
+  const actions = useRef({
+    cartEligible,
+    canBeCommander,
+    onCart,
+    onMove,
+    onToggleMarker,
+    onMakeCommander,
+  });
   /** Set by the effect below, so the press handler can lift on its hold timer. */
   const lift = useRef<(x: number, y: number) => void>(() => {});
 
   useEffect(() => {
-    actions.current = { cartEligible, onCart, onMove, onToggleMarker };
+    actions.current = {
+      cartEligible,
+      canBeCommander,
+      onCart,
+      onMove,
+      onToggleMarker,
+      onMakeCommander,
+    };
   });
 
   useEffect(() => {
@@ -366,6 +395,7 @@ export function CardGrabProviderV1({
       swallowNextClick();
       if (!bucket) return;
       if (bucket === "cart") actions.current.onCart(holding.card);
+      else if (bucket === "commander") actions.current.onMakeCommander?.(holding.card);
       else if (bucket === NEW_TAG_BUCKET_ID) {
         // The drop is the end of the gesture, so the name has to be asked for
         // after it. Nothing is created until it is answered, and the card is
@@ -380,7 +410,7 @@ export function CardGrabProviderV1({
         actions.current.onToggleMarker(
           holding.card,
           markerId,
-          !holding.card.markerIds.includes(markerId),
+          !(holding.card.markerIds ?? []).includes(markerId),
         );
       } else if (bucket !== holding.card.board) actions.current.onMove(holding.card, bucket);
     };
@@ -499,6 +529,7 @@ export function CardGrabProviderV1({
   const moveBuckets: BucketV1[] = held
     ? [
         ...(cartEligible(held.card) ? [CART_BUCKET] : []),
+        ...(canBeCommander?.(held.card) && onMakeCommander ? [COMMANDER_BUCKET] : []),
         ...boardDestinations(held.card.board).map((board) => BOARD_BUCKETS[board]),
       ]
     : [];

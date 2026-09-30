@@ -45,6 +45,7 @@ function humanizeV1(value: string): string {
 }
 
 export function derivedRoleLabelV1(role: string): string {
+  if (typeof role !== "string" || !role.trim()) return "Unknown role";
   return DERIVED_ROLE_LABELS_V1[role] ?? humanizeV1(role);
 }
 
@@ -105,5 +106,6 @@ export function pickDistinctRoleHeadlinesV1<T>(
 
 /** Oracle action identifiers are snake_case primitives from the text parse. */
 export function oracleActionLabelV1(action: string): string {
+  if (typeof action !== "string" || !action.trim()) return "Unknown action";
   return humanizeV1(action);
 }

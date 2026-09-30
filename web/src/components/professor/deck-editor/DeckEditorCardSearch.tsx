@@ -148,7 +148,7 @@ export function DeckEditorCardSearch({
           aria-autocomplete="list"
           aria-activedescendant={open && hits[active] ? `${listId}-${active}` : undefined}
           className="professor-mtg-input min-w-0 flex-1 px-3 py-2 text-sm"
-          placeholder="Add a card by name…"
+          placeholder="Add a card, or search one to make commander…"
           value={query}
           disabled={disabled}
           onChange={(event) => setQuery(event.target.value)}
@@ -237,7 +237,7 @@ function SearchHitRow({
   onSelect: () => void;
   onMakeCommander?: () => void;
 }) {
-  const offColor = hit.offColorPips.length > 0;
+  const offColor = (hit.offColorPips ?? []).length > 0;
   const alreadyHere = currentBoard === board;
 
   // Off-colour and banned cards are offered anyway. Legality is reported on the
@@ -283,7 +283,7 @@ function SearchHitRow({
             {offColor ? (
               <span
                 className="professor-mtg-chip professor-mtg-chip--warn"
-                title={`${hit.name}: ${colorIdentityDisplayNamesV1(hit.offColorPips)} — not allowed in deck colour identity`}
+                title={`${hit.name}: ${colorIdentityDisplayNamesV1(hit.offColorPips ?? [])} — not allowed in deck colour identity`}
               >
                 Off-colour
               </span>

@@ -84,7 +84,10 @@ function titleCaseV1(value: string): string {
 
 function typeLabelV1(card: DeckEditorCard): string {
   const category = card.display?.category;
-  return category ? SOL_DIRECTED_DECK_DISPLAY_SECTION_LABELS[category] : UNRECOGNISED_GROUP_V1;
+  if (!category) return UNRECOGNISED_GROUP_V1;
+  // Never return undefined: sortGroupsV1 calls localeCompare on labels, and a
+  // missing section name takes down the whole editor behind the error boundary.
+  return SOL_DIRECTED_DECK_DISPLAY_SECTION_LABELS[category] ?? UNRECOGNISED_GROUP_V1;
 }
 
 /**
@@ -197,7 +200,7 @@ export function groupKeysForV1(
       // gets it — so it is dropped here. Lands that only tap for one sit in
       // Mana base; lands that actually accelerate stay in Ramp.
       const roles = (card.semantic?.derivedRoles ?? [])
-        .filter((role) => role !== "mana_generation")
+        .filter((role): role is string => typeof role === "string" && role !== "mana_generation")
         .map(derivedRoleLabelV1);
       if (card.isLand) {
         if (card.display?.manaAcceleration) {
@@ -209,7 +212,9 @@ export function groupKeysForV1(
       return ["No derived role"];
     }
     case "oracleAction": {
-      const actions = card.semantic?.topActions ?? [];
+      const actions = (card.semantic?.topActions ?? []).filter(
+        (action): action is string => typeof action === "string" && Boolean(action.trim()),
+      );
       if (actions.length) return actions.map(oracleActionLabelV1);
       if (card.isLand) return ["Mana base"];
       return ["No parsed action"];
@@ -253,7 +258,7 @@ export function sortGroupsV1(
   const byFixedOrder = (order: string[]) => (a: [string, unknown], b: [string, unknown]) => {
     const ai = order.indexOf(a[0]);
     const bi = order.indexOf(b[0]);
-    return (ai < 0 ? 99 : ai) - (bi < 0 ? 99 : bi) || a[0].localeCompare(b[0]);
+    return (ai < 0 ? 99 : ai) - (bi < 0 ? 99 : bi) || String(a[0] ?? "").localeCompare(String(b[0] ?? ""));
   };
 
   if (mode === "type") {

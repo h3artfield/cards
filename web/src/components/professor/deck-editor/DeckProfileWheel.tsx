@@ -103,11 +103,11 @@ export function DeckProfileWheel({
         })}
         {COS_V1_PROFILE_META.map((meta, index) => {
           const [x, y] = polar(index, RADIUS * 1.12);
-          const next = polar((index + 1) % AXIS_COUNT, RADIUS * 1.12);
+          const [nx, ny] = polar((index + 1) % AXIS_COUNT, RADIUS * 1.12);
           return (
             <path
               key={`hit-${meta.id}`}
-              d={`M ${CX} ${CY} L ${x[0].toFixed(1)} ${x[1].toFixed(1)} L ${next[0].toFixed(1)} ${next[1].toFixed(1)} Z`}
+              d={`M ${CX} ${CY} L ${x.toFixed(1)} ${y.toFixed(1)} L ${nx.toFixed(1)} ${ny.toFixed(1)} Z`}
               className="deck-profile-wheel__hit"
               onMouseEnter={() => setHoverId(meta.id)}
               onMouseLeave={() => setHoverId((current) => (current === meta.id ? null : current))}

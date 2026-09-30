@@ -39,7 +39,7 @@ function normalizeEditableDeckV1(deck: EditableDeckV1): EditableDeckV1 {
     },
     cards: (deck.cards ?? []).map((card) => ({
       ...card,
-      markerIds: card.markerIds ?? [],
+      markerIds: Array.isArray(card.markerIds) ? card.markerIds : [],
       professor: card.professor
         ? {
             ...card.professor,
@@ -48,8 +48,8 @@ function normalizeEditableDeckV1(deck: EditableDeckV1): EditableDeckV1 {
           }
         : null,
     })),
-    markers: deck.markers ?? [],
-    baselineCards: deck.baselineCards ?? [],
+    markers: Array.isArray(deck.markers) ? deck.markers : [],
+    baselineCards: Array.isArray(deck.baselineCards) ? deck.baselineCards : [],
   };
 }
 

@@ -33,6 +33,10 @@ import {
 } from "@/lib/professor-deck-editor/from-scratch-v1";
 import { resolveHandDeckCommanderV1 } from "@/lib/professor-deck-editor/hand-deck-commander-v1";
 import { handDeckImportOpsV1 } from "@/lib/professor-deck-editor/import-ops-v1";
+import {
+  getCommanderSearchCatalogRuntime,
+  isPaperEligibleCommanderNameFast,
+} from "@/lib/deck-synthesis/professor-commander-search-catalog-v1";
 import { applyDeckEditOpsV1 } from "@/lib/professor-deck-editor/ops-v1";
 import type { DeckEditRejectionV1 } from "@/lib/professor-deck-editor/ops-v1";
 import { checkEditableDeckLegalityV1 } from "@/lib/professor-deck-editor/legality-v1";
@@ -117,9 +121,13 @@ async function derivedMarkerFacts(deck: EditableDeckV1): Promise<DerivedMarkerFa
 }
 
 async function deckWithLegality(deck: EditableDeckV1) {
-  const [catalog, facts] = await Promise.all([
+  const [catalog, facts, commanderCatalog] = await Promise.all([
     getDeckResolutionCatalogRuntime(),
     derivedMarkerFacts(deck),
+    getCommanderSearchCatalogRuntime().catch((err) => {
+      console.warn("[deck-editor] commander catalog unavailable:", err);
+      return null;
+    }),
   ]);
 
   let cards = withDerivedMarkersV1(deck, facts);
@@ -132,6 +140,15 @@ async function deckWithLegality(deck: EditableDeckV1) {
     cards = withSemanticFactsV1(cards);
   } catch (err) {
     console.warn("[deck-editor] semantic facts unavailable:", err);
+  }
+
+  // Commander eligibility is read-time, same as display facts: the grab tray
+  // and row actions only offer "promote to commander" for cards that can lead.
+  if (commanderCatalog) {
+    cards = cards.map((card) => ({
+      ...card,
+      canBeCommander: isPaperEligibleCommanderNameFast(commanderCatalog, card.name),
+    }));
   }
 
   return {

@@ -84,7 +84,7 @@ export function markerChipsForCard(card: DeckEditorCard, markers: readonly DeckM
       kind: marker.kind,
       title: markerTitle(marker, card),
     })),
-    ...card.markerIds.map((id) => ({
+    ...(card.markerIds ?? []).map((id) => ({
       key: `u:${id}`,
       label: userLabels.get(id) ?? id,
       kind: "user" as const,

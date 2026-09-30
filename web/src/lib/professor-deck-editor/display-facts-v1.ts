@@ -68,13 +68,15 @@ export type DeckEditorDisplayFactsLookupV1 = (
 
 function factsFromCard(card: GoldenCatalogOracleCard): DeckEditorDisplayFactsV1 {
   const typeLine = card.typeLine ?? "";
+  const produced = Array.isArray(card.producedMana) ? card.producedMana : [];
+  const identity = Array.isArray(card.colorIdentity) ? card.colorIdentity : [];
   return {
     typeLine,
     manaCost: card.manaCost ?? null,
     manaValue: typeof card.manaValue === "number" ? card.manaValue : null,
     category: solDirectedDisplayCategoryForTypeLineV1(typeLine),
-    producedMana: [...(card.producedMana ?? [])],
-    colorIdentity: [...(card.colorIdentity ?? [])],
+    producedMana: produced.map(String),
+    colorIdentity: identity.map(String),
     manaAcceleration: isLandCard(card)
       ? landManaAccelerationFromOracleV1(typeLine, oracleTextOf(card))
       : false,

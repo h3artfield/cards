@@ -131,7 +131,10 @@ export function ProfessorDeckEditorPanel({
 
   const deck = payload?.deck ?? null;
   const cardNames = useMemo(
-    () => (deck ? [deck.commander.name, ...deck.cards.map((card) => card.name)] : []),
+    () =>
+      deck?.commander?.name
+        ? [deck.commander.name, ...deck.cards.map((card) => card.name)]
+        : [],
     [deck],
   );
   const enrichment = useCardEnrichment(slug, cardNames, {
@@ -283,7 +286,7 @@ export function ProfessorDeckEditorPanel({
     return counts;
   }, [deck?.cards]);
 
-  const libraryCount = payload?.legality.mainboardLibraryCount ?? 0;
+  const libraryCount = payload?.legality?.mainboardLibraryCount ?? 0;
   const readyToGrade = libraryCount >= COMMANDER_LIBRARY_SIZE_V1;
 
   const ownershipTally = useMemo(() => {
@@ -343,12 +346,12 @@ export function ProfessorDeckEditorPanel({
 
   const illegalByCardKey = useMemo(() => {
     const map = new Map<string, string>();
-    for (const violation of payload?.legality.violations ?? []) {
+    for (const violation of payload?.legality?.violations ?? []) {
       if (violation.severity !== "illegal" || !violation.cardKey) continue;
       if (!map.has(violation.cardKey)) map.set(violation.cardKey, violation.message);
     }
     return map;
-  }, [payload?.legality.violations]);
+  }, [payload?.legality?.violations]);
 
   /** Whether the search box or a facet chip is narrowing what is on screen. */
   const filtering = filter.trim().length > 0 || activeFacets.length > 0;
@@ -368,7 +371,7 @@ export function ProfessorDeckEditorPanel({
       if (activeFacets.length === 0) return true;
       const ids = new Set([
         ...(card.derivedMarkers ?? []).map((marker) => marker.id),
-        ...card.markerIds,
+        ...(card.markerIds ?? []),
       ]);
       return activeFacets.some((facet) => ids.has(facet));
     };
@@ -469,9 +472,9 @@ export function ProfessorDeckEditorPanel({
 
   const colorBalance = useMemo(
     () =>
-      deck
+      deck?.commander
         ? computeDeckColorBalanceV1({
-            commanderColors: deck.commander.colorIdentity,
+            commanderColors: deck.commander.colorIdentity ?? [],
             cards: (deck.cards ?? [])
               .filter((card) => card.board === "mainboard")
               .map((card) => ({
@@ -569,7 +572,7 @@ export function ProfessorDeckEditorPanel({
             op: "setCommander",
             oracleId: deck.commander.oracleId,
             name: deck.commander.name,
-            colorIdentity: [...deck.commander.colorIdentity],
+            colorIdentity: [...(deck.commander.colorIdentity ?? [])],
           },
         ],
         message: `${args.name} is now the commander — ${deck.commander.name} moved into the deck.`,
@@ -636,7 +639,7 @@ export function ProfessorDeckEditorPanel({
     );
   }
 
-  if (!payload || !deck) {
+  if (!payload || !deck || !deck.commander?.name) {
     return (
       <div className="px-5 py-8">
         <div className="professor-mtg-alert professor-mtg-alert--illegal mx-auto max-w-xl">
@@ -656,14 +659,14 @@ export function ProfessorDeckEditorPanel({
     );
   }
 
-  const facets = payload.markerFacets;
+  const facets = payload.markerFacets ?? [];
 
   /** One full-detail row: costs, markers, prices and the edit actions. */
   const renderTextRow = (card: DeckEditorCard) => (
     <DeckEditorCardRow
         key={card.cardKey}
         card={card}
-        markers={deck.markers}
+        markers={deck.markers ?? []}
         imageUrl={enrichment.imageUrls[card.name]}
         inventory={enrichment.inventoryByName[card.name]}
         tcgPrice={tcgPriceForCardName(enrichment.tcgPricesByName, card.name)}
@@ -683,7 +686,7 @@ export function ProfessorDeckEditorPanel({
                 copies: card.copies,
                 isLand: card.isLand,
               },
-              ...card.markerIds.map((markerId) => ({
+              ...(card.markerIds ?? []).map((markerId) => ({
                 op: "assignMarker" as const,
                 cardKey: card.cardKey,
                 markerId,
@@ -692,7 +695,7 @@ export function ProfessorDeckEditorPanel({
           })
         }
         onMakeCommander={
-          card.oracleId
+          card.canBeCommander && card.oracleId
             ? () => makeCommanderFromCard(card)
             : undefined
         }
@@ -734,7 +737,9 @@ export function ProfessorDeckEditorPanel({
       onMove: move,
       onRemove: (card: DeckEditorCard) =>
         applyOps([{ op: "removeCard", cardKey: card.cardKey }]),
-      onMakeCommander: makeCommanderFromCard,
+      onMakeCommander: (card) => {
+        if (card.canBeCommander && card.oracleId) makeCommanderFromCard(card);
+      },
     };
     if (viewMode === "condensed") return <CardCondensedView {...shared} />;
     if (viewMode === "grid") return <CardGridView {...shared} />;
@@ -784,9 +789,11 @@ export function ProfessorDeckEditorPanel({
       imageUrls={enrichment.imageUrls}
       markers={deck.markers}
       cartEligible={cartEligible}
+      canBeCommander={(card) => Boolean(card.canBeCommander && card.oracleId)}
       onCart={addToCart}
       onMove={move}
       onToggleMarker={toggleMarker}
+      onMakeCommander={makeCommanderFromCard}
       // The tray has no room to ask which scope, so a name that already belongs
       // to a tag of either scope reuses that one rather than making a twin.
       onCreateTag={(card, label) => createAndAssignMarker(card, label, "deck", true)}
@@ -803,7 +810,7 @@ export function ProfessorDeckEditorPanel({
             bracket={eventRegistrationBracketV1(deck).bracket ?? deck.bracket}
             grade={null}
             libraryCount={libraryCount}
-            libraryLegal={payload.legality.commanderLegal}
+            libraryLegal={payload.legality?.commanderLegal ?? false}
             inStockCount={ownershipTally.buyHere}
             ownedCount={
               ownershipTally.owned > 0 || ownershipTally.needElsewhere > 0
@@ -1025,7 +1032,7 @@ export function ProfessorDeckEditorPanel({
                 href={`/s/${encodeURIComponent(slug)}/inventory`}
                 className="professor-mtg-btn shrink-0 px-2.5 py-1 text-[11px] text-[var(--ok)]"
               >
-                Cart {cart.count} · ${cart.subtotal.toFixed(2)}
+                Cart {cart.count} · ${(cart.subtotal ?? 0).toFixed(2)}
               </a>
             ) : null}
           </div>
@@ -1035,14 +1042,16 @@ export function ProfessorDeckEditorPanel({
             a bracket read-out in the panel around this one, and two buttons
             called the same thing on one screen is worse than none. */}
         <div className="px-4 py-2 sm:px-5 lg:px-8 empty:hidden">
-          <DeckEditorStatus
-            legality={payload.legality}
-            editedByUser={deck.editedByUser}
-            hasBaseline={deck.baselineCards.length > 0}
-            stale={editor.saving}
-            onRevert={() => applyOps([{ op: "revertToBaseline" }])}
-            onRegrade={readyToGrade ? () => setRegradeOpen(true) : undefined}
-          />
+          {payload.legality ? (
+            <DeckEditorStatus
+              legality={payload.legality}
+              editedByUser={deck.editedByUser}
+              hasBaseline={(deck.baselineCards ?? []).length > 0}
+              stale={editor.saving}
+              onRevert={() => applyOps([{ op: "revertToBaseline" }])}
+              onRegrade={readyToGrade ? () => setRegradeOpen(true) : undefined}
+            />
+          ) : null}
         </div>
 
         {/* The bench, above the deck's groups rather than among them.
@@ -1226,6 +1235,11 @@ export function ProfessorDeckEditorPanel({
             onRemove={
               revealCard.origin === "user"
                 ? () => applyOps([{ op: "removeCard", cardKey: revealCard.cardKey }])
+                : undefined
+            }
+            onMakeCommander={
+              revealCard.canBeCommander && revealCard.oracleId
+                ? () => makeCommanderFromCard(revealCard)
                 : undefined
             }
             onClose={() => setRevealKey(null)}

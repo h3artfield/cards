@@ -1756,6 +1756,17 @@ body.professor-mtg-grabbing {
   color: var(--bad);
 }
 
+.professor-mtg-grab-bucket--commander.professor-mtg-grab-bucket--over {
+  border-color: var(--mtg-gold-bright);
+  background: rgba(224, 180, 76, 0.18);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 26px -4px rgba(224, 180, 76, 0.35);
+}
+
+.professor-mtg-grab-bucket--commander.professor-mtg-grab-bucket--over
+  .professor-mtg-grab-bucket-label {
+  color: var(--mtg-gold-bright);
+}
+
 /* A tag bucket is not a place, it is a label you are sticking on. So no dashed
    "put it in here" outline: a solid edge with a gold spine, which reads as the
    marker chips the tag will turn into on the row. */

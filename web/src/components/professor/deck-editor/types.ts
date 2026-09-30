@@ -24,6 +24,8 @@ export type DeckEditorCard = EditableDeckCardV1 & {
   copyOwnership?: CopyOwnershipSplit;
   display?: DeckEditorDisplayFactsV1;
   semantic?: DeckEditorSemanticFactsV1;
+  /** True when this card may sit in the command zone (paper-eligible sole commander). */
+  canBeCommander?: boolean;
 };
 
 /** A card's synergy partners, fetched lazily the first time one is asked for. */
