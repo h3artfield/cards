@@ -88,11 +88,14 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 RUN mkdir -p \
   data/milestones/mechanical-space/commander-optimization-score-v1 \
   data/milestones/mechanical-space/spellbook-win-architecture-space-v1 \
-  data/milestones/catalog-shadow
+  data/milestones/catalog-shadow \
+  data/milestones/deck-synthesis
 COPY --from=builder --chown=nextjs:nodejs /app/data/milestones/mechanical-space/commander-optimization-score-v1/ ./data/milestones/mechanical-space/commander-optimization-score-v1/
 COPY --from=builder --chown=nextjs:nodejs /app/data/milestones/mechanical-space/spellbook-win-architecture-space-v1/normalized-combo-dictionary.jsonl ./data/milestones/mechanical-space/spellbook-win-architecture-space-v1/normalized-combo-dictionary.jsonl
 COPY --from=builder --chown=nextjs:nodejs /app/data/milestones/catalog-shadow/catalog-semantic-visualization-v1-points.json.gz ./data/milestones/catalog-shadow/catalog-semantic-visualization-v1-points.json.gz
 COPY --from=builder --chown=nextjs:nodejs /app/data/milestones/catalog-shadow/catalog-shadow-parse-rc8-firestore-v2.jsonl.gz ./data/milestones/catalog-shadow/catalog-shadow-parse-rc8-firestore-v2.jsonl.gz
+# Head Professor loads this pin at runtime via fs; standalone tracing does not pull it in.
+COPY --from=builder --chown=nextjs:nodejs /app/data/milestones/deck-synthesis/phase6a1-professor-plan-model-pin-v2.json ./data/milestones/deck-synthesis/phase6a1-professor-plan-model-pin-v2.json
 
 USER nextjs
 EXPOSE 8080

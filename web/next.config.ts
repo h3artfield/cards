@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
       "./data/milestones/catalog-shadow/catalog-semantic-visualization-v1-points.json.gz",
       "./data/milestones/catalog-shadow/catalog-shadow-parse-rc8-firestore-v2.jsonl.gz",
     ],
+    "/api/store/[slug]/professor/sol-directed-build": [
+      "./data/milestones/deck-synthesis/phase6a1-professor-plan-model-pin-v2.json",
+    ],
   },
   typescript: {
     // Milestone snapshot TS under data/ and legacy parser strictness gaps — app routes typecheck in CI separately.
