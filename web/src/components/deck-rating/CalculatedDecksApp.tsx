@@ -10,6 +10,7 @@ type Row = {
   planRate: number | null;
   resilience: number | null;
   synergy: number | null;
+  score: string | null;
   executionScore: string | null;
   pendingReason: string | null;
 };
@@ -50,8 +51,8 @@ export function CalculatedDecksApp() {
   const shown = useMemo(() => {
     const rows = bracket === "all" ? decks : decks.filter((row) => row.bracket === bracket);
     return [...rows].sort((a, b) => {
-      const aScore = a.executionScore == null ? -1 : Number(a.executionScore);
-      const bScore = b.executionScore == null ? -1 : Number(b.executionScore);
+      const aScore = a.score == null ? -1 : Number(a.score);
+      const bScore = b.score == null ? -1 : Number(b.score);
       if (bScore !== aScore) return bScore - aScore;
       return (b.planRate ?? -1) - (a.planRate ?? -1) || a.name.localeCompare(b.name);
     });
@@ -63,7 +64,7 @@ export function CalculatedDecksApp() {
         <div className="text-xs uppercase tracking-widest text-amber-400">Calculated decks</div>
         <h1 className="text-2xl font-semibold">Deck scores</h1>
         <p className="max-w-3xl text-sm text-neutral-400">
-          A deck lands here when the Professor finishes it and the checker measures it. Pick a bracket to see that group from the highest four-digit score to the lowest. The score is the execution rating: bracket, then how often the stated win succeeds and survives a setback.
+          Decks that already have a four-digit score are listed here. Pick a bracket to see that group from the highest score to the lowest.
         </p>
       </header>
       <main className="px-6 py-5">
@@ -93,7 +94,7 @@ export function CalculatedDecksApp() {
               {shown.map((row) => (
                 <tr key={row.id} className="border-b border-neutral-900">
                   <td className="py-3 pr-4 font-semibold tracking-wide">
-                    {row.executionScore ?? "Pending"}
+                    {row.score ?? "Pending"}
                   </td>
                   <td className="py-3 pr-4">{row.name}</td>
                   <td className="py-3 pr-4">{row.bracket}</td>

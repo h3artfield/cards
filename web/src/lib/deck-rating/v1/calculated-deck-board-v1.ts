@@ -5,6 +5,7 @@
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
+import scoredDecksSnapshot from "./scored-decks-snapshot.json";
 
 export const CALCULATED_DECK_BOARD_VERSION = "calculated-decks-1.0" as const;
 
@@ -17,6 +18,8 @@ export type CalculatedDeckRowV1 = {
   planRate: number | null;
   resilience: number | null;
   synergy: number | null;
+  /** Four-digit score already measured for this deck. */
+  score: string | null;
   executionScore: string | null;
   pendingReason: string | null;
 };
@@ -27,7 +30,7 @@ type FieldFile = {
     name?: string;
     buildId?: string | null;
     measuredAt?: string;
-    score?: { bracket?: number; planRate?: number | null };
+    score?: { bracket?: number; planRate?: number | null; w?: number | null; display?: string };
     scris?: {
       speed?: number | null;
       consistency?: number | null;
@@ -68,11 +71,13 @@ export function calculatedDeckRow(args: {
   planRate?: number | null;
   resilience?: number | null;
   synergy?: number | null;
+  score?: string | null;
 }): CalculatedDeckRowV1 {
   const bracket = asBracket(args.bracket);
   const planRate = args.planRate ?? null;
   const resilience = args.resilience ?? null;
-  const score = executionScore(planRate, resilience, bracket);
+  const execution = executionScore(planRate, resilience, bracket);
+  const score = args.score ?? execution;
   return {
     id: args.id,
     name: args.name,
@@ -82,7 +87,8 @@ export function calculatedDeckRow(args: {
     planRate,
     resilience,
     synergy: args.synergy ?? null,
-    executionScore: score,
+    score,
+    executionScore: execution,
     pendingReason: score == null ? PENDING : null,
   };
 }
@@ -118,17 +124,34 @@ function fieldRows(): CalculatedDeckRowV1[] {
         planRate: entry.scris?.consistency ?? entry.score?.planRate ?? null,
         resilience: entry.scris?.resilience ?? null,
         synergy: entry.scris?.synergy ?? null,
+        score: entry.score?.w != null ? entry.score.display ?? null : null,
       }),
     ];
   });
 }
 
+function snapshotRows(): CalculatedDeckRowV1[] {
+  return scoredDecksSnapshot.map((row) =>
+    calculatedDeckRow({
+      id: row.id,
+      name: row.name,
+      bracket: row.bracket,
+      measuredAt: row.measuredAt,
+      speed: row.speed,
+      planRate: row.planRate,
+      resilience: row.resilience,
+      synergy: row.synergy,
+      score: row.score,
+    }),
+  );
+}
+
 export function listCalculatedDecks(): CalculatedDeckRowV1[] {
   const byId = new Map<string, CalculatedDeckRowV1>();
-  for (const row of [...fieldRows(), ...readLedger()]) byId.set(row.id, row);
+  for (const row of [...snapshotRows(), ...fieldRows(), ...readLedger()]) byId.set(row.id, row);
   return [...byId.values()].sort((a, b) => {
-    const aScore = a.executionScore == null ? -1 : Number(a.executionScore);
-    const bScore = b.executionScore == null ? -1 : Number(b.executionScore);
+    const aScore = a.score == null ? -1 : Number(a.score);
+    const bScore = b.score == null ? -1 : Number(b.score);
     if (bScore !== aScore) return bScore - aScore;
     const aPlan = a.planRate ?? -1;
     const bPlan = b.planRate ?? -1;
