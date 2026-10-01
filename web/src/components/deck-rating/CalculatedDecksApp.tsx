@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 type Row = {
@@ -64,7 +65,10 @@ export function CalculatedDecksApp() {
         <div className="text-xs uppercase tracking-widest text-amber-400">Calculated decks</div>
         <h1 className="text-2xl font-semibold">Deck scores</h1>
         <p className="max-w-3xl text-sm text-neutral-400">
-          Decks that already have a four-digit score are listed here. Pick a bracket to see that group from the highest score to the lowest.
+          Decks that already have a four-digit score are listed here. Pick a bracket to see that group from the highest score to the lowest.{" "}
+          <Link href="/experimental/grading" className="text-amber-400 hover:text-amber-300">
+            How grading works
+          </Link>
         </p>
       </header>
       <main className="px-6 py-5">
