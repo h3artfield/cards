@@ -1600,6 +1600,8 @@ export async function runSolDirectedCommanderBuild(
             bracket: deckScore.bracket,
             measuredAt: new Date().toISOString(),
             planRate: deckScore.planRate,
+            namedLineRate: deckScore.planRate,
+            score: deckScore.display,
           }),
         );
       }

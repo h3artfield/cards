@@ -1,27 +1,46 @@
 /**
- * Every measured Professor deck on the public board.
- * The four-digit execution score is 1000×bracket + round(999×planSuccess×resilience).
- * It stays empty until both of those rates are measured.
+ * Public calculated-decks board.
+ *
+ * Phase A: last-three digits are withheld (`B···`). Named-line machinery feeds
+ * Plan check evidence, not the customer four-digit score. Threat-by-clock
+ * digits publish only after CALCULATED_SCORE_DIGITS_PUBLISHED flips and the
+ * band gate passes.
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
+import {
+  CALCULATED_SCORE_DIGITS_PUBLISHED,
+  formatWithheldScore,
+} from "./goldfish-engine-v1";
 import scoredDecksSnapshot from "./scored-decks-snapshot.json";
 
-export const CALCULATED_DECK_BOARD_VERSION = "calculated-decks-1.0" as const;
+export const CALCULATED_DECK_BOARD_VERSION = "calculated-decks-1.1" as const;
 
 export type CalculatedDeckRowV1 = {
   id: string;
   name: string;
   bracket: 1 | 2 | 3 | 4 | 5;
   measuredAt: string;
+  /** Goldfish Speed in the deck's own turns (median among wins). */
   speed: number | null;
+  /** @deprecated Prefer namedLineRate — kept for older field.json readers. */
   planRate: number | null;
   resilience: number | null;
+  /**
+   * Plan connectivity score (0–1). Board UI: Plan check detail, not EDHREC Synergy.
+   * @deprecated Prefer planValid + namedLine* evidence.
+   */
   synergy: number | null;
-  /** Four-digit score already measured for this deck. */
+  planValid: boolean | null;
+  namedLineRate: number | null;
+  namedLineSpeed: number | null;
+  /** What the board shows: withheld `B···` until digits are published. */
   score: string | null;
+  /** Legacy named-line four-digit string, if measured — not shown as the product score. */
+  legacyNamedLineScore: string | null;
   executionScore: string | null;
   pendingReason: string | null;
+  scoreDigitsPublished: boolean;
 };
 
 type FieldFile = {
@@ -40,8 +59,8 @@ type FieldFile = {
   }>;
 };
 
-const PENDING =
-  "The execution score waits until the replay checks the Professor's stated win and the seven setbacks have been played.";
+const WITHHELD_REASON =
+  "Last three digits stay hidden until the threat-by-clock statistic is frozen and this bracket passes its gate. The bracket digit is live.";
 
 function boardPath(): string {
   return resolve(process.cwd(), "data/milestones/deck-rating/v1/plan-factory/calculated-decks.json");
@@ -71,25 +90,41 @@ export function calculatedDeckRow(args: {
   planRate?: number | null;
   resilience?: number | null;
   synergy?: number | null;
+  planValid?: boolean | null;
+  namedLineRate?: number | null;
+  namedLineSpeed?: number | null;
+  /** Legacy named-line display from older scoring — not the product score. */
   score?: string | null;
 }): CalculatedDeckRowV1 {
   const bracket = asBracket(args.bracket);
-  const planRate = args.planRate ?? null;
+  const namedLineRate = args.namedLineRate ?? args.planRate ?? null;
+  const namedLineSpeed = args.namedLineSpeed ?? args.speed ?? null;
   const resilience = args.resilience ?? null;
-  const execution = executionScore(planRate, resilience, bracket);
-  const score = args.score ?? execution;
+  const connectivity = args.synergy ?? null;
+  const planValid =
+    args.planValid ??
+    (connectivity == null ? null : connectivity > 0 && (namedLineRate == null || namedLineRate >= 0));
+  const execution = executionScore(namedLineRate, resilience, bracket);
+  const legacyNamedLineScore = args.score ?? execution;
+  const published = CALCULATED_SCORE_DIGITS_PUBLISHED;
+  const score = published ? legacyNamedLineScore : formatWithheldScore(bracket);
   return {
     id: args.id,
     name: args.name,
     bracket,
     measuredAt: args.measuredAt,
-    speed: args.speed ?? null,
-    planRate,
+    speed: namedLineSpeed,
+    planRate: namedLineRate,
     resilience,
-    synergy: args.synergy ?? null,
+    synergy: connectivity,
+    planValid,
+    namedLineRate,
+    namedLineSpeed,
     score,
+    legacyNamedLineScore,
     executionScore: execution,
-    pendingReason: score == null ? PENDING : null,
+    pendingReason: published ? (legacyNamedLineScore == null ? WITHHELD_REASON : null) : WITHHELD_REASON,
+    scoreDigitsPublished: published,
   };
 }
 
@@ -97,7 +132,22 @@ function readLedger(): CalculatedDeckRowV1[] {
   const path = boardPath();
   if (!existsSync(path)) return [];
   const body = JSON.parse(readFileSync(path, "utf8")) as { entries?: CalculatedDeckRowV1[] };
-  return body.entries ?? [];
+  return (body.entries ?? []).map((entry) =>
+    calculatedDeckRow({
+      id: entry.id,
+      name: entry.name,
+      bracket: entry.bracket,
+      measuredAt: entry.measuredAt,
+      speed: entry.speed,
+      planRate: entry.namedLineRate ?? entry.planRate,
+      resilience: entry.resilience,
+      synergy: entry.synergy,
+      planValid: entry.planValid,
+      namedLineRate: entry.namedLineRate ?? entry.planRate,
+      namedLineSpeed: entry.namedLineSpeed ?? entry.speed,
+      score: entry.legacyNamedLineScore ?? (entry.scoreDigitsPublished ? entry.score : null),
+    }),
+  );
 }
 
 export function recordCalculatedDeck(row: CalculatedDeckRowV1) {
@@ -114,6 +164,8 @@ function fieldRows(): CalculatedDeckRowV1[] {
   const field = JSON.parse(readFileSync(path, "utf8")) as FieldFile;
   return (field.entries ?? []).flatMap((entry) => {
     if (!entry.name) return [];
+    const namedLineRate = entry.scris?.consistency ?? entry.score?.planRate ?? null;
+    const connectivity = entry.scris?.synergy ?? null;
     return [
       calculatedDeckRow({
         id: entry.buildId || entry.oracleId || entry.name,
@@ -121,9 +173,12 @@ function fieldRows(): CalculatedDeckRowV1[] {
         bracket: entry.score?.bracket ?? 2,
         measuredAt: entry.measuredAt ?? "",
         speed: entry.scris?.speed ?? null,
-        planRate: entry.scris?.consistency ?? entry.score?.planRate ?? null,
+        planRate: namedLineRate,
         resilience: entry.scris?.resilience ?? null,
-        synergy: entry.scris?.synergy ?? null,
+        synergy: connectivity,
+        planValid: connectivity == null ? null : connectivity > 0,
+        namedLineRate,
+        namedLineSpeed: entry.scris?.speed ?? null,
         score: entry.score?.w != null ? entry.score.display ?? null : null,
       }),
     ];
@@ -141,6 +196,9 @@ function snapshotRows(): CalculatedDeckRowV1[] {
       planRate: row.planRate,
       resilience: row.resilience,
       synergy: row.synergy,
+      planValid: row.synergy == null ? null : row.synergy > 0,
+      namedLineRate: row.planRate,
+      namedLineSpeed: row.speed,
       score: row.score,
     }),
   );
@@ -150,12 +208,13 @@ export function listCalculatedDecks(): CalculatedDeckRowV1[] {
   const byId = new Map<string, CalculatedDeckRowV1>();
   for (const row of [...snapshotRows(), ...fieldRows(), ...readLedger()]) byId.set(row.id, row);
   return [...byId.values()].sort((a, b) => {
-    const aScore = a.score == null ? -1 : Number(a.score);
-    const bScore = b.score == null ? -1 : Number(b.score);
-    if (bScore !== aScore) return bScore - aScore;
-    const aPlan = a.planRate ?? -1;
-    const bPlan = b.planRate ?? -1;
-    if (bPlan !== aPlan) return bPlan - aPlan;
+    if (a.bracket !== b.bracket) return a.bracket - b.bracket;
+    const aRate = a.namedLineRate ?? -1;
+    const bRate = b.namedLineRate ?? -1;
+    if (bRate !== aRate) return bRate - aRate;
+    const aSpeed = a.namedLineSpeed ?? 99;
+    const bSpeed = b.namedLineSpeed ?? 99;
+    if (aSpeed !== bSpeed) return aSpeed - bSpeed;
     return a.name.localeCompare(b.name);
   });
 }

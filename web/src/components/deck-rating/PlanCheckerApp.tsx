@@ -269,7 +269,9 @@ export function PlanCheckerApp() {
           Calculated decks
         </a>
         <p className="max-w-3xl text-sm text-neutral-400">
-          One deck at a time. The checker plays the primary plan across seeds 0–99 and stamps the pilot, checker, and seed set on the result. Speed is the median winning turn. Fewer than 10 wins leaves speed empty.
+          Named-line evidence tool (Plan check), not the published four-digit score. Plays the primary plan across
+          seeds 0–99. Speed is median winning own-turn; fewer than 10 wins leaves speed empty. Connectivity was
+          formerly labeled Synergy.
         </p>
       </header>
 
@@ -350,7 +352,7 @@ export function PlanCheckerApp() {
                       {withheld ? `not scored · ${row.name}` : `${row.display} ${row.name}`}
                       {row.speed != null ? ` · speed ${row.speed}` : ""}
                       {row.consistency != null ? ` · line ${Math.round(row.consistency * 100)}%` : ""}
-                      {row.synergy != null ? ` · synergy ${row.synergy.toFixed(2)}` : ""}
+                      {row.synergy != null ? ` · connectivity ${row.synergy.toFixed(2)}` : ""}
                     </li>
                   );
                 })}
@@ -389,7 +391,7 @@ export function PlanCheckerApp() {
                 {latest.winType ?? latest.claim?.type ?? "plan"}
                 {latest.scris?.speed != null ? ` · speed ${latest.scris.speed}` : ""}
                 {latest.scris?.consistency != null ? ` · line ${Math.round(latest.scris.consistency * 100)}%` : ""}
-                {latest.scris?.synergy != null ? ` · synergy ${latest.scris.synergy.toFixed(2)}` : ""}
+                {latest.scris?.synergy != null ? ` · connectivity ${latest.scris.synergy.toFixed(2)}` : ""}
               </p>
               {latest.score?.reason && !latest.gaps?.length && (
                 <p className="mt-1 text-xs text-neutral-500">{latest.score.reason}</p>
@@ -512,33 +514,33 @@ export function PlanCheckerApp() {
 
               <div className="grid gap-3 sm:grid-cols-3">
                 <Score
-                  label="Speed"
-                  value={deck.result.speed == null ? "—" : String(deck.result.speed)}
-                  detail={deck.result.speedReason ?? "Median winning turn"}
+                  label="Named-line speed"
+                  value={deck.result.planCheck.namedLineSpeed == null ? "—" : `T${deck.result.planCheck.namedLineSpeed}`}
+                  detail={deck.result.speedReason ?? "Median winning own-turn"}
                 />
                 <Score
-                  label="Consistency"
-                  value={pct(deck.result.consistency)}
-                  detail={`${deck.result.successes} of ${deck.result.trials} wins`}
+                  label="Named-line rate"
+                  value={pct(deck.result.planCheck.namedLineRate)}
+                  detail={`${deck.result.successes} of ${deck.result.trials} wins · valid ${deck.result.planCheck.planValid ? "yes" : "no"}`}
                 />
                 <Score
-                  label="Synergy"
-                  value={deck.result.synergy.score.toFixed(3)}
-                  detail={deck.result.synergy.reason ?? "Equal-weight plan connectivity"}
+                  label="Connectivity"
+                  value={deck.result.planCheck.connectivity.score.toFixed(3)}
+                  detail={deck.result.planCheck.connectivity.reason ?? "Plan check connectivity (not EDHREC Synergy)"}
                 />
               </div>
 
               <div className="rounded border border-neutral-800 p-4">
-                <h3 className="text-sm font-medium">Synergy parts</h3>
+                <h3 className="text-sm font-medium">Connectivity parts</h3>
                 <dl className="mt-3 grid grid-cols-2 gap-2 text-sm sm:grid-cols-5">
-                  <Part name="Direct" value={deck.result.synergy.direct} />
-                  <Part name="Access" value={deck.result.synergy.access} />
-                  <Part name="Enablers" value={deck.result.synergy.enablers} />
-                  <Part name="Redundancy" value={deck.result.synergy.redundancy} />
-                  <Part name="Verified combo" value={deck.result.synergy.verifiedCombo} />
+                  <Part name="Direct" value={deck.result.planCheck.connectivity.direct} />
+                  <Part name="Access" value={deck.result.planCheck.connectivity.access} />
+                  <Part name="Enablers" value={deck.result.planCheck.connectivity.enablers} />
+                  <Part name="Redundancy" value={deck.result.planCheck.connectivity.redundancy} />
+                  <Part name="Verified combo" value={deck.result.planCheck.connectivity.verifiedCombo} />
                 </dl>
                 <p className="mt-3 text-xs text-neutral-500">
-                  Poison and combat drop the verified-combo part and split its weight across the other four. A missing required card, a missing outlet, or an outlet that cannot convert the loop scores 0.
+                  Poison and combat drop the verified-combo part and split its weight across the other four. A missing required card, a missing outlet, or an outlet that cannot convert the loop scores 0. This is Plan check connectivity, not EDHREC Synergy.
                 </p>
               </div>
 
