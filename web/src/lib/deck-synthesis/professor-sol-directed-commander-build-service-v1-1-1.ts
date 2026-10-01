@@ -3,6 +3,9 @@
  * Architect → Retrieval → Constructor → Validation → Critic swaps → Head Professor grade.
  */
 import type { DeckResolutionCatalog } from "../../../scripts/lib/load-deck-resolution-catalog";
+import { calculatedDeckRow, recordCalculatedDeck } from "@/lib/deck-rating/v1/calculated-deck-board-v1";
+import type { DeckScoreV1 } from "@/lib/deck-rating/v1/plan-score-v1";
+import { scoreConstructedDeck } from "@/lib/deck-rating/v1/score-constructed-deck-v1";
 import { resolveCommanderBlueprintFromCatalogV417 } from "./professor-commander-catalog-v4-17-v1";
 import { runSolDirectedArchitectV11 } from "./professor-sol-directed-architect-v1-1";
 import { evaluateArchitectIngestionGateV111 } from "./professor-sol-directed-ingestion-gate-v1-1-1";
@@ -154,6 +157,8 @@ export type RunSolDirectedCommanderBuildArgs = {
   onStatus?: (status: SolDirectedBuildStatusV111) => void | Promise<void>;
   mode?: "build" | "optimize";
   importedCards?: ProfessorImportedDeckCardV111[];
+  /** When set, a finished deck gets a Professor strategy and a four-digit score before it is saved. */
+  scoreDeck?: boolean;
 };
 
 /**
@@ -1569,6 +1574,37 @@ export async function runSolDirectedCommanderBuild(
     const nonlandCount = shippable.deck.nonlands.length;
     const landCount = shippable.deck.lands.reduce((s, l) => s + l.copies, 0);
 
+    let deckScore: DeckScoreV1 | null = null;
+    if (args.scoreDeck) {
+      try {
+        deckScore = await scoreConstructedDeck({ catalog: args.catalog, deck: shippable.deck });
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        console.warn(`[deck-score] ${message}`);
+        deckScore = {
+          schema: "plan-score-1.0",
+          bracket: asCommanderBracketV111(args.bracket) ?? 2,
+          w: null,
+          display: String(asCommanderBracketV111(args.bracket) ?? 2),
+          planRate: null,
+          namedLineWins: null,
+          trials: null,
+          reason: message,
+        };
+      }
+      if (deckScore) {
+        recordCalculatedDeck(
+          calculatedDeckRow({
+            id: job.buildId,
+            name: shippable.deck.commander.name,
+            bracket: deckScore.bracket,
+            measuredAt: new Date().toISOString(),
+            planRate: deckScore.planRate,
+          }),
+        );
+      }
+    }
+
     const deckEnrichmentPromise = enrichSolDirectedDeckForDisplayV111({
       storeSlug: args.storeSlug,
       deck: shippable.deck,
@@ -1593,6 +1629,7 @@ export async function runSolDirectedCommanderBuild(
       headProfessor: headProfessor.verdict,
       retrievalContract,
       professorRepairApplied,
+      deckScore,
       deckEnrichment: null,
       telemetry: {
         modelCallCount: modelCalls.length,

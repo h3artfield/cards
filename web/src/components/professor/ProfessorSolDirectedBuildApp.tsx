@@ -89,6 +89,7 @@ type BuildView = {
       landCount: number | null;
       candidateUniqueCount: number | null;
     } | null;
+    deckScore?: { display: string; w: number | null; reason: string | null; namedLineWins: number | null; trials: number | null } | null;
   };
 };
 
@@ -272,6 +273,18 @@ export function ProfessorSolDirectedBuildApp({ slug }: { slug: string }) {
 
         {isComplete && view?.result ? (
           <ProfessorClientErrorBoundary>
+            {view.result.deckScore ? (
+              <div className="professor-mtg-card mx-auto mb-6 max-w-2xl p-6">
+                <p className="professor-mtg-label">Deck rating</p>
+                <p className="mt-2 text-3xl font-semibold tracking-wide">{view.result.deckScore.display}</p>
+                <p className="mt-2 text-sm text-[var(--mtg-parchment-muted)]">{view.result.deckScore.reason}</p>
+                {view.result.deckScore.w != null ? (
+                  <p className="mt-1 text-xs text-[var(--mtg-parchment-muted)]">
+                    Named line {view.result.deckScore.namedLineWins} of {view.result.deckScore.trials} seeds.
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
             <ProfessorSolDirectedDeckListPanel
               slug={slug}
               buildId={buildId ?? view.job.buildId}

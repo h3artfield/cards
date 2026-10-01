@@ -16,6 +16,8 @@ export type CustomerSavedDeck = {
   grade: string | null;
   classification: string | null;
   bracket: number;
+  /** Four-digit rating once the named line has been checked. Null when the claim was not verified. */
+  deckRating: string | null;
   playstyle: string;
   createdAt: string;
   updatedAt: string;
@@ -48,6 +50,7 @@ export async function saveCustomerDeckFromBuildJob(args: {
     classification:
       args.result.headProfessor?.classification ?? args.job.finalClassification ?? null,
     bracket: args.job.bracket,
+    deckRating: args.result.deckScore?.w == null ? null : args.result.deckScore.display,
     playstyle: args.job.playstyle,
     createdAt: now,
     updatedAt: now,

@@ -161,6 +161,8 @@ export type SolDirectedBuildResultV111 = {
   professorRepairApplied?: boolean;
   /** Prefetched Scryfall art + store inventory for instant deck list rendering. */
   deckEnrichment?: SolDirectedDeckEnrichmentV111 | null;
+  /** Four-digit rating. Absent until the build asked for a score. Null W means the claim was not verified. */
+  deckScore?: import("@/lib/deck-rating/v1/plan-score-v1").DeckScoreV1 | null;
   telemetry: SolDirectedBuildTelemetryV111;
   modelCalls: SolDirectedModelCallRecordV1[];
   proofChain: SolDirectedBuildProofChainV111;

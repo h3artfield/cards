@@ -69,7 +69,7 @@ function kickSolDirectedBuildWorker(buildId: string, runArgs: ReturnType<typeof 
   runningBuilds.add(buildId);
   void (async () => {
     const p0Pass = runP0Selftest(runArgs.catalog);
-    await runSolDirectedCommanderBuild({ ...runArgs, p0TruthPass: p0Pass });
+    await runSolDirectedCommanderBuild({ ...runArgs, p0TruthPass: p0Pass, scoreDeck: true });
   })().finally(() => {
     runningBuilds.delete(buildId);
   });
@@ -122,6 +122,7 @@ function publicJobView(view: SolDirectedBuildJobViewV111) {
           failureCode: view.result.failureCode,
           failureMessage: view.result.failureMessage,
           professorRepairApplied: view.result.professorRepairApplied,
+          deckScore: view.result.deckScore ?? null,
           deckEnrichment: view.result.deckEnrichment ?? null,
         }
       : undefined,
@@ -270,7 +271,7 @@ export async function POST(
 
     if (body.awaitCompletion) {
       const p0Pass = runP0Selftest(catalog);
-      const result = await runSolDirectedCommanderBuild({ ...runArgs, p0TruthPass: p0Pass });
+      const result = await runSolDirectedCommanderBuild({ ...runArgs, p0TruthPass: p0Pass, scoreDeck: true });
       const view = await getSolDirectedBuildJobV111(result.buildId);
       if (!view) return jsonError("Build state lost", 500);
       return jsonOk(publicJobView(view));
