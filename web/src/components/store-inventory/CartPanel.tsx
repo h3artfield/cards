@@ -7,7 +7,14 @@ import { useCart } from "@/hooks/useCart";
 import type { RejectedCheckoutLine } from "@/lib/store-inventory/validate-cart";
 import type { TradeCreditBalance } from "@/lib/types";
 
-export function CartPanel({ slug }: { slug: string }) {
+export function CartPanel({
+  slug,
+  /** Keep Check out pinned; scroll the line list inside the sticky shop column. */
+  fillViewport = false,
+}: {
+  slug: string;
+  fillViewport?: boolean;
+}) {
   const { lines, count, subtotal, setQuantity, remove, prune, clear } =
     useCart(slug);
   const { customer } = useCustomer();
@@ -83,8 +90,12 @@ export function CartPanel({ slug }: { slug: string }) {
   }
 
   return (
-    <div className="mt-3 rounded-xl border border-neutral-700 bg-neutral-900/60 p-3">
-      <div className="flex items-start justify-between gap-2">
+    <div
+      className={`mt-3 rounded-xl border border-neutral-700 bg-neutral-900/60 p-3 ${
+        fillViewport ? "flex min-h-0 flex-1 flex-col overflow-hidden" : ""
+      }`}
+    >
+      <div className="flex shrink-0 items-start justify-between gap-2">
         <div>
           <p className="text-sm font-semibold text-white">Cart</p>
           <p className="mt-0.5 text-[11px] text-neutral-400">
@@ -105,7 +116,7 @@ export function CartPanel({ slug }: { slug: string }) {
       </div>
 
       {rejected.length > 0 ? (
-        <ul className="mt-3 space-y-1 rounded-lg border border-amber-900/60 bg-amber-950/30 p-2 text-[11px] text-amber-200">
+        <ul className="mt-3 shrink-0 space-y-1 rounded-lg border border-amber-900/60 bg-amber-950/30 p-2 text-[11px] text-amber-200">
           {rejected.map((r) => (
             <li key={r.inventoryItemId}>
               {r.displayName ? `${r.displayName}: ` : ""}
@@ -116,14 +127,20 @@ export function CartPanel({ slug }: { slug: string }) {
       ) : null}
 
       {error ? (
-        <p className="mt-3 rounded-lg border border-red-900/60 bg-red-950/30 p-2 text-[11px] text-red-300">
+        <p className="mt-3 shrink-0 rounded-lg border border-red-900/60 bg-red-950/30 p-2 text-[11px] text-red-300">
           {error}
         </p>
       ) : null}
 
       {lines.length > 0 ? (
         <>
-          <ul className="mt-3 space-y-2">
+          <ul
+            className={`mt-3 space-y-2 ${
+              fillViewport
+                ? "min-h-0 flex-1 overflow-y-auto overscroll-contain pr-0.5"
+                : "max-h-[min(50vh,28rem)] overflow-y-auto overscroll-contain"
+            }`}
+          >
             {lines.map((line) => (
               <li
                 key={line.inventoryItemId}
@@ -182,35 +199,37 @@ export function CartPanel({ slug }: { slug: string }) {
             ))}
           </ul>
 
-          <button
-            type="button"
-            disabled={checkingOut}
-            onClick={() => void checkout()}
-            // Checkout is the one action this panel exists for, so it takes the
-            // accent rather than the inverted white it used to carry.
-            className="mt-3 w-full rounded-lg bg-[var(--accent)] px-3 py-2 text-[12px] font-semibold uppercase tracking-wide text-[var(--ink-900)] transition hover:bg-[var(--accent-hi)] disabled:opacity-50"
-          >
-            {checkingOut ? "Opening checkout…" : "Check out"}
-          </button>
+          <div className="mt-3 shrink-0 border-t border-neutral-800 pt-3">
+            <button
+              type="button"
+              disabled={checkingOut}
+              onClick={() => void checkout()}
+              // Checkout is the one action this panel exists for, so it takes the
+              // accent rather than the inverted white it used to carry.
+              className="w-full rounded-lg bg-[var(--accent)] px-3 py-2 text-[12px] font-semibold uppercase tracking-wide text-[var(--ink-900)] transition hover:bg-[var(--accent-hi)] disabled:opacity-50"
+            >
+              {checkingOut ? "Opening checkout…" : "Check out"}
+            </button>
 
-          {credit && credit.balance > 0 ? (
-            <p className="mt-2 text-[10px] leading-relaxed text-neutral-400">
-              You have ${credit.balance.toFixed(2)} in trade credit here. Online
-              checkout takes card only — ask staff to apply your credit when you
-              buy in the shop.
-            </p>
-          ) : !customer ? (
-            <p className="mt-2 text-[10px] leading-relaxed text-neutral-500">
-              No account needed to buy.{" "}
-              <Link
-                href={`/sign-in?store=${encodeURIComponent(slug)}&return=1`}
-                className="underline hover:text-neutral-300"
-              >
-                Sign in
-              </Link>{" "}
-              to use trade credit in store.
-            </p>
-          ) : null}
+            {credit && credit.balance > 0 ? (
+              <p className="mt-2 text-[10px] leading-relaxed text-neutral-400">
+                You have ${credit.balance.toFixed(2)} in trade credit here. Online
+                checkout takes card only — ask staff to apply your credit when you
+                buy in the shop.
+              </p>
+            ) : !customer ? (
+              <p className="mt-2 text-[10px] leading-relaxed text-neutral-500">
+                No account needed to buy.{" "}
+                <Link
+                  href={`/sign-in?store=${encodeURIComponent(slug)}&return=1`}
+                  className="underline hover:text-neutral-300"
+                >
+                  Sign in
+                </Link>{" "}
+                to use trade credit in store.
+              </p>
+            ) : null}
+          </div>
         </>
       ) : null}
     </div>

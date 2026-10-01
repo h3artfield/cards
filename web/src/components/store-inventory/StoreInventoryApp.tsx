@@ -584,13 +584,14 @@ export function StoreInventoryApp({
             </div>
           </div>
 
-          <aside className="hidden xl:block xl:sticky xl:top-4 xl:self-start">
+          <aside className="hidden xl:sticky xl:top-4 xl:flex xl:max-h-[calc(100dvh-2rem)] xl:flex-col xl:self-start xl:overflow-hidden">
             <GatheringDesk
               slug={slug}
               cards={gatheredCards}
               onAdd={addToGathering}
               onRemove={removeFromGathering}
               onClear={clearPile}
+              fillViewport
             />
           </aside>
         </div>
