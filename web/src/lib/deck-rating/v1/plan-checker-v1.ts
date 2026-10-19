@@ -1,9 +1,11 @@
 /**
- * Deterministic plan checker 1.0.0.
+ * Deterministic plan checker 1.0.0 — goldfish plan-pilot mode.
  * Plays the declared primary plan across canonical-100-v1.
- * Speed is the median winning turn, empty when fewer than 10 trials win.
- * Consistency is the share of trials that win. Synergy is plan connectivity.
+ * Speed / win turns are the deck's own turns (see goldfish-engine-v1).
+ * Consistency is named-line success rate. `synergy` is plan connectivity
+ * (Plan check evidence), not EDHREC Synergy.
  */
+import { planCheckEvidenceFromParts, type PlanCheckEvidenceV1 } from "./goldfish-engine-v1";
 import { bottomMulliganV2, isManaSourceV2, keepMulliganV2, type MullCard } from "./goldfish-mulligan-v2";
 import {
   grantsDeathtouch,
@@ -73,7 +75,10 @@ export type PlanCheckResultV1 = {
   trials: number;
   /** Legacy clock: failures count as turn 15. The 1.5-turn validation bar still uses this, not Speed. */
   legacyRmst15: number;
+  /** Plan connectivity — prefer `planCheck` for new UI. */
   synergy: SynergyPartsV1;
+  /** Named-line evidence: validity, rate, own-turn speed, connectivity. */
+  planCheck: PlanCheckEvidenceV1;
   trialsDetail: PlanTrialV1[];
 };
 
@@ -601,19 +606,26 @@ export function runPlanChecker(args: {
   }
   const wins = trialsDetail.map((trial) => trial.winTurn).filter((turn): turn is number => turn != null);
   const speedReason = wins.length < PLAN_SPEED_MIN_SUCCESSES ? `fewer than ${PLAN_SPEED_MIN_SUCCESSES} wins in ${PLAN_SEED_COUNT}` : null;
+  const speed = speedReason ? null : median(wins);
+  const consistency = wins.length / PLAN_SEED_COUNT;
   return {
     checker: PLAN_CHECKER_VERSION,
     pilot: PLAN_PILOT_VERSION,
     planSchema: PLAN_SCHEMA_VERSION,
     seedSet: PLAN_SEED_SET,
     comboDb: args.comboDb ?? "none",
-    speed: speedReason ? null : median(wins),
+    speed,
     speedReason,
-    consistency: wins.length / PLAN_SEED_COUNT,
+    consistency,
     successes: wins.length,
     trials: PLAN_SEED_COUNT,
     legacyRmst15: rmst15(trialsDetail),
     synergy,
+    planCheck: planCheckEvidenceFromParts({
+      connectivity: synergy,
+      namedLineRate: consistency,
+      namedLineSpeed: speed,
+    }),
     trialsDetail,
   };
 }
