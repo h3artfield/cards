@@ -880,7 +880,11 @@ export function ProfessorDeckEditorPanel({
           </div>
         )}
 
-        <div className="deck-editor-toolbar border-b border-[var(--mtg-stone-border)] px-4 py-2.5 sm:px-5 lg:px-8">
+        <div
+          className={`deck-editor-toolbar border-b border-[var(--mtg-stone-border)] px-4 py-2.5 sm:px-5 lg:px-8${
+            cart.count > 0 ? " deck-editor-toolbar--with-cart" : ""
+          }`}
+        >
           <div className="deck-editor-toolbar__controls">
             <label className="flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-[var(--mtg-parchment-muted)]">
               View
@@ -1031,15 +1035,15 @@ export function ProfessorDeckEditorPanel({
               }
             />
             </div>
-            {cart.count > 0 ? (
-              <a
-                href={`/s/${encodeURIComponent(slug)}/inventory`}
-                className="professor-mtg-btn shrink-0 px-2.5 py-1 text-[11px] text-[var(--ok)]"
-              >
-                Cart {cart.count} · ${(cart.subtotal ?? 0).toFixed(2)}
-              </a>
-            ) : null}
           </div>
+          {cart.count > 0 ? (
+            <a
+              href={`/s/${encodeURIComponent(slug)}/inventory`}
+              className="deck-editor-toolbar__cart professor-mtg-btn shrink-0 px-2.5 py-1 text-[11px] text-[var(--ok)]"
+            >
+              Cart {cart.count} · ${(cart.subtotal ?? 0).toFixed(2)}
+            </a>
+          ) : null}
         </div>
 
         {/* Only for decks built by hand. A deck the Professor built already has

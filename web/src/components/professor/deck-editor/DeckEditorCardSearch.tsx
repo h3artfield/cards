@@ -137,7 +137,7 @@ export function DeckEditorCardSearch({
   };
 
   return (
-    <div ref={wrapRef} className="relative w-full sm:w-[26rem]">
+    <div ref={wrapRef} className="relative w-full min-w-0">
       <div className="flex items-stretch gap-2">
         <input
           ref={ref}
