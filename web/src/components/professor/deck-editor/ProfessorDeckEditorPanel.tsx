@@ -19,6 +19,7 @@ import type { DeckProfileSpokeV1 } from "./DeckProfileWheel";
 import type { DeckBoardV1, DeckMarkerScopeV1 } from "@/lib/professor-deck-editor/types-v1";
 import { CardNameHoverPreview } from "../CardNameHoverPreview";
 import { DeckEditorCardRow } from "./DeckEditorCardRow";
+import { MarkerLegend } from "./MarkerChips";
 import { DeckEditorCardSearch } from "./DeckEditorCardSearch";
 import { DeckEditorStatus } from "./DeckEditorStatus";
 import {
@@ -1077,6 +1078,8 @@ export function ProfessorDeckEditorPanel({
             would cost a line on every deck that never uses the feature. Once
             something is benched the header stays even if the filter excludes all
             of it, so a search can never make the bench look empty. */}
+        <MarkerLegend cards={deck.cards ?? []} markers={deck.markers ?? []} />
+
         {boardCounts.considering > 0 ? (
           <section className="professor-mtg-offdeck border-b border-[var(--mtg-stone-border)] px-4 py-3 sm:px-5">
             {sectionHeader(

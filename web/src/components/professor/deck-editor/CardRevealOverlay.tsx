@@ -142,7 +142,7 @@ export function CardRevealOverlay({
           </div>
 
           <div className="mt-1.5">
-            <MarkerChips card={card} markers={markers} />
+            <MarkerChips card={card} markers={markers} abbreviate={false} />
           </div>
 
           {why ? (

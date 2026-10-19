@@ -49,6 +49,14 @@ const INLINE_KINDS: ReadonlySet<DerivedMarkerKindV1 | "user"> = new Set([
   "structural",
 ]);
 
+/** Short forms for the row. The words live in the legend above the list. */
+const ROW_ABBREV: Partial<Record<DerivedMarkerKindV1, { short: string; name: string }>> = {
+  structural: { short: "C", name: "Core" },
+  game_changer: { short: "GC", name: "Game Changer" },
+  owned: { short: "O", name: "Owned" },
+  user_added: { short: "Y", name: "Your addition" },
+};
+
 type Chip = {
   key: string;
   label: string;
@@ -95,19 +103,54 @@ export function markerChipsForCard(card: DeckEditorCard, markers: readonly DeckM
   return chips.sort((a, b) => PRIORITY[a.kind] - PRIORITY[b.kind]);
 }
 
+export function MarkerLegend({
+  cards,
+  markers,
+}: {
+  cards: readonly DeckEditorCard[];
+  markers: readonly DeckMarkerV1[];
+}) {
+  const present = new Set<DerivedMarkerKindV1>();
+  for (const card of cards) {
+    for (const chip of markerChipsForCard(card, markers)) {
+      if (chip.kind !== "user" && ROW_ABBREV[chip.kind] && INLINE_KINDS.has(chip.kind)) {
+        present.add(chip.kind);
+      }
+    }
+  }
+  const shown = (Object.keys(ROW_ABBREV) as DerivedMarkerKindV1[]).filter((kind) => present.has(kind));
+  if (shown.length === 0) return null;
+  return (
+    <p className="professor-mtg-muted flex flex-wrap gap-x-3 gap-y-1 px-4 pt-2 text-[10px] sm:px-5 lg:px-8">
+      {shown.map((kind) => {
+        const entry = ROW_ABBREV[kind]!;
+        return (
+          <span key={kind}>
+            <span className="font-semibold text-[var(--text-hi)]">{entry.short}</span> {entry.name}
+          </span>
+        );
+      })}
+    </p>
+  );
+}
+
 export function MarkerChips({
   card,
   markers,
   limit = 2,
+  abbreviate = true,
 }: {
   card: DeckEditorCard;
   markers: readonly DeckMarkerV1[];
   limit?: number;
+  /** Row chips use the short form. A single-card view can keep the words. */
+  abbreviate?: boolean;
 }) {
   const chips = markerChipsForCard(card, markers);
   if (chips.length === 0) return null;
 
-  const shown = chips.filter((chip) => INLINE_KINDS.has(chip.kind)).slice(0, limit);
+  const cap = abbreviate ? 4 : limit;
+  const shown = chips.filter((chip) => INLINE_KINDS.has(chip.kind)).slice(0, cap);
   // Everything that did not get a chip is still reachable, as the overflow
   // count's tooltip. That is how the Professor's role for a card stays visible
   // without a label long enough to crush the row.
@@ -118,15 +161,18 @@ export function MarkerChips({
     // `shrink-0` on purpose: when the row runs out of width the answer is fewer
     // chips, not narrower ones. A chip squeezed to an ellipsis says nothing.
     <span className="flex shrink-0 items-center gap-1">
-      {shown.map((chip) => (
-        <span
-          key={chip.key}
-          className={`professor-mtg-chip max-w-[6.5rem] ${CHIP_CLASS[chip.kind]}`}
-          title={chip.title}
-        >
-          {chip.label}
-        </span>
-      ))}
+      {shown.map((chip) => {
+        const short = abbreviate && chip.kind !== "user" ? ROW_ABBREV[chip.kind]?.short : undefined;
+        return (
+          <span
+            key={chip.key}
+            className={`professor-mtg-chip ${short ? "" : "max-w-[6.5rem]"} ${CHIP_CLASS[chip.kind]}`}
+            title={chip.title || chip.label}
+          >
+            {short ?? chip.label}
+          </span>
+        );
+      })}
       {hidden.length > 0 ? (
         <span
           className="professor-mtg-chip shrink-0"
