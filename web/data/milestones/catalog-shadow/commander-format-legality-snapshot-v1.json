@@ -1,0 +1,261 @@
+{
+  "version": "commander-format-legality-snapshot-v1",
+  "generatedAt": "2026-08-12T19:22:15.305Z",
+  "legalityAsOf": "2026-08-12T19:22:15.290Z",
+  "catalogLegalityBulkUpdatedAt": "2026-08-05T21:00:40.717+00:00",
+  "sourcePrecedence": [
+    "structural_oracle_classification",
+    "wizards_banned_policy",
+    "set_format_policy",
+    "set_release_timing",
+    "paper_population_frame",
+    "non_competitive_frame_supplement",
+    "scryfall_golden_catalog_legalities"
+  ],
+  "commanderBannedOracleIds": [
+    "0677f49e-f8bf-4349-af52-2ccde9287c2e",
+    "07b6326a-b73d-422b-bcb5-c508aa3fc558",
+    "0e505699-8388-4862-93e0-059cef91cdd4",
+    "0ff11a61-6fe3-4c70-aba8-417023a5e54e",
+    "124c8663-21f3-4cd8-a060-9d04be35c43f",
+    "1342ee23-c3a0-4578-833a-e30a9fc9141c",
+    "15710c57-369a-442b-b7ea-175f3d9d164d",
+    "17fa98cd-ed8f-483f-9525-7e989a82ebb2",
+    "1acbbf61-edf7-4f67-968b-6832c2dd54d1",
+    "20f7f33d-0c49-49f7-80fa-aed86e33a528",
+    "2111588d-9af5-4a33-989e-b074d83f0463",
+    "22e89c6d-2304-4def-8a74-e53a6271e9b9",
+    "23216e59-f147-4bb7-a698-12777c2f8584",
+    "254878f0-be90-4653-a395-0c41258fceaf",
+    "272016e1-df1e-4376-9851-af8b1ecba2f4",
+    "2c63e4e1-89d2-4bc6-a232-94e75c4b1c8a",
+    "2d2fab27-8793-4212-a512-c4f0c8c55eeb",
+    "2f533667-e29b-4bec-897a-e7a9eee08314",
+    "3015882b-4897-4d2c-8e33-6731c85a0d03",
+    "372351fd-58f7-4cb8-8644-5fbc94ccb145",
+    "376ee366-e082-402f-b4db-6592fcfcacd2",
+    "37c49483-bef6-47c6-9354-ead8560d48da",
+    "395b312b-8fe6-4c28-b91d-620b5fcb9e6d",
+    "3deb19f6-c1a3-4bca-a6ae-df5d0b42a66e",
+    "3e057471-e415-4105-9064-8236a0a5047d",
+    "42bede0a-de6d-4de3-90ea-9d92b0fe8c64",
+    "4692740f-be90-459f-8d90-c4ae71771595",
+    "50885640-cdf1-4c62-b3bc-f37db6ab38b5",
+    "5089ec1a-f881-4d55-af14-5d996171203b",
+    "512a9ab9-ddd4-4872-b4f4-dee56f9f5575",
+    "52b88034-bf0f-4d29-b776-40ce421f1107",
+    "550c74d4-1fcb-406a-b02a-639a760a4380",
+    "59119143-c0fa-49dd-adf0-e2fd3029c48b",
+    "5a9c1c2d-d4d7-4df3-a853-f1b81c67b3e3",
+    "5b287dcc-f853-4df1-8ddf-5b8b2adc2873",
+    "5e816472-561d-43d1-ad28-80a829e2a91a",
+    "632de66b-2314-4299-847c-16a84bf9121f",
+    "652f6d90-b158-4f9b-a15e-3e677905331d",
+    "65a9f643-063f-406a-8d5a-5ebbe0f04c3d",
+    "697bcfe1-ecbf-42a1-bfc7-0766d48ca56b",
+    "6f14f61f-e533-4541-b861-4dbaf0d88833",
+    "70caaa64-9623-4d05-9843-18460fea963b",
+    "74f10b9a-a286-49b2-bfa1-a427ff041bd4",
+    "79172853-240c-4924-8b20-edf469946df4",
+    "7cafc972-a6f5-4cac-a3d3-8a3ae36ffb1e",
+    "7df49476-7b6c-4b5d-bede-463a7d2e0a58",
+    "824597b8-c89a-47ec-8526-7efc6e24ef0e",
+    "854ad486-0c59-4c57-9a76-ab1dff0ff37c",
+    "86373537-7424-416a-8d89-cc38f6538458",
+    "88e936c3-cab9-430f-baa1-930ff557cbf6",
+    "89f5b21c-18da-4071-bc42-9cdc433734bf",
+    "8c912b1f-4584-4945-9931-f6850e5ebfa4",
+    "900ca697-ad38-4b2b-bc74-2ff7eb6ea951",
+    "99d4d99d-cf56-45aa-aa39-a250695612f2",
+    "9e0ed4b0-28b5-44be-ab83-f1e8eb07138d",
+    "a06f8476-0a23-413a-bc28-8dc2427fdc2a",
+    "a1ab033f-9605-4ca2-a98b-c0b2e1599609",
+    "a610c77c-fe31-4465-a1c1-392db4ce4ed1",
+    "a6708b11-1bcd-4208-a967-fe91f2e3313c",
+    "ae83ef2c-960f-4c5b-97cc-52465c687c18",
+    "b0d84455-dc35-45d3-901e-8d28363142f4",
+    "b18b9869-8490-4875-a5bb-484c3299f2c5",
+    "c100a597-8186-4b07-b34a-e1eca2146838",
+    "d0209d3f-3f7e-4fd5-bce5-10bce6f29c86",
+    "d17576b2-4a47-4848-8908-3152c8b4afe2",
+    "d17d071d-dbee-4d65-8435-137f35cd89ca",
+    "d1b815d1-2848-40d4-a555-66822d1becbc",
+    "d38937a6-ab1c-4de8-a278-d81a6ce0d921",
+    "d5d91377-fd66-4dbe-a092-07f2ea379ca7",
+    "d5ed1233-df87-4b90-8918-13922ec95249",
+    "d83bb32d-f409-421a-9d93-bd7ea3240b47",
+    "dba4fd31-8931-42dd-bd86-45479c2abf74",
+    "dfa62414-48c6-4e5c-8609-1ce507b41505",
+    "e25ab152-e166-44df-8f92-668bab0e9619",
+    "e27193b7-1a47-4555-865d-b1fd4c6d597f",
+    "ed85fa82-e4fa-434b-92a8-36b6075708d1",
+    "edb455f4-8dc9-4b7c-b25c-cb51b7dfbb41",
+    "efe9c3e0-7315-408e-9903-9d25a681039b",
+    "f309fe9f-0732-4b81-a342-a394225cbbb1",
+    "f5ca7b13-8003-4361-b827-7095c89f2750",
+    "f759d112-76db-4091-a22b-b9f19ab6fa5f",
+    "f7f76f39-a0de-4bda-86b6-0f291892fcec",
+    "fc04f621-338b-4d4c-bf57-5e5a00d990f0"
+  ],
+  "setFormatPolicies": [
+    {
+      "setCode": "hob",
+      "setName": "The Hobbit",
+      "prereleaseAt": "2026-08-07",
+      "releasedAt": "2026-08-14",
+      "commanderLegalFromPrerelease": true,
+      "policyNote": "Wizards tabletop Commander legality begins at prerelease for this product; catalog Scryfall lags until main release."
+    },
+    {
+      "setCode": "unf",
+      "setName": "Unfinity",
+      "releasedAt": "2022-10-07",
+      "nonConstructed": true,
+      "policyNote": "Acorn/non-Constructed Unfinity product."
+    },
+    {
+      "setCode": "unk",
+      "setName": "Unknown Event",
+      "releasedAt": "2023-07-29",
+      "nonConstructed": true,
+      "policyNote": "Playtest/non-Constructed Unknown Event product."
+    }
+  ],
+  "notes": [
+    "commanderLegalFromPrerelease is explicit per-set policy — never inferred globally.",
+    "Structural eligibility remains independent from format legality snapshots."
+  ],
+  "catalogUniverse": {
+    "rawCatalogIdentitiesLoaded": 38542,
+    "paperIdentitiesAvailable": 34862,
+    "digitalOnlyIdentities": 1070,
+    "nonCardIdentities": 2610,
+    "paperPopulationHash": "2fe9397218077c11dce3aa11b876e74cc91c4b1063e8e1234ded1fc034b11fd1",
+    "resolutionSupplementVersion": "deck-resolution-supplement-v2",
+    "officialAliasCount": 2023,
+    "competitiveDeckOracleCount": 34020
+  },
+  "commanderBannedCount": 83,
+  "setInventorySample": [
+    {
+      "setCode": "msc",
+      "setName": "Marvel Super Heroes Commander",
+      "releasedAt": "2026-06-26",
+      "count": 592
+    },
+    {
+      "setCode": "unk",
+      "setName": "Unknown Event",
+      "releasedAt": "2023-02-17",
+      "count": 500
+    },
+    {
+      "setCode": "cmm",
+      "setName": "Commander Masters",
+      "releasedAt": "2023-08-04",
+      "count": 465
+    },
+    {
+      "setCode": "clb",
+      "setName": "Commander Legends: Battle for Baldur's Gate",
+      "releasedAt": "2022-06-10",
+      "count": 464
+    },
+    {
+      "setCode": "fdn",
+      "setName": "Foundations",
+      "releasedAt": "2024-11-15",
+      "count": 428
+    },
+    {
+      "setCode": "soc",
+      "setName": "Secrets of Strixhaven Commander",
+      "releasedAt": "2026-04-24",
+      "count": 326
+    },
+    {
+      "setCode": "fin",
+      "setName": "Final Fantasy",
+      "releasedAt": "2025-06-13",
+      "count": 307
+    },
+    {
+      "setCode": "mh3",
+      "setName": "Modern Horizons 3",
+      "releasedAt": "2024-06-14",
+      "count": 288
+    },
+    {
+      "setCode": "tla",
+      "setName": "Avatar: The Last Airbender",
+      "releasedAt": "2025-11-21",
+      "count": 280
+    },
+    {
+      "setCode": "lci",
+      "setName": "The Lost Caverns of Ixalan",
+      "releasedAt": "2023-11-17",
+      "count": 276
+    },
+    {
+      "setCode": "snc",
+      "setName": "Streets of New Capenna",
+      "releasedAt": "2022-04-29",
+      "count": 275
+    },
+    {
+      "setCode": "khm",
+      "setName": "Kaldheim",
+      "releasedAt": "2021-02-05",
+      "count": 275
+    },
+    {
+      "setCode": "msh",
+      "setName": "Marvel Super Heroes",
+      "releasedAt": "2026-06-26",
+      "count": 274
+    },
+    {
+      "setCode": "neo",
+      "setName": "Kamigawa: Neon Dynasty",
+      "releasedAt": "2022-02-18",
+      "count": 270
+    },
+    {
+      "setCode": "dsk",
+      "setName": "Duskmourn: House of Horror",
+      "releasedAt": "2024-09-27",
+      "count": 268
+    },
+    {
+      "setCode": "tdm",
+      "setName": "Tarkir: Dragonstorm",
+      "releasedAt": "2025-04-11",
+      "count": 267
+    },
+    {
+      "setCode": "mom",
+      "setName": "March of the Machine",
+      "releasedAt": "2023-04-21",
+      "count": 266
+    },
+    {
+      "setCode": "sos",
+      "setName": "Secrets of Strixhaven",
+      "releasedAt": "2026-04-24",
+      "count": 265
+    },
+    {
+      "setCode": "otj",
+      "setName": "Outlaws of Thunder Junction",
+      "releasedAt": "2024-04-19",
+      "count": 265
+    },
+    {
+      "setCode": "mkm",
+      "setName": "Murders at Karlov Manor",
+      "releasedAt": "2024-02-09",
+      "count": 265
+    }
+  ]
+}

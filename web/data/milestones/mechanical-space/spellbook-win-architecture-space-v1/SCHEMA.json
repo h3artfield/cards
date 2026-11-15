@@ -1,0 +1,29 @@
+{
+  "lineage": "SPELLBOOK_WIN_ARCHITECTURE_SPACE_V1",
+  "objects": [
+    "A_spellbook_variant",
+    "B_normalized_combo_card_set",
+    "C_win_architecture_signature"
+  ],
+  "fingerprintFields": [
+    "nNormalizedCombos",
+    "nNativeVariants",
+    "minComboCardCount",
+    "nTwoCard",
+    "nThreeCard",
+    "nFourPlusCard",
+    "nCommanderInvolved",
+    "commanderDependence",
+    "terminalFeatureIds",
+    "nTerminalRoutes",
+    "enablingFeatureIds",
+    "nResourceOnlyLoops",
+    "nCardsInMultipleComboSets",
+    "sharedPieceConcentration",
+    "nCombosWithPrereqOrTemplate",
+    "zoneProfile",
+    "architectureMotif"
+  ],
+  "nearCombosInPrimaryArchitecture": false,
+  "comboPowerScore": false
+}

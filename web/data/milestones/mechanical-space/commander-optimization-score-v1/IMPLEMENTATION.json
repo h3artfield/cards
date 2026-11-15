@@ -1,0 +1,52 @@
+{
+  "lineage": "COMMANDER_OPTIMIZATION_SCORE_V1",
+  "role": "PRODUCT_SCORER",
+  "COS_V1_MATH_CHANGED": false,
+  "COLOR_USED": false,
+  "OPPONENT_FEATURES_USED": false,
+  "PROFILE_AVERAGED_INTO_HEADLINE": false,
+  "CONSTRUCTOR_USES_COS": false,
+  "unknownCommanderFallback": {
+    "S": 0,
+    "internalLabel": "COMMANDER_BASELINE_UNCALIBRATED",
+    "publicCompetitiveStrength": null,
+    "note": "Do not publish percentile(S=0+R) on the global U grid. A commander-card kNN/cluster prior failed leave-one-out versus frozen S_c (MAE worse than predicting 0). Build Optimization and the ten profile axes still render."
+  },
+  "productionModule": "web/src/lib/commander-optimization-score/v1/",
+  "api": "POST /api/commander-optimization-score",
+  "percentile": "percentileFromGrid = numpy.interp(value, grid101, linspace(0,100,101))",
+  "featureExtraction": {
+    "architecture": "CARD_COMPLETE Spellbook detector + frozen combo dictionary",
+    "access": "RC8 regex + catalog-semantic-visualization-v1 points",
+    "version": "cos-v1-extract-rc8-regex-catalog-points-spellbook-detector-v1"
+  },
+  "goldenFixtures": "GOLDEN_FIXTURES.json",
+  "replacedDisplays": [
+    "ProfessorSolDirectedDeckListPanel headline composite",
+    "ProfessorDeckGradeSummaryBar /100",
+    "ProfessorDeckReportPanel /100",
+    "Sol-directed PDF overall score line"
+  ],
+  "playerReport": {
+    "module": "web/src/lib/commander-optimization-score/v1/player-report.ts",
+    "entersFrozenMath": false,
+    "hierarchy": [
+      "competitiveStrength",
+      "buildOptimization",
+      "deckProfile",
+      "howThisDeckWorks",
+      "keySynergies",
+      "knownCombos",
+      "winConditions",
+      "whyTheScore",
+      "optimizationHeadroom"
+    ],
+    "language": {
+      "doNotSayPointContribution": true,
+      "buildOptimizationIsNotWinPercentile": true,
+      "profileNotAveragedIntoHeadline": true
+    }
+  },
+  "legacyScoreRetained": true,
+  "constructorCardChoiceDependsOnCos": false
+}

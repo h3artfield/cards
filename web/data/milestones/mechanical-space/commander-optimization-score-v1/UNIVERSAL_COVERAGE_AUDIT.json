@@ -1,0 +1,48 @@
+{
+  "lineage": "COS_V1_UNIVERSAL_COVERAGE_V1",
+  "COS_V1_MODEL_COEFFICIENTS_CHANGED": false,
+  "SPENT_OUTCOMES_USED_FOR_TUNING": false,
+  "OPPONENT_FEATURES_USED": false,
+  "PLAYER_FEATURES_USED": false,
+  "COLOR_BONUS_USED": false,
+  "LLM_USED_IN_NUMERIC_SCORE": false,
+  "EXISTING_N_GE_30_BO_CHANGED": false,
+  "note": "architecture-fingerprints.jsonl (72,482) has no card lists; this audit scores every REFERENCE commander plus one unseen identity on a frozen golden headline vector.",
+  "nReferenceCommanders": 839,
+  "nScoredIncludingUnseen": 840,
+  "competitiveStrengthReturned": 839,
+  "buildOptimizationReturned": 840,
+  "allTenProfileReturned": 840,
+  "completeCosReportReturned": 840,
+  "referenceDepthBuckets": {
+    "STRONG": 155,
+    "MODERATE": 118,
+    "LIMITED": 566,
+    "NEW_COMMANDER": 1
+  },
+  "failures": [],
+  "goldenFixtureRegression": [
+    {
+      "id": "tymna_kraum",
+      "csBitIdentical": true,
+      "boBitIdentical": true
+    },
+    {
+      "id": "kinnan",
+      "csBitIdentical": true,
+      "boBitIdentical": true
+    },
+    {
+      "id": "etali",
+      "csBitIdentical": true,
+      "boBitIdentical": true
+    },
+    {
+      "id": "magda",
+      "csBitIdentical": true,
+      "boBitIdentical": true
+    }
+  ],
+  "fingerprintCorpusHasCardLists": false,
+  "fingerprintCorpusRows": 72482
+}

@@ -1,0 +1,124 @@
+{
+  "lineage": "COMMANDER_OPTIMIZATION_SCORE_V1",
+  "COS_FORMULA_FROZEN": true,
+  "outputs": {
+    "competitiveStrength": {
+      "range": "0-100",
+      "answers": "How strong does this deck appear overall?",
+      "utility": "S[commander] + beta · z(architecture ⊕ access)",
+      "mapping": "percentile of utility among unique spent lists",
+      "includes": [
+        "commander identity",
+        "frozen Spellbook architecture",
+        "access/construction densities"
+      ],
+      "excludes": [
+        "color_enabler",
+        "opponent features",
+        "equal-weighted profile sum"
+      ]
+    },
+    "buildOptimization": {
+      "range": "0-100 percentile or null",
+      "answers": "Given this commander, how well is the 99 optimized?",
+      "residual": "beta · z(architecture ⊕ access)",
+      "mapping": "percentile of residual among unique spent lists of the same commander",
+      "minUniqueLists": 30,
+      "insufficientReference": null
+    },
+    "profile": {
+      "role": "explain why; do not average into Competitive Strength",
+      "mapping": "within-commander percentile of outcome-blind axis scalars; global fallback if n < 30",
+      "axes": [
+        {
+          "id": "win_architecture",
+          "label": "Win architecture",
+          "role": "load_bearing",
+          "higherIsBetter": true,
+          "measurement": "routes + two-card flag − 0.25×minComboSize; 0 if no CARD_COMPLETE combo"
+        },
+        {
+          "id": "access_consistency",
+          "label": "Access / consistency",
+          "role": "descriptive_only",
+          "higherIsBetter": true,
+          "measurement": "tutorFrac",
+          "note": "Isolation signal only. Not an independent headline weight."
+        },
+        {
+          "id": "mana_efficiency",
+          "label": "Mana efficiency",
+          "role": "load_bearing",
+          "higherIsBetter": true,
+          "measurement": "fracMvLe2 + rampFrac − 0.15×meanMvNonland"
+        },
+        {
+          "id": "redundancy",
+          "label": "Redundancy",
+          "role": "descriptive_only",
+          "higherIsBetter": true,
+          "measurement": "sharedPieceConcentration",
+          "note": "Architecture-slice LOO was ~0. Profile descriptor only."
+        },
+        {
+          "id": "interaction",
+          "label": "Interaction",
+          "role": "load_bearing",
+          "higherIsBetter": true,
+          "measurement": "interactFrac"
+        },
+        {
+          "id": "protection",
+          "label": "Protection",
+          "role": "load_bearing",
+          "higherIsBetter": true,
+          "measurement": "protectFrac"
+        },
+        {
+          "id": "resilience",
+          "label": "Resilience",
+          "role": "descriptive_only",
+          "higherIsBetter": true,
+          "measurement": "recurFrac"
+        },
+        {
+          "id": "card_advantage",
+          "label": "Card advantage",
+          "role": "load_bearing",
+          "higherIsBetter": true,
+          "measurement": "drawFrac"
+        },
+        {
+          "id": "role_compression",
+          "label": "Role compression",
+          "role": "descriptive_only",
+          "higherIsBetter": true,
+          "measurement": "roleCompressFrac"
+        },
+        {
+          "id": "coherence",
+          "label": "Coherence",
+          "role": "load_bearing",
+          "higherIsBetter": true,
+          "measurement": "−clusterEntropy"
+        }
+      ]
+    }
+  },
+  "rejected": [
+    "CRISPI-style equal buckets",
+    "points per additional color",
+    "tutor density as an independent headline weight",
+    "averaging profile axes into the overall number"
+  ],
+  "ablation": {
+    "dir": "intrinsic-strength-ablation-v1",
+    "fullDeltaVsCommander": 0.005193110414959179,
+    "uniqueAccessBundle": 0.002887981388759897,
+    "uniqueArchitecture": 0.0017898644392000396,
+    "uniqueColor": -9.284889436433907e-05
+  },
+  "colorRole": "ENABLER_NOT_MEASURE",
+  "opponentFeatures": false,
+  "professorChanged": false
+}

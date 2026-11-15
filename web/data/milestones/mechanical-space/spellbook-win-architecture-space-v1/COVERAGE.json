@@ -1,0 +1,26 @@
+{
+  "coverage": {
+    "zero": 1537,
+    "ge1": 70945,
+    "ge2": 69491,
+    "ge5": 59315,
+    "ge10": 20674,
+    "fractionGe1": 0.9787947352446125,
+    "fractionCommanderInvolved": 0.3592616097789796,
+    "fractionWithTerminalRoute": 0.6275351121657791,
+    "fractionWithResourceOnlyLoop": 0.914875417344996
+  },
+  "minComboSizeDistribution": {
+    "1": 12263,
+    "2": 52745,
+    "3": 5897,
+    "4": 39,
+    "5": 1
+  },
+  "commanderDependence": {
+    "MIXED": 23908,
+    "COMMANDER_INDEPENDENT": 44905,
+    "no_complete": 1537,
+    "COMMANDER_DEPENDENT": 2132
+  }
+}

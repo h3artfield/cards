@@ -1,0 +1,25 @@
+{
+  "lineage": "COMMANDER_OPTIMIZATION_SCORE_V1",
+  "status": "LIVE_PRODUCT_AUTHORITATIVE",
+  "COS_FORMULA_FROZEN": true,
+  "challenger": {
+    "lineage": "COMMANDER_OPTIMIZATION_SCORE_V2_E",
+    "result": "FAILED_CHALLENGER",
+    "productReplacement": "NO_PRODUCT_REPLACEMENT"
+  },
+  "CMMG_SEALED_OUTCOMES_OPENED": false,
+  "PROFESSOR_CHANGED": false,
+  "CONSTRUCTOR_USES_COS": false,
+  "matchupMining": false,
+  "unknownCommander": {
+    "S": 0,
+    "commanderBaselineStatus": "COMMANDER_BASELINE_UNCALIBRATED",
+    "note": "CS remains defined; commander intercept is uncalibrated."
+  },
+  "buildOptimization": {
+    "meaning": "How optimized this 99 appears relative to other observed builds of the same commander",
+    "not": "expected win percentile",
+    "finalTestConcordance": 0.531,
+    "validation": "directionally encouraging but weak"
+  }
+}

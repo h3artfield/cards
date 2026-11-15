@@ -1,0 +1,67 @@
+{
+  "artifactType": "SpellbookWinArchitectureSpaceV1",
+  "lineage": "SPELLBOOK_WIN_ARCHITECTURE_SPACE_V1",
+  "status": "OUTCOME_BLIND_REPRESENTATION_FROZEN",
+  "TOPDECK_OUTCOMES_JOINED": false,
+  "PROFESSOR_CHANGED": false,
+  "CMMG_CONFIRMATORY_LINEAGE_CHANGED": false,
+  "HISTORICAL_COMMANDER_3_CYCLE_NOT_DISTINGUISHED_FROM_STRENGTH_NULL": true,
+  "nNativeVariants": 105904,
+  "nNormalizedUniqueComboCardSets": 105833,
+  "nUniqueProducedFeatures": 1090,
+  "taxonomyAllFeatures": {
+    "UNCLASSIFIED": 446,
+    "COMPONENT_OR_TEMPLATE": 146,
+    "ENABLING": 665,
+    "TERMINAL": 47
+  },
+  "taxonomyProducedFeatures": {
+    "TERMINAL": 47,
+    "ENABLING": 623,
+    "UNCLASSIFIED": 420
+  },
+  "nUnclassifiedProducedFeatures": 420,
+  "nExactLists": 72482,
+  "coverage": {
+    "zero": 1537,
+    "ge1": 70945,
+    "ge2": 69491,
+    "ge5": 59315,
+    "ge10": 20674,
+    "fractionGe1": 0.9787947352446125,
+    "fractionCommanderInvolved": 0.3592616097789796,
+    "fractionWithTerminalRoute": 0.6275351121657791,
+    "fractionWithResourceOnlyLoop": 0.914875417344996
+  },
+  "minComboSizeDistribution": {
+    "1": 12263,
+    "2": 52745,
+    "3": 5897,
+    "4": 39,
+    "5": 1
+  },
+  "commanderDependence": {
+    "MIXED": 23908,
+    "COMMANDER_INDEPENDENT": 44905,
+    "no_complete": 1537,
+    "COMMANDER_DEPENDENT": 2132
+  },
+  "medianCardsInMultipleComboSets": 5,
+  "nDistinctArchitectureMotifs": 3972,
+  "nMotifsUsedByAtLeastTwoCommanders": 1250,
+  "nCommandersWithAtLeast50Lists": 144,
+  "nCommandersMateriallySplit": 91,
+  "naturalStructure": "REUSABLE_FAMILIES",
+  "comboPowerScore": null,
+  "checksums": {
+    "taxonomy": "7d78da72aebf6530d528d4db295b7e2100f90ca842200b6ea13bb4e1b883a8bb",
+    "comboDictionary": "8a6b782f0ae01181eee01397081026fd4f077e4c5103a6a433c4bbb26c791845",
+    "fingerprints": "172f0e83b8f8db6dfb16ee0b8894a199ea27062ea752daad61de1e90a274cfd1",
+    "heterogeneity": "20cecf8094fa88e1f66c919f66282fce18a0a4d5f601a26438ac61a8b3ba2fd5",
+    "motifs": "260ee262fd0d1a2c00e54b515c3a9a974f19d3e7ae06ac1409d4390aefdb20bd",
+    "schema": "d5c70bed6871da62687490fefd822eb90d5d3b5c6a0d4e90c1f8f5bb036722d8",
+    "script": "4c4cf006fe98978159b74cd66e2f6405b57dd69acd66040902f82ec1d29c4e2a",
+    "mirrorVariants": "565c7f87ea961aa9dff0accbaf5a2da4de3b82fa6ccb2944ee8fdf2bfd41b142",
+    "detector": "cb743b35dd65c672ae0d462d69a1ecc1d05816e1d339e18f9b4eae5c503104ff"
+  }
+}

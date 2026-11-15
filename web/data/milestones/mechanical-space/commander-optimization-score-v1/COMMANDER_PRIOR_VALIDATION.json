@@ -1,0 +1,25 @@
+{
+  "version": "COS_V1_UNIVERSAL_COMMANDER_BASELINE_V1",
+  "nCommanders": 839,
+  "nCovered": 839,
+  "k": 15,
+  "loo": {
+    "knnMae": 0.36175373205060907,
+    "zeroMae": 0.31497966862263943,
+    "knnPearson": 0.05599714807781285,
+    "zeroPearson": 0
+  },
+  "S": {
+    "mean": 2.016801791125742e-10,
+    "min": -1.3925400972366333,
+    "max": 1.0389949083328247
+  },
+  "SPENT_OUTCOMES_USED_FOR_TUNING": false,
+  "COLOR_BONUS_USED": false,
+  "EXISTING_N_GE_30_BO_CHANGED": false,
+  "COS_V1_MODEL_COEFFICIENTS_CHANGED": false,
+  "clusterLooMae": 0.31724647266933587,
+  "clusterLooPearson": 0.07646379522238943,
+  "productionUsed": false,
+  "decision": "REJECT. Commander-card kNN and cluster-mean both lose to predicting S=0. Do not publish S=0+R on the global U grid as Competitive Strength."
+}

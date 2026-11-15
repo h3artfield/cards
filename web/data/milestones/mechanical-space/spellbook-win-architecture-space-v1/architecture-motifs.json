@@ -1,0 +1,360 @@
+{
+  "rule": "Motif = terminalBuckets + enablingBuckets + minComboSize + commanderDependence. Not a fitted cluster model.",
+  "nDistinctMotifs": 3972,
+  "nMotifsUsedByAtLeastTwoCommanders": 1250,
+  "nMotifsWithAtLeast50Decks": 197,
+  "topMotifs": [
+    {
+      "motif": "INFINITE_MILL,WIN_THE_GAME|DRAW,MAGECRAFT,MANA,OTHER_ENABLING,SELF_MILL,STORM,TOKENS|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 5245,
+      "nCommanders": 23
+    },
+    {
+      "motif": "NO_TERMINAL|ETB,LTB,MANA,STORM|min1|MIXED",
+      "nDecks": 4941,
+      "nCommanders": 3
+    },
+    {
+      "motif": "INFINITE_MILL,WIN_THE_GAME|DRAW,MAGECRAFT,MANA,OTHER_ENABLING,SELF_MILL,STORM|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 4522,
+      "nCommanders": 42
+    },
+    {
+      "motif": "NO_TERMINAL|DRAW,ETB,LTB,MAGECRAFT,MANA,OTHER_ENABLING,SACRIFICE,STORM,TOKENS|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 1977,
+      "nCommanders": 15
+    },
+    {
+      "motif": "INFINITE_MILL,WIN_THE_GAME|MAGECRAFT,MANA,SELF_MILL,STORM|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 1942,
+      "nCommanders": 31
+    },
+    {
+      "motif": "NO_TERMINAL|NO_ENABLING|min0|NONE",
+      "nDecks": 1537,
+      "nCommanders": 261
+    },
+    {
+      "motif": "INFINITE_MILL|DRAW,ETB,LTB,MAGECRAFT,MANA,OTHER_ENABLING,SACRIFICE,SELF_MILL,STORM,TOKENS,UNTAP|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 1303,
+      "nCommanders": 20
+    },
+    {
+      "motif": "NO_TERMINAL|ETB,LTB,MANA,OTHER_ENABLING,SACRIFICE,TOKENS,UNTAP|min3|COMMANDER_DEPENDENT",
+      "nDecks": 1127,
+      "nCommanders": 1
+    },
+    {
+      "motif": "WIN_THE_GAME|NO_ENABLING|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 953,
+      "nCommanders": 77
+    },
+    {
+      "motif": "NO_TERMINAL|DRAW,ETB,LANDFALL,LTB,MANA,OTHER_ENABLING,TOKENS,UNTAP|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 900,
+      "nCommanders": 8
+    },
+    {
+      "motif": "INFINITE_DAMAGE,INFINITE_MILL,OPPONENT_LOSES_THE_GAME|CASTS,COUNTERS,DRAW,ETB,LTB,MANA,SACRIFICE,SELF_MILL,STORM,TOKENS|min2|MIXED",
+      "nDecks": 831,
+      "nCommanders": 4
+    },
+    {
+      "motif": "NO_TERMINAL|DRAW,ETB,LANDFALL,LTB,MANA,OTHER_ENABLING,SACRIFICE,SELF_MILL,STORM,TOKENS,UNTAP|min2|MIXED",
+      "nDecks": 793,
+      "nCommanders": 2
+    },
+    {
+      "motif": "INFINITE_MILL|DRAW,ETB,LTB,MAGECRAFT,MANA,SELF_MILL,STORM,TOKENS|min1|COMMANDER_INDEPENDENT",
+      "nDecks": 762,
+      "nCommanders": 11
+    },
+    {
+      "motif": "WIN_THE_GAME|DRAW,MANA,TOKENS|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 739,
+      "nCommanders": 20
+    },
+    {
+      "motif": "INFINITE_MILL,WIN_THE_GAME|DRAW,MAGECRAFT,MANA,SELF_MILL,STORM,TOKENS|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 648,
+      "nCommanders": 11
+    },
+    {
+      "motif": "INFINITE_MILL,WIN_THE_GAME|DRAW,ETB,LTB,MAGECRAFT,MANA,OTHER_ENABLING,SACRIFICE,SELF_MILL,STORM,TOKENS|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 634,
+      "nCommanders": 22
+    },
+    {
+      "motif": "NO_TERMINAL|COUNTERS,ETB,LTB,MANA,SACRIFICE,SELF_MILL,TOKENS|min2|MIXED",
+      "nDecks": 631,
+      "nCommanders": 1
+    },
+    {
+      "motif": "NO_TERMINAL|LANDFALL,MANA|min3|COMMANDER_INDEPENDENT",
+      "nDecks": 542,
+      "nCommanders": 5
+    },
+    {
+      "motif": "INFINITE_DAMAGE|ETB,LTB,MANA,OTHER_ENABLING,SACRIFICE,TOKENS,UNTAP|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 520,
+      "nCommanders": 16
+    },
+    {
+      "motif": "INFINITE_MILL|ETB,LANDFALL,LTB,MAGECRAFT,MANA,SELF_MILL,STORM,UNTAP|min3|COMMANDER_INDEPENDENT",
+      "nDecks": 495,
+      "nCommanders": 1
+    },
+    {
+      "motif": "NO_TERMINAL|ETB,LANDFALL,LTB,MANA,OTHER_ENABLING,TOKENS,UNTAP|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 489,
+      "nCommanders": 9
+    },
+    {
+      "motif": "INFINITE_MILL|DRAW,ETB,LTB,MAGECRAFT,MANA,OTHER_ENABLING,SACRIFICE,SELF_MILL,STORM,TOKENS|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 466,
+      "nCommanders": 27
+    },
+    {
+      "motif": "NO_TERMINAL|DRAW,MANA,OTHER_ENABLING,UNTAP|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 466,
+      "nCommanders": 15
+    },
+    {
+      "motif": "NO_TERMINAL|ETB,LTB,MANA,SACRIFICE,STORM,TOKENS,UNTAP|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 441,
+      "nCommanders": 1
+    },
+    {
+      "motif": "INFINITE_DAMAGE,INFINITE_MILL,WIN_THE_GAME|DRAW,ETB,LTB,MAGECRAFT,MANA,OTHER_ENABLING,SACRIFICE,SELF_MILL,STORM,TOKENS|min2|MIXED",
+      "nDecks": 438,
+      "nCommanders": 6
+    },
+    {
+      "motif": "INFINITE_DAMAGE,INFINITE_MILL,WIN_THE_GAME|DRAW,MAGECRAFT,MANA,OTHER_ENABLING,SELF_MILL,STORM|min2|MIXED",
+      "nDecks": 366,
+      "nCommanders": 5
+    },
+    {
+      "motif": "NO_TERMINAL|ETB,LANDFALL,LTB,MAGECRAFT,MANA,STORM,UNTAP|min3|COMMANDER_INDEPENDENT",
+      "nDecks": 363,
+      "nCommanders": 3
+    },
+    {
+      "motif": "NO_TERMINAL|ETB,LTB,MANA,OTHER_ENABLING,STORM,UNTAP|min1|MIXED",
+      "nDecks": 362,
+      "nCommanders": 4
+    },
+    {
+      "motif": "INFINITE_MILL|LANDFALL,MAGECRAFT,MANA,SELF_MILL,STORM|min3|COMMANDER_INDEPENDENT",
+      "nDecks": 362,
+      "nCommanders": 3
+    },
+    {
+      "motif": "WIN_THE_GAME|DRAW,ETB,LTB,MANA,OTHER_ENABLING,STORM|min2|MIXED",
+      "nDecks": 362,
+      "nCommanders": 2
+    },
+    {
+      "motif": "INFINITE_DAMAGE|COUNTERS,DRAW,ETB,LTB,MAGECRAFT,MANA,OTHER_ENABLING,SACRIFICE,SELF_MILL,STORM,TOKENS|min2|MIXED",
+      "nDecks": 341,
+      "nCommanders": 5
+    },
+    {
+      "motif": "WIN_THE_GAME|ETB,LANDFALL,LTB,MANA,OTHER_ENABLING,TOKENS,UNTAP|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 321,
+      "nCommanders": 2
+    },
+    {
+      "motif": "INFINITE_MILL,WIN_THE_GAME|DRAW,MAGECRAFT,MANA,OTHER_ENABLING,SELF_MILL,STORM,UNTAP|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 315,
+      "nCommanders": 16
+    },
+    {
+      "motif": "INFINITE_MILL|DRAW,ETB,LTB,MAGECRAFT,MANA,OTHER_ENABLING,SELF_MILL,STORM|min1|MIXED",
+      "nDecks": 297,
+      "nCommanders": 3
+    },
+    {
+      "motif": "NO_TERMINAL|LANDFALL,MANA,TOKENS|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 293,
+      "nCommanders": 2
+    },
+    {
+      "motif": "NO_TERMINAL|ETB,LTB,MAGECRAFT,MANA,SACRIFICE,STORM,TOKENS|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 288,
+      "nCommanders": 9
+    },
+    {
+      "motif": "INFINITE_DAMAGE|DRAW,ETB,LTB,MAGECRAFT,MANA,OTHER_ENABLING,SACRIFICE,SELF_MILL,STORM,TOKENS|min2|MIXED",
+      "nDecks": 286,
+      "nCommanders": 11
+    },
+    {
+      "motif": "NO_TERMINAL|DRAW,ETB,LTB,MANA,OTHER_ENABLING,TOKENS,UNTAP|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 279,
+      "nCommanders": 4
+    },
+    {
+      "motif": "WIN_THE_GAME|MANA,OTHER_ENABLING,STORM,UNTAP|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 274,
+      "nCommanders": 18
+    },
+    {
+      "motif": "WIN_THE_GAME|MANA|min2|COMMANDER_INDEPENDENT",
+      "nDecks": 274,
+      "nCommanders": 16
+    }
+  ],
+  "topTerminalPackages": [
+    {
+      "terminalPackage": "NO_TERMINAL",
+      "nDecks": 26997,
+      "nCommanders": 615
+    },
+    {
+      "terminalPackage": "INFINITE_MILL,WIN_THE_GAME",
+      "nDecks": 15763,
+      "nCommanders": 109
+    },
+    {
+      "terminalPackage": "INFINITE_MILL",
+      "nDecks": 8245,
+      "nCommanders": 174
+    },
+    {
+      "terminalPackage": "WIN_THE_GAME",
+      "nDecks": 7887,
+      "nCommanders": 205
+    },
+    {
+      "terminalPackage": "INFINITE_DAMAGE",
+      "nDecks": 4144,
+      "nCommanders": 301
+    },
+    {
+      "terminalPackage": "INFINITE_LIFELOSS",
+      "nDecks": 1345,
+      "nCommanders": 114
+    },
+    {
+      "terminalPackage": "INFINITE_DAMAGE,INFINITE_MILL",
+      "nDecks": 1330,
+      "nCommanders": 106
+    },
+    {
+      "terminalPackage": "INFINITE_DAMAGE,INFINITE_MILL,OPPONENT_LOSES_THE_GAME",
+      "nDecks": 1261,
+      "nCommanders": 11
+    },
+    {
+      "terminalPackage": "INFINITE_DAMAGE,INFINITE_MILL,WIN_THE_GAME",
+      "nDecks": 1164,
+      "nCommanders": 39
+    },
+    {
+      "terminalPackage": "INFINITE_DAMAGE,WIN_THE_GAME",
+      "nDecks": 1004,
+      "nCommanders": 73
+    },
+    {
+      "terminalPackage": "INFINITE_DAMAGE,INFINITE_LIFELOSS,OPPONENT_LOSES_THE_GAME",
+      "nDecks": 586,
+      "nCommanders": 38
+    },
+    {
+      "terminalPackage": "INFINITE_LIFELOSS,INFINITE_MILL,WIN_THE_GAME",
+      "nDecks": 582,
+      "nCommanders": 46
+    },
+    {
+      "terminalPackage": "INFINITE_LIFELOSS,WIN_THE_GAME",
+      "nDecks": 453,
+      "nCommanders": 36
+    },
+    {
+      "terminalPackage": "INFINITE_DAMAGE,INFINITE_LIFELOSS",
+      "nDecks": 361,
+      "nCommanders": 58
+    },
+    {
+      "terminalPackage": "EXILE_LIBRARIES,INFINITE_LIFELOSS",
+      "nDecks": 214,
+      "nCommanders": 3
+    },
+    {
+      "terminalPackage": "INFINITE_DAMAGE,OPPONENT_LOSES_THE_GAME",
+      "nDecks": 188,
+      "nCommanders": 42
+    },
+    {
+      "terminalPackage": "INFINITE_DAMAGE,INFINITE_LIFELOSS,INFINITE_MILL",
+      "nDecks": 127,
+      "nCommanders": 26
+    },
+    {
+      "terminalPackage": "OPPONENT_LOSES_THE_GAME",
+      "nDecks": 110,
+      "nCommanders": 15
+    },
+    {
+      "terminalPackage": "INFINITE_DAMAGE,OPPONENT_LOSES_THE_GAME,WIN_THE_GAME",
+      "nDecks": 109,
+      "nCommanders": 27
+    },
+    {
+      "terminalPackage": "INFINITE_DAMAGE,INFINITE_MILL,OPPONENT_LOSES_THE_GAME,WIN_THE_GAME",
+      "nDecks": 103,
+      "nCommanders": 21
+    },
+    {
+      "terminalPackage": "INFINITE_LIFELOSS,INFINITE_MILL",
+      "nDecks": 98,
+      "nCommanders": 47
+    },
+    {
+      "terminalPackage": "INFINITE_DAMAGE,INFINITE_LIFELOSS,INFINITE_MILL,WIN_THE_GAME",
+      "nDecks": 42,
+      "nCommanders": 16
+    },
+    {
+      "terminalPackage": "INFINITE_DAMAGE,INFINITE_LIFELOSS,INFINITE_MILL,OPPONENT_LOSES_THE_GAME",
+      "nDecks": 39,
+      "nCommanders": 15
+    },
+    {
+      "terminalPackage": "INFINITE_LIFELOSS,OPPONENT_LOSES_THE_GAME",
+      "nDecks": 38,
+      "nCommanders": 19
+    },
+    {
+      "terminalPackage": "INFINITE_DAMAGE,INFINITE_LIFELOSS,WIN_THE_GAME",
+      "nDecks": 37,
+      "nCommanders": 14
+    },
+    {
+      "terminalPackage": "EXILE_LIBRARIES,INFINITE_LIFELOSS,INFINITE_MILL",
+      "nDecks": 29,
+      "nCommanders": 2
+    },
+    {
+      "terminalPackage": "INFINITE_DAMAGE,INFINITE_LIFELOSS,OPPONENT_LOSES_THE_GAME,WIN_THE_GAME",
+      "nDecks": 29,
+      "nCommanders": 16
+    },
+    {
+      "terminalPackage": "INFINITE_LIFELOSS,INFINITE_MILL,OPPONENT_LOSES_THE_GAME,WIN_THE_GAME",
+      "nDecks": 28,
+      "nCommanders": 10
+    },
+    {
+      "terminalPackage": "EXILE_LIBRARIES",
+      "nDecks": 24,
+      "nCommanders": 7
+    },
+    {
+      "terminalPackage": "EXILE_LIBRARIES,WIN_THE_GAME",
+      "nDecks": 23,
+      "nCommanders": 10
+    }
+  ]
+}

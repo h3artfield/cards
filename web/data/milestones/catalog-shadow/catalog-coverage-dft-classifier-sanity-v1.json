@@ -1,0 +1,66 @@
+{
+  "artifactType": "CatalogCoverageDftClassifierSanity",
+  "version": "catalog-coverage-dft-classifier-sanity-v1",
+  "generatedAt": "2026-08-11T02:10:00.000Z",
+  "question": "Why is one blank double_faced_token category C while ten blank double_faced_token records are category D?",
+  "summary": "Classification is reproducible from type_line token detection, not an ad hoc exception.",
+  "ruleOrder": [
+    "1. top_level_oracle_text_present => A",
+    "2. any_face_oracle_text_present => B",
+    "3. missing identity => E",
+    "4. multi_face_layout_missing_card_faces => E",
+    "5. non_card_layout OR non_card_type_line => D",
+    "6. legitimate_blank_magic_card => C",
+    "7. else => E"
+  ],
+  "doubleFacedTokenInventory": {
+    "totalInCatalog": 80,
+    "A_withOracleText": 69,
+    "B_faceOnlyText": 0,
+    "C_legitimateBlank": 1,
+    "D_nonCard": 10,
+    "E_malformed": 0
+  },
+  "categoryCRecord": {
+    "oracleId": "96247b92-0c7a-4410-85a4-598916541b1d",
+    "canonicalName": "Punchcard // Punchcard",
+    "layout": "double_faced_token",
+    "typeLine": "Card // Card",
+    "cardFacesCount": 2,
+    "classificationReason": "legitimate_blank_rules_text",
+    "whyCategoryC": "typeLine is 'Card // Card' — does NOT match /\\bToken\\b/ or /\\bEmblem\\b/ or /\\bVanguard\\b/. Layout alone does not force category D. Blank rules text on a non-token Card-type double-faced punchcard is a legitimate Magic oracle identity with zero L2 actions.",
+    "classifierFunction": "isNonCardTypeLine(typeLine) returns false; isLegitimateBlankMagicCard returns true"
+  },
+  "categoryDRecords": {
+    "count": 10,
+    "classificationReason": "non_card_type_line",
+    "rule": "typeLine contains 'Token' (Token Creature, Token Legendary Creature, etc.) => D even when oracle text is blank",
+    "representativeExamples": [
+      {
+        "oracleId": "160abce3-949c-4e17-9db7-06ac4327eec6",
+        "canonicalName": "Voja // Saproling",
+        "typeLine": "Token Legendary Creature — Wolf // Token Creature — Saproling"
+      },
+      {
+        "oracleId": "302e20b6-ab0c-4e63-8c39-e91fc323bf0e",
+        "canonicalName": "Beast // Beast",
+        "typeLine": "Token Creature — Beast // Token"
+      },
+      {
+        "oracleId": "37b9b92e-ab15-4721-a520-d3d9a8d4e69f",
+        "canonicalName": "Zombie // Zombie",
+        "typeLine": "Token Creature — Zombie // Token Creature — Zombie"
+      }
+    ],
+    "layoutDistribution": {
+      "token": 0,
+      "double_faced_token": 10
+    },
+    "note": "All 10 D-category blank double_faced_token records have Token in typeLine. The single C record is the only blank DFT with Card // Card typing."
+  },
+  "reproducibility": {
+    "classifierPath": "web/scripts/lib/catalog-population-classifier-v1.ts",
+    "functions": ["isNonCardTypeLine", "isNonCardObject", "isLegitimateBlankMagicCard", "NON_CARD_LAYOUTS"],
+    "explicitImprovementOptional": "Future classifier versions may emit reason code 'blank_double_faced_token_card_type' vs 'blank_double_faced_token_token_type_line' for audit clarity without changing counts."
+  }
+}

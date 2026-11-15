@@ -1,0 +1,27 @@
+{
+  "version": "phase6a1-professor-plan-model-pin-v2",
+  "pinnedAt": "2026-08-13T08:10:58.173Z",
+  "authorization": "APPROVED_FRONTIER_PROFESSOR_CONFIGURATION",
+  "provider": "openai",
+  "apiSurface": "responses",
+  "modelIdentifier": "gpt-5.6-sol",
+  "modelAlias": "gpt-5.6",
+  "productName": "GPT-5.6 Sol",
+  "reasoningConfiguration": {
+    "effort": "xhigh",
+    "mode": "standard"
+  },
+  "inferenceParameters": {
+    "temperature": null,
+    "maxCompletionTokens": 32768,
+    "responseFormatFinal": "json_object",
+    "requestTimeoutMs": 600000
+  },
+  "experimentBounds": {
+    "maxProfessorToolCalls": 8,
+    "maxEvidenceChunks": 24,
+    "maxValidationRepairRounds": 3
+  },
+  "note": "Formal Professor PLAN experiment v2 frontier pin via OpenAI Responses API. gpt-4o harness smoke excluded from formal population.",
+  "sha256": "490b9a84a74113f27f42576fbc087bafe27832bfe979bc5fa8ad4c53751ffd50"
+}

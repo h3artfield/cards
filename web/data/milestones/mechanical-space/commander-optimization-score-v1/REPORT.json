@@ -1,0 +1,208 @@
+{
+  "artifactType": "CommanderOptimizationScoreV1",
+  "lineage": "COMMANDER_OPTIMIZATION_SCORE_V1",
+  "status": "FORMULA_FROZEN",
+  "frozen": true,
+  "role": "HISTORICAL_EXPLORATORY_CALIBRATION",
+  "confirmatory": false,
+  "COS_FORMULA_FROZEN": true,
+  "outputs": [
+    "competitiveStrength",
+    "buildOptimization",
+    "profile"
+  ],
+  "headline": "commander + Spellbook architecture + access/construction; color excluded",
+  "profileNotAveragedIntoHeadline": true,
+  "heldOut": {
+    "nPods": 38461,
+    "nEvents": 2324,
+    "commanderLogloss": 1.367912172311607,
+    "headlineLogloss": 1.3626262928683515,
+    "deltaVsCommander": 0.005285879443255537,
+    "commanderTop1": 0.30480226723174125,
+    "headlineTop1": 0.31335638698941787
+  },
+  "nUniqueLists": 58835,
+  "nCommandersEligibleForBuildOptimization": 155,
+  "checksums": {
+    "FORMULA.json": "10c4e3ab09d393a98b7921343379c6cc436fed30d01189e805ba98dc1d79882f",
+    "SCHEMA.json": "76f24597ed59578b1d8b8e941cdd896b58deb3c633f668c99e8e63fbbe28490c",
+    "MODEL.json": "5f51e063a848508a1663201cbc7b8d3539872bd37ff8115fc8ed82d86343c9a9",
+    "REFERENCE.json": "b728a42fe81de3ab0abb7488761c95f460a0d0c48cf4d29b144a7f12b4b7d8ab"
+  },
+  "SPELLBOOK_REPRESENTATION_CHANGED": false,
+  "CMMG_SEALED_OUTCOMES_OPENED": false,
+  "PROFESSOR_CHANGED": false,
+  "caveat": "0-100 mapping is a spent-data calibration of the frozen scorer, not a prospective gate. Not wired into Professor.",
+  "illustrations": [
+    {
+      "name": "Tymna the Weaver / Kraum, Ludevic's Opus",
+      "nUnique": 5878,
+      "competitiveStrength": {
+        "p10": 71.40181510289861,
+        "p50": 83.55172485639864,
+        "p90": 95.95825400079916
+      },
+      "buildOptimization": {
+        "p10": 9.999791158154926,
+        "p50": 49.99721612034921,
+        "p90": 90.00004307911587
+      }
+    },
+    {
+      "name": "Kinnan, Bonder Prodigy",
+      "nUnique": 4870,
+      "competitiveStrength": {
+        "p10": 38.730116000042216,
+        "p50": 67.90652735914321,
+        "p90": 93.27202662152925
+      },
+      "buildOptimization": {
+        "p10": 10.00010780484287,
+        "p50": 50.0,
+        "p90": 89.99965859845769
+      }
+    },
+    {
+      "name": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero",
+      "nUnique": 3463,
+      "competitiveStrength": {
+        "p10": 40.85366659058467,
+        "p50": 65.85305143264704,
+        "p90": 87.79789149819041
+      },
+      "buildOptimization": {
+        "p10": 10.002468504233498,
+        "p50": 50.0,
+        "p90": 89.99892706389652
+      }
+    },
+    {
+      "name": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept",
+      "nUnique": 2877,
+      "competitiveStrength": {
+        "p10": 42.59513622062574,
+        "p50": 51.171824628330945,
+        "p90": 60.479713330728856
+      },
+      "buildOptimization": {
+        "p10": 10.013284351127316,
+        "p50": 50.0,
+        "p90": 89.99977371386395
+      }
+    },
+    {
+      "name": "Sisay, Weatherlight Captain",
+      "nUnique": 2476,
+      "competitiveStrength": {
+        "p10": 37.731277890936326,
+        "p50": 65.03181164155464,
+        "p90": 93.19507646499474
+      },
+      "buildOptimization": {
+        "p10": 9.999867900082707,
+        "p50": 49.99169086780529,
+        "p90": 90.0013062476483
+      }
+    },
+    {
+      "name": "Etali, Primal Conqueror // Etali, Primal Sickness",
+      "nUnique": 1905,
+      "competitiveStrength": {
+        "p10": 14.37422086351185,
+        "p50": 23.001971858745275,
+        "p90": 33.04217320546547
+      },
+      "buildOptimization": {
+        "p10": 11.0,
+        "p50": 50.0,
+        "p90": 89.99454046199507
+      }
+    },
+    {
+      "name": "Tymna the Weaver / Thrasios, Triton Hero",
+      "nUnique": 1849,
+      "competitiveStrength": {
+        "p10": 31.51462187044041,
+        "p50": 48.57634539442014,
+        "p90": 84.9416034519102
+      },
+      "buildOptimization": {
+        "p10": 10.002658303015687,
+        "p50": 50.0,
+        "p90": 89.99933147088181
+      }
+    },
+    {
+      "name": "Ral, Monsoon Mage // Ral, Leyline Prodigy",
+      "nUnique": 1456,
+      "competitiveStrength": {
+        "p10": 54.805517862063205,
+        "p50": 65.00169370835957,
+        "p90": 77.2201296964275
+      },
+      "buildOptimization": {
+        "p10": 10.001119599042777,
+        "p50": 49.99923768179164,
+        "p90": 90.00011181106115
+      }
+    },
+    {
+      "name": "Dargo, the Shipwrecker / Tymna the Weaver",
+      "nUnique": 1374,
+      "competitiveStrength": {
+        "p10": 29.492929011830935,
+        "p50": 53.216973178194856,
+        "p90": 77.71293935344342
+      },
+      "buildOptimization": {
+        "p10": 10.00119253389717,
+        "p50": 50.006309170734724,
+        "p90": 90.01457843830524
+      }
+    },
+    {
+      "name": "Vivi Ornitier",
+      "nUnique": 1241,
+      "competitiveStrength": {
+        "p10": 11.768718350154305,
+        "p50": 28.519782886398996,
+        "p90": 67.61836754070815
+      },
+      "buildOptimization": {
+        "p10": 10.0,
+        "p50": 50.0,
+        "p90": 90.0
+      }
+    },
+    {
+      "name": "Kefka, Court Mage // Kefka, Ruler of Ruin",
+      "nUnique": 1224,
+      "competitiveStrength": {
+        "p10": 9.18327474983487,
+        "p50": 19.464498379515145,
+        "p90": 31.554705217005434
+      },
+      "buildOptimization": {
+        "p10": 10.018283089978432,
+        "p50": 49.985304393153584,
+        "p90": 89.99674753425282
+      }
+    },
+    {
+      "name": "Magda, Brazen Outlaw",
+      "nUnique": 1197,
+      "competitiveStrength": {
+        "p10": 66.95043525942727,
+        "p50": 80.3836512818652,
+        "p90": 91.46518707781551
+      },
+      "buildOptimization": {
+        "p10": 10.000075464106033,
+        "p50": 50.0,
+        "p90": 89.92744608468202
+      }
+    }
+  ],
+  "elapsedSec": 764.5903880596161
+}

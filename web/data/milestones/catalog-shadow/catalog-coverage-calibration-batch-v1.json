@@ -1,0 +1,1171 @@
+{
+  "artifactType": "CatalogCoverageCalibrationBatch",
+  "version": "catalog-coverage-calibration-batch-v1",
+  "status": "SEALED_FROM_SAMPLE_V2",
+  "purpose": "Protocol calibration only — do not redraw or replace cards.",
+  "sealedAt": "2026-08-11T02:23:20.698Z",
+  "calibrationSeed": "catalog-coverage-calibration-batch-seed-v1",
+  "sampleIdentityHash": "8cc44c119302ad8ffb331f5ca8f6761fc0b52fb81bb799ec3f2762276d1931bb",
+  "populationHash": "986c26116efaea45a20bb0cffe388fc20340db47839300ce69127942681dcbc5",
+  "batchSize": 35,
+  "batchIdentityHash": "b8125ca2b09da0753baa664e97afc5d0e71780297139a1d03094461be01c2b24",
+  "tagQuotas": {
+    "blank_text": 4,
+    "simple": 4,
+    "normal": 4,
+    "complex": 4,
+    "pathological": 3,
+    "multi_face": 4,
+    "granted": 3,
+    "replacement": 3,
+    "modal": 3,
+    "saga_planeswalker": 3
+  },
+  "tagCoverage": {
+    "blank_text": 4,
+    "simple": 10,
+    "normal": 7,
+    "complex": 12,
+    "pathological": 6,
+    "multi_face": 13,
+    "granted": 4,
+    "replacement": 10,
+    "modal": 4,
+    "saga_planeswalker": 4
+  },
+  "cards": [
+    {
+      "oracleId": "01160cb5-6d83-4317-9522-74083b3a83bb",
+      "canonicalName": "Eldrazi Confluence",
+      "oracleTextHash": "68a19a9783b3b68876af68512bec8450c508951b4dfeeb3f815f98b889e99f80",
+      "cardStructureHash": "b7e74d14b88fabe96758e6c081e77743c9ad6098717503bbb42f3763b0175912",
+      "layout": "normal",
+      "typeLine": "Instant",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "modal"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "modal"
+      ],
+      "oracleText": "Choose three. You may choose the same mode more than once.\n• Target creature gets +3/-3 until end of turn.\n• Exile target nonland permanent, then return it to the battlefield tapped under its owner's control.\n• Create a 1/1 colorless Eldrazi Scion creature token with \"Sacrifice this token: Add {C}.\"",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "022667d0-60f2-4e37-bc50-53198fc933ab",
+      "canonicalName": "Seek Bolas's Counsel",
+      "oracleTextHash": "c2bd391e058c2cba8141d7a88512a0e4b555517bb3e5ea5cbd5d3244cc7411ed",
+      "cardStructureHash": "04f21f0ebf393dfe4870a6cae6c22af45fd86fdf1cac9d92690f2065931f88ec",
+      "layout": "normal",
+      "typeLine": "Sorcery",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "modal"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "modal"
+      ],
+      "oracleText": "Choose one at random —\n• You get an emblem with \"At the beginning of your upkeep, pay {U}{B}{R}. If you don't, you lose the game.\"\n• Each player discards their hand.\n• Planeswalk to Pools of Becoming. (Once there, you can roll the planar die only if you're playing Planechase.)\n• For each opponent, exile cards from the top of their library until you exile a nonland card. You may cast those cards without paying their mana costs.\n• Destroy all creatures and non-Bolas planeswalkers.\n• You get an emblem with \"You can cast nonland cards from your sideboard.\"",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "0a4bf88d-106a-413b-9d80-8775c1ff5ded",
+      "canonicalName": "Selesnya Loft Gardens",
+      "oracleTextHash": "f48a1e23ef84d24a9cacaa6bcb5abf41dd4192436c991ba00b8c8335d7ecadad",
+      "cardStructureHash": "63d94e8afbb72b728e031dfbc3b06942e1bdb9298037d075e18823dd184b5a16",
+      "layout": "planar",
+      "typeLine": "Plane — Ravnica",
+      "populationCategory": "A",
+      "complexityBucket": "pathological",
+      "selectionTags": [
+        "saga_planeswalker"
+      ],
+      "allMatchingTags": [
+        "pathological",
+        "multi_face",
+        "replacement",
+        "saga_planeswalker"
+      ],
+      "oracleText": "If an effect would create one or more tokens, it creates twice that many of those tokens instead.\nIf an effect would put one or more counters on a permanent, it puts twice that many of those counters on that permanent instead.\nWhenever chaos ensues, until end of turn, whenever you tap a land for mana, add one mana of any type that land produced.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "14994561-5048-4974-93c2-98b2fc3ee868",
+      "canonicalName": "Counters",
+      "oracleTextHash": "0d531309b789fde1bf9c3bba35b2c7c589b983530e88670d1623ea6b817a3866",
+      "cardStructureHash": "a296f48c74252e416bc7e732ee5d9b4f6b95fab7f1c0c6d72e7a0d7640bd7032",
+      "layout": "token",
+      "typeLine": "Card",
+      "populationCategory": "A",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "multi_face"
+      ],
+      "allMatchingTags": [
+        "simple",
+        "multi_face"
+      ],
+      "oracleText": "Buff your team\n(Theme color: {B})",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "1a4d16eb-343e-41ca-9363-90dc79da4769",
+      "canonicalName": "Armament of Nyx",
+      "oracleTextHash": "c8992c45bd76171b1bd2021a52fdc477cb8708a4da55f78ce4643025f6f916d8",
+      "cardStructureHash": "cf8a33c510924a842402afa4e93664c9c294249f7e52d2ee4500cadb59638766",
+      "layout": "normal",
+      "typeLine": "Enchantment — Aura",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "replacement"
+      ],
+      "allMatchingTags": [
+        "normal",
+        "replacement"
+      ],
+      "oracleText": "Enchant creature\nEnchanted creature has double strike as long as it's an enchantment. Otherwise, prevent all damage that would be dealt by enchanted creature. (A creature with double strike deals both first-strike and regular combat damage.)",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "2ef063d2-8702-43a3-a7d0-fc255f8512d3",
+      "canonicalName": "Double Trouble",
+      "oracleTextHash": "e9dec1d171f281ac19b3579882aaba6c061b9759165ec952ca21742d921a47f8",
+      "cardStructureHash": "131d09f3b5d3f8d13d9ad87f21082b6d8e79940ea7b42a9ebb4283d4433c0e39",
+      "layout": "normal",
+      "typeLine": "Instant",
+      "populationCategory": "A",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "simple"
+      ],
+      "allMatchingTags": [
+        "simple"
+      ],
+      "oracleText": "Double the power of each creature you control until end of turn.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "3a5b8972-7e50-42aa-a922-fa476260fafd",
+      "canonicalName": "Warzone Duplicator",
+      "oracleTextHash": "2f18c06cdbbd9e2f948fb44d510cbb21eaa581c485d6ea96ffe3db75c6bc1773",
+      "cardStructureHash": "1b362a1730b0aa3cbe1e8eef44fdddf62e5f974a706947fdbe0f105730edf52f",
+      "layout": "prototype",
+      "typeLine": "Artifact Creature — Construct",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "granted"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "multi_face",
+        "granted",
+        "replacement"
+      ],
+      "oracleText": "Prototype {3}{U} — 3/3\nWhen this creature enters, return target creature an opponent controls with power less than this creature's power to its owner's hand. If that creature wasn't a token, conjure a duplicate of it into your hand. It perpetually gains \"You may spend mana as though it were mana of any color to cast this spell.\"",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "3d937cd9-b1e1-406d-9e29-3b9d3ceea3be",
+      "canonicalName": "Kayla's Command",
+      "oracleTextHash": "94e593501c49308ebc89fad28c6a69e83e0309ccd6dc7a81f18ca5cdc3361e9e",
+      "cardStructureHash": "e46d348472d66d63fc4cdf604e3d30e7a7b786eaa069d3dd3a232490f1a41965",
+      "layout": "normal",
+      "typeLine": "Sorcery",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "modal"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "modal"
+      ],
+      "oracleText": "Choose two —\n• Create a 2/2 colorless Construct artifact creature token.\n• Put a +1/+1 counter on a creature you control. It gains double strike until end of turn.\n• Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\n• You gain 2 life and scry 2.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "3da87e58-6a4b-48c3-873c-bc654277d4df",
+      "canonicalName": "Drowned",
+      "oracleTextHash": "8b04509688b929df87398e2b998a5281a2cced08222e2c99ecabea5900a0b845",
+      "cardStructureHash": "469c37bf52df53d5959710a2c1e062fb546a7b27c5acddba7d99823bec26c6be",
+      "layout": "normal",
+      "typeLine": "Creature — Zombie",
+      "populationCategory": "A",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "simple"
+      ],
+      "allMatchingTags": [
+        "simple"
+      ],
+      "oracleText": "{B}: Regenerate this creature.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "48c0cd06-465d-4901-bf23-948a003afc0b",
+      "canonicalName": "Honor",
+      "oracleTextHash": "2885c91ac435bc3913d126680106ba0ec8fb5c0c56913e210e7e8e633ee419a0",
+      "cardStructureHash": "4e99c2b6f129bc17c07e434ca38182ef7234914b80db37531b9ada13dcfe2b48",
+      "layout": "normal",
+      "typeLine": "Sorcery",
+      "populationCategory": "A",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "simple"
+      ],
+      "allMatchingTags": [
+        "simple"
+      ],
+      "oracleText": "Put a +1/+1 counter on target creature.\nDraw a card.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "4a002816-aaab-4702-b736-97e6bf354d49",
+      "canonicalName": "Bombardment",
+      "oracleTextHash": "42e59dae8a82c97ba523dc1851821ea6c08a1d78e65faa9f629c546bf9da633e",
+      "cardStructureHash": "49cc599f575fb9991156a2d8bcdbd076b3805d29757e2a4d6d6fefdf2e67fe45",
+      "layout": "normal",
+      "typeLine": "Sorcery",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "normal"
+      ],
+      "allMatchingTags": [
+        "normal"
+      ],
+      "oracleText": "Until end of turn, cards you own that aren't on the battlefield lose all card types, costs, names, and abilities and become red sorceries named Missile that cost {R} with \"Missile deals 2 damage to any target.\"",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "4d057a7d-1c66-4e39-acd5-91d68ef1ceae",
+      "canonicalName": "Masterpiece Vault",
+      "oracleTextHash": "8556f4611a4b4d07eee156e16960012d0c3ab33c4644c072690fdb85a289f861",
+      "cardStructureHash": "0b8e7278d00f92384b1a983aeae661cec0111b62735f1daa81b228a67b267a33",
+      "layout": "normal",
+      "typeLine": "Artifact",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "normal"
+      ],
+      "allMatchingTags": [
+        "normal"
+      ],
+      "oracleText": "When this artifact is put into a graveyard from the battlefield, draft a card from Masterpiece Vault's spellbook and put it onto the battlefield. When an Equipment enters this way, attach it to up to one target creature you control.\n{5}: Sacrifice this artifact.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "54d65915-3833-4e4d-a066-37ae9507846f",
+      "canonicalName": "Venser's Sliver",
+      "oracleTextHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "cardStructureHash": "b55a89647e0aa4f60cd2e30bde9e0e40f509771675c0e8626abb5b53d392da84",
+      "layout": "normal",
+      "typeLine": "Artifact Creature — Sliver",
+      "populationCategory": "C",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "blank_text"
+      ],
+      "allMatchingTags": [
+        "blank_text",
+        "simple"
+      ],
+      "oracleText": "",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "5ea1d89c-8650-4373-9835-e369587020ef",
+      "canonicalName": "Pyrrhic Strike",
+      "oracleTextHash": "a81ed4b39639cfe532d8083f14bee9453599c09a69723079edf79ccfd20589d5",
+      "cardStructureHash": "02062e6edf1149cc24adc794e32e350a0fb2e504cba8ffab925951a66639e8d7",
+      "layout": "normal",
+      "typeLine": "Instant",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "replacement"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "replacement",
+        "modal"
+      ],
+      "oracleText": "As an additional cost to cast this spell, you may blight 2. (You may put two -1/-1 counters on a creature you control.)\nChoose one. If this spell's additional cost was paid, choose both instead.\n• Destroy target artifact or enchantment.\n• Destroy target creature with mana value 3 or greater.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "794e1dcb-aa64-4824-8d7b-0c65fc3afa13",
+      "canonicalName": "Electrostatic Blast",
+      "oracleTextHash": "d3748123aca61f94264d981d871ea7b9cf52183efb913cd92eed1de646f7a941",
+      "cardStructureHash": "f6f387a6dc2697c0214bea212aa05f436f5c6d0882af7b2e707b99060e85edd0",
+      "layout": "normal",
+      "typeLine": "Instant",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "normal"
+      ],
+      "allMatchingTags": [
+        "normal"
+      ],
+      "oracleText": "Electrostatic Blast deals 2 damage to any target. You get a one-time boon with \"When you cast an instant or sorcery spell, exile the top three cards of your library. You may play one of those cards until end of turn.\"",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "7b389f2b-fddc-46fb-85d5-4470565323f3",
+      "canonicalName": "Form of the Dragon",
+      "oracleTextHash": "d87998ad6d2cf71bb0f53b1ab45bac26d199b364f7363da59a29326ef3c11d35",
+      "cardStructureHash": "02939b0d5b43cdf13efb0aeb843c50b0cb5d54cff4bfd5062234796f0a82c507",
+      "layout": "normal",
+      "typeLine": "Enchantment",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "normal"
+      ],
+      "allMatchingTags": [
+        "normal"
+      ],
+      "oracleText": "At the beginning of your upkeep, this enchantment deals 5 damage to any target.\nAt the beginning of each end step, your life total becomes 5.\nCreatures without flying can't attack you.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "7d27c583-469c-42d7-a547-8c65654e9d95",
+      "canonicalName": "Biorganic Carapace",
+      "oracleTextHash": "234e1bde039b65b56b3e8dd2abddf9a906029913db43800fa44bca01a1e948bd",
+      "cardStructureHash": "13a8a4be560e5e1450b15fdd56b604752668f7e6e39109a49480c209da977a72",
+      "layout": "normal",
+      "typeLine": "Artifact — Equipment",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "granted"
+      ],
+      "allMatchingTags": [
+        "normal",
+        "granted"
+      ],
+      "oracleText": "When this Equipment enters, attach it to target creature you control.\nEquipped creature gets +2/+2 and has \"Whenever this creature deals combat damage to a player, draw a card for each modified creature you control.\" (Equipment, Auras you control, and counters are modifications.)\nEquip {2}",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "8215f4a2-7131-426b-ad9c-6427caabd715",
+      "canonicalName": "Jolene, the Plunder Queen",
+      "oracleTextHash": "c76fe66495de0b251103be21f801e3b127cc8378c118d604e086c2c3dc04b7aa",
+      "cardStructureHash": "4c3fb87baa5efb3f24111e1020297acc5e22f226c8c3abe0b9ab45f06a062de7",
+      "layout": "normal",
+      "typeLine": "Legendary Creature — Human Warrior",
+      "populationCategory": "A",
+      "complexityBucket": "normal",
+      "selectionTags": [
+        "replacement"
+      ],
+      "allMatchingTags": [
+        "normal",
+        "replacement"
+      ],
+      "oracleText": "Whenever a player attacks one or more of your opponents, that attacking player creates a Treasure token.\nIf you would create one or more Treasure tokens, instead create those tokens plus an additional Treasure token.\nSacrifice five Treasures: Put five +1/+1 counters on Jolene.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "8426fe4b-7632-4122-9a6c-70f469e1d092",
+      "canonicalName": "Foot Skirmisher",
+      "oracleTextHash": "f8eb202642d9f89da5949f3aa5b4eb4620103505ca7ee555daec34d565cefed1",
+      "cardStructureHash": "0dc313d137754748ded5b22c57990fab50fb804dcc69c9ecc42b5999f8a364ec",
+      "layout": "token",
+      "typeLine": "Creature — Ninja",
+      "populationCategory": "A",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "multi_face"
+      ],
+      "allMatchingTags": [
+        "simple",
+        "multi_face"
+      ],
+      "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)\nThis creature can't block.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "86b47725-1764-4716-993d-e4dfcea2346c",
+      "canonicalName": "Joven and Chandler",
+      "oracleTextHash": "bced8090b8abc1cb3439aecf28804488db14101522a7a57b4b28cd0711b1e9c4",
+      "cardStructureHash": "ebef8166ff4d357294a31f870bab1282c1867b58c70876767210e88802d47cc2",
+      "layout": "normal",
+      "typeLine": "Legendary Creature — Human Rogue",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "complex"
+      ],
+      "allMatchingTags": [
+        "complex"
+      ],
+      "oracleText": "Backup 2 (When this creature enters the battlefield, put two +1/+1 counters on target creature. If that's another creature, it gains the following abilities until end of turn.)\nHaste\nWhenever this creature deals combat damage to an opponent, destroy target artifact that player controls.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "8a280ba8-6b7b-46dd-9c2b-6d0027cfff30",
+      "canonicalName": "Fighter Class",
+      "oracleTextHash": "b6d35348e1eaee5e38c524fac2cceadb039a39d4125e3d7ed4ff6c40c2f0645f",
+      "cardStructureHash": "757b754c5c4a8861c3fbbebfbd166f64baa5604286ea0a52b7c09b8b9d313f6b",
+      "layout": "class",
+      "typeLine": "Enchantment — Class",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "complex"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "multi_face"
+      ],
+      "oracleText": "(Gain the next level as a sorcery to add its ability.)\nWhen this Class enters, search your library for an Equipment card, reveal it, put it into your hand, then shuffle.\n{1}{R}{W}: Level 2\nEquip abilities you activate cost {2} less to activate.\n{3}{R}{W}: Level 3\nWhenever a creature you control attacks, up to one target creature blocks it this combat if able.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "947b40a2-e272-4ef6-85fb-3d767a21bc7a",
+      "canonicalName": "Esper Origins // Summon: Esper Maduin",
+      "oracleTextHash": "006104b3d9d7235b5e3f0839e54add208e332e4acf6f3c3a6126ddc0af033e41",
+      "cardStructureHash": "1881e6e7a7a2207da02ccee4fd437161fb2cb8d2c122e45b8cf22bfa32b019ac",
+      "layout": "transform",
+      "typeLine": "Sorcery // Enchantment Creature — Saga Elemental",
+      "populationCategory": "A",
+      "complexityBucket": "pathological",
+      "selectionTags": [
+        "saga_planeswalker"
+      ],
+      "allMatchingTags": [
+        "pathological",
+        "multi_face",
+        "replacement",
+        "saga_planeswalker"
+      ],
+      "cardFaces": [
+        {
+          "name": "Esper Origins",
+          "manaCost": "{1}{G}",
+          "typeLine": "Sorcery",
+          "oracleText": "Surveil 2. You gain 2 life. If this spell was cast from a graveyard, exile it, then put it onto the battlefield transformed under its owner's control with a finality counter on it. (If a creature with a finality counter on it would die, exile it instead.)\nFlashback {3}{G} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",
+          "colors": [
+            "G"
+          ]
+        },
+        {
+          "name": "Summon: Esper Maduin",
+          "manaCost": "",
+          "typeLine": "Enchantment Creature — Saga Elemental",
+          "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Reveal the top card of your library. If it's a permanent card, put it into your hand.\nII — Add {G}{G}.\nIII — Other creatures you control get +2/+2 and gain trample until end of turn.",
+          "colors": [
+            "G"
+          ],
+          "power": "4",
+          "toughness": "4"
+        }
+      ],
+      "oracleText": "Surveil 2. You gain 2 life. If this spell was cast from a graveyard, exile it, then put it onto the battlefield transformed under its owner's control with a finality counter on it. (If a creature with a finality counter on it would die, exile it instead.)\nFlashback {3}{G} (You may cast this card from your graveyard for its flashback cost. Then exile it.)\n//\n(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Reveal the top card of your library. If it's a permanent card, put it into your hand.\nII — Add {G}{G}.\nIII — Other creatures you control get +2/+2 and gain trample until end of turn.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "96cb97ca-4ce0-4d33-86fb-4db4ce1956be",
+      "canonicalName": "Edgar, Charmed Groom // Edgar Markov's Coffin",
+      "oracleTextHash": "3e1ae8bc22eb1a2f8276fdfb909dea043ad32207f149b70760c84b59d6287c2b",
+      "cardStructureHash": "5c84f800c698bf70e331c15612f126532db293cc6ed01415ea48a6da1a3d6911",
+      "layout": "transform",
+      "typeLine": "Legendary Creature — Vampire Noble // Legendary Artifact",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "multi_face"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "multi_face"
+      ],
+      "cardFaces": [
+        {
+          "name": "Edgar, Charmed Groom",
+          "manaCost": "{2}{W}{B}",
+          "typeLine": "Legendary Creature — Vampire Noble",
+          "oracleText": "Other Vampires you control get +1/+1.\nWhen Edgar dies, return it to the battlefield transformed under its owner's control.",
+          "colors": [
+            "B",
+            "W"
+          ],
+          "power": "4",
+          "toughness": "4"
+        },
+        {
+          "name": "Edgar Markov's Coffin",
+          "manaCost": "",
+          "typeLine": "Legendary Artifact",
+          "oracleText": "At the beginning of your upkeep, create a 1/1 white and black Vampire creature token with lifelink and put a bloodline counter on Edgar Markov's Coffin. Then if there are three or more bloodline counters on it, remove those counters and transform it.",
+          "colors": [
+            "B",
+            "W"
+          ]
+        }
+      ],
+      "oracleText": "Other Vampires you control get +1/+1.\nWhen Edgar dies, return it to the battlefield transformed under its owner's control.\n//\nAt the beginning of your upkeep, create a 1/1 white and black Vampire creature token with lifelink and put a bloodline counter on Edgar Markov's Coffin. Then if there are three or more bloodline counters on it, remove those counters and transform it.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "995eede5-d3aa-42f8-9883-6e47a7c041bc",
+      "canonicalName": "No Way Out",
+      "oracleTextHash": "e909b7abcad1158e50e3f27346cac17aa9e25f87c10c281deb2a04898d33df14",
+      "cardStructureHash": "d3efedad0924c5d5c456f882047c8c118963d2ebe86ca98c157b9c48bca7d7fd",
+      "layout": "planar",
+      "typeLine": "Plane — Duskmourn",
+      "populationCategory": "A",
+      "complexityBucket": "pathological",
+      "selectionTags": [
+        "pathological"
+      ],
+      "allMatchingTags": [
+        "pathological",
+        "multi_face",
+        "replacement",
+        "saga_planeswalker"
+      ],
+      "oracleText": "No Way Out enters with three dread counters.\nYou can never leave — If a player would planeswalk while this plane has dread counters, chaos ensues instead.\nWhenever you roll the planar die, manifest dread. (Look at the top two cards of your library. Put one onto the battlefield face down as a 2/2 creature and the other into your graveyard. Turn it face up any time for its mana cost if it's a creature card.)\nWhenever Chaos ensures each player may turn a face-down permanent they control face-up. Remove a dread counter from this plane.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "9cf541a5-bfea-4cad-ae60-239b4d15be89",
+      "canonicalName": "Antoine Ruel Bio",
+      "oracleTextHash": "96b128cd2df5e1b048c4b53392c1bd207a1cbe9dbf52b5b8a0f0f0afef8e02e3",
+      "cardStructureHash": "a6cb355dfaded5518e07cd90bc49e4c1e0ecf50e070e462d0243fe494338c42f",
+      "layout": "token",
+      "typeLine": "Card",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "multi_face"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "multi_face"
+      ],
+      "oracleText": "A member of the famous Team Block Ops, Antoine Ruel, a native of Aubervilliers, France, took his blue-black-red control deck to a third-place finish at this year's World Championships. Ruel credits his teammate Laurent Pagorek for the deck that he calls \"AK-Go.\" The deck, which Ruel played to a 5—1 record during the Standard portion of the tournament, relies on card drawing (most notably Accumulated Knowledge, or \"AK\" for short), countermagic (\"Go,\" for short), red for board control, and Nether Spirits for the win.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "9ef53bd8-9999-4ea3-a43a-4084a9f208db",
+      "canonicalName": "A-Dorothea, Vengeful Victim // A-Dorothea's Retribution",
+      "oracleTextHash": "5b188d14ed90a72821ee39340787d0fd74d82f968456f654fb176d5605c163d0",
+      "cardStructureHash": "4bd84b56509dbcb76f78665fe2e46c78d190dcb458ebbca8896b2729b1053f02",
+      "layout": "transform",
+      "typeLine": "Legendary Creature — Spirit // Enchantment — Aura",
+      "populationCategory": "A",
+      "complexityBucket": "pathological",
+      "selectionTags": [
+        "pathological"
+      ],
+      "allMatchingTags": [
+        "pathological",
+        "multi_face",
+        "granted",
+        "replacement"
+      ],
+      "cardFaces": [
+        {
+          "name": "A-Dorothea, Vengeful Victim",
+          "manaCost": "{W}{U}",
+          "typeLine": "Legendary Creature — Spirit",
+          "oracleText": "Flying\nWhen Dorothea, Vengeful Victim attacks or blocks, sacrifice it at end of combat.\nDisturb {W}{U} (You may cast this card from your graveyard transformed for its disturb cost.)",
+          "colors": [
+            "U",
+            "W"
+          ],
+          "power": "4",
+          "toughness": "4"
+        },
+        {
+          "name": "A-Dorothea's Retribution",
+          "manaCost": "",
+          "typeLine": "Enchantment — Aura",
+          "oracleText": "Enchant creature\nEnchanted creature has \"Whenever this creature attacks, create a 4/4 white Spirit creature token with flying that's tapped and attacking. Sacrifice that token at end of combat.\"\nIf Dorothea's Retribution would be put into a graveyard from anywhere, exile it instead.",
+          "colors": [
+            "U",
+            "W"
+          ]
+        }
+      ],
+      "oracleText": "Flying\nWhen Dorothea, Vengeful Victim attacks or blocks, sacrifice it at end of combat.\nDisturb {W}{U} (You may cast this card from your graveyard transformed for its disturb cost.)\n//\nEnchant creature\nEnchanted creature has \"Whenever this creature attacks, create a 4/4 white Spirit creature token with flying that's tapped and attacking. Sacrifice that token at end of combat.\"\nIf Dorothea's Retribution would be put into a graveyard from anywhere, exile it instead.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "a6649a99-c9cd-474e-91f2-cc8e75496864",
+      "canonicalName": "Vizzerdrix",
+      "oracleTextHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "cardStructureHash": "829013f180ed8da2b464cf93ce7a67decf564bef194bb92218621f6c22800490",
+      "layout": "normal",
+      "typeLine": "Creature — Rabbit Beast",
+      "populationCategory": "C",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "blank_text"
+      ],
+      "allMatchingTags": [
+        "blank_text",
+        "simple"
+      ],
+      "oracleText": "",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "aa944cbe-fdba-4001-97d5-c722fe744dcc",
+      "canonicalName": "Vorstclaw",
+      "oracleTextHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "cardStructureHash": "e6cedf247c59b642657b3f8f700273723ac3d6448664c7a3a12fc562c519693d",
+      "layout": "normal",
+      "typeLine": "Creature — Elemental Horror",
+      "populationCategory": "C",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "blank_text"
+      ],
+      "allMatchingTags": [
+        "blank_text",
+        "simple"
+      ],
+      "oracleText": "",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "b288c863-5377-473d-a628-bb199993a29c",
+      "canonicalName": "Queen's Bay Soldier",
+      "oracleTextHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "cardStructureHash": "e09c8398db407079dfbdc68c14bbca95d4e911b7082b56a2f9283dfdef520c98",
+      "layout": "normal",
+      "typeLine": "Creature — Vampire Soldier",
+      "populationCategory": "C",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "blank_text"
+      ],
+      "allMatchingTags": [
+        "blank_text",
+        "simple"
+      ],
+      "oracleText": "",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "b70c3adb-64ba-49ea-bcf6-6406a58cb453",
+      "canonicalName": "Jin-Gitaxias // The Great Synthesis",
+      "oracleTextHash": "79ac1130dbff0c88e8e607fb356996832d7a21edadfa034ab0dc11839e521f23",
+      "cardStructureHash": "5949891b75016f8694dc05e7c8194f3c2fa17ee61c881227beeff9e43cc78929",
+      "layout": "transform",
+      "typeLine": "Legendary Creature — Phyrexian Praetor // Enchantment — Saga",
+      "populationCategory": "A",
+      "complexityBucket": "pathological",
+      "selectionTags": [
+        "saga_planeswalker"
+      ],
+      "allMatchingTags": [
+        "pathological",
+        "multi_face",
+        "saga_planeswalker"
+      ],
+      "cardFaces": [
+        {
+          "name": "Jin-Gitaxias",
+          "manaCost": "{3}{U}{U}",
+          "typeLine": "Legendary Creature — Phyrexian Praetor",
+          "oracleText": "Ward {2}\nWhenever you cast a noncreature spell with mana value 3 or greater, draw a card.\n{3}{U}: Exile Jin-Gitaxias, then return it to the battlefield transformed under its owner's control. Activate only as a sorcery and only if you have seven or more cards in hand.",
+          "colors": [
+            "U"
+          ],
+          "power": "5",
+          "toughness": "5"
+        },
+        {
+          "name": "The Great Synthesis",
+          "manaCost": "",
+          "typeLine": "Enchantment — Saga",
+          "oracleText": "(As this Saga enters and after your draw step, add a lore counter.)\nI — Draw cards equal to the number of cards in your hand. You have no maximum hand size for as long as you control this Saga.\nII — Return all non-Phyrexian creatures to their owners' hands.\nIII — You may cast any number of spells from your hand without paying their mana costs. Exile this Saga, then return it to the battlefield (front face up).",
+          "colors": [
+            "U"
+          ]
+        }
+      ],
+      "oracleText": "Ward {2}\nWhenever you cast a noncreature spell with mana value 3 or greater, draw a card.\n{3}{U}: Exile Jin-Gitaxias, then return it to the battlefield transformed under its owner's control. Activate only as a sorcery and only if you have seven or more cards in hand.\n//\n(As this Saga enters and after your draw step, add a lore counter.)\nI — Draw cards equal to the number of cards in your hand. You have no maximum hand size for as long as you control this Saga.\nII — Return all non-Phyrexian creatures to their owners' hands.\nIII — You may cast any number of spells from your hand without paying their mana costs. Exile this Saga, then return it to the battlefield (front face up).",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "bd532f8d-789f-4ee1-a2f3-ae30e8282c76",
+      "canonicalName": "Gempalm Polluter",
+      "oracleTextHash": "739bf3afcbae242d5d219bcf09d15766b43c61f8ddc11ce8ec1ad594327c7e52",
+      "cardStructureHash": "23a95d8aece41c9bb95995749a485d1e54acc6b72cdb7d9179a1d64909a5ecf7",
+      "layout": "normal",
+      "typeLine": "Creature — Zombie",
+      "populationCategory": "A",
+      "complexityBucket": "simple",
+      "selectionTags": [
+        "simple"
+      ],
+      "allMatchingTags": [
+        "simple"
+      ],
+      "oracleText": "Cycling {B}{B} ({B}{B}, Discard this card: Draw a card.)\nWhen you cycle this card, you may have target player lose life equal to the number of Zombies on the battlefield.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "bd7111bc-9b8f-4c4b-b61c-7841a857ce6b",
+      "canonicalName": "Cherished Hatchling",
+      "oracleTextHash": "b82e8bd23531861db52945ed7be8c734101e6bb5f93f2bd1295ecb542ba7b20a",
+      "cardStructureHash": "c1e5e3d2ddde11d20fd28df6391dd502b9369e9e498910e7f8c5566c84598ecd",
+      "layout": "normal",
+      "typeLine": "Creature — Dinosaur",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "granted"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "granted",
+        "replacement"
+      ],
+      "oracleText": "When this creature dies, you may cast Dinosaur spells this turn as though they had flash, and whenever you cast a Dinosaur spell this turn, it gains \"When this creature enters, you may have it fight another target creature.\"",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "c556baae-77bc-4459-a925-5b94e92b336d",
+      "canonicalName": "Mini-Master // Mini-Master (cont'd)",
+      "oracleTextHash": "a6d0f6fa0b3c85a8b3bf2ed81e5494af873d5881bdd07f28e5b86f808d1ee883",
+      "cardStructureHash": "a940d440f405d01816b6382071ab70a4181798a81e7ee17d5028f89ad6d9e4ac",
+      "layout": "double_faced_token",
+      "typeLine": "Card // Card",
+      "populationCategory": "A",
+      "complexityBucket": "pathological",
+      "selectionTags": [
+        "pathological"
+      ],
+      "allMatchingTags": [
+        "pathological",
+        "multi_face",
+        "replacement"
+      ],
+      "cardFaces": [
+        {
+          "name": "Mini-Master",
+          "manaCost": "",
+          "typeLine": "Card",
+          "oracleText": "2 players | 2 packs. 10 minutes | Basic Lands\nOBJECTIVE:\nPlay a quick game of Magic using only the cards in a single pack. You may also know this game as Pack Wars!\nGET READY:\nEach player opens a pack and sets aside any cards without Magic card backs, trying not to look at the rest of the cards. Then they add three of each basic land (Plains, Island, Swamp, Mountain, and Forest) to their pack and shuffle. This becomes the player's deck.\nLET'S PLAY:\nRandomly determine who goes first, then play a game of Magic! There are many variants of Mini-Master. The following are modified rules you can add to your game:",
+          "colors": []
+        },
+        {
+          "name": "Mini-Master (cont'd)",
+          "manaCost": "",
+          "typeLine": "Card",
+          "oracleText": "If you have two or more copies of any basic land, you can tap other lands as though they were lands of that type. This can help you pay costs with lots of mana symbols in them.\nAfter the first game, add another pack to your deck, look at the contents, then cut cards until you have 30. Do this again for game three!\nNot feeling your deck? Replace the whole thing with a new pack between games!\nTO WIN:\nThe first player to win two games wins the match.",
+          "colors": []
+        }
+      ],
+      "oracleText": "2 players | 2 packs. 10 minutes | Basic Lands\nOBJECTIVE:\nPlay a quick game of Magic using only the cards in a single pack. You may also know this game as Pack Wars!\nGET READY:\nEach player opens a pack and sets aside any cards without Magic card backs, trying not to look at the rest of the cards. Then they add three of each basic land (Plains, Island, Swamp, Mountain, and Forest) to their pack and shuffle. This becomes the player's deck.\nLET'S PLAY:\nRandomly determine who goes first, then play a game of Magic! There are many variants of Mini-Master. The following are modified rules you can add to your game:\n//\nIf you have two or more copies of any basic land, you can tap other lands as though they were lands of that type. This can help you pay costs with lots of mana symbols in them.\nAfter the first game, add another pack to your deck, look at the contents, then cut cards until you have 30. Do this again for game three!\nNot feeling your deck? Replace the whole thing with a new pack between games!\nTO WIN:\nThe first player to win two games wins the match.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "cb45860a-1937-4803-b6d8-331a35be39fd",
+      "canonicalName": "Fractal Tender",
+      "oracleTextHash": "750a2b4210f0ad9d2cc1bd04b2c01a6f384c1ce0d377f46ccc5cafe266563c75",
+      "cardStructureHash": "723b40f8299f6295f7523e5bdf3c087858722220c2874dd9ae8229b15335c7b5",
+      "layout": "normal",
+      "typeLine": "Creature — Elf Wizard",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "complex"
+      ],
+      "allMatchingTags": [
+        "complex"
+      ],
+      "oracleText": "Ward {2}\nIncrement (Whenever you cast a spell, if the amount of mana you spent is greater than this creature's power or toughness, put a +1/+1 counter on this creature.)\nAt the beginning of each end step, if you put a counter on this creature this turn, create a 0/0 green and blue Fractal creature token and put three +1/+1 counters on it.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    },
+    {
+      "oracleId": "d3654ade-36d7-43f4-88c2-b4e0725acdaa",
+      "canonicalName": "Peer Kröger Bio",
+      "oracleTextHash": "0c6e9a913fd2c88efa7c17f13942d29e7e2d339d99d67686424a1f69caa4a433",
+      "cardStructureHash": "e583e0130dffb329ab49e57a7b83d54fce1cf1fbfdad008d6ae3b5e3456791c6",
+      "layout": "token",
+      "typeLine": "Card",
+      "populationCategory": "A",
+      "complexityBucket": "complex",
+      "selectionTags": [
+        "complex"
+      ],
+      "allMatchingTags": [
+        "complex",
+        "multi_face"
+      ],
+      "oracleText": "Hometown hero Peer Kröger played his own version of the classic \"Reanimator\" deck to an impressive record during this year's World Championships. The twenty-eight-year-old communications and computer science student nicknamed his deck \"Herbert Wise\" after the famous H. P. Lovecraft work \"Herbert Wise—Reanimator.\" Winning with this deck is a two-step process: Step 1. Use Entomb or Buried Alive to quickly get daunting creatures into the graveyard. Step 2. Bring the creature back to life with Zombify or Doomed Necromancer. The mostly black deck also uses Burning Wish to find just the right answers to deal with opponents' plans.",
+      "officialRulingsConsulted": false,
+      "adjudicationSlots": {
+        "primaryA": {
+          "status": "pending",
+          "adjudicatorId": null
+        },
+        "primaryB": {
+          "status": "pending",
+          "adjudicatorId": null
+        }
+      }
+    }
+  ],
+  "disagreementResolutionRequired": true,
+  "versionsToFreezeAfterCalibration": {
+    "annotationProtocolVersion": "catalog-coverage-annotation-protocol-v1",
+    "wholeCardRubricVersion": "catalog-coverage-whole-card-rubric-v1",
+    "semanticGoldSchemaVersion": "catalog-coverage-semantic-gold-schema-v1"
+  }
+}
