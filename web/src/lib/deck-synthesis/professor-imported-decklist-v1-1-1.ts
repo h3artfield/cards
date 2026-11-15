@@ -31,6 +31,8 @@ export type ProfessorImportedResolvedCardV111 = {
 export type ProfessorImportedDeckPreviewV111 = {
   commanderName: string | null;
   commanderResolved: boolean;
+  /** Second card in the list's Commanders section, when it names a pair. */
+  partnerName: string | null;
   cards: ProfessorImportedResolvedCardV111[];
   recognized: number;
   total: number;

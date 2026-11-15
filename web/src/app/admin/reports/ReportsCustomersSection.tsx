@@ -99,16 +99,29 @@ function CustomerCreditHistory({ customerId }: { customerId: string }) {
   );
 }
 
-export function ReportsCustomersSection() {
+export function ReportsCustomersSection({
+  customerId = null,
+}: {
+  customerId?: string | null;
+}) {
   const { loading: authLoading, activeStore } = useAdmin();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loadedStoreId, setLoadedStoreId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [openCustomerId, setOpenCustomerId] = useState<string | null>(null);
+  const [openCustomerId, setOpenCustomerId] = useState<string | null>(customerId);
 
   const storeId = activeStore?.id ?? null;
   // Switching stores puts the section back into its loading state on its own.
   const loading = authLoading || !storeId || loadedStoreId !== storeId;
+
+  useEffect(() => {
+    setOpenCustomerId(customerId);
+  }, [customerId]);
+
+  useEffect(() => {
+    if (!customerId || loading) return;
+    document.getElementById(`customer-${customerId}`)?.scrollIntoView({ block: "center" });
+  }, [customerId, loading]);
 
   useEffect(() => {
     if (authLoading || !storeId) return;
@@ -165,7 +178,12 @@ export function ReportsCustomersSection() {
           {customers.map((c) => (
             <li
               key={c.id}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm"
+              id={`customer-${c.id}`}
+              className={`rounded-xl border bg-white px-4 py-3 text-sm shadow-sm ${
+                openCustomerId === c.id
+                  ? "border-indigo-300 ring-2 ring-indigo-100"
+                  : "border-slate-200"
+              }`}
             >
               <p className="font-medium text-slate-900">
                 {c.firstName} {c.lastName}

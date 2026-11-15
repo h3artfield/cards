@@ -1,14 +1,25 @@
-import type { StoreInventorySemanticFilter } from "@/lib/deck-builder/store-inventory-semantic";
+import {
+  isSemanticFilterActive,
+  type StoreInventorySemanticFilter,
+} from "@/lib/deck-builder/store-inventory-semantic";
 import { PRIMITIVE_ACTION_TYPES } from "@/lib/deck-builder/golden-catalog/oracle-action-taxonomy";
 
-export type InventoryBrowseGame = "magic" | "pokemon" | "riftbound";
+export type InventoryBrowseGame = string;
 export type InventoryBrowseSource = "inventory" | "catalog";
 export type InventorySortBy =
   | "name"
+  | "newest"
   | "price_asc"
   | "price_desc"
   | "cmc_asc"
   | "cmc_desc";
+
+export type ColorMatchMode = "exact" | "including" | "atmost";
+
+export type InventoryFinishFilter = "all" | "foil" | "nonfoil";
+
+/** Matches `InventoryChannelFilter` in lib/inventory/status. */
+export type InventoryChannelFilter = "all" | "online" | "instore";
 
 export type InventoryBrowseFilterParams = {
   cardTypes: string[];
@@ -20,6 +31,18 @@ export type InventoryBrowseFilterParams = {
   semanticOwners: string[];
   manaValuePreset: "all" | "0-2" | "3-4" | "5+";
   sortBy: InventorySortBy;
+  finish: InventoryFinishFilter;
+  channel?: InventoryChannelFilter;
+  colorMode: ColorMatchMode;
+  commanderColors: string[];
+  rulesText: string;
+  typeLine: string;
+  typeLinePartial: boolean;
+  manaCost: string;
+  pokemonTypes?: string[];
+  pokemonCards?: string[];
+  pokemonStages?: string[];
+  pokemonTrainers?: string[];
 };
 
 export const INVENTORY_PRIMITIVE_ACTION_OPTIONS = [...PRIMITIVE_ACTION_TYPES] as const;
@@ -250,4 +273,74 @@ export function appendInventoryBrowseParams(
   if (filters.manaValuePreset !== "all") {
     params.set("mv", filters.manaValuePreset);
   }
+  if (filters.finish === "foil" || filters.finish === "nonfoil") {
+    params.set("finish", filters.finish);
+  }
+  if (filters.channel === "online" || filters.channel === "instore") {
+    params.set("channel", filters.channel);
+  }
+  if (filters.colorMode) params.set("colorMode", filters.colorMode);
+  if (filters.commanderColors.length > 0) {
+    params.set("commander", filters.commanderColors.join(","));
+  }
+  if (filters.rulesText.trim()) params.set("oracle", filters.rulesText.trim());
+  if (filters.typeLine.trim()) {
+    params.set("typeLine", filters.typeLine.trim());
+    if (filters.typeLinePartial) params.set("typePartial", "1");
+  }
+  if (filters.manaCost.trim()) params.set("mana", filters.manaCost.trim());
+  if (filters.pokemonTypes?.length) params.set("pokeType", filters.pokemonTypes.join(","));
+  if (filters.pokemonCards?.length) params.set("pokeCard", filters.pokemonCards.join(","));
+  if (filters.pokemonStages?.length) params.set("pokeStage", filters.pokemonStages.join(","));
+  if (filters.pokemonTrainers?.length) params.set("pokeTrainer", filters.pokemonTrainers.join(","));
+}
+
+const CLERK_SEARCH_BASE_KEYS = [
+  "oracleTagsAny",
+  "oracleTextAny",
+  "keywordsAny",
+  "nameIncludesAny",
+  "rarityAny",
+  "primitiveActions",
+  "abilityTypes",
+  "zones",
+  "semanticOwners",
+] as const satisfies readonly (keyof StoreInventorySemanticFilter)[];
+
+/** Keep a search base across filter changes. Unknown fields are dropped. */
+export function parseClerkSearchBaseParam(
+  raw: string | null,
+): StoreInventorySemanticFilter | undefined {
+  if (!raw?.trim()) return undefined;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return undefined;
+  }
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return undefined;
+  const src = parsed as Record<string, unknown>;
+  const base: StoreInventorySemanticFilter = {};
+  for (const key of CLERK_SEARCH_BASE_KEYS) {
+    const value = src[key];
+    if (!Array.isArray(value)) continue;
+    const strings = value
+      .filter((entry): entry is string => typeof entry === "string")
+      .map((entry) => entry.trim())
+      .filter((entry) => entry.length > 0 && entry.length <= 120)
+      .slice(0, 16);
+    if (strings.length > 0) base[key] = strings;
+  }
+  if (src.primitiveActionMode === "all" || src.primitiveActionMode === "any") {
+    base.primitiveActionMode = src.primitiveActionMode;
+  }
+  return isSemanticFilterActive(base) ? base : undefined;
+}
+
+export function appendClerkSearchBaseParam(
+  params: URLSearchParams,
+  base: StoreInventorySemanticFilter | undefined,
+): void {
+  if (!base || !isSemanticFilterActive(base)) return;
+  params.set("qbase", JSON.stringify(base));
 }

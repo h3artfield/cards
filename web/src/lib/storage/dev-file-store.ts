@@ -9,6 +9,7 @@ import type {
   CollectionCard,
   Customer,
   InventoryItem,
+  PickupReservation,
   ScannedCard,
   ShopTicket,
   StoreRule,
@@ -28,6 +29,7 @@ export interface DevMemoryState {
   tradeCreditEntries: TradeCreditEntry[];
   collectionCards: CollectionCard[];
   shopTickets: ShopTicket[];
+  pickupReservations: PickupReservation[];
   rules: StoreRule[];
   stores: Record<string, StoreSettings>;
   adminUsers: AdminUser[];
@@ -62,6 +64,7 @@ export function defaultDevMemoryState(): DevMemoryState {
     tradeCreditEntries: [],
     collectionCards: [],
     shopTickets: [],
+    pickupReservations: [],
     rules: [],
     stores: { [DEFAULT_STORE_ID]: gameLodge },
     adminUsers: [],
@@ -95,6 +98,7 @@ export async function readDevMemoryState(): Promise<DevMemoryState> {
     if (!memoryCache!.tradeCreditEntries) memoryCache!.tradeCreditEntries = [];
     if (!memoryCache!.collectionCards) memoryCache!.collectionCards = [];
     if (!memoryCache!.shopTickets) memoryCache!.shopTickets = [];
+    if (!memoryCache!.pickupReservations) memoryCache!.pickupReservations = [];
     if (!memoryCache!.orderCounters) memoryCache!.orderCounters = {};
     if (!memoryCache!.ticketCounters) memoryCache!.ticketCounters = {};
     if (!memoryCache!.inventoryImportSnapshots) {

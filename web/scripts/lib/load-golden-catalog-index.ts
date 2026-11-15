@@ -5,6 +5,7 @@ import { createHash } from "node:crypto";
 import { COLLECTIONS } from "../../src/lib/firebase/collections";
 import type { CardFace, GoldenCatalogOracleCard } from "../../src/lib/deck-builder/golden-catalog/schemas";
 import { normalizeOracleName } from "../../src/lib/deck-builder/golden-catalog/normalize-name";
+import { registerCatalogNameAliases } from "../../src/lib/commander-strategy/resolve-catalog-card-by-name";
 import { requireLocalFirestore, withFirestoreScriptTimeout } from "./firestore-fail-fast";
 
 export function normalizeOracleTextForCompare(text: string | undefined): string {
@@ -46,7 +47,7 @@ export async function loadGoldenCatalogIndex(): Promise<GoldenCatalogIndex> {
   const snap = await withFirestoreScriptTimeout(
     "catalogOracleCards get",
     () => db.collection(COLLECTIONS.catalogOracleCards).get(),
-    120_000,
+    300_000,
   );
 
   const byOracleId = new Map<string, GoldenCatalogOracleCard>();
@@ -59,10 +60,7 @@ export async function loadGoldenCatalogIndex(): Promise<GoldenCatalogIndex> {
     if (!card.oracleId) continue;
     byOracleId.set(card.oracleId, card);
 
-    const norm = normalizeOracleName(card.canonicalName);
-    const nameBucket = byNormalizedName.get(norm) ?? [];
-    nameBucket.push(card);
-    byNormalizedName.set(norm, nameBucket);
+    registerCatalogNameAliases(card, byNormalizedName);
 
     const hash = goldenOracleTextHash(card.oracleText);
     const textBucket = byOracleTextHash.get(hash) ?? [];

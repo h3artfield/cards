@@ -3,7 +3,7 @@ import { requireAdminSession, requireStoreScope } from "@/lib/admin-auth";
 import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
 import { computeInventoryAnalytics } from "@/lib/inventory/analytics";
 import { snapshotFromAnalytics } from "@/lib/inventory/import-snapshots";
-import { isCatalogImportItem } from "@/lib/inventory/status";
+import { isCatalogImportItem, isInventoryAvailable } from "@/lib/inventory/status";
 import { applyShopifyInventoryImport } from "@/lib/shopify-inventory/apply-import";
 import { fetchShopifyCatalogVariants } from "@/lib/shopify-inventory/fetch-products";
 import { resolveShopifyAccessTokenForStore } from "@/lib/shopify/resolve-access-token";
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
     const updatedInventory = await dataStore.getInventory(scope.storeId);
     const analytics = computeInventoryAnalytics(
       updatedInventory.filter(
-        (i) => isCatalogImportItem(i) && i.status !== "sold",
+        (i) => isCatalogImportItem(i) && isInventoryAvailable(i),
       ),
     );
     await dataStore.saveInventoryImportSnapshot(

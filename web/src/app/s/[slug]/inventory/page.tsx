@@ -10,12 +10,9 @@ function InventoryLoadingShell() {
       className="min-h-screen bg-neutral-950 text-neutral-300"
       style={{ backgroundColor: "#0a0a0a", color: "#d4d4d4" }}
     >
-      <header className="border-b border-neutral-800 px-4 py-4">
-        <div className="mx-auto max-w-7xl">
-          <p className="text-lg font-semibold text-white">Inventory</p>
-          <p className="mt-2 text-sm text-neutral-500">Loading inventory…</p>
-        </div>
-      </header>
+      <main className="mx-auto max-w-7xl px-4 py-4">
+        <p className="text-sm text-neutral-500">Loading inventory…</p>
+      </main>
     </div>
   );
 }

@@ -4,16 +4,25 @@ import {
 } from "./image-url";
 import { inventoryEffectiveQuantity, isInventoryListed } from "./status";
 import type { InventoryItem } from "../types";
+import {
+  inventoryItemMatchesFinishFilter,
+  parseInventoryFinishFilter,
+  type InventoryFinishFilter,
+} from "./inventory-finish-v1";
 
 export type InventoryStockFilter = "all" | "in_stock" | "catalog";
 export type InventoryListedFilter = "all" | "listed" | "unlisted";
+export type { InventoryFinishFilter };
 
 export interface InventoryBrowseQuery {
   q?: string;
   stock?: InventoryStockFilter;
   listed?: InventoryListedFilter;
+  finish?: InventoryFinishFilter;
   page?: number;
   limit?: number;
+  /** Name order for the inventory sheet. The default keeps the older quantity order. */
+  sort?: "name" | "qty";
   /** Raise cap for store browse (default 100 for admin UI). */
   maxLimit?: number;
 }
@@ -50,8 +59,11 @@ export function inventoryItemMatchesSearch(
   return haystack.includes(needle);
 }
 
+/** Staff sheet search: also matches where the card is and staff notes. */
 function matchesSearch(item: InventoryItem, q: string): boolean {
-  return inventoryItemMatchesSearch(item, q);
+  if (inventoryItemMatchesSearch(item, q)) return true;
+  const needle = q.trim().toLowerCase();
+  return [item.shelfLocation, item.staffNote].some((v) => v?.toLowerCase().includes(needle));
 }
 
 function matchesStock(item: InventoryItem, stock: InventoryStockFilter): boolean {
@@ -76,17 +88,23 @@ export function browseInventoryItems(
   const limit = Math.min(cap, Math.max(1, query.limit ?? 48));
   const stock = query.stock ?? "all";
   const listed = query.listed ?? "all";
+  const finish = parseInventoryFinishFilter(query.finish);
 
   const filtered = items
     .filter((item) => matchesStock(item, stock))
     .filter((item) => matchesListed(item, listed))
-    .filter((item) => matchesSearch(item, query.q ?? ""));
+    .filter((item) => matchesSearch(item, query.q ?? ""))
+    .filter((item) => inventoryItemMatchesFinishFilter(item, finish));
 
-  filtered.sort((a, b) => {
-    const qtyDiff = inventoryEffectiveQuantity(b) - inventoryEffectiveQuantity(a);
-    if (qtyDiff !== 0) return qtyDiff;
-    return a.displayName.localeCompare(b.displayName);
-  });
+  if (query.sort === "name") {
+    filtered.sort((a, b) => a.displayName.localeCompare(b.displayName) || a.id.localeCompare(b.id));
+  } else {
+    filtered.sort((a, b) => {
+      const qtyDiff = inventoryEffectiveQuantity(b) - inventoryEffectiveQuantity(a);
+      if (qtyDiff !== 0) return qtyDiff;
+      return a.displayName.localeCompare(b.displayName);
+    });
+  }
 
   const total = filtered.length;
   const totalPages = Math.max(1, Math.ceil(total / limit));

@@ -1,0 +1,117 @@
+#!/usr/bin/env npx tsx
+/** Build ACL proof audit bundle acl-proof-v1.zip */
+import { createHash } from "node:crypto";
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { spawnSync } from "node:child_process";
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+const REPO = resolve(HERE, "../..");
+const OUT = resolve(REPO, "web/data/milestones/deck-synthesis");
+const ZIP_PATH = resolve(OUT, "acl-proof-v1.zip");
+const STAGING = resolve(OUT, ".audit-bundle-acl-proof-v1-staging");
+const MANIFEST_NAME = "phase6a1-professor-plan-audit-bundle-acl-proof-v1-manifest.json";
+const BYTE_PIN_NAME = "phase6a1-professor-plan-audit-bundle-acl-proof-v1-byte-pin.json";
+const GENERATED_AT = new Date().toISOString();
+
+function sha256File(path: string): string {
+  return createHash("sha256").update(readFileSync(path)).digest("hex");
+}
+
+function stageFile(absPath: string, zipPath: string, staged: Array<{ zipPath: string; absPath: string }>): void {
+  const dest = join(STAGING, zipPath);
+  mkdirSync(dirname(dest), { recursive: true });
+  cpSync(absPath, dest);
+  staged.push({ zipPath, absPath });
+}
+
+function stageFromOut(relFromOut: string, staged: Array<{ zipPath: string; absPath: string }>): void {
+  const abs = resolve(OUT, relFromOut);
+  if (!existsSync(abs)) throw new Error(`Missing file: ${abs}`);
+  stageFile(abs, relFromOut.replace(/\\/g, "/"), staged);
+}
+
+function stageFromRepo(relFromRepo: string, zipPath: string, staged: Array<{ zipPath: string; absPath: string }>): void {
+  const abs = resolve(REPO, relFromRepo);
+  if (!existsSync(abs)) throw new Error(`Missing repo file: ${abs}`);
+  stageFile(abs, zipPath, staged);
+}
+
+async function main() {
+  rmSync(STAGING, { recursive: true, force: true });
+  mkdirSync(STAGING, { recursive: true });
+  const staged: Array<{ zipPath: string; absPath: string }> = [];
+
+  for (const f of [
+    "phase6a1-professor-plan-separate-authority-checkout-acl-proof-v1.json",
+    "phase6a1-professor-plan-separate-authority-checkout-acl-proof-spec-v1.json",
+    "phase6a1-benchmark-authority-access-boundary-evidence-pipeline-v2.json",
+    "phase6a1-professor-plan-prospective-pipeline-freeze-spec-v13.json",
+    "phase6a1-professor-plan-prospective-commander-selection-policy-v3.json",
+    "phase6a1-professor-plan-benchmark-architecture-sealed-manifest-v10-pre-roster-v4.json",
+    "phase6a1-professor-plan-benchmark-architecture-v10-pre-roster-v4-independent-reaudit-gpt56sol-v1.json",
+  ]) {
+    stageFromOut(f, staged);
+  }
+
+  for (const rel of [
+    "web/scripts/lib/phase6a1-benchmark-access-boundary-v1.ts",
+    "web/scripts/run-phase6a1-prove-separate-authority-checkout-acl-v1.ts",
+    "web/scripts/run-phase6a1-build-audit-bundle-acl-proof-v1.ts",
+    ".gitignore",
+  ]) {
+    stageFromRepo(rel, rel.replace(/\\/g, "/"), staged);
+  }
+
+  const manifestPath = resolve(OUT, MANIFEST_NAME);
+  writeFileSync(
+    manifestPath,
+    JSON.stringify(
+      {
+        version: "phase6a1-professor-plan-audit-bundle-acl-proof-v1-manifest",
+        generatedAt: GENERATED_AT,
+        artifact: "acl-proof-v1.zip",
+        zipEntryCount: staged.length + 1,
+        purpose: "Operational ACL / separate-authority-checkout proof bundle",
+        excludesAuthorityPrivateBytes: true,
+        entries: staged.map((e) => ({ zipPath: e.zipPath, sha256: sha256File(e.absPath) })),
+      },
+      null,
+      2,
+    ),
+  );
+  stageFile(manifestPath, MANIFEST_NAME, staged);
+
+  rmSync(ZIP_PATH, { force: true });
+  const tar = spawnSync("tar", ["-a", "-c", "-f", ZIP_PATH, "-C", STAGING, "."], { encoding: "utf8" });
+  if (tar.status !== 0) throw new Error(`tar failed: ${tar.stderr || tar.stdout}`);
+  rmSync(STAGING, { recursive: true, force: true });
+
+  const byteSha256 = sha256File(ZIP_PATH);
+  writeFileSync(
+    resolve(OUT, BYTE_PIN_NAME),
+    JSON.stringify(
+      {
+        version: "phase6a1-professor-plan-audit-bundle-acl-proof-v1-byte-pin",
+        generatedAt: GENERATED_AT,
+        artifact: "acl-proof-v1.zip",
+        byteSha256,
+        manifestArtifact: MANIFEST_NAME,
+        manifestSha256: sha256File(manifestPath),
+        aclProofArtifact: "phase6a1-professor-plan-separate-authority-checkout-acl-proof-v1.json",
+        aclProofSha256: sha256File(resolve(OUT, "phase6a1-professor-plan-separate-authority-checkout-acl-proof-v1.json")),
+        uploadTogether: ["acl-proof-v1.zip", BYTE_PIN_NAME],
+      },
+      null,
+      2,
+    ),
+  );
+
+  console.log(JSON.stringify({ zipPath: ZIP_PATH, byteSha256, entryCount: staged.length }, null, 2));
+}
+
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

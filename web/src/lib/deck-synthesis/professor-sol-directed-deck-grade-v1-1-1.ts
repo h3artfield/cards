@@ -183,15 +183,15 @@ export function headProfessorClassificationHint(
   options?: { professorRepairApplied?: boolean },
 ): string {
   if (classification === "CONSTRUCTION_SUCCESS") {
-    return "The Professor thinks this deck executes the plan well as built.";
+    return "The Professor thinks this deck carries out its plan well as built.";
   }
   if (classification === "OPTIONAL_REFINEMENT") {
     if (options?.professorRepairApplied) {
-      return "Solid core — the Professor applied targeted package fixes before the final grade.";
+      return "The core is right. The Professor made a few targeted fixes before the final grade.";
     }
-    return "Solid core — optional tuning suggestions only.";
+    return "The core is right. Anything below is an optional tweak, not a fix.";
   }
-  return "Construction defect — the list has serious issues as built, but the strategy may still be sound after fixes.";
+  return "The list has real problems as built, though the strategy may still work after the fixes below.";
 }
 
 /** Strip model-identity phrasing from Head Professor self-build answers for customer UI. */
@@ -381,12 +381,12 @@ export function computeSolDirectedDeckGradeV111(args: {
     mechanicalConfidencePercent: args.validationPass ? 88 : 62,
     verifiedConnections: args.validationPass ? categories.length : Math.max(1, categories.length - 3),
     totalConnections: categories.length,
-    weirdDiscoveries: Math.max(0, 3 - hp.offPlanCards.length),
+    weirdDiscoveries: Math.max(0, 3 - (hp.offPlanCards ?? []).length),
     categories,
     bestArea: sorted[0]!,
     weakestArea: sorted[sorted.length - 1]!,
     professorNotes: [
-      hp.reasoningSummary.slice(0, 240) || hp.grade,
+      (hp.reasoningSummary ?? "").slice(0, 240) || hp.grade,
       `Best area: ${sorted[0]!.label} (${sorted[0]!.letter}).`,
       `Weakest area: ${sorted[sorted.length - 1]!.label} (${sorted[sorted.length - 1]!.letter}).`,
     ],
@@ -394,9 +394,9 @@ export function computeSolDirectedDeckGradeV111(args: {
     improvementProfessorLine: hp.selfBuildQuestionAnswer || hp.reasoningSummary,
     characterSheet: {
       coreEngines: args.primaryWinPaths?.slice(0, 3) ?? [],
-      discoveredSynergies: Math.max(0, 10 - hp.offPlanCards.length),
+      discoveredSynergies: Math.max(0, 10 - (hp.offPlanCards ?? []).length),
       verifiedConnectionsLabel: args.validationPass ? "Commander legal" : "Review needed",
-      weirdDiscoveries: Math.max(0, 2 - hp.requiredChanges.length),
+      weirdDiscoveries: Math.max(0, 2 - (hp.requiredChanges ?? []).length),
       independencePercent: clamp(textAssessmentToScore(hp.resilienceAssessment, 70)),
     },
     bracketAlignment: {

@@ -273,7 +273,8 @@ const ORACLE_TAG_PHRASES: Array<{
     keywordsAny: ["Counter"],
   },
   {
-    pattern: /\bcard\s+draw\b|\bdraw\s+cards?\b/i,
+    pattern:
+      /\bcard\s+draw\b|\bdraws?\s+(?:(?:a|an|one|two|three|four|five|\d+)\s+)?cards?\b/i,
     tags: ["draw"],
     oracleTextAny: ["draw a card", "draw two cards", "draw three cards"],
   },

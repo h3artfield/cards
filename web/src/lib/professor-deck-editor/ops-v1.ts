@@ -16,6 +16,7 @@ import type {
   DeckMarkerScopeV1,
   DeckMarkerV1,
   EditableDeckCardV1,
+  EditableDeckCommanderV1,
   EditableDeckV1,
 } from "./types-v1";
 
@@ -39,6 +40,17 @@ export type DeckEditOpV1 =
   | { op: "unassignMarker"; cardKey: string; markerId: string }
   | { op: "setPrimaryMarker"; cardKey: string; markerId: string | null }
   | { op: "renameDeck"; deckName: string }
+  | {
+      /**
+       * Promote a card to the command zone. The current commander is demoted
+       * into the mainboard; if the new commander was already in the 99 it is
+       * removed from `cards` so it is not counted twice.
+       */
+      op: "setCommander";
+      oracleId: string;
+      name: string;
+      colorIdentity: string[];
+    }
   | { op: "revertToBaseline" };
 
 export type DeckEditRejectionV1 = {
@@ -246,6 +258,58 @@ function applyOne(
       }
       if (deckName === deck.deckName) return { deck, reason: "The deck already has that name" };
       return { deck: { ...deck, deckName } };
+    }
+
+    case "setCommander": {
+      const name = op.name.trim();
+      const oracleId = op.oracleId.trim();
+      if (!name) return { deck, reason: "A commander name is required" };
+      if (!oracleId) return { deck, reason: "A commander oracle id is required" };
+
+      const nextCommander: EditableDeckCommanderV1 = {
+        oracleId,
+        name,
+        colorIdentity: op.colorIdentity.map((c) => c.toUpperCase()),
+      };
+
+      const sameOracle = deck.commander.oracleId === nextCommander.oracleId;
+      const sameName =
+        deck.commander.name.trim().toLowerCase() === nextCommander.name.toLowerCase();
+      if (sameOracle || sameName) {
+        return { deck, reason: `${nextCommander.name} is already the commander` };
+      }
+
+      const newKey = deckCardKeyV1({ oracleId: nextCommander.oracleId, name: nextCommander.name });
+      const withoutPromoted = deck.cards.filter((card) => card.cardKey !== newKey);
+
+      const oldKey = deckCardKeyV1({
+        oracleId: deck.commander.oracleId,
+        name: deck.commander.name,
+      });
+      const demotedAlready = withoutPromoted.some((card) => card.cardKey === oldKey);
+      const demoted: EditableDeckCardV1 | null = demotedAlready
+        ? null
+        : {
+            cardKey: oldKey,
+            oracleId: deck.commander.oracleId || null,
+            name: deck.commander.name,
+            copies: 1,
+            board: "mainboard",
+            isLand: false,
+            isBasicLand: false,
+            origin: "user",
+            professor: null,
+            markerIds: [],
+            primaryMarkerId: null,
+          };
+
+      return {
+        deck: {
+          ...deck,
+          commander: nextCommander,
+          cards: demoted ? [...withoutPromoted, demoted] : withoutPromoted,
+        },
+      };
     }
 
     case "revertToBaseline": {

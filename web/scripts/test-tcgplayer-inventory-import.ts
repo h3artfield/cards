@@ -3,6 +3,10 @@
  * Run: npm run test:tcgplayer-inventory-import
  */
 import { applyTcgplayerInventoryImport } from "../src/lib/tcgplayer-inventory/apply-import";
+import {
+  assessTcgplayerWithdrawalRisk,
+  TcgplayerImportWithdrawalBlockedError,
+} from "../src/lib/tcgplayer-inventory/import-guard";
 import { buildTcgplayerImportPreview } from "../src/lib/tcgplayer-inventory/import-preview";
 import { parseTcgplayerInventoryExportCsv } from "../src/lib/tcgplayer-inventory/parse-export-csv";
 import type { InventoryItem } from "../src/lib/types";
@@ -167,12 +171,232 @@ assert(
   "flags conflict when sold item reappears with qty in CSV",
 );
 
+console.log("\nPartial export must not withdraw absent product lines");
+const MAGIC_ONLY_CSV = `TCGplayer Id,Product Line,Set Name,Product Name,Title,Number,Rarity,Condition,TCG Market Price,TCG Direct Low,TCG Low Price,Total Quantity,Add to Quantity,TCG Marketplace Price,My Store Reserve Qty,My Store Price
+100,Magic,Modern Horizons 3,Magic Card,Magic Card,001,Rare,Near Mint,5,,4,3,0,5,0,4.50`;
+
+function stockedItem(
+  id: string,
+  productLine: string,
+  category: InventoryItem["category"],
+  quantity: number,
+): InventoryItem {
+  return {
+    id,
+    storeId: "store-1",
+    source: "tcgplayer_import",
+    displayName: `${productLine} ${id}`,
+    acquiredAt: new Date().toISOString(),
+    tcgplayerProductId: id,
+    tcgplayerListingKey: `${id}|near mint`,
+    productLine,
+    category,
+    quantity,
+    status: "on_hand",
+  };
+}
+
+const mixedInventory: InventoryItem[] = [
+  stockedItem("100", "Magic", "magic", 1),
+  stockedItem("200", "Pokemon", "pokemon", 4),
+  stockedItem("201", "Pokemon", "pokemon", 6),
+  stockedItem("300", "Riftbound", "other", 2),
+];
+
+const partialPreview = buildTcgplayerImportPreview(MAGIC_ONLY_CSV, mixedInventory);
+assert(
+  partialPreview.csvProductLines.join(",") === "Magic",
+  "preview reports the product lines the file covers",
+);
+assert(
+  partialPreview.missingFromCsv.length === 0,
+  "Pokemon and Riftbound rows are not queued for withdrawal",
+);
+assert(partialPreview.outOfScopeRows === 3, "three rows reported out of scope");
+assert(partialPreview.outOfScopeUnits === 12, "out-of-scope units reported");
+
+const partialApply = applyTcgplayerInventoryImport({
+  csvText: MAGIC_ONLY_CSV,
+  storeId: "store-1",
+  existingInventory: mixedInventory,
+});
+assert(partialApply.withdrawn === 0, "Magic-only file withdraws nothing else");
+assert(
+  partialApply.items.every((i) => i.productLine === "Magic"),
+  "only Magic rows are written",
+);
+assert(
+  partialApply.csvProductLines.join(",") === "Magic",
+  "apply result carries the file's product lines",
+);
+
+console.log("\nSame product line still reconciles");
+const magicPairInventory: InventoryItem[] = [
+  stockedItem("100", "Magic", "magic", 1),
+  stockedItem("101", "Magic", "magic", 2),
+];
+const samePreview = buildTcgplayerImportPreview(MAGIC_ONLY_CSV, magicPairInventory);
+assert(
+  samePreview.missingFromCsv.length === 1 &&
+    samePreview.missingFromCsv[0]!.inventoryItemId === "101",
+  "Magic row absent from a Magic file is still withdrawn",
+);
+assert(samePreview.outOfScopeRows === 0, "nothing out of scope for a same-line file");
+
+console.log("\nMass withdrawal needs confirmation");
+const bigInventory: InventoryItem[] = [
+  stockedItem("100", "Magic", "magic", 1),
+  ...Array.from({ length: 60 }, (_, i) =>
+    stockedItem(`9${i.toString().padStart(3, "0")}`, "Magic", "magic", 2),
+  ),
+];
+const bigPreview = buildTcgplayerImportPreview(MAGIC_ONLY_CSV, bigInventory);
+assert(bigPreview.inStockRowsBefore === 61, "counts in-stock rows before import");
+assert(bigPreview.withdrawnInStockRows === 60, "counts rows dropping to zero");
+assert(bigPreview.withdrawnUnits === 120, "counts units dropping to zero");
+
+const bigRisk = assessTcgplayerWithdrawalRisk(bigPreview);
+assert(bigRisk.requiresConfirmation, "large withdrawal flagged for confirmation");
+
+let blocked = false;
+try {
+  applyTcgplayerInventoryImport({
+    csvText: MAGIC_ONLY_CSV,
+    storeId: "store-1",
+    existingInventory: bigInventory,
+  });
+} catch (err) {
+  blocked = err instanceof TcgplayerImportWithdrawalBlockedError;
+}
+assert(blocked, "apply refuses an unconfirmed mass withdrawal");
+
+const confirmed = applyTcgplayerInventoryImport({
+  csvText: MAGIC_ONLY_CSV,
+  storeId: "store-1",
+  existingInventory: bigInventory,
+  confirmLargeWithdrawal: true,
+});
+assert(confirmed.withdrawn === 60, "explicit confirmation lets the import through");
+
+assert(
+  !assessTcgplayerWithdrawalRisk(
+    buildTcgplayerImportPreview(MAGIC_ONLY_CSV, magicPairInventory),
+  ).requiresConfirmation,
+  "small withdrawals apply without confirmation",
+);
+
 assert(
   apply1.items.every((i) => i.frontImageUrl?.includes("tcgplayer-cdn")),
   "import assigns TCGplayer CDN image URL",
 );
 assert(apply1.items[0]!.tcgLowPrice === 20, "import stores CSV tcg low price");
 assert(apply1.items[0]!.tcgMarketPrice === 22.2, "import stores CSV market price");
+
+console.log("\nAdd mode — new batch on top of existing stock");
+const BATCH_HEADER =
+  "TCGplayer Id,Product Line,Set Name,Product Name,Title,Number,Rarity,Condition,TCG Market Price,TCG Low Price,In Store,Online,Location,My Store Price";
+const BATCH_CSV = [
+  BATCH_HEADER,
+  "100,Magic,MH3,Magic Card,Magic Card,001,Rare,Near Mint,6,5,2,1,9-9,7.00",
+  "100,Magic,MH3,Magic Card,Magic Card,001,Rare,Near Mint,6,5,1,0,,7.00",
+  "500,Magic,MH3,Fresh Card,Fresh Card,050,Rare,Near Mint,3,2,1,1,2-1,3.00",
+  "501,Magic,MH3,Empty Row,Empty Row,051,Common,Near Mint,1,1,0,0,2-2,1.00",
+  "102,Magic,MH3,Sold Card,Sold Card,002,Rare,Near Mint,4,3,1,0,4-4,4.00",
+  "103,Magic,MH3,Withdrawn Card,Withdrawn Card,003,Rare,Near Mint,4,3,0,2,,4.00",
+].join("\n");
+
+const addInventory: InventoryItem[] = [
+  {
+    ...stockedItem("100", "Magic", "magic", 3),
+    quantityOnHand: 3,
+    quantityAvailable: 3,
+    quantityInStore: 2,
+    quantityOnline: 1,
+    shelfLocation: "1-2",
+    listPrice: 5,
+    tcgMarketPrice: 4,
+  },
+  stockedItem("101", "Magic", "magic", 4),
+  { ...stockedItem("102", "Magic", "magic", 0), status: "sold" },
+  {
+    ...stockedItem("103", "Magic", "magic", 0),
+    status: "withdrawn",
+    quantityOnHand: 5,
+    quantityInStore: 3,
+    quantityOnline: 2,
+  },
+];
+
+const addPreview = buildTcgplayerImportPreview(BATCH_CSV, addInventory, "add");
+assert(addPreview.mode === "add", "preview reports add mode");
+assert(addPreview.creates === 1, "one new card");
+assert(addPreview.updates === 3, "three existing cards get more copies");
+assert(addPreview.withdrawals === 0 && addPreview.missingFromCsv.length === 0, "add mode never withdraws");
+assert(addPreview.ignoredZeroQtyRows === 1, "zero-qty row ignored");
+assert(addPreview.unitsAdded === 9, "copies added counts merged rows (4 + 2 + 1 + 2)");
+const dupRow = addPreview.rows.find((r) => r.tcgplayerProductId === "100")!;
+assert(
+  addPreview.rows.filter((r) => r.tcgplayerProductId === "100").length === 1,
+  "duplicate rows merged into one",
+);
+assert(
+  dupRow.previousQuantity === 3 && dupRow.quantity === 7 && dupRow.addedQuantity === 4,
+  "preview shows 3 → 7 for summed duplicates",
+);
+assert(!assessTcgplayerWithdrawalRisk(addPreview).requiresConfirmation, "no mass-withdrawal guard in add mode");
+
+const addApply = applyTcgplayerInventoryImport({
+  csvText: BATCH_CSV,
+  storeId: "store-1",
+  existingInventory: addInventory,
+  mode: "add",
+});
+assert(addApply.withdrawn === 0, "apply withdraws nothing");
+assert(addApply.created === 1 && addApply.updated === 3, "apply creates one, updates three");
+assert(addApply.unitsAdded === 9, "apply reports copies added");
+assert(!addApply.items.some((i) => i.id === "101"), "card missing from file is untouched");
+const added100 = addApply.items.find((i) => i.id === "100")!;
+assert(added100.quantity === 7 && added100.quantityOnHand === 7, "existing total 3 + 4 = 7");
+assert(added100.quantityInStore === 5 && added100.quantityOnline === 2, "in-store and online summed separately");
+assert(added100.shelfLocation === "1-2", "existing shelf location kept");
+assert(added100.listPrice === 5, "existing shelf price kept");
+assert(added100.tcgMarketPrice === 6, "market price refreshed from file");
+const restockedSold = addApply.items.find((i) => i.id === "102")!;
+assert(restockedSold.status === "on_hand" && restockedSold.quantity === 1, "sold card restocked with new copy");
+assert(restockedSold.shelfLocation === "4-4", "blank location filled from file");
+assert(
+  added100.lastImportAddedQuantity === 4 && !!added100.lastImportBatchAt,
+  "extra copies stamped with only the 4 new copies for labels",
+);
+assert(
+  (added100.lastImportAddedInStore ?? 0) <= 4,
+  "in-store label count never exceeds the copies added",
+);
+assert(restockedSold.lastImportAddedQuantity === 1, "restocked sold card needs one new label");
+assert(
+  addApply.items.every((i) => i.lastImportBatchAt === added100.lastImportBatchAt),
+  "every row this import added to shares one batch stamp",
+);
+assert(restockedSold.listPrice === 4, "blank shelf price filled from file");
+const backInStock = addApply.items.find((i) => i.id === "103")!;
+assert(
+  backInStock.status === "on_hand" &&
+    backInStock.quantity === 2 &&
+    backInStock.quantityOnHand === 2 &&
+    backInStock.quantityInStore === 0 &&
+    backInStock.quantityOnline === 2,
+  "withdrawn card starts from 0, not its stale counts",
+);
+const fresh = addApply.items.find((i) => i.tcgplayerProductId === "500")!;
+assert(
+  fresh.quantity === 2 && fresh.shelfLocation === "2-1" && fresh.listPrice === 3 && Boolean(fresh.ingestedAt),
+  "new card created like replace mode",
+);
+assert(!addApply.items.some((i) => i.tcgplayerProductId === "501"), "zero-qty new card not created");
+
+const replaceDefault = buildTcgplayerImportPreview(BATCH_CSV, addInventory);
+assert(replaceDefault.mode === "replace", "replace stays the default");
+assert(replaceDefault.missingFromCsv.some((m) => m.inventoryItemId === "101"), "replace mode still withdraws missing cards");
 
 console.log(`\n${passed} passed, ${failed} failed\n`);
 process.exit(failed > 0 ? 1 : 0);

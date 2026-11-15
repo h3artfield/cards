@@ -40,6 +40,8 @@ export type CartValidation = {
 export function validateCartForCheckout(
   requested: CartCheckoutRequestLine[],
   inventory: InventoryItem[],
+  /** Units already held for someone else's pickup. */
+  reserved: Map<string, number> = new Map(),
 ): CartValidation {
   const byId = new Map(inventory.map((i) => [i.id, i]));
   const lines: ValidatedCheckoutLine[] = [];
@@ -71,13 +73,14 @@ export function validateCartForCheckout(
       continue;
     }
 
-    const available = inventoryEffectiveQuantity(item);
+    const held = reserved.get(id) ?? 0;
+    const available = inventoryEffectiveQuantity(item) - held;
     if (available <= 0) {
       rejected.push({
         inventoryItemId: id,
         displayName: item.displayName,
         reason: "out_of_stock",
-        message: "Out of stock.",
+        message: held > 0 ? "Held for another customer's pickup." : "Out of stock.",
       });
       continue;
     }

@@ -1,5 +1,6 @@
 "use client";
 
+import { pickDistinctRoleHeadlinesV1 } from "@/lib/professor-deck-editor/semantic-labels-v1";
 import { useState } from "react";
 import type { DeckDistributionV1 } from "./distribution-v1";
 
@@ -22,13 +23,19 @@ export function DeckDistributionStrip({
   axisLabel,
   focused,
   onFocus,
+  embedded = false,
+  compact = false,
 }: {
   distribution: DeckDistributionV1;
   axisLabel: string;
   focused: string | null;
   onFocus: (key: string | null) => void;
+  /** Compact layout for the deck hero header. */
+  embedded?: boolean;
+  /** Five headline numbers; the full chart waits behind a button. */
+  compact?: boolean;
 }) {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(embedded && !compact);
   const { bars, measures, total, foldedGroups, ordered } = distribution;
   const peak = Math.max(...bars.map((bar) => bar.count), 1);
 
@@ -40,8 +47,53 @@ export function DeckDistributionStrip({
     return measures === "cards" ? "1 card" : "1 entry";
   };
 
+  const headline = pickDistinctRoleHeadlinesV1(
+    bars.filter((bar) => bar.key !== "__other__"),
+    (bar) => bar.label,
+    5,
+  );
+
+  if (compact && !expanded) {
+    return (
+      <div className="deck-editor-hero__distribution-strip deck-editor-hero__distribution-strip--compact">
+        <div className="flex items-center gap-2">
+          <span className="professor-mtg-label text-[10px]">Deck profile</span>
+          <span className="flex-1" />
+          <button
+            type="button"
+            className="professor-mtg-link text-[10px]"
+            onClick={() => setExpanded(true)}
+          >
+            See full breakdown
+          </button>
+        </div>
+        <ul className="deck-profile-compact">
+          {headline.map((bar) => (
+            <li key={bar.key}>
+              <button
+                type="button"
+                disabled={!focusable(bar.key)}
+                className={`deck-profile-compact__item${focused === bar.key ? " deck-profile-compact__item--on" : ""}`}
+                onClick={() => onFocus(focused === bar.key ? null : bar.key)}
+              >
+                <span>{bar.label}</span>
+                <span className="tabular-nums">{bar.count}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
   return (
-    <div className="border-b border-[var(--mtg-stone-border)] bg-[var(--ink-800)] px-4 py-2 sm:px-5">
+    <div
+      className={
+        embedded
+          ? "deck-editor-hero__distribution-strip"
+          : "border-b border-[var(--mtg-stone-border)] bg-[var(--ink-800)] px-4 py-2 sm:px-5"
+      }
+    >
       <div className="flex items-center gap-2">
         <span className="professor-mtg-label text-[10px]">{axisLabel} shape</span>
         <span className="professor-mtg-muted text-[10px] tabular-nums">
@@ -58,20 +110,22 @@ export function DeckDistributionStrip({
             Clear focus
           </button>
         ) : null}
-        <button
-          type="button"
-          className="professor-mtg-icon-btn text-[10px]"
-          aria-expanded={expanded}
-          onClick={() => setExpanded((value) => !value)}
-        >
-          {expanded ? "Collapse" : "Expand"}
-        </button>
+        {compact || !embedded ? (
+          <button
+            type="button"
+            className="professor-mtg-icon-btn text-[10px]"
+            aria-expanded={expanded}
+            onClick={() => setExpanded((value) => !value)}
+          >
+            {expanded ? "Collapse" : "Expand"}
+          </button>
+        ) : null}
       </div>
 
       {ordered ? (
         <ul
-          className="mt-1.5 flex items-end gap-1"
-          style={{ height: expanded ? "7rem" : "2.5rem" }}
+          className={`mt-1.5 flex min-h-0 flex-1 items-end gap-1 ${embedded ? "deck-editor-hero__distribution-bars" : ""}`}
+          style={{ height: embedded ? undefined : expanded ? "7rem" : "2.5rem" }}
         >
           {bars.map((bar) => {
             const on = focused === bar.key;
@@ -112,8 +166,14 @@ export function DeckDistributionStrip({
           })}
         </ul>
       ) : (
-        <ul className="mt-1.5 space-y-0.5">
-          {(expanded ? bars : bars.slice(0, 4)).map((bar) => {
+        <ul
+          className={`mt-1.5 min-h-0 flex-1 ${
+            embedded
+              ? "deck-editor-hero__distribution-rows overflow-y-auto pr-0.5"
+              : "space-y-0.5"
+          }`}
+        >
+          {(expanded || embedded ? bars : bars.slice(0, 4)).map((bar) => {
             const on = focused === bar.key;
             return (
               <li key={bar.key}>
@@ -126,7 +186,9 @@ export function DeckDistributionStrip({
                   className="flex w-full items-center gap-2"
                 >
                   <span
-                    className={`w-28 shrink-0 truncate text-left text-[10px] ${
+                    className={`shrink-0 truncate text-left text-[10px] ${
+                      embedded ? "w-36 sm:w-44" : "w-28"
+                    } ${
                       on ? "text-[var(--accent-hi)]" : "text-[var(--text-lo)]"
                     }`}
                   >
@@ -134,7 +196,9 @@ export function DeckDistributionStrip({
                   </span>
                   <span className="min-w-0 flex-1">
                     <span
-                      className={`block h-2 rounded-sm transition ${
+                      className={`block rounded-sm transition ${
+                        embedded ? "h-3" : "h-2"
+                      } ${
                         on ? "bg-[var(--accent)]" : "bg-[var(--accent-lo)] hover:bg-[var(--accent)]"
                       }`}
                       style={{ width: `${Math.max((bar.count / peak) * 100, 2)}%` }}

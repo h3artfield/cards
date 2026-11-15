@@ -6,10 +6,9 @@ import { adminFetch } from "@/lib/api-client";
 import { useAdmin } from "@/context/AdminContext";
 import { inventoryImageProxyPath } from "@/lib/inventory/resolve-display-image";
 import { isFirebaseStorageUrl } from "@/lib/inventory/image-url";
-import {
-  inventoryEffectiveQuantity,
-  isInventoryListed,
-} from "@/lib/inventory/status";
+import { InventoryShelfTable } from "@/components/admin/InventoryShelfTable";
+import { type InventoryFinishFilter } from "@/lib/inventory/inventory-finish-v1";
+import type { InventoryChannelFilter } from "@/lib/inventory/status";
 import type { InventoryItem } from "@/lib/types";
 
 type StockFilter = "all" | "in_stock" | "catalog";
@@ -33,6 +32,8 @@ export function InventoryBrowser({ refreshKey }: { refreshKey: number }) {
   const [debouncedQ, setDebouncedQ] = useState("");
   const [stock, setStock] = useState<StockFilter>("all");
   const [listed, setListed] = useState<ListedFilter>("all");
+  const [finish, setFinish] = useState<InventoryFinishFilter>("all");
+  const [channel, setChannel] = useState<InventoryChannelFilter>("all");
   const [page, setPage] = useState(1);
   const [data, setData] = useState<BrowseResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -40,7 +41,6 @@ export function InventoryBrowser({ refreshKey }: { refreshKey: number }) {
   const [caching, setCaching] = useState(false);
   const [cacheStatus, setCacheStatus] = useState<string | null>(null);
   const [pricingLow, setPricingLow] = useState(false);
-  const [brokenThumbs, setBrokenThumbs] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedQ(q.trim()), 300);
@@ -49,17 +49,20 @@ export function InventoryBrowser({ refreshKey }: { refreshKey: number }) {
 
   useEffect(() => {
     setPage(1);
-  }, [debouncedQ, stock, listed]);
+  }, [debouncedQ, stock, listed, finish, channel]);
 
   const load = useCallback(() => {
     setLoading(true);
     setError(null);
     const params = new URLSearchParams({
       page: String(page),
-      limit: "48",
+      limit: "100",
       stock,
       listed,
+      sort: "name",
     });
+    if (finish !== "all") params.set("finish", finish);
+    if (channel !== "all") params.set("channel", channel);
     if (debouncedQ) params.set("q", debouncedQ);
 
     adminFetch(`/api/admin/inventory/browse?${params}`)
@@ -73,7 +76,7 @@ export function InventoryBrowser({ refreshKey }: { refreshKey: number }) {
         setData(null);
       })
       .finally(() => setLoading(false));
-  }, [debouncedQ, stock, listed, page]);
+  }, [debouncedQ, stock, listed, finish, channel, page]);
 
   useEffect(() => {
     load();
@@ -250,11 +253,10 @@ export function InventoryBrowser({ refreshKey }: { refreshKey: number }) {
     <div className="rounded-xl border bg-white p-4 shadow-sm">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-sm font-semibold text-slate-900">Inventory browser</p>
+          <p className="text-sm font-semibold text-slate-900">Inventory sheet</p>
           <p className="text-xs text-slate-500">
-            TCGplayer & Shopify imports — {data?.total.toLocaleString() ?? "…"} rows
-            (buyback scans are listed separately above). Images load via catalog/proxy
-            and save to storage automatically.
+            {data?.total.toLocaleString() ?? "…"} products, sorted by name. Edit a
+            cell and leave it to save.
           </p>
         </div>
         {(data?.imagesPending ?? 0) > 0 ||
@@ -350,6 +352,25 @@ export function InventoryBrowser({ refreshKey }: { refreshKey: number }) {
           <option value="listed">Listed (Shopify)</option>
           <option value="unlisted">Not listed</option>
         </select>
+        <select
+          value={finish}
+          onChange={(e) => setFinish(e.target.value as InventoryFinishFilter)}
+          className="rounded-lg border border-slate-200 px-3 py-2 text-sm"
+        >
+          <option value="all">All finishes</option>
+          <option value="foil">Foils</option>
+          <option value="nonfoil">Nonfoil</option>
+        </select>
+        <select
+          value={channel}
+          onChange={(e) => setChannel(e.target.value as InventoryChannelFilter)}
+          className="rounded-lg border border-slate-200 px-3 py-2 text-sm"
+          aria-label="Where it can be bought"
+        >
+          <option value="all">All cards</option>
+          <option value="online">Online &amp; in-store</option>
+          <option value="instore">In-store only</option>
+        </select>
       </div>
 
       {error ? (
@@ -368,60 +389,20 @@ export function InventoryBrowser({ refreshKey }: { refreshKey: number }) {
 
       {data && data.items.length > 0 ? (
         <>
-          <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {data.items.map((item) => {
-              const qty = inventoryEffectiveQuantity(item);
-              const listedOnShopify = isInventoryListed(item);
-              return (
-                <li
-                  key={item.id}
-                  className="flex gap-3 rounded-lg border border-slate-100 bg-slate-50/50 p-3 text-sm"
-                >
-                  {inventoryThumbSrc(item) && !brokenThumbs.has(item.id) ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={inventoryThumbSrc(item)}
-                      alt=""
-                      className="h-20 w-14 shrink-0 rounded object-cover ring-1 ring-slate-200"
-                      loading="lazy"
-                      onError={() =>
-                        setBrokenThumbs((prev) => new Set(prev).add(item.id))
-                      }
-                    />
-                  ) : (
-                    <div className="flex h-20 w-14 shrink-0 items-center justify-center rounded bg-slate-200 text-[10px] text-slate-500">
-                      No img
-                    </div>
-                  )}
-                  <div className="min-w-0 flex-1">
-                    <p className="line-clamp-2 font-medium text-slate-900">
-                      {item.displayName}
-                    </p>
-                    <p className="mt-0.5 text-xs text-slate-500">
-                      {item.setName ?? item.productLine ?? "—"}
-                      {item.tcgplayerCondition
-                        ? ` · ${item.tcgplayerCondition}`
-                        : ""}
-                    </p>
-                    <p className="mt-1 text-xs tabular-nums text-slate-600">
-                      Qty {qty}
-                      {item.listPrice != null
-                        ? ` · $${item.listPrice.toFixed(2)}`
-                        : ""}
-                      {item.tcgplayerProductId
-                        ? ` · #${item.tcgplayerProductId}`
-                        : ""}
-                    </p>
-                    {listedOnShopify ? (
-                      <span className="mt-1 inline-block rounded bg-indigo-100 px-1.5 py-0.5 text-[10px] font-medium text-indigo-800">
-                        Shopify
-                      </span>
-                    ) : null}
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
+          <InventoryShelfTable
+            items={data.items}
+            thumbSrc={(item) => inventoryThumbSrc(item)}
+            onSaved={(item) =>
+              setData((current) =>
+                current
+                  ? {
+                      ...current,
+                      items: current.items.map((row) => (row.id === item.id ? item : row)),
+                    }
+                  : current,
+              )
+            }
+          />
 
           {data.totalPages > 1 ? (
             <div className="mt-4 flex items-center justify-between gap-2 text-sm">

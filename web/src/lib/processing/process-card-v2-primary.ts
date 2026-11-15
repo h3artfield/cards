@@ -60,6 +60,10 @@ function patchCardFromV2(
 }
 
 import { cardVisionFallback } from "./card-vision-fallback";
+import {
+  buildScannerLockedV2Bundles,
+  hasScannerCatalogLock,
+} from "./scanner-fast-lock";
 function maybeAutoConfirmLockedIdentity(
   identity: CardCandidateBundle,
   card: ScannedCard,
@@ -109,19 +113,27 @@ export async function processCardV2Primary(
       declaredItemType: card.itemType,
     };
 
-    const evidence = await timePhase(timings, "v2EvidenceMs", () =>
-      runCardEvidenceV2(input),
-    );
+    const preLocked = hasScannerCatalogLock(card)
+      ? buildScannerLockedV2Bundles(card)
+      : null;
 
-    let identity = isCardFlowV2IdentityEnabled()
-      ? await timePhase(timings, "v2IdentityMs", () =>
-          runCardIdentityV2({
-            ...input,
-            evidence,
-            visionFallback: cardVisionFallback(card),
-          }),
-        )
-      : undefined;
+    const evidence = preLocked
+      ? preLocked.evidence
+      : await timePhase(timings, "v2EvidenceMs", () =>
+          runCardEvidenceV2(input),
+        );
+
+    let identity = preLocked
+      ? preLocked.identity
+      : isCardFlowV2IdentityEnabled()
+        ? await timePhase(timings, "v2IdentityMs", () =>
+            runCardIdentityV2({
+              ...input,
+              evidence,
+              visionFallback: cardVisionFallback(card),
+            }),
+          )
+        : undefined;
 
     if (identity) {
       identity = maybeAutoConfirmLockedIdentity(identity, card);

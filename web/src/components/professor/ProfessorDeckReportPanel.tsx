@@ -76,12 +76,9 @@ export function ProfessorDeckReportPanel({
         <div className="grid gap-6 px-6 py-6 sm:grid-cols-[1fr_1.2fr]">
           <div className="space-y-4">
             <div className="border-4 border-[#111] bg-[#ffe14d] p-5 text-center">
-              <p className="text-[10px] font-black uppercase tracking-[0.18em]">Professor Grade</p>
-              <p className="mt-2 text-5xl font-black">{grade.overallLetter}</p>
-              <p className="text-lg font-black">
-                {grade.cos?.competitiveStrength != null
-                  ? `Competitive Strength ${Math.round(grade.cos.competitiveStrength)} / 100`
-                  : "COS not scored"}
+              <p className="text-[10px] font-black uppercase tracking-[0.18em]">Measured bracket</p>
+              <p className="mt-2 text-5xl font-black">
+                {grade.bracketAlignment ? `B${grade.bracketAlignment.effectiveBracket}` : "—"}
               </p>
             </div>
 

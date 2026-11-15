@@ -57,6 +57,11 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // Bulk Shopify export jobs — staff API only.
+    match /shopifyExportJobs/{jobId} {
+      allow read, write: if false;
+    }
+
     match /adminLogs/{logId} {
       allow read, write: if isAdmin();
     }

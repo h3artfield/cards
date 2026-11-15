@@ -31,13 +31,11 @@ export function isProfessorSolDirectedBracketPowerRankingEnabled(): boolean {
 }
 
 /**
- * Server-only — set PROFESSOR_SOL_DIRECTED_BRACKET_ATTAINMENT_ENABLED=true to measure the
- * finished deck against the requested bracket and swap in Game Changers until it reaches it.
- * Off means the deck ships at whatever bracket it happens to measure, which on the builds
- * measured so far was an average of 0.67 brackets below the request.
+ * Retired. Attainment manufactured Game Changer labels to hit a requested
+ * floor; WotC brackets are a max-of-floors rubric, not a quota to fill.
  */
 export function isProfessorSolDirectedBracketAttainmentEnabled(): boolean {
-  return process.env.PROFESSOR_SOL_DIRECTED_BRACKET_ATTAINMENT_ENABLED === "true";
+  return false;
 }
 
 /**

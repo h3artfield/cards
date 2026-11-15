@@ -452,6 +452,38 @@ export function assessCommanderFormatLegality(input: {
   }
 
   if (scryfallCommander === "not_legal") {
+    const releasedAt = setPolicy?.releasedAt ?? input.card.releaseInformation?.releasedAt;
+    const releasePassed = Boolean(releasedAt && isOnOrAfter(asOfDate, releasedAt));
+    const prereleaseLegal = Boolean(
+      setPolicy?.commanderLegalFromPrerelease &&
+        setPolicy.prereleaseAt &&
+        isOnOrAfter(asOfDate, setPolicy.prereleaseAt),
+    );
+
+    if (releasePassed || prereleaseLegal) {
+      return {
+        ...structural,
+        currentCommanderFormatLegality: "LEGAL",
+        configurationLegality: true,
+        legalityEffectiveDate: releasePassed
+          ? releasedAt!
+          : setPolicy?.prereleaseAt ?? null,
+        legalityReason: releasePassed
+          ? "Paper set released — catalog Scryfall Commander legality is stale (not_legal)."
+          : `${setPolicy?.setName ?? "Set"}: Wizards prerelease Commander legality active; Scryfall bulk still not_legal.`,
+        legalitySource: releasePassed ? "set_release_timing" : "set_format_policy",
+        legalityCheckedAt: checkedAt,
+        legalityAsOf,
+        provenance: {
+          ...provenanceBase,
+          legalitySource: releasePassed ? "set_release_timing" : "set_format_policy",
+        },
+        staleLegalityMetadata: true,
+        liveCommanderLegal: true,
+        previewTheorycraftPermitted: true,
+      };
+    }
+
     return {
       ...structural,
       currentCommanderFormatLegality: "UNKNOWN",
@@ -483,4 +515,26 @@ export function assessCommanderFormatLegality(input: {
     liveCommanderLegal: false,
     previewTheorycraftPermitted: false,
   };
+}
+
+/** Playable in a Commander deck (command zone or 99) using reconciled legality, not raw Scryfall bulk. */
+export function isPlayableInCommanderFormat(
+  card: LegalityCardInput | GoldenCatalogOracleCard,
+  legalityAsOf?: string,
+): boolean {
+  const snapshot = loadCommanderFormatLegalitySnapshot();
+  if (!snapshot) {
+    const cmd = card.legalities?.commander?.toLowerCase();
+    return cmd === "legal" || cmd === "restricted";
+  }
+
+  const assessment = assessCommanderFormatLegality({
+    card,
+    snapshot,
+    legalityAsOf: legalityAsOf ?? new Date().toISOString(),
+  });
+
+  // Deck inclusion (the 99) follows Commander *format* legality — not command-zone
+  // structural eligibility. Arcane Signet is legal; it just cannot be your commander.
+  return assessment.currentCommanderFormatLegality === "LEGAL";
 }

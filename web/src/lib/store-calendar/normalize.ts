@@ -112,6 +112,20 @@ function parseCapacity(raw: unknown): number | null | undefined {
   return Math.floor(n);
 }
 
+function parseCost(raw: unknown): number | null | undefined {
+  if (raw == null || raw === "") return undefined;
+  const n = Number(raw);
+  if (!Number.isFinite(n) || n < 0) return undefined;
+  return Math.round(n * 100) / 100;
+}
+
+function parseRequiredBracket(raw: unknown): number | null | undefined {
+  if (raw == null || raw === "") return undefined;
+  const n = Number(raw);
+  if (!Number.isInteger(n) || n < 1 || n > 5) return undefined;
+  return n;
+}
+
 function normalizeStoreEventFlyer(raw: unknown): StoreEventFlyer | undefined {
   if (!raw || typeof raw !== "object") return undefined;
   const rec = raw as Record<string, unknown>;
@@ -170,6 +184,10 @@ export function normalizeStoreEvent(
     endAt: String(raw.endAt ?? raw.end_at ?? raw.startAt ?? now),
     allDay: raw.allDay === true || raw.all_day === true,
     capacity: parseCapacity(raw.capacity ?? raw.max_slots ?? raw.maxSlots),
+    cost: parseCost(raw.cost ?? raw.entry_fee ?? raw.entryFee),
+    requiredBracket: parseRequiredBracket(
+      raw.requiredBracket ?? raw.required_bracket ?? raw.bracket,
+    ),
     signupUrl:
       raw.signupUrl != null
         ? String(raw.signupUrl)
@@ -210,6 +228,10 @@ export function normalizeStoreEventInput(
     endAt,
     allDay: raw.allDay === true || raw.all_day === true,
     capacity: parseCapacity(raw.capacity ?? raw.max_slots ?? raw.maxSlots),
+    cost: parseCost(raw.cost ?? raw.entry_fee ?? raw.entryFee),
+    requiredBracket: parseRequiredBracket(
+      raw.requiredBracket ?? raw.required_bracket ?? raw.bracket,
+    ),
     signupUrl:
       raw.signupUrl != null
         ? String(raw.signupUrl)

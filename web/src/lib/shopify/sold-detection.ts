@@ -1,8 +1,10 @@
 import type { InventoryItem, ScannedCard } from "../types";
 import { dataStore } from "../storage/data-store";
 import { parseShopifySku } from "./product-builder";
+import { withSaleLog } from "../inventory/sale-log";
 import {
   inventoryEffectiveQuantity,
+  inventoryEffectiveStatus,
   isCatalogImportItem,
   isInventorySold,
 } from "./inventory-status";
@@ -33,6 +35,8 @@ export type SoldDetectionResult = {
   quantitySold?: number;
   /** Units still on the row — 0 means the row is now sold out. */
   remainingQuantity?: number;
+  /** A sold-out row came back because Shopify's count rose above zero. */
+  restocked?: boolean;
 };
 
 const MAX_TRACKED_SALE_REFS = 50;
@@ -145,6 +149,55 @@ export type ShopifyInventoryLevelPayload = {
   updated_at?: string;
 };
 
+export type CatalogShopifyQuantityPlan =
+  | { action: "ignore" }
+  | { action: "unchanged" }
+  | {
+      action: "sync";
+      quantity: number;
+      status: NonNullable<InventoryItem["status"]>;
+      sellOut: boolean;
+      restore: boolean;
+    };
+
+/**
+ * Shopify's available count is the stock for this row. A sale that leaves
+ * copies and a refund that puts a copy back both land here. Withdrawn rows
+ * stay withdrawn. Buyback singles are not quantity-tracked and are ignored.
+ */
+export function planCatalogQuantityFromShopify(
+  item: InventoryItem,
+  available: number,
+): CatalogShopifyQuantityPlan {
+  if (!isCatalogImportItem(item)) return { action: "ignore" };
+  if (inventoryEffectiveStatus(item) === "withdrawn") return { action: "ignore" };
+
+  const nextQty = Math.max(0, Math.trunc(available));
+  const sold = isInventorySold(item);
+  if (nextQty === 0) {
+    if (sold) return { action: "unchanged" };
+    return {
+      action: "sync",
+      quantity: 0,
+      status: "sold",
+      sellOut: true,
+      restore: false,
+    };
+  }
+
+  if (!sold && inventoryEffectiveQuantity(item) === nextQty) {
+    return { action: "unchanged" };
+  }
+
+  return {
+    action: "sync",
+    quantity: nextQty,
+    status: sold ? (item.shopifyListing ? "listed" : "on_hand") : inventoryEffectiveStatus(item),
+    sellOut: false,
+    restore: sold,
+  };
+}
+
 async function findInventoryByShopifyInventoryItemId(
   storeId: string,
   shopifyInventoryItemId: string,
@@ -217,9 +270,17 @@ async function markInventorySoldFromShopify(input: {
     quantitySold,
   );
 
+  const saleLog = withSaleLog(item, {
+    at: now,
+    quantity: inventoryEffectiveQuantity(item) - remaining,
+    unitPrice: input.soldPrice,
+    channel: "shopify",
+  });
+
   if (remaining > 0) {
     await dataStore.saveInventoryItem({
       ...decremented,
+      saleLog,
       shopifySoldLineItemIds: withSaleRef(item, ref),
       shopifyListing: decremented.shopifyListing
         ? {
@@ -263,6 +324,7 @@ async function markInventorySoldFromShopify(input: {
     soldOrderId: input.soldOrderId,
     soldLineItemId: input.soldLineItemId,
     shopifySoldLineItemIds: withSaleRef(item, ref),
+    saleLog,
   };
   await dataStore.saveInventoryItem(updatedItem);
 
@@ -304,11 +366,15 @@ async function markInventorySoldFromShopify(input: {
 export async function processShopifyInventoryLevelUpdate(input: {
   storeId: string;
   payload: ShopifyInventoryLevelPayload;
+  /** Ignore updates from a location other than the shelf's stocking location. */
+  defaultLocationId?: string;
 }): Promise<SoldDetectionResult | null> {
   const available = input.payload.available;
-  if (available == null || available > 0) {
-    return null;
-  }
+  if (available == null || !Number.isFinite(available)) return null;
+
+  const eventLocation = normalizeShopifyResourceId(input.payload.location_id);
+  const homeLocation = normalizeShopifyResourceId(input.defaultLocationId);
+  if (eventLocation && homeLocation && eventLocation !== homeLocation) return null;
 
   const cardsById = new Map<string, ScannedCard>();
   const match = await findInventoryByShopifyInventoryItemId(
@@ -319,18 +385,36 @@ export async function processShopifyInventoryLevelUpdate(input: {
   if (!match) return null;
 
   const { item, card } = match;
+
+  // A pickup draft's reservation also lowers "available"; that card is held,
+  // not sold. The sale is recorded when the draft is paid.
+  const reservations = await dataStore.getPickupReservations(input.storeId);
+  const held = reservations.some(
+    (r) =>
+      r.status === "active" &&
+      r.lines.some((line) => line.inventoryItemId === item.id),
+  );
+  if (held) return null;
+
+  if (isCatalogImportItem(item)) {
+    return syncCatalogQuantityFromShopify({
+      item,
+      card,
+      available,
+    });
+  }
+
+  if (available > 0) return null;
+
   const soldPrice =
     item.shopifyListing?.exportPrice ??
     card?.shopifyExport?.exportPrice ??
     item.marketPrice ??
     0;
-
   const inventoryItemId = normalizeShopifyResourceId(
     input.payload.inventory_item_id,
   );
 
-  // Shopify reports zero available, so the whole row is gone regardless of
-  // how many units we thought were left.
   return markInventorySoldFromShopify({
     storeId: input.storeId,
     item,
@@ -340,6 +424,86 @@ export async function processShopifyInventoryLevelUpdate(input: {
     soldOrderId: `inventory_level:${inventoryItemId}`,
     detectionSource: "inventory_levels_update",
   });
+}
+
+async function syncCatalogQuantityFromShopify(input: {
+  item: InventoryItem;
+  card: ScannedCard | null;
+  available: number;
+}): Promise<SoldDetectionResult | null> {
+  const plan = planCatalogQuantityFromShopify(input.item, input.available);
+  if (plan.action !== "sync") return null;
+
+  const now = new Date().toISOString();
+  const previous = inventoryEffectiveQuantity(input.item);
+  const listing = input.item.shopifyListing;
+  const base: InventoryItem = {
+    ...input.item,
+    quantity: plan.quantity,
+    quantityOnHand: plan.quantity,
+    quantityAvailable: plan.quantity,
+    status: plan.status,
+    shopifyListing: listing
+      ? { ...listing, syncedQuantity: plan.quantity, syncedAt: now }
+      : undefined,
+  };
+
+  let updated: InventoryItem = {
+    ...base,
+    saleLog: withSaleLog(input.item, {
+      at: now,
+      quantity: previous - plan.quantity,
+      unitPrice: listing?.exportPrice ?? input.item.listPrice ?? input.item.marketPrice ?? 0,
+      channel: "shopify",
+    }),
+  };
+  if (plan.sellOut) {
+    updated = {
+      ...updated,
+      soldAt: now,
+      soldChannel: "shopify",
+      soldPrice: listing?.exportPrice ?? input.item.marketPrice ?? 0,
+    };
+  }
+
+  await dataStore.saveInventoryItem(updated);
+  if (plan.restore) {
+    await dataStore.clearInventoryShopifySale(updated.id);
+  }
+
+  if (input.card && plan.sellOut) {
+    await dataStore.saveCard({
+      ...input.card,
+      shopifyExport: {
+        ...(input.card.shopifyExport ?? { status: "exported" }),
+        status: input.card.shopifyExport?.status ?? "exported",
+        soldAt: now,
+      },
+    });
+  }
+
+  await dataStore.logAdminAction({
+    action: plan.restore
+      ? "inventory_restock_shopify"
+      : "inventory_sold_shopify",
+    metadata: {
+      inventoryItemId: updated.id,
+      displayName: updated.displayName,
+      previousQuantity: previous,
+      quantity: plan.quantity,
+      detectionSource: "inventory_levels_update",
+    },
+  });
+
+  return {
+    inventoryItemId: updated.id,
+    cardId: updated.cardId ?? "",
+    soldPrice: updated.soldPrice ?? listing?.exportPrice ?? 0,
+    alreadySold: false,
+    quantitySold: plan.sellOut ? previous : 0,
+    remainingQuantity: plan.quantity,
+    restocked: plan.restore,
+  };
 }
 
 async function findInventoryForLineItem(

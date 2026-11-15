@@ -8,6 +8,7 @@
 import { architectureFromHits } from "@/lib/commander-optimization-score/v1/architecture-from-hits";
 import { detectCompleteCombos } from "@/lib/commander-optimization-score/v1/detect";
 import { loadSpellbookComboArtifacts } from "@/lib/commander-optimization-score/v1/load-artifacts";
+import { loadComboBracketTagsV1 } from "./combo-bracket-tags";
 import { comboSummaryFromArchitecture } from "./detectors";
 import type { BracketRubricCard, BracketRubricComboSet, BracketRubricComboSummary } from "./types";
 
@@ -15,6 +16,7 @@ export async function comboSummaryForDeck(args: {
   cards: BracketRubricCard[];
 }): Promise<BracketRubricComboSummary> {
   const { comboIndex, compiled } = await loadSpellbookComboArtifacts();
+  const tags = loadComboBracketTagsV1();
 
   const deckOracleIds = new Set<string>();
   const commanderOracleIds = new Set<string>();
@@ -35,6 +37,8 @@ export async function comboSummaryForDeck(args: {
     seen.add(hit.cardSetSignature);
     const row = comboIndex.get(hit.cardSetSignature);
     if (!row) continue;
+    const tagRow = tags.get(hit.cardSetSignature);
+    const nTemplates = tagRow?.nTemplates ?? row.nTemplates ?? 0;
     comboSets.push({
       cardCount: row.comboCardCount,
       cards: hit.cardSetSignature
@@ -42,8 +46,16 @@ export async function comboSummaryForDeck(args: {
         .filter(Boolean)
         .map((oracleId) => ({ oracleId, name: nameByOracleId.get(oracleId) ?? oracleId })),
       winsOnResolution: row.isTerminalRoute,
+      bracketTag: tagRow?.tag ?? null,
+      requiresUnsatisfiedTemplate: nTemplates > 0,
     });
   }
 
-  return { ...summary, comboSets };
+  const live = comboSets.filter((set) => !set.requiresUnsatisfiedTemplate);
+  return {
+    ...summary,
+    twoCardCombos: live.filter((set) => set.cardCount === 2).length,
+    totalCombos: live.length,
+    comboSets,
+  };
 }

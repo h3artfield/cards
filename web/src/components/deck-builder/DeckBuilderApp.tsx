@@ -545,6 +545,7 @@ export function DeckBuilderApp({
                     cards={inventoryCommanders}
                     selectable
                     onSelect={selectCommanderFromInventory}
+                    storeSlug={slug}
                     emptyMessage="No commanders in stock match these filters. Try another color or run the inventory crosswalk in admin."
                   />
                 )}

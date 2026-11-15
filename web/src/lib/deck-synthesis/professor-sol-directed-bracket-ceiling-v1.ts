@@ -29,9 +29,9 @@
 import {
   BASE_BRACKET,
   EXTRA_TURN_CHAIN_THRESHOLD,
-  TUTOR_DENSITY_THRESHOLD,
   UPGRADED_GAME_CHANGER_MAX,
 } from "../commander-bracket-rubric/v1";
+import { spellbookTagFloorV1 } from "../commander-bracket-rubric/v1/spellbook-tag-floor";
 import type { CommanderBracket } from "../bracket-policy/bracket-policy-v1";
 
 export const PROFESSOR_SOL_DIRECTED_BRACKET_CEILING_V1_VERSION =
@@ -51,6 +51,8 @@ export type CeilingComboSetV1 = {
   signature: string;
   cardCount: number;
   oracleIds: string[];
+  bracketTag?: "R" | "S" | "P" | "O" | "C" | "E" | "B" | null;
+  requiresUnsatisfiedTemplate?: boolean;
 };
 
 export type CeilingDeckCardV1 = {
@@ -254,9 +256,9 @@ function ceilingRequirements(requested: CommanderBracket): {
   return {
     maxGameChangers: requested >= 4 ? Number.POSITIVE_INFINITY : requested === 3 ? UPGRADED_GAME_CHANGER_MAX : 0,
     allowMassLandDenial: requested >= 4,
-    maxExtraTurns: requested >= 3 ? Number.POSITIVE_INFINITY : 0,
+    maxExtraTurns: requested >= 2 ? Number.POSITIVE_INFINITY : 0,
     maxLoopableExtraTurns: requested >= 4 ? Number.POSITIVE_INFINITY : EXTRA_TURN_CHAIN_THRESHOLD - 1,
-    maxUnrestrictedTutors: requested >= 3 ? Number.POSITIVE_INFINITY : TUTOR_DENSITY_THRESHOLD - 1,
+    maxUnrestrictedTutors: Number.POSITIVE_INFINITY,
     allowTwoCardCombos: requested >= 4,
     allowAnyCombos: requested >= 3,
   };
@@ -429,11 +431,19 @@ export function planBracketCeilingV1(input: {
     "Unrestricted tutors remain that cannot be cut.",
   );
 
-  // Combos: only the sets that actually breach the requested bracket.
+  // Combos: only the sets whose Spellbook floor exceeds the requested bracket.
+  // Untagged sets keep the old conservative floors so a missing tag map cannot
+  // under-cut a list that still measured hot.
+  const comboFloorForCeiling = (set: CeilingComboSetV1): number | null => {
+    if (set.requiresUnsatisfiedTemplate) return null;
+    if (set.bracketTag) return spellbookTagFloorV1(set.bracketTag);
+    if (set.cardCount === 2) return 4;
+    if (set.cardCount >= 3) return 3;
+    return null;
+  };
   const offendingSets = input.comboSets.filter((set) => {
-    if (!requirements.allowAnyCombos) return true;
-    if (!requirements.allowTwoCardCombos) return set.cardCount === 2;
-    return false;
+    const floor = comboFloorForCeiling(set);
+    return floor != null && floor > input.requestedBracket;
   });
   const comboSignalId: CeilingSignalIdV1 = requirements.allowAnyCombos
     ? "two_card_infinite"

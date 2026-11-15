@@ -1,3 +1,8 @@
+import {
+  latestSalesVolume,
+  marketToneFromPoints,
+  monthlySalesFromPoints,
+} from "./market-tone";
 import type {
   CardPriceHistoryResponse,
   CardPriceSnapshot,
@@ -56,16 +61,19 @@ export function buildCardPriceHistoryResponse(input: {
     a.capturedDate.localeCompare(b.capturedDate),
   );
 
-  const byDate = new Map<string, number>();
+  const byDate = new Map<string, { value: number; volume?: number }>();
   for (const snap of sorted) {
     if (snap.rawUngraded != null) {
-      byDate.set(snap.capturedDate, snap.rawUngraded);
+      byDate.set(snap.capturedDate, {
+        value: snap.rawUngraded,
+        volume: snap.salesVolume,
+      });
     }
   }
 
   const points = [...byDate.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([date, value]) => ({ date, value }));
+    .map(([date, row]) => ({ date, value: row.value, volume: row.volume }));
 
   const latest = sorted[sorted.length - 1];
   const latestValue = points[points.length - 1]?.value;
@@ -109,6 +117,9 @@ export function buildCardPriceHistoryResponse(input: {
           : undefined,
       sampleCount,
       volatility: sampleCount > 1 ? computeVolatility(points) : undefined,
+      marketTone: marketToneFromPoints(points) ?? undefined,
+      latestSalesVolume: latestSalesVolume(points),
+      monthlySales: monthlySalesFromPoints(points) ?? undefined,
     },
     lastUpdated: latest?.capturedAt ?? latest?.capturedDate ?? today,
     sourceNote: trendNote

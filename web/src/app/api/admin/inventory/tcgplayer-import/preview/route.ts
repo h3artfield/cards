@@ -4,7 +4,9 @@ import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
 import { dataStore } from "@/lib/storage/data-store";
 import { buildTcgplayerImportPreview } from "@/lib/tcgplayer-inventory/apply-import";
 import { computeCsvImportTotals } from "@/lib/tcgplayer-inventory/csv-totals";
+import { assessTcgplayerWithdrawalRisk } from "@/lib/tcgplayer-inventory/import-guard";
 import { parseTcgplayerInventoryExportCsv } from "@/lib/tcgplayer-inventory/parse-export-csv";
+import type { TcgplayerImportMode } from "@/lib/tcgplayer-inventory/types";
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,17 +16,19 @@ export async function POST(req: NextRequest) {
     const scope = requireStoreScope(auth, req);
     if (scope instanceof Response) return scope;
 
-    const body = (await req.json()) as { csv?: string };
+    const body = (await req.json()) as { csv?: string; mode?: string };
     if (!body.csv?.trim()) {
       return jsonError("Upload a TCGplayer inventory export CSV", 400);
     }
+    const mode: TcgplayerImportMode = body.mode === "add" ? "add" : "replace";
 
     const inventory = await dataStore.getInventory(scope.storeId);
-    const preview = buildTcgplayerImportPreview(body.csv, inventory);
+    const preview = buildTcgplayerImportPreview(body.csv, inventory, mode);
     const { rows } = parseTcgplayerInventoryExportCsv(body.csv);
     const csvTotals = computeCsvImportTotals(rows);
+    const risk = assessTcgplayerWithdrawalRisk(preview);
 
-    return jsonOk({ preview, csvTotals });
+    return jsonOk({ preview, csvTotals, risk });
   } catch (err) {
     return handleRouteError(err);
   }

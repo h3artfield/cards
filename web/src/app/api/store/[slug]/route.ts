@@ -29,6 +29,16 @@ export async function GET(
       customerEmailVerificationMode:
         store.customerEmailVerificationMode ?? "required_before_submit",
     },
+    calendar: {
+      /**
+       * Whether there is a calendar worth linking to. Same gate the calendar
+       * page and its API apply, so the dashboard cannot offer an Events link
+       * that lands on "Calendar not available".
+       */
+      available:
+        store.calendarSettings?.enabled !== false &&
+        store.calendarSettings?.published === true,
+    },
     auth: {
       googleEnabled:
         process.env.AUTH_GOOGLE_ENABLED !== "false" &&

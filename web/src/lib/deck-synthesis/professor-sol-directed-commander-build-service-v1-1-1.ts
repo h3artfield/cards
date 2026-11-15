@@ -3,6 +3,9 @@
  * Architect → Retrieval → Constructor → Validation → Critic swaps → Head Professor grade.
  */
 import type { DeckResolutionCatalog } from "../../../scripts/lib/load-deck-resolution-catalog";
+import { calculatedDeckRow, recordCalculatedDeck } from "@/lib/deck-rating/v1/calculated-deck-board-v1";
+import type { DeckScoreV1 } from "@/lib/deck-rating/v1/plan-score-v1";
+import { scoreConstructedDeck } from "@/lib/deck-rating/v1/score-constructed-deck-v1";
 import { resolveCommanderBlueprintFromCatalogV417 } from "./professor-commander-catalog-v4-17-v1";
 import { runSolDirectedArchitectV11 } from "./professor-sol-directed-architect-v1-1";
 import { evaluateArchitectIngestionGateV111 } from "./professor-sol-directed-ingestion-gate-v1-1-1";
@@ -152,8 +155,11 @@ export type RunSolDirectedCommanderBuildArgs = {
   catalog: DeckResolutionCatalog;
   p0TruthPass?: boolean;
   onStatus?: (status: SolDirectedBuildStatusV111) => void | Promise<void>;
-  mode?: "build" | "optimize";
+  mode?: "build" | "optimize" | "review";
   importedCards?: ProfessorImportedDeckCardV111[];
+  sourceDeckId?: string;
+  /** When set, a finished deck gets a Professor strategy and a four-digit score before it is saved. */
+  scoreDeck?: boolean;
 };
 
 /**
@@ -485,9 +491,10 @@ function applyCriticDeckIfValidV111(args: {
 export async function runSolDirectedCommanderBuild(
   args: RunSolDirectedCommanderBuildArgs,
 ): Promise<SolDirectedBuildResultV111> {
-  if (args.mode === "optimize") {
+  if (args.mode === "optimize" || args.mode === "review") {
     return runSolDirectedImportedDeckOptimize({
       ...args,
+      mode: args.mode,
       importedCards: args.importedCards ?? [],
     });
   }
@@ -1080,9 +1087,11 @@ export async function runSolDirectedCommanderBuild(
       professorRepairPass < MAX_PROFESSOR_REPAIR_PASSES
     ) {
       professorRepairPass += 1;
+      const requiredChanges = headProfessor.verdict.requiredChanges ?? [];
+      const offPlanCards = headProfessor.verdict.offPlanCards ?? [];
       const repairReason =
-        headProfessor.verdict.requiredChanges.length > 0
-          ? `${headProfessor.verdict.requiredChanges.length} required fix(es)`
+        requiredChanges.length > 0
+          ? `${requiredChanges.length} required fix(es)`
           : `${headProfessor.verdict.classification} (${headProfessor.verdict.grade})`;
       await appendSolDirectedBuildActivityV111({
         buildId: job.buildId,
@@ -1095,11 +1104,11 @@ export async function runSolDirectedCommanderBuild(
         status: "HEAD_PROFESSOR_REVIEW",
       });
 
-      if (headProfessor.verdict.offPlanCards.length > 0 || headProfessor.verdict.requiredChanges.length > 0) {
+      if (offPlanCards.length > 0 || requiredChanges.length > 0) {
         const offPlanRepair = repairOffPlanNonlandsV111({
           deck: deckForReview,
-          offPlanCards: headProfessor.verdict.offPlanCards,
-          requiredChanges: headProfessor.verdict.requiredChanges,
+          offPlanCards,
+          requiredChanges,
           candidateDictionary: retrieval.candidateDictionary,
           requirementPools: retrieval.requirementPools,
         });
@@ -1199,8 +1208,8 @@ export async function runSolDirectedCommanderBuild(
         landPool: retrieval.landPool,
         maxSwaps: 16,
         repairContext: {
-          requiredChanges: headProfessor.verdict.requiredChanges,
-          offPlanCards: headProfessor.verdict.offPlanCards,
+          requiredChanges,
+          offPlanCards,
           professorSummary: headProfessor.verdict.reasoningSummary,
           priorGrade: headProfessor.verdict.grade,
           classification: headProfessor.verdict.classification,
@@ -1567,6 +1576,39 @@ export async function runSolDirectedCommanderBuild(
     const nonlandCount = shippable.deck.nonlands.length;
     const landCount = shippable.deck.lands.reduce((s, l) => s + l.copies, 0);
 
+    let deckScore: DeckScoreV1 | null = null;
+    if (args.scoreDeck) {
+      try {
+        deckScore = await scoreConstructedDeck({ catalog: args.catalog, deck: shippable.deck });
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        console.warn(`[deck-score] ${message}`);
+        deckScore = {
+          schema: "plan-score-1.0",
+          bracket: asCommanderBracketV111(args.bracket) ?? 2,
+          w: null,
+          display: String(asCommanderBracketV111(args.bracket) ?? 2),
+          planRate: null,
+          namedLineWins: null,
+          trials: null,
+          reason: message,
+        };
+      }
+      if (deckScore) {
+        recordCalculatedDeck(
+          calculatedDeckRow({
+            id: job.buildId,
+            name: shippable.deck.commander.name,
+            bracket: deckScore.bracket,
+            measuredAt: new Date().toISOString(),
+            planRate: deckScore.planRate,
+            namedLineRate: deckScore.planRate,
+            score: deckScore.display,
+          }),
+        );
+      }
+    }
+
     const deckEnrichmentPromise = enrichSolDirectedDeckForDisplayV111({
       storeSlug: args.storeSlug,
       deck: shippable.deck,
@@ -1591,6 +1633,7 @@ export async function runSolDirectedCommanderBuild(
       headProfessor: headProfessor.verdict,
       retrievalContract,
       professorRepairApplied,
+      deckScore,
       deckEnrichment: null,
       telemetry: {
         modelCallCount: modelCalls.length,

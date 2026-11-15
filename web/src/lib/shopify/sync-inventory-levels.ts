@@ -1,8 +1,11 @@
+import { cardLinkBaseUrlV1 } from "../inventory/card-link-base";
+import { cardLinkUrlV1 } from "../inventory/card-link-key";
 import { dataStore } from "../storage/data-store";
 import type { InventoryItem } from "../types";
 import {
   formatShopifyApiErrorMessage,
   setShopifyInventoryQuantity,
+  setShopifyProductStatus,
   updateShopifyVariantPrice,
 } from "./client";
 import { hasShopifyListing, planCatalogListingSync } from "./inventory-listing";
@@ -16,6 +19,8 @@ export type CatalogSyncOutcome = {
   price?: number;
   quantityPushed: boolean;
   pricePushed: boolean;
+  /** Set when the row entered or left the storefront. */
+  statusPushed?: "ACTIVE" | "DRAFT";
   error?: string;
 };
 
@@ -23,8 +28,14 @@ export type CatalogSyncSummary = {
   considered: number;
   quantityPushed: number;
   pricePushed: number;
+  /** Rows pulled from the storefront because they hit zero on hand. */
+  drafted: number;
+  /** Rows returned to the storefront because a later import restocked them. */
+  reactivated: number;
   unchanged: number;
   failed: number;
+  /** True when limitPushes was hit and rows still need a follow-up pass. */
+  stoppedEarly?: boolean;
   outcomes: CatalogSyncOutcome[];
 };
 
@@ -36,11 +47,20 @@ export async function syncShopifyListingsForItems(input: {
   items: InventoryItem[];
   integration: ShopifyIntegration | undefined;
   accessToken: string | undefined;
+  /** When set, price pushes also realign the variant barcode to the card link. */
+  storeSlug?: string;
+  /**
+   * Stop after this many rows needed work. Rows that are already in sync cost
+   * no API calls, so a full reconcile sweep only pays for genuine drift.
+   */
+  limitPushes?: number;
 }): Promise<CatalogSyncSummary> {
   const summary: CatalogSyncSummary = {
     considered: 0,
     quantityPushed: 0,
     pricePushed: 0,
+    drafted: 0,
+    reactivated: 0,
     unchanged: 0,
     failed: 0,
     outcomes: [],
@@ -53,16 +73,39 @@ export async function syncShopifyListingsForItems(input: {
     return summary;
   }
 
+  const limit = input.limitPushes ?? Infinity;
+  let touched = 0;
+
+  // An absolute "available" write on a row held by a pickup draft would undo
+  // Shopify's reservation and let the card sell twice.
+  const storeIds = [...new Set(input.items.map((i) => i.storeId).filter(Boolean))];
+  const held = new Set<string>();
+  for (const storeId of storeIds) {
+    for (const r of await dataStore.getPickupReservations(storeId)) {
+      if (r.status !== "active") continue;
+      for (const line of r.lines) held.add(line.inventoryItemId);
+    }
+  }
+
   for (const item of input.items) {
     if (!hasShopifyListing(item)) continue;
     const listing = item.shopifyListing!;
     summary.considered += 1;
 
-    const plan = planCatalogListingSync(item, integration);
-    if (!plan.quantityChanged && !plan.priceChanged) {
+    const planned = planCatalogListingSync(item, integration);
+    const plan = held.has(item.id)
+      ? { ...planned, quantityChanged: false, statusChanged: false }
+      : planned;
+    if (!plan.quantityChanged && !plan.priceChanged && !plan.statusChanged) {
       summary.unchanged += 1;
       continue;
     }
+
+    if (touched >= limit) {
+      summary.stoppedEarly = true;
+      break;
+    }
+    touched += 1;
 
     const outcome: CatalogSyncOutcome = {
       inventoryItemId: item.id,
@@ -98,15 +141,32 @@ export async function syncShopifyListingsForItems(input: {
           productId: listing.productId,
           variantId: listing.variantId,
           price: plan.price.toFixed(2),
+          barcode:
+            input.storeSlug && item.cardLinkKey
+              ? cardLinkUrlV1(cardLinkBaseUrlV1(), input.storeSlug, item.cardLinkKey)
+              : undefined,
         });
         outcome.pricePushed = true;
         summary.pricePushed += 1;
+      }
+
+      if (plan.statusChanged) {
+        await setShopifyProductStatus({
+          shopDomain: domain,
+          accessToken: input.accessToken,
+          productId: listing.productId,
+          status: plan.status,
+        });
+        outcome.statusPushed = plan.status;
+        if (plan.status === "DRAFT") summary.drafted += 1;
+        else summary.reactivated += 1;
       }
 
       await dataStore.saveInventoryItem(
         applySyncResult(item, {
           quantity: outcome.quantityPushed ? plan.quantity : undefined,
           price: outcome.pricePushed ? plan.price ?? undefined : undefined,
+          status: outcome.statusPushed,
         }),
       );
     } catch (err) {
@@ -136,6 +196,8 @@ export async function pushShopifyLevelsAfterImport(
     considered: 0,
     quantityPushed: 0,
     pricePushed: 0,
+    drafted: 0,
+    reactivated: 0,
     unchanged: 0,
     failed: 0,
     outcomes: [],
@@ -154,6 +216,7 @@ export async function pushShopifyLevelsAfterImport(
       items,
       integration: withToken.shopifyIntegration ?? settings.shopifyIntegration,
       accessToken,
+      storeSlug: settings.storeSlug,
     });
   } catch (err) {
     console.error("[shopify] inventory level sync after import failed:", err);
@@ -167,7 +230,12 @@ export async function pushShopifyLevelsAfterImport(
 /** Record what Shopify now holds so the next import can diff against it. */
 export function applySyncResult(
   item: InventoryItem,
-  result: { quantity?: number; price?: number; error?: string },
+  result: {
+    quantity?: number;
+    price?: number;
+    status?: "ACTIVE" | "DRAFT";
+    error?: string;
+  },
 ): InventoryItem {
   const listing = item.shopifyListing;
   if (!listing) return item;
@@ -178,6 +246,7 @@ export function applySyncResult(
     shopifyListing: {
       ...listing,
       syncedQuantity: result.quantity ?? listing.syncedQuantity,
+      syncedStatus: result.status ?? listing.syncedStatus,
       exportPrice: result.price ?? listing.exportPrice,
       syncedAt: result.error ? listing.syncedAt : now,
       syncError: result.error,

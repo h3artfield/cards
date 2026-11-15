@@ -86,6 +86,12 @@ export interface Customer {
   createdAt: string;
   updatedAt: string;
   lastLoginAt?: string;
+  /** Public name shown on the stream and the Hall of Champions. */
+  challengerDisplayName?: string;
+  /** Lowercase key used to keep display names unique. */
+  challengerDisplayNameKey?: string;
+  challengerConsentAt?: string;
+  challengerAgeConfirmedAt?: string;
   /** Server-only — never returned to clients */
   passwordHash?: string;
   emailVerificationTokenHash?: string;
@@ -311,6 +317,10 @@ export interface CollectionCard {
   /** Magic printing + oracle ids — required for deck building. */
   scryfallId?: string;
   oracleId?: string;
+  /** Magic type line — persisted so the binder can highlight commanders. */
+  typeLine?: string;
+  /** Read-time hint from catalog / type line. Not required in storage. */
+  canBeCommander?: boolean;
   conditionEstimate?: ConditionEstimate;
   identityConfidence?: number;
   identityLocked?: boolean;
@@ -318,6 +328,8 @@ export interface CollectionCard {
   needsReview?: boolean;
   /** Copies of this printing in the binder. Unset means 1. */
   quantity?: number;
+  /** Paper finish. Unset means non-foil. */
+  finish?: "nonfoil" | "foil" | "etched";
   visionJson?: Record<string, unknown>;
   status: CollectionCardStatus;
   buybackOrderId?: string;
@@ -362,10 +374,67 @@ export interface ShopTicket {
   voidedAt?: string;
 }
 
+export type PickupReservationStatus =
+  | "active"
+  | "completed"
+  | "expired"
+  | "cancelled";
+
+export interface PickupReservationLine {
+  inventoryItemId: string;
+  displayName: string;
+  variantId: string;
+  quantity: number;
+  unitPrice: number;
+}
+
+/** Unpaid Shopify draft order holding singles until the customer pays in store. */
+export interface PickupReservation {
+  id: string;
+  storeId: string;
+  status: PickupReservationStatus;
+  customerId?: string;
+  customerName: string;
+  customerEmail?: string;
+  customerPhone?: string;
+  shopifyCustomerId?: string;
+  draftOrderId: string;
+  /** Shopify's draft name, e.g. "#D12" — what staff search for in POS. */
+  draftOrderName: string;
+  /** Paid online through the draft's invoice checkout; collected in store. */
+  payOnline?: boolean;
+  invoiceUrl?: string;
+  /** Staff handed a paid-online order over at the counter. */
+  pickedUpAt?: string;
+  lines: PickupReservationLine[];
+  subtotal: number;
+  reserveUntil: string;
+  shopifyOrderId?: string;
+  lastError?: string;
+  createdAt: string;
+  updatedAt: string;
+  completedAt?: string;
+  releasedAt?: string;
+}
+
 /** Lifecycle of a physical card in store inventory. */
 export type InventoryStatus = "on_hand" | "listed" | "sold" | "withdrawn";
 
 /** Sales channel where inventory was sold or listed. */
+export interface InventoryChangeLogEntry {
+  at: string;
+  field: "location" | "condition" | "online" | "quantity" | "price" | "name" | "note";
+  from: string;
+  to: string;
+}
+
+export interface InventorySaleLogEntry {
+  at: string;
+  quantity: number;
+  unitPrice: number;
+  channel: InventorySalesChannel;
+}
+
 export type InventorySalesChannel =
   | "shopify"
   | "ebay"
@@ -456,6 +525,31 @@ export interface InventoryItem {
   quantityAvailable?: number;
   /** TCGplayer My Store Reserve Qty from CSV — reporting only, NOT an application hold. */
   tcgplayerReportedReserve?: number;
+  /**
+   * The two halves of `quantityOnHand` when the store tracks them: units on
+   * the shelf and units set aside for online orders. Shopify gets the total;
+   * the storefront only ships from the online half.
+   */
+  quantityInStore?: number;
+  quantityOnline?: number;
+  /** Permanent label / QR key, e.g. "593337-nm-f" (see card-link-key.ts). */
+  cardLinkKey?: string;
+  /** Where staff find it, e.g. "1-2" (cabinet 1, bottom shelf), "Binder U", "Bulk". */
+  shelfLocation?: string;
+  /** Where the location rules now put it after a price change; staff confirm the move. */
+  suggestedLocation?: string;
+  suggestedLocationAt?: string;
+  /** A suggestion staff chose not to follow; not raised again until the rules change their answer. */
+  keptLocationFor?: string;
+  /** Free-text staff note, e.g. "moved to case for display". */
+  staffNote?: string;
+  /** Manual edits from the inventory sheet, newest last (capped). */
+  changeLog?: InventoryChangeLogEntry[];
+  /** When the store first took the card into stock, from the inventory list. */
+  ingestedAt?: string;
+  /** Last JustTCG price refresh. */
+  marketPriceAt?: string;
+  marketPriceSource?: "justtcg" | "tcgplayer_csv";
   /** Store list price from TCGplayer (My Store Price). */
   listPrice?: number;
   tcgMarketPrice?: number;
@@ -463,6 +557,10 @@ export interface InventoryItem {
   tcgLowPrice?: number;
   tcgLowPriceAt?: string;
   lastTcgplayerImportAt?: string;
+  /** Import that last added copies to this row; "Labels for latest import" prints only those copies. */
+  lastImportBatchAt?: string;
+  lastImportAddedQuantity?: number;
+  lastImportAddedInStore?: number;
   /** Stable upsert key for Shopify variant GID. */
   shopifyVariantKey?: string;
   lastShopifyImportAt?: string;
@@ -493,6 +591,9 @@ export interface InventoryItem {
   /** Shop tickets already rung up against this row, so a retried completion
    * cannot decrement it twice. */
   ticketSaleRefs?: string[];
+  /** Every sale against this row, newest last (capped). Multi-copy rows only get
+   * `soldAt` on the final copy, so reports count recent sales from here. */
+  saleLog?: InventorySaleLogEntry[];
   /** Denormalized Scryfall catalog — golden-table dimensions for browse/clerk. */
   catalogScryfallId?: string;
   catalogOracleId?: string;
@@ -557,8 +658,12 @@ export interface ScannedCard {
   detectedName?: string;
   brand?: string;
   setName?: string;
+  setCode?: string;
   year?: string;
   cardNumber?: string;
+  catalogSource?: import("./card-flow-v2/types").CatalogSource;
+  catalogId?: string;
+  scanMatchDistance?: number;
   playerName?: string;
   team?: string;
   variant?: string;

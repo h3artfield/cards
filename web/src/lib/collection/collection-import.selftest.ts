@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { parseCollectionImportText } from "./collection-import-parse";
+import { stripFoilMark } from "./collection-finish";
 import {
   buildOwnedCardIndex,
   overlayTone,
@@ -25,6 +26,19 @@ const csv = parseCollectionImportText(`Count,Name,Set,Collector Number
 `);
 assert.equal(csv[0]?.name, "Birds of Paradise");
 assert.equal(csv[0]?.setCode, "mh2");
+
+assert.deepEqual(stripFoilMark("Lightning Bolt *F*"), {
+  name: "Lightning Bolt",
+  finish: "foil",
+});
+const foilLine = parseCollectionImportText("1 Sol Ring (c21) 165 *F*");
+assert.equal(foilLine[0]?.finish, "foil");
+assert.equal(foilLine[0]?.name, "Sol Ring");
+
+const foilCsv = parseCollectionImportText(`Count,Name,Set,Foil
+1,Birds of Paradise,mh2,foil
+`);
+assert.equal(foilCsv[0]?.finish, "foil");
 
 const dek = parseCollectionImportText(
   `<Deck><Cards Qty="3" Name="Forest" Edition="UNF" /></Deck>`,

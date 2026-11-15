@@ -34,17 +34,31 @@ function extractKeywords(raw: Record<string, unknown>): string[] {
 
 function extractCardFaces(raw: Record<string, unknown>): CardFace[] | undefined {
   const faces = raw.card_faces as Array<Record<string, unknown>> | undefined;
-  if (!faces?.length) return undefined;
-  return faces.map((face) => ({
-    name: face.name as string | undefined,
-    manaCost: face.mana_cost as string | undefined,
-    typeLine: face.type_line as string | undefined,
-    oracleText: face.oracle_text as string | undefined,
-    colors: face.colors as string[] | undefined,
-    power: face.power as string | undefined,
-    toughness: face.toughness as string | undefined,
-    loyalty: face.loyalty as string | undefined,
-  }));
+  if (faces?.length) {
+    return faces.map((face) => ({
+      name: face.name as string | undefined,
+      manaCost: face.mana_cost as string | undefined,
+      typeLine: face.type_line as string | undefined,
+      oracleText: face.oracle_text as string | undefined,
+      colors: face.colors as string[] | undefined,
+      power: face.power as string | undefined,
+      toughness: face.toughness as string | undefined,
+      loyalty: face.loyalty as string | undefined,
+    }));
+  }
+  const power = raw.power as string | undefined;
+  const toughness = raw.toughness as string | undefined;
+  if (!power && !toughness) return undefined;
+  return [{
+    name: raw.name as string | undefined,
+    manaCost: raw.mana_cost as string | undefined,
+    typeLine: raw.type_line as string | undefined,
+    oracleText: raw.oracle_text as string | undefined,
+    colors: raw.colors as string[] | undefined,
+    power,
+    toughness,
+    loyalty: raw.loyalty as string | undefined,
+  }];
 }
 
 function syntheticCatalogForEligibility(input: {

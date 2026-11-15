@@ -84,6 +84,7 @@ export function customerSessionResponse(
   const token = createCustomerSessionToken(session);
   const response = jsonOk({
     customer: sanitizeCustomer(customer),
+    token,
     ...extra,
   });
   response.headers.set("Set-Cookie", customerSessionCookieHeader(token));
@@ -108,6 +109,28 @@ export function customerOwnsOrder(
   if (order.customerId === session.customerId) return true;
   if (order.customer?.customerId === session.customerId) return true;
   return false;
+}
+
+export type CustomerHomeStoreSummary = {
+  id: string;
+  slug: string;
+  storeName: string;
+  storeLogoUrl?: string;
+};
+
+export async function customerHomeStoreSummary(
+  customer: Customer,
+): Promise<CustomerHomeStoreSummary | null> {
+  const storeId = customer.storeId?.trim();
+  if (!storeId) return null;
+  const store = await dataStore.getSettings(storeId);
+  if (!store) return null;
+  return {
+    id: store.id,
+    slug: store.storeSlug,
+    storeName: store.storeName,
+    storeLogoUrl: store.storeLogoUrl,
+  };
 }
 
 export async function resolveStoreForSlug(

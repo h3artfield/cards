@@ -33,7 +33,8 @@ export type SolDirectedBuildStatusV111 =
   | "COMPLETE"
   | "FAILED";
 
-export type SolDirectedBuildModeV111 = "build" | "optimize";
+/** "review" grades an existing deck and suggests swaps without applying them. */
+export type SolDirectedBuildModeV111 = "build" | "optimize" | "review";
 
 export type SolDirectedBuildUserInputsV111 = {
   commanderOracleId: string;
@@ -48,6 +49,8 @@ export type SolDirectedBuildUserInputsV111 = {
   inventoryConstraints?: string[];
   mode?: SolDirectedBuildModeV111;
   importedCards?: ProfessorImportedDeckCardV111[];
+  /** Review mode only: the editable deck the review is attached to. */
+  sourceDeckId?: string;
 };
 
 /** Firestore rejects undefined field values — GUI omits optional constraint arrays. */
@@ -65,7 +68,7 @@ export function normalizeSolDirectedBuildUserInputsV111(
     userSemanticPreferences: normalizeUserSemanticPreferencesV111(inputs.userSemanticPreferences),
     budgetConstraints: inputs.budgetConstraints ?? [],
     inventoryConstraints: inputs.inventoryConstraints ?? [],
-    mode: inputs.mode === "optimize" ? "optimize" : "build",
+    mode: inputs.mode === "optimize" || inputs.mode === "review" ? inputs.mode : "build",
     importedCards: Array.isArray(inputs.importedCards)
       ? inputs.importedCards
           .map((card) => ({
@@ -74,6 +77,9 @@ export function normalizeSolDirectedBuildUserInputsV111(
           }))
           .filter((card) => card.name)
       : [],
+    ...(inputs.mode === "review" && inputs.sourceDeckId?.trim()
+      ? { sourceDeckId: inputs.sourceDeckId.trim() }
+      : {}),
   };
 }
 
@@ -161,6 +167,10 @@ export type SolDirectedBuildResultV111 = {
   professorRepairApplied?: boolean;
   /** Prefetched Scryfall art + store inventory for instant deck list rendering. */
   deckEnrichment?: SolDirectedDeckEnrichmentV111 | null;
+  /** Four-digit rating. Absent until the build asked for a score. Null W means the claim was not verified. */
+  deckScore?: import("@/lib/deck-rating/v1/plan-score-v1").DeckScoreV1 | null;
+  /** Review mode: validated Critic swaps offered to the owner, not applied. */
+  suggestedSwaps?: Array<{ cut: string; add: string; reason: string }>;
   telemetry: SolDirectedBuildTelemetryV111;
   modelCalls: SolDirectedModelCallRecordV1[];
   proofChain: SolDirectedBuildProofChainV111;
@@ -198,4 +208,16 @@ export const SOL_DIRECTED_BUILD_FAILURE_MESSAGES: Record<string, string> = {
   P0_TRUTH_REGRESSIONS_NOT_PASSING: "Card catalog truth checks failed before building.",
   IMPORT_UNRESOLVED: "I couldn't recognize enough cards in this list to optimize it.",
   IMPORT_IDENTITY: "This list has cards outside the commander's colors.",
+};
+
+export const SOL_DIRECTED_REVIEW_STATUS_LABELS: Record<SolDirectedBuildStatusV111, string> = {
+  CREATED: "Starting review…",
+  ARCHITECTING: "Reading your deck…",
+  RETRIEVING_CANDIDATES: "Looking for possible upgrades…",
+  CONSTRUCTING_DECK: "Loading your deck…",
+  VALIDATING: "Checking Commander legality…",
+  CRITIC_REFINING: "Weighing swaps for your list…",
+  HEAD_PROFESSOR_REVIEW: "Professor is grading your deck…",
+  COMPLETE: "Review complete",
+  FAILED: "Review failed",
 };

@@ -8,7 +8,7 @@
  */
 import type { CommanderBracket } from "@/lib/bracket-policy/commander-bracket-snapshot-v1";
 
-export const COMMANDER_BRACKET_RUBRIC_V1_VERSION = "commander-bracket-rubric-v1";
+export const COMMANDER_BRACKET_RUBRIC_V1_VERSION = "commander-bracket-rubric-v1.1";
 
 export type { CommanderBracket };
 
@@ -51,12 +51,22 @@ export type BracketRubricSignal = {
   detail: string;
 };
 
+/** CommanderSpellbook variant bracket tag. R is Ruthless, S/P late-game spicy/powerful. */
+export type SpellbookBracketTagV1 = "R" | "S" | "P" | "O" | "C" | "E" | "B";
+
 export type BracketRubricComboSet = {
   cardCount: number;
   /** Cards forming the combo, so the call can be checked against the deck. */
   cards: BracketRubricEvidence[];
   /** True when the combo ends the game rather than only making a resource. */
   winsOnResolution: boolean;
+  /** Spellbook speed/relevance tag. Absent when the export did not carry one. */
+  bracketTag?: SpellbookBracketTagV1 | null;
+  /**
+   * True when the variant still needs an unnamed template card. Those are not
+   * complete from the named 99 alone and must not raise a floor.
+   */
+  requiresUnsatisfiedTemplate?: boolean;
 };
 
 /**

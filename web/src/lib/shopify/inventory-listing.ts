@@ -1,4 +1,9 @@
 import {
+  isFirebaseStorageUrl,
+  isTcgplayerCdnUrl,
+} from "../inventory/image-url";
+import { inventoryImageProxyPath } from "../inventory/resolve-display-image";
+import {
   inventoryEffectiveQuantity,
   isCatalogImportItem,
   isInventorySold,
@@ -239,9 +244,27 @@ export function buildCatalogTags(
   return [...tags].slice(0, 250);
 }
 
-export function catalogProductImageUrls(item: InventoryItem): string[] {
+/**
+ * Shopify downloads product media server-side, and the TCGplayer CDN refuses
+ * those fetches, so only Firebase Storage URLs can be handed over directly.
+ * Everything else goes through our own image proxy, which resolves the art
+ * from the catalog (Scryfall) and caches it on the way past.
+ */
+export function catalogProductImageUrls(
+  item: InventoryItem,
+  options?: { storeSlug?: string; appBaseUrl?: string },
+): string[] {
   const url = item.frontImageUrl?.trim();
-  if (!url || url.startsWith("data:")) return [];
+  if (isFirebaseStorageUrl(url)) return [url!];
+
+  const base = options?.appBaseUrl?.trim().replace(/\/$/, "");
+  const reachable =
+    base && !base.includes("localhost") && !base.includes("127.0.0.1");
+  if (reachable && options?.storeSlug) {
+    return [`${base}${inventoryImageProxyPath(options.storeSlug, item.id)}`];
+  }
+
+  if (!url || url.startsWith("data:") || isTcgplayerCdnUrl(url)) return [];
   return [url];
 }
 
@@ -251,6 +274,9 @@ export type CatalogSyncPlan = {
   quantityChanged: boolean;
   price: number | null;
   priceChanged: boolean;
+  /** Sold-out rows leave the storefront; restocked SKUs come back. */
+  status: "ACTIVE" | "DRAFT";
+  statusChanged: boolean;
 };
 
 /** What a re-import needs to push for an already-listed row. */
@@ -261,12 +287,24 @@ export function planCatalogListingSync(
   const listing = item.shopifyListing;
   const quantity = isInventorySold(item) ? 0 : catalogExportQuantity(item);
   const price = resolveCatalogExportPrice(item, integration);
+  // Out of stock always leaves the storefront. In stock returns to whatever the
+  // store chose as its default, so a shop that stages exports as drafts keeps
+  // reviewing them by hand instead of having us publish on its behalf.
+  const inStockStatus =
+    integration.defaultProductStatus === "ACTIVE" ? "ACTIVE" : "DRAFT";
+  const status = quantity > 0 ? inStockStatus : "DRAFT";
+
+  // Rows exported before status tracking existed have no syncedStatus. Fall
+  // back to how the export would have created them so only real changes push.
+  const lastStatus = listing?.syncedStatus ?? inStockStatus;
 
   return {
     quantity,
     quantityChanged: listing?.syncedQuantity !== quantity,
     price,
     priceChanged: price != null && listing?.exportPrice !== price,
+    status,
+    statusChanged: lastStatus !== status,
   };
 }
 

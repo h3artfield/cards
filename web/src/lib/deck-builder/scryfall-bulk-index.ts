@@ -17,6 +17,10 @@ export interface ScryfallBulkIndex {
   byNormalizedName: Map<string, CatalogCard>;
   byScryfallId: Map<string, CatalogCard>;
   setNameToCode: Map<string, string>;
+  /** Tokens and emblems, kept out of the card maps above; only shelf locations use them. */
+  tokensByTcgplayerId?: Map<string, CatalogCard>;
+  /** Every token and emblem, including the many Scryfall has no TCGplayer id for. */
+  tokens?: CatalogCard[];
   cardCount: number;
   loadedAt: string;
 }
@@ -56,6 +60,15 @@ function isPaperInventoryCard(raw: Record<string, unknown>): boolean {
   return true;
 }
 
+function indexToken(index: ScryfallBulkIndex, raw: Record<string, unknown>): void {
+  const games = raw.games as string[] | undefined;
+  if (games?.length && !games.includes("paper")) return;
+  const card = catalogCardFromScryfall(raw);
+  if (!card) return;
+  (index.tokens ??= []).push(card);
+  if (card.tcgplayerId) (index.tokensByTcgplayerId ??= new Map()).set(card.tcgplayerId, card);
+}
+
 function indexCatalogCard(index: ScryfallBulkIndex, card: CatalogCard, raw: Record<string, unknown>): void {
   index.cardCount += 1;
   index.byScryfallId.set(card.id, card);
@@ -91,6 +104,7 @@ function emptyBulkIndex(): ScryfallBulkIndex {
     byNormalizedName: new Map(),
     byScryfallId: new Map(),
     setNameToCode: new Map(),
+    tokensByTcgplayerId: new Map(),
     cardCount: 0,
     loadedAt: new Date().toISOString(),
   };
@@ -119,7 +133,10 @@ export async function streamDefaultCardsBulk(input: {
     } catch {
       continue;
     }
-    if (!isPaperInventoryCard(raw)) continue;
+    if (!isPaperInventoryCard(raw)) {
+      indexToken(index, raw);
+      continue;
+    }
     const card = catalogCardFromScryfall(raw);
     if (!card) continue;
     indexCatalogCard(index, card, raw);

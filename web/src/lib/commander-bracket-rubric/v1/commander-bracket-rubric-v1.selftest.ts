@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { classifyCommanderBracketV1 } from "./classify";
 import {
   countLoopableExtraTurns,
@@ -43,8 +45,12 @@ const VANILLA: BracketRubricCard[] = [
 
 const GC_IDS = new Set<string>(["oracle:demonic-tutor", "oracle:cyclonic-rift", "oracle:mana-crypt", "oracle:fierce-guardianship"]);
 
-function classify(cards: BracketRubricCard[], combos?: BracketRubricComboSummary | null) {
-  return classifyCommanderBracketV1({ cards, gameChangerOracleIds: GC_IDS, combos });
+function classify(
+  cards: BracketRubricCard[],
+  combos?: BracketRubricComboSummary | null,
+  declared?: 1 | 2 | 3 | 4 | 5 | null,
+) {
+  return classifyCommanderBracketV1({ cards, gameChangerOracleIds: GC_IDS, combos, declared });
 }
 
 console.log("commander-bracket-rubric-v1 selftest");
@@ -125,7 +131,7 @@ check("land lockout is caught by text, using Winter Orb's real wording", () => {
   assert.equal(legacyWording.length, 1);
 });
 
-check("a single self-exiling extra turn is Upgraded, not Optimized", () => {
+check("a few un-chained extra turns stay in Core (WotC Oct 2025)", () => {
   const result = classify([
     ...VANILLA,
     card({
@@ -133,7 +139,7 @@ check("a single self-exiling extra turn is Upgraded, not Optimized", () => {
       oracleText: "Take an extra turn after this one. Exile Temporal Mastery instead of putting it into your graveyard.",
     }),
   ]);
-  assert.equal(result.assignedBracket, 3);
+  assert.equal(result.assignedBracket, 2);
   assert.equal(
     countLoopableExtraTurns([
       card({
@@ -155,16 +161,72 @@ check("three loopable extra turns read as a turns chain and force Optimized", ()
   assert.equal(result.determiningSignals.some((s) => s.id === "extra_turns"), true);
 });
 
-check("a two-card infinite combo forces Optimized", () => {
+check("a Ruthless two-card combo forces Optimized", () => {
   const result = classify(VANILLA, {
     twoCardCombos: 1,
     totalCombos: 1,
     terminalRoutes: 1,
     resourceOnlyLoops: 0,
     minComboCardCount: 2,
+    comboSets: [
+      {
+        cardCount: 2,
+        cards: [
+          { oracleId: "oracle:thassas-oracle", name: "Thassa's Oracle" },
+          { oracleId: "oracle:demonic-consultation", name: "Demonic Consultation" },
+        ],
+        winsOnResolution: true,
+        bracketTag: "R",
+      },
+    ],
   });
   assert.equal(result.assignedBracket, 4);
   assert.equal(result.determiningSignals.some((s) => s.id === "two_card_infinite"), true);
+});
+
+check("a Spicy two-card combo only reaches Upgraded", () => {
+  const result = classify(VANILLA, {
+    twoCardCombos: 1,
+    totalCombos: 1,
+    terminalRoutes: 0,
+    resourceOnlyLoops: 1,
+    minComboCardCount: 2,
+    comboSets: [
+      {
+        cardCount: 2,
+        cards: [
+          { oracleId: "oracle:a", name: "Piece A" },
+          { oracleId: "oracle:b", name: "Piece B" },
+        ],
+        winsOnResolution: false,
+        bracketTag: "S",
+      },
+    ],
+  });
+  assert.equal(result.assignedBracket, 3);
+});
+
+check("a template-only combo does not raise the floor", () => {
+  const result = classify(VANILLA, {
+    twoCardCombos: 1,
+    totalCombos: 1,
+    terminalRoutes: 1,
+    resourceOnlyLoops: 0,
+    minComboCardCount: 2,
+    comboSets: [
+      {
+        cardCount: 2,
+        cards: [
+          { oracleId: "oracle:a", name: "Piece A" },
+          { oracleId: "oracle:b", name: "Piece B" },
+        ],
+        winsOnResolution: true,
+        bracketTag: "R",
+        requiresUnsatisfiedTemplate: true,
+      },
+    ],
+  });
+  assert.equal(result.assignedBracket, 2);
 });
 
 check("combo signals name their pieces when combo sets are supplied", () => {
@@ -182,6 +244,7 @@ check("combo signals name their pieces when combo sets are supplied", () => {
           { oracleId: "oracle:demonic-consultation", name: "Demonic Consultation" },
         ],
         winsOnResolution: true,
+        bracketTag: "R",
       },
       {
         cardCount: 3,
@@ -191,6 +254,7 @@ check("combo signals name their pieces when combo sets are supplied", () => {
           { oracleId: "oracle:sol-ring", name: "Sol Ring" },
         ],
         winsOnResolution: false,
+        bracketTag: "S",
       },
     ],
   });
@@ -206,13 +270,25 @@ check("combo signals name their pieces when combo sets are supplied", () => {
   assert.equal(anyCombo.evidence.length, 5, "all combo pieces are cited, deduplicated");
 });
 
-check("a three-card infinite combo only reaches Upgraded", () => {
+check("a three-card Spicy combo only reaches Upgraded", () => {
   const result = classify(VANILLA, {
     twoCardCombos: 0,
     totalCombos: 1,
     terminalRoutes: 1,
     resourceOnlyLoops: 0,
     minComboCardCount: 3,
+    comboSets: [
+      {
+        cardCount: 3,
+        cards: [
+          { oracleId: "oracle:a", name: "A" },
+          { oracleId: "oracle:b", name: "B" },
+          { oracleId: "oracle:c", name: "C" },
+        ],
+        winsOnResolution: true,
+        bracketTag: "S",
+      },
+    ],
   });
   assert.equal(result.assignedBracket, 3);
 });
@@ -227,13 +303,15 @@ check("unrestricted tutors are counted but type-restricted searches are not", ()
   assert.deepEqual(unrestricted.map((c) => c.name), ["Demonic Tutor"]);
 });
 
-check("three unrestricted tutors raise the floor to Upgraded", () => {
+check("tutors no longer raise a bracket floor", () => {
   const tutors = ["Diabolic Tutor", "Beseech the Queen", "Grim Tutor"].map((name) =>
     card({ name, oracleText: "Search your library for a card and put it into your hand." }),
   );
   const result = classify([...VANILLA, ...tutors]);
-  assert.equal(result.assignedBracket, 3);
-  assert.equal(result.determiningSignals.some((s) => s.id === "tutor_density"), true);
+  assert.equal(result.assignedBracket, 2);
+  const tutor = result.signals.find((s) => s.id === "tutor_density")!;
+  assert.equal(tutor.bracketFloor, null);
+  assert.equal(tutor.count, 3);
 });
 
 check("the commander itself counts toward signals", () => {
@@ -254,9 +332,60 @@ check("Exhibition and cEDH are never inferred from cards", () => {
     terminalRoutes: 12,
     resourceOnlyLoops: 8,
     minComboCardCount: 2,
+    comboSets: [
+      {
+        cardCount: 2,
+        cards: [
+          { oracleId: "oracle:a", name: "A" },
+          { oracleId: "oracle:b", name: "B" },
+        ],
+        winsOnResolution: true,
+        bracketTag: "R",
+      },
+    ],
   });
   assert.equal(result.assignedBracket, 4, "the rubric caps at Optimized");
   assert.deepEqual(result.declaredOnlyBrackets.map((d) => d.bracket), [1, 5]);
+});
+
+check("Exhibition is assigned only when declared and the list is clean", () => {
+  const clean = classify(VANILLA, null, 1);
+  assert.equal(clean.assignedBracket, 1);
+  const dirty = classify(
+    [...VANILLA, card({ oracleId: "oracle:mana-crypt", name: "Mana Crypt" })],
+    null,
+    1,
+  );
+  assert.equal(dirty.assignedBracket, 3);
+});
+
+check("cEDH is assigned only when declared and the list already measures Optimized", () => {
+  const core = classify(VANILLA, null, 5);
+  assert.equal(core.assignedBracket, 2, "a Core list cannot become cEDH by declaration");
+  const optimized = classify(
+    [...VANILLA, card({ name: "Armageddon", oracleText: "Destroy all lands." })],
+    null,
+    5,
+  );
+  assert.equal(optimized.assignedBracket, 5);
+});
+
+check("the 2026-08-11 Game Changer snapshot is 53 cards including Farewell and Biorhythm", () => {
+  const snapshot = JSON.parse(
+    readFileSync(
+      resolve(
+        process.cwd(),
+        "data/milestones/commander-strategy/commander-game-changers-snapshot-2026-08-11-v1.json",
+      ),
+      "utf8",
+    ),
+  ) as { officialCardNames: string[] };
+  assert.equal(snapshot.officialCardNames.length, 53);
+  assert.ok(snapshot.officialCardNames.includes("Farewell"));
+  assert.ok(snapshot.officialCardNames.includes("Biorhythm"));
+  assert.equal(snapshot.officialCardNames.includes("Mana Crypt"), false);
+  assert.equal(snapshot.officialCardNames.includes("Dockside Extortionist"), false);
+  assert.equal(snapshot.officialCardNames.includes("Jeweled Lotus"), false);
 });
 
 check("the same deck always produces the same result", () => {

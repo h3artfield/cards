@@ -2,13 +2,19 @@
 
 import Link from "next/link";
 
-export type CustomerStoreNavTab = "dashboard" | "shop" | "events" | "decks";
+export type CustomerStoreNavTab =
+  | "dashboard"
+  | "shop"
+  | "events"
+  | "decks"
+  | "collection"
+  | "tokens";
 
 /**
- * The four places a customer at a store actually goes.
+ * The places a customer at a store actually goes.
  *
- * One tab strip on the dashboard, the shop, the calendar and the deck list so
- * Events is not a link you only find if you already know the calendar exists.
+ * One tab strip on the dashboard, the shop, the calendar, decks and collection
+ * so Events / Collection are not links you only find from the store home.
  * Events is always shown: if the store has not published a calendar yet, the
  * calendar page says so rather than hiding the tab and pretending events do
  * not exist.
@@ -28,12 +34,23 @@ export function CustomerStoreNavV1({
   const decksHref = loggedIn
     ? `/s/${store}/decks`
     : `/sign-in?store=${store}&return=${encodeURIComponent(`/s/${store}/decks`)}`;
+  const collectionHref = loggedIn
+    ? `/s/${store}/collection`
+    : `/sign-in?store=${store}&return=${encodeURIComponent(`/s/${store}/collection`)}`;
 
   const tabs: { id: CustomerStoreNavTab; label: string; href: string }[] = [
     { id: "dashboard", label: "Dashboard", href: `/s/${store}` },
     { id: "shop", label: "Shop", href: `/s/${store}/inventory` },
     { id: "events", label: "Events", href: `/s/${store}/calendar` },
     { id: "decks", label: "My decks", href: decksHref },
+    { id: "collection", label: "My collection", href: collectionHref },
+    {
+      id: "tokens",
+      label: "Token Creator",
+      href: loggedIn
+        ? `/s/${store}/tokens/create`
+        : `/sign-in?store=${store}&return=${encodeURIComponent(`/s/${store}/tokens/create`)}`,
+    },
   ];
 
   const activeClass =
@@ -47,7 +64,7 @@ export function CustomerStoreNavV1({
 
   return (
     <nav
-      className={`flex flex-wrap justify-center gap-x-0.5 gap-y-1 border-b pb-px ${
+      className={`flex flex-wrap justify-center gap-x-2 gap-y-1 border-b pb-1 ${
         variant === "light" ? "border-gray-200" : "border-[var(--line-subtle)]"
       }`}
       aria-label="Store"
@@ -57,7 +74,7 @@ export function CustomerStoreNavV1({
           key={tab.id}
           href={tab.href}
           aria-current={tab.id === active ? "page" : undefined}
-          className={`-mb-px border-b-2 px-2.5 py-2 text-[11px] font-semibold uppercase tracking-wide transition sm:px-3 sm:text-xs ${
+          className={`-mb-px flex min-h-11 items-center border-b-2 px-3 py-3 text-xs font-semibold uppercase tracking-wide transition sm:px-4 sm:text-sm ${
             tab.id === active ? activeClass : inactiveClass
           }`}
         >

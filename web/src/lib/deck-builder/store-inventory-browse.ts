@@ -1,23 +1,34 @@
 import {
   inventoryEffectiveQuantity,
+  inventoryItemMatchesChannelFilter,
+  inventoryOnlineQuantity,
+  type InventoryChannelFilter,
 } from "../inventory/status";
 import {
   buildInventoryIdentityExclusionTrace,
   isClerkEligibleInventory,
   type InventoryIdentityExclusionTrace,
 } from "../inventory/catalog-link-identity";
-import { inventoryItemMatchesSearch } from "../inventory/search";
 import {
   inventoryImageProxyPath,
   pickInventoryDisplayImageUrl,
   catalogMatchesInventoryItem,
+  catalogPrintingMatchesInventoryItem,
+  collectorNumbersAgree,
 } from "../inventory/resolve-display-image";
-import { classifyInventoryGame } from "../inventory/analytics";
-import { isFirebaseStorageUrl } from "../inventory/image-url";
+import { normalizeCardNameForMatch } from "../store-inventory/clerk-tools/magic-commander-inventory";
+import { isEnrichableMagicSingle } from "../inventory/magic-items";
+import {
+  inventoryBrowseGameFacets,
+  inventoryBrowseGameKey,
+  inventoryBrowseGameLabel,
+  matchesInventoryBrowseGame,
+} from "../inventory/inventory-browse-game-v1";
 import {
   isRc8SemanticFilterActive,
 } from "../inventory/inventory-rc8-semantic-match";
 import { loadSemanticBrowseIndex } from "../inventory/inventory-semantic-browse-index";
+import { inventoryItemIsSoleCommanderCandidate } from "./commander-pool-eligibility";
 import { deckBuilderStore } from "./deck-builder-store";
 import { getCachedStoreInventory } from "./store-inventory-cache";
 import type { CardCategory, InventoryItem } from "../types";
@@ -27,6 +38,13 @@ import {
   itemMatchesSemanticFilter,
   isSemanticFilterActive,
 } from "../deck-builder/store-inventory-semantic";
+import {
+  inferInventoryFinish,
+  inventoryFinishBadgeLabel,
+  inventoryFinishIsFoil,
+  inventoryItemMatchesFinishFilter,
+  type InventoryFinishFilter,
+} from "../inventory/inventory-finish-v1";
 
 export type { StoreInventorySemanticFilter } from "../deck-builder/store-inventory-semantic";
 
@@ -55,9 +73,16 @@ export interface StoreInventoryCard {
   keywords?: string[];
   oracleTags?: string[];
   rarity?: string;
+  gameKey?: string;
+  gameLabel?: string;
+  isFoil?: boolean;
+  finishLabel?: string;
+  /** Units that can be bought online; 0 means in-store purchase only. */
+  onlineQty?: number;
 }
 
-export type StoreInventoryGameFilter = CardCategory | "all" | "riftbound";
+/** Browse game slug from `inventoryBrowseGameKey`, or `all`. */
+export type StoreInventoryGameFilter = string;
 export type StoreInventoryColorFilter =
   | "all"
   | "W"
@@ -74,28 +99,13 @@ export type StoreInventoryColorFilter =
 
 export type StoreInventoryTypeFilter = "all" | "commander";
 
-function inferGame(item: InventoryItem): CardCategory {
-  if (item.category) return item.category;
-  const line = (item.productLine ?? "").toLowerCase();
-  if (line.includes("magic") || line.includes("mtg")) return "magic";
-  if (line.includes("pokemon") || line.includes("pokémon")) return "pokemon";
-  if (line.includes("yugioh") || line.includes("yu-gi-oh")) return "yugioh";
-  if (line.includes("sport")) return "sports";
+export function inferGame(item: InventoryItem): CardCategory {
+  const key = inventoryBrowseGameKey(item);
+  if (key === "magic") return "magic";
+  if (key === "pokemon") return "pokemon";
+  if (key === "yugioh") return "yugioh";
+  if (key === "sports") return "sports";
   return "other";
-}
-
-function isRiftboundItem(item: InventoryItem): boolean {
-  const line = (item.productLine ?? "").toLowerCase();
-  const name = (item.productName ?? item.displayName ?? "").toLowerCase();
-  return line.includes("riftbound") || name.includes("riftbound");
-}
-
-function matchesGameFilter(item: InventoryItem, game: StoreInventoryGameFilter): boolean {
-  if (game === "all") return true;
-  if (game === "riftbound") return isRiftboundItem(item);
-  if (game === "magic") return classifyInventoryGame(item) === "Magic";
-  if (game === "pokemon") return classifyInventoryGame(item) === "Pokémon";
-  return inferGame(item) === game;
 }
 
 function matchesColorFilter(
@@ -118,6 +128,101 @@ function matchesColorFilter(
 }
 
 export type ColorCountFilter = Exclude<StoreInventoryColorFilter, "W" | "U" | "B" | "R" | "G" | "C">;
+
+export type ColorMatchMode = "exact" | "including" | "atmost";
+
+/**
+ * Scryfall color row.
+ * exact: the card's colors are these pips and no others.
+ * including: the card has every selected pip, and may have more.
+ * atmost: every color on the card is one of the selected pips.
+ */
+export function matchesColorMode(
+  colors: string[],
+  selectedColors: string[],
+  mode: ColorMatchMode,
+): boolean {
+  const id = (colors ?? []).filter((c) => c !== "C");
+  const wanted = selectedColors.filter((c) => c !== "C");
+  if (selectedColors.length === 1 && selectedColors[0] === "C") {
+    return id.length === 0;
+  }
+  if (wanted.length === 0) return true;
+
+  if (mode === "exact") {
+    return id.length === wanted.length && wanted.every((c) => id.includes(c));
+  }
+  if (mode === "including") {
+    return wanted.every((c) => id.includes(c));
+  }
+  return id.every((c) => wanted.includes(c));
+}
+
+/** A card can be played in a deck whose commander has this color identity. */
+export function matchesCommanderIdentity(
+  colorIdentity: string[],
+  commanderColors: string[],
+): boolean {
+  if (commanderColors.length === 0) return true;
+  const allowed = new Set(commanderColors.filter((c) => c !== "C"));
+  return (colorIdentity ?? []).every((c) => allowed.has(c));
+}
+
+export function cardColorsForBrowse(item: InventoryItem): string[] {
+  if (item.catalogColors) return item.catalogColors;
+  return item.catalogColorIdentity ?? [];
+}
+
+export function cardNameIncludes(item: InventoryItem, query: string): boolean {
+  const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return true;
+  const haystack = [item.productName, item.displayName, item.title]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  return words.every((word) => haystack.includes(word));
+}
+
+export function matchesRulesText(oracleText: string | undefined, query: string): boolean {
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return true;
+  const haystack = (oracleText ?? "").toLowerCase();
+  return words.every((word) => haystack.includes(word));
+}
+
+export function matchesTypeLineQuery(
+  typeLine: string | undefined,
+  query: string,
+  partial: boolean,
+): boolean {
+  const wanted = query.trim().toLowerCase();
+  if (!wanted) return true;
+  const line = (typeLine ?? "").toLowerCase();
+  const tokens = wanted.split(/\s+/).filter(Boolean);
+  // Several chosen types all have to be on the line. Partial only applies to one word.
+  if (partial && tokens.length === 1) return line.includes(wanted);
+  return tokens.every((token) => {
+    const escaped = token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp(`(?:^|[^a-z])${escaped}(?:[^a-z]|$)`).test(line);
+  });
+}
+
+export function manaCostSymbols(raw: string): string[] {
+  const braced = [...raw.matchAll(/\{([^}]+)\}/g)].map((match) => match[1]!.toUpperCase());
+  if (braced.length > 0) return braced;
+  const compact = raw.toUpperCase().replace(/\s+/g, "");
+  return [...compact.matchAll(/\d+|[WUBRGCXPYS]/g)].map((match) => match[0]);
+}
+
+export function matchesExactManaCost(
+  manaCost: string | undefined,
+  query: string,
+): boolean {
+  const wanted = manaCostSymbols(query);
+  if (wanted.length === 0) return true;
+  const have = manaCostSymbols(manaCost ?? "");
+  return have.length === wanted.length && have.every((symbol, i) => symbol === wanted[i]);
+}
 
 /** Multi-select browse: mono when one pip; must include all pips when several selected. */
 export function matchesSelectedColorFilters(
@@ -174,6 +279,38 @@ export function parseBrowseColorParams(input: {
   return { selectedColors: [], colorCount: legacy as ColorCountFilter };
 }
 
+type SharedPrintingFacts = {
+  colorIdentity: string[];
+  colors?: string[];
+  manaCost?: string;
+  cmc?: number;
+  typeLine?: string;
+};
+
+/** A promo row often has no catalog link. The same card's main printing does. */
+function sharedPrintingFacts(items: InventoryItem[]): Map<string, SharedPrintingFacts> {
+  const facts = new Map<string, SharedPrintingFacts>();
+  for (const item of items) {
+    const name =
+      item.productName?.trim() ||
+      item.displayName.split(" — ")[0]?.trim() ||
+      item.displayName;
+    const key = normalizeCardNameForMatch(name);
+    if (!key || facts.has(key)) continue;
+    const colorIdentity = item.catalogColorIdentity ?? [];
+    const manaCost = item.catalogManaCost?.trim();
+    if (!colorIdentity.length && !manaCost) continue;
+    facts.set(key, {
+      colorIdentity,
+      colors: item.catalogColors,
+      manaCost,
+      cmc: item.catalogCmc,
+      typeLine: item.catalogTypeLine,
+    });
+  }
+  return facts;
+}
+
 function cardFromInventoryItemSync(
   item: InventoryItem,
   crosswalkByItem: Map<string, string>,
@@ -188,36 +325,42 @@ function cardFromInventoryItemSync(
     item.displayName.split(" — ")[0]?.trim() ??
     item.displayName;
 
-  const scryfallId =
-    item.catalogScryfallId ?? crosswalkByItem.get(item.id);
-  const catalog = scryfallId ? (catalogCache.get(scryfallId) ?? null) : null;
+  const usesScryfall = isEnrichableMagicSingle(item);
+  const scryfallId = usesScryfall
+    ? item.catalogScryfallId ?? crosswalkByItem.get(item.id)
+    : item.catalogScryfallId;
+  const catalog =
+    usesScryfall && scryfallId ? (catalogCache.get(scryfallId) ?? null) : null;
 
-  let colorIdentity = item.catalogColorIdentity ?? catalog?.colorIdentity ?? [];
-  let typeLine = item.catalogTypeLine ?? catalog?.typeLine;
-  let isCommander = item.catalogCanBeSoleCommander === true;
-  const cmc = item.catalogCmc ?? catalog?.cmc;
-  const manaCost = item.catalogManaCost ?? catalog?.manaCost;
-  const oracleText = item.catalogOracleText ?? catalog?.oracleText;
-  const keywords = item.catalogKeywords ?? catalog?.keywords;
-  const oracleTags = item.catalogOracleTags;
-  const colors = item.catalogColors ?? catalog?.colors;
-  const rarity = item.catalogRarity ?? catalog?.rarity;
+  // A saved link whose name is a different card (Alpha 203 on a Prerelease 203 row)
+  // must not paint that card's mana cost onto this shelf row.
+  const catalogFactsOk = catalogMatchesInventoryItem(item, catalog);
+  let colorIdentity = catalogFactsOk ? (item.catalogColorIdentity ?? catalog?.colorIdentity ?? []) : [];
+  let typeLine = catalogFactsOk ? (item.catalogTypeLine ?? catalog?.typeLine) : undefined;
+  let isCommander = inventoryItemIsSoleCommanderCandidate(item, catalogFactsOk ? catalog : null);
+  const cmc = catalogFactsOk ? (item.catalogCmc ?? catalog?.cmc) : undefined;
+  const manaCost = catalogFactsOk ? (item.catalogManaCost ?? catalog?.manaCost) : undefined;
+  const oracleText = catalogFactsOk ? (item.catalogOracleText ?? catalog?.oracleText) : undefined;
+  const keywords = catalogFactsOk ? (item.catalogKeywords ?? catalog?.keywords) : undefined;
+  const oracleTags = catalogFactsOk ? item.catalogOracleTags : undefined;
+  const colors = catalogFactsOk ? (item.catalogColors ?? catalog?.colors) : undefined;
+  const rarity = item.rarity?.trim() || item.catalogRarity || catalog?.rarity;
   const setName = item.setName ?? catalog?.setName;
+  const finishKind = inferInventoryFinish(item);
+  const finishLabel = inventoryFinishBadgeLabel(finishKind);
 
-  const catalogMatch = catalog != null && catalogMatchesInventoryItem(item, catalog);
-  const scryfallLinked =
-    Boolean(scryfallId && catalog?.imageNormal) &&
-    catalog?.id === scryfallId;
-  const isMagic = classifyInventoryGame(item) === "Magic";
-
+  const samePrinting = catalogPrintingMatchesInventoryItem(item, catalog);
+  const nameMatch = catalog != null && catalogMatchesInventoryItem(item, catalog);
+  // A same-name scan is fine when the printed number agrees (promo 255p on a
+  // 255 shelf row). It is not fine when the number is a different card, such
+  // as Endstone 391 on the promo-pack 240 row.
+  const numberAgrees = collectorNumbersAgree(item.cardNumber, catalog?.collectorNumber);
   let imageUrl: string | undefined;
-  if ((catalogMatch || scryfallLinked) && catalog?.imageNormal) {
+  if (numberAgrees && (samePrinting || nameMatch) && catalog?.imageNormal) {
     imageUrl = catalog.imageNormal;
-  } else {
+  } else if (numberAgrees && (samePrinting || nameMatch)) {
     const directImage = pickInventoryDisplayImageUrl(item, catalog);
-    if (directImage && (!isMagic || !isFirebaseStorageUrl(directImage))) {
-      imageUrl = directImage;
-    }
+    if (directImage) imageUrl = directImage;
   }
 
   return {
@@ -233,6 +376,8 @@ function cardFromInventoryItemSync(
     setName,
     cardNumber: item.cardNumber ?? catalog?.collectorNumber,
     category: inferGame(item),
+    gameKey: inventoryBrowseGameKey(item),
+    gameLabel: inventoryBrowseGameLabel(inventoryBrowseGameKey(item)),
     productLine: item.productLine,
     condition: item.tcgplayerCondition ?? item.condition,
     colorIdentity,
@@ -245,6 +390,9 @@ function cardFromInventoryItemSync(
     keywords,
     oracleTags,
     rarity,
+    isFoil: inventoryFinishIsFoil(finishKind),
+    finishLabel: finishLabel ?? undefined,
+    onlineQty: inventoryOnlineQuantity(item),
   };
 }
 
@@ -255,25 +403,61 @@ function itemMatchesBrowseFilters(
   cardType: StoreInventoryTypeFilter,
   semantic?: StoreInventorySemanticFilter,
   semanticBrowseIndex?: ReturnType<typeof loadSemanticBrowseIndex>,
+  finish?: InventoryFinishFilter,
+  extra?: {
+    colorMode?: ColorMatchMode;
+    commanderColors?: string[];
+    rulesText?: string;
+    typeLine?: string;
+    typeLinePartial?: boolean;
+    manaCost?: string;
+    baseSemantic?: StoreInventorySemanticFilter;
+  },
 ): boolean {
   const identity = item.catalogColorIdentity ?? [];
-  if (
-    selectedColors.length > 0 ||
-    colorCount !== "all"
-  ) {
-    if (!matchesSelectedColorFilters(identity, selectedColors, colorCount)) {
+  const cardColors = cardColorsForBrowse(item);
+  if (selectedColors.length > 0 || colorCount !== "all") {
+    if (extra?.colorMode && colorCount === "all") {
+      if (!matchesColorMode(cardColors, selectedColors, extra.colorMode)) return false;
+    } else if (!matchesSelectedColorFilters(identity, selectedColors, colorCount)) {
       return false;
     }
   }
+  if (
+    extra?.commanderColors?.length &&
+    !matchesCommanderIdentity(identity, extra.commanderColors)
+  ) {
+    return false;
+  }
+  if (extra?.rulesText && !matchesRulesText(item.catalogOracleText, extra.rulesText)) {
+    return false;
+  }
+  if (
+    extra?.typeLine &&
+    !matchesTypeLineQuery(item.catalogTypeLine, extra.typeLine, extra.typeLinePartial === true)
+  ) {
+    return false;
+  }
+  if (extra?.manaCost && !matchesExactManaCost(item.catalogManaCost, extra.manaCost)) {
+    return false;
+  }
   if (!itemMatchesSemanticFilter(item, semantic, semanticBrowseIndex)) return false;
+  if (
+    extra?.baseSemantic &&
+    !itemMatchesSemanticFilter(item, extra.baseSemantic, semanticBrowseIndex)
+  ) {
+    return false;
+  }
+  if (!inventoryItemMatchesFinishFilter(item, finish)) return false;
   if (cardType === "commander") {
-    return item.catalogCanBeSoleCommander === true;
+    return inventoryItemIsSoleCommanderCandidate(item);
   }
   return true;
 }
 
 export type StoreInventorySortBy =
   | "name"
+  | "newest"
   | "price_asc"
   | "price_desc"
   | "cmc_asc"
@@ -294,6 +478,20 @@ export async function browseStoreInventory(input: {
   page?: number;
   limit?: number;
   sortBy?: StoreInventorySortBy;
+  finish?: InventoryFinishFilter;
+  channel?: InventoryChannelFilter;
+  colorMode?: ColorMatchMode;
+  commanderColors?: string[];
+  rulesText?: string;
+  typeLine?: string;
+  typeLinePartial?: boolean;
+  manaCost?: string;
+  /** Natural-language search that stays in effect while the shopper narrows with filters. */
+  baseSemantic?: StoreInventorySemanticFilter;
+  pokemonTypes?: string[];
+  pokemonCards?: string[];
+  pokemonStages?: string[];
+  pokemonTrainers?: string[];
   /** When true, exclude unlinked / manual-review / unresolved inventory from results. */
   requireClerkEligible?: boolean;
 }): Promise<{
@@ -324,18 +522,38 @@ export async function browseStoreInventory(input: {
       : parsedColors.selectedColors;
   const colorCount = input.colorCount ?? parsedColors.colorCount;
   const cardType = input.cardType ?? "all";
+  const finish = input.finish ?? "all";
   const semantic = input.semantic;
   const textQuery = input.semanticOnly ? undefined : input.q?.trim().toLowerCase();
 
-  const semanticBrowseIndex = isRc8SemanticFilterActive(semantic)
-    ? loadSemanticBrowseIndex()
-    : undefined;
+  const semanticBrowseIndex =
+    isRc8SemanticFilterActive(semantic) || isRc8SemanticFilterActive(input.baseSemantic)
+      ? loadSemanticBrowseIndex()
+      : undefined;
+
+  const pokemonFilters = {
+    types: input.pokemonTypes ?? [],
+    cards: input.pokemonCards ?? [],
+    stages: input.pokemonStages ?? [],
+    trainers: input.pokemonTrainers ?? [],
+  };
+  const pokemonFilterActive =
+    game === "pokemon" &&
+    (pokemonFilters.types.length > 0 ||
+      pokemonFilters.cards.length > 0 ||
+      pokemonFilters.stages.length > 0 ||
+      pokemonFilters.trainers.length > 0);
+  const matchPokemon = pokemonFilterActive
+    ? (await import("../inventory/pokemon-shelf-traits")).matchesPokemonShelfFilters
+    : null;
 
   const matchedItems: InventoryItem[] = [];
   for (const item of all) {
     if (requireClerkEligible && !isClerkEligibleInventory(item)) continue;
-    if (!matchesGameFilter(item, game)) continue;
-    if (textQuery && !inventoryItemMatchesSearch(item, textQuery)) continue;
+    if (!matchesInventoryBrowseGame(item, game)) continue;
+    if (textQuery && !cardNameIncludes(item, textQuery)) continue;
+    if (!inventoryItemMatchesChannelFilter(item, input.channel)) continue;
+    if (matchPokemon && !matchPokemon(item, pokemonFilters)) continue;
     if (
       !itemMatchesBrowseFilters(
         item,
@@ -344,6 +562,16 @@ export async function browseStoreInventory(input: {
         cardType,
         semantic,
         semanticBrowseIndex,
+        finish,
+        {
+          colorMode: input.colorMode,
+          commanderColors: input.commanderColors,
+          rulesText: input.rulesText,
+          typeLine: input.typeLine,
+          typeLinePartial: input.typeLinePartial,
+          manaCost: input.manaCost,
+          baseSemantic: input.baseSemantic,
+        },
       )
     ) {
       continue;
@@ -364,6 +592,16 @@ export async function browseStoreInventory(input: {
       if (pa !== pb) {
         return input.sortBy === "price_desc" ? pb - pa : pa - pb;
       }
+    }
+
+    if (input.sortBy === "newest") {
+      const addedAt = (item: InventoryItem) => {
+        const parsed = Date.parse(item.acquiredAt ?? "");
+        return Number.isFinite(parsed) ? parsed : Number.NEGATIVE_INFINITY;
+      };
+      const ta = addedAt(a);
+      const tb = addedAt(b);
+      if (ta !== tb) return tb - ta;
     }
 
     if (input.sortBy === "cmc_desc" || input.sortBy === "cmc_asc") {
@@ -394,7 +632,9 @@ export async function browseStoreInventory(input: {
 
   const pageItemIds = new Set(pageItems.map((item) => item.id));
   const crosswalkByItem = new Map<string, string>();
-  const needsCrosswalk = pageItems.some((item) => !item.catalogScryfallId);
+  const needsCrosswalk = pageItems.some(
+    (item) => isEnrichableMagicSingle(item) && !item.catalogScryfallId,
+  );
   if (needsCrosswalk) {
     const crosswalks = await deckBuilderStore.listCrosswalks(input.storeId);
     for (const crosswalk of crosswalks) {
@@ -418,6 +658,7 @@ export async function browseStoreInventory(input: {
   }
 
   const enriched: StoreInventoryCard[] = [];
+  const sharedFacts = sharedPrintingFacts(all);
   for (const item of pageItems) {
     const card = cardFromInventoryItemSync(
       item,
@@ -426,6 +667,24 @@ export async function browseStoreInventory(input: {
       catalogCache,
     );
     if (!card) continue;
+    if (!card.colorIdentity.length && !card.manaCost) {
+      const shared = sharedFacts.get(normalizeCardNameForMatch(card.name));
+      const linked = item.catalogScryfallId
+        ? catalogCache.get(item.catalogScryfallId)
+        : undefined;
+      const rejectedOwn =
+        linked != null &&
+        !catalogMatchesInventoryItem(item, linked) &&
+        Boolean(item.catalogManaCost) &&
+        shared?.manaCost === item.catalogManaCost;
+      if (shared && !rejectedOwn) {
+        card.colorIdentity = shared.colorIdentity;
+        if (!card.colors?.length) card.colors = shared.colors;
+        card.manaCost = shared.manaCost;
+        card.cmc = card.cmc ?? shared.cmc;
+        card.typeLine = card.typeLine || shared.typeLine;
+      }
+    }
     if (cardType === "commander" && !card.isCommander) continue;
     if (
       (selectedColors.length > 0 || colorCount !== "all") &&
@@ -443,12 +702,11 @@ export async function browseStoreInventory(input: {
 
   const items = enriched;
 
-  const gameCounts: Record<string, number> = {};
   let commanderCount = 0;
+  let inStockRows = 0;
   for (const item of all) {
-    const g = isRiftboundItem(item) ? "riftbound" : inferGame(item);
-    gameCounts[g] = (gameCounts[g] ?? 0) + 1;
-    if (item.catalogCanBeSoleCommander === true) {
+    if (inventoryEffectiveQuantity(item) > 0) inStockRows += 1;
+    if (inventoryItemIsSoleCommanderCandidate(item)) {
       commanderCount += 1;
     }
   }
@@ -460,9 +718,9 @@ export async function browseStoreInventory(input: {
     limit,
     totalPages,
     facets: {
-      games: gameCounts,
+      games: inventoryBrowseGameFacets(all),
       commanders: commanderCount,
-      inStock: all.length,
+      inStock: inStockRows,
     },
     identityTrace: requireClerkEligible
       ? buildInventoryIdentityExclusionTrace({ items: all, magicOnly: game === "magic" || game === "all" })

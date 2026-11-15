@@ -2,7 +2,7 @@
  * Professor v4.4 — resolve any Commander via golden catalog for live brew.
  */
 import { normalizeOracleName } from "@/lib/deck-builder/golden-catalog/normalize-name";
-import { deriveCommanderClassification } from "@/lib/deck-builder/commander-classification";
+import { goldenOracleCardIsSoleCommanderPoolCandidate } from "@/lib/deck-builder/commander-pool-eligibility";
 import type { GoldenCatalogOracleCard } from "@/lib/deck-builder/golden-catalog/schemas";
 import { resolveBenchmarkCommanderName } from "./benchmark-commander-resolver-v1";
 import {
@@ -119,14 +119,10 @@ export function auditProfessorBrewCommanderEligibility(
   catalog: Awaited<ReturnType<typeof getDeckResolutionCatalogRuntime>>,
   card: GoldenCatalogOracleCard,
 ): { ok: true } | { ok: false; message: string } {
-  const classification = deriveCommanderClassification(card);
-  if (classification.commanderFormatStatus !== "legal") {
-    return { ok: false, message: `${card.canonicalName} is not legal as a Commander.` };
-  }
-  if (!classification.canBeSoleCommander) {
+  if (!goldenOracleCardIsSoleCommanderPoolCandidate(card)) {
     return {
       ok: false,
-      message: `${card.canonicalName} needs a partner or background — pick the full command-zone configuration.`,
+      message: `${card.canonicalName} is not eligible as a sole commander (must be a legendary creature or have commander permission text).`,
     };
   }
   const paper = paperMetaForOracle(catalog, card.oracleId);

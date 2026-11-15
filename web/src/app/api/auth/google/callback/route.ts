@@ -65,6 +65,23 @@ function safeAfterLoginPath(path: string | undefined, origin: string): string | 
   }
 }
 
+function redirectAfterAuth(
+  origin: string,
+  storeSlug: string,
+  afterLoginPath: string | undefined,
+  query?: Record<string, string>,
+): string {
+  const target = safeAfterLoginPath(afterLoginPath, origin);
+  if (target) {
+    const url = new URL(target);
+    if (query) {
+      for (const [k, v] of Object.entries(query)) url.searchParams.set(k, v);
+    }
+    return url.toString();
+  }
+  return redirectToStore(origin, storeSlug, query);
+}
+
 function redirectToStore(
   origin: string,
   storeSlug: string,
@@ -100,7 +117,7 @@ export async function GET(req: NextRequest) {
 
   if (error || !code) {
     return NextResponse.redirect(
-      redirectToStore(postAuthOrigin, storeSlug, { auth_error: "google_cancelled" }),
+      redirectAfterAuth(postAuthOrigin, storeSlug, afterLoginPath, { auth_error: "google_cancelled" }),
     );
   }
 
@@ -122,7 +139,7 @@ export async function GET(req: NextRequest) {
   const tokenData = (await tokenRes.json()) as GoogleTokenResponse;
   if (!tokenRes.ok || !tokenData.access_token) {
     return NextResponse.redirect(
-      redirectToStore(postAuthOrigin, storeSlug, { auth_error: "google_failed" }),
+      redirectAfterAuth(postAuthOrigin, storeSlug, afterLoginPath, { auth_error: "google_failed" }),
     );
   }
 
@@ -133,7 +150,7 @@ export async function GET(req: NextRequest) {
 
   if (!userRes.ok || !profile.sub || !profile.email) {
     return NextResponse.redirect(
-      redirectToStore(postAuthOrigin, storeSlug, { auth_error: "google_profile" }),
+      redirectAfterAuth(postAuthOrigin, storeSlug, afterLoginPath, { auth_error: "google_profile" }),
     );
   }
 
@@ -141,7 +158,7 @@ export async function GET(req: NextRequest) {
   const store = await resolveStoreForSlug(storeSlug);
   if (!store) {
     return NextResponse.redirect(
-      redirectToStore(postAuthOrigin, storeSlug, { auth_error: "store_required" }),
+      redirectAfterAuth(postAuthOrigin, storeSlug, afterLoginPath, { auth_error: "store_required" }),
     );
   }
   const now = new Date().toISOString();
@@ -155,7 +172,7 @@ export async function GET(req: NextRequest) {
   const existingAccount = byGoogle ?? byEmail;
   if (existingAccount && !customerCanActAtStore(existingAccount, store.id)) {
     return NextResponse.redirect(
-      redirectToStore(postAuthOrigin, storeSlug, { auth_error: "wrong_store" }),
+      redirectAfterAuth(postAuthOrigin, storeSlug, afterLoginPath, { auth_error: "wrong_store" }),
     );
   }
 
@@ -179,7 +196,7 @@ export async function GET(req: NextRequest) {
 
   if (!merged.ok) {
     return NextResponse.redirect(
-      redirectToStore(postAuthOrigin, storeSlug, {
+      redirectAfterAuth(postAuthOrigin, storeSlug, afterLoginPath, {
         auth_error: "account_conflict",
       }),
     );

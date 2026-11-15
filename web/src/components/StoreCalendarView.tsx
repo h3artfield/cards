@@ -23,8 +23,19 @@ import {
 import { DEFAULT_CALENDAR_SETTINGS } from "@/lib/store-calendar/types";
 import { EventDeckPickerV1 } from "@/components/calendar/EventDeckPickerV1";
 import { CustomerStoreNavV1 } from "@/components/CustomerStoreNavV1";
+import { eventRequiredBracketV1 } from "@/lib/store-calendar/event-required-bracket-v1";
 import { eventWantsDeckRegistrationV1 } from "@/lib/store-calendar/event-wants-deck-registration-v1";
+import { formatEventCostV1 } from "@/lib/store-calendar/format-event-cost-v1";
 import type { StoreEventSignupDeck } from "@/lib/store-calendar/types";
+import {
+  authButton,
+  authButtonSecondary,
+  authError,
+  authInput,
+  authLabel,
+  authLink,
+  authSubtext,
+} from "@/lib/customer-auth-ui";
 
 type Props = {
   slug: string;
@@ -92,23 +103,22 @@ export function StoreCalendarView({ slug, embed = false }: Props) {
     calendarSettings.headline?.trim() ||
     DEFAULT_CALENDAR_SETTINGS.headline!;
 
+  const pageClass = embed
+    ? "storefront-theme min-h-[480px] bg-[var(--ink-850)] p-3 text-[var(--text)] sm:p-4"
+    : "storefront-theme min-h-screen bg-[var(--ink-850)] text-[var(--text)]";
+
   if (!published && !loading) {
     return (
-      <div
-        className={
-          embed ? "min-h-[480px] bg-white p-3 sm:p-4" : "min-h-screen bg-white"
-        }
-      >
+      <div className={pageClass}>
         <div className={embed ? "" : "mx-auto max-w-6xl px-4 py-8"}>
           {!embed ? (
             <CustomerStoreNavV1
               slug={slug}
               active="events"
               loggedIn={Boolean(customer)}
-              variant="light"
             />
           ) : null}
-          <p className="mt-10 text-center text-sm text-gray-600">
+          <p className={`mt-10 text-center ${authSubtext}`}>
             This store&apos;s event calendar is not published yet.
           </p>
         </div>
@@ -117,13 +127,7 @@ export function StoreCalendarView({ slug, embed = false }: Props) {
   }
 
   return (
-    <div
-      className={
-        embed
-          ? "min-h-[480px] bg-white p-3 sm:p-4"
-          : "min-h-screen bg-white"
-      }
-    >
+    <div className={pageClass}>
       <div className={embed ? "" : "mx-auto max-w-6xl px-4 py-8"}>
         {!embed ? (
           <div className="mb-6">
@@ -131,34 +135,33 @@ export function StoreCalendarView({ slug, embed = false }: Props) {
               slug={slug}
               active="events"
               loggedIn={Boolean(customer)}
-              variant="light"
             />
             {storeName ? (
-              <p className="mt-3 text-center text-sm font-medium text-gray-500">{storeName}</p>
+              <p className={`mt-3 text-center font-medium ${authSubtext}`}>{storeName}</p>
             ) : null}
           </div>
         ) : null}
 
-        <h1 className="text-center text-xl font-semibold text-gray-900 sm:text-2xl">
+        <h1 className="text-center text-xl font-semibold text-[var(--text-hi)] sm:text-2xl">
           {headline}
         </h1>
 
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold text-gray-900">
+          <h2 className="text-lg font-semibold text-[var(--text-hi)]">
             {formatMonthYear(month)}
           </h2>
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => setMonth(startOfMonth(new Date()))}
-              className="rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              className="rounded-md border border-[var(--line)] bg-[var(--ink-750)] px-3 py-1.5 text-sm font-medium text-[var(--text-hi)] hover:border-[var(--line-strong)]"
             >
               today
             </button>
             <button
               type="button"
               onClick={() => setMonth((m) => addMonths(m, -1))}
-              className="rounded-md border border-gray-300 px-2.5 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+              className="rounded-md border border-[var(--line)] bg-[var(--ink-750)] px-2.5 py-1.5 text-sm text-[var(--text-hi)] hover:border-[var(--line-strong)]"
               aria-label="Previous month"
             >
               ‹
@@ -166,7 +169,7 @@ export function StoreCalendarView({ slug, embed = false }: Props) {
             <button
               type="button"
               onClick={() => setMonth((m) => addMonths(m, 1))}
-              className="rounded-md border border-gray-300 px-2.5 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+              className="rounded-md border border-[var(--line)] bg-[var(--ink-750)] px-2.5 py-1.5 text-sm text-[var(--text-hi)] hover:border-[var(--line-strong)]"
               aria-label="Next month"
             >
               ›
@@ -192,16 +195,16 @@ export function StoreCalendarView({ slug, embed = false }: Props) {
         </div>
 
         {error ? (
-          <p className="mt-6 text-center text-sm text-red-600">{error}</p>
+          <p className={`mt-6 text-center ${authError}`}>{error}</p>
         ) : null}
 
         <div className="mt-4 overflow-x-auto">
-          <div className="min-w-[720px] border border-gray-200">
-            <div className="grid grid-cols-7 border-b border-gray-200 bg-gray-50">
+          <div className="min-w-[720px] border border-[var(--line-subtle)] bg-[var(--ink-900)]">
+            <div className="grid grid-cols-7 border-b border-[var(--line-subtle)] bg-[var(--ink-800)]">
               {WEEKDAYS.map((day) => (
                 <div
                   key={day}
-                  className="border-r border-gray-200 px-2 py-2 text-center text-xs font-semibold uppercase tracking-wide text-gray-600 last:border-r-0"
+                  className="border-r border-[var(--line-subtle)] px-2 py-2 text-center text-xs font-semibold uppercase tracking-wide text-[var(--text-lo)] last:border-r-0"
                 >
                   {day}
                 </div>
@@ -217,13 +220,13 @@ export function StoreCalendarView({ slug, embed = false }: Props) {
                 return (
                   <div
                     key={day.toISOString()}
-                    className={`min-h-[110px] border-b border-r border-gray-200 p-1 last:border-r-0 ${
-                      inMonth ? "bg-white" : "bg-gray-50/80"
+                    className={`min-h-[110px] border-b border-r border-[var(--line-subtle)] p-1 last:border-r-0 ${
+                      inMonth ? "bg-[var(--ink-900)]" : "bg-[var(--ink-850)]"
                     }`}
                   >
                     <div
                       className={`mb-1 text-right text-xs ${
-                        inMonth ? "text-gray-700" : "text-gray-400"
+                        inMonth ? "text-[var(--text)]" : "text-[var(--text-lo)]"
                       }`}
                     >
                       {day.getDate()}
@@ -263,11 +266,11 @@ export function StoreCalendarView({ slug, embed = false }: Props) {
         </div>
 
         {loading ? (
-          <p className="mt-4 text-center text-xs text-gray-500">Loading events…</p>
+          <p className={`mt-4 text-center text-xs ${authSubtext}`}>Loading events…</p>
         ) : null}
 
         {!loading && filteredEvents.length === 0 ? (
-          <p className="mt-4 text-center text-sm text-gray-500">
+          <p className={`mt-4 text-center ${authSubtext}`}>
             No events scheduled this month.
           </p>
         ) : null}
@@ -304,13 +307,13 @@ function FilterChip({
       onClick={onClick}
       className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold transition ${
         active
-          ? "bg-gray-800 text-white"
-          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+          ? "bg-[var(--accent)] text-[var(--ink-900)]"
+          : "border border-[var(--line-subtle)] bg-[var(--ink-750)] text-[var(--text)] hover:border-[var(--line-strong)] hover:text-[var(--text-hi)]"
       }`}
     >
       {color ? (
         <span
-          className="h-2 w-2 rounded-full ring-1 ring-black/10"
+          className="h-2 w-2 rounded-full ring-1 ring-white/20"
           style={{ backgroundColor: color }}
           aria-hidden
         />
@@ -338,6 +341,7 @@ function EventModal({
   const { customer } = useCustomer();
   const meta = categoryMeta(event.category, categories);
   const wantsDeck = eventWantsDeckRegistrationV1(event);
+  const requiredBracket = eventRequiredBracketV1(event);
   const [firstName, setFirstName] = useState(customer?.firstName ?? "");
   const [lastName, setLastName] = useState(customer?.lastName ?? "");
   const [email, setEmail] = useState(customer?.email ?? "");
@@ -370,7 +374,9 @@ function EventModal({
       .then((data: { signup?: { deck?: StoreEventSignupDeck | null } | null } | null) => {
         if (cancelled || !data?.signup) return;
         setSuccess(true);
-        setRegisteredDeck(data.signup.deck ?? null);
+        const deck = data.signup.deck ?? null;
+        setRegisteredDeck(deck);
+        if (deck) setDeckId(deck.deckId);
       })
       .catch(() => {});
     return () => {
@@ -406,7 +412,7 @@ function EventModal({
     }
   }
 
-  async function attachDeckAfterSignup() {
+  async function saveDeckForSignup() {
     if (!deckId) return;
     setAddingDeck(true);
     setError(null);
@@ -422,7 +428,9 @@ function EventModal({
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Could not save your deck");
-      setRegisteredDeck((data.signup?.deck as StoreEventSignupDeck | undefined) ?? null);
+      const saved = (data.signup?.deck as StoreEventSignupDeck | undefined) ?? null;
+      setRegisteredDeck(saved);
+      if (saved) setDeckId(saved.deckId);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not save your deck");
     } finally {
@@ -430,14 +438,19 @@ function EventModal({
     }
   }
 
+  const selectedDeckId = deckId ?? registeredDeck?.deckId ?? null;
+  const deckChanged =
+    registeredDeck != null && selectedDeckId != null && selectedDeckId !== registeredDeck.deckId;
+  const canSaveDeck = selectedDeckId != null && (registeredDeck == null || deckChanged);
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
       onClick={onClose}
       role="presentation"
     >
       <div
-        className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
+        className="w-full max-w-md rounded-xl border border-[var(--line-subtle)] bg-[var(--ink-850)] p-6 shadow-xl"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
@@ -445,29 +458,41 @@ function EventModal({
       >
         <div className="flex items-start justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--text-lo)]">
               {meta.label}
             </p>
-            <h3 id="event-modal-title" className="mt-1 text-lg font-bold text-gray-900">
+            <h3 id="event-modal-title" className="mt-1 text-lg font-bold text-[var(--text-hi)]">
               {event.title}
             </h3>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg px-2 py-1 text-gray-500 hover:bg-gray-100"
+            className="rounded-lg px-2 py-1 text-[var(--text-lo)] hover:bg-[var(--ink-750)] hover:text-[var(--text-hi)]"
             aria-label="Close"
           >
             ×
           </button>
         </div>
 
-        <p className="mt-3 text-sm text-gray-700">
+        <p className="mt-3 text-sm text-[var(--text)]">
           {formatEventTimeRange(event.startAt, event.endAt, event.allDay, timeZone)}
         </p>
 
+        {requiredBracket != null ? (
+          <p className="mt-2 text-sm font-semibold text-[var(--accent-hi)]">
+            Bracket {requiredBracket} event — only B{requiredBracket} decks can register.
+          </p>
+        ) : null}
+
+        {formatEventCostV1(event.cost) ? (
+          <p className="mt-2 text-sm font-semibold text-[var(--text-hi)]">
+            Entry: {formatEventCostV1(event.cost)}
+          </p>
+        ) : null}
+
         {event.capacity != null ? (
-          <p className="mt-2 text-xs text-gray-600">
+          <p className="mt-2 text-xs text-[var(--text-lo)]">
             {isFull
               ? "This event is full."
               : event.spotsRemaining != null
@@ -477,45 +502,62 @@ function EventModal({
         ) : null}
 
         {event.description ? (
-          <p className="mt-3 whitespace-pre-wrap text-sm text-gray-600">
+          <p className={`mt-3 whitespace-pre-wrap ${authSubtext}`}>
             {event.description}
           </p>
         ) : null}
 
         {success ? (
           <div className="mt-5 space-y-3">
-            <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-800">
+            <p className="rounded-lg border border-[var(--ok-line)] bg-[var(--ok-wash)] px-3 py-2 text-sm text-[var(--ok)]">
               You&apos;re signed up! A confirmation email is on its way.
             </p>
-            {registeredDeck ? (
-              <p className="rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-800">
-                Registered deck:{" "}
-                <span className="font-semibold">{registeredDeck.commanderName}</span> · bracket{" "}
-                {registeredDeck.bracket}
-              </p>
-            ) : wantsDeck && customer ? (
-              <div className="space-y-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-3">
-                <p className="text-sm text-amber-950">
-                  You did not register a deck yet. The shop uses this to seat balanced pods.
-                </p>
-                <EventDeckPickerV1 slug={slug} value={deckId} onChange={setDeckId} />
-                {error ? <p className="text-sm text-red-600">{error}</p> : null}
-                {deckId ? (
+            {wantsDeck && customer ? (
+              <div
+                className={`space-y-2 rounded-lg border px-3 py-3 ${
+                  registeredDeck
+                    ? "border-[var(--line-subtle)] bg-[var(--ink-800)]"
+                    : "border-[var(--warn)]/40 bg-[var(--accent-wash)]"
+                }`}
+              >
+                {registeredDeck ? (
+                  <p className="text-sm text-[var(--text-hi)]">
+                    Registered deck:{" "}
+                    <span className="font-semibold">{registeredDeck.commanderName}</span> · bracket{" "}
+                    {registeredDeck.bracket}
+                  </p>
+                ) : (
+                  <p className="text-sm text-[var(--accent-hi)]">
+                    You did not register a deck yet. The shop uses this to seat balanced pods.
+                  </p>
+                )}
+                <EventDeckPickerV1
+                  slug={slug}
+                  requiredBracket={requiredBracket}
+                  value={selectedDeckId}
+                  onChange={setDeckId}
+                />
+                {error ? <p className={authError}>{error}</p> : null}
+                {canSaveDeck ? (
                   <button
                     type="button"
                     disabled={addingDeck}
-                    onClick={() => void attachDeckAfterSignup()}
-                    className="inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60"
+                    onClick={() => void saveDeckForSignup()}
+                    className={authButton}
                   >
-                    {addingDeck ? "Saving…" : "Save deck for this event"}
+                    {addingDeck
+                      ? "Saving…"
+                      : registeredDeck
+                        ? "Update deck for this event"
+                        : "Save deck for this event"}
                   </button>
                 ) : null}
               </div>
             ) : wantsDeck && !customer ? (
-              <p className="text-sm text-gray-600">
+              <p className={authSubtext}>
                 <Link
                   href={`/sign-in?store=${encodeURIComponent(slug)}&return=${encodeURIComponent(`/s/${slug}/calendar`)}`}
-                  className="font-semibold text-indigo-600 hover:underline"
+                  className={authLink}
                 >
                   Sign in
                 </Link>{" "}
@@ -525,52 +567,50 @@ function EventModal({
           </div>
         ) : isFull ? null : (
           <form onSubmit={submitSignup} className="mt-5 space-y-3">
-            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-              Sign up
-            </p>
+            <p className={authLabel}>Sign up</p>
             <div className="grid gap-3 sm:grid-cols-2">
-              <label className="block text-sm">
-                <span className="font-medium">First name</span>
+              <label className="block">
+                <span className={authLabel}>First name</span>
                 <input
                   required
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="mt-1 w-full rounded-lg border px-3 py-2"
+                  className={authInput}
                 />
               </label>
-              <label className="block text-sm">
-                <span className="font-medium">Last name</span>
+              <label className="block">
+                <span className={authLabel}>Last name</span>
                 <input
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  className="mt-1 w-full rounded-lg border px-3 py-2"
+                  className={authInput}
                 />
               </label>
             </div>
-            <label className="block text-sm">
-              <span className="font-medium">Email</span>
+            <label className="block">
+              <span className={authLabel}>Email</span>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 w-full rounded-lg border px-3 py-2"
+                className={authInput}
               />
             </label>
-            <label className="block text-sm">
-              <span className="font-medium">Phone (optional)</span>
+            <label className="block">
+              <span className={authLabel}>Phone (optional)</span>
               <input
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="mt-1 w-full rounded-lg border px-3 py-2"
+                className={authInput}
               />
             </label>
             {wantsDeck && !customer ? (
-              <p className="rounded-lg bg-indigo-50 px-3 py-2 text-sm text-indigo-950">
+              <p className={`rounded-md border border-[var(--line-subtle)] bg-[var(--ink-800)] px-3 py-2 ${authSubtext}`}>
                 <Link
                   href={`/sign-in?store=${encodeURIComponent(slug)}&return=${encodeURIComponent(`/s/${slug}/calendar`)}`}
-                  className="font-semibold underline"
+                  className={authLink}
                 >
                   Sign in
                 </Link>{" "}
@@ -578,13 +618,18 @@ function EventModal({
               </p>
             ) : null}
             {wantsDeck && customer ? (
-              <EventDeckPickerV1 slug={slug} value={deckId} onChange={setDeckId} />
+              <EventDeckPickerV1
+                slug={slug}
+                requiredBracket={requiredBracket}
+                value={deckId}
+                onChange={setDeckId}
+              />
             ) : null}
-            {error ? <p className="text-sm text-red-600">{error}</p> : null}
+            {error ? <p className={authError}>{error}</p> : null}
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60"
+              className={authButton}
             >
               {submitting ? "Signing up…" : "Sign up"}
             </button>
@@ -596,14 +641,14 @@ function EventModal({
             href={event.signupUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={`${success || isFull ? "mt-3" : "mt-2"} inline-flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-50`}
+            className={`${success || isFull ? "mt-3" : "mt-2"} ${authButtonSecondary} no-underline`}
           >
             External signup
           </a>
         ) : null}
 
         {!success && !event.signupUrl && isFull ? (
-          <p className="mt-5 text-sm text-gray-500">
+          <p className={`mt-5 ${authSubtext}`}>
             Contact the store to join the waitlist.
           </p>
         ) : null}

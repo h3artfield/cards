@@ -111,6 +111,12 @@ export type EditableDeckV1 = {
   /** The bracket the build was asked for, or null for a deck started by hand. */
   bracket: number | null;
   commander: EditableDeckCommanderV1;
+  /**
+   * The second commander of a pair (Partner, Friends forever, a Background,
+   * a Doctor's companion). Kept out of `cards` like the commander, so the
+   * library is 98 rather than 99 whenever this is set.
+   */
+  partner?: EditableDeckCommanderV1 | null;
   cards: EditableDeckCardV1[];
   /** Marker definitions available on this deck, including cached global ones. */
   markers: DeckMarkerV1[];
@@ -130,8 +136,22 @@ export type EditableDeckV1 = {
    * rather than silently invalidating it.
    */
   measuredBracket?: MeasuredBracketV1 | null;
+  /** The latest Professor review of a hand-built or imported deck. */
+  professorReview?: DeckProfessorReviewV1 | null;
   createdAt: string;
   updatedAt: string;
+};
+
+export type DeckProfessorReviewV1 = {
+  /** The review job; its result holds the report and suggested swaps. */
+  buildId: string;
+  status: "running" | "complete" | "failed";
+  /** The deck revision that was reviewed. A later edit makes the review stale. */
+  atRevision: number;
+  requestedAt: string;
+  completedAt?: string;
+  grade?: string | null;
+  failureMessage?: string | null;
 };
 
 export type MeasuredBracketV1 = {
@@ -210,4 +230,32 @@ export function boardCardCountV1(deck: EditableDeckV1, board: DeckBoardV1): numb
  */
 export function mainboardLibraryCountV1(deck: EditableDeckV1): number {
   return boardCardCountV1(deck, "mainboard");
+}
+
+/** Commander first, then the partner when there is one. */
+export function deckCommandersV1(
+  deck: Pick<EditableDeckV1, "commander" | "partner">,
+): EditableDeckCommanderV1[] {
+  return deck.partner ? [deck.commander, deck.partner] : [deck.commander];
+}
+
+/** A pair's colour identity is the union of both commanders'. */
+export function deckColorIdentityV1(deck: Pick<EditableDeckV1, "commander" | "partner">): string[] {
+  const colors = new Set<string>();
+  for (const commander of deckCommandersV1(deck)) {
+    for (const color of commander.colorIdentity ?? []) colors.add(color.toUpperCase());
+  }
+  return ["W", "U", "B", "R", "G"].filter((color) => colors.has(color));
+}
+
+/** "Ishai, Ojutai Dragonspeaker & Rograkh, Son of Rohgahh". */
+export function deckCommanderLabelV1(deck: Pick<EditableDeckV1, "commander" | "partner">): string {
+  return deckCommandersV1(deck)
+    .map((commander) => commander.name)
+    .join(" & ");
+}
+
+/** 99 with one commander, 98 with a pair: the deck is 100 either way. */
+export function deckLibrarySizeV1(deck: Pick<EditableDeckV1, "partner">): number {
+  return deck.partner ? 98 : 99;
 }

@@ -1,4 +1,5 @@
 import type { CardSearchHitV1 } from "@/lib/professor-deck-editor/card-search-v1";
+import type { DeckTokensV1 } from "@/lib/deck-tokens/deck-tokens-v1";
 import type { DeckEditorDisplayFactsV1 } from "@/lib/professor-deck-editor/display-facts-v1";
 import type {
   CopyOwnershipSplit,
@@ -24,6 +25,8 @@ export type DeckEditorCard = EditableDeckCardV1 & {
   copyOwnership?: CopyOwnershipSplit;
   display?: DeckEditorDisplayFactsV1;
   semantic?: DeckEditorSemanticFactsV1;
+  /** True when this card may sit in the command zone (paper-eligible sole commander). */
+  canBeCommander?: boolean;
 };
 
 /** A card's synergy partners, fetched lazily the first time one is asked for. */
@@ -41,6 +44,8 @@ export type DeckEditorPayload = {
   deck: DeckEditorDeck;
   legality: DeckEditorLegalityReportV1;
   markerFacets: MarkerFacetV1[];
+  /** Null when the token map could not be read. */
+  tokens?: DeckTokensV1 | null;
 };
 
 export type DeckEditorSearchHit = CardSearchHitV1 & { inStock: boolean };

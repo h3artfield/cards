@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CardNameHoverPreview } from "../CardNameHoverPreview";
+import { CardNameHoverPreview, useCardHoverPreviewV1 } from "../CardNameHoverPreview";
 import { CardTileMenu } from "./CardTileMenu";
 import { ManaCost } from "./ManaCost";
 import { useCardGrabV1 } from "./card-grab-v1";
@@ -38,6 +38,7 @@ export type CardViewProps = {
   onCart?: (card: DeckEditorCard) => void;
   onMove?: (card: DeckEditorCard, board: DeckBoardV1) => void;
   onRemove?: (card: DeckEditorCard) => void;
+  onMakeCommander?: (card: DeckEditorCard) => void;
 };
 
 /**
@@ -55,7 +56,7 @@ const SPOILER_TILE_MIN = "9.5rem";
 
 /** Shared hover chrome: a ring on hover so a tile reads as clickable. */
 const TILE_BUTTON_CLASS =
-  "group relative block w-full overflow-hidden rounded-[4.5%] transition hover:ring-2 hover:ring-[var(--accent-lo)]";
+  "deck-card-tile group relative block w-full overflow-hidden rounded-[4.5%] transition hover:ring-2 hover:ring-[var(--accent-lo)]";
 
 /**
  * Only the player's own additions can be deleted outright.
@@ -175,8 +176,7 @@ function CardFallback({ name }: { name: string }) {
 
 /** The actions menu for a tile, with the cart entry resolved. */
 function tileMenu(props: CardViewProps, card: DeckEditorCard) {
-  const { slug, inventoryByName, selectedKey, onSelect, onReveal, onCart, onMove, onRemove, cartEligible } =
-    props;
+  const { slug, inventoryByName, selectedKey, onSelect, onMove, onRemove, onMakeCommander } = props;
   if (!slug || !onMove) return null;
   return (
     <CardTileMenu
@@ -185,10 +185,11 @@ function tileMenu(props: CardViewProps, card: DeckEditorCard) {
       inventory={inventoryByName?.[card.name]}
       synergySelected={selectedKey === card.cardKey}
       onSynergy={() => onSelect?.(card)}
-      onReveal={onReveal ? () => onReveal(card) : undefined}
-      onCart={onCart && cartEligible?.(card) ? () => onCart(card) : undefined}
       onMove={(board) => onMove(card, board)}
       onRemove={removable(card, onRemove)}
+      onMakeCommander={
+        onMakeCommander && card.canBeCommander ? () => onMakeCommander(card) : undefined
+      }
     />
   );
 }
@@ -200,17 +201,24 @@ function tileMenu(props: CardViewProps, card: DeckEditorCard) {
  * without nesting interactive elements; the card image carries its own button
  * for the reveal.
  */
-function CardTile(props: CardViewProps & { card: DeckEditorCard }) {
-  const { card, imageUrls, dimmed, selectedKey, onReveal, inventoryByName } = props;
+function CardTile(props: CardViewProps & { card: DeckEditorCard; hoverPreview?: boolean }) {
+  const { card, imageUrls, dimmed, selectedKey, onReveal, inventoryByName, hoverPreview } = props;
   const url = imageFor(card, imageUrls);
   const tone = overlayFor(card, inventoryByName);
   const selected = selectedKey === card.cardKey;
   const grab = useCardGrabV1();
   const held = grab?.heldKey === card.cardKey;
+  const hover = useCardHoverPreviewV1(card.name, url ?? undefined);
 
   return (
     <div
-      onPointerDown={(event) => grab?.beginPress(card, event)}
+      onPointerDown={(event) => {
+        hover.hide();
+        grab?.beginPress(card, event);
+      }}
+      onMouseEnter={hoverPreview ? hover.handlers.onMouseEnter : undefined}
+      onMouseMove={hoverPreview ? hover.handlers.onMouseMove : undefined}
+      onMouseLeave={hoverPreview ? hover.handlers.onMouseLeave : undefined}
       className={`group relative transition ${dimClass(card, { dimmed, selectedKey })} ${
         held ? "professor-mtg-grab-source" : ""
       }`}
@@ -233,6 +241,7 @@ function CardTile(props: CardViewProps & { card: DeckEditorCard }) {
         ) : null}
       </button>
       {tileMenu(props, card)}
+      {hoverPreview && !held ? hover.preview : null}
     </div>
   );
 }
@@ -246,7 +255,7 @@ export function CardGridView(props: CardViewProps) {
     >
       {props.cards.map((card) => (
         <li key={card.cardKey}>
-          <CardTile {...props} card={card} />
+          <CardTile {...props} card={card} hoverPreview />
         </li>
       ))}
     </ul>
@@ -259,8 +268,63 @@ export function CardGridView(props: CardViewProps) {
  * In-stock copies get a green ring — the same shop language as the stock count
  * in the hero — so you can scan a column without opening each card.
  */
+function StackLayer(
+  props: CardViewProps & {
+    card: DeckEditorCard;
+    featuredLayer: boolean;
+    z: number;
+    grab: ReturnType<typeof useCardGrabV1>;
+  },
+) {
+  const { card, featuredLayer, z, grab, imageUrls, dimmed, selectedKey, onReveal, inventoryByName } = props;
+  const url = imageFor(card, imageUrls);
+  const hover = useCardHoverPreviewV1(card.name, url ?? undefined);
+  const tone = overlayFor(card, inventoryByName);
+  const selected = selectedKey === card.cardKey;
+  const held = grab?.heldKey === card.cardKey;
+  return (
+    <li
+      onPointerDown={(event) => {
+        hover.hide();
+        grab?.beginPress(card, event);
+      }}
+      onMouseEnter={hover.handlers.onMouseEnter}
+      onMouseMove={hover.handlers.onMouseMove}
+      onMouseLeave={hover.handlers.onMouseLeave}
+      className={`deck-card-stack__layer ${featuredLayer ? "deck-card-stack__layer--featured" : "deck-card-stack__layer--peek"} ${dimClass(card, {
+        dimmed,
+        selectedKey,
+      })} ${held ? "professor-mtg-grab-source" : ""}`}
+      style={{ zIndex: z }}
+    >
+      <button
+        type="button"
+        onClick={() => onReveal?.(card)}
+        title={tileTitle(card, tone)}
+        aria-label={card.name}
+        className={`deck-card-stack__face${selected ? " deck-card-stack__face--selected" : ""}${stackToneClass(tone)}`}
+      >
+        {featuredLayer ? (
+          url ? (
+            <img src={url} alt={card.name} loading="lazy" decoding="async" draggable={false} />
+          ) : (
+            <CardFallback name={card.name} />
+          )
+        ) : (
+          <span className="deck-card-stack__peek-name">{card.name}</span>
+        )}
+        {card.copies > 1 ? (
+          <span className="deck-card-stack__copies">×{card.copies}</span>
+        ) : null}
+      </button>
+      {tileMenu(props, card)}
+      {held ? null : hover.preview}
+    </li>
+  );
+}
+
 export function CardStackView(props: CardViewProps) {
-  const { cards, imageUrls, dimmed, selectedKey, onReveal, inventoryByName } = props;
+  const { cards } = props;
   const grab = useCardGrabV1();
   const featured = cards[0];
   if (!featured) return null;
@@ -268,50 +332,19 @@ export function CardStackView(props: CardViewProps) {
   const peeks = cards.slice(1, STACK_PEEK_LIMIT + 1);
   const hidden = Math.max(0, cards.length - 1 - peeks.length);
 
-  const renderLayer = (card: DeckEditorCard, featuredLayer: boolean, z: number) => {
-    const url = featuredLayer ? imageFor(card, imageUrls) : null;
-    const tone = overlayFor(card, inventoryByName);
-    const selected = selectedKey === card.cardKey;
-    const held = grab?.heldKey === card.cardKey;
-    return (
-      <li
-        key={card.cardKey}
-        onPointerDown={(event) => grab?.beginPress(card, event)}
-        className={`deck-card-stack__layer ${featuredLayer ? "deck-card-stack__layer--featured" : "deck-card-stack__layer--peek"} ${dimClass(card, {
-          dimmed,
-          selectedKey,
-        })} ${held ? "professor-mtg-grab-source" : ""}`}
-        style={{ zIndex: z }}
-      >
-        <button
-          type="button"
-          onClick={() => onReveal?.(card)}
-          title={tileTitle(card, tone)}
-          aria-label={card.name}
-          className={`deck-card-stack__face${selected ? " deck-card-stack__face--selected" : ""}${stackToneClass(tone)}`}
-        >
-          {featuredLayer ? (
-            url ? (
-              <img src={url} alt={card.name} loading="lazy" decoding="async" draggable={false} />
-            ) : (
-              <CardFallback name={card.name} />
-            )
-          ) : (
-            <span className="deck-card-stack__peek-name">{card.name}</span>
-          )}
-          {card.copies > 1 ? (
-            <span className="deck-card-stack__copies">×{card.copies}</span>
-          ) : null}
-        </button>
-        {tileMenu(props, card)}
-      </li>
-    );
-  };
-
   return (
     <ol className="deck-card-stack">
-      {renderLayer(featured, true, peeks.length + 2)}
-      {peeks.map((card, index) => renderLayer(card, false, peeks.length - index))}
+      <StackLayer {...props} card={featured} featuredLayer z={peeks.length + 2} grab={grab} />
+      {peeks.map((card, index) => (
+        <StackLayer
+          key={card.cardKey}
+          {...props}
+          card={card}
+          featuredLayer={false}
+          z={peeks.length - index}
+          grab={grab}
+        />
+      ))}
       {hidden > 0 ? (
         <li className="deck-card-stack__more">
           +{hidden} more
@@ -348,6 +381,7 @@ export function CardSpoilerView(props: CardViewProps) {
  */
 export function CardCondensedView({
   cards,
+  imageUrls,
   dimmed,
   selectedKey,
   onReveal,
@@ -374,6 +408,7 @@ export function CardCondensedView({
           <span className="min-w-0 flex-1 truncate">
             <CardNameHoverPreview
               name={card.name}
+              imageUrl={imageFor(card, imageUrls) ?? undefined}
               overlay={overlayFor(card, inventoryByName)}
               onClick={() => onReveal?.(card)}
             />

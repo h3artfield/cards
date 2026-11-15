@@ -12,7 +12,8 @@ import { COLLECTIONS } from "../firebase/collections";
 import { getAdminFirestore } from "../firebase/admin";
 import { applyDeckEditOpsV1 } from "./ops-v1";
 import type { DeckEditOpV1, DeckEditRejectionV1 } from "./ops-v1";
-import type { EditableDeckV1 } from "./types-v1";
+import { normalizeDeckCardNameV1 } from "./types-v1";
+import type { DeckProfessorReviewV1, EditableDeckCommanderV1, EditableDeckV1 } from "./types-v1";
 
 export const PROFESSOR_DECK_EDITOR_STORE_V1_VERSION = "professor-deck-editor-store-v1";
 
@@ -37,9 +38,12 @@ function normalizeEditableDeckV1(deck: EditableDeckV1): EditableDeckV1 {
       ...deck.commander,
       colorIdentity: [...(deck.commander?.colorIdentity ?? [])],
     },
+    partner: deck.partner
+      ? { ...deck.partner, colorIdentity: [...(deck.partner.colorIdentity ?? [])] }
+      : null,
     cards: (deck.cards ?? []).map((card) => ({
       ...card,
-      markerIds: card.markerIds ?? [],
+      markerIds: Array.isArray(card.markerIds) ? card.markerIds : [],
       professor: card.professor
         ? {
             ...card.professor,
@@ -48,8 +52,8 @@ function normalizeEditableDeckV1(deck: EditableDeckV1): EditableDeckV1 {
           }
         : null,
     })),
-    markers: deck.markers ?? [],
-    baselineCards: deck.baselineCards ?? [],
+    markers: Array.isArray(deck.markers) ? deck.markers : [],
+    baselineCards: Array.isArray(deck.baselineCards) ? deck.baselineCards : [],
   };
 }
 
@@ -131,6 +135,100 @@ export async function recordMeasuredBracketV1(args: {
   return db.runTransaction(async (tx) => {
     const snap = await tx.get(ref);
     const next = stamp(snap.exists ? (snap.data() as EditableDeckV1) : null);
+    if (next) tx.set(ref, next);
+    return next;
+  });
+}
+
+/**
+ * Records the Professor review state. Like a measured bracket, a review is not
+ * an edit, so it never bumps the revision. A later review supersedes an older
+ * one; a stale job finishing late must not overwrite it.
+ */
+export async function recordProfessorReviewV1(args: {
+  deckId: string;
+  review: DeckProfessorReviewV1;
+}): Promise<EditableDeckV1 | null> {
+  const stamp = (current: EditableDeckV1 | null): EditableDeckV1 | null => {
+    if (!current) return null;
+    const existing = current.professorReview;
+    if (existing && existing.buildId !== args.review.buildId && args.review.status !== "running") {
+      return current;
+    }
+    return { ...current, professorReview: args.review };
+  };
+
+  const col = collection();
+  if (!col) {
+    const next = stamp(memoryDecks.get(args.deckId) ?? null);
+    if (next) memoryDecks.set(args.deckId, next);
+    return next;
+  }
+
+  const db = getAdminFirestore();
+  if (!db) return null;
+
+  const ref = col.doc(args.deckId);
+  return db.runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    const next = stamp(snap.exists ? (snap.data() as EditableDeckV1) : null);
+    if (next) tx.set(ref, next);
+    return next;
+  });
+}
+
+/**
+ * Puts a different commander at the head of the deck.
+ *
+ * The 99 stay as they are, so the legality report can show what no longer fits
+ * the new colours. A partner belongs to the old commander and goes with it. If
+ * the new commander was one of the 99 it leaves the list, since it now sits in
+ * the command zone. An edit like any other: it bumps the revision.
+ */
+export async function swapEditableDeckCommanderV1(args: {
+  deckId: string;
+  customerId: string;
+  commander: EditableDeckCommanderV1;
+  now?: string;
+}): Promise<EditableDeckV1 | null> {
+  const now = args.now ?? new Date().toISOString();
+  const swap = (current: EditableDeckV1 | null): EditableDeckV1 | null => {
+    if (!current || current.customerId !== args.customerId) return null;
+    const oldLabel = current.partner
+      ? `${current.commander.name} & ${current.partner.name}`
+      : current.commander.name;
+    // A review was of the old commander's deck; it says nothing about this one.
+    const { professorReview: _review, ...rest } = current;
+    return {
+      ...rest,
+      commander: args.commander,
+      partner: null,
+      cards: current.cards.filter(
+        (card) =>
+          card.oracleId !== args.commander.oracleId &&
+          normalizeDeckCardNameV1(card.name) !== normalizeDeckCardNameV1(args.commander.name),
+      ),
+      deckName: current.deckName === oldLabel ? args.commander.name : current.deckName,
+      editedByUser: true,
+      revision: current.revision + 1,
+      updatedAt: now,
+    };
+  };
+
+  const col = collection();
+  if (!col) {
+    const next = swap(memoryDecks.get(args.deckId) ?? null);
+    if (next) memoryDecks.set(args.deckId, next);
+    return next;
+  }
+
+  const db = getAdminFirestore();
+  if (!db) return null;
+
+  const ref = col.doc(args.deckId);
+  return db.runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    const next = swap(snap.exists ? normalizeEditableDeckV1(snap.data() as EditableDeckV1) : null);
     if (next) tx.set(ref, next);
     return next;
   });

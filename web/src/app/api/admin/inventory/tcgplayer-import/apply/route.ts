@@ -1,13 +1,18 @@
 import { NextRequest } from "next/server";
 import { requireAdminSession, requireStoreScope } from "@/lib/admin-auth";
 import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
+import { deckBuilderStore } from "@/lib/deck-builder/deck-builder-store";
+import { invalidateStoreInventoryCache } from "@/lib/deck-builder/store-inventory-cache";
 import { computeInventoryAnalytics } from "@/lib/inventory/analytics";
+import { backfillInventoryImagesRun } from "@/lib/inventory/image-backfill";
 import { snapshotFromAnalytics } from "@/lib/inventory/import-snapshots";
-import { isCatalogImportItem } from "@/lib/inventory/status";
+import { isCatalogImportItem, isInventoryAvailable } from "@/lib/inventory/status";
 import { pushShopifyLevelsAfterImport } from "@/lib/shopify/sync-inventory-levels";
 import { dataStore } from "@/lib/storage/data-store";
 import { applyTcgplayerInventoryImport } from "@/lib/tcgplayer-inventory/apply-import";
-import { invalidateStoreInventoryCache } from "@/lib/deck-builder/store-inventory-cache";
+import { TcgplayerImportWithdrawalBlockedError } from "@/lib/tcgplayer-inventory/import-guard";
+
+export const maxDuration = 300;
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,6 +25,8 @@ export async function POST(req: NextRequest) {
     const body = (await req.json()) as {
       csv?: string;
       skipConflicts?: boolean;
+      confirmLargeWithdrawal?: boolean;
+      mode?: string;
     };
     if (!body.csv?.trim()) {
       return jsonError("Upload a TCGplayer inventory export CSV", 400);
@@ -31,6 +38,8 @@ export async function POST(req: NextRequest) {
       storeId: scope.storeId,
       existingInventory: inventory,
       skipConflicts: body.skipConflicts ?? true,
+      confirmLargeWithdrawal: body.confirmLargeWithdrawal ?? false,
+      mode: body.mode === "add" ? "add" : "replace",
     });
 
     for (const item of result.items) {
@@ -39,15 +48,34 @@ export async function POST(req: NextRequest) {
 
     invalidateStoreInventoryCache(scope.storeId);
 
+    const updatedInventory = await dataStore.getInventory(scope.storeId);
+    const catalog = updatedInventory.filter(
+      (i) => isCatalogImportItem(i) && i.status !== "sold",
+    );
+    const crosswalks = await deckBuilderStore.listCrosswalks(scope.storeId);
+    const crosswalkByItemId = new Map(
+      crosswalks.map((cw) => [cw.inventoryItemId, cw]),
+    );
+    const imageCacheRun = await backfillInventoryImagesRun({
+      storeId: scope.storeId,
+      items: catalog,
+      batchSize: 15,
+      budgetMs: 50_000,
+      crosswalkByItemId,
+    });
+    for (const item of imageCacheRun.updatedItems) {
+      await dataStore.saveInventoryItem(item);
+    }
+    invalidateStoreInventoryCache(scope.storeId);
+
     const shopifySync = await pushShopifyLevelsAfterImport(
       scope.storeId,
       result.items,
     );
 
-    const updatedInventory = await dataStore.getInventory(scope.storeId);
     const analytics = computeInventoryAnalytics(
-      updatedInventory.filter(
-        (i) => isCatalogImportItem(i) && i.status !== "sold",
+      (await dataStore.getInventory(scope.storeId)).filter(
+        (i) => isCatalogImportItem(i) && isInventoryAvailable(i),
       ),
     );
     await dataStore.saveInventoryImportSnapshot(
@@ -59,6 +87,9 @@ export async function POST(req: NextRequest) {
           created: result.created,
           updated: result.updated,
           withdrawn: result.withdrawn,
+          csvRowCount: result.csvRowCount,
+          csvProductLines: result.csvProductLines,
+          outOfScopeRows: result.outOfScopeRows,
         },
       }),
     );
@@ -66,19 +97,36 @@ export async function POST(req: NextRequest) {
     await dataStore.logAdminAction({
       action: "inventory_tcgplayer_import",
       metadata: {
+        mode: result.mode,
+        unitsAdded: result.unitsAdded,
         created: result.created,
         updated: result.updated,
         withdrawn: result.withdrawn,
         skipped: result.skipped,
         conflicts: result.conflicts,
+        csvRowCount: result.csvRowCount,
+        csvProductLines: result.csvProductLines,
+        outOfScopeRows: result.outOfScopeRows,
         shopifyQuantityPushed: shopifySync.quantityPushed,
         shopifyPricePushed: shopifySync.pricePushed,
         shopifySyncFailed: shopifySync.failed,
       },
     });
 
-    return jsonOk({ result, shopifySync });
+    return jsonOk({
+      result,
+      shopifySync,
+      imageCache: {
+        cached: imageCacheRun.cached,
+        failed: imageCacheRun.failed,
+        remaining: imageCacheRun.remaining,
+        processed: imageCacheRun.processed,
+      },
+    });
   } catch (err) {
+    if (err instanceof TcgplayerImportWithdrawalBlockedError) {
+      return jsonError(err.message, 409, { blocked: true, risk: err.risk });
+    }
     return handleRouteError(err);
   }
 }

@@ -44,9 +44,11 @@ export function createEditableDeckFromScratchV1(args: {
   storeId: string;
   storeSlug: string;
   commander: EditableDeckCommanderV1;
+  partner?: EditableDeckCommanderV1 | null;
   deckName?: string;
   now: string;
 }): EditableDeckV1 {
+  const label = args.partner ? `${args.commander.name} & ${args.partner.name}` : args.commander.name;
   return {
     version: PROFESSOR_DECK_EDITOR_TYPES_V1_VERSION,
     deckId: args.deckId,
@@ -54,9 +56,10 @@ export function createEditableDeckFromScratchV1(args: {
     customerId: args.customerId,
     storeId: args.storeId,
     storeSlug: args.storeSlug,
-    deckName: args.deckName?.trim() || args.commander.name,
+    deckName: args.deckName?.trim() || label,
     bracket: null,
     commander: args.commander,
+    ...(args.partner ? { partner: args.partner } : {}),
     cards: [],
     markers: [],
     baselineCards: [],

@@ -15,7 +15,7 @@ export function ClerkChatCardStrip({
   return (
     <div className="mt-2">
       <p className="mb-1.5 text-[10px] text-neutral-500">
-        {cards.length} in stock — drag to your pile → or tap a card to add
+        {cards.length} in stock — drag to your cart, or tap a card to add
       </p>
       <div className="flex gap-2 overflow-x-auto pb-1">
         {cards.map((card) => (

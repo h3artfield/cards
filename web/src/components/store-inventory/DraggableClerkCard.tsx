@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   cardDisplayImage,
   cardDisplayPrice,
@@ -8,6 +9,7 @@ import {
   type GatheringCard,
 } from "./clerk-gathering";
 import { ColorPips } from "./InventoryBrowseUI";
+import { CardInspectButton, InventoryCardDetail } from "./InventoryCardDetail";
 
 export function DraggableClerkCard({
   card,
@@ -15,17 +17,21 @@ export function DraggableClerkCard({
   compact = false,
   showReason = false,
   size = "default",
+  storeSlug,
 }: {
   card: GatheringCard;
   onTapAdd?: (card: GatheringCard) => void;
   compact?: boolean;
   showReason?: boolean;
   size?: "default" | "large";
+  storeSlug?: string;
 }) {
   const src = cardDisplayImage(card);
   const price = cardDisplayPrice(card);
+  const [inspect, setInspect] = useState(false);
 
   return (
+    <>
     <div
       draggable
       onDragStart={(e) => {
@@ -33,7 +39,7 @@ export function DraggableClerkCard({
         e.dataTransfer.effectAllowed = "copy";
       }}
       onClick={() => onTapAdd?.(card)}
-      title={onTapAdd ? "Drag to your pile, or tap to add" : "Drag to your card pile"}
+      title={onTapAdd ? "Drag to your cart, or tap to add" : "Drag to your cart"}
       className={`cursor-grab overflow-hidden rounded-xl border border-emerald-700/50 bg-neutral-900/90 ring-1 ring-emerald-500/20 transition active:cursor-grabbing ${
         onTapAdd ? "hover:border-indigo-500 hover:ring-indigo-500/30" : ""
       } ${compact ? "w-[108px] shrink-0" : size === "large" ? "w-full max-w-[320px] mx-auto" : "w-full"}`}
@@ -53,6 +59,7 @@ export function DraggableClerkCard({
             {card.name}
           </div>
         )}
+        <CardInspectButton onInspect={() => setInspect(true)} />
         {card.qty > 1 ? (
           <span
             className={`absolute right-1 top-1 rounded bg-black/75 px-1 py-0.5 font-semibold text-white ${
@@ -80,7 +87,13 @@ export function DraggableClerkCard({
           {card.name}
         </p>
         <div className="flex items-center justify-between gap-1">
-          <ColorPips colors={card.colorIdentity ?? []} />
+          <ColorPips
+            colors={card.colorIdentity ?? []}
+            known={
+              (card.colorIdentity?.length ?? 0) > 0 ||
+              Boolean(card.manaCost || card.typeLine)
+            }
+          />
           {price != null ? (
             <span
               className={`shrink-0 font-medium text-emerald-400 ${
@@ -102,5 +115,13 @@ export function DraggableClerkCard({
         ) : null}
       </div>
     </div>
+    {inspect ? (
+      <InventoryCardDetail
+        slug={storeSlug}
+        card={card}
+        onClose={() => setInspect(false)}
+      />
+    ) : null}
+    </>
   );
 }

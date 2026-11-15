@@ -10,7 +10,10 @@ let catalogPromise: Promise<DeckResolutionCatalog> | null = null;
 
 export async function getDeckResolutionCatalogRuntime(): Promise<DeckResolutionCatalog> {
   if (!catalogPromise) {
-    catalogPromise = loadDeckResolutionCatalog();
+    catalogPromise = loadDeckResolutionCatalog().catch((err) => {
+      catalogPromise = null;
+      throw err;
+    });
   }
   return catalogPromise;
 }

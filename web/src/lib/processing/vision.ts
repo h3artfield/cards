@@ -4,6 +4,14 @@ import { buildRulesPromptContext } from "./rules-engine";
 import { normalizeSlabFields } from "./slab-normalize";
 import { TCGPLAYER_CONDITION_GUIDE } from "./tcgplayer-condition-standards";
 import { trackApiCall } from "./api-call-tracker";
+import { buildCardHeaderFooterZoomDataUrl } from "./card-zoom-crops";
+
+export const DEFAULT_FRONTIER_VISION_MODEL = "gpt-6-luna";
+export const DEFAULT_FAST_SCAN_VISION_MODEL = "gpt-5.4-mini";
+
+function supportsReasoningEffortNone(model: string): boolean {
+  return /^(gpt-5|gpt-6)/i.test(model.trim());
+}
 
 const VISION_SCHEMA = `Return JSON only with these fields:
 {
@@ -12,6 +20,7 @@ const VISION_SCHEMA = `Return JSON only with these fields:
   "cardName": string,
   "brand": string|null,
   "setName": string|null,
+  "setCode": string|null,
   "year": string|null,
   "cardNumber": string|null,
   "playerName": string|null,
@@ -86,7 +95,8 @@ export async function analyzeCardImages(
   }
 
   const rulesContext = buildRulesPromptContext(rules);
-  const model = process.env.OPENAI_VISION_MODEL ?? "gpt-4o";
+  const model = process.env.OPENAI_VISION_MODEL ?? DEFAULT_FRONTIER_VISION_MODEL;
+  const zoomStripUrl = await buildCardHeaderFooterZoomDataUrl(frontImageUrl);
 
   const imageContent: Array<
     | { type: "text"; text: string }
@@ -95,11 +105,17 @@ export async function analyzeCardImages(
     {
       type: "text",
       text: hasBackImage(backImageUrl)
-        ? `Customer declared item type: ${declaredItemType}. Analyze front and back images. Read the collector number and set name carefully. For sports cards, extract year, brand/manufacturer, set name, card number, and team from BOTH sides — especially the back stats/copyright area.`
-        : `Customer declared item type: ${declaredItemType}. Analyze the front image. Read the collector number and set name carefully.`,
+        ? `Customer declared item type: ${declaredItemType}. Analyze front and back images (plus the magnified top-title & bottom-collector strip when attached). Read the exact printed collector number, 3-letter set code, and set name carefully. For sports cards, extract year, brand/manufacturer, set name, card number, and team from BOTH sides — especially the back stats/copyright area.`
+        : `Customer declared item type: ${declaredItemType}. Analyze the front image (and the magnified top-title & bottom-collector strip when attached). Read the exact printed collector number, 3-letter set code, and set name carefully.`,
     },
     { type: "image_url", image_url: { url: frontImageUrl, detail: "high" } },
   ];
+  if (zoomStripUrl) {
+    imageContent.push({
+      type: "image_url",
+      image_url: { url: zoomStripUrl, detail: "high" },
+    });
+  }
   if (hasBackImage(backImageUrl)) {
     imageContent.push({
       type: "image_url",
@@ -108,27 +124,34 @@ export async function analyzeCardImages(
   }
 
   trackApiCall("openai");
+  const requestBody: Record<string, unknown> = {
+    model,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content: `${VISION_SYSTEM}${rulesContext}\n${VISION_SCHEMA}`,
+      },
+      {
+        role: "user",
+        content: imageContent,
+      },
+    ],
+  };
+  if (supportsReasoningEffortNone(model)) {
+    requestBody.reasoning_effort = "none";
+    requestBody.max_completion_tokens = 800;
+  } else {
+    requestBody.max_tokens = 800;
+  }
+
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      model,
-      response_format: { type: "json_object" },
-      messages: [
-        {
-          role: "system",
-          content: `${VISION_SYSTEM}${rulesContext}\n${VISION_SCHEMA}`,
-        },
-        {
-          role: "user",
-          content: imageContent,
-        },
-      ],
-      max_tokens: 800,
-    }),
+    body: JSON.stringify(requestBody),
     signal: AbortSignal.timeout(
       parseInt(process.env.OPENAI_REQUEST_TIMEOUT_MS ?? "60000", 10),
     ),
@@ -143,6 +166,103 @@ export async function analyzeCardImages(
   const content = data.choices?.[0]?.message?.content;
   const parsed = JSON.parse(content) as VisionResult;
   return normalizeVisionResult(parsed, declaredItemType);
+}
+
+const COLLECTION_VISION_SYSTEM = `Identify this trading card from the front photo (and the attached 2x magnified top-title & bottom-collector strip when provided).
+Return JSON only:
+{
+  "category": "pokemon|magic|yugioh|sports|other",
+  "cardName": string,
+  "setName": string|null,
+  "setCode": string|null,
+  "cardNumber": string|null,
+  "playerName": string|null,
+  "confidence": number
+}
+Rules:
+- Read the exact printed cardName from the top title bar.
+- Read the exact collector number (e.g. "0499", "263", "143/147", "SWSH260") and 3-to-4 letter set code (e.g. "MH3", "CMM", "LTC", "SVI") from the bottom collector strip.
+- Never confuse mana value, HP, or power/toughness with cardNumber.
+- If a field is unreadable, use null — do not guess numbers.`;
+
+/** Fast, high-resolution front-only lookup for live scanning and customer binder. */
+export async function analyzeCollectionFront(
+  frontImageUrl: string,
+): Promise<VisionResult> {
+  const apiKey = process.env.OPENAI_API_KEY?.trim();
+  if (!apiKey) {
+    throw new Error(
+      "OPENAI_API_KEY is required for card identification. Add it to web/.env.local and restart the dev server.",
+    );
+  }
+
+  const model =
+    process.env.OPENAI_COLLECTION_VISION_MODEL ??
+    process.env.OPENAI_VISION_MODEL ??
+    DEFAULT_FAST_SCAN_VISION_MODEL;
+
+  const zoomStripUrl = await buildCardHeaderFooterZoomDataUrl(frontImageUrl);
+
+  const userContent: Array<
+    | { type: "text"; text: string }
+    | { type: "image_url"; image_url: { url: string; detail: "high" } }
+  > = [
+    {
+      type: "text",
+      text: "Identify this exact card printing. Read the card name from the top bar and the exact set code + collector number from the bottom corner.",
+    },
+    {
+      type: "image_url",
+      image_url: { url: frontImageUrl, detail: "high" },
+    },
+  ];
+  if (zoomStripUrl) {
+    userContent.push({
+      type: "image_url",
+      image_url: { url: zoomStripUrl, detail: "high" },
+    });
+  }
+
+  const requestBody: Record<string, unknown> = {
+    model,
+    response_format: { type: "json_object" },
+    messages: [
+      { role: "system", content: COLLECTION_VISION_SYSTEM },
+      {
+        role: "user",
+        content: userContent,
+      },
+    ],
+  };
+  if (supportsReasoningEffortNone(model)) {
+    requestBody.reasoning_effort = "none";
+    requestBody.max_completion_tokens = 300;
+  } else {
+    requestBody.max_tokens = 300;
+  }
+
+  trackApiCall("openai");
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestBody),
+    signal: AbortSignal.timeout(
+      parseInt(process.env.OPENAI_REQUEST_TIMEOUT_MS ?? "30000", 10),
+    ),
+  });
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`OpenAI vision failed: ${err}`);
+  }
+
+  const data = await response.json();
+  const content = data.choices?.[0]?.message?.content;
+  const parsed = JSON.parse(content) as VisionResult;
+  return normalizeVisionResult(parsed, "raw");
 }
 
 function normalizeVisionResult(
@@ -171,6 +291,7 @@ function normalizeVisionResult(
     cardName: raw.cardName ?? "Unknown Card",
     brand: raw.brand ?? undefined,
     setName: raw.setName ?? undefined,
+    setCode: raw.setCode?.trim() || undefined,
     year: raw.year ?? undefined,
     cardNumber,
     playerName:

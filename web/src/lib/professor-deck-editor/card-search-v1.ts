@@ -16,7 +16,7 @@
  *   offer "move back to the deck" instead of silently doing nothing.
  */
 import { normalizeOracleName } from "../deck-builder/golden-catalog/normalize-name";
-import { mapCommanderFormatStatus } from "../deck-builder/commander-classification";
+import { isPlayableInCommanderFormat } from "../deck-builder/commander-format-legality-snapshot-v1";
 import { paperMetaForOracle } from "../../../scripts/lib/load-deck-resolution-catalog";
 import type { DeckResolutionCatalog } from "../../../scripts/lib/load-deck-resolution-catalog";
 import type { GoldenCatalogOracleCard } from "../deck-builder/golden-catalog/schemas";
@@ -35,6 +35,12 @@ export type CardSearchHitV1 = {
   isBasicLand: boolean;
   /** Banned or not legal in Commander. Still returned, so the UI can say why. */
   commanderLegal: boolean;
+  /**
+   * True when this card may sit in the command zone (paper-eligible sole
+   * commander). Populated by the search route from the commander catalog; the
+   * pure search itself leaves it undefined.
+   */
+  canBeCommander?: boolean;
   /** Colours this card would add beyond the commander's identity. */
   offColorPips: string[];
   /** Set when the deck already holds this card, naming the board it sits on. */
@@ -140,7 +146,6 @@ function toHit(args: {
   boardsByOracleId: ReadonlyMap<string, DeckBoardV1>;
 }): CardSearchHitV1 {
   const { card } = args;
-  const status = mapCommanderFormatStatus(card.legalities);
   return {
     oracleId: card.oracleId,
     name: card.canonicalName,
@@ -150,7 +155,7 @@ function toHit(args: {
     colorIdentity: [...(card.colorIdentity ?? [])],
     isLand: isLandCard(card),
     isBasicLand: isBasicLandCard(card),
-    commanderLegal: status !== "banned" && status !== "not_legal",
+    commanderLegal: isPlayableInCommanderFormat(card),
     offColorPips: offColorPips(card, args.commanderColorIdentity),
     alreadyOnBoard: args.boardsByOracleId.get(card.oracleId) ?? null,
   };

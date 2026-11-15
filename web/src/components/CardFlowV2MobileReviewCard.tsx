@@ -69,13 +69,25 @@ function money(n?: number): string {
   return `$${n.toFixed(2)}`;
 }
 
-function ClerkMetricCell({ label, value }: { label: string; value: string }) {
+function ClerkMetricCell({
+  label,
+  value,
+  emphasis = false,
+}: {
+  label: string;
+  value: string;
+  emphasis?: boolean;
+}) {
   return (
-    <div className="min-w-0 px-0.5">
-      <p className="text-[9px] font-bold uppercase leading-tight tracking-wide text-gray-500">
+    <div className="min-w-0 rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5">
+      <p className="text-[11px] font-semibold uppercase leading-tight tracking-wide text-gray-600">
         {label}
       </p>
-      <p className="mt-0.5 truncate text-xs font-bold leading-tight text-gray-900">
+      <p
+        className={`mt-0.5 truncate text-sm font-bold leading-tight tabular-nums ${
+          emphasis ? "text-emerald-300" : "text-gray-900"
+        }`}
+      >
         {value}
       </p>
     </div>
@@ -98,7 +110,7 @@ function ClerkCardMetricsStrip({
   trade?: number;
 }) {
   return (
-    <div className="mt-2 grid grid-cols-5 gap-1 border-y border-gray-100 py-2">
+    <div className="mt-3 grid grid-cols-3 gap-1.5 sm:grid-cols-5">
       <ClerkMetricCell label="Condition" value={conditionLabel ?? "—"} />
       <ClerkMetricCell
         label="Market"
@@ -113,6 +125,7 @@ function ClerkCardMetricsStrip({
       <ClerkMetricCell
         label="Cash"
         value={showPricingFields ? money(cash) : "—"}
+        emphasis={showPricingFields && cash != null}
       />
       <ClerkMetricCell
         label="Trade"
@@ -164,7 +177,7 @@ function ClerkCardScanPhotos({
               alt={`${name} front`}
               className={imgClass}
             />
-            <p className="border-t border-gray-100 py-1 text-center text-[10px] font-semibold uppercase tracking-wide text-gray-600">
+            <p className="border-t border-gray-200 py-1 text-center text-xs font-semibold uppercase tracking-wide text-gray-700">
               Front
             </p>
           </button>
@@ -188,7 +201,7 @@ function ClerkCardScanPhotos({
               alt={`${name} back`}
               className={imgClass}
             />
-            <p className="border-t border-gray-100 py-1 text-center text-[10px] font-semibold uppercase tracking-wide text-gray-600">
+            <p className="border-t border-gray-200 py-1 text-center text-xs font-semibold uppercase tracking-wide text-gray-700">
               Back
             </p>
           </button>
@@ -204,7 +217,7 @@ function ClerkCardScanPhotos({
       {hasPregrade && (
         <Button
           variant="ghost"
-          className={`w-full text-xs text-indigo-700 ${compact ? "mt-1 px-1 py-1" : "mt-2"}`}
+          className={`w-full text-sm text-indigo-300 ${compact ? "mt-1 px-1 py-1" : "mt-2"}`}
           onClick={() => setPregradeOpen(true)}
         >
           Pregrade scan overlay
@@ -270,7 +283,7 @@ function showOfferReasonButton(input: {
 
 function SectionHeading({ children }: { children: ReactNode }) {
   return (
-    <h4 className="mb-1.5 text-[10px] font-bold uppercase tracking-wide text-gray-600">
+    <h4 className="mb-2 text-xs font-bold uppercase tracking-wide text-gray-700">
       {children}
     </h4>
   );
@@ -535,59 +548,60 @@ export function CardFlowV2MobileReviewCard({
         <div className="flex min-w-0 flex-col">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <p className="text-base font-bold leading-tight text-gray-900">
+              <p className="text-lg font-bold leading-tight text-gray-900">
                 {scanIdentity.primaryName}
               </p>
               {scanIdentity.secondaryName ? (
-                <p className="text-sm font-semibold text-gray-700">
+                <p className="mt-0.5 text-sm font-semibold text-gray-700">
                   {scanIdentity.secondaryName}
                 </p>
               ) : null}
-              <div className="mt-1 space-y-0.5">
-                <p className="text-sm font-semibold text-gray-900">
-                  {gameCategoryLabel(card.category)}
+              {scanIdentity.setLabel ? (
+                <p className="mt-1 text-sm font-medium text-gray-800">
+                  {scanIdentity.setLabel}
                 </p>
-                {scanIdentity.setLabel ? (
-                  <p className="text-sm font-semibold text-gray-900">
-                    {scanIdentity.setLabel}
-                  </p>
-                ) : null}
-                {scanIdentity.setCode ? (
-                  <p className="text-sm font-semibold uppercase text-gray-900">
-                    {scanIdentity.setCode}
-                  </p>
-                ) : null}
-                {scanIdentity.collectorNumber ? (
-                  <p className="text-sm font-semibold text-gray-900">
-                    #{scanIdentity.collectorNumber}
-                  </p>
-                ) : null}
-                {scanIdentity.language ? (
-                  <p className="text-xs font-medium text-gray-600">
-                    {scanIdentity.language}
-                  </p>
-                ) : null}
-                {scanIdentity.fromScan && !versionConfirmed ? (
-                  <p className="text-[10px] text-violet-700">From scan — confirm version</p>
-                ) : null}
+              ) : null}
+              <div className="mt-1.5 flex flex-wrap gap-1.5">
+                {[
+                  gameCategoryLabel(card.category),
+                  scanIdentity.setCode?.toUpperCase(),
+                  scanIdentity.collectorNumber
+                    ? `#${scanIdentity.collectorNumber}`
+                    : undefined,
+                  scanIdentity.language,
+                ]
+                  .filter((v): v is string => Boolean(v))
+                  .map((chip) => (
+                    <span
+                      key={chip}
+                      className="rounded-md border border-gray-300 bg-gray-200 px-2 py-0.5 text-xs font-semibold text-gray-900"
+                    >
+                      {chip}
+                    </span>
+                  ))}
               </div>
+              {scanIdentity.fromScan && !versionConfirmed ? (
+                <p className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-amber-400/50 bg-amber-400/10 px-2 py-1 text-xs font-semibold text-amber-200">
+                  <span aria-hidden>⚠</span> From scan — confirm version
+                </p>
+              ) : null}
             </div>
             <Button
               variant="primary"
-              className="shrink-0 px-3 py-2 text-xs font-semibold"
+              className="shrink-0 px-3 py-2 text-sm font-semibold"
               onClick={openReviewPicker}
             >
               Select version
             </Button>
           </div>
 
-          <div className="mt-2">
-            <p className="text-[10px] font-bold uppercase tracking-wide text-gray-500">
+          <div className="mt-3">
+            <p className="text-xs font-semibold uppercase tracking-wide text-gray-600">
               Recommendation
             </p>
             <p
-              className={`text-sm font-semibold ${
-                recommendation.tone === "red" ? "text-red-700" : "text-gray-900"
+              className={`mt-0.5 text-base font-semibold ${
+                recommendation.tone === "red" ? "text-red-300" : "text-gray-900"
               }`}
             >
               {clerkRecommendationShortTitle(recommendation)}
@@ -605,12 +619,12 @@ export function CardFlowV2MobileReviewCard({
                 trade={tradeVal}
               />
               {!versionConfirmed && showPricingFields && (
-                <p className="mt-1 text-[10px] leading-snug text-gray-600">
+                <p className="mt-1.5 text-xs leading-snug text-gray-700">
                   Estimate from scan — tap Select version to confirm printing.
                 </p>
               )}
               {showStoredOfferMismatch && (
-                <p className="mt-1 text-[10px] leading-snug text-amber-800">
+                <p className="mt-1.5 text-xs leading-snug text-amber-200">
                   Stored offer on file was {money(card.cashOffer)} cash (from{" "}
                   {money(card.marketPrice)} market). Confirmed-printing estimate
                   shown above — use Edit if the buy price should change.
@@ -624,7 +638,7 @@ export function CardFlowV2MobileReviewCard({
                 showPricingFields={false}
                 marketSource="—"
               />
-              <p className="mt-1 text-[10px] leading-snug text-gray-600">
+              <p className="mt-1.5 text-xs leading-snug text-gray-700">
                 Select version to see pricing.
               </p>
             </>
@@ -646,10 +660,10 @@ export function CardFlowV2MobileReviewCard({
 
           <div className="mt-auto space-y-2 pt-2">
             {bodyExtras ? (
-              <div className="space-y-2 border-t border-gray-100 pt-2">{bodyExtras}</div>
+              <div className="space-y-2 border-t border-gray-200 pt-3">{bodyExtras}</div>
             ) : null}
 
-            {footer ? <div className="border-t border-gray-100 pt-2">{footer}</div> : null}
+            {footer ? <div className="border-t border-gray-200 pt-3">{footer}</div> : null}
           </div>
         </div>
 
@@ -671,21 +685,21 @@ export function CardFlowV2MobileReviewCard({
 
       {conditionLabel && (
         <div className="mt-1">
-          <p className="text-[10px] font-bold uppercase tracking-wide text-gray-500">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-600">
             Condition
           </p>
           <p className="text-sm font-semibold text-gray-900">{conditionLabel}</p>
-          <p className="text-[10px] text-gray-600">Prices above reflect this grade.</p>
+          <p className="text-xs text-gray-700">Prices above reflect this grade.</p>
         </div>
       )}
 
       <div className="mt-3">
-        <p className="text-[10px] font-bold uppercase tracking-wide text-gray-500">
+        <p className="text-xs font-semibold uppercase tracking-wide text-gray-600">
           Recommendation
         </p>
         <p
           className={`text-sm font-semibold ${
-            recommendation.tone === "red" ? "text-red-700" : "text-gray-900"
+            recommendation.tone === "red" ? "text-red-300" : "text-gray-900"
           }`}
         >
           {recommendation.title}
@@ -697,11 +711,11 @@ export function CardFlowV2MobileReviewCard({
 
       {storeRuleBlocked && storeRuleBlock && (
         <div className="mt-3 space-y-1">
-          <p className="text-[10px] font-bold uppercase tracking-wide text-red-700">
+          <p className="text-xs font-semibold uppercase tracking-wide text-red-300">
             Store rules
           </p>
           {storeRuleReasonLines(storeRuleBlock, storeRules ?? []).map((line) => (
-            <p key={line.slice(0, 64)} className="text-sm font-bold leading-snug text-red-700">
+            <p key={line.slice(0, 64)} className="text-sm font-bold leading-snug text-red-300">
               {line}
             </p>
           ))}
@@ -709,7 +723,7 @@ export function CardFlowV2MobileReviewCard({
       )}
 
       {cardInsight.staleBuybackReport && (
-        <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-2 py-2 text-xs text-amber-950">
+        <div className="mt-3 rounded-md border border-amber-400/40 bg-amber-400/10 px-3 py-2 text-sm text-amber-100">
           <p className="font-semibold">Buyback report may be outdated</p>
           <p className="mt-0.5">
             The stored buyback note does not match this card or current pricing.
@@ -721,7 +735,7 @@ export function CardFlowV2MobileReviewCard({
       )}
 
       {displayOffers.storedOfferMismatch && showStoredOfferMismatch && (
-        <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-2 py-2 text-xs text-amber-950">
+        <div className="mt-3 rounded-md border border-amber-400/40 bg-amber-400/10 px-3 py-2 text-sm text-amber-100">
           <p className="font-semibold">Stored offer differs from estimate</p>
           <p className="mt-0.5">
             On file: {money(card.marketPrice)} market → {money(card.cashOffer)}{" "}
@@ -732,8 +746,8 @@ export function CardFlowV2MobileReviewCard({
 
       {cardInsight.lines.length > 0 && (
         <div className="mt-3">
-          <p className="text-[10px] font-bold uppercase text-gray-500">Market notes</p>
-          <ul className="mt-1 list-inside list-disc space-y-0.5 text-xs text-gray-800">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-600">Market notes</p>
+          <ul className="mt-1 list-inside list-disc space-y-1 text-sm text-gray-800">
             {cardInsight.lines.slice(0, 5).map((line) => (
               <li key={line.slice(0, 64)}>{line}</li>
             ))}
@@ -751,7 +765,7 @@ export function CardFlowV2MobileReviewCard({
       )}
 
       {offerReason?.warnings?.[0] && (
-        <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-2 py-2 text-xs text-amber-950">
+        <div className="mt-3 rounded-md border border-amber-400/40 bg-amber-400/10 px-3 py-2 text-sm text-amber-100">
           <p className="font-semibold">Risk</p>
           <p className="mt-0.5">{offerReason.warnings[0]}</p>
         </div>
@@ -770,7 +784,7 @@ export function CardFlowV2MobileReviewCard({
         <ReviewFlipBackHeader title="Select version" onBack={flipToFront} />
 
         {viewMode !== "clerk" && (
-          <p className="mb-3 text-[10px] text-gray-500">
+          <p className="mb-3 text-xs text-gray-600">
             View: {adminCardViewModeLabel(viewMode)}
           </p>
         )}
@@ -795,7 +809,7 @@ export function CardFlowV2MobileReviewCard({
               onSaved={handleSaved}
             />
           ) : (
-            <p className="rounded border border-amber-200 bg-amber-50 p-2 text-xs text-amber-950">
+            <p className="rounded-md border border-amber-400/40 bg-amber-400/10 p-2 text-sm text-amber-100">
               Pick the exact version — no printing options yet.
             </p>
           )}

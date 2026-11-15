@@ -2,6 +2,7 @@ import type { InventoryItem, StoreSettings } from "../types";
 import {
   createShopifyDraftProduct,
   formatShopifyApiErrorMessage,
+  isPointOfSalePublication,
   listShopifyPublications,
   publishShopifyProduct,
 } from "./client";
@@ -15,6 +16,9 @@ import {
   catalogProductImageUrls,
   resolveCatalogExportPrice,
 } from "./inventory-listing";
+import { getAppBaseUrl } from "../stripe/config";
+import { cardLinkBaseUrlV1 } from "../inventory/card-link-base";
+import { cardLinkUrlV1 } from "../inventory/card-link-key";
 import { buildShopifyVendor } from "./product-builder";
 import type { ShopifyIntegration, ShopifyProductStatus } from "./types";
 
@@ -101,43 +105,51 @@ export async function exportInventoryItemToShopify(input: {
       tags: buildCatalogTags(item, integration),
       status,
       sku,
+      barcode: item.cardLinkKey
+        ? cardLinkUrlV1(cardLinkBaseUrlV1(), input.settings.storeSlug, item.cardLinkKey)
+        : undefined,
       price: price.toFixed(2),
       quantity,
       locationId: integration.defaultLocationId,
-      imageUrls: catalogProductImageUrls(item),
+      imageUrls: catalogProductImageUrls(item, {
+        storeSlug: input.settings.storeSlug,
+        appBaseUrl: getAppBaseUrl(),
+      }),
     });
 
     let publishWarning: string | undefined;
-    if (
-      status === "ACTIVE" &&
-      (integration.publishOnlineStore || integration.publishShopChannel)
-    ) {
-      try {
-        const publications = await listShopifyPublications(
-          domain,
-          input.accessToken,
-        );
-        const targets = publications.filter((p) => {
-          const name = p.name.toLowerCase();
-          if (integration.publishOnlineStore && name.includes("online store")) {
-            return true;
-          }
-          if (integration.publishShopChannel && name.includes("shop")) {
-            return true;
-          }
-          return false;
-        });
-        const warnings = await publishShopifyProduct({
-          shopDomain: domain,
-          accessToken: input.accessToken,
-          productId: created.productId,
-          publicationIds: targets.map((t) => t.id),
-        });
-        if (warnings.length) publishWarning = warnings.join("; ");
-      } catch (err) {
-        publishWarning =
-          err instanceof Error ? err.message : "Publish step failed";
+    try {
+      const publications = await listShopifyPublications(
+        domain,
+        input.accessToken,
+      );
+      const targets = publications.filter((p) => {
+        const name = p.name.toLowerCase();
+        if (isPointOfSalePublication(p.name)) return true;
+        if (status !== "ACTIVE") return false;
+        if (integration.publishOnlineStore && name.includes("online store")) {
+          return true;
+        }
+        if (integration.publishShopChannel && name.includes("shop")) {
+          return true;
+        }
+        return false;
+      });
+      if (!targets.some((t) => isPointOfSalePublication(t.name))) {
+        publishWarning = "Point of Sale channel not found; the register can't sell this listing";
       }
+      const warnings = await publishShopifyProduct({
+        shopDomain: domain,
+        accessToken: input.accessToken,
+        productId: created.productId,
+        publicationIds: targets.map((t) => t.id),
+      });
+      if (warnings.length) {
+        publishWarning = [publishWarning, ...warnings].filter(Boolean).join("; ");
+      }
+    } catch (err) {
+      publishWarning =
+        err instanceof Error ? err.message : "Publish step failed";
     }
 
     const updated: InventoryItem = {
@@ -158,6 +170,7 @@ export async function exportInventoryItemToShopify(input: {
             ? `https://${domain.replace(".myshopify.com", "")}.com/products/${created.handle}`
             : undefined,
         syncedQuantity: integration.defaultLocationId ? quantity : undefined,
+        syncedStatus: status === "ACTIVE" ? "ACTIVE" : "DRAFT",
         syncedAt: integration.defaultLocationId ? now : undefined,
         syncError: publishWarning,
       },

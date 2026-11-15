@@ -21,6 +21,8 @@ export type DecklistMatchCard = {
   isCommander?: boolean;
   typeLine?: string;
   setName?: string;
+  /** Copies the pasted list asked for, already capped by shelf stock. */
+  addQuantity?: number;
 };
 
 export type DecklistMatchResult = {
@@ -153,7 +155,7 @@ export async function matchDecklistToStoreInventory(args: {
   const inStock: DecklistMatchCard[] = [];
   const outOfStock: Array<{ name: string; quantity: number }> = [];
   const unmatched: string[] = [];
-  const seenInStock = new Set<string>();
+  const inStockById = new Map<string, DecklistMatchCard>();
 
   for (const row of rows) {
     const item = await resolveItem({
@@ -171,9 +173,15 @@ export async function matchDecklistToStoreInventory(args: {
       outOfStock.push({ name: row.name, quantity: row.quantity });
       continue;
     }
-    if (seenInStock.has(item.id)) continue;
-    seenInStock.add(item.id);
-    inStock.push(toMatchCard(item, args.storeSlug));
+    const take = Math.max(1, Math.min(row.quantity, qty));
+    const already = inStockById.get(item.id);
+    if (already) {
+      already.addQuantity = Math.min(qty, (already.addQuantity ?? 1) + row.quantity);
+      continue;
+    }
+    const card = { ...toMatchCard(item, args.storeSlug), addQuantity: take };
+    inStockById.set(item.id, card);
+    inStock.push(card);
   }
 
   return { inStock, outOfStock, unmatched };

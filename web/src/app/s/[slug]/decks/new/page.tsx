@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { NewDeckApp } from "@/components/professor/NewDeckApp";
 import { ProfessorMtgPageShell } from "@/components/professor/ProfessorMtgPageShell";
 import { RequireCustomerForDeckBuild } from "@/components/store-inventory/RequireCustomerForDeckBuild";
@@ -18,6 +18,7 @@ function Loading() {
 
 function Content() {
   const { slug } = useParams<{ slug: string }>();
+  const fromChallenger = useSearchParams().get("from") === "challenger";
   if (!slug) {
     return (
       <ProfessorMtgPageShell>
@@ -28,7 +29,15 @@ function Content() {
     );
   }
   return (
-    <RequireCustomerForDeckBuild slug={slug} returnPath={`/s/${slug}/decks/new`}>
+    <RequireCustomerForDeckBuild
+      slug={slug}
+      returnPath={`/s/${slug}/decks/new`}
+      signedOutHref={
+        fromChallenger
+          ? `/challenger?next=${encodeURIComponent(`/s/${slug}/decks/new`)}`
+          : undefined
+      }
+    >
       <NewDeckApp slug={slug} />
     </RequireCustomerForDeckBuild>
   );

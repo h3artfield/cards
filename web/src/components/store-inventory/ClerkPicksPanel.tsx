@@ -12,10 +12,12 @@ export function ClerkPicksPanel({
   title,
   picks,
   onAddToGathering,
+  storeSlug,
 }: {
   title: string;
   picks: ClerkPickCard[];
   onAddToGathering?: (card: GatheringCard) => void;
+  storeSlug?: string;
 }) {
   if (!picks.length) return null;
 
@@ -24,7 +26,7 @@ export function ClerkPicksPanel({
       <p className="text-sm font-semibold text-emerald-200">{title}</p>
       <p className="mt-1 text-xs text-neutral-400">
         {picks.length} in-stock pick{picks.length === 1 ? "" : "s"} — drag to
-        your pile or tap to add
+        your cart or tap to add
       </p>
 
       <ul className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
@@ -34,6 +36,7 @@ export function ClerkPicksPanel({
               card={card}
               showReason
               size="large"
+              storeSlug={storeSlug}
               onTapAdd={onAddToGathering}
             />
           </li>

@@ -25,7 +25,7 @@ const MENU_WIDTH_PX = 208;
 
 const MOVE_TARGETS: Record<DeckBoardV1, { board: DeckBoardV1; label: string }[]> = {
   mainboard: [
-    { board: "considering", label: "Move to Considering" },
+    { board: "considering", label: "Move to Bench" },
     { board: "cut", label: "Move to Cut" },
   ],
   considering: [
@@ -34,7 +34,7 @@ const MOVE_TARGETS: Record<DeckBoardV1, { board: DeckBoardV1; label: string }[]>
   ],
   cut: [
     { board: "mainboard", label: "Move to Deck" },
-    { board: "considering", label: "Move to Considering" },
+    { board: "considering", label: "Move to Bench" },
   ],
 };
 
@@ -44,16 +44,23 @@ export function CardTileMenu({
   inventory,
   synergySelected,
   onSynergy,
+  onReveal,
+  onCart,
   onMove,
   onRemove,
+  onMakeCommander,
 }: {
   card: DeckEditorCard;
   slug: string;
   inventory?: ProfessorDeckInventoryEntryV43;
   synergySelected?: boolean;
   onSynergy: () => void;
+  onReveal?: () => void;
+  /** Set only when this card is on our shelf at a price we can charge. */
+  onCart?: () => void;
   onMove: (board: DeckBoardV1) => void;
   onRemove?: () => void;
+  onMakeCommander?: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -89,8 +96,10 @@ export function CardTileMenu({
   const inStock = (inventory?.quantity ?? 0) > 0;
   const price = inventory?.listPrice;
 
+  // `data-grab-ignore` on the wrapper keeps a press on the menu from also
+  // lifting the card underneath it.
   return (
-    <div ref={wrapRef} className="absolute right-1 top-1 z-20">
+    <div ref={wrapRef} data-grab-ignore className="absolute right-1 top-1 z-20">
       <button
         ref={buttonRef}
         type="button"
@@ -131,6 +140,20 @@ export function CardTileMenu({
             {card.name}
           </p>
 
+          {onReveal ? (
+            <button
+              type="button"
+              role="menuitem"
+              className="professor-mtg-pop-item text-xs"
+              onClick={() => {
+                onReveal();
+                setOpen(false);
+              }}
+            >
+              Why it's here
+            </button>
+          ) : null}
+
           <button
             type="button"
             role="menuitem"
@@ -143,7 +166,21 @@ export function CardTileMenu({
             {synergySelected ? "Hide synergy" : "Show synergy"}
           </button>
 
-          {inStock ? (
+          {/* Adding straight to the cart beats linking off to the shop page:
+              the card is already identified, so a search for it is a detour. */}
+          {onCart ? (
+            <button
+              type="button"
+              role="menuitem"
+              className="professor-mtg-pop-item text-xs text-[var(--ok)]"
+              onClick={() => {
+                onCart();
+                setOpen(false);
+              }}
+            >
+              Add to cart{price != null && price > 0 ? ` — $${price.toFixed(2)}` : ""}
+            </button>
+          ) : inStock ? (
             <a
               role="menuitem"
               href={storeInventorySearchUrlV1(slug, card.name)}
@@ -152,7 +189,7 @@ export function CardTileMenu({
               className="professor-mtg-pop-item text-xs text-[var(--ok)]"
               onClick={() => setOpen(false)}
             >
-              Buy here{price != null ? ` — $${price.toFixed(2)}` : ""}
+              See it in the shop
             </a>
           ) : null}
 
@@ -191,6 +228,19 @@ export function CardTileMenu({
           </button>
 
           <div className="border-t border-[var(--mtg-stone-border)]">
+            {onMakeCommander ? (
+              <button
+                type="button"
+                role="menuitem"
+                className="professor-mtg-pop-item text-xs"
+                onClick={() => {
+                  onMakeCommander();
+                  setOpen(false);
+                }}
+              >
+                Make this the commander
+              </button>
+            ) : null}
             {MOVE_TARGETS[card.board].map((target) => (
               <button
                 key={target.board}

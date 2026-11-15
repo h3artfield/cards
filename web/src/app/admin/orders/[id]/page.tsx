@@ -326,7 +326,7 @@ export default function AdminOrderDetailPage() {
               )}
 
               {hasV2 && duplicateCardIds.has(card.id) && (
-                <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+                <p className="text-xs font-semibold uppercase tracking-wide text-amber-300">
                   Possible duplicate entry
                 </p>
               )}

@@ -152,4 +152,48 @@ const ctx: GroupingContextV1 = {
   assert.deepEqual(groupKeysForV1(card({ name: "Anything" }), "none", ctx), ["All cards"]);
 }
 
+// --- ramp vs mana base -------------------------------------------------------
+{
+  const forest = card({
+    name: "Forest",
+    isLand: true,
+    semantic: { derivedRoles: ["ramp", "mana_generation"], clusterId: null, topActions: ["add_mana"] },
+    display: { typeLine: "Basic Land — Forest", manaCost: null, manaValue: 0, category: "land" },
+  });
+  assert.deepEqual(
+    groupKeysForV1(forest, "semanticRole", ctx),
+    ["Mana base"],
+    "a tap-for-one land stays in the mana base even if oracle parse tagged it ramp",
+  );
+
+  const tomb = card({
+    name: "Ancient Tomb",
+    isLand: true,
+    semantic: { derivedRoles: ["ramp", "mana_generation"], clusterId: null, topActions: ["add_mana"] },
+    display: {
+      typeLine: "Land",
+      manaCost: null,
+      manaValue: 0,
+      category: "land",
+      manaAcceleration: true,
+    },
+  });
+  assert.deepEqual(
+    groupKeysForV1(tomb, "semanticRole", ctx),
+    ["Ramp"],
+    "a land that taps for two is Ramp, not a second mana-sources column",
+  );
+
+  const rock = card({
+    name: "Sol Ring",
+    semantic: { derivedRoles: ["ramp", "mana_generation"], clusterId: null, topActions: ["add_mana"] },
+    display: { typeLine: "Artifact", manaCost: "{1}", manaValue: 1, category: "artifact" },
+  });
+  assert.deepEqual(
+    groupKeysForV1(rock, "semanticRole", ctx),
+    ["Ramp"],
+    "mana_generation is dropped so rocks do not appear twice",
+  );
+}
+
 console.log("grouping-v1 selftest: all assertions passed");

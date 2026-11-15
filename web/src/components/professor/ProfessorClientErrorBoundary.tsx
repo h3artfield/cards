@@ -12,12 +12,12 @@ import { Component, type ReactNode } from "react";
  */
 export class ProfessorClientErrorBoundary extends Component<
   { children: ReactNode; fallbackTitle?: string; fallbackBody?: string },
-  { failed: boolean }
+  { failed: boolean; message: string | null }
 > {
-  state = { failed: false };
+  state = { failed: false, message: null as string | null };
 
-  static getDerivedStateFromError(): { failed: boolean } {
-    return { failed: true };
+  static getDerivedStateFromError(error: Error): { failed: boolean; message: string | null } {
+    return { failed: true, message: error?.message?.trim() || null };
   }
 
   componentDidCatch(error: Error) {
@@ -35,6 +35,11 @@ export class ProfessorClientErrorBoundary extends Component<
             {this.props.fallbackBody ??
               "Refresh the page to try again. Your build was saved — the list is not lost."}
           </p>
+          {this.state.message ? (
+            <p className="professor-mtg-muted mt-3 break-words font-mono text-[11px]">
+              {this.state.message}
+            </p>
+          ) : null}
         </div>
       );
     }

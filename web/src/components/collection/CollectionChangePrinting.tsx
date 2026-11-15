@@ -49,15 +49,15 @@ export function CollectionChangePrinting({
     };
   }, [card.displayName, open, slug]);
 
-  async function pick(scryfallId: string) {
-    setSaving(scryfallId);
+  async function pick(scryfallId: string, finish: "nonfoil" | "foil" | "etched") {
+    setSaving(`${scryfallId}:${finish}`);
     setError(null);
     try {
       const data = await apiFetch<{ card: CollectionCard }>(
         `/api/store/${encodeURIComponent(slug)}/collection/${encodeURIComponent(card.id)}`,
         {
           method: "PATCH",
-          body: JSON.stringify({ scryfallId }),
+          body: JSON.stringify({ scryfallId, finish }),
         },
       );
       onChanged(data.card);
@@ -81,7 +81,7 @@ export function CollectionChangePrinting({
       {open ? (
         <div className="mt-2 w-full border border-neutral-800 bg-neutral-950 p-3">
           <p className={authSubtext}>
-            Pick the set and art for {card.displayName}.
+            Pick the set, art, and foil for {card.displayName}.
           </p>
           {loading ? <p className={`mt-2 ${authSubtext}`}>Loading printings…</p> : null}
           {error ? <p className={`mt-2 ${authError}`}>{error}</p> : null}
@@ -89,7 +89,7 @@ export function CollectionChangePrinting({
             <CollectionPrintingPicker
               candidates={hits.filter((hit) => hit.scryfallId !== card.scryfallId)}
               busyId={saving}
-              onPick={(id) => void pick(id)}
+              onPick={(id, finish) => void pick(id, finish)}
             />
           ) : null}
           <button

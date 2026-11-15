@@ -15,6 +15,10 @@ export function requireOpenAiApiKey(): string {
   return apiKey;
 }
 
+function supportsReasoningEffortNone(model: string): boolean {
+  return /^(gpt-5|gpt-6)/i.test(model.trim());
+}
+
 export async function callOpenAiJsonWithUsage<T>(
   system: string,
   userContent: VisionMessageContent[],
@@ -26,7 +30,24 @@ export async function callOpenAiJsonWithUsage<T>(
     options?.model ??
     process.env.OPENAI_VISION_MODEL ??
     process.env.OPENAI_CATEGORY_CLASSIFIER_MODEL ??
-    "gpt-4o-mini";
+    "gpt-5.4-mini";
+
+  const requestBody: Record<string, unknown> = {
+    model,
+    response_format: { type: "json_object" },
+    messages: [
+      { role: "system", content: system },
+      { role: "user", content: userContent },
+    ],
+  };
+
+  if (supportsReasoningEffortNone(model)) {
+    requestBody.reasoning_effort = "none";
+    requestBody.max_completion_tokens = options?.maxTokens ?? 1200;
+  } else {
+    requestBody.max_tokens = options?.maxTokens ?? 1200;
+    requestBody.temperature = options?.temperature ?? 0.2;
+  }
 
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
@@ -34,16 +55,7 @@ export async function callOpenAiJsonWithUsage<T>(
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      model,
-      response_format: { type: "json_object" },
-      messages: [
-        { role: "system", content: system },
-        { role: "user", content: userContent },
-      ],
-      max_tokens: options?.maxTokens ?? 1200,
-      temperature: options?.temperature ?? 0.2,
-    }),
+    body: JSON.stringify(requestBody),
     signal: AbortSignal.timeout(
       parseInt(process.env.OPENAI_REQUEST_TIMEOUT_MS ?? "60000", 10),
     ),

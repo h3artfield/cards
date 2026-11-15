@@ -28,6 +28,7 @@ export interface CatalogCard {
   legalities?: Record<string, string | undefined>;
   imageNormal?: string;
   imageArtCrop?: string;
+  finishes?: Array<"nonfoil" | "foil" | "etched">;
   tcgplayerId?: string;
   edhrecRank?: number;
   gameChanger?: boolean;

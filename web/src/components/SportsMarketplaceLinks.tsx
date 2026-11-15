@@ -32,7 +32,7 @@ function LinkItem({ href, label }: { href?: string; label: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="font-medium text-indigo-700 hover:underline"
+      className="inline-flex min-h-9 items-center rounded-md border border-gray-300 bg-gray-200 px-3 text-sm font-semibold text-gray-900 hover:border-indigo-400 hover:text-indigo-300"
     >
       {label}
     </a>
@@ -89,9 +89,11 @@ export function SportsMarketplaceLinks({
   }
 
   return (
-    <div className="rounded-lg border border-sky-200 bg-sky-50/50 p-2.5 text-xs">
-      <p className="font-semibold text-sky-900">Check live listings</p>
-      <p className="mt-2 flex flex-wrap gap-3">
+    <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
+      <p className="text-xs font-semibold uppercase tracking-wide text-gray-600">
+        Check live listings
+      </p>
+      <p className="mt-2 flex flex-wrap gap-2">
         <LinkItem href={links.tcgplayer} label="TCGplayer" />
         <LinkItem href={links.ebayActive} label="eBay active" />
         <LinkItem href={links.ebaySold} label="eBay sold (manual)" />

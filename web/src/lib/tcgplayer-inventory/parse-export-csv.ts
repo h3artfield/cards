@@ -40,7 +40,7 @@ function buildDisplayName(row: {
 }
 
 /** Derive inventory counts from TCGplayer export columns.
- * Total Quantity → quantityOnHand (authoritative physical count).
+ * Add to Quantity (else Total Quantity) → quantityOnHand (authoritative physical count).
  * My Store Reserve Qty → tcgplayerReportedReserve (TCGplayer reporting only; NOT an app hold).
  * quantityAvailable is computed at read time from on-hand minus app holds. */
 export function resolveInventoryQuantities(
@@ -107,6 +107,7 @@ function readMyStorePrice(
       "MyStorePrice",
       "Store Price",
       "My Store Channel Price",
+      "Saved Price",
     );
   return parseMoney(raw);
 }
@@ -119,6 +120,10 @@ export function parseTcgplayerInventoryExportCsv(
 
   const headers = parsed[0]!;
   const index = buildHeaderIndex(headers);
+  const hasInStore = index.has(normalizeHeader("In Store"));
+  const hasOnline = index.has(normalizeHeader("Online"));
+  // The store keeps its online count in Add to Quantity; Total Quantity is not its stock.
+  const hasAddToQuantity = index.has(normalizeHeader("Add to Quantity"));
   const rows: TcgplayerInventoryCsvRow[] = [];
   let skipped = 0;
 
@@ -144,7 +149,7 @@ export function parseTcgplayerInventoryExportCsv(
     }
 
     const productLine = getCell(row, index, "Product Line", "ProductLine");
-    const setName = getCell(row, index, "Set Name", "SetName");
+    const setName = getCell(row, index, "Set Name", "SetName", "Set");
     const productName = getCell(row, index, "Product Name", "ProductName");
     const title = getCell(row, index, "Title");
     const number = getCell(row, index, "Number", "Card Number", "CardNumber");
@@ -173,9 +178,17 @@ export function parseTcgplayerInventoryExportCsv(
       tcgLowPrice,
       tcgLowPriceWithShipping,
     );
-    const totalQuantity = parseIntQty(
-      getCell(row, index, "Total Quantity", "TotalQuantity", "Quantity"),
-    );
+    const quantityInStore = hasInStore ? parseIntQty(getCell(row, index, "In Store")) : undefined;
+    const quantityOnline = hasOnline ? parseIntQty(getCell(row, index, "Online")) : undefined;
+    const totalQuantity =
+      hasInStore || hasOnline
+        ? (quantityInStore ?? 0) + (quantityOnline ?? 0)
+        : hasAddToQuantity
+          ? parseIntQty(getCell(row, index, "Add to Quantity"))
+          : parseIntQty(getCell(row, index, "Total Quantity", "TotalQuantity", "Quantity"));
+    const shelfLocation = getCell(row, index, "Location", "Shelf Location").trim();
+    const ingestedRaw = getCell(row, index, "Ingestion Date", "Injestion Date", "Date Added").trim();
+    const ingestedMs = ingestedRaw ? Date.parse(ingestedRaw) : NaN;
     const storeReserveQty = parseIntQty(
       getCell(
         row,
@@ -231,6 +244,9 @@ export function parseTcgplayerInventoryExportCsv(
       tcgplayerReportedReserve: quantities.tcgplayerReportedReserve,
       quantityAvailable: quantities.quantityAvailable,
       listPrice,
+      ...(hasInStore || hasOnline ? { quantityInStore: quantityInStore ?? 0, quantityOnline: quantityOnline ?? 0 } : {}),
+      ...(shelfLocation ? { shelfLocation } : {}),
+      ...(Number.isFinite(ingestedMs) ? { ingestedAt: new Date(ingestedMs).toISOString() } : {}),
       raw,
     });
   }

@@ -2,12 +2,33 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  serverExternalPackages: ["sharp", "onnxruntime-node"],
+  webpack: (config, { isServer }) => {
+    config.module.rules.push({
+      test: /\.md$/,
+      type: "asset/source",
+    });
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        sharp$: false,
+        "onnxruntime-node$": false,
+      };
+    }
+    return config;
+  },
   outputFileTracingIncludes: {
+    "/api/scan-index": ["./data/scan-index/**"],
+    "/api/scan-index/[game]": ["./data/scan-index/**"],
+    "/api/scan-index/[game]/pack": ["./data/scan-index/**"],
     "/api/commander-optimization-score": [
       "./data/milestones/mechanical-space/commander-optimization-score-v1/**",
       "./data/milestones/mechanical-space/spellbook-win-architecture-space-v1/normalized-combo-dictionary.jsonl",
       "./data/milestones/catalog-shadow/catalog-semantic-visualization-v1-points.json.gz",
       "./data/milestones/catalog-shadow/catalog-shadow-parse-rc8-firestore-v2.jsonl.gz",
+    ],
+    "/api/store/[slug]/professor/sol-directed-build": [
+      "./data/milestones/deck-synthesis/phase6a1-professor-plan-model-pin-v2.json",
     ],
   },
   typescript: {

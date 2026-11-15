@@ -109,11 +109,20 @@ export function ProfessorDeckBracketPanel({
       <p className="professor-mtg-body mt-1 text-lg font-bold">
         {result.assignedBracket} · {result.assignedBracketName}
       </p>
+      {result.assignedBracket <= 4 ? (
+        <p className="professor-mtg-muted mt-1 text-[11px] leading-relaxed">
+          Deck Rating publishes the bracket digit only (B{result.assignedBracket}). The last three
+          digits stay unpublished for every band, including 5xxx, until W moves with the list.
+        </p>
+      ) : null}
 
       <p className="professor-mtg-muted mt-2 text-xs leading-relaxed">
         {result.determiningSignals.length === 0
           ? "Nothing in this list pushes it above the baseline bracket."
           : `Set by ${result.determiningSignals.map((s) => s.label.toLowerCase()).join(" and ")}.`}
+      </p>
+      <p className="professor-mtg-muted mt-1 text-[11px] leading-relaxed">
+        Tutors no longer affect brackets (WotC, Oct 2025). Game Changer list is the 2026-08-11 snapshot.
       </p>
 
       <ul className="mt-3 space-y-1">

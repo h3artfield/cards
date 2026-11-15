@@ -19,10 +19,14 @@ export {
 export {
   COMMANDER_BRACKET_RUBRIC_V1_VERSION,
   type BracketRubricCard,
+  type BracketRubricComboSet,
   type BracketRubricComboSummary,
   type BracketRubricEvidence,
   type BracketRubricSignal,
   type BracketRubricSignalId,
   type CommanderBracket,
   type CommanderBracketRubricResult,
+  type SpellbookBracketTagV1,
 } from "./types";
+export { isExhibitionEligibleV1 } from "./classify";
+export { spellbookTagFloorV1, maxSpellbookFloorV1 } from "./spellbook-tag-floor";

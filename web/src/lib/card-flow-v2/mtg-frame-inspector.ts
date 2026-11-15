@@ -105,7 +105,7 @@ export async function inspectMtgFrameTreatment(
   const model =
     process.env.OPENAI_VISION_MODEL ??
     process.env.OPENAI_EVIDENCE_MODEL ??
-    "gpt-4o";
+    "gpt-6-luna";
 
   try {
     const raw = await callOpenAiJson<InspectorRaw>(

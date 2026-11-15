@@ -1,6 +1,18 @@
 import { NextRequest } from "next/server";
 import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
-import { resolveStoreForSlug } from "@/lib/auth/customer-auth";
+import { getCustomerSession, loadCustomer, resolveStoreForSlug } from "@/lib/auth/customer-auth";
+import { formatShopifyApiErrorMessage } from "@/lib/shopify/client";
+import {
+  splitTokenCartLinesV1,
+  startTokenCheckoutV1,
+  TOKEN_CART_PREFIX,
+} from "@/lib/token-creator/orders-v1";
+import { inventoryOnlineQuantity } from "@/lib/inventory/status";
+import {
+  createPickupReservation,
+  reservedQuantities,
+  syncPickupReservationsIfStale,
+} from "@/lib/pickup/reservations";
 import { buildShopifyCheckoutUrl } from "@/lib/shopify/checkout-permalink";
 import { dataStore } from "@/lib/storage/data-store";
 import {
@@ -51,8 +63,93 @@ export async function POST(
       );
     }
 
-    const inventory = await dataStore.getInventory(store.id);
-    const validation = validateCartForCheckout(requested, inventory);
+    const split = splitTokenCartLinesV1(requested);
+
+    await syncPickupReservationsIfStale(store.id);
+    const [inventory, reservations] = await Promise.all([
+      dataStore.getInventory(store.id),
+      dataStore.getPickupReservations(store.id),
+    ]);
+    const validation = validateCartForCheckout(
+      split.inventory,
+      inventory,
+      reservedQuantities(reservations),
+    );
+
+    // Custom tokens carry a design reference on their line, which a cart link
+    // cannot hold, so a cart with tokens checks out through a draft order.
+    if (split.tokens.length) {
+      const session = getCustomerSession(req);
+      const customer = session ? await loadCustomer(session.customerId) : null;
+      if (!customer) return jsonError("Sign in to buy custom tokens.", 401);
+      let result;
+      try {
+        result = await startTokenCheckoutV1({
+          store,
+          customer,
+          tokens: split.tokens,
+          inventoryLines: validation.lines,
+        });
+      } catch (err) {
+        return jsonError(formatShopifyApiErrorMessage(err), 502);
+      }
+      if (!result.ok) {
+        return jsonOk({
+          checkoutUrl: null,
+          lines: validation.lines,
+          rejected: [
+            ...validation.rejected,
+            ...(result.rejectedSnapshotIds ?? []).map((id) => ({
+              inventoryItemId: `${TOKEN_CART_PREFIX}${id}`,
+              reason: "not_found" as const,
+              message: "This custom token could not be found.",
+            })),
+          ],
+          subtotal: validation.subtotal,
+          error: result.message,
+        });
+      }
+      return jsonOk({
+        checkoutUrl: result.checkoutUrl,
+        lines: validation.lines,
+        rejected: validation.rejected,
+        subtotal: validation.subtotal + result.order.subtotalCents / 100,
+      });
+    }
+
+    const byId = new Map(inventory.map((i) => [i.id, i]));
+    const pickupOnly = validation.lines.some((l) => {
+      const item = byId.get(l.inventoryItemId);
+      return item != null && l.quantity > inventoryOnlineQuantity(item);
+    });
+    if (pickupOnly && validation.lines.length) {
+      const session = getCustomerSession(req);
+      const customer = session ? await loadCustomer(session.customerId) : null;
+      let reservation;
+      try {
+        reservation = await createPickupReservation({
+          store,
+          customerId: customer?.id,
+          contact: {
+            firstName: customer?.firstName ?? "",
+            lastName: customer?.lastName ?? "",
+            email: customer?.email || undefined,
+            phone: customer?.phone || undefined,
+          },
+          lines: validation.lines,
+          payOnline: true,
+        });
+      } catch (err) {
+        return jsonError(formatShopifyApiErrorMessage(err), 502);
+      }
+      return jsonOk({
+        checkoutUrl: reservation.invoiceUrl ?? null,
+        pickupOnly: true,
+        lines: validation.lines,
+        rejected: validation.rejected,
+        subtotal: validation.subtotal,
+      });
+    }
 
     const checkoutUrl = buildShopifyCheckoutUrl({
       shopDomain: integration.shopDomain,

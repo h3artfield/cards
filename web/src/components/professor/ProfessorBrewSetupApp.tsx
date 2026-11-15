@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { howCosWorksPath } from "@/lib/commander-optimization-score/v1/public-path";
 import {
   DEFAULT_PROFESSOR_PLAYSTYLE_V111,
   PROFESSOR_PLAYSTYLE_CHOICES_V111,
@@ -218,6 +217,39 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
 
     setError(null);
     try {
+      if (setupMode === "optimize") {
+        // An imported list becomes the customer's own deck, which the Professor
+        // then reviews in place: swaps are suggested, not applied.
+        setLoading(true);
+        const createRes = await fetch(`/api/store/${slug}/professor/deck-editor`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ commanderName: commander.name, decklist: importText.trim() }),
+        });
+        const created = (await createRes.json().catch(() => null)) as
+          | { deck?: { deckId: string }; error?: string }
+          | null;
+        if (!createRes.ok || !created?.deck) throw new Error(created?.error ?? "Could not save this list");
+        const deckId = created.deck.deckId;
+        await fetch(`/api/store/${slug}/professor/deck-review`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            deckId,
+            bracket,
+            playstyle: composedPlaystyle,
+            deckTheme: composedDeckTheme,
+            winPreference: composedWinPreference,
+            commanderStyle: composedCommanderStyle,
+            deckPreferences: deckPreferencesText.trim() || undefined,
+          }),
+        }).catch(() => undefined);
+        router.push(`/s/${slug}/decks/${encodeURIComponent(deckId)}`);
+        return;
+      }
+
       if (solDirectedEnabled) {
         saveSolDirectedPendingBuild(slug, {
           commanderName: commander.name,
@@ -230,14 +262,7 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
           userSemanticPreferences: isUserSemanticPreferencesNoneV111(userSemanticPreferences)
             ? undefined
             : userSemanticPreferences,
-          mode: setupMode,
-          importedCards:
-            setupMode === "optimize" && importPreview
-              ? importPreview.cards.map((card) => ({
-                  name: card.resolved ? card.name : card.sourceName,
-                  copies: card.copies,
-                }))
-              : undefined,
+          mode: "build",
         });
         router.push(`/s/${slug}/inventory/professor/build?start=1`);
         return;
@@ -321,12 +346,20 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
 
         <div className="mt-6 text-center">
           <h1 className="professor-mtg-title text-3xl leading-none sm:text-4xl">
-            {setupMode === "optimize" ? "Optimize a Deck" : "Build a Deck"}
+            {setupMode === "optimize" ? "Review a Deck" : "Build a Deck"}
           </h1>
           <p className="professor-mtg-muted mt-3 text-sm italic">
             {setupMode === "optimize"
               ? "Paste a list you already have · bracket · playstyle"
               : "Paper-legal commanders · bracket · your playstyle"}
+          </p>
+          <p className="mt-3">
+            <Link
+              href={`/s/${encodeURIComponent(slug)}/decks/new`}
+              className="professor-mtg-link text-xs"
+            >
+              Build it myself — pick cards or paste a list
+            </Link>
           </p>
           {pilePrefillNote ? (
             <p className="professor-mtg-body mt-2 text-sm text-[var(--mtg-gold)]">{pilePrefillNote}</p>
@@ -415,7 +448,7 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
                       </p>
                     ))}
                     {importPreview.canOptimize ? (
-                      <p className="text-[var(--mtg-emerald)]">List is ready to optimize.</p>
+                      <p className="text-[var(--mtg-emerald)]">List is ready for review.</p>
                     ) : null}
                   </div>
                 ) : null}
@@ -658,27 +691,22 @@ export function ProfessorBrewSetupApp({ slug }: { slug: string }) {
                   (setupMode === "optimize" && !importPreview?.canOptimize)
                 }
                 onClick={() => void buildDeck()}
-                className="professor-mtg-btn w-full px-6 py-4 text-sm"
+                className="professor-mtg-btn professor-mtg-btn--primary w-full px-6 py-4 text-sm"
               >
                 {loading
                   ? setupMode === "optimize"
-                    ? "Queuing optimization…"
+                    ? "Saving your deck…"
                     : solDirectedEnabled
                       ? "Entering the chamber…"
                       : "Starting professors…"
                   : setupMode === "optimize"
-                    ? "Optimize this deck"
+                    ? "Save and have the Professor review it"
                     : "Build deck"}
               </button>
               <p className="professor-mtg-muted text-center text-xs italic">
                 {setupMode === "optimize"
-                  ? "Professor keeps your list and applies bounded upgrades"
+                  ? "Saved to My decks. The Professor grades it and suggests swaps; you choose which to apply."
                   : "Swap cards after the full list is built"}
-              </p>
-              <p className="text-center">
-                <Link href={howCosWorksPath(slug)} className="professor-mtg-link">
-                  How COS works
-                </Link>
               </p>
             </div>
 

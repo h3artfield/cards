@@ -22,6 +22,14 @@ const DATASET_PATHS = [
   "data/oracle-action-eval-development-generalization-expansion-check-v4.json",
   "data/milestones/rc2-development-planning/development-probe-reserved-oracle-ids.json",
   "data/oracle-action-eval-validation-v12-fresh.json",
+  "data/oracle-action-eval-validation-v13.json",
+  "data/oracle-action-eval-validation-v14.json",
+  "data/oracle-action-eval-validation-v15.json",
+  "data/oracle-action-eval-validation-v16.json",
+  "data/oracle-action-eval-validation-v17.json",
+  "data/oracle-action-eval-rc3-positive-training-catalog-v133.json",
+  "data/oracle-action-eval-rc3-policy-guardrail-v130.json",
+  "data/oracle-action-eval-rc3-policy-guardrail-v132.json",
 ];
 
 const PROBE_RESERVED_REL = "data/milestones/rc2-development-planning/development-probe-reserved-oracle-ids.json";

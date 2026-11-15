@@ -1,17 +1,37 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import type { CommanderBracket } from "@/lib/bracket-policy/commander-bracket-snapshot-v1";
 import { bracketLabel } from "@/lib/deck-synthesis/professor-brew-bracket-v4-v1";
 import { ProfessorDeckBracketPanel } from "./ProfessorDeckBracketPanel";
 import { ProfessorDeckSwapPanel } from "./ProfessorDeckSwapPanel";
-import { CardNameHoverPreview } from "./CardNameHoverPreview";
-import { DeckInsightDrawer } from "./deck-editor/DeckInsightDrawer";
+import { useCart } from "@/hooks/useCart";
+import {
+  CardImageUrlsProviderV1,
+  CardMentionTextV1,
+  CardMentionV1,
+  CardNameHoverPreview,
+} from "./CardNameHoverPreview";
 import { ProfessorDeckEditorPanel } from "./deck-editor/ProfessorDeckEditorPanel";
+import { DeckActionsV1 } from "./deck-editor/DeckActionsV1";
+import {
+  classificationLabelV1,
+  customerFacingProseV1,
+  customerWinPathsV1,
+} from "@/lib/professor-deck-editor/customer-copy-v1";
+import { ReviewSwapList } from "./ReviewSwapList";
+import {
+  DeckWorkspaceSummary,
+  DeckWorkspaceTabs,
+  type DeckWorkspaceTab,
+} from "./DeckWorkspaceSummary";
+import { ColorBalanceStrip } from "./deck-editor/ColorBalanceStrip";
+import { DeckDistributionStrip } from "./deck-editor/DeckDistributionStrip";
+import type { DeckWorkspaceProfileV1 } from "./deck-editor/ProfessorDeckEditorPanel";
 import { scryfallNamedImageUrl } from "@/lib/deck-synthesis/professor-brew-scryfall-images-v1";
 import type { ProfessorDeckInventoryEntryV43 } from "@/lib/deck-synthesis/professor-brew-inventory-match-v4-3-v1";
-import { computeSolDirectedDeckGradeV111, formatProfessorVerdictForCustomer, parseHeadProfessorGradeText, headProfessorClassificationHint, headProfessorDisplayLetter } from "@/lib/deck-synthesis/professor-sol-directed-deck-grade-v1-1-1";
+import { computeSolDirectedDeckGradeV111, formatProfessorVerdictForCustomer, parseHeadProfessorGradeText, headProfessorClassificationHint } from "@/lib/deck-synthesis/professor-sol-directed-deck-grade-v1-1-1";
 import {
   formatThesisForCustomer,
   resolveCustomerGamePlanV111,
@@ -30,10 +50,6 @@ import {
 import { downloadSolDirectedDeckReportPdf } from "@/lib/deck-synthesis/professor-sol-directed-deck-report-pdf-v1-1-1";
 import { tcgPriceForCardName } from "@/lib/deck-synthesis/professor-brew-scryfall-prices-v1";
 import type { CosV1Score } from "@/lib/commander-optimization-score/v1/types";
-import { ordinalPercentile } from "@/lib/commander-optimization-score/v1/player-report";
-import { cosGradeDivergenceNoteV1 } from "@/lib/commander-optimization-score/v1/grade-divergence-v1";
-import { howCosWorksPath } from "@/lib/commander-optimization-score/v1/public-path";
-import { CosV1PlayerReportView } from "./CosV1PlayerReportView";
 
 type ConstructedDeck = {
   commander?: { name: string; oracleId?: string; typeLine?: string };
@@ -197,12 +213,23 @@ function CategoryScoreRow({ label, letter, score }: { label: string; letter: str
   );
 }
 
-function AssessmentBlock({ label, text }: { label: string; text: string }) {
-  if (!text.trim()) return null;
+function AssessmentBlock({
+  label,
+  text,
+  cardNames,
+}: {
+  label: string;
+  text?: string | null;
+  cardNames: readonly string[];
+}) {
+  const prose = customerFacingProseV1(text);
+  if (!prose) return null;
   return (
     <div>
       <p className="professor-mtg-label">{label}</p>
-      <p className="professor-mtg-body mt-2 text-sm leading-relaxed">{text}</p>
+      <p className="professor-mtg-body mt-2 text-sm leading-relaxed">
+        <CardMentionTextV1 text={prose} cardNames={cardNames} />
+      </p>
     </div>
   );
 }
@@ -222,10 +249,13 @@ function ScorePlaystyleModal({
   professorRepairApplied,
   cos,
   storeSlug,
+  cardNames,
 }: {
   open: boolean;
   onClose: () => void;
   commanderName: string;
+  /** Names to make hoverable wherever the report mentions them. */
+  cardNames: readonly string[];
   userInputs: UserInputs;
   headProfessor: SolDirectedHeadProfessorWholeDeckVerdictV111 | null;
   thesis: string;
@@ -262,18 +292,9 @@ function ScorePlaystyleModal({
   }, [headProfessor, userInputs.bracket, userInputs.playstyle, thesis, winPaths.primary, validation, telemetry, validationPass]);
 
   const gradeParts = headProfessor ? parseHeadProfessorGradeText(headProfessor.grade) : null;
-  const displayLetter =
-    (headProfessor ? headProfessorDisplayLetter(headProfessor.grade) : null) ??
-    deckGrade?.overallLetter ??
-    "—";
-  const divergenceNote = cosGradeDivergenceNoteV1({
-    displayLetter,
-    buildOptimization: cos?.buildOptimization,
-  });
+  const requiredChanges = headProfessor?.requiredChanges ?? [];
   const showRequiredChanges =
-    headProfessor != null &&
-    headProfessor.requiredChanges.length > 0 &&
-    !professorRepairApplied;
+    headProfessor != null && requiredChanges.length > 0 && !professorRepairApplied;
 
   if (!open) return null;
 
@@ -290,14 +311,6 @@ function ScorePlaystyleModal({
           <div>
             <p className="professor-mtg-label">Score & playstyle</p>
             <h2 className="professor-mtg-title mt-1 text-xl">{commanderName}</h2>
-            <a
-              href={howCosWorksPath(storeSlug)}
-              target="_blank"
-              rel="noreferrer"
-              className="professor-mtg-link mt-2 inline-block"
-            >
-              How COS works
-            </a>
           </div>
           <button
             type="button"
@@ -313,53 +326,11 @@ function ScorePlaystyleModal({
           <div className="mt-6 border-b border-[var(--mtg-stone-border)] pb-6">
             <div className="flex flex-wrap items-end gap-8">
               <div>
-                <p className="professor-mtg-label">As built</p>
-                <p className="professor-mtg-stat-value text-5xl font-bold">{displayLetter}</p>
-                {cos?.competitiveStrength != null ? (
-                  <p className="professor-mtg-body text-sm tabular-nums">
-                    Competitive Strength {Math.round(cos.competitiveStrength)} / 100
-                    <span className="ml-2 opacity-70">Full scoring coverage</span>
-                  </p>
-                ) : cos?.commanderBaselineStatus === "COMMANDER_BASELINE_UNCALIBRATED" ? (
-                  <p className="professor-mtg-body text-sm">
-                    Competitive Strength uncalibrated — this commander has no baseline yet
-                  </p>
-                ) : cos?.failure ? (
-                  <p className="professor-mtg-body text-sm">
-                    {cos.failure.unresolvedNames?.length
-                      ? `Could not resolve: ${cos.failure.unresolvedNames.slice(0, 6).join(", ")}`
-                      : cos.failure.message}
-                  </p>
-                ) : deckGrade ? (
-                  <p className="professor-mtg-body text-sm">Scoring Competitive Strength…</p>
-                ) : null}
-                {cos?.buildOptimization != null ? (
-                  <p className="professor-mtg-body text-sm tabular-nums">
-                    Build Optimization {ordinalPercentile(cos.buildOptimization)} percentile
-                    {cos.buildOptimizationReferenceDepth ? (
-                      <span className="ml-2 opacity-70">
-                        {cos.buildOptimizationReferenceDepth === "STRONG"
-                          ? `${cos.commanderReferenceCount} same-commander reference decks`
-                          : cos.buildOptimizationReferenceDepth === "NEW_COMMANDER"
-                            ? "New commander · broader COS reference"
-                            : `Limited commander history · ${cos.commanderReferenceCount} lists`}
-                      </span>
-                    ) : null}
-                  </p>
-                ) : null}
-                {cos?.playerReport ? (
-                  <div className="mt-3 max-w-xl space-y-2">
-                    <p className="professor-mtg-muted text-xs leading-relaxed">
-                      {cos.playerReport.competitiveStrengthBlurb}
-                    </p>
-                    <p className="professor-mtg-muted text-xs leading-relaxed">
-                      {cos.playerReport.buildOptimizationBlurb}
-                    </p>
-                    {divergenceNote ? (
-                      <p className="professor-mtg-muted text-xs leading-relaxed">{divergenceNote}</p>
-                    ) : null}
-                  </div>
-                ) : null}
+                <p className="professor-mtg-label">Requested bracket</p>
+                <p className="professor-mtg-stat-value text-5xl font-bold">{userInputs.bracket}</p>
+                <p className="professor-mtg-body mt-1 text-sm">
+                  {bracketLabel(userInputs.bracket as CommanderBracket).replace(/^B\d+\s*·\s*/, "")}
+                </p>
               </div>
               {gradeParts?.potentialRange ? (
                 <div>
@@ -368,15 +339,9 @@ function ScorePlaystyleModal({
                 </div>
               ) : null}
               <div>
-                <p className="professor-mtg-label">Classification</p>
+                <p className="professor-mtg-label">Verdict</p>
                 <p className="professor-mtg-body text-sm tracking-wide">
-                  {headProfessor.classification.replace(/_/g, " ")}
-                </p>
-              </div>
-              <div>
-                <p className="professor-mtg-label">Requested bracket</p>
-                <p className="professor-mtg-body text-sm">
-                  {userInputs.bracket} · {bracketLabel(userInputs.bracket as CommanderBracket)}
+                  {classificationLabelV1(headProfessor.classification)}
                 </p>
               </div>
             </div>
@@ -385,32 +350,11 @@ function ScorePlaystyleModal({
             </p>
             {showRequiredChanges ? (
               <p className="professor-mtg-muted mt-2 text-xs">
-                {headProfessor.requiredChanges.length} required change
-                {headProfessor.requiredChanges.length === 1 ? "" : "s"} — see below.
+                {requiredChanges.length} required change
+                {requiredChanges.length === 1 ? "" : "s"} — see below.
               </p>
             ) : null}
           </div>
-        ) : null}
-
-        {cos?.playerReport ? (
-          <CosV1PlayerReportView report={cos.playerReport} storeSlug={storeSlug} />
-        ) : cos?.profile.length ? (
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            {cos.profile.map((axis) => (
-              <CategoryScoreRow
-                key={axis.id}
-                label={`${axis.label}${axis.role === "descriptive_only" ? " · descriptive" : ""}`}
-                letter={axis.mapping === "within_commander" ? "cmd" : "all"}
-                score={Math.round(axis.percentile)}
-              />
-            ))}
-          </div>
-        ) : cos?.failure ? (
-          <p className="professor-mtg-body mt-6 text-sm">
-            Competitive Strength could not be scored for this list.
-          </p>
-        ) : deckGrade ? (
-          <p className="professor-mtg-body mt-6 text-sm">Scoring Competitive Strength…</p>
         ) : null}
 
         <div className="mt-6 space-y-5 border-t border-[var(--mtg-stone-border)] pt-6">
@@ -418,13 +362,13 @@ function ScorePlaystyleModal({
           {thesis ? (
             <div>
               <p className="professor-mtg-label">Strategy thesis</p>
-              <p className="professor-mtg-body mt-2 text-sm leading-relaxed">{thesis}</p>
+              <p className="professor-mtg-body mt-2 text-sm leading-relaxed"><CardMentionTextV1 text={thesis} cardNames={cardNames} /></p>
             </div>
           ) : null}
           {headProfessor?.reasoningSummary ? (
             <div>
               <p className="professor-mtg-label">Professor review</p>
-              <p className="professor-mtg-body mt-2 text-sm leading-relaxed">{headProfessor.reasoningSummary}</p>
+              <p className="professor-mtg-body mt-2 text-sm leading-relaxed"><CardMentionTextV1 text={headProfessor.reasoningSummary} cardNames={cardNames} /></p>
             </div>
           ) : null}
           {gamePlan?.earlyGame?.length || gamePlan?.midGame?.length || gamePlan?.lateGame?.length ? (
@@ -436,7 +380,7 @@ function ScorePlaystyleModal({
                     <p className="professor-mtg-muted text-xs uppercase tracking-wide">Early game</p>
                     <ul className="professor-mtg-body mt-2 list-disc space-y-1 pl-5 text-sm">
                       {gamePlan.earlyGame.map((line) => (
-                        <li key={line}>{line}</li>
+                        <li key={line}><CardMentionTextV1 text={line} cardNames={cardNames} /></li>
                       ))}
                     </ul>
                   </div>
@@ -446,7 +390,7 @@ function ScorePlaystyleModal({
                     <p className="professor-mtg-muted text-xs uppercase tracking-wide">Mid game</p>
                     <ul className="professor-mtg-body mt-2 list-disc space-y-1 pl-5 text-sm">
                       {gamePlan.midGame.map((line) => (
-                        <li key={line}>{line}</li>
+                        <li key={line}><CardMentionTextV1 text={line} cardNames={cardNames} /></li>
                       ))}
                     </ul>
                   </div>
@@ -456,7 +400,7 @@ function ScorePlaystyleModal({
                     <p className="professor-mtg-muted text-xs uppercase tracking-wide">Late game</p>
                     <ul className="professor-mtg-body mt-2 list-disc space-y-1 pl-5 text-sm">
                       {gamePlan.lateGame.map((line) => (
-                        <li key={line}>{line}</li>
+                        <li key={line}><CardMentionTextV1 text={line} cardNames={cardNames} /></li>
                       ))}
                     </ul>
                   </div>
@@ -464,27 +408,28 @@ function ScorePlaystyleModal({
               </div>
             </div>
           ) : null}
-          {winPaths.primary?.length ? (
+          {customerWinPathsV1(winPaths.primary).length ? (
             <div>
               <p className="professor-mtg-label">Primary win paths</p>
               <ul className="professor-mtg-body mt-2 list-disc space-y-1 pl-5 text-sm">
-                {winPaths.primary.map((line) => (
-                  <li key={line}>{line}</li>
+                {customerWinPathsV1(winPaths.primary).map((line) => (
+                  <li key={line}><CardMentionTextV1 text={line} cardNames={cardNames} /></li>
                 ))}
               </ul>
             </div>
           ) : null}
           {headProfessor ? (
             <>
-              <AssessmentBlock label="Bracket fit" text={headProfessor.bracketFit} />
-              <AssessmentBlock label="Strategy coherence" text={headProfessor.strategyCoherence} />
-              <AssessmentBlock label="Mana base" text={headProfessor.manaAssessment} />
-              <AssessmentBlock label="Early / mid / late game" text={headProfessor.earlyMidLateGameAssessment} />
-              <AssessmentBlock label="Win conditions" text={headProfessor.winConditionAssessment} />
-              <AssessmentBlock label="Interaction" text={headProfessor.interactionAssessment} />
-              <AssessmentBlock label="Resilience" text={headProfessor.resilienceAssessment} />
+              <AssessmentBlock cardNames={cardNames} label="Bracket fit" text={headProfessor.bracketFit} />
+              <AssessmentBlock cardNames={cardNames} label="Strategy coherence" text={headProfessor.strategyCoherence} />
+              <AssessmentBlock cardNames={cardNames} label="Mana base" text={headProfessor.manaAssessment} />
+              <AssessmentBlock cardNames={cardNames} label="Early / mid / late game" text={headProfessor.earlyMidLateGameAssessment} />
+              <AssessmentBlock cardNames={cardNames} label="Win conditions" text={headProfessor.winConditionAssessment} />
+              <AssessmentBlock cardNames={cardNames} label="Interaction" text={headProfessor.interactionAssessment} />
+              <AssessmentBlock cardNames={cardNames} label="Resilience" text={headProfessor.resilienceAssessment} />
               {headProfessor.selfBuildQuestionAnswer ? (
                 <AssessmentBlock
+                  cardNames={cardNames}
                   label="Professor verdict"
                   text={formatProfessorVerdictForCustomer(headProfessor.selfBuildQuestionAnswer)}
                 />
@@ -493,18 +438,18 @@ function ScorePlaystyleModal({
                 <div>
                   <p className="professor-mtg-label text-red-300">Required changes</p>
                   <ul className="professor-mtg-body mt-2 list-disc space-y-1 pl-5 text-sm">
-                    {headProfessor.requiredChanges.map((c) => (
-                      <li key={c}>{c}</li>
+                    {requiredChanges.map((c) => (
+                      <li key={c}><CardMentionTextV1 text={c} cardNames={cardNames} /></li>
                     ))}
                   </ul>
                 </div>
               ) : null}
-              {headProfessor.optionalChanges.length > 0 ? (
+              {(headProfessor.optionalChanges ?? []).length > 0 ? (
                 <div>
                   <p className="professor-mtg-label">Optional tweaks</p>
                   <ul className="professor-mtg-body mt-2 list-disc space-y-1 pl-5 text-sm">
-                    {headProfessor.optionalChanges.map((c) => (
-                      <li key={c}>{c}</li>
+                    {(headProfessor.optionalChanges ?? []).map((c) => (
+                      <li key={c}><CardMentionTextV1 text={c} cardNames={cardNames} /></li>
                     ))}
                   </ul>
                 </div>
@@ -533,10 +478,21 @@ export function ProfessorSolDirectedDeckListPanel({
   validationPass,
   deckEnrichment,
   professorRepairApplied,
+  deckId,
+  review,
 }: {
   slug: string;
-  /** Required to edit. Without it the panel stays read-only. */
+  /** Required to edit (or `deckId`). Without either the panel stays read-only. */
   buildId?: string;
+  /** A hand-built deck the Professor reviewed; the editor opens it by its own id. */
+  deckId?: string;
+  /** Review mode: swaps are offered with Apply instead of listed as made. */
+  review?: {
+    suggestedSwaps: Array<{ cut: string; add: string; reason: string }>;
+    isApplied: (swap: { cut: string; add: string }) => boolean;
+    onApply: (swap: { cut: string; add: string }) => Promise<void>;
+    notice?: ReactNode;
+  };
   commander: { name: string; oracleId: string; colorIdentity: string[] };
   constructedDeck: Record<string, unknown> | null;
   userInputs: UserInputs;
@@ -577,36 +533,44 @@ export function ProfessorSolDirectedDeckListPanel({
     [deck],
   );
   const [scoreOpen, setScoreOpen] = useState(false);
-  // Which reference panel is open over the editor, if any.
-  const [insight, setInsight] = useState<null | "bracket" | "swaps" | "changes">(null);
+  const [workspaceTab, setWorkspaceTab] = useState<DeckWorkspaceTab>("deck");
+  const [measureBracket, setMeasureBracket] = useState(false);
+  const [workspaceProfile, setWorkspaceProfile] = useState<DeckWorkspaceProfileV1 | null>(null);
+  const [workspaceFocus, setWorkspaceFocus] = useState<string | null>(null);
+  const cart = useCart(slug);
   const [pdfBusy, setPdfBusy] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [cos, setCos] = useState<CosV1Score | null>(null);
   useEffect(() => {
+    if (!scoreOpen) return;
     if (!cosPayload.commanderOracleIds.length || !cosPayload.mainboard.length) return;
     let cancelled = false;
-    void fetch("/api/commander-optimization-score", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        commanderOracleIds: cosPayload.commanderOracleIds,
-        mainboard: cosPayload.mainboard,
-      }),
-    })
-      .then(async (res) => {
-        const data = (await res.json().catch(() => null)) as CosV1Score | null;
-        return data;
+    const timer = window.setTimeout(() => {
+      if (cancelled) return;
+      void fetch("/api/commander-optimization-score", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          commanderOracleIds: cosPayload.commanderOracleIds,
+          mainboard: cosPayload.mainboard,
+        }),
       })
-      .then((data: CosV1Score | null) => {
-        if (!cancelled) setCos(data);
-      })
-      .catch(() => {
-        if (!cancelled) setCos(null);
-      });
+        .then(async (res) => {
+          const data = (await res.json().catch(() => null)) as CosV1Score | null;
+          return data;
+        })
+        .then((data: CosV1Score | null) => {
+          if (!cancelled) setCos(data);
+        })
+        .catch(() => {
+          if (!cancelled) setCos(null);
+        });
+    }, 1200);
     return () => {
       cancelled = true;
+      window.clearTimeout(timer);
     };
-  }, [cosPayload]);
+  }, [cosPayload, scoreOpen]);
   const [imageUrls, setImageUrls] = useState<Record<string, string>>(deckEnrichment?.imageUrls ?? {});
   const [inventoryByName, setInventoryByName] = useState<Record<string, ProfessorDeckInventoryEntryV43>>(
     deckEnrichment?.inventoryByName ?? {},
@@ -628,7 +592,7 @@ export function ProfessorSolDirectedDeckListPanel({
         commander: {
           name: deck.commander.name,
           oracleId: deck.commander.oracleId ?? commander.oracleId,
-          colorIdentity: commander.colorIdentity,
+          colorIdentity: commander.colorIdentity ?? [],
           manaValue: null,
           oracleText: "",
           semanticFunctions: [],
@@ -676,7 +640,7 @@ export function ProfessorSolDirectedDeckListPanel({
     return formatThesisForCustomer({
       thesis: raw,
       deckPreferences: userInputs.deckPreferences,
-      commanderColorIdentity: commander.colorIdentity,
+      commanderColorIdentity: commander.colorIdentity ?? [],
     });
   }, [architectPlan, commander.colorIdentity, userInputs.deckPreferences]);
 
@@ -700,13 +664,23 @@ export function ProfessorSolDirectedDeckListPanel({
     return Object.values(grouped).flatMap((cards) => cards.map((card) => card.name));
   }, [grouped]);
 
+  const mentionNames = useMemo(
+    () => [
+      ...allCardNames,
+      commander.name,
+      ...(critic?.appliedSwaps ?? []).flatMap((swap) => [swap.cut, swap.add]),
+      ...(review?.suggestedSwaps ?? []).flatMap((swap) => [swap.cut, swap.add]),
+    ],
+    [allCardNames, commander.name, critic?.appliedSwaps, review?.suggestedSwaps],
+  );
+
   const instantImageUrls = useMemo(() => {
     const urls: Record<string, string> = { ...deckEnrichment?.imageUrls };
-    for (const name of allCardNames) {
-      if (!urls[name]) urls[name] = scryfallNamedImageUrl(name);
+    if (commander.name && !urls[commander.name]) {
+      urls[commander.name] = scryfallNamedImageUrl(commander.name);
     }
     return urls;
-  }, [allCardNames, deckEnrichment?.imageUrls]);
+  }, [commander.name, deckEnrichment?.imageUrls]);
 
   const mergedImageUrls = useMemo(
     () => ({ ...instantImageUrls, ...imageUrls }),
@@ -719,7 +693,10 @@ export function ProfessorSolDirectedDeckListPanel({
     if (deckEnrichment?.tcgPricesByName) setTcgPricesByName(deckEnrichment.tcgPricesByName);
   }, [deckEnrichment]);
 
+  const editable = Boolean(buildId || deckId);
+
   useEffect(() => {
+    if (editable) return;
     if (!slug || allCardNames.length === 0 || deckEnrichment != null) return;
 
     let cancelled = false;
@@ -774,9 +751,10 @@ export function ProfessorSolDirectedDeckListPanel({
     return () => {
       cancelled = true;
     };
-  }, [slug, allCardNames, deckEnrichment]);
+  }, [editable, slug, allCardNames, deckEnrichment]);
 
   useEffect(() => {
+    if (editable) return;
     if (!slug || allCardNames.length === 0) return;
     const deckKey = allCardNames.join("\u0001");
     if (tcgRequestedDeckKey.current !== deckKey) {
@@ -811,258 +789,335 @@ export function ProfessorSolDirectedDeckListPanel({
     return () => {
       cancelled = true;
     };
-  }, [slug, allCardNames, tcgPricesByName]);
+  }, [editable, slug, allCardNames, tcgPricesByName]);
 
   const totalCards = useMemo(() => {
     if (!grouped) return 0;
-    return Object.values(grouped).reduce(
-      (sum, cards) => sum + cards.reduce((inner, card) => inner + card.copies, 0),
-      0,
-    );
+    // The header reads "N/99", so the command zone is not part of the count.
+    return Object.entries(grouped)
+      .filter(([category]) => category !== "commander")
+      .reduce((sum, [, cards]) => sum + cards.reduce((inner, card) => inner + card.copies, 0), 0);
   }, [grouped]);
 
   if (!deck || !grouped) return null;
 
-  const inStockCount = Object.keys(inventoryByName).length;
+  const inStockCount = Object.values(inventoryByName).filter(
+    (entry) => entry.quantity > 0 && entry.inventoryItemId && entry.listPrice != null && entry.listPrice > 0,
+  ).length;
+
+  const addInStockToCart = () => {
+    const copiesByItem = new Map<
+      string,
+      { name: string; copies: number; setName?: string; listPrice: number; maxQuantity: number }
+    >();
+    const addName = (name: string, copies: number) => {
+      const entry = inventoryByName[name];
+      if (!entry?.inventoryItemId || entry.quantity <= 0 || entry.listPrice == null || entry.listPrice <= 0) {
+        return;
+      }
+      const existing = copiesByItem.get(entry.inventoryItemId);
+      if (existing) existing.copies += copies;
+      else {
+        copiesByItem.set(entry.inventoryItemId, {
+          name,
+          copies,
+          setName: entry.setName,
+          listPrice: entry.listPrice,
+          maxQuantity: Math.max(1, entry.quantity),
+        });
+      }
+    };
+    for (const card of deck?.nonlands ?? []) addName(card.name, 1);
+    for (const land of deck?.lands ?? []) addName(land.name, land.copies ?? 1);
+    for (const [inventoryItemId, line] of copiesByItem) {
+      cart.add({
+        inventoryItemId,
+        name: line.name,
+        setName: line.setName,
+        imageUrl: mergedImageUrls[line.name],
+        unitPrice: line.listPrice,
+        maxQuantity: line.maxQuantity,
+        quantity: Math.min(Math.max(1, line.copies), line.maxQuantity),
+      });
+    }
+  };
+  const requiredChangeCount = headProfessor?.requiredChanges?.length ?? 0;
+  const openSuggestedSwaps = review?.suggestedSwaps.filter((swap) => !review.isApplied(swap)) ?? [];
+  const changeCount = review
+    ? openSuggestedSwaps.length
+    : professorRepairApplied
+      ? critic?.appliedSwaps?.length ?? 0
+      : requiredChangeCount || critic?.appliedSwaps?.length || 0;
 
   return (
-    <>
+    <CardImageUrlsProviderV1 imageUrls={mergedImageUrls}>
       <div className="professor-mtg-chamber mb-8">
         <div className="professor-mtg-chamber__inner professor-mtg-chamber__inner--wide relative overflow-hidden p-0">
-        {/* Deck header bar */}
-        <div className="professor-mtg-panel-header px-5 py-4 sm:px-6">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-            <div className="min-w-0">
-              <h1 className="professor-mtg-title text-2xl leading-tight sm:text-3xl">{commander.name}</h1>
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                <span className={`professor-mtg-tag shrink-0 ${validationPass ? "professor-mtg-tag--ok" : ""}`}>
-                  {validationPass ? "Commander OK" : "Review"}
-                </span>
-                <span className="professor-mtg-tag shrink-0">B{userInputs.bracket}</span>
-                {/* The grade and the score below are computed from the list as
-                    the Professor shipped it, and the editor underneath can
-                    change that list. Saying so keeps these from silently
-                    contradicting the editor's own measurement. */}
-                {headProfessor || cos?.competitiveStrength != null ? (
-                  <span
-                    className="professor-mtg-muted shrink-0 text-[10px] uppercase tracking-wide"
-                    title="The grade and score describe the list as it was built. Use Regrade deck in the editor to measure the deck as it stands now."
-                  >
-                    as built
-                  </span>
-                ) : null}
-                {headProfessor ? (
-                  <span className="professor-mtg-tag professor-mtg-tag--grade shrink-0" title={headProfessor.grade}>
-                    {headProfessorDisplayLetter(headProfessor.grade) ?? parseHeadProfessorGradeText(headProfessor.grade).shortLabel}
-                  </span>
-                ) : null}
-                {cos?.competitiveStrength != null ? (
-                  <span className="professor-mtg-tag shrink-0" title="Competitive Strength">
-                    CS {Math.round(cos.competitiveStrength)}
-                  </span>
-                ) : cos?.commanderBaselineStatus === "COMMANDER_BASELINE_UNCALIBRATED" ? (
-                  <span className="professor-mtg-tag shrink-0" title="No calibrated commander intercept">
-                    CS uncalibrated
-                  </span>
-                ) : null}
-                {cos?.buildOptimization != null ? (
-                  <span
-                    className="professor-mtg-tag shrink-0"
-                    title={
-                      cos.buildOptimizationReferenceDepth === "STRONG"
-                        ? `${cos.commanderReferenceCount} same-commander reference decks`
-                        : cos.buildOptimizationReferenceDepth === "NEW_COMMANDER"
-                          ? "New commander · broader COS reference"
-                          : `Limited commander history · ${cos.commanderReferenceCount} lists`
-                    }
-                  >
-                    BO {ordinalPercentile(cos.buildOptimization)}
-                  </span>
-                ) : null}
-              </div>
-              <p className="professor-mtg-muted mt-3 text-sm tabular-nums">
-                {totalCards} cards
-                {inStockCount > 0 ? (
-                  <>
-                    {" · "}
-                    <span className="professor-mtg-card-price">{inStockCount} in shop stock</span>
-                  </>
-                ) : null}
-              </p>
-              {pdfError ? <p className="mt-2 text-xs text-red-300">{pdfError}</p> : null}
-            </div>
-            <div className="flex flex-wrap items-center gap-2 lg:justify-end">
-              <button
-                type="button"
-                className="professor-mtg-btn px-4 py-2 text-[11px]"
-                onClick={() => {
-                  const text = formatSolDirectedDeckListText(grouped);
-                  const filename = solDirectedDeckListDownloadFilename(commander.name);
-                  downloadTextFile(filename, text);
-                }}
-              >
-                Download .txt
-              </button>
-              <button
-                type="button"
-                className="professor-mtg-btn px-4 py-2 text-[11px]"
-                disabled={pdfBusy}
-                onClick={() => {
-                  setPdfBusy(true);
-                  setPdfError(null);
-                  void downloadSolDirectedDeckReportPdf({
-                    commanderName: commander.name,
-                    bracket: userInputs.bracket,
-                    playstyle: userInputs.playstyle,
-                    headProfessor,
-                    grade: headProfessor
-                      ? computeSolDirectedDeckGradeV111({
-                          headProfessor,
-                          bracket: userInputs.bracket,
-                          playstyle: userInputs.playstyle,
-                          thesis,
-                          primaryWinPaths: deck.primaryWinPaths,
-                          audit: validation?.legacyHeuristicAudit ?? null,
-                          landCount: telemetry?.landCount ?? null,
-                          validationPass,
-                        })
-                      : null,
-                    deckListText: formatSolDirectedDeckListText(grouped),
-                    cos,
-                    thesis,
-                    gamePlan,
-                    winPaths: {
-                      primary: deck.primaryWinPaths,
-                      secondary: deck.secondaryWinPaths,
-                    },
-                    nonlands: (deck.nonlands ?? []).map((card) => ({
-                      name: card.name,
-                      primaryArchitectRequirement: card.primaryArchitectRequirement,
-                      primaryRole: card.primaryRole,
-                      typeLine: card.typeLine,
-                    })),
-                    lands: deck.lands ?? [],
-                    grouped,
-                  })
-                    .catch(() => {
-                      setPdfError("Could not build the PDF. Try again.");
+        <DeckWorkspaceSummary
+          commanderName={commander.name}
+          commanderImageUrl={mergedImageUrls[commander.name] ?? scryfallNamedImageUrl(commander.name)}
+          playstyle={userInputs.playstyle}
+          bracket={userInputs.bracket}
+          grade={null}
+          libraryCount={totalCards}
+          libraryLegal={validationPass}
+          inStockCount={inStockCount}
+          onAddInStockToCart={inStockCount > 0 ? addInStockToCart : undefined}
+          assessment={headProfessor?.reasoningSummary ?? thesis}
+          weakness={headProfessor?.winConditionAssessment}
+          requiredChange={
+            !professorRepairApplied ? headProfessor?.requiredChanges?.[0] ?? null : null
+          }
+          changeCount={changeCount}
+          onOpenReport={() => setScoreOpen(true)}
+          onOpenChanges={() => setWorkspaceTab("changes")}
+          profileSpokes={workspaceProfile?.spokes}
+          focusedProfile={workspaceFocus}
+          onFocusProfile={(key) => {
+            setWorkspaceFocus(key);
+            setWorkspaceTab("deck");
+          }}
+          cosProfile={cos?.profile}
+          colorBalance={workspaceProfile?.colorBalance}
+          primaryWinPaths={customerWinPathsV1(deck?.primaryWinPaths)}
+          winSummary={headProfessor?.winConditionAssessment}
+          secondaryWinPaths={deck?.secondaryWinPaths}
+          earlyTips={gamePlan?.earlyGame}
+          midTips={gamePlan?.midGame}
+          comboNames={(deck?.primaryWinPaths ?? []).filter((path) => path.includes("+"))}
+          deckActions={
+            editable ? (
+              <DeckActionsV1
+                slug={slug}
+                deckKey={deckId ? { deckId } : { buildId }}
+                deckName={commander.name}
+              />
+            ) : undefined
+          }
+          overflow={
+            <details className="deck-workspace-more">
+              <summary className="professor-mtg-link cursor-pointer text-[11px]">More</summary>
+              <div className="deck-workspace-more__menu">
+                <button
+                  type="button"
+                  className="professor-mtg-btn px-3 py-1.5 text-[11px]"
+                  onClick={() => {
+                    const text = formatSolDirectedDeckListText(grouped);
+                    const filename = solDirectedDeckListDownloadFilename(commander.name);
+                    downloadTextFile(filename, text);
+                  }}
+                >
+                  Download .txt
+                </button>
+                <button
+                  type="button"
+                  className="professor-mtg-btn px-3 py-1.5 text-[11px]"
+                  disabled={pdfBusy}
+                  onClick={() => {
+                    setPdfBusy(true);
+                    setPdfError(null);
+                    void downloadSolDirectedDeckReportPdf({
+                      commanderName: commander.name,
+                      bracket: userInputs.bracket,
+                      playstyle: userInputs.playstyle,
+                      headProfessor,
+                      grade: headProfessor
+                        ? computeSolDirectedDeckGradeV111({
+                            headProfessor,
+                            bracket: userInputs.bracket,
+                            playstyle: userInputs.playstyle,
+                            thesis,
+                            primaryWinPaths: deck.primaryWinPaths,
+                            audit: validation?.legacyHeuristicAudit ?? null,
+                            landCount: telemetry?.landCount ?? null,
+                            validationPass,
+                          })
+                        : null,
+                      deckListText: formatSolDirectedDeckListText(grouped),
+                      cos,
+                      thesis,
+                      gamePlan,
+                      winPaths: {
+                        primary: deck.primaryWinPaths,
+                        secondary: deck.secondaryWinPaths,
+                      },
+                      nonlands: (deck.nonlands ?? []).map((card) => ({
+                        name: card.name,
+                        primaryArchitectRequirement: card.primaryArchitectRequirement,
+                        primaryRole: card.primaryRole,
+                        typeLine: card.typeLine,
+                      })),
+                      lands: deck.lands ?? [],
+                      grouped,
                     })
-                    .finally(() => {
-                      setPdfBusy(false);
-                    });
-                }}
-              >
-                {pdfBusy ? "Building PDF…" : "Download PDF report"}
-              </button>
-              <button
-                type="button"
-                className="professor-mtg-btn px-4 py-2 text-[11px]"
-                onClick={() => setScoreOpen(true)}
-              >
-                View score & playstyle
-              </button>
-            </div>
-          </div>
-        </div>
+                      .catch(() => {
+                        setPdfError("Could not build the PDF. Try again.");
+                      })
+                      .finally(() => {
+                        setPdfBusy(false);
+                      });
+                  }}
+                >
+                  {pdfBusy ? "Building PDF…" : "Download PDF"}
+                </button>
+              </div>
+              {pdfError ? <p className="mt-2 text-xs text-red-300">{pdfError}</p> : null}
+            </details>
+          }
+        />
 
-        {buildId ? (
+        {review?.notice}
+
+        {editable ? (
           <>
-            {/* One view, not two. The old Decklist tab was a read-only copy of a
-                deck the editor already renders live, and splitting them meant a
-                player reading their list had to change tabs — and lose their
-                place — to change one card. What the tab genuinely owned beyond
-                that list was reference material, so it moves behind these
-                buttons rather than being deleted. */}
-            <div className="professor-mtg-panel-status flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2 sm:px-5">
-              <span className="text-xs text-[var(--ok)]">✦</span>
-              <span className="text-xs tracking-wide text-[var(--ok)]">Deck complete</span>
-              <span className="professor-mtg-muted hidden text-[10px] lg:inline">
-                Green = shop stock · TCG = market price
-              </span>
-              <div className="ml-auto flex flex-wrap items-center gap-2">
-                <button
-                  type="button"
-                  className="professor-mtg-link text-[11px]"
-                  onClick={() => setScoreOpen(true)}
-                >
-                  Results
-                </button>
-                <button
-                  type="button"
-                  className="professor-mtg-link text-[11px]"
-                  onClick={() => setInsight("bracket")}
-                >
-                  Bracket
-                </button>
-                <button
-                  type="button"
-                  className="professor-mtg-link text-[11px]"
-                  onClick={() => setInsight("swaps")}
-                >
-                  Suggested swaps
-                </button>
-                {critic?.appliedSwaps?.length ? (
+            <DeckWorkspaceTabs
+              active={workspaceTab}
+              onChange={setWorkspaceTab}
+              changeCount={changeCount}
+              changesLabel={review ? "Professor swaps" : undefined}
+            />
+
+            {workspaceTab === "deck" ? (
+              <ProfessorDeckEditorPanel
+                slug={slug}
+                {...(deckId ? { deckId } : { buildId: buildId! })}
+                hideHeroTitle
+                onWorkspaceProfile={setWorkspaceProfile}
+                externalFocus={workspaceFocus}
+                onFocusGroupChange={setWorkspaceFocus}
+              />
+            ) : null}
+
+            {workspaceTab === "analysis" ? (
+              <div className="space-y-5 px-4 py-5 sm:px-6">
+                <div className="deck-workspace-analysis-id">
+                  <img
+                    src={mergedImageUrls[commander.name] ?? scryfallNamedImageUrl(commander.name)}
+                    alt=""
+                    className="deck-workspace-analysis-id__art"
+                  />
+                  <dl className="deck-workspace-analysis-id__stats">
+                    <div>
+                      <dt>Library</dt>
+                      <dd>
+                        {totalCards}
+                        <span className="deck-editor-hero__stat-dim">/99</span>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>In store</dt>
+                      <dd className={inStockCount > 0 ? "text-[var(--ok)]" : undefined}>
+                        {inStockCount}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Legality</dt>
+                      <dd className={validationPass ? "text-[var(--ok)]" : "text-[var(--bad)]"}>
+                        {validationPass ? "Commander legal" : "Needs review"}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <span className={`professor-mtg-tag ${validationPass ? "professor-mtg-tag--ok" : ""}`}>
+                    {validationPass ? "Commander OK" : "Review"}
+                  </span>
+                </div>
+                {workspaceProfile?.distribution ? (
+                  <DeckDistributionStrip
+                    embedded
+                    compact
+                    distribution={workspaceProfile.distribution}
+                    axisLabel="What it does"
+                    focused={workspaceFocus}
+                    onFocus={(key) => {
+                      setWorkspaceFocus(key);
+                      if (key) setWorkspaceTab("deck");
+                    }}
+                  />
+                ) : null}
+                {workspaceProfile?.colorBalance ? (
+                  <ColorBalanceStrip balance={workspaceProfile.colorBalance} />
+                ) : null}
+                {measureBracket ? (
+                  <ProfessorDeckBracketPanel
+                    storeSlug={slug}
+                    commanderName={commander.name}
+                    cards={bracketCards}
+                    requestedBracket={userInputs.bracket}
+                  />
+                ) : (
                   <button
                     type="button"
-                    className="professor-mtg-link text-[11px]"
-                    onClick={() => setInsight("changes")}
+                    className="professor-mtg-btn px-4 py-2 text-[11px]"
+                    onClick={() => setMeasureBracket(true)}
                   >
-                    Professor&rsquo;s changes ({critic.appliedSwaps.length})
+                    Measure bracket
                   </button>
-                ) : null}
+                )}
+                <button
+                  type="button"
+                  className="professor-mtg-btn px-4 py-2 text-[11px]"
+                  onClick={() => setScoreOpen(true)}
+                >
+                  Open full report
+                </button>
               </div>
-            </div>
+            ) : null}
 
-            <ProfessorDeckEditorPanel slug={slug} buildId={buildId} />
+            {workspaceTab === "suggestions" ? (
+              <div className="px-4 py-5 sm:px-6">
+                <ProfessorDeckSwapPanel
+                  storeSlug={slug}
+                  commanderName={commander.name}
+                  commanderColorIdentity={commander.colorIdentity ?? []}
+                  cards={bracketCards}
+                  requestedBracket={userInputs.bracket}
+                />
+              </div>
+            ) : null}
 
-            <DeckInsightDrawer
-              open={insight === "bracket"}
-              title="Bracket"
-              subtitle={`How this deck measures against the bracket ${userInputs.bracket} you asked for.`}
-              onClose={() => setInsight(null)}
-            >
-              <ProfessorDeckBracketPanel
-                storeSlug={slug}
-                commanderName={commander.name}
-                cards={bracketCards}
-                requestedBracket={userInputs.bracket}
+            {workspaceTab === "changes" && review ? (
+              <ReviewSwapList
+                summary={critic?.summary}
+                requiredChanges={headProfessor?.requiredChanges ?? []}
+                swaps={review.suggestedSwaps}
+                isApplied={review.isApplied}
+                onApply={review.onApply}
               />
-            </DeckInsightDrawer>
+            ) : null}
 
-            <DeckInsightDrawer
-              open={insight === "swaps"}
-              title="Suggested swaps"
-              subtitle="Changes that would move the deck toward the bracket and playstyle you asked for."
-              onClose={() => setInsight(null)}
-            >
-              <ProfessorDeckSwapPanel
-                storeSlug={slug}
-                commanderName={commander.name}
-                commanderColorIdentity={commander.colorIdentity}
-                cards={bracketCards}
-                requestedBracket={userInputs.bracket}
-              />
-            </DeckInsightDrawer>
-
-            <DeckInsightDrawer
-              open={insight === "changes"}
-              title="Professor's changes"
-              subtitle={critic?.summary ?? undefined}
-              onClose={() => setInsight(null)}
-            >
-              <ul className="professor-mtg-body space-y-1 text-sm">
-                {(critic?.appliedSwaps ?? []).map((swap) => (
-                  <li key={`${swap.cut}->${swap.add}`}>
-                    <span className="text-[var(--text-lo)]">{swap.cut}</span>
-                    {" → "}
-                    <span className="text-[var(--accent-hi)]">{swap.add}</span>
-                    {swap.reason ? (
-                      <span className="professor-mtg-muted"> — {swap.reason}</span>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
-            </DeckInsightDrawer>
+            {workspaceTab === "changes" && !review ? (
+              <div className="px-4 py-5 sm:px-6">
+                {requiredChangeCount && !professorRepairApplied ? (
+                  <ul className="professor-mtg-body mb-4 space-y-1 text-sm">
+                    {(headProfessor?.requiredChanges ?? []).map((change) => (
+                      <li key={change}>{change}</li>
+                    ))}
+                  </ul>
+                ) : null}
+                {critic?.appliedSwaps?.length ? (
+                  <ul className="professor-mtg-body space-y-1 text-sm">
+                    {critic.appliedSwaps.map((swap) => (
+                      <li key={`${swap.cut}->${swap.add}`}>
+                        <span className="text-[var(--text-lo)]">
+                          <CardMentionV1 name={swap.cut} />
+                        </span>
+                        {" → "}
+                        <span className="text-[var(--accent-hi)]">
+                          <CardMentionV1 name={swap.add} />
+                        </span>
+                        {swap.reason ? (
+                          <span className="professor-mtg-muted"> — {swap.reason}</span>
+                        ) : null}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="professor-mtg-muted text-sm">No Professor changes on this list.</p>
+                )}
+              </div>
+            ) : null}
           </>
         ) : (
           <>
@@ -1092,7 +1147,7 @@ export function ProfessorSolDirectedDeckListPanel({
           <ProfessorDeckSwapPanel
             storeSlug={slug}
             commanderName={commander.name}
-            commanderColorIdentity={commander.colorIdentity}
+            commanderColorIdentity={commander.colorIdentity ?? []}
             cards={bracketCards}
             requestedBracket={userInputs.bracket}
           />
@@ -1127,9 +1182,13 @@ export function ProfessorSolDirectedDeckListPanel({
             <ul className="professor-mtg-body mt-3 space-y-1 text-sm">
               {critic.appliedSwaps.slice(0, 16).map((swap) => (
                 <li key={`${swap.cut}->${swap.add}`}>
-                  <span className="text-[var(--mtg-parchment-muted)]">{swap.cut}</span>
+                  <span className="text-[var(--mtg-parchment-muted)]">
+                    <CardMentionV1 name={swap.cut} />
+                  </span>
                   {" → "}
-                  <span className="text-[var(--mtg-gold-bright)]">{swap.add}</span>
+                  <span className="text-[var(--mtg-gold-bright)]">
+                    <CardMentionV1 name={swap.add} />
+                  </span>
                   {swap.reason ? (
                     <span className="professor-mtg-muted"> — {swap.reason}</span>
                   ) : null}
@@ -1161,7 +1220,8 @@ export function ProfessorSolDirectedDeckListPanel({
         professorRepairApplied={professorRepairApplied}
         cos={cos}
         storeSlug={slug}
+        cardNames={mentionNames}
       />
-    </>
+    </CardImageUrlsProviderV1>
   );
 }

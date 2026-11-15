@@ -206,6 +206,8 @@ export async function containRequestedBracketV1(args: {
     signature: set.cards.map((card) => card.oracleId).join("|"),
     cardCount: set.cardCount,
     oracleIds: set.cards.map((card) => card.oracleId),
+    bracketTag: set.bracketTag,
+    requiresUnsatisfiedTemplate: set.requiresUnsatisfiedTemplate,
   }));
   const comboSetsByOracleId = new Map<string, string[]>();
   for (const set of comboSets) {

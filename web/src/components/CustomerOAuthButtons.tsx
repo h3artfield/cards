@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { authButtonSecondary } from "@/lib/customer-auth-ui";
+import { authButton, authButtonSecondary } from "@/lib/customer-auth-ui";
 import { STORE_SLUG_SESSION_KEY } from "@/lib/store-slug";
 import { normalizeDeckBuildRedirectPath } from "@/lib/store-inventory/deck-build-auth";
 
@@ -10,10 +10,12 @@ export function CustomerOAuthButtons({
   storeSlug: storeSlugProp,
   redirectPath,
   className = "",
+  prominent = false,
 }: {
   storeSlug?: string | null;
   redirectPath?: string | null;
   className?: string;
+  prominent?: boolean;
 }) {
   const [storeSlug, setStoreSlug] = useState(storeSlugProp ?? null);
   const [googleEnabled, setGoogleEnabled] = useState(false);
@@ -56,7 +58,7 @@ export function CustomerOAuthButtons({
     <div className={`space-y-3 ${className}`.trim()}>
       <Link
         href={googleHref}
-        className={`block text-center no-underline ${authButtonSecondary}`}
+        className={`block text-center no-underline ${prominent ? authButton : authButtonSecondary}`}
       >
         Continue with Google
       </Link>

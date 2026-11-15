@@ -13,6 +13,7 @@ Dockerfile
 
 # Offline training snapshots — not needed in production image.
 data/milestones/topdeck/
+data/milestones/deck-rating/
 
 # Mechanical-space research dumps. Do not use a blanket ignore — Docker
 # negation failed to keep COS v1 artifacts in the image.

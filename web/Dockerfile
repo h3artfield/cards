@@ -86,13 +86,24 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 RUN mkdir -p \
+  data/scan-index \
   data/milestones/mechanical-space/commander-optimization-score-v1 \
   data/milestones/mechanical-space/spellbook-win-architecture-space-v1 \
-  data/milestones/catalog-shadow
+  data/milestones/catalog-shadow \
+  data/milestones/deck-synthesis
+COPY --from=builder --chown=nextjs:nodejs /app/data/scan-index/ ./data/scan-index/
 COPY --from=builder --chown=nextjs:nodejs /app/data/milestones/mechanical-space/commander-optimization-score-v1/ ./data/milestones/mechanical-space/commander-optimization-score-v1/
 COPY --from=builder --chown=nextjs:nodejs /app/data/milestones/mechanical-space/spellbook-win-architecture-space-v1/normalized-combo-dictionary.jsonl ./data/milestones/mechanical-space/spellbook-win-architecture-space-v1/normalized-combo-dictionary.jsonl
+COPY --from=builder --chown=nextjs:nodejs /app/data/milestones/mechanical-space/spellbook-win-architecture-space-v1/combo-bracket-tags-v1.json ./data/milestones/mechanical-space/spellbook-win-architecture-space-v1/combo-bracket-tags-v1.json
 COPY --from=builder --chown=nextjs:nodejs /app/data/milestones/catalog-shadow/catalog-semantic-visualization-v1-points.json.gz ./data/milestones/catalog-shadow/catalog-semantic-visualization-v1-points.json.gz
+# semanticMapArtifactsAvailable() gates on the manifest as well as the points,
+# and a missing manifest makes every semantic lookup return nothing without
+# reporting an error. Copied explicitly so that stays true regardless of what
+# output tracing happens to pull in; it is a few kilobytes.
+COPY --from=builder --chown=nextjs:nodejs /app/data/milestones/catalog-shadow/catalog-semantic-visualization-v1-manifest.json ./data/milestones/catalog-shadow/catalog-semantic-visualization-v1-manifest.json
 COPY --from=builder --chown=nextjs:nodejs /app/data/milestones/catalog-shadow/catalog-shadow-parse-rc8-firestore-v2.jsonl.gz ./data/milestones/catalog-shadow/catalog-shadow-parse-rc8-firestore-v2.jsonl.gz
+# Head Professor loads this pin at runtime via fs; standalone tracing does not pull it in.
+COPY --from=builder --chown=nextjs:nodejs /app/data/milestones/deck-synthesis/phase6a1-professor-plan-model-pin-v2.json ./data/milestones/deck-synthesis/phase6a1-professor-plan-model-pin-v2.json
 
 USER nextjs
 EXPOSE 8080

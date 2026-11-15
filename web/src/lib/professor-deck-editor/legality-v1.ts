@@ -17,7 +17,13 @@
  * problem. Conflating them, which is what a single "valid" boolean would do, is
  * how you end up either blocking legitimate edits or shipping illegal decks.
  */
-import { boardCountsTowardDeckV1, isBasicLandNameV1, normalizeDeckCardNameV1 } from "./types-v1";
+import {
+  boardCountsTowardDeckV1,
+  deckColorIdentityV1,
+  deckLibrarySizeV1,
+  isBasicLandNameV1,
+  normalizeDeckCardNameV1,
+} from "./types-v1";
 import type { EditableDeckCardV1, EditableDeckV1 } from "./types-v1";
 
 export const PROFESSOR_DECK_EDITOR_LEGALITY_V1_VERSION = "professor-deck-editor-legality-v1";
@@ -46,7 +52,8 @@ export type DeckLegalityViolationKindV1 =
   | "singleton"
   | "color_identity"
   | "banned"
-  | "unresolved_card";
+  | "unresolved_card"
+  | "commander_pair";
 
 /**
  * `illegal` cannot be played. `incomplete` is a deck mid-edit — the right
@@ -104,19 +111,49 @@ function colorIdentityViolation(
   return cardColors.map((c) => c.toUpperCase()).filter((c) => !allowed.has(c));
 }
 
+const COLOR_IDENTITY_NAMES_V1: Record<string, string> = {
+  W: "White",
+  U: "Blue",
+  B: "Black",
+  R: "Red",
+  G: "Green",
+  C: "Colorless",
+};
+
+/** Full colour names for legality copy — never bare WUBRG letters in the UI. */
+export function colorIdentityDisplayNamesV1(pips: readonly string[]): string {
+  return (pips ?? [])
+    .filter((pip): pip is string => typeof pip === "string" && Boolean(pip.trim()))
+    .map((pip) => COLOR_IDENTITY_NAMES_V1[pip.toUpperCase()] ?? pip.toUpperCase())
+    .join(", ");
+}
+
 export function checkEditableDeckLegalityV1(args: {
   deck: EditableDeckV1;
   lookup: DeckEditorCardFactsLookupV1;
+  /** From `commanderPairProblemV1`, for decks with a partner. */
+  pairProblem?: string | null;
 }): DeckEditorLegalityReportV1 {
   const { deck } = args;
   const violations: DeckLegalityViolationV1[] = [];
   const unresolvedCardKeys: string[] = [];
+  const librarySize = deckLibrarySizeV1(deck);
+  const commanderColors = deckColorIdentityV1(deck);
+  if (deck.partner && args.pairProblem) {
+    violations.push({
+      kind: "commander_pair",
+      severity: "illegal",
+      cardKey: null,
+      cardName: deck.partner.name,
+      message: args.pairProblem,
+    });
+  }
 
   const mainboard = deck.cards.filter((card) => boardCountsTowardDeckV1(card.board));
   const mainboardLibraryCount = mainboard.reduce((sum, card) => sum + card.copies, 0);
 
-  if (mainboardLibraryCount !== COMMANDER_LIBRARY_SIZE_V1) {
-    const delta = mainboardLibraryCount - COMMANDER_LIBRARY_SIZE_V1;
+  if (mainboardLibraryCount !== librarySize) {
+    const delta = mainboardLibraryCount - librarySize;
     violations.push({
       kind: "deck_size",
       severity: "incomplete",
@@ -124,8 +161,8 @@ export function checkEditableDeckLegalityV1(args: {
       cardName: null,
       message:
         delta < 0
-          ? `${Math.abs(delta)} card${Math.abs(delta) === 1 ? "" : "s"} short of 99`
-          : `${delta} card${delta === 1 ? "" : "s"} over 99`,
+          ? `${Math.abs(delta)} card${Math.abs(delta) === 1 ? "" : "s"} short of ${librarySize}`
+          : `${delta} card${delta === 1 ? "" : "s"} over ${librarySize}`,
     });
   }
 
@@ -182,17 +219,15 @@ export function checkEditableDeckLegalityV1(args: {
       });
     }
 
-    const offColor = colorIdentityViolation(
-      facts.colorIdentity ?? [],
-      deck.commander?.colorIdentity ?? [],
-    );
+    const offColor = colorIdentityViolation(facts.colorIdentity ?? [], commanderColors);
     if (offColor.length > 0) {
+      const colours = colorIdentityDisplayNamesV1(offColor);
       violations.push({
         kind: "color_identity",
         severity: "illegal",
         cardKey: card.cardKey,
         cardName: card.name,
-        message: `${card.name} adds ${offColor.join("")} to the deck, which is outside ${deck.commander.name}'s colour identity`,
+        message: `${card.name}: ${colours} — not allowed in deck colour identity`,
       });
     }
   }

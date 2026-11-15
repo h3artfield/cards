@@ -1,4 +1,4 @@
-import { scryfallFetch } from "../processing/scryfall-client";
+import { scryfallFetch, scryfallPost } from "../processing/scryfall-client";
 import type { CatalogCard } from "./types";
 
 function extractOracleText(raw: Record<string, unknown>): string | undefined {
@@ -44,10 +44,20 @@ export function catalogCardFromScryfall(raw: Record<string, unknown>): CatalogCa
   const imageUris = raw.image_uris as Record<string, string> | undefined;
   const cardFaces = raw.card_faces as Array<{ image_uris?: Record<string, string> }> | undefined;
   const faceImages = cardFaces?.[0]?.image_uris ?? imageUris;
-  const tcgplayer = raw.tcgplayer_id as number | undefined;
+  const tcgplayer =
+    (raw.tcgplayer_id as number | undefined) ??
+    (raw.tcgplayer_etched_id as number | undefined);
   const edhrecRank = raw.edhrec_rank as number | undefined;
   const keywords = extractKeywords(raw);
-  const colors = (raw.colors as string[] | undefined) ?? [];
+  const faceList = raw.card_faces as Array<{ type_line?: string; colors?: string[] }> | undefined;
+  // Reversible cards (e.g. borderless "Hallowed Fountain // Hallowed Fountain") keep type and colours on each face only.
+  const colors = (raw.colors as string[] | undefined) ?? faceList?.[0]?.colors ?? [];
+  const typeLine =
+    String(raw.type_line ?? "") ||
+    (faceList ?? [])
+      .map((f) => f.type_line ?? "")
+      .filter(Boolean)
+      .join(" // ");
 
   return {
     id,
@@ -58,7 +68,7 @@ export function catalogCardFromScryfall(raw: Record<string, unknown>): CatalogCa
     collectorNumber: String(raw.collector_number ?? ""),
     manaCost: raw.mana_cost as string | undefined,
     cmc: Number(raw.cmc ?? 0),
-    typeLine: String(raw.type_line ?? ""),
+    typeLine,
     oracleText: extractOracleText(raw),
     keywords: keywords.length ? keywords : undefined,
     colors: colors.length ? colors : undefined,
@@ -69,6 +79,10 @@ export function catalogCardFromScryfall(raw: Record<string, unknown>): CatalogCa
     legalities,
     imageNormal: faceImages?.normal,
     imageArtCrop: faceImages?.art_crop,
+    finishes: ((raw.finishes as string[] | undefined) ?? []).filter(
+      (row): row is "nonfoil" | "foil" | "etched" =>
+        row === "nonfoil" || row === "foil" || row === "etched",
+    ),
     tcgplayerId: tcgplayer != null ? String(tcgplayer) : undefined,
     edhrecRank,
     gameChanger: Boolean(raw.game_changer),
@@ -90,6 +104,37 @@ export async function fetchScryfallCardById(
   } catch {
     return null;
   }
+}
+
+const SCRYFALL_COLLECTION_BATCH = 75;
+
+/** Live Scryfall printings for binder cards that are not in the local catalog. */
+export async function fetchScryfallCardsByIds(
+  scryfallIds: string[],
+): Promise<CatalogCard[]> {
+  const unique = [
+    ...new Set(scryfallIds.map((id) => id.trim()).filter(Boolean)),
+  ];
+  const out: CatalogCard[] = [];
+
+  for (let i = 0; i < unique.length; i += SCRYFALL_COLLECTION_BATCH) {
+    const batch = unique.slice(i, i + SCRYFALL_COLLECTION_BATCH);
+    try {
+      const res = await scryfallPost("https://api.scryfall.com/cards/collection", {
+        identifiers: batch.map((id) => ({ id })),
+      });
+      if (!res.ok) continue;
+      const json = (await res.json()) as { data?: Record<string, unknown>[] };
+      for (const raw of json.data ?? []) {
+        const card = catalogCardFromScryfall(raw);
+        if (card) out.push(card);
+      }
+    } catch {
+      /* skip this batch */
+    }
+  }
+
+  return out;
 }
 
 export async function fetchScryfallByTcgplayerId(

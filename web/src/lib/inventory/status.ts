@@ -8,8 +8,21 @@ export function isShopifyImportItem(item: InventoryItem): boolean {
   return item.source === "shopify_import" || Boolean(item.shopifyVariantKey);
 }
 
+export function isManualInventoryItem(item: InventoryItem): boolean {
+  return item.source === "manual";
+}
+
+/**
+ * Quantity-tracked catalog stock, as opposed to a legacy one-off buyback
+ * single. This gates the deck builder, storefront browsing, image and price
+ * backfills, and Shopify export, so clerk-entered rows belong here too.
+ */
 export function isCatalogImportItem(item: InventoryItem): boolean {
-  return isTcgplayerImportItem(item) || isShopifyImportItem(item);
+  return (
+    isTcgplayerImportItem(item) ||
+    isShopifyImportItem(item) ||
+    isManualInventoryItem(item)
+  );
 }
 
 export function isBuybackInventoryItem(item: InventoryItem): boolean {
@@ -47,10 +60,41 @@ export function inventoryQuantityAvailable(item: InventoryItem): number {
 /** Effective units available (buyback singles = 1). */
 export function inventoryEffectiveQuantity(item: InventoryItem): number {
   if (inventoryEffectiveStatus(item) === "sold") return 0;
-  if (isTcgplayerImportItem(item) || isShopifyImportItem(item)) {
+  if (isCatalogImportItem(item)) {
     return inventoryQuantityAvailable(item);
   }
   return 1;
+}
+
+/**
+ * Units customers can buy online. Every unit can be bought in the shop; rows
+ * without an in-store/online split are treated as fully online.
+ */
+export function inventoryOnlineQuantity(item: InventoryItem): number {
+  const total = inventoryEffectiveQuantity(item);
+  if (item.quantityOnline != null) {
+    return Math.min(total, Math.max(0, Math.trunc(item.quantityOnline)));
+  }
+  if (item.quantityInStore != null) {
+    return Math.max(0, total - Math.trunc(item.quantityInStore));
+  }
+  return total;
+}
+
+export type InventoryChannelFilter = "all" | "online" | "instore";
+
+export function parseInventoryChannelFilter(raw: string | null | undefined): InventoryChannelFilter {
+  return raw === "online" || raw === "instore" ? raw : "all";
+}
+
+/** `online`: can be bought online too. `instore`: in-store purchase only. */
+export function inventoryItemMatchesChannelFilter(
+  item: InventoryItem,
+  channel: InventoryChannelFilter | undefined,
+): boolean {
+  if (!channel || channel === "all") return true;
+  const online = inventoryOnlineQuantity(item) > 0;
+  return channel === "online" ? online : !online;
 }
 
 /** Effective inventory status — legacy records without status are on hand. */
@@ -66,7 +110,7 @@ export function isInventoryAvailable(item: InventoryItem): boolean {
   if (isInventorySold(item)) return false;
   const status = inventoryEffectiveStatus(item);
   if (status === "withdrawn") return false;
-  if (isTcgplayerImportItem(item) || isShopifyImportItem(item)) {
+  if (isCatalogImportItem(item)) {
     return inventoryEffectiveQuantity(item) > 0;
   }
   return status === "on_hand" || status === "listed";

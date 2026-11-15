@@ -9,12 +9,37 @@ import {
   type ShopifyOrderWebhookPayload,
 } from "@/lib/shopify/sold-detection";
 import { resolveStoreIdFromShopDomain } from "@/lib/shopify/resolve-store";
+import { applyTokenOrderPaidV1 } from "@/lib/token-creator/orders-v1";
+import { pushShopifyLevelsAfterImport } from "@/lib/shopify/sync-inventory-levels";
 import {
   getShopifyWebhookSecret,
   verifyShopifyWebhookHmac,
 } from "@/lib/shopify/webhook-verify";
 
 export const runtime = "nodejs";
+
+/**
+ * Push our shelf back onto the Shopify product. Quantity 0 drafts it. A
+ * restock above 0 sets it Active again, which is all a draft needs to return
+ * to the storefront.
+ *
+ * Best effort on purpose: the shelf write already happened, and a non-2xx
+ * here would make Shopify redeliver the webhook.
+ */
+async function syncListingState(
+  storeId: string,
+  inventoryItemIds: string[],
+): Promise<void> {
+  if (!inventoryItemIds.length) return;
+  try {
+    const wanted = new Set(inventoryItemIds);
+    const inventory = await dataStore.getInventory(storeId);
+    const touched = inventory.filter((item) => wanted.has(item.id));
+    if (touched.length) await pushShopifyLevelsAfterImport(storeId, touched);
+  } catch (err) {
+    console.error("[shopify webhook] could not withdraw sold listings:", err);
+  }
+}
 
 export async function POST(req: NextRequest) {
   const shopDomain = req.headers.get("x-shopify-shop-domain");
@@ -55,7 +80,11 @@ export async function POST(req: NextRequest) {
       const result = await processShopifyInventoryLevelUpdate({
         storeId,
         payload: payload as ShopifyInventoryLevelPayload,
+        defaultLocationId: integration?.defaultLocationId,
       });
+      if (result?.restocked) {
+        await syncListingState(storeId, [result.inventoryItemId]);
+      }
       return jsonOk({
         received: true,
         topic,
@@ -75,12 +104,32 @@ export async function POST(req: NextRequest) {
         storeId,
         order: orderPayload,
       });
+
+      // Token print orders are released to the staff queue only from here or
+      // from the admin sync, never before Shopify reports the order paid.
+      let tokenOrders: string[] = [];
+      try {
+        tokenOrders = await applyTokenOrderPaidV1({
+          storeId,
+          order: orderPayload as Parameters<typeof applyTokenOrderPaidV1>[0]["order"],
+        });
+      } catch (err) {
+        console.error("[shopify webhook] token order update failed:", err);
+        return jsonError("Token order update failed", 500);
+      }
+
+      await syncListingState(
+        storeId,
+        results.filter((r) => !r.alreadySold).map((r) => r.inventoryItemId),
+      );
+
       return jsonOk({
         received: true,
         topic,
         processed: results.filter((r) => !r.alreadySold).length,
         alreadySold: results.filter((r) => r.alreadySold).length,
         results,
+        tokenOrders,
       });
     }
 

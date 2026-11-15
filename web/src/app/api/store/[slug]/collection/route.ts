@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
 import { requireCustomerAtStore } from "@/lib/auth/customer-store-binding";
-import { addScanToCollection } from "@/lib/collection/collection-intake";
+import {
+  addCatalogPrintingToCollection,
+  addPrintingToCollection,
+  addScanToCollection,
+  CollectionPrintingNotFoundError,
+} from "@/lib/collection/collection-intake";
+import { parseCollectionCatalogAdd } from "@/lib/collection/collection-catalog";
+import { withBinderDeckHint, withBinderDeckHints } from "@/lib/collection/collection-binder-hints";
 import { dataStore } from "@/lib/storage/data-store";
 import type { ItemType } from "@/lib/types";
 
@@ -20,7 +27,7 @@ export async function GET(
       context.store.id,
       context.customer.id,
     );
-    return jsonOk({ cards });
+    return jsonOk({ cards: await withBinderDeckHints(cards) });
   } catch (err) {
     return handleRouteError(err);
   }
@@ -35,17 +42,55 @@ export async function POST(
     const context = await requireCustomerAtStore(req, slug);
     if (context instanceof NextResponse) return context;
 
-    const body = (await req.json()) as {
-      frontImageUrl?: string;
-      backImageUrl?: string;
-      itemType?: string;
-    };
-
-    const frontImageUrl = body.frontImageUrl?.trim();
-    if (!frontImageUrl) {
-      return jsonError("A front photo is required");
+    const body = (await req.json()) as Record<string, unknown>;
+    const catalogAdd = parseCollectionCatalogAdd(body);
+    if (catalogAdd) {
+      try {
+        const card = await addCatalogPrintingToCollection({
+          storeId: context.store.id,
+          customerId: context.customer.id,
+          input: catalogAdd,
+        });
+        return jsonOk({ card: await withBinderDeckHint(card) }, 201);
+      } catch (err) {
+        if (err instanceof CollectionPrintingNotFoundError) {
+          return jsonError(err.message, 404);
+        }
+        throw err;
+      }
     }
-    const backImageUrl = body.backImageUrl?.trim() || undefined;
+
+    const scryfallId =
+      typeof body.scryfallId === "string" ? body.scryfallId.trim() : "";
+    if (scryfallId) {
+      try {
+        const card = await addPrintingToCollection({
+          storeId: context.store.id,
+          customerId: context.customer.id,
+          scryfallId,
+          finish:
+            body.finish === "foil" || body.finish === "etched"
+              ? body.finish
+              : "nonfoil",
+        });
+        return jsonOk({ card: await withBinderDeckHint(card) }, 201);
+      } catch (err) {
+        if (err instanceof CollectionPrintingNotFoundError) {
+          return jsonError(err.message, 404);
+        }
+        throw err;
+      }
+    }
+
+    const frontImageUrl =
+      typeof body.frontImageUrl === "string" ? body.frontImageUrl.trim() : "";
+    if (!frontImageUrl) {
+      return jsonError("A front photo or a card printing is required");
+    }
+    const backImageUrl =
+      typeof body.backImageUrl === "string"
+        ? body.backImageUrl.trim() || undefined
+        : undefined;
     const itemType = ITEM_TYPES.includes(body.itemType as ItemType)
       ? (body.itemType as ItemType)
       : "unknown";
@@ -58,7 +103,7 @@ export async function POST(
       itemType,
     });
 
-    return jsonOk({ card }, 201);
+    return jsonOk({ card: await withBinderDeckHint(card) }, 201);
   } catch (err) {
     return handleRouteError(err);
   }

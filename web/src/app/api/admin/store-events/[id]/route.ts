@@ -5,6 +5,7 @@ import {
 } from "@/lib/admin-auth";
 import { dataStore } from "@/lib/storage/data-store";
 import { jsonError, jsonOk, handleRouteError } from "@/lib/api-utils";
+import { eventsInSameSeries } from "@/lib/store-calendar/event-list-groups";
 import { normalizeStoreEventInput } from "@/lib/store-calendar/normalize";
 
 export async function PATCH(
@@ -56,9 +57,30 @@ export async function DELETE(
     if (!existing || existing.storeId !== scope.storeId) {
       return jsonError("Event not found", 404);
     }
+
+    const scopeParam = request.nextUrl.searchParams.get("scope");
+    const deleteSeries = scopeParam === "series";
+
+    if (deleteSeries) {
+      const siblings = eventsInSameSeries(
+        existing,
+        await dataStore.listStoreEvents(scope.storeId),
+      );
+      const deletedCount = await dataStore.deleteStoreEvents(
+        siblings.map((event) => event.id),
+      );
+      await dataStore.logAdminAction({
+        action: "delete_store_event_series",
+        eventId: id,
+        seriesId: existing.seriesId,
+        deletedCount,
+      });
+      return jsonOk({ ok: true, deletedCount });
+    }
+
     await dataStore.deleteStoreEvent(id);
     await dataStore.logAdminAction({ action: "delete_store_event", eventId: id });
-    return jsonOk({ ok: true });
+    return jsonOk({ ok: true, deletedCount: 1 });
   } catch (err) {
     return handleRouteError(err);
   }

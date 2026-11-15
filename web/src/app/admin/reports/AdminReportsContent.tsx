@@ -10,11 +10,13 @@ import { adminFetch } from "@/lib/api-client";
 import { useAdmin } from "@/context/AdminContext";
 import type { StoreStrategicReport } from "@/lib/reports/store-strategic-report";
 import { ReportsCustomersSection } from "./ReportsCustomersSection";
+import { ReportsDailySection } from "./ReportsDailySection";
 import { ReportsInventorySection } from "./ReportsInventorySection";
 import { ReportsShippingSection } from "./ReportsShippingSection";
 
 const SECTIONS = [
   { id: "overview", label: "Overview" },
+  { id: "daily", label: "Daily" },
   { id: "customers", label: "Customers" },
   { id: "inventory", label: "Inventory" },
   { id: "shipping", label: "Shipping" },
@@ -27,9 +29,13 @@ type InventoryView = "stock" | "sold" | "purchases";
 export function AdminReportsContent({
   initialSection = "overview",
   initialInventoryView = "stock",
+  initialCustomerId = null,
+  startAddOpen = false,
 }: {
   initialSection?: ReportSectionId;
   initialInventoryView?: InventoryView;
+  initialCustomerId?: string | null;
+  startAddOpen?: boolean;
 }) {
   const { activeStore, loading: authLoading } = useAdmin();
   const router = useRouter();
@@ -132,10 +138,18 @@ export function AdminReportsContent({
         </div>
       )}
 
+      {section === "daily" && (
+        <div className="mt-6">
+          <h3 className="font-semibold text-slate-800">Daily reports</h3>
+          <p className="mt-1 text-sm text-slate-600">Pick a day to see its sales, big price moves, cards to move, and sheet edits.</p>
+          <ReportsDailySection />
+        </div>
+      )}
+
       {section === "customers" && (
         <div className="mt-6">
           <h3 className="font-semibold text-slate-800">Customer report</h3>
-          <ReportsCustomersSection />
+          <ReportsCustomersSection customerId={initialCustomerId} />
         </div>
       )}
 
@@ -144,6 +158,7 @@ export function AdminReportsContent({
           <h3 className="font-semibold text-slate-800">Inventory report</h3>
           <ReportsInventorySection
             initialView={initialInventoryView}
+            startAddOpen={startAddOpen}
             onViewChange={(view) => goToSection("inventory", view)}
           />
         </div>

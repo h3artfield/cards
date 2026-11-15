@@ -11,122 +11,24 @@ import { resolveCommanderBlueprintFromCatalogV417 } from "@/lib/deck-synthesis/p
 import { getDeckResolutionCatalogRuntime } from "@/lib/deck-synthesis/professor-brew-catalog-runtime-v1";
 import { parseProfessorBrewBracket } from "@/lib/deck-synthesis/professor-brew-bracket-v4-v1";
 import { isProfessorSolDirectedGuiEnabled } from "@/lib/deck-synthesis/professor-sol-directed-gui-flag-v1-1-1";
-import { assertProfessorSolDirectedP0Truth } from "@/lib/deck-synthesis/professor-sol-directed-p0-truth-v1-1-1";
 import {
   createSolDirectedBuildJobV111,
   getSolDirectedBuildJobV111,
   appendSolDirectedBuildActivityV111,
 } from "@/lib/deck-synthesis/professor-sol-directed-build-job-store-v1-1-1";
 import { runSolDirectedCommanderBuild } from "@/lib/deck-synthesis/professor-sol-directed-commander-build-service-v1-1-1";
+import { normalizeSolDirectedBuildUserInputsV111 } from "@/lib/deck-synthesis/professor-sol-directed-build-types-v1-1-1";
 import {
-  normalizeSolDirectedBuildUserInputsV111,
-  type SolDirectedBuildJobRecordV111,
-  type SolDirectedBuildJobViewV111,
-} from "@/lib/deck-synthesis/professor-sol-directed-build-types-v1-1-1";
-import type { DeckResolutionCatalog } from "@/lib/deck-synthesis/professor-brew-catalog-runtime-v1";
+  isInProgressBuildStatusV111,
+  isSolDirectedBuildRunningV111,
+  isStaleInProgressJobV111,
+  kickSolDirectedBuildWorkerV111,
+  publicSolDirectedJobViewV111,
+  runArgsFromJobV111,
+  runP0SelftestV111,
+} from "@/lib/deck-synthesis/professor-sol-directed-build-worker-v1-1-1";
 
 export const maxDuration = 900;
-
-const runningBuilds = new Set<string>();
-const STALE_BUILD_MS = 2 * 60 * 1000;
-const P0_SELFTEST_CACHE_MS = 10 * 60 * 1000;
-let p0SelftestCache: { pass: boolean; at: number } | null = null;
-
-function isInProgressBuildStatus(status: SolDirectedBuildJobRecordV111["status"]): boolean {
-  return status !== "COMPLETE" && status !== "FAILED";
-}
-
-function isStaleInProgressJob(job: SolDirectedBuildJobRecordV111): boolean {
-  if (!isInProgressBuildStatus(job.status)) return false;
-  return Date.now() - new Date(job.updatedAt).getTime() > STALE_BUILD_MS;
-}
-
-function runArgsFromJob(job: SolDirectedBuildJobRecordV111, catalog: DeckResolutionCatalog) {
-  return {
-    commanderOracleId: job.commanderOracleId,
-    commanderName: job.commanderName,
-    bracket: job.bracket,
-    playstyle: job.playstyle,
-    deckTheme: job.deckTheme,
-    winPreference: job.winPreference,
-    commanderStyle: job.commanderStyle,
-    deckPreferences: job.userInputs.deckPreferences,
-    userSemanticPreferences: job.userInputs.userSemanticPreferences,
-    budgetConstraints: job.userInputs.budgetConstraints,
-    inventoryConstraints: job.userInputs.inventoryConstraints,
-    mode: job.userInputs.mode,
-    importedCards: job.userInputs.importedCards,
-    storeId: job.storeId,
-    storeSlug: job.storeSlug,
-    userId: job.userId,
-    existingJob: job,
-    catalog,
-  };
-}
-
-function kickSolDirectedBuildWorker(buildId: string, runArgs: ReturnType<typeof runArgsFromJob>): void {
-  if (runningBuilds.has(buildId)) return;
-  runningBuilds.add(buildId);
-  void (async () => {
-    const p0Pass = runP0Selftest(runArgs.catalog);
-    await runSolDirectedCommanderBuild({ ...runArgs, p0TruthPass: p0Pass });
-  })().finally(() => {
-    runningBuilds.delete(buildId);
-  });
-}
-
-function runP0Selftest(catalog: DeckResolutionCatalog): boolean {
-  if (process.env.PROFESSOR_SOL_DIRECTED_SKIP_P0_SELFTEST === "1") return true;
-  if (p0SelftestCache && Date.now() - p0SelftestCache.at < P0_SELFTEST_CACHE_MS) {
-    return p0SelftestCache.pass;
-  }
-  try {
-    assertProfessorSolDirectedP0Truth(catalog);
-    p0SelftestCache = { pass: true, at: Date.now() };
-    return true;
-  } catch (err) {
-    console.error("[professor-sol-directed] P0 truth selftest failed:", err);
-    p0SelftestCache = { pass: false, at: Date.now() };
-    return false;
-  }
-}
-
-function publicJobView(view: SolDirectedBuildJobViewV111) {
-  return {
-    solDirected: true as const,
-    job: view.job,
-    result: view.result
-      ? {
-          buildId: view.result.buildId,
-          status: view.result.status,
-          commander: {
-            name: view.result.commander.name,
-            oracleId: view.result.commander.oracleId,
-            colorIdentity: view.result.commander.colorIdentity,
-          },
-          userInputs: view.result.userInputs,
-          architectPlan: view.result.architectPlan,
-          retrievalSummary: view.result.retrievalSummary,
-          constructedDeck: view.result.constructedDeck,
-          validation: view.result.validation
-            ? {
-                pass: view.result.validation.pass,
-                violations: view.result.validation.violations,
-                architectRequirementRealization: view.result.validation.architectRequirementRealization,
-                legacyHeuristicAudit: view.result.validation.legacyHeuristicAudit,
-              }
-            : null,
-          critic: view.result.critic,
-          headProfessor: view.result.headProfessor,
-          telemetry: view.result.telemetry,
-          failureCode: view.result.failureCode,
-          failureMessage: view.result.failureMessage,
-          professorRepairApplied: view.result.professorRepairApplied,
-          deckEnrichment: view.result.deckEnrichment ?? null,
-        }
-      : undefined,
-  };
-}
 
 export async function GET(
   req: NextRequest,
@@ -144,19 +46,19 @@ export async function GET(
     if (!view) return jsonError("Build not found", 404);
     if (view.job.storeSlug !== slug) return jsonError("Build not found", 404);
 
-    if (isStaleInProgressJob(view.job)) {
+    if (isStaleInProgressJobV111(view.job)) {
       const catalog = await getDeckResolutionCatalogRuntime();
       await appendSolDirectedBuildActivityV111({
         buildId,
         status: view.job.status,
         message: "Build looked stalled — resuming…",
       });
-      kickSolDirectedBuildWorker(buildId, runArgsFromJob(view.job, catalog));
+      kickSolDirectedBuildWorkerV111(buildId, runArgsFromJobV111(view.job, catalog));
       const refreshed = await getSolDirectedBuildJobV111(buildId);
-      if (refreshed) return jsonOk(publicJobView(refreshed));
+      if (refreshed) return jsonOk(publicSolDirectedJobViewV111(refreshed));
     }
 
-    return jsonOk(publicJobView(view));
+    return jsonOk(publicSolDirectedJobViewV111(view));
   } catch (err) {
     return handleRouteError(err);
   }
@@ -202,16 +104,16 @@ export async function POST(
       const view = await getSolDirectedBuildJobV111(body.resume.buildId);
       if (!view) return jsonError("Build not found", 404);
       if (view.job.storeSlug !== slug) return jsonError("Build not found", 404);
-      if (isInProgressBuildStatus(view.job.status)) {
+      if (isInProgressBuildStatusV111(view.job.status)) {
         await appendSolDirectedBuildActivityV111({
           buildId: view.job.buildId,
           status: view.job.status,
           message: "Resuming build worker…",
         });
-        kickSolDirectedBuildWorker(view.job.buildId, runArgsFromJob(view.job, catalog));
+        kickSolDirectedBuildWorkerV111(view.job.buildId, runArgsFromJobV111(view.job, catalog));
       }
       const refreshed = await getSolDirectedBuildJobV111(view.job.buildId);
-      return jsonOk(publicJobView(refreshed!));
+      return jsonOk(publicSolDirectedJobViewV111(refreshed!));
     }
 
     if (!body.start) return jsonError("start or resume payload required", 400);
@@ -244,7 +146,8 @@ export async function POST(
       userSemanticPreferences: body.start.userSemanticPreferences,
       budgetConstraints: body.start.budgetConstraints,
       inventoryConstraints: body.start.inventoryConstraints,
-      mode: body.start.mode,
+      // Reviews are started from a deck through the deck-review route, never here.
+      mode: body.start.mode === "optimize" ? "optimize" : "build",
       importedCards: body.start.importedCards,
     });
 
@@ -266,22 +169,22 @@ export async function POST(
           : `Build queued for ${body.start.commanderName}.`,
     });
 
-    const runArgs = runArgsFromJob(job, catalog);
+    const runArgs = runArgsFromJobV111(job, catalog);
 
     if (body.awaitCompletion) {
-      const p0Pass = runP0Selftest(catalog);
-      const result = await runSolDirectedCommanderBuild({ ...runArgs, p0TruthPass: p0Pass });
+      const p0Pass = runP0SelftestV111(catalog);
+      const result = await runSolDirectedCommanderBuild({ ...runArgs, p0TruthPass: p0Pass, scoreDeck: true });
       const view = await getSolDirectedBuildJobV111(result.buildId);
       if (!view) return jsonError("Build state lost", 500);
-      return jsonOk(publicJobView(view));
+      return jsonOk(publicSolDirectedJobViewV111(view));
     }
 
-    if (!runningBuilds.has(job.buildId)) {
-      kickSolDirectedBuildWorker(job.buildId, runArgs);
+    if (!isSolDirectedBuildRunningV111(job.buildId)) {
+      kickSolDirectedBuildWorkerV111(job.buildId, runArgs);
     }
 
     const view = await getSolDirectedBuildJobV111(job.buildId);
-    return jsonOk(publicJobView(view!));
+    return jsonOk(publicSolDirectedJobViewV111(view!));
   } catch (err) {
     return handleRouteError(err);
   }

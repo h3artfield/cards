@@ -2,7 +2,11 @@ import { NextRequest } from "next/server";
 import { requireAdminSession, requireStoreScope } from "@/lib/admin-auth";
 import { jsonOk, handleRouteError } from "@/lib/api-utils";
 import { computeInventoryAnalytics } from "@/lib/inventory/analytics";
-import { isCatalogImportItem } from "@/lib/inventory/status";
+import {
+  isCatalogImportItem,
+  isInventoryAvailable,
+  isInventorySold,
+} from "@/lib/inventory/status";
 import { dataStore } from "@/lib/storage/data-store";
 
 export async function GET(req: NextRequest) {
@@ -14,10 +18,11 @@ export async function GET(req: NextRequest) {
     if (scope instanceof Response) return scope;
 
     const all = await dataStore.getInventory(scope.storeId);
-    const catalogItems = all.filter(
-      (i) => isCatalogImportItem(i) && i.status !== "sold",
+    const catalog = all.filter(isCatalogImportItem);
+    const analytics = computeInventoryAnalytics(
+      catalog.filter(isInventoryAvailable),
+      { soldItems: catalog.filter(isInventorySold) },
     );
-    const analytics = computeInventoryAnalytics(catalogItems);
     const importTrends = await dataStore.listInventoryImportSnapshots(
       scope.storeId,
       20,

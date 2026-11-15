@@ -148,7 +148,7 @@ export async function runCategoryClassifierAgent(
   const model =
     process.env.OPENAI_CATEGORY_CLASSIFIER_MODEL ??
     process.env.OPENAI_VISION_MODEL ??
-    "gpt-4o-mini";
+    "gpt-5.4-mini";
 
   const raw = await callOpenAiJson<RawCategory>(CATEGORY_SYSTEM, userContent, {
     model,

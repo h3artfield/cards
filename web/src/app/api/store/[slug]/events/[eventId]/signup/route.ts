@@ -7,6 +7,7 @@ import {
   customerCanActAtStore,
   storeMismatchResponse,
 } from "@/lib/auth/customer-store-binding";
+import { eventRequiredBracketV1 } from "@/lib/store-calendar/event-required-bracket-v1";
 import { registerEventSignup } from "@/lib/store-calendar/register-signup";
 import { resolveSignupDeckV1 } from "@/lib/store-calendar/signup-deck-v1";
 import { DEFAULT_CALENDAR_SETTINGS } from "@/lib/store-calendar/types";
@@ -93,6 +94,8 @@ export async function POST(
         deckId: requestedDeckId,
         customerId: session.customerId,
         storeId: store.id,
+        storeSlug: store.storeSlug,
+        requiredBracket: eventRequiredBracketV1(event),
       });
       if (!resolved.ok) {
         return jsonError(resolved.error, resolved.status);
@@ -172,6 +175,8 @@ export async function PATCH(
       deckId: requestedDeckId,
       customerId: session.customerId,
       storeId: store.id,
+      storeSlug: store.storeSlug,
+      requiredBracket: eventRequiredBracketV1(event),
     });
     if (!resolved.ok) {
       return jsonError(resolved.error, resolved.status);

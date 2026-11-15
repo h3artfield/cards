@@ -150,7 +150,11 @@ export async function fetchTcgplayerProductDetails(
     const res = await fetch(
       `https://mp-search-api.tcgplayer.com/v1/product/${id}/details`,
       {
-        headers: { Accept: "application/json" },
+        headers: {
+          Accept: "application/json",
+          Origin: "https://www.tcgplayer.com",
+          Referer: "https://www.tcgplayer.com/",
+        },
         signal: AbortSignal.timeout(12_000),
       },
     );

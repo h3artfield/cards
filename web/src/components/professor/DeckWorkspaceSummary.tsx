@@ -7,6 +7,7 @@ import {
 import { professorPlaystyleShortLabelV1 } from "@/lib/professor-deck-editor/deck-list-display-v1";
 import type { DeckColorBalanceV1 } from "@/lib/professor-deck-editor/color-balance-v1";
 import { composeDeckPilotBriefV1 } from "@/lib/professor-deck-editor/compose-pilot-brief-v1";
+import { customerFacingProseV1 } from "@/lib/professor-deck-editor/customer-copy-v1";
 import type { ReactNode } from "react";
 import type { CosProfileDecagonPointV1 } from "./CosProfileDecagon";
 import { ColorBalanceStrip } from "./deck-editor/ColorBalanceStrip";
@@ -86,6 +87,7 @@ export function DeckWorkspaceSummary({
   onAddInStockToCart,
   nameSlot,
   overflow,
+  deckActions,
   profileSpokes,
   focusedProfile,
   onFocusProfile,
@@ -93,6 +95,7 @@ export function DeckWorkspaceSummary({
   colorBalance,
   primaryWinPaths,
   secondaryWinPaths,
+  winSummary,
   earlyTips,
   midTips,
   comboNames,
@@ -119,6 +122,8 @@ export function DeckWorkspaceSummary({
   onAddInStockToCart?: () => void;
   nameSlot?: ReactNode;
   overflow?: ReactNode;
+  /** Clone / swap commander / delete, stacked beside the commander image. */
+  deckActions?: ReactNode;
   profileSpokes?: readonly DeckProfileSpokeV1[];
   focusedProfile?: string | null;
   onFocusProfile?: (key: string | null) => void;
@@ -126,6 +131,8 @@ export function DeckWorkspaceSummary({
   colorBalance?: DeckColorBalanceV1 | null;
   primaryWinPaths?: readonly string[];
   secondaryWinPaths?: readonly string[];
+  /** The Professor's own win-condition read, for decks with no named win paths. */
+  winSummary?: string | null;
   earlyTips?: readonly string[];
   midTips?: readonly string[];
   comboNames?: readonly string[];
@@ -137,6 +144,7 @@ export function DeckWorkspaceSummary({
     playstyleDetail: styleDetail,
     primaryWinPaths,
     secondaryWinPaths,
+    winSummary: customerFacingProseV1(winSummary),
     earlyTips,
     midTips,
     comboNames,
@@ -150,13 +158,22 @@ export function DeckWorkspaceSummary({
 
   return (
     <div className="deck-workspace-summary">
-      {commanderImageUrl ? (
-        <div className="deck-workspace-summary__thumb">
-          <img src={commanderImageUrl} alt="" />
+      {commanderImageUrl || deckActions ? (
+        <div className="deck-workspace-summary__commander-col">
+          {commanderImageUrl ? (
+            <div className="deck-workspace-summary__thumb">
+              <img src={commanderImageUrl} alt="" />
+            </div>
+          ) : null}
+          {deckActions}
         </div>
       ) : null}
       <div className="deck-workspace-summary__main">
         <h2 className="deck-workspace-summary__commander">{commanderName}</h2>
+        <p className="professor-mtg-muted mt-1 text-[11px] leading-snug">
+          To change commander: search for one and choose Make this the commander, or use Make
+          commander on a card in the list.
+        </p>
         {nameSlot}
         <p className="deck-workspace-summary__facts">
           {libraryCount}/99 {libraryLegal ? "legal" : "needs review"}
@@ -255,10 +272,12 @@ export function DeckWorkspaceTabs({
   active,
   onChange,
   changeCount,
+  changesLabel = "Professor changes",
 }: {
   active: DeckWorkspaceTab;
   onChange: (tab: DeckWorkspaceTab) => void;
   changeCount: number;
+  changesLabel?: string;
 }) {
   const tabs: Array<{ id: DeckWorkspaceTab; label: string }> = [
     { id: "deck", label: "Deck" },
@@ -266,7 +285,7 @@ export function DeckWorkspaceTabs({
     { id: "suggestions", label: "Suggestions" },
     {
       id: "changes",
-      label: changeCount > 0 ? `Professor changes (${changeCount})` : "Professor changes",
+      label: changeCount > 0 ? `${changesLabel} (${changeCount})` : changesLabel,
     },
   ];
 

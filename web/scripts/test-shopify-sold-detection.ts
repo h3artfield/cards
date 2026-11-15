@@ -15,7 +15,10 @@ import {
 import { shopifyInventoryExportEligibility } from "../src/lib/shopify/eligibility";
 import { verifyShopifyWebhookHmac } from "../src/lib/shopify/webhook-verify";
 import { evaluateShopifyExportScopes } from "../src/lib/shopify/shop-domain";
-import { normalizeShopifyResourceId } from "../src/lib/shopify/sold-detection";
+import {
+  normalizeShopifyResourceId,
+  planCatalogQuantityFromShopify,
+} from "../src/lib/shopify/sold-detection";
 import type { InventoryItem, ScannedCard } from "../src/lib/types";
 import type { ShopifyIntegration } from "../src/lib/shopify/types";
 
@@ -98,6 +101,37 @@ assert(
   normalizeShopifyResourceId("gid://shopify/InventoryItem/123456789") === "123456789",
   "normalize Shopify inventory item GID",
 );
+
+console.log("\nShopify quantity sync");
+const shelfCard: InventoryItem = {
+  ...inventoryItem,
+  source: "tcgplayer_import",
+  quantity: 4,
+  quantityOnHand: 4,
+  quantityAvailable: 4,
+  status: "listed",
+  shopifyListing: {
+    sku: "CS9K-TEST",
+    productId: "p1",
+    variantId: "v1",
+    inventoryItemId: "i1",
+    exportPrice: 1,
+    exportedAt: new Date().toISOString(),
+  },
+};
+const down = planCatalogQuantityFromShopify(shelfCard, 3);
+assert(down.action === "sync" && down.quantity === 3 && down.status === "listed" && !down.restore, "sale that leaves copies lowers the same row");
+const same = planCatalogQuantityFromShopify(shelfCard, 4);
+assert(same.action === "unchanged", "matching quantity is a no-op");
+const gone = planCatalogQuantityFromShopify(shelfCard, 0);
+assert(gone.action === "sync" && gone.sellOut && gone.status === "sold", "last copy marks the row sold");
+const soldShelf: InventoryItem = { ...shelfCard, status: "sold", quantity: 0, quantityOnHand: 0, quantityAvailable: 0, soldAt: new Date().toISOString() };
+const back = planCatalogQuantityFromShopify(soldShelf, 1);
+assert(back.action === "sync" && back.restore && back.quantity === 1 && back.status === "listed", "refund restock returns the same row");
+const withdrawn = planCatalogQuantityFromShopify({ ...shelfCard, status: "withdrawn" }, 2);
+assert(withdrawn.action === "ignore", "withdrawn rows stay withdrawn");
+const buyback = planCatalogQuantityFromShopify(inventoryItem, 2);
+assert(buyback.action === "ignore", "buyback singles are not quantity-synced");
 
 console.log("\nInventory status");
 assert(isInventoryAvailable(inventoryItem), "on_hand is available");

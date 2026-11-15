@@ -2,16 +2,57 @@ import { scryfallFetch, normalizeScryfallCollectorNumber } from "../processing/s
 import { catalogCardFromScryfall } from "./scryfall-catalog";
 import type { CatalogCard } from "./types";
 
-let setCodeCache: Map<string, string> | null = null;
+let setCodeCache: Array<{ name: string; code: string }> | null = null;
 
 function normalizeSetKey(name: string): string {
   return name.trim().toLowerCase();
 }
 
-async function loadSetCodeCache(): Promise<Map<string, string>> {
+/**
+ * Exact set name or set code, then a full multi-word set name that the shelf
+ * label extends ("Avatar: The Last Airbender: Eternal-Legal" → that set).
+ * A set code is not a match just because its letters appear inside a word:
+ * "prerelease" contains "lea" (Limited Edition Alpha) and "eternal" contains
+ * "rna" (Ravnica Allegiance).
+ */
+export function matchScryfallSetCode(
+  setName: string,
+  entries: Array<{ name: string; code: string }>,
+): string | null {
+  const key = normalizeSetKey(setName);
+  if (!key) return null;
+
+  const exact = new Map<string, string>();
+  for (const entry of entries) {
+    const name = normalizeSetKey(entry.name);
+    const code = entry.code.trim().toLowerCase();
+    if (name && !exact.has(name)) exact.set(name, code);
+    if (code && !exact.has(code)) exact.set(code, code);
+  }
+  const direct = exact.get(key);
+  if (direct) return direct;
+
+  for (const entry of entries) {
+    const name = normalizeSetKey(entry.name);
+    const code = entry.code.trim().toLowerCase();
+    if (!name.includes(" ") || name.length < 8 || !code) continue;
+    const shelfExtendsSet =
+      key.startsWith(name) &&
+      (key.length === name.length || /[^a-z0-9]/.test(key.charAt(name.length)));
+    const setExtendsShelf =
+      key.length >= 8 &&
+      name.startsWith(key) &&
+      /[^a-z0-9]/.test(name.charAt(key.length));
+    if (shelfExtendsSet || setExtendsShelf) return code;
+  }
+
+  return null;
+}
+
+async function loadSetCodeCache(): Promise<Array<{ name: string; code: string }>> {
   if (setCodeCache) return setCodeCache;
 
-  const byKey = new Map<string, string>();
+  const entries: Array<{ name: string; code: string }> = [];
   try {
     let nextPage: string | null = "https://api.scryfall.com/sets";
     while (nextPage) {
@@ -22,8 +63,7 @@ async function loadSetCodeCache(): Promise<Map<string, string>> {
         next_page?: string | null;
       };
       for (const set of body.data ?? []) {
-        byKey.set(normalizeSetKey(set.name), set.code.toLowerCase());
-        byKey.set(set.code.toLowerCase(), set.code.toLowerCase());
+        if (set.code && set.name) entries.push({ name: set.name, code: set.code });
       }
       nextPage = body.next_page ?? null;
     }
@@ -31,25 +71,14 @@ async function loadSetCodeCache(): Promise<Map<string, string>> {
     /* empty cache ok */
   }
 
-  setCodeCache = byKey;
-  return byKey;
+  setCodeCache = entries;
+  return entries;
 }
 
 export async function resolveScryfallSetCode(setName: string): Promise<string | null> {
   const trimmed = setName.trim();
   if (!trimmed) return null;
-
-  const cache = await loadSetCodeCache();
-  const direct = cache.get(normalizeSetKey(trimmed));
-  if (direct) return direct;
-
-  /** Partial match — "Marvel Super Heroes" vs cached name. */
-  const key = normalizeSetKey(trimmed);
-  for (const [name, code] of cache.entries()) {
-    if (name.includes(key) || key.includes(name)) return code;
-  }
-
-  return null;
+  return matchScryfallSetCode(trimmed, await loadSetCodeCache());
 }
 
 export async function fetchCardBySetCodeAndNumber(input: {

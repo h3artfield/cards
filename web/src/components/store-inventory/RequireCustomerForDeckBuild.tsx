@@ -11,10 +11,13 @@ import {
 export function RequireCustomerForDeckBuild({
   slug,
   returnPath,
+  signedOutHref,
   children,
 }: {
   slug: string;
   returnPath: string;
+  /** When set, a signed-out visitor goes here instead of the store sign-in form. */
+  signedOutHref?: string;
   children: React.ReactNode;
 }) {
   const { customer, loading } = useCustomer();
@@ -23,8 +26,8 @@ export function RequireCustomerForDeckBuild({
   useEffect(() => {
     if (loading || customer) return;
     const safePath = normalizeDeckBuildRedirectPath(returnPath) ?? returnPath;
-    router.replace(deckBuildSignInHref(slug, safePath));
-  }, [customer, loading, returnPath, router, slug]);
+    router.replace(signedOutHref ?? deckBuildSignInHref(slug, safePath));
+  }, [customer, loading, returnPath, router, signedOutHref, slug]);
 
   if (loading || !customer) {
     return (

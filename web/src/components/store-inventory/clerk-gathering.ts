@@ -1,3 +1,4 @@
+import type { CartLine } from "@/lib/store-inventory/cart";
 import type { InventoryGridCard } from "./InventoryBrowseUI";
 
 export type GatheringCard = InventoryGridCard & {
@@ -18,6 +19,7 @@ export function clerkDragPayload(card: GatheringCard): string {
     qty: card.qty,
     colorIdentity: card.colorIdentity,
     setName: card.setName,
+    gameKey: card.gameKey,
     isCommander: card.isCommander,
     typeLine: card.typeLine,
     reason: card.reason,
@@ -50,4 +52,32 @@ export function cardDisplayPrice(card: {
   listPrice?: number;
 }): number | undefined {
   return card.listPrice;
+}
+
+/** All printings are not on the shelf. A tap must not put them in the cart. */
+export function cardIsForSale(card: {
+  inventoryItemId: string;
+  qty: number;
+}): boolean {
+  if (card.inventoryItemId.startsWith("catalog:")) return false;
+  return card.qty > 0;
+}
+
+export function gatheringCardToCartLine(
+  card: GatheringCard,
+): Omit<CartLine, "quantity"> | null {
+  if (!cardIsForSale(card)) return null;
+  return {
+    inventoryItemId: card.inventoryItemId,
+    name: card.name,
+    setName: card.setName,
+    imageUrl: cardDisplayImage(card),
+    unitPrice: cardDisplayPrice(card) ?? 0,
+    maxQuantity: card.qty,
+    onlineQty: card.onlineQty,
+    gameKey: card.gameKey,
+    typeLine: card.typeLine,
+    isCommander: card.isCommander,
+    colorIdentity: card.colorIdentity,
+  };
 }

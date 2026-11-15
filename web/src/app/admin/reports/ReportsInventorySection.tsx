@@ -6,10 +6,15 @@ import { AdminSectionTabs } from "@/components/admin/AdminSectionTabs";
 import { adminFetch } from "@/lib/api-client";
 import { useAdmin } from "@/context/AdminContext";
 import type { BuybackTransaction, InventoryItem, ScannedCard } from "@/lib/types";
+import { AddCardsPanel } from "@/components/admin/AddCardsPanel";
 import { CatalogShopifyExportPanel } from "@/components/admin/CatalogShopifyExportPanel";
 import { ShopifyInventoryExportPanel } from "@/components/admin/ShopifyInventoryExportPanel";
 import { ShopifyInventoryImportPanel } from "@/components/admin/ShopifyInventoryImportPanel";
 import { TcgplayerInventoryImportPanel } from "@/components/admin/TcgplayerInventoryImportPanel";
+import { CombinedInventoryImportPanel } from "@/components/admin/CombinedInventoryImportPanel";
+import { PriceAlertsPanel } from "@/components/admin/PriceAlertsPanel";
+import { CardsToMovePanel } from "@/components/admin/CardsToMovePanel";
+import { CardLabelsPanel } from "@/components/admin/CardLabelsPanel";
 import { InventoryOwnerDashboard } from "@/components/admin/InventoryOwnerDashboard";
 import { InventoryBrowser } from "@/components/admin/InventoryBrowser";
 import { DeckBuilderSyncPanel } from "@/components/admin/DeckBuilderSyncPanel";
@@ -36,9 +41,11 @@ interface PurchaseTotals {
 
 export function ReportsInventorySection({
   initialView = "stock",
+  startAddOpen = false,
   onViewChange,
 }: {
   initialView?: InventoryView;
+  startAddOpen?: boolean;
   onViewChange?: (view: InventoryView) => void;
 }) {
   const { loading: authLoading, activeStore } = useAdmin();
@@ -51,6 +58,8 @@ export function ReportsInventorySection({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [dashboardRefreshKey, setDashboardRefreshKey] = useState(0);
+  const [combinedCsv, setCombinedCsv] = useState<{ text: string; name: string } | null>(null);
+  const [combinedKey, setCombinedKey] = useState(0);
 
   function reloadInventory() {
     if (authLoading || !activeStore) return;
@@ -161,8 +170,26 @@ export function ReportsInventorySection({
 
       {view === "stock" ? (
         <div className="mt-4 space-y-4">
+          <AddCardsPanel onAdded={reloadInventory} startOpen={startAddOpen} />
+
+          <PriceAlertsPanel refreshKey={dashboardRefreshKey} />
+
+          <CardsToMovePanel refreshKey={dashboardRefreshKey} />
+
+          <CombinedInventoryImportPanel
+            onCombined={(csv) => {
+              setCombinedCsv(csv);
+              setCombinedKey((k) => k + 1);
+            }}
+          />
+
           <div className="grid gap-4 lg:grid-cols-2">
-            <TcgplayerInventoryImportPanel onImported={reloadInventory} />
+            <TcgplayerInventoryImportPanel
+              key={combinedKey}
+              initialCsv={combinedCsv}
+              onImported={reloadInventory}
+            />
+            <CardLabelsPanel />
             <ShopifyInventoryImportPanel onImported={reloadInventory} />
           </div>
 

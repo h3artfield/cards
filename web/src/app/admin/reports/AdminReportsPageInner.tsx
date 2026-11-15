@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { AdminReportsContent, type ReportSectionId } from "./AdminReportsContent";
 
-const SECTIONS = new Set(["overview", "customers", "inventory", "shipping"]);
+const SECTIONS = new Set(["overview", "daily", "customers", "inventory", "shipping"]);
 const VIEWS = new Set(["stock", "sold", "purchases"]);
 
 export function AdminReportsPageInner() {
@@ -17,11 +17,15 @@ export function AdminReportsPageInner() {
   const initialInventoryView = VIEWS.has(rawView)
     ? (rawView as "stock" | "sold" | "purchases")
     : "stock";
+  const initialCustomerId = searchParams.get("customer");
+  const startAddOpen = searchParams.get("add") === "1";
 
   return (
     <AdminReportsContent
       initialSection={initialSection}
       initialInventoryView={initialInventoryView}
+      initialCustomerId={initialCustomerId}
+      startAddOpen={startAddOpen}
     />
   );
 }

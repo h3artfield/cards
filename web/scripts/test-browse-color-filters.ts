@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import {
+  matchesColorMode,
+  matchesCommanderIdentity,
+  matchesExactManaCost,
+  matchesRulesText,
   matchesSelectedColorFilters,
+  matchesTypeLineQuery,
   parseBrowseColorParams,
 } from "../src/lib/deck-builder/store-inventory-browse";
 
@@ -52,4 +57,27 @@ test("parse colors query param", () => {
   });
 });
 
-console.log("\nAll browse color filter tests passed.");
+test("color modes", () => {
+  assert.equal(
+    matchesColorMode(["R"], ["R"], "exact"),
+    true,
+  );
+  assert.equal(matchesColorMode(["R", "G"], ["R"], "exact"), false);
+  assert.equal(matchesColorMode(["R", "G"], ["R"], "including"), true);
+  assert.equal(matchesColorMode(["R"], ["R", "G"], "including"), false);
+  assert.equal(matchesColorMode(["R"], ["R", "G"], "atmost"), true);
+  assert.equal(matchesColorMode(["R", "U"], ["R", "G"], "atmost"), false);
+  assert.equal(matchesCommanderIdentity(["G"], ["G", "U"]), true);
+  assert.equal(matchesCommanderIdentity(["R"], ["G", "U"]), false);
+  assert.equal(matchesCommanderIdentity([], ["C"]), true);
+  assert.equal(matchesCommanderIdentity(["G"], ["C"]), false);
+  assert.equal(matchesRulesText("Draw a card.", "draw card"), true);
+  assert.equal(matchesTypeLineQuery("Legendary Creature — Elf", "creature", false), true);
+  assert.equal(matchesTypeLineQuery("Legendary Creature — Elf", "creat", false), false);
+  assert.equal(matchesTypeLineQuery("Legendary Creature — Elf", "creat", true), true);
+  assert.equal(matchesTypeLineQuery("Legendary Creature — Elf Wizard", "creature elf", false), true);
+  assert.equal(matchesTypeLineQuery("Legendary Creature — Elf Wizard", "creature elf", true), true);
+  assert.equal(matchesTypeLineQuery("Legendary Creature — Elf", "creature goblin", false), false);
+  assert.equal(matchesExactManaCost("{W}{W}", "{W}{W}"), true);
+  assert.equal(matchesExactManaCost("{1}{W}{W}", "{W}{W}"), false);
+});

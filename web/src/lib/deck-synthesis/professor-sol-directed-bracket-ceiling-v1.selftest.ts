@@ -83,6 +83,43 @@ check("a deck below the requested bracket is left alone", () => {
   assert.equal(plan.swaps.length, 0);
 });
 
+check("a Spicy two-card combo is legal at bracket 3 and is not cut", () => {
+  const deckCards = [
+    card({ oracleId: "cmd", name: "Commander", isCommander: true }),
+    card({ oracleId: "piece-a", name: "Late Combo A", playRate: 0.05 }),
+    card({ oracleId: "piece-b", name: "Late Combo B", playRate: 0.4 }),
+  ];
+  const plan = planBracketCeilingV1({
+    requestedBracket: 3,
+    measuredBracket: 3,
+    deckCards,
+    comboSets: [
+      { signature: "piece-a|piece-b", cardCount: 2, oracleIds: ["piece-a", "piece-b"], bracketTag: "S" },
+    ],
+    addCandidates: FILLER,
+  });
+  assert.equal(plan.swaps.length, 0);
+});
+
+check("a Ruthless two-card combo is cut at bracket 3", () => {
+  const deckCards = [
+    card({ oracleId: "cmd", name: "Commander", isCommander: true }),
+    card({ oracleId: "piece-a", name: "Fast Combo A", playRate: 0.05, specificRoles: ["ramp"] }),
+    card({ oracleId: "piece-b", name: "Fast Combo B", playRate: 0.4 }),
+  ];
+  const plan = planBracketCeilingV1({
+    requestedBracket: 3,
+    measuredBracket: 4,
+    deckCards,
+    comboSets: [
+      { signature: "piece-a|piece-b", cardCount: 2, oracleIds: ["piece-a", "piece-b"], bracketTag: "R" },
+    ],
+    addCandidates: FILLER,
+  });
+  assert.equal(plan.swaps.length, 1);
+  assert.equal(plan.swaps[0].cut.name, "Fast Combo A");
+});
+
 check("Omnath case: bracket 2 requested, two-card infinite pushes it to 4", () => {
   const deckCards = [
     card({ oracleId: "cmd", name: "Omnath, Locus of Rage", isCommander: true }),
@@ -399,25 +436,24 @@ check("one cut can answer several signals at once", () => {
   const deckCards = [
     card({
       oracleId: "both",
-      name: "Tutor And Game Changer",
+      name: "Wrath And Game Changer",
       isGameChanger: true,
-      isUnrestrictedTutor: true,
+      isMassLandDenial: true,
       playRate: 0.1,
     }),
-    card({ oracleId: "t2", name: "Tutor Two", isUnrestrictedTutor: true, playRate: 0.1 }),
-    card({ oracleId: "t3", name: "Tutor Three", isUnrestrictedTutor: true, playRate: 0.1 }),
+    card({ oracleId: "gc2", name: "Another Game Changer", isGameChanger: true, playRate: 0.2 }),
   ];
   const plan = planBracketCeilingV1({
     requestedBracket: 2,
-    measuredBracket: 3,
+    measuredBracket: 4,
     deckCards,
     comboSets: [],
     addCandidates: FILLER,
   });
-  const dual = plan.swaps.find((s) => s.cut.name === "Tutor And Game Changer");
+  const dual = plan.swaps.find((s) => s.cut.name === "Wrath And Game Changer");
   assert.ok(dual, "the dual-signal card should be cut");
   assert.equal(dual.cut.reasons.length, 2, "and credited against both signals");
-  assert.equal(plan.swaps[0].cut.name, "Tutor And Game Changer", "highest-impact cut is ordered first");
+  assert.equal(plan.swaps[0].cut.name, "Wrath And Game Changer", "highest-impact cut is ordered first");
 });
 
 check("mass land denial is cut below bracket 4", () => {
@@ -514,9 +550,7 @@ check("cutting a Game Changer never replaces it with another Game Changer", () =
   assert.equal(plan.projectedBracket, 3);
 });
 
-check("a reduced signal is barred from replacements even when the bracket allows some", () => {
-  // Bracket 3 permits unlimited tutors, but a deck being trimmed for tutor
-  // density at bracket 2 must not take another tutor as the replacement.
+check("tutors are never trimmed by the ceiling pass", () => {
   const plan = planBracketCeilingV1({
     requestedBracket: 2,
     measuredBracket: 3,
@@ -526,15 +560,31 @@ check("a reduced signal is barred from replacements even when the bracket allows
       card({ oracleId: "t3", name: "Tutor Three", isUnrestrictedTutor: true, playRate: 0.3 }),
     ],
     comboSets: [],
+    addCandidates: FILLER,
+  });
+  assert.equal(plan.swaps.length, 0, "WotC Oct 2025: tutors do not raise a floor and are not cut");
+});
+
+check("a reduced signal is barred from replacements even when the bracket allows some", () => {
+  const plan = planBracketCeilingV1({
+    requestedBracket: 3,
+    measuredBracket: 4,
+    deckCards: [
+      card({ oracleId: "et1", name: "Turn One", isExtraTurn: true, isLoopableExtraTurn: true, playRate: 0.1 }),
+      card({ oracleId: "et2", name: "Turn Two", isExtraTurn: true, isLoopableExtraTurn: true, playRate: 0.2 }),
+      card({ oracleId: "et3", name: "Turn Three", isExtraTurn: true, isLoopableExtraTurn: true, playRate: 0.3 }),
+      card({ oracleId: "et4", name: "Turn Four", isExtraTurn: true, isLoopableExtraTurn: true, playRate: 0.4 }),
+    ],
+    comboSets: [],
     addCandidates: [
-      add({ oracleId: "t4", name: "Tutor Four", isUnrestrictedTutor: true, playRate: 0.95 }),
+      add({ oracleId: "et5", name: "Turn Five", isExtraTurn: true, playRate: 0.95 }),
       add({ oracleId: "plain", name: "Plain Card", playRate: 0.05 }),
     ],
   });
-  assert.ok(plan.swaps.length > 0, "tutor density above the bracket-2 threshold is trimmed");
+  assert.ok(plan.swaps.length > 0, "a loopable extra-turn chain is trimmed below Optimized");
   assert.ok(
-    plan.swaps.every((swap) => swap.add === null || swap.add.isUnrestrictedTutor === false),
-    "no replacement reintroduces the tutor signal being reduced",
+    plan.swaps.every((swap) => swap.add === null || swap.add.isExtraTurn === false),
+    "no replacement reintroduces the extra-turn signal being reduced",
   );
 });
 

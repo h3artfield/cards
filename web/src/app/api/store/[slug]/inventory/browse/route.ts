@@ -19,9 +19,13 @@ import {
   INVENTORY_SEMANTIC_OWNERS,
   INVENTORY_SEMANTIC_ZONES,
   manaValuePresetToRange,
+  parseClerkSearchBaseParam,
 } from "@/lib/store-inventory/inventory-browse-filter-params";
 import type { StoreInventorySemanticFilter } from "@/lib/deck-builder/store-inventory-semantic";
 import { resolveStoreBySlug } from "@/lib/deck-builder/deck-builder-service";
+import { parseInventoryFinishFilter } from "@/lib/inventory/inventory-finish-v1";
+import { parseInventoryChannelFilter } from "@/lib/inventory/status";
+import { parsePokemonFilterIds } from "@/lib/inventory/pokemon-browse-filters";
 
 export const maxDuration = 120;
 
@@ -132,14 +136,34 @@ export async function GET(
     const limit = parseInt(sp.get("limit") ?? "100", 10);
     const sortRaw = sp.get("sort") ?? "name";
     const sortBy: StoreInventorySortBy =
+      sortRaw === "newest" ||
       sortRaw === "price_asc" ||
       sortRaw === "price_desc" ||
       sortRaw === "cmc_asc" ||
       sortRaw === "cmc_desc"
         ? sortRaw
         : "name";
-    const source = sp.get("source") === "catalog" ? "catalog" : "inventory";
+    // The printings catalog is Magic-only, so a catalog request for these games
+    // can only ever return zero rows; a stale deep link falls back to inventory.
+    const catalogRequestable = game === "magic";
+    const source =
+      sp.get("source") === "catalog" && catalogRequestable ? "catalog" : "inventory";
     const semantic = parseBrowseSemanticFromParams(sp);
+    const finish = parseInventoryFinishFilter(sp.get("finish"));
+    const colorModeRaw = sp.get("colorMode");
+    const colorMode =
+      colorModeRaw === "exact" || colorModeRaw === "including" || colorModeRaw === "atmost"
+        ? colorModeRaw
+        : undefined;
+    const commanderColors = (sp.get("commander") ?? "")
+      .split(",")
+      .map((c) => c.trim().toUpperCase())
+      .filter((c) => ["W", "U", "B", "R", "G", "C"].includes(c));
+    const rulesText = sp.get("oracle") ?? undefined;
+    const typeLine = sp.get("typeLine") ?? undefined;
+    const typeLinePartial = sp.get("typePartial") === "1";
+    const manaCost = sp.get("mana") ?? undefined;
+    const baseSemantic = parseClerkSearchBaseParam(sp.get("qbase"));
 
     if (source === "catalog") {
       const catalogGame = (["magic", "pokemon", "riftbound"].includes(game)
@@ -155,6 +179,13 @@ export async function GET(
         limit,
         sortBy,
         semantic,
+        colorMode,
+        commanderColors,
+        rulesText,
+        typeLine,
+        typeLinePartial,
+        manaCost,
+        baseSemantic,
       });
       return jsonOk(result);
     }
@@ -171,6 +202,20 @@ export async function GET(
       limit,
       sortBy,
       semantic,
+      finish,
+      channel: parseInventoryChannelFilter(sp.get("channel")),
+      colorMode,
+      commanderColors,
+      rulesText,
+      typeLine,
+      typeLinePartial,
+      manaCost,
+      baseSemantic,
+      pokemonTypes: game === "pokemon" ? parsePokemonFilterIds(sp.get("pokeType"), "type") : [],
+      pokemonCards: game === "pokemon" ? parsePokemonFilterIds(sp.get("pokeCard"), "card") : [],
+      pokemonStages: game === "pokemon" ? parsePokemonFilterIds(sp.get("pokeStage"), "stage") : [],
+      pokemonTrainers:
+        game === "pokemon" ? parsePokemonFilterIds(sp.get("pokeTrainer"), "trainer") : [],
     });
 
     return jsonOk(result);

@@ -687,6 +687,7 @@ export async function runStoreClerk(
     userQuestion: input.message,
     conversationSummary,
     cardType: tools.inventory?.query?.cardType,
+    semantic: tools.inventory?.query?.semantic,
   });
 
   return {

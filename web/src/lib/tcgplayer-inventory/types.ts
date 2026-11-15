@@ -24,8 +24,16 @@ export interface TcgplayerInventoryCsvRow {
   tcgplayerReportedReserve: number;
   quantityAvailable: number;
   listPrice: number;
+  /** Present on combined store lists, which split stock by channel. */
+  quantityInStore?: number;
+  quantityOnline?: number;
+  shelfLocation?: string;
+  ingestedAt?: string;
   raw: Record<string, string>;
 }
+
+/** "replace" treats the file as the full count; "add" only adds a new batch on top of stock. */
+export type TcgplayerImportMode = "add" | "replace";
 
 export type TcgplayerImportAction =
   | "create"
@@ -44,14 +52,27 @@ export interface TcgplayerImportPreviewRow {
   listPrice: number;
   previousQuantity?: number;
   previousListPrice?: number;
+  /** Add mode: copies this file adds to the row. */
+  addedQuantity?: number;
   inventoryItemId?: string;
   message?: string;
   csvRow: TcgplayerInventoryCsvRow;
 }
 
 export interface TcgplayerImportPreview {
+  mode: TcgplayerImportMode;
   parsedCount: number;
   skippedCount: number;
+  /** Raw "Product Line" values present in the file. */
+  csvProductLines: string[];
+  /** Rows reconciliation left alone — their product line is absent from the file. */
+  outOfScopeRows: number;
+  outOfScopeUnits: number;
+  /** TCGplayer-managed rows holding stock before this import. */
+  inStockRowsBefore: number;
+  /** Rows this import would drop from quantity > 0 to 0. */
+  withdrawnInStockRows: number;
+  withdrawnUnits: number;
   creates: number;
   /** New rows with qty > 0. */
   createsInStock: number;
@@ -61,6 +82,10 @@ export interface TcgplayerImportPreview {
   unchanged: number;
   conflicts: number;
   withdrawals: number;
+  /** Add mode: copies added across new and existing rows. */
+  unitsAdded: number;
+  /** Add mode: rows with quantity 0, left alone. */
+  ignoredZeroQtyRows: number;
   rows: TcgplayerImportPreviewRow[];
   missingFromCsv: Array<{
     inventoryItemId: string;
@@ -73,10 +98,15 @@ export interface TcgplayerImportPreview {
 }
 
 export interface TcgplayerImportApplyResult {
+  mode: TcgplayerImportMode;
+  unitsAdded: number;
   created: number;
   updated: number;
   withdrawn: number;
   skipped: number;
   conflicts: number;
+  csvRowCount: number;
+  csvProductLines: string[];
+  outOfScopeRows: number;
   items: InventoryItem[];
 }

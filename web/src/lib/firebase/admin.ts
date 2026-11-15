@@ -212,7 +212,13 @@ export function getAdminFirestore(): Firestore | null {
   // erroring, which leaves undefined values rejected on every write.
   const db = getFirestore(app);
   if (!firestoreSettingsApplied) {
-    db.settings({ ignoreUndefinedProperties: true });
+    try {
+      db.settings({ ignoreUndefinedProperties: true });
+    } catch {
+      // The dev server can load this module once per route bundle while the
+      // app (and its Firestore) is shared, so another copy already applied
+      // these settings and Firestore refuses a second call.
+    }
     firestoreSettingsApplied = true;
   }
 

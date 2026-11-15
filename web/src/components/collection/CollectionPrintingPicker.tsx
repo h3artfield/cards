@@ -1,6 +1,11 @@
 "use client";
 
 import type { CollectionImportCandidate } from "@/lib/collection/collection-import-parse";
+import {
+  COLLECTION_FINISH_LABELS,
+  finishesFromUnknown,
+  type CollectionFinish,
+} from "@/lib/collection/collection-finish";
 
 export function printingMeta(hit: CollectionImportCandidate): string {
   const set = hit.setName ?? hit.setCode.toUpperCase();
@@ -14,7 +19,7 @@ export function CollectionPrintingPicker({
 }: {
   candidates: CollectionImportCandidate[];
   busyId?: string | null;
-  onPick: (scryfallId: string) => void;
+  onPick: (scryfallId: string, finish: CollectionFinish) => void;
 }) {
   if (!candidates.length) {
     return <p className="mt-3 text-sm text-neutral-500">No printings found.</p>;
@@ -22,13 +27,12 @@ export function CollectionPrintingPicker({
 
   return (
     <ul className="mt-3 max-h-[36rem] space-y-2 overflow-y-auto">
-      {candidates.map((hit) => (
-        <li key={hit.scryfallId}>
-          <button
-            type="button"
-            disabled={busyId != null}
-            onClick={() => onPick(hit.scryfallId)}
-            className="flex w-full items-start gap-3 border border-neutral-800 px-2 py-2 text-left hover:border-neutral-600 disabled:opacity-60"
+      {candidates.map((hit) => {
+        const finishes = finishesFromUnknown(hit.finishes);
+        return (
+          <li
+            key={hit.scryfallId}
+            className="flex items-start gap-3 border border-neutral-800 px-2 py-2"
           >
             {hit.imageNormal ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -40,15 +44,30 @@ export function CollectionPrintingPicker({
             ) : (
               <span className="h-40 w-[7.15rem] shrink-0 bg-neutral-900" />
             )}
-            <span className="min-w-0 text-left">
+            <span className="min-w-0 flex-1 text-left">
               <span className="block text-sm leading-snug text-white">{hit.name}</span>
               <span className="mt-1 block text-xs leading-snug text-neutral-500">
                 {printingMeta(hit)}
               </span>
+              <span className="mt-3 flex flex-wrap gap-2">
+                {finishes.map((finish) => (
+                  <button
+                    key={finish}
+                    type="button"
+                    disabled={busyId != null}
+                    onClick={() => onPick(hit.scryfallId, finish)}
+                    className="border border-neutral-700 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-white hover:border-[var(--accent)] disabled:opacity-60"
+                  >
+                    {busyId === `${hit.scryfallId}:${finish}`
+                      ? "Saving…"
+                      : COLLECTION_FINISH_LABELS[finish]}
+                  </button>
+                ))}
+              </span>
             </span>
-          </button>
-        </li>
-      ))}
+          </li>
+        );
+      })}
     </ul>
   );
 }

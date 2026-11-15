@@ -28,6 +28,8 @@ function destinations(board: DeckBoardV1): DeckBoardV1[] {
       return ["mainboard", "cut"];
     case "cut":
       return ["mainboard", "considering"];
+    default:
+      return ["mainboard", "considering", "cut"];
   }
 }
 
@@ -46,6 +48,7 @@ export function DeckEditorCardRow({
   illegalReason,
   onMove,
   onRemove,
+  onMakeCommander,
   onSetCopies,
   onToggleMarker,
   onCreateAndAssignMarker,
@@ -64,6 +67,7 @@ export function DeckEditorCardRow({
   illegalReason?: string;
   onMove: (board: DeckBoardV1) => void;
   onRemove: () => void;
+  onMakeCommander?: () => void;
   onSetCopies: (copies: number) => void;
   onToggleMarker: (markerId: string, assign: boolean) => void;
   onCreateAndAssignMarker: (label: string, scope: "deck" | "global") => void;
@@ -154,9 +158,9 @@ export function DeckEditorCardRow({
         />
         <ManaCost cost={card.display?.manaCost} />
 
-        {/* Chips yield before the name does: which tags a card carries is
-            worth less than knowing which card it is. */}
-        <span className="min-w-0 shrink overflow-hidden">
+        {/* Symbols never clip: they are short, and a half-shown symbol
+            reads as a different one. The name gives way down to its floor. */}
+        <span className="shrink-0">
           <MarkerChips card={card} markers={markers} />
         </span>
 
@@ -208,6 +212,16 @@ export function DeckEditorCardRow({
               {MOVE_LABEL[board]}
             </button>
           ))}
+          {onMakeCommander ? (
+            <button
+              type="button"
+              className="professor-mtg-icon-btn"
+              title={`Make ${card.name} the commander`}
+              onClick={onMakeCommander}
+            >
+              Make commander
+            </button>
+          ) : null}
           <CardMarkerMenu
             card={card}
             markers={markers}

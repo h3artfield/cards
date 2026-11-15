@@ -5,7 +5,7 @@
  * rather than against a 30,000-card Firestore load.
  */
 import { lookupGoldenByName } from "../../../scripts/lib/load-golden-catalog-index";
-import { mapCommanderFormatStatus } from "../deck-builder/commander-classification";
+import { isPlayableInCommanderFormat } from "../deck-builder/commander-format-legality-snapshot-v1";
 import type { DeckResolutionCatalog } from "../../../scripts/lib/load-deck-resolution-catalog";
 import type { GoldenCatalogOracleCard } from "../deck-builder/golden-catalog/schemas";
 import type { DeckEditorCardFactsLookupV1, DeckEditorCardFactsV1 } from "./legality-v1";
@@ -31,8 +31,7 @@ function isLandCard(card: GoldenCatalogOracleCard): boolean {
  * the catalog has never heard of.
  */
 function isLegalInTheNinetyNine(card: GoldenCatalogOracleCard): boolean {
-  const status = mapCommanderFormatStatus(card.legalities);
-  return status !== "banned" && status !== "not_legal";
+  return isPlayableInCommanderFormat(card);
 }
 
 function factsFrom(card: GoldenCatalogOracleCard): DeckEditorCardFactsV1 {

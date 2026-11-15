@@ -45,6 +45,11 @@ import type { CardProcessingPipelineMode, OrderProcessingWorker } from "./proces
 import { processCardV2Primary } from "./process-card-v2-primary";
 import { cardVisionFallback } from "./card-vision-fallback";
 import { isCardProcessingComplete } from "./card-processing-state";
+import {
+  buildScannerLockedV2Bundles,
+  buildScannerLockedVision,
+  hasScannerCatalogLock,
+} from "./scanner-fast-lock";
 
 async function runCardFlowV2WithRetry(
   input: Parameters<typeof runCardFlowV2>[0],
@@ -102,22 +107,27 @@ export async function processCard(
   settings: StoreSettings,
   rules: StoreRule[],
 ): Promise<ScannedCard> {
+  const preLocked = hasScannerCatalogLock(card);
   const v2Enabled = isCardFlowV2EvidenceEnabled();
   const v2Promise: Promise<CardFlowV2Bundle> = v2Enabled
-    ? runCardFlowV2WithRetry({
-        frontImageUrl: card.frontImageUrl,
-        backImageUrl: card.backImageUrl,
-        declaredItemType: card.itemType,
-        visionFallback: cardVisionFallback(card),
-      }, card.id)
+    ? preLocked
+      ? Promise.resolve(buildScannerLockedV2Bundles(card))
+      : runCardFlowV2WithRetry({
+          frontImageUrl: card.frontImageUrl,
+          backImageUrl: card.backImageUrl,
+          declaredItemType: card.itemType,
+          visionFallback: cardVisionFallback(card),
+        }, card.id)
     : Promise.resolve({});
 
-  const rawVision = await analyzeCardImages(
-    card.frontImageUrl,
-    card.backImageUrl,
-    card.itemType,
-    rules,
-  );
+  const rawVision = preLocked
+    ? buildScannerLockedVision(card)
+    : await analyzeCardImages(
+        card.frontImageUrl,
+        card.backImageUrl,
+        card.itemType,
+        rules,
+      );
 
   let vision =
     rawVision.category === "sports"

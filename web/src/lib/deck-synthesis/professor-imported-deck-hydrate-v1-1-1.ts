@@ -139,14 +139,13 @@ export function previewProfessorImportedDeckV111(args: {
     ? parseProfessorImportedDecklistV111(args.decklist)
     : { commanderNames: [], mainboard: flattenImportedMainboardCopies(args.importedCards ?? []), rawLineCount: 0 };
 
-  const extraCommanders = parsed.commanderNames.slice(1).map((name) => ({ name, copies: 1 }));
-  const mainboard = flattenImportedMainboardCopies([...parsed.mainboard, ...extraCommanders]);
   const commanderName = inferCommanderName({
     parsedCommanderNames: parsed.commanderNames,
     selectedCommanderName: args.selectedCommanderName,
-    mainboard,
+    mainboard: parsed.mainboard,
     catalog: args.catalog,
   });
+  const commanderKey = commanderName?.trim().toLowerCase() ?? "";
 
   let commanderResolved = false;
   let commanderColorIdentity: string[] = [];
@@ -163,9 +162,31 @@ export function previewProfessorImportedDeckV111(args: {
     }
   }
 
-  const commanderKey = commanderName?.trim().toLowerCase() ?? "";
+  // A two-card Commanders section is a pair. Anything beyond that cannot be,
+  // so extras stay in the list where the legality report can name them.
+  const otherCommanders = parsed.commanderNames.filter((name) => name.trim().toLowerCase() !== commanderKey);
+  let partnerName: string | null = null;
+  if (commanderResolved && parsed.commanderNames.length === 2 && otherCommanders.length === 1) {
+    try {
+      const partner = resolveCommanderBlueprintFromCatalogV417({
+        catalog: args.catalog,
+        commanderName: otherCommanders[0]!,
+      });
+      partnerName = partner.name;
+      commanderColorIdentity = [...new Set([...commanderColorIdentity, ...partner.colorIdentity])];
+    } catch {
+      partnerName = null;
+    }
+  }
+  const partnerKey = partnerName?.trim().toLowerCase() ?? "";
+  const extraCommanders = partnerName ? [] : otherCommanders.map((name) => ({ name, copies: 1 }));
+  const mainboard = flattenImportedMainboardCopies([...parsed.mainboard, ...extraCommanders]);
+
   const cards = mainboard
-    .filter((card) => card.name.trim().toLowerCase() !== commanderKey)
+    .filter((card) => {
+      const key = card.name.trim().toLowerCase();
+      return key !== commanderKey && (!partnerKey || key !== partnerKey);
+    })
     .map((card) =>
       resolveImportedLine({
         sourceName: card.name,
@@ -201,6 +222,7 @@ export function previewProfessorImportedDeckV111(args: {
   return {
     commanderName,
     commanderResolved,
+    partnerName,
     cards,
     recognized,
     total,

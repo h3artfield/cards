@@ -1,0 +1,9 @@
+{
+  "game": "pokemon",
+  "version": "2026-10-29T17-36-05",
+  "algorithm": "dhash64",
+  "formatVersion": 1,
+  "cardCount": 2000,
+  "builtAt": "2026-10-29T17:36:05.603Z",
+  "packFile": "cards.bin"
+}

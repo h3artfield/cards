@@ -27,9 +27,10 @@ function Get-SecretMountList() {
   $mounts = @()
   foreach ($name in @(
     "OPENAI_API_KEY", "ADMIN_SESSION_SECRET", "CUSTOMER_SESSION_SECRET",
+    "CHALLENGER_HANDOFF_SECRET", "CHALLENGER_API_SECRET",
     "POKEMON_TCG_API_KEY", "PRICECHARTING_API_KEY", "RESEND_API_KEY",
     "EBAY_CLIENT_ID", "EBAY_CLIENT_SECRET", "STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET",
-    "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"
+    "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "JUSTTCG_API_KEY", "CRON_SECRET"
   )) {
     if (Test-SecretEnabled $name) {
       $mounts += "${name}=${name}:latest"
@@ -63,7 +64,11 @@ gcloud builds submit . `
   --project=$PROJECT_ID `
   --config=scripts/cloudbuild-web-staging.yaml `
   --substitutions=$subs
+$buildExit = $LASTEXITCODE
 Pop-Location
+# A native command's exit code does not trip $ErrorActionPreference, and without
+# this check a failed build would redeploy the previous :latest image.
+if ($buildExit -ne 0) { throw "Cloud Build failed (exit $buildExit); not deploying." }
 
 $SECRET_MOUNT = Get-SecretMountList
 if (-not $SECRET_MOUNT) { throw "No secrets with enabled versions to mount" }
@@ -87,6 +92,7 @@ GRADING_SERVICE_URL: "$GRADING_URL"
 REQUIRE_FIRESTORE: "true"
 APP_URL: "$WEB_URL"
 NEXT_PUBLIC_APP_URL: "$WEB_URL"
+CARD_LINK_BASE_URL: "https://kiosk.thegamelodge.store"
 CUSTOMER_EMAIL_VERIFICATION_ENABLED: "true"
 CUSTOMER_GUEST_MODE_ENABLED: "false"
 AUTH_APPLE_ENABLED: "false"
@@ -130,9 +136,10 @@ NEXT_PUBLIC_PROFESSOR_SOL_DIRECTED_GUI_ENABLED: "true"
 PROFESSOR_SOL_DIRECTED_LIVE: "1"
 PROFESSOR_SOL_DIRECTED_MODEL: "gpt-5.6-luna"
 PROFESSOR_SOL_DIRECTED_REASONING_EFFORT: "high"
-PROFESSOR_SOL_DIRECTED_BRACKET_ATTAINMENT_ENABLED: "true"
+PROFESSOR_SOL_DIRECTED_BRACKET_ATTAINMENT_ENABLED: "false"
 PROFESSOR_SOL_DIRECTED_BRACKET_CEILING_ENABLED: "true"
-NODE_OPTIONS: "--max-old-space-size=3072"
+NODE_OPTIONS: "--max-old-space-size=6144"
+CHALLENGER_PLAY_SITE_URL: "https://play.cardscanner9000.com"
 "@
 $envContent | Set-Content -Path $envPath -Encoding utf8
 
@@ -143,13 +150,17 @@ gcloud run deploy $WEB_SERVICE `
   --project=$PROJECT_ID `
   --allow-unauthenticated `
   --port=8080 `
-  --memory=4Gi `
+  --memory=8Gi `
   --cpu=2 `
   --min-instances=1 `
   --timeout=900 `
   --no-cpu-throttling `
+  --startup-probe="httpGet.path=/api/health/warmup,httpGet.port=8080,initialDelaySeconds=0,timeoutSeconds=15,periodSeconds=15,failureThreshold=16" `
   --set-secrets=$SECRET_MOUNT `
   --env-vars-file=$envPath `
   --quiet
+
+# A rollback pins traffic to one revision, and a pinned service keeps serving it after later deploys.
+gcloud run services update-traffic $WEB_SERVICE --region=$REGION --project=$PROJECT_ID --to-latest --quiet
 
 Write-Host "DONE Web: $WEB_URL"

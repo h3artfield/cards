@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ClerkDeckList } from "@/lib/store-inventory/clerk-types";
 import {
   answerSourceLabel,
@@ -14,6 +14,7 @@ import {
   type LegacyInventoryColorFilter,
 } from "./InventoryBrowseUI";
 import type { GatheringCard } from "./clerk-gathering";
+import type { StoreInventorySemanticFilter } from "@/lib/deck-builder/store-inventory-semantic";
 
 type ClerkMessage = {
   role: "user" | "assistant";
@@ -79,6 +80,8 @@ export function StoreClerkChat({
   onApplyClerk,
   onAddToGathering: _onAddToGathering,
   onPasteList,
+  pasteListOpen = false,
+  seedQuery,
   variant = "queryBar",
 }: {
   slug: string;
@@ -97,16 +100,28 @@ export function StoreClerkChat({
     clearSearch?: boolean;
     clearBrowseFilters?: boolean;
     picks?: ClerkPickCard[];
+    /** The question the shopper just sent. Stays the base while filters narrow it. */
+    asked?: string;
     browseFilterPatch?: {
       q: string;
       game: InventoryFilterState["game"];
       selectedColors: InventoryFilterState["selectedColors"];
       colorCount: InventoryFilterState["colorCount"];
       cardType: InventoryFilterState["cardType"];
+      colorInQuery?: boolean;
+      gameInQuery?: boolean;
+      colorMode?: InventoryFilterState["colorMode"];
+      commanderColors?: string[];
+      typeLine?: string;
+      manaValuePreset?: InventoryFilterState["manaValuePreset"];
+      baseSemantic?: StoreInventorySemanticFilter;
     };
   }) => void;
   onAddToGathering?: (card: GatheringCard) => void;
   onPasteList?: () => void;
+  pasteListOpen?: boolean;
+  /** Card-name text after a search has pulled filters out of the question. */
+  seedQuery?: string;
 }) {
   const [messages, setMessages] = useState<ClerkMessage[]>(() =>
     variant === "queryBar"
@@ -121,11 +136,31 @@ export function StoreClerkChat({
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState<string | null>(null);
+  const searchActive = useRef(false);
+
+  useEffect(() => {
+    if (variant !== "queryBar" || seedQuery == null) return;
+    // A text search such as "draw one card" clears the name query on purpose.
+    // Leave the typed question in the box so it stays visible as the base.
+    if (!seedQuery.trim()) return;
+    setInput(seedQuery);
+  }, [seedQuery, variant]);
+
+  function clearSearch() {
+    if (variant !== "queryBar" || !searchActive.current) return;
+    searchActive.current = false;
+    setMessages([]);
+    onApplyClerk({ clearSearch: true });
+  }
 
   async function send() {
     const text = input.trim();
-    if (!text || loading) return;
-    setInput("");
+    if (!text || loading) {
+      if (!text) clearSearch();
+      return;
+    }
+    searchActive.current = true;
+    if (variant !== "queryBar") setInput("");
     setMessages((m) => [...m, { role: "user", text }]);
     setLoading(true);
     const history = messages;
@@ -207,6 +242,7 @@ export function StoreClerkChat({
       ]);
 
       onApplyClerk({
+        asked: text,
         searchQuery:
           typeof data.searchQuery === "string"
             ? data.searchQuery
@@ -221,6 +257,13 @@ export function StoreClerkChat({
               selectedColors: InventoryFilterState["selectedColors"];
               colorCount: InventoryFilterState["colorCount"];
               cardType: InventoryFilterState["cardType"];
+              colorInQuery?: boolean;
+              gameInQuery?: boolean;
+              colorMode?: InventoryFilterState["colorMode"];
+              commanderColors?: string[];
+              typeLine?: string;
+              manaValuePreset?: InventoryFilterState["manaValuePreset"];
+              baseSemantic?: StoreInventorySemanticFilter;
             }
           | undefined,
         highlightIds: data.highlightItemIds as string[] | undefined,
@@ -247,22 +290,22 @@ export function StoreClerkChat({
   }
 
   return (
-    <div className="rounded-xl border border-neutral-800 bg-neutral-900/60 p-3">
-      <div className="mb-2 flex items-center justify-between gap-2">
-        <p className="text-sm font-semibold text-white">
-          {variant === "queryBar" ? "Search inventory" : "Ask the clerk"}
+    <div className="rounded-xl border border-neutral-800 bg-neutral-900/60 px-3 py-2">
+      <div className="mb-1.5 flex min-w-0 items-center justify-between gap-2">
+        <p className="shrink-0 text-sm font-semibold text-white">
+          {variant === "queryBar" ? "Card name" : "Ask the clerk"}
         </p>
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 items-center gap-2">
           {onPasteList ? (
             <button
               type="button"
               onClick={onPasteList}
               className="text-[11px] text-neutral-300 underline decoration-neutral-600 underline-offset-2 hover:text-white"
             >
-              Paste a list
+              {pasteListOpen ? "Hide list" : "Paste a list"}
             </button>
           ) : null}
-          <span className="text-[10px] uppercase tracking-wide text-indigo-400">
+          <span className="truncate text-[10px] uppercase tracking-wide text-indigo-400">
             In-stock search
           </span>
         </div>
@@ -307,20 +350,28 @@ export function StoreClerkChat({
         </p>
       ) : null}
 
-      <div className="flex gap-2">
+      <div className="flex min-w-0 gap-2">
         <input
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => {
+            const next = e.target.value;
+            setInput(next);
+            if (!next.trim()) clearSearch();
+          }}
           onKeyDown={(e) => e.key === "Enter" && void send()}
           disabled={loading}
-          placeholder="Search inventory — e.g. mono green, Sol Ring, commanders under $5"
-          className="flex-1 rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm text-white placeholder:text-neutral-500 disabled:opacity-60"
+          placeholder={
+            variant === "queryBar"
+              ? "Any words in the name, e.g. Fire"
+              : "Search inventory — e.g. mono green, Sol Ring, commanders under $5"
+          }
+          className="min-w-0 flex-1 rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm text-white placeholder:text-neutral-500 disabled:opacity-60"
         />
         <button
           type="button"
           disabled={loading}
           onClick={() => void send()}
-          className="flex shrink-0 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-[var(--ink-900)] disabled:opacity-50"
+          className="flex shrink-0 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-[var(--ink-900)] disabled:opacity-50"
         >
           {loading ? (
             <>

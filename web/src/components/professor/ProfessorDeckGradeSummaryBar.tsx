@@ -98,13 +98,12 @@ export function ProfessorDeckGradeSummaryBar({
         {grade && draftReady ? (
           <>
             <p className="text-[10px] font-black uppercase tracking-[0.18em] text-neutral-600">
-              {finalReportReady ? "Deck report" : "Professor grade"}
+              {finalReportReady ? "Deck report" : "Measured bracket"}
             </p>
-            <p className="text-3xl font-black leading-none">{grade.overallLetter}</p>
-            <p className="text-sm font-black text-neutral-700">
-              {grade.cos?.competitiveStrength != null
-                ? `Competitive Strength ${Math.round(grade.cos.competitiveStrength)} / 100`
-                : "COS not scored"}
+            <p className="text-3xl font-black leading-none">
+              {grade.bracketAlignment
+                ? `B${grade.bracketAlignment.effectiveBracket}`
+                : "—"}
             </p>
             <button
               type="button"

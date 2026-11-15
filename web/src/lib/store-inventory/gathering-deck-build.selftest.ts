@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { buildGatheringDeckPrefill } from "./gathering-deck-build";
+import { cartCanBuildMagicDeck } from "./cart";
 
 const prefill = buildGatheringDeckPrefill([
   {
@@ -28,5 +29,14 @@ assert.equal(prefill.commanderName, "Gandalf the White");
 assert.ok(prefill.deckPreferences.includes("Sol Ring"));
 assert.ok(prefill.deckPreferences.includes("Wayfarer's Bauble"));
 assert.ok(!prefill.deckPreferences.toLowerCase().includes("gandalf"));
+
+assert.equal(cartCanBuildMagicDeck("magic", [{ gameKey: "magic" }]), true);
+assert.equal(cartCanBuildMagicDeck("magic", [{}]), true);
+assert.equal(cartCanBuildMagicDeck("flesh-blood", [{ gameKey: "magic" }]), false);
+assert.equal(cartCanBuildMagicDeck("one-piece", []), false);
+assert.equal(
+  cartCanBuildMagicDeck("magic", [{ gameKey: "magic" }, { gameKey: "one-piece" }]),
+  false,
+);
 
 console.log("gathering-deck-build.selftest: ok");

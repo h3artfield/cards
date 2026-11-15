@@ -6,12 +6,17 @@ import {
   type InventoryListedFilter,
   type InventoryStockFilter,
 } from "@/lib/inventory/search";
+import { parseInventoryFinishFilter } from "@/lib/inventory/inventory-finish-v1";
 import {
   inventoryItemCanRetryImageCache,
   inventoryItemNeedsImageCache,
 } from "@/lib/inventory/image-backfill";
 import { inventoryItemNeedsTcgLowPrice } from "@/lib/inventory/tcg-low-price";
-import { isCatalogImportItem } from "@/lib/inventory/status";
+import {
+  inventoryItemMatchesChannelFilter,
+  isCatalogImportItem,
+  parseInventoryChannelFilter,
+} from "@/lib/inventory/status";
 import { dataStore } from "@/lib/storage/data-store";
 
 export async function GET(req: NextRequest) {
@@ -26,18 +31,30 @@ export async function GET(req: NextRequest) {
     const q = params.get("q") ?? undefined;
     const stock = (params.get("stock") ?? "all") as InventoryStockFilter;
     const listed = (params.get("listed") ?? "all") as InventoryListedFilter;
+    const finish = parseInventoryFinishFilter(params.get("finish"));
     const page = Number(params.get("page") ?? "1");
     const limit = Number(params.get("limit") ?? "48");
+    const sort = params.get("sort") === "name" ? "name" : "qty";
 
     // The register sells buyback singles too; the catalog browser does not.
     const includeAllSources = params.get("source") === "all";
     const all = await dataStore.getInventory(scope.storeId);
+    const channel = parseInventoryChannelFilter(params.get("channel"));
     const active = all.filter(
       (item) =>
         item.status !== "sold" &&
         (includeAllSources || isCatalogImportItem(item)),
     );
-    const result = browseInventoryItems(active, { q, stock, listed, page, limit });
+    const shown = active.filter((item) => inventoryItemMatchesChannelFilter(item, channel));
+    const result = browseInventoryItems(shown, {
+      q,
+      stock,
+      listed,
+      finish,
+      page,
+      limit,
+      sort,
+    });
 
     return jsonOk({
       ...result,

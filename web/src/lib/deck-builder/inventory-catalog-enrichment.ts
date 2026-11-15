@@ -21,6 +21,7 @@ import {
   searchScryfallCard,
 } from "./scryfall-set-resolver";
 import { cardNameFromInventoryItem } from "../inventory/image-fallback";
+import { catalogMatchesInventoryItem } from "../inventory/resolve-display-image";
 import {
   isEnrichableMagicSingle,
   isInventoryCatalogLinked,
@@ -65,6 +66,16 @@ export interface InventoryCatalogEnrichment {
   syncedAt: string;
 }
 
+function printingNameAgrees(productName: string | undefined, catalog: CatalogCard | null): boolean {
+  if (!catalog) return false;
+  const name = productName?.trim();
+  if (!name) return true;
+  const shelf = { productName: name, displayName: name } as InventoryItem;
+  return catalog.name.split("//").some((face) =>
+    catalogMatchesInventoryItem(shelf, { ...catalog, name: face.trim() }),
+  );
+}
+
 async function lookupBySetNameAndNumber(input: {
   setName: string;
   cardNumber: string;
@@ -74,7 +85,8 @@ async function lookupBySetNameAndNumber(input: {
     setName: input.setName,
     cardNumber: input.cardNumber,
   });
-  if (byCode) return byCode;
+  // Set code "lea" is not "Prerelease Cards" just because both use number 203.
+  if (byCode && printingNameAgrees(input.productName, byCode)) return byCode;
 
   const cn = input.cardNumber.trim();
   const set = input.setName.trim();
@@ -82,20 +94,23 @@ async function lookupBySetNameAndNumber(input: {
     const exact = await searchScryfallCard(
       `!"${input.productName.trim()}" set:"${set}" cn:${cn} game:paper`,
     );
-    if (exact) return exact;
+    if (exact && printingNameAgrees(input.productName, exact)) return exact;
 
     const byNameCn = await searchScryfallCard(
       `!"${input.productName.trim()}" cn:${cn} game:paper`,
     );
-    if (byNameCn) return byNameCn;
+    if (byNameCn && printingNameAgrees(input.productName, byNameCn)) return byNameCn;
   }
 
   const setCode = await resolveScryfallSetCode(set);
   if (setCode) {
-    return searchScryfallCard(`set:${setCode} cn:${cn} game:paper`);
+    const bySetCode = await searchScryfallCard(`set:${setCode} cn:${cn} game:paper`);
+    if (bySetCode && printingNameAgrees(input.productName, bySetCode)) return bySetCode;
   }
 
-  return searchScryfallCard(`set:"${set}" cn:${cn} game:paper`);
+  const bySetLabel = await searchScryfallCard(`set:"${set}" cn:${cn} game:paper`);
+  if (bySetLabel && printingNameAgrees(input.productName, bySetLabel)) return bySetLabel;
+  return null;
 }
 
 export type CatalogResolveFailure =

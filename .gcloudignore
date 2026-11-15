@@ -9,6 +9,7 @@ web/.cache/
 
 # Offline training snapshots — not needed at runtime (~10GB).
 web/data/milestones/topdeck/
+web/data/milestones/deck-rating/
 
 # Mechanical-space research dumps — roughly 5GB across 70-odd experiment
 # directories, of which the deployed app reads two.
@@ -45,6 +46,7 @@ data/pricecharting/
 **/.env*.local
 **/.tunnel-url
 
+scanner/
 services/
 grading-service/
 node_modules/

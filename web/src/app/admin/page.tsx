@@ -138,14 +138,14 @@ export default function AdminOrdersPage() {
   return (
     <AdminLayout>
       <div>
-        <h2 className="text-2xl font-bold text-slate-900">Orders</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-hi)]">Orders</h2>
         {activeStore && (
-          <p className="text-sm text-slate-600">{activeStore.storeName}</p>
+          <p className="mt-1 text-sm text-[var(--text-lo)]">{activeStore.storeName}</p>
         )}
       </div>
 
       {!loading && orders.length > 0 && (
-        <div className="mt-4 flex flex-wrap items-center gap-3 border-b border-slate-200">
+        <div className="mt-6 flex flex-wrap items-center gap-3 border-b border-[var(--line-subtle)]">
           <TabButton
             active={tab === "open"}
             onClick={() => setTab("open")}
@@ -163,17 +163,17 @@ export default function AdminOrdersPage() {
 
       {tab === "closed" && !loading && closedOrders.length > 0 && (
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          <label className="flex items-center gap-2 text-sm text-slate-700">
+          <label className="flex items-center gap-2 text-sm text-[var(--text)]">
             <span className="font-medium">Completed on</span>
             <input
               type="date"
               value={closedDate}
               onChange={(e) => setClosedDate(e.target.value)}
-              className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="rounded-lg border border-[var(--line)] bg-[var(--ink-800)] px-3 py-1.5 text-sm text-[var(--text-hi)] shadow-sm focus:border-[var(--accent-lo)] focus:outline-none focus:ring-1 focus:ring-[var(--accent-lo)]"
             />
           </label>
           {closedDates.length > 0 && !closedDates.includes(closedDate) && (
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[var(--text-lo)]">
               No orders on this date — pick another or choose a recent day below.
             </p>
           )}
@@ -186,8 +186,8 @@ export default function AdminOrdersPage() {
                   onClick={() => setClosedDate(date)}
                   className={`rounded-full px-2.5 py-0.5 text-xs font-medium transition ${
                     date === closedDate
-                      ? "bg-indigo-100 text-indigo-800"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      ? "bg-[var(--accent-wash)] text-[var(--accent-hi)]"
+                      : "bg-[var(--ink-750)] text-[var(--text)] hover:bg-[var(--ink-700)]"
                   }`}
                 >
                   {formatDateChip(date)}
@@ -199,31 +199,31 @@ export default function AdminOrdersPage() {
       )}
 
       {loading ? (
-        <p className="mt-6 text-slate-500">Loading orders…</p>
+        <p className="mt-6 text-[var(--text-lo)]">Loading orders…</p>
       ) : orders.length === 0 ? (
-        <div className="mt-8 rounded-xl border border-dashed border-slate-300 bg-white px-8 py-12 text-center">
-          <p className="text-lg font-medium text-slate-800">No orders yet</p>
-          <p className="mt-2 text-sm text-slate-600">
+        <div className="mt-8 rounded-xl border border-dashed border-[var(--line)] bg-[var(--ink-800)] px-8 py-12 text-center">
+          <p className="text-lg font-medium text-[var(--text-hi)]">No orders yet</p>
+          <p className="mt-2 text-sm text-[var(--text)]">
             Customers scan your store QR code to create orders. Print the QR from{" "}
-            <Link href="/admin/settings" className="text-indigo-600 hover:underline">
+            <Link href="/admin/settings" className="text-[var(--accent)] hover:underline">
               Settings & QR
             </Link>
             .
           </p>
         </div>
       ) : visibleOrders.length === 0 ? (
-        <div className="mt-8 rounded-xl border border-dashed border-slate-300 bg-white px-8 py-12 text-center">
-          <p className="text-lg font-medium text-slate-800">
+        <div className="mt-8 rounded-xl border border-dashed border-[var(--line)] bg-[var(--ink-800)] px-8 py-12 text-center">
+          <p className="text-lg font-medium text-[var(--text-hi)]">
             {tab === "open" ? "No open orders" : "No closed orders on this date"}
           </p>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="mt-2 text-sm text-[var(--text)]">
             {tab === "open"
               ? "Completed purchases appear under the Closed tab."
               : `Try another date — ${closedOrders.length} completed order${closedOrders.length === 1 ? "" : "s"} total.`}
           </p>
         </div>
       ) : (
-        <div className="mt-6 overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div className="mt-6 overflow-x-auto rounded-xl border border-[var(--line-subtle)] bg-[var(--ink-800)]">
           {tab === "open" ? (
             <OpenOrdersTable orders={visibleOrders} />
           ) : (
@@ -238,7 +238,7 @@ export default function AdminOrdersPage() {
 function OpenOrdersTable({ orders }: { orders: EnrichedOrder[] }) {
   return (
     <table className="min-w-full text-sm">
-      <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+      <thead className="bg-[var(--ink-750)] text-left text-xs uppercase tracking-wide text-[var(--text-lo)]">
         <tr>
           <th className="px-4 py-3">Order</th>
           <th className="px-4 py-3">Customer</th>
@@ -251,26 +251,26 @@ function OpenOrdersTable({ orders }: { orders: EnrichedOrder[] }) {
           return (
           <tr
             key={order.id}
-            className="border-t border-slate-100 hover:bg-slate-50/80"
+            className="border-t border-[var(--line-subtle)] hover:bg-[var(--ink-750)]"
           >
             <td className="px-4 py-3">
               {ready ? (
                 <Link
                   href={`/admin/orders/${order.id}`}
-                  className="font-semibold text-indigo-600 hover:underline"
+                  className="font-semibold text-[var(--accent)] hover:text-[var(--accent-hi)] hover:underline"
                 >
                   {order.orderNumber}
                 </Link>
               ) : (
                 <span
-                  className="font-semibold text-slate-400"
+                  className="font-semibold text-[var(--text-lo)]"
                   title="Still processing — available when status is Ready for review"
                 >
                   {order.orderNumber}
                 </span>
               )}
             </td>
-            <td className="px-4 py-3 font-medium text-slate-900">
+            <td className="px-4 py-3 font-medium text-[var(--text-hi)]">
               {customer ? `${customer.firstName} ${customer.lastName}` : "—"}
             </td>
             <td className="px-4 py-3 text-right">
@@ -291,7 +291,7 @@ function OpenOrdersTable({ orders }: { orders: EnrichedOrder[] }) {
 function ClosedOrdersTable({ orders }: { orders: EnrichedOrder[] }) {
   return (
     <table className="min-w-full text-sm">
-      <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+      <thead className="bg-[var(--ink-750)] text-left text-xs uppercase tracking-wide text-[var(--text-lo)]">
         <tr>
           <th className="px-4 py-3">Order</th>
           <th className="px-4 py-3">Customer</th>
@@ -308,12 +308,12 @@ function ClosedOrdersTable({ orders }: { orders: EnrichedOrder[] }) {
         {orders.map(({ order, customer, cardCount, reportSummary }) => (
           <tr
             key={order.id}
-            className="border-t border-slate-100 hover:bg-slate-50/80"
+            className="border-t border-[var(--line-subtle)] hover:bg-[var(--ink-750)]"
           >
             <td className="px-4 py-3">
               <Link
                 href={`/admin/orders/${order.id}`}
-                className="font-medium text-indigo-600 hover:underline"
+                className="font-medium text-[var(--accent)] hover:text-[var(--accent-hi)] hover:underline"
               >
                 {order.orderNumber}
               </Link>
@@ -391,14 +391,14 @@ function TabButton({
       onClick={onClick}
       className={`-mb-px border-b-2 px-1 pb-3 text-sm font-medium transition ${
         active
-          ? "border-indigo-600 text-indigo-600"
-          : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700"
+          ? "border-[var(--accent)] text-[var(--accent-hi)]"
+          : "border-transparent text-[var(--text-lo)] hover:border-[var(--line)] hover:text-[var(--text-hi)]"
       }`}
     >
       {label}
       <span
         className={`ml-1.5 rounded-full px-1.5 py-0.5 text-xs ${
-          active ? "bg-indigo-100 text-indigo-700" : "bg-slate-100 text-slate-600"
+          active ? "bg-[var(--accent-wash)] text-[var(--accent-hi)]" : "bg-[var(--ink-750)] text-[var(--text)]"
         }`}
       >
         {count}

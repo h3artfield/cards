@@ -7,7 +7,7 @@
  * their dashboard sees one surface instead of three.
  */
 
-export const authPage = "min-h-screen bg-[var(--ink-850)] text-[var(--text)]";
+export const authPage = "auth-page-ground min-h-screen text-[var(--text)]";
 export const authContainer = "mx-auto flex min-h-screen max-w-md flex-col px-6 py-10";
 export const authHeading = "text-2xl font-semibold tracking-tight text-[var(--text-hi)]";
 export const authSubtext = "text-sm leading-relaxed text-[var(--text-lo)]";
@@ -21,9 +21,9 @@ export const authError =
 /**
  * Solid accent with near-black text. A filled gold button is the highest
  * contrast element available on this ground, which is what a page's single
- * primary action should be.
+ * primary action should be. Material fill comes from `.ui-shader-foil`.
  */
 export const authButton =
-  "w-full rounded-md bg-[var(--accent)] px-4 py-3.5 text-center text-sm font-semibold uppercase tracking-wide text-[var(--ink-900)] shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] transition hover:bg-[var(--accent-hi)] disabled:opacity-50";
+  "ui-shader-foil w-full rounded-md px-4 py-3.5 text-center text-sm font-semibold uppercase tracking-wide disabled:opacity-50";
 export const authButtonSecondary =
-  "w-full rounded-md border border-[var(--line)] bg-[var(--ink-750)] px-4 py-3.5 text-center text-sm font-semibold uppercase tracking-wide text-[var(--text-hi)] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:border-[var(--line-strong)] disabled:opacity-50";
+  "ui-shader-stone w-full rounded-md px-4 py-3.5 text-center text-sm font-semibold uppercase tracking-wide disabled:opacity-50";

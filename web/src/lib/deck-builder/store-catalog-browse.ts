@@ -33,6 +33,13 @@ function buildScryfallQuery(input: {
   colorCount: ColorCountFilter;
   cardType: StoreInventoryTypeFilter;
   semantic?: StoreInventorySemanticFilter;
+  colorMode?: "exact" | "including" | "atmost";
+  commanderColors?: string[];
+  rulesText?: string;
+  typeLine?: string;
+  typeLinePartial?: boolean;
+  manaCost?: string;
+  baseSemantic?: StoreInventorySemanticFilter;
 }): string {
   const parts: string[] = [];
   const text = input.q.trim();
@@ -58,7 +65,15 @@ function buildScryfallQuery(input: {
     parts.push(`otag:${tag}`);
   }
 
-  if (input.colorCount !== "all") {
+  if (input.colorMode && input.selectedColors.length > 0 && input.colorCount === "all") {
+    const pips = input.selectedColors.filter((c) => c !== "C").join("").toLowerCase();
+    if (input.selectedColors.length === 1 && input.selectedColors[0] === "C") {
+      parts.push("c=c");
+    } else if (pips) {
+      const op = input.colorMode === "including" ? ">=" : input.colorMode === "atmost" ? "<=" : "=";
+      parts.push(`c${op}${pips}`);
+    }
+  } else if (input.colorCount !== "all") {
     if (input.colorCount === "multicolor") parts.push("c>=2");
     else if (input.colorCount === "two") parts.push("c=2");
     else if (input.colorCount === "three") parts.push("c=3");
@@ -72,9 +87,53 @@ function buildScryfallQuery(input: {
     parts.push(`c:${input.selectedColors.join("").toLowerCase()}`);
   }
 
-  parts.push("-is:token");
   parts.push("game:paper");
+  if (input.commanderColors?.length) {
+    parts.push(`id<=${input.commanderColors.join("").toLowerCase()}`);
+  }
+  const rules = input.rulesText?.trim();
+  if (rules) parts.push(rules.includes(" ") ? `o:"${rules}"` : `o:${rules}`);
+  const typeLine = input.typeLine?.trim();
+  if (typeLine) {
+    const tokens = typeLine.split(/\s+/).filter(Boolean);
+    const partial = input.typeLinePartial === true && tokens.length === 1;
+    for (const token of tokens) {
+      const safe = token.replace(/"/g, "");
+      const term = /[^a-z0-9]/i.test(safe) ? `"${safe}"` : safe;
+      parts.push(`${partial ? "t:" : "type:"}${term}`);
+    }
+  }
+  const mana = input.manaCost?.trim();
+  if (mana) parts.push(`mana=${mana.includes("{") ? mana : mana.toLowerCase()}`);
+  const baseClause = scryfallSearchBaseClause(input.baseSemantic);
+  if (baseClause) parts.push(baseClause);
   return parts.filter(Boolean).join(" ");
+}
+
+function scryfallQuoted(value: string): string {
+  return `"${value.replace(/"/g, "")}"`;
+}
+
+/** The search base is one AND group. Tags and oracle snippets inside it are alternatives. */
+function scryfallSearchBaseClause(
+  base: StoreInventorySemanticFilter | undefined,
+): string | undefined {
+  if (!base) return undefined;
+  const groups: string[] = [];
+  const textOrTags = [
+    ...(base.oracleTagsAny ?? []).map((tag) => `otag:${tag}`),
+    ...(base.oracleTextAny ?? []).map((text) => `o:${scryfallQuoted(text)}`),
+  ];
+  if (textOrTags.length === 1) groups.push(textOrTags[0]!);
+  else if (textOrTags.length > 1) groups.push(`(${textOrTags.join(" or ")})`);
+  const keywords = (base.keywordsAny ?? []).map((keyword) => `keyword:${scryfallQuoted(keyword)}`);
+  if (keywords.length === 1) groups.push(keywords[0]!);
+  else if (keywords.length > 1) groups.push(`(${keywords.join(" or ")})`);
+  const names = (base.nameIncludesAny ?? []).map((name) => `name:${scryfallQuoted(name)}`);
+  if (names.length === 1) groups.push(names[0]!);
+  else if (names.length > 1) groups.push(`(${names.join(" or ")})`);
+  if (groups.length === 0) return undefined;
+  return groups.join(" ");
 }
 
 function catalogCardToGridCard(
@@ -102,6 +161,20 @@ function catalogCardToGridCard(
   };
 }
 
+function catalogSearchUrl(query: string, order: string, page: number, extras: boolean): string {
+  const extrasParam = extras ? "&include_extras=true" : "";
+  return `https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}&unique=cards&order=${order}&page=${page}${extrasParam}`;
+}
+
+/** Tokens and planes stay out of ordinary results. A type that only exists on them still returns those cards. */
+async function fetchCatalogSearch(query: string, order: string, page: number): Promise<Response> {
+  const first = await scryfallFetch(catalogSearchUrl(query, order, page, false));
+  if (first.status === 404 && page <= 1) {
+    return scryfallFetch(catalogSearchUrl(query, order, page, true));
+  }
+  return first;
+}
+
 async function browseMagicCatalog(input: {
   q: string;
   page: number;
@@ -111,6 +184,13 @@ async function browseMagicCatalog(input: {
   cardType: StoreInventoryTypeFilter;
   sortBy?: StoreInventorySortBy;
   semantic?: StoreInventorySemanticFilter;
+  colorMode?: "exact" | "including" | "atmost";
+  commanderColors?: string[];
+  rulesText?: string;
+  typeLine?: string;
+  typeLinePartial?: boolean;
+  manaCost?: string;
+  baseSemantic?: StoreInventorySemanticFilter;
 }): Promise<{
   items: StoreInventoryCard[];
   total: number;
@@ -120,8 +200,7 @@ async function browseMagicCatalog(input: {
 }> {
   const query = buildScryfallQuery(input);
   const order = scryfallOrder(input.sortBy);
-  const url = `https://api.scryfall.com/cards/search?q=${encodeURIComponent(query)}&unique=cards&order=${order}&page=${input.page}`;
-  const res = await scryfallFetch(url);
+  const res = await fetchCatalogSearch(query, order, input.page);
   if (!res.ok) {
     return { items: [], total: 0, page: input.page, limit: input.limit, totalPages: 1 };
   }
@@ -286,6 +365,13 @@ export async function browseCatalogPrintings(input: {
   limit?: number;
   sortBy?: StoreInventorySortBy;
   semantic?: StoreInventorySemanticFilter;
+  colorMode?: "exact" | "including" | "atmost";
+  commanderColors?: string[];
+  rulesText?: string;
+  typeLine?: string;
+  typeLinePartial?: boolean;
+  manaCost?: string;
+  baseSemantic?: StoreInventorySemanticFilter;
 }): Promise<{
   items: StoreInventoryCard[];
   total: number;
@@ -323,6 +409,13 @@ export async function browseCatalogPrintings(input: {
           cardType,
           sortBy: input.sortBy,
           semantic: input.semantic,
+          colorMode: input.colorMode,
+          commanderColors: input.commanderColors,
+          rulesText: input.rulesText,
+          typeLine: input.typeLine,
+          typeLinePartial: input.typeLinePartial,
+          manaCost: input.manaCost,
+          baseSemantic: input.baseSemantic,
         })
       : await browseTcgplayerCatalog({
           q,

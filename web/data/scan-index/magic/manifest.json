@@ -1,0 +1,9 @@
+{
+  "game": "magic",
+  "version": "2026-10-29T17-36-52",
+  "algorithm": "dhash64",
+  "formatVersion": 1,
+  "cardCount": 5000,
+  "builtAt": "2026-10-29T17:36:52.244Z",
+  "packFile": "cards.bin"
+}

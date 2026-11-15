@@ -72,6 +72,9 @@ function main() {
   assert.equal(cartItemCount(cart), 2);
   assert.equal(cartSubtotal(cart), 6.98);
 
+  cart = addCartLine(cart, line({ inventoryItemId: "catalog:magic:extus", unitPrice: 0, maxQuantity: 1 }));
+  assert.equal(cart.length, 1, "a catalog printing the store does not own stays out of the cart");
+
   cart = addCartLine(cart, line({ inventoryItemId: "item-2", unitPrice: 10 }));
   assert.equal(cartSubtotal(cart), 16.98);
   assert.equal(
@@ -94,6 +97,11 @@ function main() {
   );
   assert.equal(restored.length, 1);
   assert.equal(restored[0]!.quantity, 5);
+  assert.equal(
+    parseStoredCart(JSON.stringify([line({ inventoryItemId: "catalog:magic:extus", unitPrice: 0 })])).length,
+    0,
+    "a saved catalog line is dropped",
+  );
 
   // Shopify permalinks.
   assert.equal(

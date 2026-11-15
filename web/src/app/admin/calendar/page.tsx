@@ -16,6 +16,7 @@ import {
   type EventEditorFormState,
 } from "@/components/calendar/AdminEventEditorDialog";
 import { resolveStoreEventCategories } from "@/lib/store-calendar/categories";
+import { eventsInSameSeries } from "@/lib/store-calendar/event-list-groups";
 import { adminFetch } from "@/lib/api-client";
 import { useAdmin } from "@/context/AdminContext";
 import { startOfMonth } from "@/lib/store-calendar/date-utils";
@@ -112,6 +113,10 @@ export default function AdminCalendarPage() {
       allDay: form.allDay,
       signupUrl: form.signupUrl.trim() || undefined,
       capacity: form.capacity.trim() ? Number(form.capacity) : undefined,
+      cost: form.cost.trim() ? Number(form.cost) : undefined,
+      requiredBracket: form.requiredBracket.trim()
+        ? Number(form.requiredBracket)
+        : undefined,
       published: form.published,
     };
 
@@ -153,19 +158,44 @@ export default function AdminCalendarPage() {
 
   async function deleteEditingEvent() {
     if (!editingEvent) return;
-    if (!window.confirm("Delete this event?")) return;
-    const res = await adminFetch(
-      `/api/admin/store-events/${encodeURIComponent(editingEvent.id)}`,
-      { method: "DELETE" },
-    );
+
+    const siblings = eventsInSameSeries(editingEvent, events);
+    let deleteSeries = false;
+
+    if (siblings.length > 1) {
+      deleteSeries = window.confirm(
+        `Delete all ${siblings.length} events in this recurring series?\n\nOK deletes every date in the series.\nCancel lets you delete only this one date.`,
+      );
+      if (!deleteSeries) {
+        const dateLabel = new Date(editingEvent.startAt).toLocaleDateString(undefined, {
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+        });
+        if (!window.confirm(`Delete only ${dateLabel}?`)) return;
+      }
+    } else if (!window.confirm("Delete this event?")) {
+      return;
+    }
+
+    const url =
+      `/api/admin/store-events/${encodeURIComponent(editingEvent.id)}` +
+      (deleteSeries ? "?scope=series" : "");
+
+    const res = await adminFetch(url, { method: "DELETE" });
     if (!res.ok) {
       const data = await res.json();
       setMessage(data.error ?? "Could not delete event");
       return;
     }
+    const data = (await res.json()) as { deletedCount?: number };
     closeEditor();
     await load();
-    setMessage("Event deleted.");
+    setMessage(
+      data.deletedCount && data.deletedCount > 1
+        ? `Deleted ${data.deletedCount} events in the series.`
+        : "Event deleted.",
+    );
   }
 
   async function seedSchedule() {

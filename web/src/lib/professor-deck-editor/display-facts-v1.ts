@@ -31,7 +31,36 @@ export type DeckEditorDisplayFactsV1 = {
    * mistyped a name can find and fix it in one place.
    */
   category: SolDirectedDeckDisplayCategory | null;
+  /** Colors this card can add, from Scryfall `produced_mana`. */
+  producedMana?: string[];
+  /** Used as a land-source fallback when `producedMana` is empty. */
+  colorIdentity?: string[];
+  /**
+   * True for lands that go ahead of the one-land-per-turn rule: tap for two or
+   * more, or search up extra lands. Tap-for-one duals are not this.
+   */
+  manaAcceleration?: boolean;
 };
+
+const MULTI_MANA_ADD_V1 =
+  /Add (?:\{[^}]+\}){2,}|Add (?:two|three|four|five|six|seven|eight|ten|x) mana|Add \{[^}]+\} for each|Add an amount of/i;
+const EXTRA_LAND_SEARCH_V1 =
+  /search your library for (?:up to )?(?:two|three|four|\d+).{0,40}land|play an additional land|an additional land/i;
+
+function oracleTextOf(card: GoldenCatalogOracleCard): string {
+  const faces = (card.cardFaces ?? []).map((face) => face.oracleText ?? "").join(" ");
+  return `${card.oracleText ?? ""} ${faces}`;
+}
+
+function isLandCard(card: GoldenCatalogOracleCard): boolean {
+  return (card.types ?? []).includes("Land") || /\bLand\b/.test(card.typeLine ?? "");
+}
+
+/** Display-only: lands that actually accelerate, not every tap-for-one source. */
+export function landManaAccelerationFromOracleV1(typeLine: string, oracleText: string): boolean {
+  if (!/\bLand\b/i.test(typeLine)) return false;
+  return MULTI_MANA_ADD_V1.test(oracleText) || EXTRA_LAND_SEARCH_V1.test(oracleText);
+}
 
 export type DeckEditorDisplayFactsLookupV1 = (
   card: EditableDeckCardV1,
@@ -39,11 +68,18 @@ export type DeckEditorDisplayFactsLookupV1 = (
 
 function factsFromCard(card: GoldenCatalogOracleCard): DeckEditorDisplayFactsV1 {
   const typeLine = card.typeLine ?? "";
+  const produced = Array.isArray(card.producedMana) ? card.producedMana : [];
+  const identity = Array.isArray(card.colorIdentity) ? card.colorIdentity : [];
   return {
     typeLine,
     manaCost: card.manaCost ?? null,
     manaValue: typeof card.manaValue === "number" ? card.manaValue : null,
     category: solDirectedDisplayCategoryForTypeLineV1(typeLine),
+    producedMana: produced.map(String),
+    colorIdentity: identity.map(String),
+    manaAcceleration: isLandCard(card)
+      ? landManaAccelerationFromOracleV1(typeLine, oracleTextOf(card))
+      : false,
   };
 }
 
@@ -80,6 +116,9 @@ export function displayFactsForCardV1(
     manaCost: null,
     manaValue: null,
     category: card.isLand ? "land" : null,
+    producedMana: [],
+    colorIdentity: [],
+    manaAcceleration: false,
   };
 }
 

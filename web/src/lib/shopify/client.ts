@@ -3,6 +3,11 @@ import { normalizeShopDomain } from "./mask-token";
 import { evaluateShopifyExportScopes } from "./shop-domain";
 
 const API_VERSION = "2024-10";
+/**
+ * For calls written against the current API. inventorySetQuantities needs
+ * 2026-04+ (per-quantity `changeFromQuantity` and an `@idempotent` key).
+ */
+export const SHOPIFY_CURRENT_API_VERSION = "2026-10";
 
 export type ShopifyGraphqlError = {
   message: string;
@@ -42,9 +47,10 @@ export async function shopifyGraphql<T>(
   accessToken: string,
   query: string,
   variables?: Record<string, unknown>,
+  apiVersion: string = API_VERSION,
 ): Promise<T> {
   const domain = normalizeShopDomain(shopDomain);
-  const url = `https://${domain}/admin/api/${API_VERSION}/graphql.json`;
+  const url = `https://${domain}/admin/api/${apiVersion}/graphql.json`;
   const res = await fetch(url, {
     method: "POST",
     headers: {
@@ -80,7 +86,7 @@ export async function shopifyGraphql<T>(
   return json.data;
 }
 
-function collectUserErrors(
+export function collectUserErrors(
   payload: Record<string, unknown> | undefined,
 ): ShopifyGraphqlError[] {
   const errors = payload?.userErrors as ShopifyGraphqlError[] | undefined;
@@ -165,7 +171,7 @@ export type CreatedShopifyProduct = {
   adminUrl: string;
 };
 
-export async function createShopifyDraftProduct(input: {
+type CreateShopifyProductInput = {
   shopDomain: string;
   accessToken: string;
   title: string;
@@ -175,11 +181,45 @@ export async function createShopifyDraftProduct(input: {
   tags: string[];
   status: "DRAFT" | "ACTIVE";
   sku: string;
+  /** What POS matches a scanned label against: the card's QR link. */
+  barcode?: string;
   price: string;
   quantity: number;
   locationId?: string;
   imageUrls: string[];
-}): Promise<CreatedShopifyProduct> {
+};
+
+type CreatedProductShell = { id: string; handle: string };
+type CreatedVariantShell = { id: string; inventoryItem?: { id: string } };
+
+/** Remove a product created by an export that could not be completed. */
+export async function deleteShopifyProduct(input: {
+  shopDomain: string;
+  accessToken: string;
+  productId: string;
+}): Promise<void> {
+  const data = await shopifyGraphql<{
+    productDelete: { userErrors: ShopifyGraphqlError[] };
+  }>(
+    input.shopDomain,
+    input.accessToken,
+    `mutation DeleteProduct($input: ProductDeleteInput!) {
+      productDelete(input: $input) {
+        userErrors { field message }
+      }
+    }`,
+    { input: { id: input.productId } },
+  );
+
+  const errors = collectUserErrors(data.productDelete);
+  if (errors.length) {
+    throw new ShopifyApiError(errors.map((e) => e.message).join("; "), errors);
+  }
+}
+
+export async function createShopifyDraftProduct(
+  input: CreateShopifyProductInput,
+): Promise<CreatedShopifyProduct> {
   const media = input.imageUrls.map((url) => ({
     originalSource: url,
     mediaContentType: "IMAGE" as const,
@@ -236,9 +276,36 @@ export async function createShopifyDraftProduct(input: {
   const product = createResult.product;
   const defaultVariant = product?.variants.nodes[0];
   if (!product?.id || !defaultVariant?.id) {
+    if (product?.id) await rollbackCreatedProduct(input, product.id);
     throw new ShopifyApiError("Product created but missing IDs");
   }
 
+  try {
+    return await configureCreatedProduct(input, product, defaultVariant);
+  } catch (err) {
+    // A half-configured product is unsellable, and since the inventory row stays
+    // unlisted, a retry would create a duplicate rather than repair it.
+    await rollbackCreatedProduct(input, product.id);
+    throw err;
+  }
+}
+
+async function rollbackCreatedProduct(
+  input: CreateShopifyProductInput,
+  productId: string,
+): Promise<void> {
+  await deleteShopifyProduct({
+    shopDomain: input.shopDomain,
+    accessToken: input.accessToken,
+    productId,
+  }).catch(() => undefined);
+}
+
+async function configureCreatedProduct(
+  input: CreateShopifyProductInput,
+  product: CreatedProductShell,
+  defaultVariant: CreatedVariantShell,
+): Promise<CreatedShopifyProduct> {
   const updateData = await shopifyGraphql<{
     productVariantsBulkUpdate: {
       productVariants?: Array<{ id: string; inventoryItem?: { id: string } }>;
@@ -259,6 +326,7 @@ export async function createShopifyDraftProduct(input: {
         {
           id: defaultVariant.id,
           price: input.price,
+          ...(input.barcode ? { barcode: input.barcode } : {}),
           inventoryPolicy: "DENY",
           inventoryItem: { sku: input.sku, tracked: true },
         },
@@ -280,42 +348,15 @@ export async function createShopifyDraftProduct(input: {
     variant.inventoryItem?.id ?? defaultVariant.inventoryItem?.id;
 
   if (input.locationId && input.quantity > 0 && inventoryItemId) {
-    const inventoryData = await shopifyGraphql<{
-      inventorySetQuantities: {
-        userErrors: ShopifyGraphqlError[];
-      };
-    }>(
-      input.shopDomain,
-      input.accessToken,
-      `mutation SetInventory($input: InventorySetQuantitiesInput!) {
-        inventorySetQuantities(input: $input) {
-          userErrors { field message }
-        }
-      }`,
-      {
-        input: {
-          name: "available",
-          reason: "correction",
-          referenceDocumentUri: `gid://cardscanner9000/InventoryExport/${product.id}`,
-          ignoreCompareQuantity: true,
-          quantities: [
-            {
-              inventoryItemId,
-              locationId: input.locationId,
-              quantity: input.quantity,
-            },
-          ],
-        },
-      },
-    );
-
-    const inventoryErrors = collectUserErrors(inventoryData.inventorySetQuantities);
-    if (inventoryErrors.length) {
-      throw new ShopifyApiError(
-        inventoryErrors.map((e) => e.message).join("; "),
-        inventoryErrors,
-      );
-    }
+    await setAvailableQuantity({
+      shopDomain: input.shopDomain,
+      accessToken: input.accessToken,
+      inventoryItemId,
+      locationId: input.locationId,
+      quantity: input.quantity,
+      reason: "correction",
+      referenceDocumentUri: `gid://cardscanner9000/InventoryExport/${product.id}`,
+    });
   }
 
   const domain = normalizeShopDomain(input.shopDomain);
@@ -342,31 +383,53 @@ export async function setShopifyInventoryQuantity(input: {
   quantity: number;
   reason?: string;
 }): Promise<void> {
+  await setAvailableQuantity({
+    ...input,
+    reason: input.reason ?? "correction",
+    referenceDocumentUri: `gid://cardscanner9000/InventorySync/${input.inventoryItemId}`,
+  });
+}
+
+/**
+ * Absolute "available" write. `changeFromQuantity: null` opts out of Shopify's
+ * compare-and-swap: our inventory is the source of truth for these units.
+ */
+async function setAvailableQuantity(input: {
+  shopDomain: string;
+  accessToken: string;
+  inventoryItemId: string;
+  locationId: string;
+  quantity: number;
+  reason: string;
+  referenceDocumentUri: string;
+}): Promise<void> {
   const data = await shopifyGraphql<{
     inventorySetQuantities: { userErrors: ShopifyGraphqlError[] };
   }>(
     input.shopDomain,
     input.accessToken,
-    `mutation SetInventory($input: InventorySetQuantitiesInput!) {
-      inventorySetQuantities(input: $input) {
+    `mutation SetInventory($input: InventorySetQuantitiesInput!, $idempotencyKey: String!) {
+      inventorySetQuantities(input: $input) @idempotent(key: $idempotencyKey) {
         userErrors { field message }
       }
     }`,
     {
       input: {
         name: "available",
-        reason: input.reason ?? "correction",
-        referenceDocumentUri: `gid://cardscanner9000/InventorySync/${input.inventoryItemId}`,
-        ignoreCompareQuantity: true,
+        reason: input.reason,
+        referenceDocumentUri: input.referenceDocumentUri,
         quantities: [
           {
             inventoryItemId: input.inventoryItemId,
             locationId: input.locationId,
             quantity: Math.max(0, Math.trunc(input.quantity)),
+            changeFromQuantity: null,
           },
         ],
       },
+      idempotencyKey: crypto.randomUUID(),
     },
+    SHOPIFY_CURRENT_API_VERSION,
   );
 
   const errors = collectUserErrors(data.inventorySetQuantities);
@@ -384,6 +447,7 @@ export async function updateShopifyVariantPrice(input: {
   productId: string;
   variantId: string;
   price: string;
+  barcode?: string;
 }): Promise<void> {
   const data = await shopifyGraphql<{
     productVariantsBulkUpdate: { userErrors: ShopifyGraphqlError[] };
@@ -397,7 +461,13 @@ export async function updateShopifyVariantPrice(input: {
     }`,
     {
       productId: input.productId,
-      variants: [{ id: input.variantId, price: input.price }],
+      variants: [
+        {
+          id: input.variantId,
+          price: input.price,
+          ...(input.barcode ? { barcode: input.barcode } : {}),
+        },
+      ],
     },
   );
 
@@ -407,6 +477,93 @@ export async function updateShopifyVariantPrice(input: {
       errors.map((e) => e.message).join("; "),
       errors,
     );
+  }
+}
+
+/** Current barcode per variant id; ids Shopify no longer knows are absent. */
+export async function getShopifyVariantBarcodes(input: {
+  shopDomain: string;
+  accessToken: string;
+  variantIds: string[];
+}): Promise<Map<string, string>> {
+  const data = await shopifyGraphql<{
+    nodes: Array<{ id?: string; barcode?: string | null } | null>;
+  }>(
+    input.shopDomain,
+    input.accessToken,
+    `query VariantBarcodes($ids: [ID!]!) {
+      nodes(ids: $ids) {
+        ... on ProductVariant { id barcode }
+      }
+    }`,
+    { ids: input.variantIds },
+  );
+  const out = new Map<string, string>();
+  for (const node of data.nodes) {
+    if (node?.id) out.set(node.id, node.barcode ?? "");
+  }
+  return out;
+}
+
+export async function updateShopifyVariantBarcode(input: {
+  shopDomain: string;
+  accessToken: string;
+  productId: string;
+  variantId: string;
+  barcode: string;
+}): Promise<void> {
+  const data = await shopifyGraphql<{
+    productVariantsBulkUpdate: { userErrors: ShopifyGraphqlError[] };
+  }>(
+    input.shopDomain,
+    input.accessToken,
+    `mutation UpdateVariantBarcode($productId: ID!, $variants: [ProductVariantsBulkInput!]!) {
+      productVariantsBulkUpdate(productId: $productId, variants: $variants) {
+        userErrors { field message }
+      }
+    }`,
+    {
+      productId: input.productId,
+      variants: [{ id: input.variantId, barcode: input.barcode }],
+    },
+  );
+
+  const errors = collectUserErrors(data.productVariantsBulkUpdate);
+  if (errors.length) {
+    throw new ShopifyApiError(
+      errors.map((e) => e.message).join("; "),
+      errors,
+    );
+  }
+}
+
+/**
+ * Flip a listing in or out of the storefront. Sold-out rows go to DRAFT rather
+ * than being archived or deleted, so a later restock only needs ACTIVE again
+ * and keeps its product URL, images, and publication channels.
+ */
+export async function setShopifyProductStatus(input: {
+  shopDomain: string;
+  accessToken: string;
+  productId: string;
+  status: "ACTIVE" | "DRAFT";
+}): Promise<void> {
+  const data = await shopifyGraphql<{
+    productUpdate: { userErrors: ShopifyGraphqlError[] };
+  }>(
+    input.shopDomain,
+    input.accessToken,
+    `mutation SetProductStatus($input: ProductInput!) {
+      productUpdate(input: $input) {
+        userErrors { field message }
+      }
+    }`,
+    { input: { id: input.productId, status: input.status } },
+  );
+
+  const errors = collectUserErrors(data.productUpdate);
+  if (errors.length) {
+    throw new ShopifyApiError(errors.map((e) => e.message).join("; "), errors);
   }
 }
 
@@ -447,6 +604,46 @@ export async function publishShopifyProduct(input: {
     }
   }
   return warnings;
+}
+
+/** Shopify POS only finds products published to this channel. */
+export function isPointOfSalePublication(name: string): boolean {
+  return /point of sale/i.test(name);
+}
+
+/** Status and POS availability per product; ids Shopify no longer knows are absent. */
+export async function getShopifyProductSaleStates(input: {
+  shopDomain: string;
+  accessToken: string;
+  productIds: string[];
+  publicationId: string;
+}): Promise<Map<string, { status: string; onPublication: boolean }>> {
+  const data = await shopifyGraphql<{
+    nodes: Array<{
+      id?: string;
+      status?: string;
+      publishedOnPublication?: boolean;
+    } | null>;
+  }>(
+    input.shopDomain,
+    input.accessToken,
+    `query ProductSaleStates($ids: [ID!]!, $pub: ID!) {
+      nodes(ids: $ids) {
+        ... on Product { id status publishedOnPublication(publicationId: $pub) }
+      }
+    }`,
+    { ids: input.productIds, pub: input.publicationId },
+  );
+  const out = new Map<string, { status: string; onPublication: boolean }>();
+  for (const node of data.nodes) {
+    if (node?.id) {
+      out.set(node.id, {
+        status: node.status ?? "",
+        onPublication: Boolean(node.publishedOnPublication),
+      });
+    }
+  }
+  return out;
 }
 
 export async function listShopifyPublications(

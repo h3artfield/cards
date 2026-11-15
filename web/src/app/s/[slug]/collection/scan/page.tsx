@@ -1,68 +1,74 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useParams } from "next/navigation";
-import { CameraCapture } from "@/components/CameraCapture";
+import {
+  LiveCardScanner,
+  type LiveScanMatchPayload,
+} from "@/components/LiveCardScanner";
 import { CustomerAuthShell } from "@/components/CustomerAuthShell";
 import { useCustomer } from "@/context/CustomerContext";
 import { apiFetch } from "@/lib/api-client";
 import {
   authButton,
-  authButtonSecondary,
-  authError,
   authHeading,
   authLink,
   authSubtext,
 } from "@/lib/customer-auth-ui";
 import type { CollectionCard } from "@/lib/types";
-
-type Step = "front" | "back" | "confirm" | "saved";
+import { collectionScannerAppHref } from "@/lib/collection/collection-scanner-app";
 
 export default function CollectionScanPage() {
   const { slug } = useParams<{ slug: string }>();
   const { customer, loading: customerLoading } = useCustomer();
 
-  const [step, setStep] = useState<Step>("front");
-  const [frontUrl, setFrontUrl] = useState<string | null>(null);
-  const [backUrl, setBackUrl] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [added, setAdded] = useState<CollectionCard[]>([]);
+  const [savingCount, setSavingCount] = useState(0);
 
-  function resetCapture() {
-    setFrontUrl(null);
-    setBackUrl(null);
-    setStep("front");
-  }
+  const handleCardDetected = useCallback(
+    async (payload: LiveScanMatchPayload) => {
+      setError(null);
+      setSavingCount((n) => n + 1);
+      try {
+        const body = payload.card
+          ? {
+              category:
+                payload.card.catalogSource === "pokemon_tcg"
+                  ? "pokemon"
+                  : payload.card.catalogSource === "ygoprodeck"
+                    ? "yugioh"
+                    : "magic",
+              catalogSource: payload.card.catalogSource,
+              catalogId: payload.card.catalogId,
+              displayName: payload.card.name,
+              setName: payload.card.setName,
+              cardNumber: payload.card.cardNumber,
+            }
+          : { frontImageUrl: payload.frontImageUrl };
 
-  async function saveToCollection() {
-    if (!frontUrl) return;
-    setSaving(true);
-    setError(null);
-    try {
-      const { card } = await apiFetch<{ card: CollectionCard }>(
-        `/api/store/${encodeURIComponent(slug)}/collection`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            frontImageUrl: frontUrl,
-            backImageUrl: backUrl ?? undefined,
-          }),
-        },
-      );
-      setAdded((prev) => [card, ...prev]);
-      setFrontUrl(null);
-      setBackUrl(null);
-      setStep("saved");
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Could not add the card.",
-      );
-    } finally {
-      setSaving(false);
-    }
-  }
+        const { card } = await apiFetch<{ card: CollectionCard }>(
+          `/api/store/${encodeURIComponent(slug)}/collection`,
+          {
+            method: "POST",
+            body: JSON.stringify(body),
+          },
+        );
+        setAdded((prev) => [
+          card,
+          ...prev.filter((c) => c.id !== card.id),
+        ]);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Could not add that card.",
+        );
+      } finally {
+        setSavingCount((n) => Math.max(0, n - 1));
+      }
+    },
+    [slug],
+  );
 
   if (customerLoading) {
     return (
@@ -97,182 +103,91 @@ export default function CollectionScanPage() {
           Check your inbox for the verification link before scanning cards
           into your collection.
         </p>
-        <Link href={`/s/${slug}/collection`} className={`mt-6 block text-center ${authLink}`}>
+        <Link
+          href={`/s/${slug}/collection`}
+          className={`mt-6 block text-center ${authLink}`}
+        >
           Back to collection
         </Link>
       </CustomerAuthShell>
     );
   }
 
-  const capturing = step === "front" || step === "back";
-
-  if (capturing) {
-    return (
-      <div className="fixed inset-0 z-10 flex flex-col bg-white px-3 pb-[env(safe-area-inset-bottom)] pt-[max(0.5rem,env(safe-area-inset-top))]">
-        <div className="mb-2 flex shrink-0 items-center justify-between">
-          <div>
-            <p className="text-xs text-gray-500">My collection</p>
-            <h1 className="text-lg font-bold">
-              {step === "front" ? "Front photo" : "Back photo"}
-            </h1>
-          </div>
-          <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-800">
-            {added.length} added
-          </span>
-        </div>
-
-        <div className="min-h-0 flex-1">
-          <CameraCapture
-            key={step}
-            side={step === "back" ? "back" : "front"}
-            captureMode="raw"
-            label={
-              step === "front"
-                ? "Place the front of the card inside the rectangle."
-                : "Flip the card and capture the back."
-            }
-            onCapture={(url) => {
-              if (step === "front") {
-                setFrontUrl(url);
-                setStep("back");
-              } else {
-                setBackUrl(url);
-                setStep("confirm");
-              }
-            }}
-            onRetake={() => {
-              if (step === "front") setFrontUrl(null);
-              else setBackUrl(null);
-            }}
-            previewUrl={step === "front" ? frontUrl : backUrl}
-          />
-        </div>
-
-        {step === "back" && (
-          <button
-            type="button"
-            className="shrink-0 py-3 text-sm text-gray-500"
-            onClick={() => setStep("confirm")}
-          >
-            Skip the back photo
-          </button>
-        )}
-      </div>
-    );
-  }
-
   return (
-    <CustomerAuthShell>
-      <h1 className={authHeading}>
-        {step === "confirm" ? "Confirm this card" : "Added to your collection"}
-      </h1>
-
-      {error && <p className={`mt-6 ${authError}`}>{error}</p>}
-
-      {step === "confirm" && frontUrl && (
-        <>
-          <div className="mt-6 grid grid-cols-2 gap-3">
-            <div>
-              <p className="mb-1 text-xs uppercase tracking-wide text-neutral-500">
-                Front
-              </p>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={frontUrl}
-                alt="Card front"
-                className="w-full border border-neutral-700 object-contain"
-              />
-            </div>
-            {backUrl && (
-              <div>
-                <p className="mb-1 text-xs uppercase tracking-wide text-neutral-500">
-                  Back
-                </p>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={backUrl}
-                  alt="Card back"
-                  className="w-full border border-neutral-700 object-contain"
-                />
-              </div>
-            )}
-          </div>
-
-          <div className="mt-6 space-y-3">
-            <button
-              type="button"
-              className={authButton}
-              disabled={saving}
-              onClick={() => void saveToCollection()}
-            >
-              {saving ? "Identifying…" : "Add to my collection"}
-            </button>
-            <button
-              type="button"
-              className={authButtonSecondary}
-              disabled={saving}
-              onClick={resetCapture}
-            >
-              Retake photos
-            </button>
-          </div>
-        </>
-      )}
-
-      {step === "saved" && (
-        <>
-          <p className={`mt-3 ${authSubtext}`}>
-            {added.length} card{added.length === 1 ? "" : "s"} added this
-            session.
+    <div className="fixed inset-0 z-10 flex flex-col bg-neutral-950 text-white pb-[env(safe-area-inset-bottom)] pt-[max(0.5rem,env(safe-area-inset-top))]">
+      <div className="flex shrink-0 items-center justify-between px-3 pb-2">
+        <div>
+          <p className="text-[11px] font-medium text-neutral-400">
+            My Collection · Instant Live Scanner
           </p>
+          <h1 className="text-base font-bold text-white">Scan Cards</h1>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="rounded-full bg-indigo-500/20 px-3 py-1 text-xs font-semibold text-indigo-300 ring-1 ring-indigo-500/40">
+            {added.length} added{savingCount > 0 ? " (saving…)" : ""}
+          </span>
+          <a
+            href={collectionScannerAppHref(slug)}
+            className="rounded-xl bg-neutral-800 px-3 py-1.5 text-xs font-semibold text-white no-underline hover:bg-neutral-700"
+          >
+            Scanner app
+          </a>
+          <Link
+            href={`/s/${slug}/collection`}
+            className="rounded-xl bg-neutral-800 px-3 py-1.5 text-xs font-semibold text-white no-underline hover:bg-neutral-700"
+          >
+            Done
+          </Link>
+        </div>
+      </div>
 
-          <ul className="mt-6 space-y-3">
-            {added.map((card) => (
-              <li
+      {error ? (
+        <p className="mx-3 mb-2 rounded-lg border border-red-500/40 bg-red-950/80 px-3 py-2 text-xs text-red-200">
+          {error}
+        </p>
+      ) : null}
+
+      <div className="min-h-0 flex-1 px-2">
+        <LiveCardScanner
+          onCardDetected={handleCardDetected}
+          autoAdd
+        />
+      </div>
+
+      <div className="shrink-0 border-t border-neutral-800 bg-neutral-900/95 px-3 py-2.5">
+        {added.length === 0 ? (
+          <p className="text-xs text-neutral-400">
+            Point your camera at a card to add it to your binder immediately.
+          </p>
+        ) : (
+          <div className="flex items-center gap-2 overflow-x-auto pb-1">
+            {added.slice(0, 12).map((card) => (
+              <div
                 key={card.id}
-                className="flex items-center gap-3 border border-neutral-800 p-3"
+                className="flex shrink-0 items-center gap-2 rounded-xl border border-neutral-800 bg-neutral-950 px-2.5 py-1.5"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={card.frontImageUrl}
                   alt={card.displayName}
-                  className="h-40 w-[7.15rem] shrink-0 object-cover"
+                  className="h-9 w-7 rounded object-cover"
                 />
-                <div className="min-w-0">
-                  <p className="truncate text-sm text-white">
+                <div className="max-w-[9rem] min-w-0">
+                  <p className="truncate text-xs font-semibold text-white">
+                    {card.quantity && card.quantity > 1 ? `${card.quantity}× ` : ""}
                     {card.displayName}
                   </p>
-                  <p className="truncate text-xs text-neutral-500">
+                  <p className="truncate text-[10px] text-neutral-400">
                     {[card.setName, card.cardNumber && `#${card.cardNumber}`]
                       .filter(Boolean)
-                      .join(" · ") ||
-                      (card.needsReview ? "Not identified" : "In your binder")}
+                      .join(" · ") || "In binder"}
                   </p>
                 </div>
-              </li>
+              </div>
             ))}
-          </ul>
-
-          <div className="mt-8 space-y-3">
-            <button type="button" className={authButton} onClick={resetCapture}>
-              Scan another card
-            </button>
-            <Link
-              href={`/s/${slug}/collection`}
-              className={`block ${authButtonSecondary} no-underline`}
-            >
-              View my collection
-            </Link>
           </div>
-        </>
-      )}
-
-      <Link
-        href={`/s/${slug}/collection`}
-        className={`mt-8 block text-center ${authLink}`}
-      >
-        Back to collection
-      </Link>
-    </CustomerAuthShell>
+        )}
+      </div>
+    </div>
   );
 }

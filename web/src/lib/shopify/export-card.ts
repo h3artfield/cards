@@ -2,6 +2,7 @@ import type { BuybackOrder, InventoryItem, ScannedCard, StoreSettings, StoreRule
 import {
   createShopifyDraftProduct,
   formatShopifyApiErrorMessage,
+  isPointOfSalePublication,
   listShopifyPublications,
   publishShopifyProduct,
 } from "./client";
@@ -190,37 +191,34 @@ export async function exportCardToShopify(input: {
     let exportStatus: ShopifyExportStatus = "exported";
     let publishWarning: string | undefined;
 
-    if (
-      status === "ACTIVE" &&
-      (integration.publishOnlineStore || integration.publishShopChannel)
-    ) {
-      try {
-        const publications = await listShopifyPublications(domain, token);
-        const targets = publications.filter((p) => {
-          const n = p.name.toLowerCase();
-          if (integration.publishOnlineStore && n.includes("online store")) {
-            return true;
-          }
-          if (integration.publishShopChannel && n.includes("shop")) {
-            return true;
-          }
-          return false;
-        });
-        const warnings = await publishShopifyProduct({
-          shopDomain: domain,
-          accessToken: token,
-          productId: created.productId,
-          publicationIds: targets.map((t) => t.id),
-        });
-        if (warnings.length) {
-          exportStatus = "exported_with_publish_warning";
-          publishWarning = warnings.join("; ");
+    try {
+      const publications = await listShopifyPublications(domain, token);
+      const targets = publications.filter((p) => {
+        const n = p.name.toLowerCase();
+        if (isPointOfSalePublication(p.name)) return true;
+        if (status !== "ACTIVE") return false;
+        if (integration.publishOnlineStore && n.includes("online store")) {
+          return true;
         }
-      } catch (err) {
+        if (integration.publishShopChannel && n.includes("shop")) {
+          return true;
+        }
+        return false;
+      });
+      const warnings = await publishShopifyProduct({
+        shopDomain: domain,
+        accessToken: token,
+        productId: created.productId,
+        publicationIds: targets.map((t) => t.id),
+      });
+      if (warnings.length) {
         exportStatus = "exported_with_publish_warning";
-        publishWarning =
-          err instanceof Error ? err.message : "Publish step failed";
+        publishWarning = warnings.join("; ");
       }
+    } catch (err) {
+      exportStatus = "exported_with_publish_warning";
+      publishWarning =
+        err instanceof Error ? err.message : "Publish step failed";
     }
 
     const shopifyExport = {

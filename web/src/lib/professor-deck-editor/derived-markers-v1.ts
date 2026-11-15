@@ -205,7 +205,7 @@ export function derivedMarkersForCardV1(
     markers.push({
       id: "user-added",
       kind: "user_added",
-      label: "Your addition",
+      label: "User addition",
       // Worth surfacing: it explains why this card has no Professor rationale
       // and why the grade no longer covers the whole deck.
       detail: "You added this card, so the Professor's grade does not account for it",

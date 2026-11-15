@@ -9,42 +9,13 @@ type FocusCaps = MediaTrackCapabilities & {
   zoom?: { min: number; max: number; step?: number };
 };
 
-/** Bottom of the card outline — set name and collector number. */
 export const CARD_TEXT_FOCUS_POINTS: NormalizedPoint[] = [
+  { x: 0.5, y: 0.5 },
   { x: 0.5, y: 0.85 },
-  { x: 0.35, y: 0.88 },
-  { x: 0.65, y: 0.88 },
 ];
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => window.setTimeout(resolve, ms));
-}
-
-/** Closest-focus distances to try — max for lens position (0–1), min for meters. */
-function closeFocusDistances(caps: FocusCaps): number[] {
-  const fd = caps.focusDistance;
-  if (!fd || fd.min == null || fd.max == null) return [];
-
-  const { min, max } = fd;
-  const values = new Set<number>();
-
-  if (max <= 1.5 && min >= 0) {
-    values.add(max);
-    if (fd.step) {
-      for (let v = max; v >= min; v -= fd.step * 2) {
-        values.add(Math.round(v * 1000) / 1000);
-      }
-    } else {
-      values.add(min + (max - min) * 0.85);
-      values.add(min + (max - min) * 0.7);
-    }
-  } else {
-    values.add(min);
-    values.add(min + (max - min) * 0.05);
-    values.add(min + (max - min) * 0.15);
-  }
-
-  return [...values].filter((v) => Number.isFinite(v));
 }
 
 async function tryApply(
@@ -59,14 +30,37 @@ async function tryApply(
   }
 }
 
-function macroZoomConstraint(caps: FocusCaps): MediaTrackConstraints | null {
-  const zoom = caps.zoom;
-  if (!zoom || zoom.max == null) return null;
-  const target = Math.min(zoom.max, Math.max(zoom.min ?? 1, 1.15));
-  if (target <= 1) return null;
-  return { advanced: [{ zoom: target }] } as unknown as MediaTrackConstraints;
+export function getTrackZoomRange(
+  track: MediaStreamTrack | undefined | null,
+): { min: number; max: number; step: number; current?: number } | null {
+  if (!track?.getCapabilities) return null;
+  const caps = track.getCapabilities() as FocusCaps;
+  if (!caps?.zoom || caps.zoom.max == null || caps.zoom.max <= 1) return null;
+  const settings = (track.getSettings?.() ?? {}) as { zoom?: number };
+  return {
+    min: caps.zoom.min ?? 1,
+    max: caps.zoom.max,
+    step: caps.zoom.step ?? 0.1,
+    current: settings.zoom,
+  };
 }
 
+export async function applyTrackZoom(
+  track: MediaStreamTrack,
+  zoomFactor: number,
+): Promise<boolean> {
+  const range = getTrackZoomRange(track);
+  if (!range) return false;
+  const clamped = Math.min(range.max, Math.max(range.min, zoomFactor));
+  return tryApply(track, {
+    advanced: [{ zoom: clamped }],
+  } as unknown as MediaTrackConstraints);
+}
+
+/**
+ * Enable continuous hardware autofocus (NEVER lock into `manual` focusMode,
+ * which breaks close-up focus on Android/Samsung cameras where focusDistance is in diopters).
+ */
 export async function focusAtPoints(
   track: MediaStreamTrack,
   points: NormalizedPoint[],
@@ -75,77 +69,46 @@ export async function focusAtPoints(
   const caps = track.getCapabilities() as FocusCaps;
   let applied = false;
 
-  const zoom = macroZoomConstraint(caps);
-  if (zoom) {
-    applied = (await tryApply(track, zoom)) || applied;
-  }
-
-  if (points.length > 0) {
-    applied =
-      (await tryApply(track, {
-        advanced: [{ pointsOfInterest: points, focusMode: "single-shot" }],
-      } as MediaTrackConstraints)) || applied;
-    await sleep(350);
-
-    applied =
-      (await tryApply(track, {
-        advanced: [{ pointsOfInterest: [points[0]!], focusMode: "single-shot" }],
-      } as MediaTrackConstraints)) || applied;
-    await sleep(250);
-
+  if (points.length > 0 && caps.focusMode?.includes("continuous")) {
     applied =
       (await tryApply(track, {
         advanced: [{ pointsOfInterest: points, focusMode: "continuous" }],
-      } as MediaTrackConstraints)) || applied;
+      } as unknown as MediaTrackConstraints)) || applied;
   }
 
-  if (caps.focusMode?.includes("manual")) {
-    for (const distance of closeFocusDistances(caps)) {
-      if (
-        await tryApply(track, {
-          advanced: [{ focusMode: "manual", focusDistance: distance }],
-        } as MediaTrackConstraints)
-      ) {
-        applied = true;
-        await sleep(200);
-        break;
-      }
-    }
+  if (!applied && caps.focusMode?.includes("continuous")) {
+    applied = await tryApply(track, {
+      focusMode: "continuous",
+    } as unknown as MediaTrackConstraints);
   }
 
-  if (!applied) {
-    applied = await tryApply(track, { focusMode: "continuous" } as MediaTrackConstraints);
+  if (!applied && caps.focusMode?.includes("single-shot")) {
+    applied = await tryApply(track, {
+      advanced: [{ pointsOfInterest: points, focusMode: "single-shot" }],
+    } as unknown as MediaTrackConstraints);
   }
 
   return applied;
 }
 
+/**
+ * Set up continuous autofocus and apply a slight 1.35x optical/sensor crop zoom
+ * on mobile cameras so the user can hold the phone ~8-10 inches away (outside the
+ * main sensor's minimum focus blind spot) while keeping the card large and razor-sharp.
+ */
 export async function applyCardTextFocus(
   track: MediaStreamTrack,
 ): Promise<boolean> {
+  const range = getTrackZoomRange(track);
+  if (range && (range.current ?? 1) <= 1.05 && range.max >= 1.35) {
+    await applyTrackZoom(track, 1.35);
+  }
   return focusAtPoints(track, CARD_TEXT_FOCUS_POINTS);
 }
 
-/** Aggressive refocus sequence used right before still capture. */
 export async function refocusForCapture(track: MediaStreamTrack): Promise<void> {
   await focusAtPoints(track, CARD_TEXT_FOCUS_POINTS);
-  await sleep(500);
-
-  if (typeof ImageCapture !== "undefined") {
-    try {
-      const ic = new ImageCapture(track);
-      const blob = await ic.takePhoto({ imageWidth: 640 });
-      if ("close" in blob && typeof blob.close === "function") {
-        blob.close();
-      }
-    } catch {
-      // Preflight photo triggers AF on some phones; ignore failures.
-    }
-    await sleep(400);
-  }
-
-  await focusAtPoints(track, [{ x: 0.5, y: 0.86 }]);
-  await sleep(350);
+  await sleep(250);
 }
 
 export async function focusAtTap(
@@ -159,12 +122,17 @@ export async function focusAtTap(
 
   const x = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
   const y = Math.min(1, Math.max(0, (clientY - rect.top) / rect.height));
+
+  // Trigger a quick single-shot AF pulse at tap point, then return to continuous AF
+  await tryApply(track, {
+    advanced: [{ pointsOfInterest: [{ x, y }], focusMode: "single-shot" }],
+  } as unknown as MediaTrackConstraints);
+  await sleep(180);
   const ok = await focusAtPoints(track, [{ x, y }]);
-  await sleep(400);
   return ok;
 }
 
-export function waitForFocusSettle(ms = 800): Promise<void> {
+export function waitForFocusSettle(ms = 400): Promise<void> {
   return sleep(ms);
 }
 

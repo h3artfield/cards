@@ -1,9 +1,16 @@
 import { NextRequest } from "next/server";
 import { jsonOk, handleRouteError } from "@/lib/api-utils";
 import { listCustomerSavedDecks } from "@/lib/customer-saved-decks/customer-saved-deck-store";
-import { mergeCustomerDeckListV1 } from "@/lib/professor-deck-editor/deck-list-v1";
+import {
+  attachDeckEventAssignmentsV1,
+  mergeCustomerDeckListV1,
+} from "@/lib/professor-deck-editor/deck-list-v1";
 import { listEditableDecksV1 } from "@/lib/professor-deck-editor/store-v1";
+import { deckEventAssignmentsByDeckIdV1 } from "@/lib/store-calendar/deck-event-assignments-v1";
+import { loadCustomer } from "@/lib/auth/customer-auth";
 import { authorizeDeckEditorV1 } from "../professor/deck-editor/authorize";
+
+export const maxDuration = 120;
 
 /**
  * Every deck this customer has at this store, however it was made.
@@ -44,11 +51,30 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
       throw editable.reason;
     }
 
+    const editableDecks = editable.status === "fulfilled" ? editable.value : [];
+    /**
+     * Do not score shelf COS here. Loading the full resolution catalog and
+     * scoring every editable deck in one request OOMs Cloud Run
+     * (heap limit → signal 6 → 503 on /decks). COS still runs on demand in
+     * editor / report surfaces.
+     */
+    const cosByDeckId = new Map();
+
+    const merged = mergeCustomerDeckListV1({
+      editableDecks,
+      savedDecks: saved.status === "fulfilled" ? saved.value : [],
+      cosByDeckId,
+    });
+
+    const customer = await loadCustomer(auth.customerId!);
+    const assignmentsByDeckId = await deckEventAssignmentsByDeckIdV1({
+      storeId: auth.storeId!,
+      customerId: auth.customerId!,
+      email: customer?.email,
+    });
+
     return jsonOk({
-      decks: mergeCustomerDeckListV1({
-        editableDecks: editable.status === "fulfilled" ? editable.value : [],
-        savedDecks: saved.status === "fulfilled" ? saved.value : [],
-      }),
+      decks: attachDeckEventAssignmentsV1(merged, assignmentsByDeckId),
       partialFailure: partial.length ? `Could not load ${partial.join(" or ")}.` : null,
     });
   } catch (err) {

@@ -19,8 +19,9 @@ export function buildVideoConstraints(deviceId?: string): MediaTrackConstraints 
   const mobile = isMobileDevice();
   const base: MediaTrackConstraints = mobile
     ? {
-        width: { ideal: 3840, min: 1920 },
-        height: { ideal: 2160, min: 1080 },
+        width: { ideal: 1920, min: 1280 },
+        height: { ideal: 1080, min: 720 },
+        frameRate: { ideal: 30 },
       }
     : {
         width: { ideal: 1920 },
@@ -28,7 +29,11 @@ export function buildVideoConstraints(deviceId?: string): MediaTrackConstraints 
       };
 
   if (deviceId) {
-    return { ...base, deviceId: { exact: deviceId } };
+    return {
+      ...base,
+      deviceId: { exact: deviceId },
+      ...(mobile ? ({ focusMode: { ideal: "continuous" } } as MediaTrackConstraints) : {}),
+    };
   }
 
   if (mobile) {

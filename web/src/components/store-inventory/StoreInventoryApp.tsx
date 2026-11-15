@@ -1,21 +1,16 @@
 "use client";
 
-import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useCustomer } from "@/context/CustomerContext";
-import {
-  deckBuildReturnPath,
-  deckBuildSignInHref,
-} from "@/lib/store-inventory/deck-build-auth";
-import { StoreBrandMark } from "@/components/StoreBrandMark";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CustomerStoreNavV1 } from "@/components/CustomerStoreNavV1";
+import { useCustomer } from "@/context/CustomerContext";
 import {
   DEFAULT_INVENTORY_FILTERS,
   InventoryCardGrid,
   inventoryGameLabel,
   InventoryFilterBar,
   InventoryGameSourceBar,
+  InventoryResultsToolbar,
+  sortInventoryCards,
   appendInventoryColorParams,
   catalogSupportsGame,
   inventoryColorFiltersActive,
@@ -29,11 +24,13 @@ import {
   ClerkPicksPanel,
   type ClerkPickCard,
 } from "@/components/store-inventory/ClerkPicksPanel";
-import { GatheringDesk } from "@/components/store-inventory/GatheringDesk";
-import { InventoryDecklistImport } from "@/components/store-inventory/InventoryDecklistImport";
+import { GatheringDesk } from "@/components/store-inventory/GatheringDesk";import { InventoryDecklistImport } from "@/components/store-inventory/InventoryDecklistImport";
 import type { GatheringCard } from "@/components/store-inventory/clerk-gathering";
+import { gatheringCardToCartLine } from "@/components/store-inventory/clerk-gathering";
 import type { ClerkDeckList } from "@/lib/store-inventory/clerk-types";
-import { appendInventoryBrowseParams } from "@/lib/store-inventory/inventory-browse-filter-params";
+import { appendClerkSearchBaseParam, appendInventoryBrowseParams } from "@/lib/store-inventory/inventory-browse-filter-params";
+import type { StoreInventorySemanticFilter } from "@/lib/deck-builder/store-inventory-semantic";
+import { useCart } from "@/hooks/useCart";
 import { usePile } from "@/hooks/usePile";
 
 const BROWSE_PAGE_SIZE = 100;
@@ -75,6 +72,12 @@ function browseFiltersActive(_filters: InventoryFilterState, _committedQ: string
   return true;
 }
 
+function queryBaseNote(asked?: string, fallback?: string): string | null {
+  const label = asked?.trim() || fallback?.trim();
+  if (!label) return null;
+  return `“${label}” is the base. Filters narrow this list.`;
+}
+
 function clerkGameToBrowseGame(game?: string): InventoryFilterState["game"] {
   if (game === "pokemon") return "pokemon";
   if (game === "riftbound") return "riftbound";
@@ -103,17 +106,13 @@ function browseEmptyMessage(
 export function StoreInventoryApp({
   slug,
   storeName: storeNameProp,
-  logoUrl: logoUrlProp,
 }: {
   slug: string;
   storeName?: string;
   logoUrl?: string | null;
 }) {
-  const router = useRouter();
-  const { customer, loading: customerLoading } = useCustomer();
-  const professorHref = deckBuildReturnPath(slug, "professor");
+  const { customer } = useCustomer();
   const [storeName, setStoreName] = useState(storeNameProp ?? titleFromSlug(slug));
-  const [logoUrl, setLogoUrl] = useState<string | null | undefined>(logoUrlProp);
   const [filters, setFilters] = useState<InventoryFilterState>({
     ...DEFAULT_INVENTORY_FILTERS,
     sortBy: "name",
@@ -128,29 +127,93 @@ export function StoreInventoryApp({
   const [clerkFilterNote, setClerkFilterNote] = useState<string | null>(null);
   const [clerkDeck, setClerkDeck] = useState<ClerkDeckList | null>(null);
   const [clerkPicks, setClerkPicks] = useState<ClerkPickCard[]>([]);
-  const {
-    cards: piledCards,
-    add: addToGathering,
-    addMany: addManyToGathering,
-    remove: removeFromGathering,
-    toggle: toggleGathering,
-    clear: clearPile,
-  } = usePile(slug);
-  const gatheredCards = piledCards as GatheringCard[];
+  const [queryBase, setQueryBase] = useState<StoreInventorySemanticFilter | undefined>();
+  const queryBaseKey = queryBase ? JSON.stringify(queryBase) : "";
+  const cart = useCart(slug);
+  const pile = usePile(slug);
+  const migratedPile = useRef(false);
+  useEffect(() => {
+    if (migratedPile.current) return;
+    migratedPile.current = true;
+    const present = new Set(cart.lines.map((line) => line.inventoryItemId));
+    for (const card of pile.cards) {
+      if (present.has(card.inventoryItemId)) continue;
+      const line = gatheringCardToCartLine(card as GatheringCard);
+      if (line) cart.add(line);
+    }
+    if (pile.cards.length > 0) pile.clear();
+  }, [cart, pile]);
+
+  const shownPicks = useMemo(
+    () => sortInventoryCards(clerkPicks, filters.sortBy),
+    [clerkPicks, filters.sortBy],
+  );
+  const cartQtyById = useMemo(() => {
+    const quantities = new Map<string, number>();
+    for (const line of cart.lines) {
+      quantities.set(line.inventoryItemId, line.quantity);
+    }
+    return quantities;
+  }, [cart.lines]);
+  const cartIds = useMemo(() => new Set(cartQtyById.keys()), [cartQtyById]);
+
+  function addCardToCart(card: GatheringCard) {
+    const line = gatheringCardToCartLine(card);
+    if (line) cart.add(line);
+  }
+
+  function addManyToCart(cards: Array<GatheringCard & { addQuantity?: number }>) {
+    for (const card of cards) {
+      const line = gatheringCardToCartLine(card);
+      if (!line) continue;
+      const copies = Math.max(1, Math.trunc(card.addQuantity ?? 1) || 1);
+      cart.add({
+        ...line,
+        quantity: copies,
+      });
+    }
+  }
+
+  function toggleCart(card: GatheringCard) {
+    const line = gatheringCardToCartLine(card);
+    if (line) cart.add(line);
+  }
   const [retryNonce, setRetryNonce] = useState(0);
   const [pasteListOpen, setPasteListOpen] = useState(false);
-
-  const gatheredIds = useMemo(
-    () => new Set(gatheredCards.map((c) => c.inventoryItemId)),
-    [gatheredCards],
-  );
+  const [filtersCollapsed, setFiltersCollapsed] = useState(false);
 
   const apiBase = `/api/store/${encodeURIComponent(slug)}`;
 
+  const [textQueryFilters, setTextQueryFilters] = useState({
+    rulesText: "",
+    typeLine: "",
+    manaCost: "",
+  });
+
   useEffect(() => {
-    if (storeNameProp && logoUrlProp !== undefined) {
+    const handle = setTimeout(() => {
+      setTextQueryFilters((prev) => {
+        const next = {
+          rulesText: filters.rulesText.trim(),
+          typeLine: filters.typeLine.trim(),
+          manaCost: filters.manaCost.trim(),
+        };
+        if (
+          prev.rulesText === next.rulesText &&
+          prev.typeLine === next.typeLine &&
+          prev.manaCost === next.manaCost
+        ) {
+          return prev;
+        }
+        return next;
+      });
+    }, 400);
+    return () => clearTimeout(handle);
+  }, [filters.rulesText, filters.typeLine, filters.manaCost]);
+
+  useEffect(() => {
+    if (storeNameProp) {
       setStoreName(storeNameProp);
-      setLogoUrl(logoUrlProp);
       return;
     }
 
@@ -160,14 +223,13 @@ export function StoreInventoryApp({
         const body = await r.json();
         if (!r.ok) return;
         setStoreName(body.store?.name ?? titleFromSlug(slug));
-        setLogoUrl(body.store?.logoUrl ?? null);
       })
       .catch(() => {
         /* keep slug-based title */
       });
 
     return () => controller.abort();
-  }, [apiBase, slug, storeNameProp, logoUrlProp]);
+  }, [apiBase, slug, storeNameProp]);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedQ(filters.q.trim()), 500);
@@ -224,7 +286,8 @@ export function StoreInventoryApp({
       source: filters.source,
     });
     appendInventoryColorParams(params, filters);
-    appendInventoryBrowseParams(params, filters, query);
+    appendInventoryBrowseParams(params, { ...filters, ...textQueryFilters }, query);
+    appendClerkSearchBaseParam(params, queryBase);
 
     fetch(`${apiBase}/inventory/browse?${params}`, {
       signal: controller.signal,
@@ -276,10 +339,22 @@ export function StoreInventoryApp({
     filters.manaValuePreset,
     filters.selectedColors.join(","),
     filters.colorCount,
+    filters.colorMode,
+    filters.commanderColors.join(","),
     filters.cardType,
     filters.sortBy,
     filters.finish,
+    filters.channel,
+    filters.pokemonTypes.join(","),
+    filters.pokemonCards.join(","),
+    filters.pokemonStages.join(","),
+    filters.pokemonTrainers.join(","),
+    textQueryFilters.rulesText,
+    textQueryFilters.typeLine,
+    filters.typeLinePartial,
+    textQueryFilters.manaCost,
     committedQ,
+    queryBaseKey,
     retryNonce,
   ]);
 
@@ -294,6 +369,12 @@ export function StoreInventoryApp({
       // The clerk switches games without touching the source, which would
       // otherwise strand a catalog browse on a game the catalog has no data for.
       if (!catalogSupportsGame(merged.game)) merged.source = "inventory";
+      if (next.game != null && next.game !== "pokemon") {
+        merged.pokemonTypes = [];
+        merged.pokemonCards = [];
+        merged.pokemonStages = [];
+        merged.pokemonTrainers = [];
+      }
       return merged;
     });
     if (next.q != null) {
@@ -305,6 +386,8 @@ export function StoreInventoryApp({
       next.source != null ||
       next.selectedColors != null ||
       next.colorCount != null ||
+      next.colorMode != null ||
+      next.commanderColors != null ||
       next.cardType != null ||
       next.cardTypes != null ||
       next.oracleActions != null ||
@@ -315,24 +398,24 @@ export function StoreInventoryApp({
       next.semanticOwners != null ||
       next.manaValuePreset != null ||
       next.sortBy != null ||
-      next.finish != null
+      next.finish != null ||
+      next.channel != null ||
+      next.rulesText != null ||
+      next.typeLine != null ||
+      next.typeLinePartial != null ||
+      next.manaCost != null ||
+      next.pokemonTypes != null ||
+      next.pokemonCards != null ||
+      next.pokemonStages != null ||
+      next.pokemonTrainers != null
     ) {
       setPage(1);
     }
   }
 
-  function goToDeckBuilder() {
-    if (customerLoading) return;
-    if (!customer) {
-      router.push(deckBuildSignInHref(slug, professorHref));
-      return;
-    }
-    router.push(professorHref);
-  }
-
   return (
     <div
-      className="storefront-theme min-h-screen bg-neutral-950 text-[var(--text)]"
+      className="storefront-theme flex min-h-screen flex-col bg-neutral-950 text-[var(--text)] lg:h-dvh lg:overflow-hidden"
       // The inline background/colour that used to sit here was a hard-coded
       // pure grey, which overrode the themed class and pinned this page to the
       // old palette. The class alone is enough; the belt-and-braces literal was
@@ -340,65 +423,53 @@ export function StoreInventoryApp({
       // rules above already cover.
       style={{ backgroundColor: "var(--ink-850)" }}
     >
-      <header className="border-b border-neutral-800 px-4 py-4">
-        <div className="mx-auto max-w-7xl">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            {/* A left-aligned app header, so this deliberately does not use the
-                shared `auth` lockup: that variant centres itself, which is why
-                the old header read as off-axis against the "Store home" link. */}
-            <div className="min-w-0">
-              <h1 className="truncate text-xl font-semibold tracking-tight text-[var(--text-hi)] sm:text-2xl">
-                {storeName}
-              </h1>
-              <p className="mt-0.5 text-[11px] uppercase tracking-[0.18em] text-[var(--text-lo)]">
-                Inventory
-              </p>
-              <p className="mt-2 text-xs text-[var(--text-lo)]">
-                Powered by{" "}
-                <Link href="/" className="transition hover:text-[var(--accent-hi)]">
-                  Card Scanner 9000
-                </Link>
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-4">
-            <CustomerStoreNavV1
-              slug={slug}
-              active="shop"
-              loggedIn={Boolean(customer)}
-            />
-          </div>
-
-          <div className="mt-4 flex gap-2 border-b border-neutral-800 pb-0">
-            <TabButton active>Browse inventory</TabButton>
-            <TabNavButton onClick={goToDeckBuilder}>Deck builder</TabNavButton>
-          </div>
+      {customer ? (
+        <div className="shrink-0 px-4 pt-3">
+          <CustomerStoreNavV1 slug={slug} active="shop" loggedIn />
         </div>
-      </header>
-
-      <main className="mx-auto max-w-7xl px-4 py-4">
-        <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_280px]">
-          <div className="min-w-0 space-y-4">
+      ) : null}
+      <main
+        className={`inventory-page-grid grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 py-3 lg:overflow-hidden ${
+          filtersCollapsed ? "inventory-filters-collapsed" : ""
+        }`}
+      >
+        {filtersCollapsed ? null : (
+        <div
+          id="inventory-search-filters"
+          className="min-h-0 min-w-0 space-y-2 lg:overflow-y-auto lg:pr-1"
+        >
+            <InventoryGameSourceBar
+              filters={filters}
+              onChange={patchFilters}
+              facets={data?.facets}
+              showBrowse={false}
+            />
             <StoreClerkChat
               slug={slug}
               storeName={storeName}
               filters={filters}
               variant="queryBar"
-              onAddToGathering={addToGathering}
+              seedQuery={filters.q}
+              onAddToGathering={addCardToCart}
+              pasteListOpen={pasteListOpen}
               onPasteList={() => {
-                setPasteListOpen(true);
-                window.requestAnimationFrame(() => {
-                  document.getElementById("inventory-paste-list")?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "nearest",
-                  });
-                });
+                setPasteListOpen((open) => !open);
               }}
               onApplyClerk={(clerk) => {
+            if (clerk.clearSearch && !clerk.deckList && !clerk.browseFilterPatch) {
+              setQueryBase(undefined);
+              setClerkDeck(null);
+              setClerkPicks([]);
+              setHighlightIds(new Set());
+              setClerkFilterNote(null);
+              setData(null);
+              patchFilters({ q: "" });
+              return;
+            }
             if (clerk.deckList) {
               setClerkDeck(clerk.deckList);
               setClerkPicks([]);
+              setQueryBase(undefined);
               patchFilters({
                 q: "",
                 game: clerkGameToBrowseGame(clerk.deckList.game),
@@ -420,26 +491,34 @@ export function StoreInventoryApp({
             setClerkDeck(null);
             const patch = clerk.browseFilterPatch;
             if (patch) {
-              patchFilters({
-                q: patch.q,
-                game: patch.game,
-                selectedColors: patch.selectedColors,
-                colorCount: patch.colorCount,
-                cardType: patch.cardType,
-              });
+              const next: Partial<InventoryFilterState> = { q: patch.q };
+              if (patch.gameInQuery) next.game = patch.game;
+              if (patch.colorInQuery) {
+                next.selectedColors = patch.selectedColors;
+                next.colorCount = patch.colorCount;
+                if (patch.colorMode) next.colorMode = patch.colorMode;
+              }
+              if (patch.cardType && patch.cardType !== "all") next.cardType = patch.cardType;
+              if (patch.typeLine) next.typeLine = patch.typeLine;
+              if (patch.commanderColors?.length) {
+                next.commanderColors = patch.commanderColors.filter(
+                  (color): color is InventoryFilterState["commanderColors"][number] =>
+                    color === "W" ||
+                    color === "U" ||
+                    color === "B" ||
+                    color === "R" ||
+                    color === "G" ||
+                    color === "C",
+                );
+              }
+              if (patch.manaValuePreset) next.manaValuePreset = patch.manaValuePreset;
+              patchFilters(next);
               setCommittedQ(patch.q);
               setDebouncedQ(patch.q);
-              const picks = clerk.picks ?? [];
-              setClerkPicks(picks);
-              setClerkFilterNote(
-                picks.length
-                  ? `${picks.length} clerk pick${picks.length === 1 ? "" : "s"} · inventory filtered below`
-                  : patch.q
-                    ? `Showing inventory for “${patch.q}”`
-                    : patch.selectedColors.length
-                      ? `Showing ${patch.selectedColors.join("")} inventory below`
-                      : null,
-              );
+              setQueryBase(patch.baseSemantic);
+              setData(null);
+              setClerkPicks([]);
+              setClerkFilterNote(queryBaseNote(clerk.asked, patch.q));
             } else if (clerk.clearBrowseFilters) {
               patchFilters({
                 q: clerk.searchQuery ?? "",
@@ -448,16 +527,13 @@ export function StoreInventoryApp({
                 colorCount: "all",
                 cardType: "all",
               });
-              const picks = clerk.picks ?? [];
-              setClerkPicks(picks);
-              setClerkFilterNote(
-                picks.length
-                  ? `${picks.length} clerk pick${picks.length === 1 ? "" : "s"} shown below${clerk.searchQuery ? ` · browse filtered to “${clerk.searchQuery}”` : ""}`
-                  : clerk.searchQuery
-                    ? `Showing results for “${clerk.searchQuery}”`
-                    : null,
-              );
+              setQueryBase(undefined);
+              setData(null);
+              setClerkPicks([]);
+              setClerkFilterNote(queryBaseNote(clerk.asked, clerk.searchQuery));
             } else {
+              setQueryBase(undefined);
+              setData(null);
               setClerkPicks([]);
               patchFilters({
                 ...(clerk.clearSearch ? { q: "" } : {}),
@@ -486,16 +562,11 @@ export function StoreInventoryApp({
 
             <InventoryDecklistImport
               slug={slug}
-              onAddMany={addManyToGathering}
+              onAddMany={addManyToCart}
               open={pasteListOpen}
               onOpenChange={setPasteListOpen}
             />
 
-            <InventoryGameSourceBar
-              filters={filters}
-              onChange={patchFilters}
-              facets={data?.facets}
-            />
             <InventoryFilterBar
               slug={slug}
               filters={filters}
@@ -503,35 +574,49 @@ export function StoreInventoryApp({
               onSearchCommit={commitSearch}
               facets={data?.facets}
               showSearch={false}
+              showSortAndFinish={false}
             />
 
+          </div>
+        )}
+
+          <div className="flex min-h-0 min-w-0 flex-col gap-2 lg:overflow-hidden">
             {clerkFilterNote ? (
-              <p className="text-xs text-indigo-400">{clerkFilterNote}</p>
+              <p className="shrink-0 text-xs text-indigo-400">{clerkFilterNote}</p>
             ) : null}
 
-            {data?.facets ? (
-              <p className="text-xs text-neutral-500">
-                {data.total.toLocaleString()} cards shown
-                {filters.source === "catalog"
-                  ? " (all printings)"
-                  : ` (${inventoryGameLabel(filters.game)})`}{" "}
-                {filters.source === "inventory" ? (
-                  <>
-                    · {data.facets.inStock.toLocaleString()} total in stock at {storeName}
-                  </>
-                ) : null}
-              </p>
-            ) : null}
+            <div className="flex shrink-0 items-start gap-2">
+              <button
+                type="button"
+                aria-expanded={!filtersCollapsed}
+                aria-controls="inventory-search-filters"
+                onClick={() => setFiltersCollapsed((collapsed) => !collapsed)}
+                className="shrink-0 rounded-lg border border-neutral-700 px-2.5 py-1.5 text-xs font-medium text-neutral-200 hover:border-neutral-500"
+              >
+                {filtersCollapsed ? "Show filters" : "Hide filters"}
+              </button>
+              <div className="min-w-0 flex-1">
+            <InventoryResultsToolbar
+              filters={filters}
+              onChange={patchFilters}
+              facets={data?.facets}
+              shown={data?.total}
+            />
+              </div>
+            </div>
 
+            <div className="min-h-0 flex-1 lg:overflow-y-auto lg:pr-1">
+            <div className="inventory-card-stage space-y-2">
             {clerkDeck ? (
-              <ClerkDeckPanel deck={clerkDeck} onAddToGathering={addToGathering} />
+              <ClerkDeckPanel deck={clerkDeck} onAddToGathering={addCardToCart} />
             ) : null}
 
             {clerkPicks.length > 0 ? (
               <ClerkPicksPanel
                 title="Top matches — in stock now"
-                picks={clerkPicks}
-                onAddToGathering={addToGathering}
+                picks={shownPicks}
+                storeSlug={slug}
+                onAddToGathering={addCardToCart}
               />
             ) : null}
 
@@ -561,10 +646,12 @@ export function StoreInventoryApp({
                 <InventoryCardGrid
                   cards={data?.items ?? []}
                   highlightIds={highlightIds}
-                  pileIds={gatheredIds}
-                  onSelect={toggleGathering}
+                  pileIds={cartIds}
+                  pileQty={cartQtyById}
+                  onSelect={toggleCart}
                   draggable
                   size="large"
+                  storeSlug={slug}
                   emptyMessage={browseEmptyMessage(filters, data)}
                 />
 
@@ -593,67 +680,28 @@ export function StoreInventoryApp({
                 ) : null}
               </>
             )}
+            </div>
+            </div>
 
-            <div className="xl:hidden">
+            <div className="lg:hidden">
               <GatheringDesk
                 slug={slug}
-                cards={gatheredCards}
-                onAdd={addToGathering}
-                onRemove={removeFromGathering}
-                onClear={clearPile}
+                game={filters.game}
+                onAdd={addCardToCart}
               />
             </div>
           </div>
 
-          <aside className="hidden xl:block xl:sticky xl:top-4 xl:self-start">
+          <aside className="hidden min-h-0 lg:flex lg:flex-col lg:overflow-hidden">
             <GatheringDesk
               slug={slug}
-              cards={gatheredCards}
-              onAdd={addToGathering}
-              onRemove={removeFromGathering}
-              onClear={clearPile}
+              game={filters.game}
+              onAdd={addCardToCart}
+              fillViewport
             />
           </aside>
-        </div>
       </main>
     </div>
   );
 }
 
-function TabButton({
-  active,
-  children,
-}: {
-  active: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <span
-      className={`border-b-2 px-4 py-2 text-sm font-medium ${
-        active
-          ? "border-indigo-500 text-white"
-          : "border-transparent text-neutral-400"
-      }`}
-    >
-      {children}
-    </span>
-  );
-}
-
-function TabNavButton({
-  onClick,
-  children,
-}: {
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="border-b-2 border-transparent px-4 py-2 text-sm font-medium text-neutral-400 transition hover:text-neutral-200"
-    >
-      {children}
-    </button>
-  );
-}

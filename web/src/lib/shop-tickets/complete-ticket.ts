@@ -1,4 +1,5 @@
 import { inventoryEffectiveQuantity, isInventorySold } from "../inventory/status";
+import { withSaleLog } from "../inventory/sale-log";
 import { applySaleToQuantities } from "../shopify/sold-detection";
 import { sendShopTicketReceipt } from "../receipts/send-receipts";
 import { pushShopifyLevelsAfterImport } from "../shopify/sync-inventory-levels";
@@ -176,16 +177,25 @@ export async function completeShopTicket(args: {
       line.quantity,
     );
 
+    const saleLog = withSaleLog(item, {
+      at: now,
+      quantity: inventoryEffectiveQuantity(item) - remaining,
+      unitPrice: line.unitPrice,
+      channel: "in_store",
+    });
+
     // syncedQuantity is left alone on purpose: the Shopify push below diffs
     // against it, so writing it here would silently skip the update.
     const updated: InventoryItem =
       remaining > 0
         ? {
             ...decremented,
+            saleLog,
             ticketSaleRefs: withTicketRef(item, ticket.id),
           }
         : {
             ...decremented,
+            saleLog,
             status: "sold",
             soldAt: now,
             soldChannel: "in_store",

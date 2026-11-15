@@ -112,6 +112,8 @@ export function InventoryDecklistImport({
     }
   }
 
+  if (!open) return null;
+
   return (
     <div id="inventory-paste-list" className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -123,15 +125,14 @@ export function InventoryDecklistImport({
         </div>
         <button
           type="button"
-          onClick={() => setOpen(!open)}
+          onClick={() => setOpen(false)}
           className="rounded-lg border border-neutral-700 px-3 py-1.5 text-xs text-neutral-200 hover:border-neutral-500"
         >
-          {open ? "Hide" : "Paste list"}
+          Hide
         </button>
       </div>
 
-      {open ? (
-        <div className="mt-3 space-y-3">
+      <div className="mt-3 space-y-3">
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -173,7 +174,7 @@ export function InventoryDecklistImport({
             <div className="space-y-2 rounded-lg border border-neutral-800 bg-neutral-950/80 p-3 text-xs">
               <p className="text-emerald-400">
                 {result.inStock.length} in stock
-                {result.inStock.length > 0 ? " — added to your pile" : ""}
+                {result.inStock.length > 0 ? " — added to your cart" : ""}
               </p>
               {result.inStock.length > 0 ? (
                 <ul className="mt-1 space-y-0.5 text-emerald-200/90">
@@ -233,8 +234,7 @@ export function InventoryDecklistImport({
               ) : null}
             </div>
           ) : null}
-        </div>
-      ) : null}
+      </div>
     </div>
   );
 }

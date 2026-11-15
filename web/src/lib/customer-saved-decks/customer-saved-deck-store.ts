@@ -16,6 +16,8 @@ export type CustomerSavedDeck = {
   grade: string | null;
   classification: string | null;
   bracket: number;
+  /** Four-digit rating once the named line has been checked. Null when the claim was not verified. */
+  deckRating: string | null;
   playstyle: string;
   createdAt: string;
   updatedAt: string;
@@ -48,6 +50,7 @@ export async function saveCustomerDeckFromBuildJob(args: {
     classification:
       args.result.headProfessor?.classification ?? args.job.finalClassification ?? null,
     bracket: args.job.bracket,
+    deckRating: args.result.deckScore?.w == null ? null : args.result.deckScore.display,
     playstyle: args.job.playstyle,
     createdAt: now,
     updatedAt: now,
@@ -89,4 +92,26 @@ export async function listCustomerSavedDecks(args: {
   return rows
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
     .slice(0, limit);
+}
+
+export async function deleteCustomerSavedDeckV1(args: {
+  id: string;
+  customerId: string;
+}): Promise<"deleted" | "not_found" | "forbidden"> {
+  const db = getAdminFirestore();
+  if (!db) {
+    const row = memoryDecks.get(args.id);
+    if (!row) return "not_found";
+    if (row.customerId !== args.customerId) return "forbidden";
+    memoryDecks.delete(args.id);
+    return "deleted";
+  }
+
+  const ref = db.collection(COLLECTIONS.customerSavedDecks).doc(args.id);
+  const snap = await ref.get();
+  if (!snap.exists) return "not_found";
+  const row = snap.data() as CustomerSavedDeck;
+  if (row.customerId !== args.customerId) return "forbidden";
+  await ref.delete();
+  return "deleted";
 }

@@ -3,6 +3,8 @@
  * Does not run Architect or Constructor as list authors. Does not optimize against COS.
  */
 import type { DeckResolutionCatalog } from "../../../scripts/lib/load-deck-resolution-catalog";
+import type { DeckScoreV1 } from "@/lib/deck-rating/v1/plan-score-v1";
+import { scoreConstructedDeck } from "@/lib/deck-rating/v1/score-constructed-deck-v1";
 import { resolveCanonicalCardTruthV4164 } from "./professor-canonical-card-truth-v4-16-4-v1";
 import { isBasicLandName } from "./professor-commander-legality-v4-9-v1";
 import {
@@ -23,6 +25,7 @@ import {
 import {
   normalizeSolDirectedBuildUserInputsV111,
   SOL_DIRECTED_BUILD_FAILURE_MESSAGES,
+  SOL_DIRECTED_REVIEW_STATUS_LABELS,
   type SolDirectedBuildJobRecordV111,
   type SolDirectedBuildResultV111,
   type SolDirectedBuildStatusV111,
@@ -183,6 +186,10 @@ export type RunSolDirectedImportedOptimizeArgs = {
   existingJob?: SolDirectedBuildJobRecordV111;
   catalog: DeckResolutionCatalog;
   p0TruthPass?: boolean;
+  /** "review" keeps the list as-is, grades it, and returns swaps as suggestions. */
+  mode?: "optimize" | "review";
+  sourceDeckId?: string;
+  scoreDeck?: boolean;
 };
 
 export async function runSolDirectedImportedDeckOptimize(
@@ -191,6 +198,8 @@ export async function runSolDirectedImportedDeckOptimize(
   const started = Date.now();
   const latencyMsByStage: Partial<Record<SolDirectedBuildStatusV111, number>> = {};
   const modelCalls: SolDirectedModelCallRecordV1[] = [];
+  const reviewOnly = args.mode === "review";
+  const statusLabels = reviewOnly ? SOL_DIRECTED_REVIEW_STATUS_LABELS : SOL_DIRECTED_OPTIMIZE_STATUS_LABELS;
 
   const userInputs = normalizeSolDirectedBuildUserInputsV111({
     commanderOracleId: args.commanderOracleId,
@@ -203,8 +212,9 @@ export async function runSolDirectedImportedDeckOptimize(
     userSemanticPreferences: args.userSemanticPreferences,
     budgetConstraints: args.budgetConstraints,
     inventoryConstraints: args.inventoryConstraints,
-    mode: "optimize",
+    mode: reviewOnly ? "review" : "optimize",
     importedCards: args.importedCards,
+    sourceDeckId: args.sourceDeckId,
   });
 
   const job =
@@ -223,12 +233,12 @@ export async function runSolDirectedImportedDeckOptimize(
     await updateSolDirectedBuildJobStatusV111({
       buildId: job.buildId,
       status,
-      patch: { statusLabel: SOL_DIRECTED_OPTIMIZE_STATUS_LABELS[status] },
+      patch: { statusLabel: statusLabels[status] },
     });
     await appendSolDirectedBuildActivityV111({
       buildId: job.buildId,
       status,
-      message: thought ?? SOL_DIRECTED_OPTIMIZE_STATUS_LABELS[status],
+      message: thought ?? statusLabels[status],
     });
   };
 
@@ -433,11 +443,30 @@ export async function runSolDirectedImportedDeckOptimize(
       });
     }
 
+    let suggestedSwaps: SolDirectedCriticVerdictV111["appliedSwaps"] = [];
+    if (reviewOnly) {
+      suggestedSwaps = criticVerdict.appliedSwaps;
+      deckForReview = hydrated.deck;
+      criticVerdict = { ...criticVerdict, appliedSwaps: [] };
+      validation = validateSolDirectedDeckV111({
+        deck: deckForReview,
+        catalog: args.catalog,
+        contract: retrievalContract,
+        candidateDictionary: retrieval.candidateDictionary,
+        landPool: retrieval.landPool,
+        identityLedger,
+        prohibitedOracleIds: retrieval.prohibitedOracleIds,
+      });
+    }
+
     await appendSolDirectedBuildActivityV111({
       buildId: job.buildId,
       status: "CRITIC_REFINING",
-      message:
-        criticVerdict.appliedSwaps.length > 0
+      message: reviewOnly
+        ? suggestedSwaps.length > 0
+          ? `Found ${suggestedSwaps.length} swap${suggestedSwaps.length === 1 ? "" : "s"} worth considering.`
+          : "No swaps to suggest — your list is already tight for this brief."
+        : criticVerdict.appliedSwaps.length > 0
           ? `Applied ${criticVerdict.appliedSwaps.length} upgrade${criticVerdict.appliedSwaps.length === 1 ? "" : "s"} to your list.`
           : "No swaps applied — your list was already tight for this brief.",
     });
@@ -461,7 +490,7 @@ export async function runSolDirectedImportedDeckOptimize(
     modelCalls.push(headProfessor.record);
 
     let professorRepairApplied = false;
-    if (shouldRunProfessorRepairCriticV111(headProfessor.verdict) && modelCalls.length < 8) {
+    if (!reviewOnly && shouldRunProfessorRepairCriticV111(headProfessor.verdict) && modelCalls.length < 8) {
       const repair = await runSolDirectedCriticV111({
         deck: deckForReview,
         architectRawPlan,
@@ -525,7 +554,8 @@ export async function runSolDirectedImportedDeckOptimize(
       }
     }
 
-    if (!isSolDirectedHeadProfessorShippableV111(headProfessor.verdict)) {
+    // A review reports the grade whatever it is; only an optimize must ship a fixed list.
+    if (!reviewOnly && !isSolDirectedHeadProfessorShippableV111(headProfessor.verdict)) {
       const bestEffort = isSolDirectedHeadProfessorBestEffortShippableV111(headProfessor.verdict, {
         repairPassesCompleted: professorRepairApplied ? 1 : 0,
         maxRepairPasses: 1,
@@ -564,6 +594,15 @@ export async function runSolDirectedImportedDeckOptimize(
       headProfessorResponse: headProfessor.verdict,
     });
 
+    let deckScore: DeckScoreV1 | null = null;
+    if (reviewOnly && args.scoreDeck) {
+      try {
+        deckScore = await scoreConstructedDeck({ catalog: args.catalog, deck: deckForReview });
+      } catch (err) {
+        console.warn("[sol-directed-review] deck score failed:", err);
+      }
+    }
+
     const result: SolDirectedBuildResultV111 = {
       buildId: job.buildId,
       status: "COMPLETE",
@@ -584,6 +623,7 @@ export async function runSolDirectedImportedDeckOptimize(
       retrievalContract,
       professorRepairApplied,
       deckEnrichment: null,
+      ...(reviewOnly ? { suggestedSwaps, deckScore } : {}),
       telemetry: {
         ...emptyTelemetry({
           candidateUniqueCount: retrieval.uniqueNonlandCount,
@@ -610,6 +650,7 @@ export async function runSolDirectedImportedDeckOptimize(
           "canonicalized-deck.json": deckForReview,
           "validation.json": validation,
           "critic-response.json": criticVerdict,
+          ...(reviewOnly ? { "review-suggestions.json": { suggestedSwaps, deckScore } } : {}),
           "head-professor-response.json": headProfessor.verdict,
           "proof-chain.json": proofChain,
         },

@@ -58,17 +58,17 @@ export async function verifyCosV1Hashes(): Promise<{
   return { ok: checks.every((c) => c.match), hashes, checks };
 }
 
-let cached:
-  | {
-      model: CosV1Model;
-      reference: CosV1Reference;
-      hashes: { formula: string; schema: string; model: string; reference: string };
-      comboIndex: Map<string, CosV1ComboRow>;
-      compiled: CosV1CompiledVariant[];
-      points: Map<string, CosV1CatalogPoint>;
-      texts: Map<string, string>;
-    }
-  | null = null;
+type CosV1Runtime = {
+  model: CosV1Model;
+  reference: CosV1Reference;
+  hashes: { formula: string; schema: string; model: string; reference: string };
+  comboIndex: Map<string, CosV1ComboRow>;
+  compiled: CosV1CompiledVariant[];
+  points: Map<string, CosV1CatalogPoint>;
+  texts: Map<string, string>;
+};
+
+let cached: CosV1Runtime | null = null;
 
 /**
  * Streams non-blank JSONL lines. Yields rather than accumulating: these files
@@ -83,7 +83,15 @@ async function* readJsonl(path: string): AsyncGenerator<string> {
   }
 }
 
+/**
+ * Concurrent first callers share one in-flight load. Each load holds a few
+ * hundred MB while parsing, so a page that scores many decks at once would
+ * otherwise run the server out of memory before the first load finishes.
+ */
+let runtimePromise: Promise<CosV1Runtime> | null = null;
+
 let cachedCombos: { comboIndex: Map<string, CosV1ComboRow>; compiled: CosV1CompiledVariant[] } | null = null;
+let combosPromise: Promise<{ comboIndex: Map<string, CosV1ComboRow>; compiled: CosV1CompiledVariant[] }> | null = null;
 
 /**
  * Loads only the CommanderSpellbook detector table and combo dictionary.
@@ -97,6 +105,17 @@ export async function loadSpellbookComboArtifacts(): Promise<{
   compiled: CosV1CompiledVariant[];
 }> {
   if (cachedCombos) return cachedCombos;
+  combosPromise ??= readSpellbookComboArtifacts().catch((err) => {
+    combosPromise = null;
+    throw err;
+  });
+  return combosPromise;
+}
+
+async function readSpellbookComboArtifacts(): Promise<{
+  comboIndex: Map<string, CosV1ComboRow>;
+  compiled: CosV1CompiledVariant[];
+}> {
   const ms = mechanicalSpaceRoot();
 
   const comboIndex = new Map<string, CosV1ComboRow>();
@@ -114,8 +133,16 @@ export async function loadSpellbookComboArtifacts(): Promise<{
   return cachedCombos;
 }
 
-export async function loadCosV1Runtime() {
+export async function loadCosV1Runtime(): Promise<CosV1Runtime> {
   if (cached) return cached;
+  runtimePromise ??= readCosV1Runtime().catch((err) => {
+    runtimePromise = null;
+    throw err;
+  });
+  return runtimePromise;
+}
+
+async function readCosV1Runtime(): Promise<CosV1Runtime> {
   const verified = await verifyCosV1Hashes();
   if (!verified.ok) {
     throw new Error(`COS v1 frozen hash mismatch: ${JSON.stringify(verified.checks)}`);

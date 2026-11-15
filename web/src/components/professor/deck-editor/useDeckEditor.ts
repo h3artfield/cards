@@ -56,6 +56,9 @@ function reattachEnrichment(next: DeckEditorDeck, previous: DeckEditorDeck): Dec
         ...card,
         display: card.display ?? known.display,
         derivedMarkers: card.derivedMarkers ?? known.derivedMarkers,
+        canBeCommander: card.canBeCommander ?? known.canBeCommander,
+        semantic: card.semantic ?? known.semantic,
+        copyOwnership: card.copyOwnership ?? known.copyOwnership,
       };
     }),
   };

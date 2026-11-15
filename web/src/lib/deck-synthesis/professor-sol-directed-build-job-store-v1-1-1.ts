@@ -17,6 +17,11 @@ import {
   SOL_DIRECTED_BUILD_STATUS_LABELS,
 } from "./professor-sol-directed-build-types-v1-1-1";
 import { saveCustomerDeckFromBuildJob } from "../customer-saved-decks/customer-saved-deck-store";
+import { getEditableDeckV1, recordProfessorReviewV1 } from "../professor-deck-editor/store-v1";
+import {
+  jobShouldHaveResultV1,
+  rehydrateSolDirectedBuildResultV1,
+} from "./professor-sol-directed-build-result-rehydrate-v1";
 
 export const PROFESSOR_SOL_DIRECTED_BUILD_JOB_STORE_V1_1_1_VERSION =
   "professor-sol-directed-build-job-store-v1-1-1";
@@ -128,7 +133,27 @@ async function loadJobFromFirestore(buildId: string): Promise<SolDirectedBuildJo
 export async function getSolDirectedBuildJobV111(buildId: string): Promise<SolDirectedBuildJobViewV111 | null> {
   const job = memoryJobs.get(buildId) ?? (await loadJobFromFirestore(buildId));
   if (!job) return null;
-  const result = memoryResults.get(buildId) ?? null;
+
+  let result = memoryResults.get(buildId) ?? null;
+
+  // A completed build whose result is not in this process was almost certainly
+  // built by an instance that has since gone away. Recover the deck from its
+  // artifacts rather than serving a COMPLETE job with no cards.
+  if (!result && jobShouldHaveResultV1(job)) {
+    try {
+      const rehydrated = await rehydrateSolDirectedBuildResultV1({ job });
+      if (rehydrated) {
+        result = rehydrated.result;
+        // Cached so a page that polls does not re-read Storage each time.
+        memoryResults.set(buildId, result);
+      } else {
+        console.warn(`[sol-directed-build] ${buildId} is COMPLETE but its deck could not be recovered`);
+      }
+    } catch (err) {
+      console.warn(`[sol-directed-build] recovery failed for ${buildId}:`, err);
+    }
+  }
+
   return {
     job: { ...job, activityLog: job.activityLog ?? [] },
     result: result ?? undefined,
@@ -159,7 +184,25 @@ export async function saveSolDirectedBuildResultV111(args: {
     activityLog: latest.activityLog ?? [],
   };
   await persistJob(updated);
-  if (updated.status === "COMPLETE" && updated.userId) {
+  const sourceDeckId = updated.userInputs?.sourceDeckId;
+  if (updated.userInputs?.mode === "review") {
+    if (sourceDeckId && (updated.status === "COMPLETE" || updated.status === "FAILED")) {
+      const current = await getEditableDeckV1(sourceDeckId);
+      const reviewed = current?.professorReview?.buildId === updated.buildId ? current.professorReview : null;
+      await recordProfessorReviewV1({
+        deckId: sourceDeckId,
+        review: {
+          buildId: updated.buildId,
+          status: updated.status === "COMPLETE" ? "complete" : "failed",
+          atRevision: reviewed?.atRevision ?? current?.revision ?? 0,
+          requestedAt: reviewed?.requestedAt ?? updated.createdAt,
+          completedAt: nowIso(),
+          grade: args.result.headProfessor?.grade ?? null,
+          failureMessage: args.result.failureMessage ?? null,
+        },
+      });
+    }
+  } else if (updated.status === "COMPLETE" && updated.userId) {
     await saveCustomerDeckFromBuildJob({ job: updated, result: args.result });
   }
   return updated;

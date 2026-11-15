@@ -33,6 +33,10 @@ import {
 } from "@/lib/professor-deck-editor/from-scratch-v1";
 import { resolveHandDeckCommanderV1 } from "@/lib/professor-deck-editor/hand-deck-commander-v1";
 import { handDeckImportOpsV1 } from "@/lib/professor-deck-editor/import-ops-v1";
+import {
+  getCommanderSearchCatalogRuntime,
+  isPaperEligibleCommanderNameFast,
+} from "@/lib/deck-synthesis/professor-commander-search-catalog-v1";
 import { applyDeckEditOpsV1 } from "@/lib/professor-deck-editor/ops-v1";
 import type { DeckEditRejectionV1 } from "@/lib/professor-deck-editor/ops-v1";
 import { checkEditableDeckLegalityV1 } from "@/lib/professor-deck-editor/legality-v1";
@@ -42,8 +46,18 @@ import {
   mutateEditableDeckV1,
 } from "@/lib/professor-deck-editor/store-v1";
 import { parseDeckEditOpsV1 } from "@/lib/professor-deck-editor/parse-ops-v1";
-import type { EditableDeckV1 } from "@/lib/professor-deck-editor/types-v1";
+import type { EditableDeckCommanderV1, EditableDeckV1 } from "@/lib/professor-deck-editor/types-v1";
+import { commanderPairProblemV1 } from "@/lib/professor-deck-editor/commander-pair-v1";
+import {
+  combinedGoldenOracleText,
+  lookupGoldenByName,
+} from "../../../../../../../scripts/lib/load-golden-catalog-index";
+import type { DeckResolutionCatalog } from "../../../../../../../scripts/lib/load-deck-resolution-catalog";
+import { getCardTokenMapV1, getCardTokenSetsV1 } from "@/lib/deck-tokens/card-token-map-v1";
+import { computeDeckTokensV1, type DeckTokensV1 } from "@/lib/deck-tokens/deck-tokens-v1";
+import { deleteCustomerDeckV1 } from "@/lib/professor-deck-editor/delete-deck-v1";
 import { authorizeDeckEditorV1 } from "./authorize";
+import { deckIdFromRequestV1 } from "./deck-key";
 
 /**
  * The editable-deck surface: GET to open a deck, PATCH to change it.
@@ -116,10 +130,26 @@ async function derivedMarkerFacts(deck: EditableDeckV1): Promise<DerivedMarkerFa
   return facts;
 }
 
+function commanderPairProblemFromCatalog(deck: EditableDeckV1, catalog: DeckResolutionCatalog): string | null {
+  if (!deck.partner) return null;
+  const [a, b] = [deck.commander, deck.partner].map((commander) => catalog.byOracleId.get(commander.oracleId));
+  // Without both cards' text the pair can't be judged, and calling it illegal
+  // would be a claim the data doesn't support.
+  if (!a || !b) return null;
+  return commanderPairProblemV1(
+    { name: a.canonicalName, typeLine: a.typeLine ?? "", oracleText: combinedGoldenOracleText(a) },
+    { name: b.canonicalName, typeLine: b.typeLine ?? "", oracleText: combinedGoldenOracleText(b) },
+  );
+}
+
 async function deckWithLegality(deck: EditableDeckV1) {
-  const [catalog, facts] = await Promise.all([
+  const [catalog, facts, commanderCatalog] = await Promise.all([
     getDeckResolutionCatalogRuntime(),
     derivedMarkerFacts(deck),
+    getCommanderSearchCatalogRuntime().catch((err) => {
+      console.warn("[deck-editor] commander catalog unavailable:", err);
+      return null;
+    }),
   ]);
 
   let cards = withDerivedMarkersV1(deck, facts);
@@ -132,6 +162,30 @@ async function deckWithLegality(deck: EditableDeckV1) {
     cards = withSemanticFactsV1(cards);
   } catch (err) {
     console.warn("[deck-editor] semantic facts unavailable:", err);
+  }
+
+  let tokens: DeckTokensV1 | null = null;
+  try {
+    tokens = computeDeckTokensV1({
+      commander: deck.commander,
+      mainboard: [
+        ...(deck.partner ? [deck.partner] : []),
+        ...deck.cards.filter((card) => card.board === "mainboard"),
+      ],
+      map: getCardTokenMapV1(),
+      cardSets: getCardTokenSetsV1(),
+    });
+  } catch (err) {
+    console.warn("[deck-editor] token map unavailable:", err);
+  }
+
+  // Commander eligibility is read-time, same as display facts: the grab tray
+  // and row actions only offer "promote to commander" for cards that can lead.
+  if (commanderCatalog) {
+    cards = cards.map((card) => ({
+      ...card,
+      canBeCommander: isPaperEligibleCommanderNameFast(commanderCatalog, card.name),
+    }));
   }
 
   return {
@@ -147,8 +201,10 @@ async function deckWithLegality(deck: EditableDeckV1) {
     legality: checkEditableDeckLegalityV1({
       deck,
       lookup: createCatalogCardFactsLookupV1(catalog),
+      pairProblem: deck.partner ? commanderPairProblemFromCatalog(deck, catalog) : null,
     }),
     markerFacets: markerFacetsV1(deck, facts),
+    tokens,
   };
 }
 
@@ -207,10 +263,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
 /**
  * Starts a deck by hand.
  *
- * Takes a commander, and optionally a decklist to seed it with. When only a
- * list is supplied the commander is inferred from it, because a customer
- * pasting an export from Moxfield has already said who leads the deck and
- * asking again would be a step that exists purely to satisfy the data model.
+ * Takes a commander (required) and optionally a decklist to seed it with. The
+ * commander must be chosen explicitly — pasting a list alone is not enough —
+ * so colour identity never depends on inferring a name from the paste.
  *
  * The seeded cards go through the ordinary edit reducer rather than being
  * written straight into the record, so an import cannot put a deck into a state
@@ -228,24 +283,39 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
       decklist?: string;
     };
 
-    const decklist = body.decklist?.trim();
-    let preview: ProfessorImportedDeckPreviewV111 | null = null;
+    const commanderName = body.commanderName?.trim() || "";
+    if (!commanderName) {
+      return jsonError("Pick a commander to start the deck", 400);
+    }
 
+    const resolved = await resolveHandDeckCommanderV1(commanderName);
+    if (!resolved.ok) {
+      return jsonError(resolved.message, 400);
+    }
+
+    let preview: ProfessorImportedDeckPreviewV111 | null = null;
+    const decklist = body.decklist?.trim();
     if (decklist) {
       preview = previewProfessorImportedDeckV111({
         decklist,
-        selectedCommanderName: body.commanderName?.trim() || undefined,
+        selectedCommanderName: commanderName,
         catalog: await getDeckResolutionCatalogRuntime(),
       });
     }
 
-    const commanderName = body.commanderName?.trim() || preview?.commanderName || "";
-    const resolved = await resolveHandDeckCommanderV1(commanderName);
-    if (!resolved.ok) {
-      return jsonError(
-        commanderName ? resolved.message : "Pick a commander, or paste a list that names one",
-        400,
-      );
+    // Looked up directly rather than through the commander picker's check: a
+    // Background or a Doctor's companion is not a commander on its own, and
+    // whether the pair is legal is the legality report's call to make.
+    let partner: EditableDeckCommanderV1 | null = null;
+    if (preview?.partnerName) {
+      const card = lookupGoldenByName(await getDeckResolutionCatalogRuntime(), preview.partnerName);
+      if (card) {
+        partner = {
+          oracleId: card.oracleId,
+          name: card.canonicalName,
+          colorIdentity: [...(card.colorIdentity ?? [])],
+        };
+      }
     }
 
     const now = new Date().toISOString();
@@ -255,6 +325,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
       storeId: auth.storeId!,
       storeSlug: slug,
       commander: resolved.commander,
+      partner,
       deckName: body.deckName,
       now,
     });
@@ -299,10 +370,28 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ sl
     const parsed = parseDeckEditOpsV1(body.ops);
     if (!parsed.ok) return jsonError(parsed.message, 400);
 
+    // Commander swaps must resolve against the commander catalog — a client can
+    // invent colour identity, but it cannot invent eligibility.
+    const ops: typeof parsed.ops = [];
+    for (const op of parsed.ops) {
+      if (op.op !== "setCommander") {
+        ops.push(op);
+        continue;
+      }
+      const resolved = await resolveHandDeckCommanderV1(op.name);
+      if (!resolved.ok) return jsonError(resolved.message, 422);
+      ops.push({
+        op: "setCommander",
+        oracleId: resolved.commander.oracleId,
+        name: resolved.commander.name,
+        colorIdentity: resolved.commander.colorIdentity,
+      });
+    }
+
     const result = await mutateEditableDeckV1({
       deckId,
       customerId: auth.customerId!,
-      ops: parsed.ops,
+      ops,
       expectedRevision: body.expectedRevision,
     });
 
@@ -329,6 +418,33 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ sl
       applied: result.applied,
       rejected: result.rejected,
     });
+  } catch (err) {
+    return handleRouteError(err);
+  }
+}
+
+/** Deletes the deck, and for a Professor build its saved record too. */
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
+  try {
+    const { slug } = await params;
+    const auth = await authorizeDeckEditorV1(req, slug);
+    if (auth.error) return auth.error;
+
+    const deckId = deckIdFromRequestV1(req, auth.customerId!);
+    if (!deckId) return jsonError("buildId or deckId required", 400);
+    const deck = await getEditableDeckV1(deckId);
+    if (!deck || deck.customerId !== auth.customerId || deck.storeSlug !== slug) {
+      return jsonError("Deck not found", 404);
+    }
+
+    const result = await deleteCustomerDeckV1({
+      customerId: auth.customerId!,
+      deckId,
+      origin: deck.buildId ? "professor" : "hand",
+      listKey: deckId,
+    });
+    if (!result.ok) return jsonError(result.message, 404);
+    return jsonOk({ deleted: true });
   } catch (err) {
     return handleRouteError(err);
   }

@@ -12,6 +12,14 @@ export type CartLine = {
   quantity: number;
   /** Units on the shelf when added, used to cap the stepper. */
   maxQuantity: number;
+  /** Units that can ship; beyond this the order is in-store pickup. Unknown on older carts. */
+  onlineQty?: number;
+  /** Shelf game. Build deck is offered only for Magic lines. */
+  gameKey?: string;
+  /** Kept so Build deck can see a legendary creature in the cart. */
+  typeLine?: string;
+  isCommander?: boolean;
+  colorIdentity?: string[];
 };
 
 export const CART_STORAGE_PREFIX = "cs9k-cart:";
@@ -33,6 +41,7 @@ export function addCartLine(
   lines: CartLine[],
   line: Omit<CartLine, "quantity"> & { quantity?: number },
 ): CartLine[] {
+  if (line.inventoryItemId.startsWith("catalog:")) return lines;
   const max = Math.max(1, Math.trunc(line.maxQuantity) || 1);
   const existing = lines.find(
     (l) => l.inventoryItemId === line.inventoryItemId,
@@ -54,6 +63,7 @@ export function addCartLine(
       ? {
           ...l,
           maxQuantity: max,
+          ...(line.onlineQty != null ? { onlineQty: line.onlineQty } : {}),
           quantity: clampQuantity(l.quantity + (line.quantity ?? 1), max),
         }
       : l,
@@ -82,6 +92,11 @@ export function removeCartLine(
 
 export function cartItemCount(lines: CartLine[]): number {
   return lines.reduce((sum, l) => sum + l.quantity, 0);
+}
+
+/** True when a line asks for more copies than can ship, so the order is pickup. */
+export function cartNeedsPickup(lines: CartLine[]): boolean {
+  return lines.some((l) => l.onlineQty != null && l.quantity > l.onlineQty);
 }
 
 export function cartSubtotal(lines: CartLine[]): number {
@@ -116,7 +131,10 @@ export function parseStoredCart(raw: string | null): CartLine[] {
   try {
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
-    return parsed.filter(isCartLine).map((line) => ({
+    return parsed
+      .filter(isCartLine)
+      .filter((line) => !line.inventoryItemId.startsWith("catalog:"))
+      .map((line) => ({
       ...line,
       maxQuantity: Math.max(1, Math.trunc(line.maxQuantity) || 1),
       quantity: clampQuantity(line.quantity, line.maxQuantity),
@@ -146,4 +164,13 @@ export function writeCart(slug: string, lines: CartLine[]): void {
   } catch {
     /* private mode or full storage — the cart just won't persist */
   }
+}
+
+/** Commander deck building is Magic only, and only from a Magic cart. */
+export function cartCanBuildMagicDeck(
+  game: string,
+  lines: Array<Pick<CartLine, "gameKey">>,
+): boolean {
+  if (game !== "magic" || lines.length === 0) return false;
+  return lines.every((line) => !line.gameKey || line.gameKey === "magic");
 }

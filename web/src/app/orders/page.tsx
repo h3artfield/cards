@@ -16,7 +16,6 @@ import {
   goToOrderScan,
 } from "@/lib/create-customer-order";
 import type { BuybackOrder } from "@/lib/types";
-import type { CustomerSavedDeck } from "@/lib/customer-saved-decks/customer-saved-deck-store";
 
 function readStoredStoreSlug(): string | null {
   try {
@@ -34,7 +33,6 @@ export default function OrdersPage() {
     canViewOrderHistory,
   } = useCustomer();
   const [orders, setOrders] = useState<BuybackOrder[]>([]);
-  const [savedDecks, setSavedDecks] = useState<CustomerSavedDeck[]>([]);
   const [ordersLoaded, setOrdersLoaded] = useState(false);
   const [accessError, setAccessError] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
@@ -69,16 +67,6 @@ export default function OrdersPage() {
         setOrders(d.orders ?? []);
       })
       .finally(() => setOrdersLoaded(true));
-
-    fetch(`/api/customers/decks${storeQuery ? storeQuery.replace("&", "?") : ""}`, {
-      credentials: "include",
-    })
-      .then(async (r) => {
-        if (!r.ok) return;
-        const d = (await r.json()) as { decks?: CustomerSavedDeck[] };
-        setSavedDecks(d.decks ?? []);
-      })
-      .catch(() => {});
   }, [customer, customerLoading, slug]);
 
   async function handleCreateOrder() {
@@ -159,38 +147,6 @@ export default function OrdersPage() {
           <CustomerTradeCreditPanel slug={store.slug} />
         </>
       ) : null}
-
-      <h2 className="mt-8 text-sm font-semibold uppercase tracking-wide text-[var(--text-lo)]">
-        Your Commander decks
-      </h2>
-      {savedDecks.length === 0 ? (
-        <p className="mt-4 text-[var(--text-lo)]">No saved decks yet. Build one from store inventory.</p>
-      ) : (
-        <ul className="mt-4 space-y-3">
-          {savedDecks.map((deck) => (
-            <li key={deck.id}>
-              <Link
-                href={`/s/${deck.storeSlug}/inventory/professor/build?buildId=${encodeURIComponent(deck.buildId)}`}
-                className="block rounded-xl border border-[var(--line-subtle)] bg-[var(--ink-800)] p-4 hover:border-[var(--accent-lo)]"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="font-semibold text-[var(--text-hi)]">{deck.deckName}</p>
-                    <p className="mt-1 text-xs text-[var(--text-lo)]">
-                      Bracket {deck.bracket} · {new Date(deck.updatedAt).toLocaleDateString()}
-                    </p>
-                  </div>
-                  {deck.grade ? (
-                    <span className="rounded-full bg-[var(--accent-wash)] px-2.5 py-1 text-xs font-bold text-[var(--accent-hi)]">
-                      {deck.grade.split(/[\s(]/)[0]}
-                    </span>
-                  ) : null}
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
 
       <h2 className="mt-8 text-sm font-semibold uppercase tracking-wide text-[var(--text-lo)]">
         Your orders

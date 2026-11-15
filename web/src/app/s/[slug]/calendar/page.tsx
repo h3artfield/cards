@@ -16,8 +16,8 @@ export default function StoreCalendarPage() {
 
   if (valid === false) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white px-4">
-        <p className="text-sm text-gray-600">Store not found.</p>
+      <div className="flex min-h-screen items-center justify-center bg-[var(--ink-850)] px-4">
+        <p className="text-sm text-[var(--text-lo)]">Store not found.</p>
       </div>
     );
   }

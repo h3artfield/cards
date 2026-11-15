@@ -8,6 +8,7 @@ import type {
   CollectionCard,
   Customer,
   InventoryItem,
+  PickupReservation,
   ScannedCard,
   ShopTicket,
   StoreRule,
@@ -795,6 +796,30 @@ export const dataStore = {
     return cleared;
   },
 
+  /** A Shopify restock brings the same row back. Merge writes cannot erase these. */
+  async clearInventoryShopifySale(itemId: string): Promise<void> {
+    const db = dbOrMemory();
+    if (!db) {
+      await mutateDevMemory((state) => {
+        const item = state.inventory?.find((row) => row.id === itemId);
+        if (!item) return;
+        delete item.soldAt;
+        delete item.soldChannel;
+        delete item.soldPrice;
+        delete item.soldOrderId;
+        delete item.soldLineItemId;
+      });
+      return;
+    }
+    await db.collection(COLLECTIONS.inventory).doc(itemId).update({
+      soldAt: FieldValue.delete(),
+      soldChannel: FieldValue.delete(),
+      soldPrice: FieldValue.delete(),
+      soldOrderId: FieldValue.delete(),
+      soldLineItemId: FieldValue.delete(),
+    });
+  },
+
   async deleteInventoryByOrderId(orderId: string): Promise<number> {
     const db = dbOrMemory();
     if (db) {
@@ -1071,6 +1096,61 @@ export const dataStore = {
     const state = await readDevMemoryState();
     return (state.shopTickets ?? [])
       .filter((t) => shopTicketStoreId(t) === id)
+      .sort(sortDesc);
+  },
+
+  async savePickupReservation(
+    reservation: PickupReservation,
+  ): Promise<PickupReservation> {
+    const db = dbOrMemory();
+    if (db) {
+      await db
+        .collection(COLLECTIONS.pickupReservations)
+        .doc(reservation.id)
+        .set(forFirestore(reservation));
+      return reservation;
+    }
+    await mutateDevMemory((state) => {
+      if (!state.pickupReservations) state.pickupReservations = [];
+      const idx = state.pickupReservations.findIndex(
+        (r) => r.id === reservation.id,
+      );
+      if (idx >= 0) state.pickupReservations[idx] = reservation;
+      else state.pickupReservations.push(reservation);
+    });
+    return reservation;
+  },
+
+  async getPickupReservation(id: string): Promise<PickupReservation | null> {
+    const db = dbOrMemory();
+    if (db) {
+      const doc = await db
+        .collection(COLLECTIONS.pickupReservations)
+        .doc(id)
+        .get();
+      return doc.exists ? (doc.data() as PickupReservation) : null;
+    }
+    const state = await readDevMemoryState();
+    return (state.pickupReservations ?? []).find((r) => r.id === id) ?? null;
+  },
+
+  /** Newest first. */
+  async getPickupReservations(storeId?: string): Promise<PickupReservation[]> {
+    const id = resolveStoreId(storeId);
+    const sortDesc = (a: PickupReservation, b: PickupReservation) =>
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+
+    const db = dbOrMemory();
+    if (db) {
+      const snap = await db
+        .collection(COLLECTIONS.pickupReservations)
+        .where("storeId", "==", id)
+        .get();
+      return snap.docs.map((d) => d.data() as PickupReservation).sort(sortDesc);
+    }
+    const state = await readDevMemoryState();
+    return (state.pickupReservations ?? [])
+      .filter((r) => r.storeId === id)
       .sort(sortDesc);
   },
 
@@ -1397,6 +1477,91 @@ export const dataStore = {
       if (!state.storeEvents) return;
       state.storeEvents = state.storeEvents.filter((e) => e.id !== eventId);
     });
+  },
+
+  async deleteStoreEvents(eventIds: readonly string[]): Promise<number> {
+    const unique = [...new Set(eventIds.filter(Boolean))];
+    if (unique.length === 0) return 0;
+
+    const db = dbOrMemory();
+    if (db) {
+      const batch = db.batch();
+      for (const eventId of unique) {
+        batch.delete(db.collection(COLLECTIONS.storeEvents).doc(eventId));
+      }
+      await batch.commit();
+      return unique.length;
+    }
+
+    await mutateDevMemory((state) => {
+      if (!state.storeEvents) return;
+      const drop = new Set(unique);
+      state.storeEvents = state.storeEvents.filter((e) => !drop.has(e.id));
+    });
+    return unique.length;
+  },
+
+  async listEventSignupsForCustomerAtStore(
+    storeId: string,
+    customerId: string,
+    email?: string,
+  ): Promise<StoreEventSignup[]> {
+    const id = resolveStoreId(storeId);
+    const normalizedEmail = email?.trim().toLowerCase();
+    const db = dbOrMemory();
+    const byId = new Map<string, StoreEventSignup>();
+
+    const addSignup = (signup: StoreEventSignup) => {
+      if (signup.storeId !== id) return;
+      byId.set(signup.id, signup);
+    };
+
+    if (db) {
+      const customerSnap = await db
+        .collection(COLLECTIONS.storeEventSignups)
+        .where("storeId", "==", id)
+        .where("customerId", "==", customerId)
+        .get();
+      for (const doc of customerSnap.docs) {
+        addSignup(
+          normalizeStoreEventSignup(
+            doc.id,
+            doc.data() as Record<string, unknown>,
+            id,
+            String((doc.data() as Record<string, unknown>).eventId ?? ""),
+          ),
+        );
+      }
+
+      if (normalizedEmail) {
+        const emailSnap = await db
+          .collection(COLLECTIONS.storeEventSignups)
+          .where("storeId", "==", id)
+          .where("email", "==", normalizedEmail)
+          .get();
+        for (const doc of emailSnap.docs) {
+          addSignup(
+            normalizeStoreEventSignup(
+              doc.id,
+              doc.data() as Record<string, unknown>,
+              id,
+              String((doc.data() as Record<string, unknown>).eventId ?? ""),
+            ),
+          );
+        }
+      }
+    } else {
+      const state = await readDevMemoryState();
+      for (const signup of state.storeEventSignups ?? []) {
+        if (signup.storeId !== id) continue;
+        if (signup.customerId === customerId) addSignup(signup);
+        else if (normalizedEmail && signup.email === normalizedEmail) addSignup(signup);
+      }
+    }
+
+    return [...byId.values()].sort(
+      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    );
   },
 
   async listEventSignups(eventId: string): Promise<StoreEventSignup[]> {

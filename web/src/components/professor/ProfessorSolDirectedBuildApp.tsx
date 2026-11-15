@@ -10,12 +10,15 @@ import {
   readSolDirectedPendingBuild,
   clearSolDirectedPendingBuild,
 } from "@/lib/deck-synthesis/professor-sol-directed-pending-build-v1-1-1";
+import type { SolDirectedHeadProfessorWholeDeckVerdictV111 } from "@/lib/deck-synthesis/professor-sol-directed-head-professor-v1-1-1";
+import type { SolDirectedDeckEnrichmentV111 } from "@/lib/deck-synthesis/professor-sol-directed-deck-enrichment-v1-1-1";
+import { ProfessorClientErrorBoundary } from "./ProfessorClientErrorBoundary";
 import { ProfessorSolDirectedBuildProgressPanel } from "./ProfessorSolDirectedBuildProgressPanel";
 import { ProfessorSolDirectedDeckListPanel } from "./ProfessorSolDirectedDeckListPanel";
 import { ProfessorMtgPageShell } from "./ProfessorMtgPageShell";
 import { CustomerDeckNavV1 } from "./CustomerDeckNavV1";
 
-type BuildView = {
+export type BuildView = {
   solDirected: true;
   job: SolDirectedBuildJobRecordV111;
   result?: {
@@ -41,22 +44,9 @@ type BuildView = {
       proposedSwaps?: Array<{ cut: string; add: string; reason: string }>;
       rejectedSwaps?: Array<{ swap: { cut: string; add: string }; reason: string }>;
     } | null;
-    headProfessor: {
-      classification: string;
-      grade: string;
-      bracketFit: string;
-      strategyCoherence: string;
-      manaAssessment: string;
-      earlyMidLateGameAssessment: string;
-      winConditionAssessment: string;
-      interactionAssessment: string;
-      resilienceAssessment: string;
-      offPlanCards: string[];
-      requiredChanges: string[];
-      optionalChanges: string[];
-      reasoningSummary: string;
-      selfBuildQuestionAnswer: string;
-    } | null;
+    headProfessor: SolDirectedHeadProfessorWholeDeckVerdictV111 | null;
+    deckEnrichment?: SolDirectedDeckEnrichmentV111 | null;
+    professorRepairApplied?: boolean;
     failureCode: string | null;
     failureMessage: string | null;
     validation: {
@@ -88,6 +78,8 @@ type BuildView = {
       landCount: number | null;
       candidateUniqueCount: number | null;
     } | null;
+    deckScore?: { display: string; w: number | null; reason: string | null; namedLineWins: number | null; trials: number | null } | null;
+    suggestedSwaps?: Array<{ cut: string; add: string; reason: string }> | null;
   };
 };
 
@@ -260,23 +252,46 @@ export function ProfessorSolDirectedBuildApp({ slug }: { slug: string }) {
           </div>
         ) : null}
 
+        {isComplete && !view?.result && !error ? (
+          <div className="professor-mtg-card mx-auto max-w-2xl border-red-900/40 p-6">
+            <p className="professor-mtg-label text-red-300/90">The build finished, but the list could not be recovered</p>
+            <p className="mt-2 text-sm text-[var(--mtg-parchment-muted)]">
+              Refresh this page to try again. The job was saved — the cards may still be on My decks.
+            </p>
+          </div>
+        ) : null}
+
         {isComplete && view?.result ? (
-          <ProfessorSolDirectedDeckListPanel
-            slug={slug}
-            buildId={buildId ?? view.job.buildId}
-            commander={view.result.commander}
-            constructedDeck={view.result.constructedDeck}
-            userInputs={view.result.userInputs}
-            architectPlan={view.result.architectPlan}
-            critic={view.result.critic}
-            headProfessor={view.result.headProfessor}
-            validation={view.result.validation}
-            retrievalSummary={view.result.retrievalSummary}
-            telemetry={view.result.telemetry}
-            validationPass={view.result.validation?.pass ?? false}
-            deckEnrichment={view.result.deckEnrichment}
-            professorRepairApplied={view.result.professorRepairApplied}
-          />
+          <ProfessorClientErrorBoundary>
+            {view.result.deckScore ? (
+              <div className="professor-mtg-card mx-auto mb-6 max-w-2xl p-6">
+                <p className="professor-mtg-label">Deck rating</p>
+                <p className="mt-2 text-3xl font-semibold tracking-wide">{view.result.deckScore.display}</p>
+                <p className="mt-2 text-sm text-[var(--mtg-parchment-muted)]">{view.result.deckScore.reason}</p>
+                {view.result.deckScore.w != null ? (
+                  <p className="mt-1 text-xs text-[var(--mtg-parchment-muted)]">
+                    Named line {view.result.deckScore.namedLineWins} of {view.result.deckScore.trials} seeds.
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
+            <ProfessorSolDirectedDeckListPanel
+              slug={slug}
+              buildId={buildId ?? view.job.buildId}
+              commander={view.result.commander}
+              constructedDeck={view.result.constructedDeck}
+              userInputs={view.result.userInputs}
+              architectPlan={view.result.architectPlan}
+              critic={view.result.critic}
+              headProfessor={view.result.headProfessor}
+              validation={view.result.validation}
+              retrievalSummary={view.result.retrievalSummary}
+              telemetry={view.result.telemetry}
+              validationPass={view.result.validation?.pass ?? false}
+              deckEnrichment={view.result.deckEnrichment}
+              professorRepairApplied={view.result.professorRepairApplied}
+            />
+          </ProfessorClientErrorBoundary>
         ) : null}
 
         {loading && !view && !error ? (
