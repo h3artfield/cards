@@ -16,6 +16,21 @@ function sign(payload: string): string {
   return createHmac("sha256", signingKey()).update(payload).digest("base64url");
 }
 
+/** HMAC check shared with the staff (clerk PIN) cookie. */
+export function signSessionPayload(payload: string): string {
+  return sign(payload);
+}
+
+export function sessionSignatureMatches(payload: string, sig: string): boolean {
+  try {
+    const a = Buffer.from(sig);
+    const b = Buffer.from(sign(payload));
+    return a.length === b.length && timingSafeEqual(a, b);
+  } catch {
+    return false;
+  }
+}
+
 export function createAdminSessionToken(session: AdminSession): string {
   const payload = Buffer.from(
     JSON.stringify({

@@ -14,6 +14,7 @@ import {
   sanitizeAdminSession,
 } from "@/lib/admin-auth";
 import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
+import { requireStoreOwner } from "@/lib/staff/owner-access";
 import { dataStore } from "@/lib/storage/data-store";
 import type { AdminSession } from "@/lib/types";
 
@@ -41,6 +42,10 @@ export async function PATCH(req: NextRequest) {
   try {
     const auth = requireAdminSession(req);
     if (auth instanceof Response) return auth;
+    if (auth.role === "store" && auth.storeId) {
+      const forbidden = await requireStoreOwner(req, auth, auth.storeId);
+      if (forbidden) return forbidden;
+    }
 
     const user = await dataStore.getAdminUserById(auth.userId);
     if (!user) return jsonError("Account not found", 404);

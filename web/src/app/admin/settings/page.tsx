@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AdminLayout } from "@/components/AdminLayout";
 import { AdminAccountForms } from "@/components/admin/AdminAccountForms";
 import { StoreOwnerPasswordForm } from "@/components/admin/StoreOwnerPasswordForm";
+import { StaffManagementPanel } from "@/components/admin/StaffManagementPanel";
 import { Button } from "@/components/Button";
 import { StoreQrCode } from "@/components/StoreQrCode";
 import { StoreCalendarEmbedPanel } from "@/components/StoreCalendarEmbedPanel";
@@ -23,7 +24,7 @@ type AccountInfo = {
 };
 
 export default function AdminSettingsPage() {
-  const { loading: authLoading, activeStore, session, refresh } = useAdmin();
+  const { loading: authLoading, activeStore, session, refresh, isOwner } = useAdmin();
   const [settings, setSettings] = useState<StoreSettings | null>(null);
   const [storeSlug, setStoreSlug] = useState("");
   const [account, setAccount] = useState<AccountInfo | null>(null);
@@ -74,6 +75,24 @@ export default function AdminSettingsPage() {
     setStoreMessage("Store settings saved.");
   }
 
+  if (!authLoading && !isOwner) {
+    return (
+      <AdminLayout>
+        <div className="max-w-md rounded-xl border bg-white p-6 text-sm">
+          <h2 className="text-lg font-semibold text-slate-900">Owner only</h2>
+          <p className="mt-2 text-slate-600">
+            Store settings are for the owner. Ask them to sign in with their PIN (Switch user, top right).
+          </p>
+          <p className="mt-3">
+            <Link href="/admin/calendar" className="text-indigo-600 hover:underline">
+              Open the calendar
+            </Link>
+          </p>
+        </div>
+      </AdminLayout>
+    );
+  }
+
   if (!settings) return <AdminLayout><p>Loading...</p></AdminLayout>;
 
   return (
@@ -82,6 +101,8 @@ export default function AdminSettingsPage() {
         <h2 className="text-2xl font-bold text-slate-900">{settings.storeName}</h2>
         <p className="mt-1 text-sm text-slate-600">Store settings</p>
       </div>
+
+      <StaffManagementPanel />
 
       <div className="mt-4 max-w-lg">
         <StoreCalendarEmbedPanel
