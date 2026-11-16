@@ -1,8 +1,15 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { adminFetch } from "@/lib/api-client";
+import {
+  asOfLabel,
+  isShopQuestion,
+  readShopReply,
+  type ShopAnswerView,
+} from "@/lib/shop-assistant/detect";
 import {
   isStaffQuestion,
   matchStaffDestinations,
@@ -25,7 +32,88 @@ type AnswerHit = {
 type Row =
   | { key: string; kind: "page"; label: string; hint: string; href: string }
   | { key: string; kind: "customer"; label: string; hint: string; href: string }
-  | { key: string; kind: "answer"; label: string; hint: string };
+  | { key: string; kind: "answer"; label: string; hint: string }
+  | { key: string; kind: "confirm"; label: string; hint: string; tool: string };
+
+/** What the store's own numbers have to say about the typed question. */
+type ShopState =
+  | { status: "idle" }
+  | { status: "asking" }
+  | { status: "confirm"; tool: string }
+  | { status: "answer"; tool: string; answer: ShopAnswerView; confirmed: boolean }
+  | { status: "error"; message: string };
+
+const SHOP_DEBOUNCE_MS = 600;
+
+/** What a confirm row is called, by tool. */
+const CONFIRM_LABELS: Record<string, string> = {
+  store_credit: "Store credit",
+};
+
+function ShopAnswerPanel({
+  answer,
+  onNavigate,
+}: {
+  answer: ShopAnswerView;
+  onNavigate: () => void;
+}) {
+  const asOf = asOfLabel(answer.asOf);
+  return (
+    <div className="border-b border-slate-200 px-3 py-3" aria-live="polite">
+      <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+        Your store
+      </div>
+      <div className="text-sm font-semibold text-slate-900">{answer.title}</div>
+      {answer.lines.map((line, i) => (
+        <p key={i} className="mt-1 text-sm text-slate-800">
+          {line}
+        </p>
+      ))}
+      {answer.columns && answer.rows && answer.rows.length > 0 ? (
+        <div className="mt-2 overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead className="text-xs text-slate-500">
+              <tr>
+                {answer.columns.map((column) => (
+                  <th key={column} className="py-1 pr-3 font-medium">
+                    {column}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {answer.rows.map((cells, r) => (
+                <tr key={r} className="border-t border-slate-100">
+                  {cells.map((cell, c) => (
+                    <td
+                      key={c}
+                      className={`py-1.5 pr-3 ${c === 0 ? "font-medium text-slate-800" : "text-slate-600"}`}
+                    >
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : null}
+      {answer.note ? <p className="mt-2 text-xs text-slate-500">{answer.note}</p> : null}
+      <div className="mt-2 flex flex-wrap items-center gap-x-3 text-xs text-slate-500">
+        {answer.href ? (
+          <Link
+            href={answer.href}
+            className="font-medium text-indigo-600 hover:underline"
+            onClick={onNavigate}
+          >
+            {answer.hrefLabel ?? "Open"}
+          </Link>
+        ) : null}
+        {asOf ? <span>As of {asOf}</span> : null}
+      </div>
+    </div>
+  );
+}
 
 function customerScore(customer: CustomerHit, query: string): number {
   const name = `${customer.firstName} ${customer.lastName}`.toLowerCase();
@@ -52,6 +140,20 @@ export function StaffAssistant() {
   const [active, setActive] = useState(0);
   const [answer, setAnswer] = useState<AnswerHit | null>(null);
   const [asking, setAsking] = useState(false);
+  const [shop, setShop] = useState<ShopState>({ status: "idle" });
+  /** The question the shop assistant was last asked, so reopening the box does not ask again. */
+  const shopAskedFor = useRef<string | null>(null);
+  const shopRequest = useRef<AbortController | null>(null);
+
+  /** Closes the box. Customer data goes back behind its confirmation. */
+  const close = useCallback(() => {
+    setOpen(false);
+    setShop((current) =>
+      current.status === "answer" && current.confirmed
+        ? { status: "confirm", tool: current.tool }
+        : current,
+    );
+  }, []);
 
   useEffect(() => {
     if (!open || customers) return;
@@ -72,11 +174,11 @@ export function StaffAssistant() {
 
   useEffect(() => {
     function onPointer(event: MouseEvent) {
-      if (!boxRef.current?.contains(event.target as Node)) setOpen(false);
+      if (!boxRef.current?.contains(event.target as Node)) close();
     }
     document.addEventListener("mousedown", onPointer);
     return () => document.removeEventListener("mousedown", onPointer);
-  }, []);
+  }, [close]);
 
   const pages = useMemo(() => matchStaffDestinations(query), [query]);
   const people = useMemo(() => {
@@ -91,14 +193,36 @@ export function StaffAssistant() {
   }, [customers, query]);
 
   const question = isStaffQuestion(query);
+  const shopQuestion = isShopQuestion(query);
   const rows = useMemo<Row[]>(() => {
-    const next: Row[] = pages.map((page) => ({
-      key: `page:${page.id}`,
-      kind: "page",
-      label: page.label,
-      hint: page.hint,
-      href: page.href,
-    }));
+    const next: Row[] = [];
+    if (shop.status === "confirm") {
+      next.push({
+        key: "shop-confirm",
+        kind: "confirm",
+        label: CONFIRM_LABELS[shop.tool] ?? "Customer details",
+        hint: "This shows customer balances. Press Enter to show.",
+        tool: shop.tool,
+      });
+    }
+    if (shop.status === "answer" && shop.answer.href) {
+      next.push({
+        key: "shop-link",
+        kind: "page",
+        label: shop.answer.hrefLabel ?? "Open",
+        hint: shop.answer.title,
+        href: shop.answer.href,
+      });
+    }
+    for (const page of pages) {
+      next.push({
+        key: `page:${page.id}`,
+        kind: "page",
+        label: page.label,
+        hint: page.hint,
+        href: page.href,
+      });
+    }
     for (const person of people) {
       const name = `${person.firstName} ${person.lastName}`.trim();
       next.push({
@@ -109,7 +233,9 @@ export function StaffAssistant() {
         href: `/admin/reports?section=customers&customer=${encodeURIComponent(person.id)}`,
       });
     }
-    if (question) {
+    // When the store's own data answered, "the handbook does not cover that" is noise.
+    const storeAnswered = shop.status === "answer" || shop.status === "confirm";
+    if (question && !(storeAnswered && !asking && answer && !answer.covered)) {
       next.push({
         key: "answer",
         kind: "answer",
@@ -120,12 +246,66 @@ export function StaffAssistant() {
       });
     }
     return next;
-  }, [pages, people, question, answer, asking]);
+  }, [pages, people, question, answer, asking, shop]);
 
   useEffect(() => {
     setActive(0);
     setAnswer(null);
+    // A new question starts clean: no earlier answer carries over.
+    shopRequest.current?.abort();
+    shopAskedFor.current = null;
+    setShop({ status: "idle" });
   }, [query]);
+
+  const askShop = useCallback((text: string, confirmTool?: string) => {
+    shopRequest.current?.abort();
+    const controller = new AbortController();
+    shopRequest.current = controller;
+    setShop({ status: "asking" });
+    adminFetch("/api/admin/shop-assistant", {
+      method: "POST",
+      body: JSON.stringify(
+        confirmTool ? { query: text, confirm: true, tool: confirmTool } : { query: text },
+      ),
+      signal: controller.signal,
+    })
+      .then(async (res) => {
+        const data: unknown = await res.json().catch(() => null);
+        if (controller.signal.aborted) return;
+        const reply = readShopReply(res.ok, res.status, data);
+        if (reply.kind === "answer") {
+          setShop({
+            status: "answer",
+            tool: reply.tool,
+            answer: reply.answer,
+            confirmed: Boolean(confirmTool),
+          });
+        } else if (reply.kind === "confirm") {
+          setShop({ status: "confirm", tool: reply.tool });
+        } else if (reply.kind === "error") {
+          setShop({ status: "error", message: reply.message });
+        } else {
+          setShop({ status: "idle" });
+        }
+      })
+      .catch(() => {
+        if (controller.signal.aborted) return;
+        setShop({ status: "idle" });
+      });
+  }, []);
+
+  useEffect(() => {
+    if (!open || !shopQuestion) return;
+    const text = query.trim();
+    if (shopAskedFor.current === text) return;
+    const timer = window.setTimeout(() => {
+      shopAskedFor.current = text;
+      askShop(text);
+    }, SHOP_DEBOUNCE_MS);
+    return () => window.clearTimeout(timer);
+  }, [open, shopQuestion, query, askShop]);
+
+  useEffect(() => () => shopRequest.current?.abort(), []);
 
   useEffect(() => {
     if (!open || !question) return;
@@ -170,6 +350,10 @@ export function StaffAssistant() {
 
   function go(row: Row) {
     if (row.kind === "answer") return;
+    if (row.kind === "confirm") {
+      askShop(query.trim(), row.tool);
+      return;
+    }
     setOpen(false);
     setQuery("");
     router.push(row.href);
@@ -184,7 +368,7 @@ export function StaffAssistant() {
       event.preventDefault();
       setActive((index) => Math.max(index - 1, 0));
     } else if (event.key === "Escape") {
-      setOpen(false);
+      close();
     } else if (event.key === "Enter") {
       event.preventDefault();
       const row = rows[active];
@@ -195,7 +379,7 @@ export function StaffAssistant() {
   return (
     <div ref={boxRef} className="relative mx-auto max-w-7xl px-4 pb-3">
       <label htmlFor={listId} className="sr-only">
-        Search customers, pages, or ask how to do something
+        Search customers, pages, or ask a question about the store
       </label>
       <input
         id={listId}
@@ -204,7 +388,7 @@ export function StaffAssistant() {
         aria-expanded={open}
         aria-controls={`${listId}-list`}
         aria-autocomplete="list"
-        placeholder="Search a customer, a page, or ask how to…"
+        placeholder="Search a customer, a page, or ask a question…"
         className="w-full rounded-lg border border-[var(--line)] bg-[var(--ink-750)] px-3 py-2 text-sm text-[var(--text-hi)] placeholder:text-[var(--text-lo)] focus:border-[var(--accent)] focus:outline-none"
         onFocus={() => setOpen(true)}
         onChange={(event) => {
@@ -213,37 +397,56 @@ export function StaffAssistant() {
         }}
         onKeyDown={onKeyDown}
       />
-      {open && rows.length > 0 ? (
-        <ul
-          id={`${listId}-list`}
-          role="listbox"
-          className="absolute z-30 mt-1 max-h-96 w-[calc(100%-2rem)] overflow-y-auto rounded-lg border border-slate-200 bg-white py-1 text-slate-900 shadow-lg"
-        >
-          {rows.map((row, index) => (
-            <li key={row.key} role="option" aria-selected={index === active}>
-              <button
-                type="button"
-                className={`flex w-full flex-col items-start px-3 py-2 text-left ${
-                  index === active ? "bg-slate-200" : "hover:bg-slate-200/60"
-                }`}
-                onMouseEnter={() => setActive(index)}
-                onClick={() => go(row)}
-              >
-                <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
-                  {row.kind === "customer"
-                    ? "Customer"
-                    : row.kind === "page"
-                      ? "Go to"
-                      : "Handbook"}
-                </span>
-                <span className="text-sm font-medium">{row.label}</span>
-                <span className="whitespace-pre-wrap text-xs text-slate-600">
-                  {row.hint}
-                </span>
-              </button>
-            </li>
-          ))}
-        </ul>
+      {open && (rows.length > 0 || shop.status !== "idle") ? (
+        <div className="absolute z-30 mt-1 max-h-[70vh] w-[calc(100%-2rem)] overflow-y-auto rounded-lg border border-slate-200 bg-white text-slate-900 shadow-lg">
+          {shop.status === "answer" ? (
+            <ShopAnswerPanel
+              answer={shop.answer}
+              onNavigate={() => {
+                close();
+                setQuery("");
+              }}
+            />
+          ) : shop.status === "asking" ? (
+            <p className="border-b border-slate-200 px-3 py-2 text-xs text-slate-600" aria-live="polite">
+              Checking your store…
+            </p>
+          ) : shop.status === "error" ? (
+            <p className="border-b border-slate-200 px-3 py-2 text-xs text-slate-600" aria-live="polite">
+              {shop.message}
+            </p>
+          ) : null}
+          {rows.length > 0 ? (
+            <ul id={`${listId}-list`} role="listbox" className="py-1">
+              {rows.map((row, index) => (
+                <li key={row.key} role="option" aria-selected={index === active}>
+                  <button
+                    type="button"
+                    className={`flex w-full flex-col items-start px-3 py-2 text-left ${
+                      index === active ? "bg-slate-200" : "hover:bg-slate-200/60"
+                    }`}
+                    onMouseEnter={() => setActive(index)}
+                    onClick={() => go(row)}
+                  >
+                    <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                      {row.kind === "customer"
+                        ? "Customer"
+                        : row.kind === "page"
+                          ? "Go to"
+                          : row.kind === "confirm"
+                            ? "Your store"
+                            : "Handbook"}
+                    </span>
+                    <span className="text-sm font-medium">{row.label}</span>
+                    <span className="whitespace-pre-wrap text-xs text-slate-600">
+                      {row.hint}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
       ) : null}
     </div>
   );

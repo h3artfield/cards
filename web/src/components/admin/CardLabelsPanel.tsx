@@ -65,7 +65,7 @@ export function CardLabelsPanel() {
   }
 
   return (
-    <div className="rounded-xl border bg-white p-4 shadow-sm">
+    <div id="qr-labels" className="rounded-xl border bg-white p-4 shadow-sm">
       <h3 className="text-sm font-semibold text-slate-900">QR labels</h3>
       <p className="mt-1 text-sm text-slate-600">
         DYMO 30336 (2-1/8&quot; × 1&quot;). Each label has the QR code with the card name, set, condition, F/NF (Magic),

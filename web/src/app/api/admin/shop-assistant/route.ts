@@ -32,13 +32,13 @@ export async function POST(req: NextRequest) {
     const scope = requireStoreScope(auth, req);
     if (scope instanceof Response) return scope;
 
-    // Who is asking. A missing staff sign-in is not refused here: the admin
-    // screens already require it, and display tokens have none.
-    const { staff } = await getStaffContext(req, scope.storeId);
+    // Who is asking. A missing staff sign-in is not refused outright (display
+    // screens have none); the handler refuses it for customer data only.
+    const { staff, setupNeeded } = await getStaffContext(req, scope.storeId);
     const body: unknown = await req.json().catch(() => null);
 
     const result = await handleShopAssistant(
-      { body, storeId: scope.storeId, session: auth, staff },
+      { body, storeId: scope.storeId, session: auth, staff, setupNeeded },
       {
         loader,
         now: () => new Date(),

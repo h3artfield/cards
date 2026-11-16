@@ -64,6 +64,13 @@ export const STAFF_DESTINATIONS: StaffDestination[] = [
     keywords: ["ship", "shipping", "label", "labels", "usps", "tracking"],
   },
   {
+    id: "card-labels",
+    label: "Card QR labels",
+    hint: "Print QR labels to stick on cards",
+    href: "/admin/reports?section=inventory#qr-labels",
+    keywords: ["label", "labels", "qr label", "qr labels", "card label", "card labels", "dymo", "sticker", "stickers"],
+  },
+  {
     id: "reports",
     label: "Reports",
     hint: "Store overview",

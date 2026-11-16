@@ -1,6 +1,7 @@
 /**
- * Shop assistant, steps 1 to 4: the six tools, the registry that runs them,
- * the chooser that picks one, and the request handler behind the route. Plain fixtures only: no Firestore, no OpenAI.
+ * Shop assistant: the six tools, the registry that runs them, the chooser
+ * that picks one, the request handler behind the route, and the pure helpers
+ * the search box uses. Plain fixtures only: no Firestore, no OpenAI.
  *
  *   npx tsx scripts/test-shop-assistant.ts
  */
@@ -20,6 +21,7 @@ import {
   parseModelChoice,
   staffAssistantModel,
 } from "../src/lib/shop-assistant/choose";
+import { asOfLabel, isShopQuestion, readShopReply } from "../src/lib/shop-assistant/detect";
 import { formatMoney, plural, shelfName } from "../src/lib/shop-assistant/format";
 import {
   handleShopAssistant,
@@ -59,6 +61,7 @@ import {
   storeCreditAnswer,
 } from "../src/lib/shop-assistant/tools/store-credit";
 import type { ShopAnswer, ShopToolData } from "../src/lib/shop-assistant/types";
+import { matchStaffDestinations } from "../src/lib/staff-assistant/destinations";
 import { EVAL_NOW, EVAL_QUESTIONS, matchesExpected } from "./shop-assistant-eval-questions";
 import type {
   ConditionEstimate,
@@ -670,7 +673,7 @@ async function routeTests() {
   };
   const session = { userId: "u1", role: "store" as const };
   const ask = (body: unknown, staff: { staffId: string } | null = { staffId: "st1" }) =>
-    handleShopAssistant({ body, storeId: STORE, session, staff }, deps);
+    handleShopAssistant({ body, storeId: STORE, session, staff, setupNeeded: false }, deps);
 
   calls.length = 0;
   nextChoice = { tool: "find_card", args: { name: "lightning bolt" }, via: "model" };
@@ -717,6 +720,22 @@ async function routeTests() {
   nextChoice = { tool: "store_credit", args: {}, via: "fallback" };
   assert((await ask({ query: "who has store credit", confirm: "yes" })).body.needsConfirm === true, "confirm must be exactly true");
 
+  // A display screen: the store's token, no person signed in, staff sign-in in use.
+  freshLoader.clear();
+  calls.length = 0;
+  nextChoice = { tool: "store_credit", args: {}, via: "model" };
+  const display = await ask({ query: "who has store credit" }, null);
+  same(display, { status: 403, body: { error: "Sign in with your PIN to see that." } }, "a display screen is refused customer data");
+  same(await ask({ query: "who has store credit", confirm: true, tool: "store_credit" }, null), { status: 403, body: { error: "Sign in with your PIN to see that." } }, "also when it sends the confirmation itself");
+  assert(calls.length === 0 && audits[audits.length - 1]!.outcome === "not_allowed" && audits[audits.length - 1]!.staffId === null, "and nothing is loaded for it");
+  nextChoice = { tool: "cards_to_move", args: {}, via: "model" };
+  assert((await ask({ query: "what needs to move" }, null)).body.matched === true, "the same screen still gets answers that show no customer data");
+  nextChoice = { tool: "store_credit", args: {}, via: "model" };
+  const beforeSetup = await handleShopAssistant({ body: { query: "who has store credit", confirm: true, tool: "store_credit" }, storeId: STORE, session, staff: null, setupNeeded: true }, deps);
+  assert(beforeSetup.status === 200 && beforeSetup.body.answer !== undefined, "a store that has not set up staff sign-in works as before");
+  const platform = await handleShopAssistant({ body: { query: "who has store credit" }, storeId: STORE, session: { userId: "p1", role: "platform" }, staff: null, setupNeeded: false }, deps);
+  assert(platform.status === 200 && platform.body.needsConfirm === true, "a platform admin is not asked for a PIN");
+
   nextChoice = { tool: "find_card", args: { name: "x" }, via: "model" } as never;
   same((await ask({ query: "do we have lightning bolt" })).body, { matched: false, via: "model" }, "arguments are validated again before a tool runs");
 
@@ -727,14 +746,45 @@ async function routeTests() {
   failInventory = false;
   same(broke, { status: 500, body: { error: "Couldn't work that out just now. Try again in a moment." } }, "a failure is a plain sentence");
   assert(audits[audits.length - 1]!.outcome === "error" && audits[audits.length - 1]!.ok === false && audits[audits.length - 1]!.severity === "WARNING" && !JSON.stringify([broke, audits]).includes("secret-detail"), "the error's own text reaches neither the client nor the log line");
-  const chooserDown = await handleShopAssistant({ body: { query: "what needs to move" }, storeId: STORE, session, staff: null }, { ...deps, choose: async () => { throw new Error("model text"); } });
+  const chooserDown = await handleShopAssistant({ body: { query: "what needs to move" }, storeId: STORE, session, staff: null, setupNeeded: false }, { ...deps, choose: async () => { throw new Error("model text"); } });
   assert(chooserDown.status === 500 && !JSON.stringify(chooserDown).includes("model text"), "even a chooser that throws gives the plain sentence");
   assert(getShopTool("store_credit")!.describe.includes("total outstanding"), "the store credit description covers the total (the one model miss in 010)");
+}
+
+/* ------------------------------------------------------------- box helpers */
+function boxTests() {
+  console.log("\nbox: which typed text is sent");
+  const sent = EVAL_QUESTIONS.filter((q) => q.tool !== "none" && !isShopQuestion(q.question)).map((q) => q.question);
+  same(sent, [], "every eval question a tool should answer reaches the route");
+  assert(["sale", "inventory", "jordan avery", "sam carter", "labels", "print labels", "shipping", "lightning bolt", "do we", "x".repeat(401) + " ?"].every((q) => !isShopQuestion(q)), "one-word jumps, bare names and page names are not sent");
+  assert(isShopQuestion("sales today") && isShopQuestion("lightning bolt in stock") && isShopQuestion("mox diamond buy price") && isShopQuestion("sheoldred nm?"), "short data questions are sent");
+
+  console.log("\nbox: reading the route's reply");
+  same(readShopReply(true, 200, { matched: false, via: "model" }), { kind: "none" }, "no match");
+  same(readShopReply(true, 200, { matched: true, tool: "store_credit", needsConfirm: true }), { kind: "confirm", tool: "store_credit" }, "confirmation needed");
+  const reply = readShopReply(true, 200, { matched: true, tool: "find_card", answer: { title: "T", lines: ["one"], columns: ["A", "B"], rows: [["1", "2"]], note: "n", href: "/admin/reports?section=inventory", hrefLabel: "Open Inventory", asOf: NOW.toISOString(), extra: "ignored" } });
+  same(reply, { kind: "answer", tool: "find_card", answer: { title: "T", lines: ["one"], columns: ["A", "B"], rows: [["1", "2"]], note: "n", href: "/admin/reports?section=inventory", hrefLabel: "Open Inventory", asOf: NOW.toISOString() } }, "an answer, with unknown fields dropped");
+  const offSite = readShopReply(true, 200, { matched: true, tool: "find_card", answer: { title: "T", lines: [], href: "https://example.com/x", hrefLabel: "Click", asOf: "x" } });
+  assert(offSite.kind === "answer" && offSite.answer.href === undefined && offSite.answer.hrefLabel === undefined, "a link that does not go into the admin is dropped");
+  assert(["//evil.example", "/administrator", "javascript:alert(1)", "/admin.evil"].every((href) => { const r = readShopReply(true, 200, { matched: true, tool: "t", answer: { title: "T", lines: [], href, asOf: "x" } }); return r.kind === "answer" && r.answer.href === undefined; }), "nor look-alike links");
+  same(readShopReply(true, 200, { matched: true, tool: "find_card", answer: { title: "T", lines: [1, 2], asOf: "x" } }), { kind: "none" }, "a malformed answer shows nothing");
+  assert((() => { const r = readShopReply(true, 200, { matched: true, tool: "t", answer: { title: "T", lines: [], columns: ["A"], rows: [[1]], asOf: "x" } }); return r.kind === "answer" && r.answer.rows === undefined && r.answer.columns === undefined; })(), "a malformed table is dropped, the rest kept");
+  same(readShopReply(false, 429, { error: "Too many questions at once. Wait a minute and try again." }), { kind: "error", message: "Too many questions at once. Wait a minute and try again." }, "the server's plain sentence is shown");
+  same(readShopReply(false, 500, null), { kind: "error", message: "Couldn't work that out just now. Try again in a moment." }, "a broken response gets the plain sentence");
+  same(readShopReply(false, 400, { error: "Ask a full question" }), { kind: "none" }, "not a full question: nothing shown");
+  for (const junk of [null, undefined, "x", 7, []]) if (readShopReply(true, 200, junk).kind !== "none") assert(false, "junk shows nothing");
+  assert(asOfLabel("not a date") === "" && /^\d{1,2}:\d{2}\s?(AM|PM)$/.test(asOfLabel(NOW.toISOString())), "the as-of time, or nothing");
+
+  console.log("\nbox: label destinations");
+  same(matchStaffDestinations("print labels").map((d) => d.id), ["card-labels", "shipping"], "print labels offers both meanings: QR labels and shipping labels");
+  assert(matchStaffDestinations("qr labels")[0]?.id === "card-labels" && matchStaffDestinations("usps")[0]?.id === "shipping", "and each has its own words");
+  assert(matchStaffDestinations("qr labels")[0]!.href === "/admin/reports?section=inventory#qr-labels", "the QR labels link lands on the panel");
 }
 
 async function finish() {
   await chooserTests();
   await routeTests();
+  boxTests();
 
 /* ------------------------------------------------------------ every answer */
 console.log("\nevery answer");

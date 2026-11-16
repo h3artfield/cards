@@ -56,6 +56,8 @@ export type ShopAssistantInput = {
   session: Pick<AdminSession, "userId" | "role">;
   /** The clerk signed in with a PIN, when there is one. */
   staff: { staffId: string } | null;
+  /** The store has no staff profiles yet, so nobody can sign in with a PIN. */
+  setupNeeded: boolean;
 };
 
 export type ShopAssistantDeps = {
@@ -137,6 +139,20 @@ export async function handleShopAssistant(
 
     if (!canUseShopTool(input.session, picked.id)) {
       return done("not_allowed", { status: 403, body: { error: "You don't have access to that." } });
+    }
+
+    // A display screen signs in with the store's token and has no person
+    // behind it. Once the store uses staff sign-in, customer data needs one.
+    if (
+      picked.sensitive &&
+      !input.staff &&
+      !input.setupNeeded &&
+      input.session.role !== "platform"
+    ) {
+      return done("not_allowed", {
+        status: 403,
+        body: { error: "Sign in with your PIN to see that." },
+      });
     }
 
     // Customer data is not even loaded until the person has confirmed.
