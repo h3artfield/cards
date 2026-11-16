@@ -170,7 +170,8 @@ const buyEstimate: ShopTool<"buy_estimate"> = {
 
 const storeCredit: ShopTool<"store_credit"> = {
   id: "store_credit",
-  describe: "Which customers hold store credit (trade credit) and how much.",
+  describe:
+    "Store credit (trade credit): which customers hold a balance, how much each, and the total outstanding.",
   sensitive: true,
   needs: ["customers", "creditEntries"],
   validateArgs: noArgs,

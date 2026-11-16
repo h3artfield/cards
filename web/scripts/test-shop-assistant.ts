@@ -1,6 +1,6 @@
 /**
- * Shop assistant, steps 1 to 3: the six tools, the registry that runs them
- * and the chooser that picks one. Plain fixtures only: no Firestore, no OpenAI.
+ * Shop assistant, steps 1 to 4: the six tools, the registry that runs them,
+ * the chooser that picks one, and the request handler behind the route. Plain fixtures only: no Firestore, no OpenAI.
  *
  *   npx tsx scripts/test-shop-assistant.ts
  */
@@ -21,6 +21,12 @@ import {
   staffAssistantModel,
 } from "../src/lib/shop-assistant/choose";
 import { formatMoney, plural, shelfName } from "../src/lib/shop-assistant/format";
+import {
+  handleShopAssistant,
+  type ShopAssistantAudit,
+  type ShopAssistantDeps,
+} from "../src/lib/shop-assistant/handle";
+import { createShopDataLoader, type ShopDataSources } from "../src/lib/shop-assistant/load";
 import { getShopTool, listShopTools, runShopTool } from "../src/lib/shop-assistant/registry";
 import {
   buyEstimateAnswer,
@@ -56,6 +62,7 @@ import type { ShopAnswer, ShopToolData } from "../src/lib/shop-assistant/types";
 import { EVAL_NOW, EVAL_QUESTIONS, matchesExpected } from "./shop-assistant-eval-questions";
 import type {
   ConditionEstimate,
+  Customer,
   InventoryItem,
   ScannedCard,
   StoreRule,
@@ -585,8 +592,149 @@ async function chooserTests() {
   same(fallbackChooseTool("sales on Dec 28", new Date("2027-01-04T18:00:00Z")), { tool: "sales_summary", args: { period: "date", date: "2026-12-28" } }, "a month and day means the most recent one, across a new year");
 }
 
+/* ------------------------------------------------------- loader and route */
+async function routeTests() {
+  const calls: string[] = [];
+  let failInventory = false;
+  const otherStock = [card("Other Store Card", { storeId: "s2", quantity: 9 })];
+  const sources: ShopDataSources = {
+    getInventory: async (storeId) => {
+      calls.push(`inventory:${storeId}`);
+      if (failInventory) throw new Error("FIRESTORE secret-detail");
+      return storeId === STORE ? stock : otherStock;
+    },
+    getCustomers: async (storeId) => {
+      calls.push(`customers:${storeId}`);
+      return customers as unknown as Customer[];
+    },
+    getTradeCreditEntries: async (storeId) => {
+      calls.push(`creditEntries:${storeId}`);
+      return ledger;
+    },
+    getSettings: async (storeId) => {
+      calls.push(`settings:${storeId}`);
+      return SETTINGS;
+    },
+    getActiveRules: async (storeId) => {
+      calls.push(`rules:${storeId}`);
+      return [];
+    },
+  };
+
+  console.log("\nloader");
+  let clock = 1_000_000;
+  const loader = createShopDataLoader(sources, { now: () => clock });
+  const onlyStock = await loader.load(STORE, ["inventory"]);
+  same(calls, [`inventory:${STORE}`], "loads only what the tool needs");
+  assert(onlyStock.storeId === STORE && onlyStock.inventory === stock && onlyStock.customers.length === 0 && onlyStock.creditEntries.length === 0 && onlyStock.settings === null, "what was not asked for is empty");
+  await loader.load(STORE, ["inventory"]);
+  same(calls, [`inventory:${STORE}`], "a second question within the minute reuses the load");
+  const second = await loader.load("s2", ["inventory"]);
+  assert(calls.length === 2 && second.inventory === otherStock && second.storeId === "s2", "another store gets its own data, never the cached store's");
+  clock += 59_000;
+  await loader.load(STORE, ["inventory"]);
+  assert(calls.length === 2, "still cached at 59 seconds");
+  clock += 2_000;
+  await loader.load(STORE, ["inventory"]);
+  same(calls.slice(2), [`inventory:${STORE}`], "reloaded after 60 seconds");
+  calls.length = 0;
+  const people = await loader.load(STORE, ["customers", "creditEntries"]);
+  same(calls.sort(), [`creditEntries:${STORE}`, `customers:${STORE}`], "customer data is loaded only when asked for");
+  same(Object.keys(people.customers[0]!).sort(), ["firstName", "id", "lastName"], "customers are cut down to id and name before they are cached");
+  assert(!JSON.stringify(people.customers).includes("@") && !JSON.stringify(people.customers).includes("555-"), "no email or phone is kept");
+  const failing = createShopDataLoader(sources, { now: () => clock });
+  failInventory = true;
+  let threw = false;
+  await failing.load(STORE, ["inventory"]).catch(() => { threw = true; });
+  failInventory = false;
+  calls.length = 0;
+  const retried = await failing.load(STORE, ["inventory"]);
+  assert(threw && calls.length === 1 && retried.inventory === stock, "a failed read is not cached; the next question tries again");
+  let refused = false;
+  await loader.load("", ["inventory"]).catch(() => { refused = true; });
+  assert(refused, "no store, no load");
+
+  console.log("\nroute handler");
+  const audits: ShopAssistantAudit[] = [];
+  const chosen: string[] = [];
+  let allowed = true;
+  let nextChoice: Awaited<ReturnType<NonNullable<ShopAssistantDeps["choose"]>>> = { tool: null, via: "model" };
+  const freshLoader = createShopDataLoader(sources, { now: () => clock });
+  const keys: string[] = [];
+  const deps: ShopAssistantDeps = {
+    loader: freshLoader,
+    now: () => NOW,
+    allow: (key) => { keys.push(key); return allowed; },
+    audit: (line) => audits.push(line),
+    choose: async (question) => { chosen.push(question); return nextChoice; },
+  };
+  const session = { userId: "u1", role: "store" as const };
+  const ask = (body: unknown, staff: { staffId: string } | null = { staffId: "st1" }) =>
+    handleShopAssistant({ body, storeId: STORE, session, staff }, deps);
+
+  calls.length = 0;
+  nextChoice = { tool: "find_card", args: { name: "lightning bolt" }, via: "model" };
+  const found = await ask({ query: "  do we have   lightning bolt ", storeId: "s2" });
+  assert(found.status === 200 && found.body.matched === true && found.body.tool === "find_card" && found.body.via === "model" && found.body.answer!.lines[0] === "4 copies in stock across 2 listings.", "a question is chosen, loaded and answered");
+  same(chosen, ["do we have lightning bolt"], "the chooser gets the tidied question");
+  same(calls, [`inventory:${STORE}`], "a storeId in the request body is ignored: the session's store is read");
+  same(audits[0], { severity: "INFO", event: "shop_assistant", userId: "u1", staffId: "st1", storeId: STORE, tool: "find_card", via: "model", outcome: "answered", ms: audits[0]!.ms, ok: true }, "the audit line has who, which store, which tool and how long");
+  assert(!JSON.stringify(audits).toLowerCase().includes("lightning") && !JSON.stringify(audits).includes("copies"), "the audit line holds neither the question nor the answer");
+  same(keys, ["shop-assistant:st1"], "rate limit is per staff member");
+  keys.length = 0;
+  await ask({ query: "do we have lightning bolt" }, null);
+  assert(keys[0] === "shop-assistant:u1" && audits[audits.length - 1]!.staffId === null, "with no staff sign-in it falls back to the store login, and is not refused");
+
+  for (const bad of [null, "text", [], {}, { query: 12 }, { query: "short" }, { query: "x".repeat(401) }]) {
+    const r = await ask(bad);
+    if (r.status !== 400) assert(false, `bad body ${JSON.stringify(bad)} should be 400`);
+  }
+  assert(audits[audits.length - 1]!.outcome === "bad_request", "bad requests are refused with 400 before any model call");
+
+  chosen.length = 0;
+  allowed = false;
+  const limited = await ask({ query: "do we have lightning bolt" });
+  allowed = true;
+  assert(limited.status === 429 && chosen.length === 0 && audits[audits.length - 1]!.outcome === "rate_limited", "over the limit: 429, and no model call");
+
+  nextChoice = { tool: null, via: "model" };
+  same((await ask({ query: "how do I print labels" })).body, { matched: false, via: "model" }, "no tool: matched false, so the box shows its ordinary results");
+
+  calls.length = 0;
+  nextChoice = { tool: "store_credit", args: {}, via: "model" };
+  const gate = await ask({ query: "who has store credit" });
+  same(gate.body, { matched: true, tool: "store_credit", needsConfirm: true, via: "model" }, "customer data needs a confirmation first");
+  assert(calls.length === 0 && audits[audits.length - 1]!.outcome === "confirm_needed", "and nothing about customers is loaded until then");
+  chosen.length = 0;
+  const shownCredit = await ask({ query: "who has store credit", confirm: true, tool: "store_credit" });
+  assert(shownCredit.status === 200 && shownCredit.body.via === "confirm" && shownCredit.body.answer!.lines[0] === "4 customers have store credit, $24.25 in total." && chosen.length === 0, "confirming runs the confirmed tool without asking the model again");
+  assert(!JSON.stringify(shownCredit.body).includes("@") && !JSON.stringify(shownCredit.body).includes("555-"), "the response carries names and balances only");
+  nextChoice = { tool: null, via: "model" };
+  chosen.length = 0;
+  const sneaky = await ask({ query: "do we have lightning bolt", confirm: true, tool: "find_card" });
+  assert(chosen.length === 1 && sneaky.body.matched === false, "confirm cannot be used to name an ordinary tool and skip the chooser");
+  assert((await ask({ query: "do we have lightning bolt", confirm: true, tool: "drop_tables" })).body.matched === false, "or an unknown one");
+  nextChoice = { tool: "store_credit", args: {}, via: "fallback" };
+  assert((await ask({ query: "who has store credit", confirm: "yes" })).body.needsConfirm === true, "confirm must be exactly true");
+
+  nextChoice = { tool: "find_card", args: { name: "x" }, via: "model" } as never;
+  same((await ask({ query: "do we have lightning bolt" })).body, { matched: false, via: "model" }, "arguments are validated again before a tool runs");
+
+  failInventory = true;
+  freshLoader.clear();
+  nextChoice = { tool: "cards_to_move", args: {}, via: "model" };
+  const broke = await ask({ query: "what needs to move" });
+  failInventory = false;
+  same(broke, { status: 500, body: { error: "Couldn't work that out just now. Try again in a moment." } }, "a failure is a plain sentence");
+  assert(audits[audits.length - 1]!.outcome === "error" && audits[audits.length - 1]!.ok === false && audits[audits.length - 1]!.severity === "WARNING" && !JSON.stringify([broke, audits]).includes("secret-detail"), "the error's own text reaches neither the client nor the log line");
+  const chooserDown = await handleShopAssistant({ body: { query: "what needs to move" }, storeId: STORE, session, staff: null }, { ...deps, choose: async () => { throw new Error("model text"); } });
+  assert(chooserDown.status === 500 && !JSON.stringify(chooserDown).includes("model text"), "even a chooser that throws gives the plain sentence");
+  assert(getShopTool("store_credit")!.describe.includes("total outstanding"), "the store credit description covers the total (the one model miss in 010)");
+}
+
 async function finish() {
   await chooserTests();
+  await routeTests();
 
 /* ------------------------------------------------------------ every answer */
 console.log("\nevery answer");
