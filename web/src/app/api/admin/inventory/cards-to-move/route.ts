@@ -1,19 +1,10 @@
 import { NextRequest } from "next/server";
 import { requireAdminSession, requireStoreScope } from "@/lib/admin-auth";
 import { handleRouteError, jsonError, jsonOk } from "@/lib/api-utils";
+import { listCardsToMove } from "@/lib/inventory/cards-to-move";
 import { dataStore } from "@/lib/storage/data-store";
 
-export type CardToMoveV1 = {
-  id: string;
-  name: string;
-  setName: string;
-  condition: string;
-  quantity: number;
-  market: number | null;
-  from: string;
-  to: string;
-  since: string;
-};
+export type { CardToMoveV1 } from "@/lib/inventory/cards-to-move";
 
 /** Cards whose price now puts them in a different cabinet, binder or bulk. */
 export async function GET(req: NextRequest) {
@@ -23,21 +14,7 @@ export async function GET(req: NextRequest) {
   if (scope instanceof Response) return scope;
   try {
     const items = await dataStore.getInventory(scope.storeId);
-    const cards: CardToMoveV1[] = items
-      .filter((i) => i.suggestedLocation && i.suggestedLocation !== i.shelfLocation)
-      .map((i) => ({
-        id: i.id,
-        name: i.productName ?? i.displayName,
-        setName: i.setName ?? "",
-        condition: i.tcgplayerCondition ?? "",
-        quantity: i.quantityInStore ?? i.quantity ?? 0,
-        market: i.tcgMarketPrice ?? null,
-        from: i.shelfLocation ?? "",
-        to: i.suggestedLocation!,
-        since: i.suggestedLocationAt ?? "",
-      }))
-      .sort((a, b) => a.to.localeCompare(b.to) || a.name.localeCompare(b.name));
-    return jsonOk({ cards });
+    return jsonOk({ cards: listCardsToMove(items) });
   } catch (err) {
     return handleRouteError(err);
   }

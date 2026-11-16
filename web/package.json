@@ -57,6 +57,7 @@
     "test:shipping-converter": "npx --yes tsx scripts/test-shipping-converter.ts",
     "test:tcgplayer-inventory-import": "npx --yes tsx scripts/test-tcgplayer-inventory-import.ts",
     "test:inventory-analytics": "npx --yes tsx scripts/test-inventory-analytics.ts",
+    "test:shop-assistant": "npx --yes tsx scripts/test-shop-assistant.ts",
     "test:inventory-search": "npx --yes tsx scripts/test-inventory-search.ts",
     "test:deck-builder": "npx --yes tsx scripts/test-deck-builder.ts",
     "test:professor-v4-15-1-stabilization": "npx --yes tsx src/lib/deck-synthesis/professor-v4-15-1-stabilization.selftest.ts",

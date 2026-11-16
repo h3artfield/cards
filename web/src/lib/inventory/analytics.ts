@@ -150,6 +150,15 @@ export interface LocationStats {
   needsMove: number;
 }
 
+/**
+ * Share of a spot's cards sold in the last 30 days: sold ÷ (sold + still in
+ * stock), as a fraction. Null for a spot that is empty and sold nothing.
+ */
+export function sellThrough(stats: Pick<LocationStats, "units" | "sold30">): number | null {
+  const total = stats.sold30 + stats.units;
+  return total ? stats.sold30 / total : null;
+}
+
 export interface SalesByTier {
   label: string;
   sold30: number;

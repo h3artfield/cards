@@ -7,6 +7,7 @@ import {
   gameColor,
   placementColor,
   priceTierColor,
+  sellThrough,
   type InventoryAnalytics,
   type LocationStats,
 } from "@/lib/inventory/analytics";
@@ -218,7 +219,8 @@ function LocationTable({
             {rows.map((l) => {
               const share = totalUnits ? (l.units / totalUnits) * 100 : 0;
               const vsAvg = avg && l.units ? ((l.units - avg) / avg) * 100 : null;
-              const sellThrough = l.sold30 + l.units ? (l.sold30 / (l.sold30 + l.units)) * 100 : null;
+              const soldShare = sellThrough(l);
+              const sellThroughPct = soldShare == null ? null : soldShare * 100;
               const contents = SHELF_CONTENTS_V1[l.location];
               const bareName = l.location.replace(/^Binder /, "").replace(/ Binder$/, "");
               return (
@@ -257,7 +259,7 @@ function LocationTable({
                   </td>
                   <td className="py-1 pr-2 text-right tabular-nums">{l.sold30 || "—"}</td>
                   <td className="py-1 pr-2 text-right tabular-nums">
-                    {sellThrough == null || !l.sold30 ? "—" : `${sellThrough.toFixed(0)}%`}
+                    {sellThroughPct == null || !l.sold30 ? "—" : `${sellThroughPct.toFixed(0)}%`}
                   </td>
                   <td className={`py-1 text-right tabular-nums ${l.needsMove ? "font-semibold text-amber-600" : ""}`}>
                     {l.needsMove || "—"}
