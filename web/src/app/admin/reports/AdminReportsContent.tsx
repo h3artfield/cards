@@ -31,11 +31,14 @@ export function AdminReportsContent({
   initialInventoryView = "stock",
   initialCustomerId = null,
   startAddOpen = false,
+  initialDay = null,
 }: {
   initialSection?: ReportSectionId;
   initialInventoryView?: InventoryView;
   initialCustomerId?: string | null;
   startAddOpen?: boolean;
+  /** "2026-11-12": the day the Daily tab opens on. */
+  initialDay?: string | null;
 }) {
   const { activeStore, loading: authLoading } = useAdmin();
   const router = useRouter();
@@ -142,7 +145,7 @@ export function AdminReportsContent({
         <div className="mt-6">
           <h3 className="font-semibold text-slate-800">Daily reports</h3>
           <p className="mt-1 text-sm text-slate-600">Pick a day to see its sales, big price moves, cards to move, and sheet edits.</p>
-          <ReportsDailySection />
+          <ReportsDailySection initialDay={initialDay} />
         </div>
       )}
 

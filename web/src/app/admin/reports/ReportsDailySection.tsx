@@ -23,7 +23,8 @@ const CHANNEL_LABEL: Record<string, string> = {
   other: "Other",
 };
 
-export function ReportsDailySection() {
+/** `initialDay` ("2026-11-12") opens that day when the report has it, else the latest day. */
+export function ReportsDailySection({ initialDay = null }: { initialDay?: string | null }) {
   const [days, setDays] = useState<DailyReportSummary[]>([]);
   const [report, setReport] = useState<DailyReport | null>(null);
   const [loading, setLoading] = useState(true);
@@ -46,8 +47,8 @@ export function ReportsDailySection() {
   }, []);
 
   useEffect(() => {
-    void load();
-  }, [load]);
+    void load(initialDay ?? undefined);
+  }, [load, initialDay]);
 
   return (
     <div className="mt-4 grid gap-4 lg:grid-cols-[260px_1fr]">

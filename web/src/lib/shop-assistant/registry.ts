@@ -1,12 +1,16 @@
 import { tidy } from "./format";
+import { buyEstimateAnswer } from "./tools/buy-estimate";
 import { cardsToMoveAnswer } from "./tools/cards-to-move";
 import { findCardAnswer } from "./tools/find-card";
+import { isCalendarDay, salesSummaryAnswer } from "./tools/sales-summary";
 import { shelfPerformanceAnswer } from "./tools/shelf-performance";
 import { storeCreditAnswer } from "./tools/store-credit";
+import type { ConditionEstimate } from "../types";
 import type {
   ShopAnswer,
   ShopArgsResult,
   ShopFinishArg,
+  ShopSalesPeriod,
   ShopTool,
   ShopToolArgs,
   ShopToolContext,
@@ -40,7 +44,58 @@ function finishArg(raw: unknown): ShopFinishArg | undefined {
   return raw === "foil" || raw === "nonfoil" ? raw : undefined;
 }
 
+const CONDITION_WORDS: Record<string, ConditionEstimate> = {
+  nm: "NM",
+  "near mint": "NM",
+  mint: "NM",
+  lp: "LP",
+  "lightly played": "LP",
+  "light play": "LP",
+  mp: "MP",
+  "moderately played": "MP",
+  "moderate play": "MP",
+  hp: "HP",
+  "heavily played": "HP",
+  "heavy play": "HP",
+  dmg: "DMG",
+  damaged: "DMG",
+};
+
+/** Staff and the model both say "LP" or "lightly played". Anything else is Near Mint. */
+function conditionArg(raw: unknown): ConditionEstimate {
+  return (typeof raw === "string" && CONDITION_WORDS[tidy(raw).toLowerCase()]) || "NM";
+}
+
+const SALES_PERIODS: ReadonlyArray<ShopSalesPeriod> = [
+  "today",
+  "yesterday",
+  "date",
+  "month_to_date",
+  "last_7_days",
+];
+
 const noArgs = (): ShopArgsResult<Record<string, never>> => ({ ok: true, args: {} });
+
+const salesSummary: ShopTool<"sales_summary"> = {
+  id: "sales_summary",
+  describe:
+    "How much the store sold: cards and dollars, in store and online. " +
+    'Args: period "today", "yesterday", "date", "month_to_date" or "last_7_days"; ' +
+    'for "date" also date as YYYY-MM-DD.',
+  sensitive: false,
+  needs: ["inventory"],
+  validateArgs(raw) {
+    const input = asRecord(raw);
+    const period = SALES_PERIODS.find((p) => p === input.period);
+    if (!period) return { ok: false, error: "period is not one of the listed periods" };
+    if (period !== "date") return { ok: true, args: { period } };
+    if (typeof input.date !== "string" || !isCalendarDay(input.date)) {
+      return { ok: false, error: "date must be a real day written YYYY-MM-DD" };
+    }
+    return { ok: true, args: { period, date: input.date } };
+  },
+  run: (args, data, ctx) => salesSummaryAnswer(data.inventory, args, ctx.now),
+};
 
 const cardsToMove: ShopTool<"cards_to_move"> = {
   id: "cards_to_move",
@@ -91,6 +146,28 @@ const findCard: ShopTool<"find_card"> = {
   run: (args, data, ctx) => findCardAnswer(data.inventory, args, ctx.now),
 };
 
+const buyEstimate: ShopTool<"buy_estimate"> = {
+  id: "buy_estimate",
+  describe:
+    "Roughly what the store would pay, in cash or trade, for a named card a customer brings in. " +
+    'Args: name (the card name as typed); optional condition "NM", "LP", "MP", "HP" or "DMG"; ' +
+    'optional finish "foil" or "nonfoil".',
+  sensitive: false,
+  needs: ["inventory", "settings", "rules"],
+  validateArgs(raw) {
+    const input = asRecord(raw);
+    const name = nameArg(input.name);
+    if (!name) {
+      return { ok: false, error: `name must be ${NAME_ARG_MIN} to ${NAME_ARG_MAX} characters` };
+    }
+    const condition = conditionArg(input.condition);
+    const finish = finishArg(input.finish);
+    return { ok: true, args: finish ? { name, condition, finish } : { name, condition } };
+  },
+  run: (args, data, ctx) =>
+    buyEstimateAnswer(data.inventory, args, data.settings, data.rules, ctx.now),
+};
+
 const storeCredit: ShopTool<"store_credit"> = {
   id: "store_credit",
   describe: "Which customers hold store credit (trade credit) and how much.",
@@ -104,14 +181,13 @@ const storeCredit: ShopTool<"store_credit"> = {
 /** One member per tool id, each keeping its own argument type. */
 export type AnyShopTool = { [Id in ShopToolId]: ShopTool<Id> }[ShopToolId];
 
-/**
- * Tools that are built. `sales_summary` and `buy_estimate` join in step 2;
- * until then the chooser is not offered them and `runShopTool` refuses them.
- */
+/** Every tool, in the order the chooser is shown them. */
 const SHOP_TOOLS: ReadonlyArray<AnyShopTool> = [
+  salesSummary,
   cardsToMove,
   shelfPerformance,
   findCard,
+  buyEstimate,
   storeCredit,
 ];
 

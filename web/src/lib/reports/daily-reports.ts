@@ -11,7 +11,8 @@ import type { InventoryChangeLogEntry, InventoryItem, InventorySalesChannel } fr
 
 /** Days are cut at midnight shop time, not UTC. */
 export const STORE_TIME_ZONE = "America/Chicago";
-const MAX_DAYS = 90;
+/** How many days the Daily report keeps. */
+export const MAX_DAYS = 90;
 /** Nightly alerts fire on any 20% move; pennies doubling isn't news. */
 export const BIG_MOVE_MIN_DOLLARS = 1;
 
@@ -101,6 +102,86 @@ function saleEvents(item: InventoryItem): Array<{ at: string; quantity: number; 
   return [];
 }
 
+export type DailySales = DailyReport["sales"];
+
+/** One shop day of sales, with the month's running total through that day. */
+export type DailySalesDay = Pick<DailyReport, "date" | "sales" | "monthToDate">;
+
+function emptySales(): DailySales {
+  return { units: 0, revenue: 0, inStore: { units: 0, revenue: 0 }, online: { units: 0, revenue: 0 }, lines: [] };
+}
+
+/**
+ * Every sale in inventory, grouped by shop day. Revenue is not rounded and
+ * lines are not sorted yet; `finishDailySales` does both.
+ */
+export function collectDailySales(inventory: InventoryItem[]): Map<string, DailySales> {
+  const byDay = new Map<string, DailySales>();
+  for (const item of inventory) {
+    const name = shelfCustomerName(item);
+    for (const sale of saleEvents(item)) {
+      const date = storeDay(sale.at);
+      let sales = byDay.get(date);
+      if (!sales) {
+        sales = emptySales();
+        byDay.set(date, sales);
+      }
+      const revenue = sale.quantity * sale.unitPrice;
+      sales.units += sale.quantity;
+      sales.revenue += revenue;
+      const bucket = sale.channel === "in_store" ? sales.inStore : sales.online;
+      bucket.units += sale.quantity;
+      bucket.revenue += revenue;
+      sales.lines.push({
+        inventoryItemId: item.id,
+        name,
+        setName: item.setName ?? "",
+        condition: shelfConditionShort(shelfConditionLabel(item)),
+        location: item.shelfLocation ?? "",
+        quantity: sale.quantity,
+        unitPrice: sale.unitPrice,
+        channel: sale.channel,
+        at: sale.at,
+      });
+    }
+  }
+  return byDay;
+}
+
+/**
+ * Month-to-date totals, cent rounding and newest-first sale lines. `ordered`
+ * must be oldest day first; days are changed in place.
+ */
+export function finishDailySales(ordered: DailySalesDay[]): void {
+  let month = "";
+  let mtd = { units: 0, revenue: 0 };
+  for (const d of ordered) {
+    if (d.date.slice(0, 7) !== month) {
+      month = d.date.slice(0, 7);
+      mtd = { units: 0, revenue: 0 };
+    }
+    mtd = { units: mtd.units + d.sales.units, revenue: mtd.revenue + d.sales.revenue };
+    d.monthToDate = { units: mtd.units, revenue: round2(mtd.revenue) };
+    d.sales.revenue = round2(d.sales.revenue);
+    d.sales.inStore.revenue = round2(d.sales.inStore.revenue);
+    d.sales.online.revenue = round2(d.sales.online.revenue);
+    d.sales.lines.sort((a, b) => b.at.localeCompare(a.at));
+  }
+}
+
+/**
+ * The sales half of the Daily report, from inventory alone: every day with a
+ * sale, oldest first. `buildDailyReports` is built from the same two functions,
+ * so these numbers are the report's numbers.
+ */
+export function buildDailySales(inventory: InventoryItem[]): DailySalesDay[] {
+  const ordered: DailySalesDay[] = [...collectDailySales(inventory)]
+    .map(([date, sales]) => ({ date, sales, monthToDate: { units: 0, revenue: 0 } }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+  finishDailySales(ordered);
+  return ordered;
+}
+
 export async function buildDailyReports(storeId: string, now = new Date()): Promise<DailyReport[]> {
   const db = getAdminFirestore();
   const [inventory, snapshots, reservations, alertDocs, runDocs] = await Promise.all([
@@ -122,28 +203,12 @@ export async function buildDailyReports(storeId: string, now = new Date()): Prom
   };
   day(storeDay(now));
 
+  for (const [date, sales] of collectDailySales(inventory)) {
+    day(date).sales = sales;
+  }
+
   for (const item of inventory) {
     const name = shelfCustomerName(item);
-    for (const sale of saleEvents(item)) {
-      const d = day(storeDay(sale.at));
-      const revenue = sale.quantity * sale.unitPrice;
-      d.sales.units += sale.quantity;
-      d.sales.revenue += revenue;
-      const bucket = sale.channel === "in_store" ? d.sales.inStore : d.sales.online;
-      bucket.units += sale.quantity;
-      bucket.revenue += revenue;
-      d.sales.lines.push({
-        inventoryItemId: item.id,
-        name,
-        setName: item.setName ?? "",
-        condition: shelfConditionShort(shelfConditionLabel(item)),
-        location: item.shelfLocation ?? "",
-        quantity: sale.quantity,
-        unitPrice: sale.unitPrice,
-        channel: sale.channel,
-        at: sale.at,
-      });
-    }
     for (const change of item.changeLog ?? []) {
       day(storeDay(change.at)).manualChanges.push({ ...change, inventoryItemId: item.id, name });
     }
@@ -196,19 +261,8 @@ export async function buildDailyReports(storeId: string, now = new Date()): Prom
   }
 
   const ordered = [...days.values()].sort((a, b) => a.date.localeCompare(b.date));
-  let month = "";
-  let mtd = { units: 0, revenue: 0 };
+  finishDailySales(ordered);
   for (const d of ordered) {
-    if (d.date.slice(0, 7) !== month) {
-      month = d.date.slice(0, 7);
-      mtd = { units: 0, revenue: 0 };
-    }
-    mtd = { units: mtd.units + d.sales.units, revenue: mtd.revenue + d.sales.revenue };
-    d.monthToDate = { units: mtd.units, revenue: round2(mtd.revenue) };
-    d.sales.revenue = round2(d.sales.revenue);
-    d.sales.inStore.revenue = round2(d.sales.inStore.revenue);
-    d.sales.online.revenue = round2(d.sales.online.revenue);
-    d.sales.lines.sort((a, b) => b.at.localeCompare(a.at));
     d.manualChanges.sort((a, b) => b.at.localeCompare(a.at));
     d.priceAlerts.sort((a, b) => Math.abs(b.change) - Math.abs(a.change));
     d.moveSuggestions.sort((a, b) => a.to.localeCompare(b.to) || a.name.localeCompare(b.name));

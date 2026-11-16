@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/Button";
 import { adminFetch } from "@/lib/api-client";
+import { sellPrice } from "@/lib/inventory/sell-price";
 import { computeTicketTotals } from "@/lib/shop-tickets/ticket-math";
 import type { InventoryItem, ShopTicket, ShopTicketLine } from "@/lib/types";
 
@@ -24,16 +25,6 @@ type Receipt = {
   creditApplied: number;
   creditRemaining: number;
 };
-
-function sellPrice(item: InventoryItem): number {
-  return (
-    item.listPrice ??
-    item.shopifyListing?.exportPrice ??
-    item.tcgMarketPrice ??
-    item.marketPrice ??
-    0
-  );
-}
 
 async function fetchRecentTickets(): Promise<ShopTicket[]> {
   const res = await adminFetch("/api/admin/shop-tickets");

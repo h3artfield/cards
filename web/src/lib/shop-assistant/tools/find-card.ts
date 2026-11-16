@@ -1,4 +1,5 @@
 import { inventoryItemMatchesFinishFilter } from "../../inventory/inventory-finish-v1";
+import { sellPrice } from "../../inventory/sell-price";
 import { shelfConditionLabel, shelfCustomerName } from "../../inventory/shelf-row-edit";
 import {
   inventoryEffectiveQuantity,
@@ -135,10 +136,6 @@ function printing(item: InventoryItem): string {
     .join(" · ");
 }
 
-function shelfPrice(item: InventoryItem): number | null {
-  return item.listPrice ?? item.marketPrice ?? item.tcgMarketPrice ?? null;
-}
-
 /** "Do we have <card>?" */
 export function findCardAnswer(
   inventory: InventoryItem[],
@@ -184,7 +181,8 @@ export function findCardAnswer(
       String(quantity),
       String(online),
       item.shelfLocation?.trim() ? shelfName(item.shelfLocation.trim()) : "No location",
-      formatMoney(shelfPrice(item)),
+      // The register's own price, so the box quotes what will ring up.
+      sellPrice(item) > 0 ? formatMoney(sellPrice(item)) : "—",
     ]),
     note: notes.join(" "),
   };

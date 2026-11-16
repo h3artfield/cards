@@ -2,6 +2,8 @@ import type {
   ConditionEstimate,
   Customer,
   InventoryItem,
+  StoreRule,
+  StoreSettings,
   TradeCreditEntry,
 } from "../types";
 
@@ -75,9 +77,18 @@ export type ShopToolData = {
   inventory: InventoryItem[];
   customers: ShopCustomerName[];
   creditEntries: TradeCreditEntry[];
+  /** Buy percentages and condition multipliers. Null when the store has none yet. */
+  settings: StoreSettings | null;
+  /** The store's buy rules, active or not. */
+  rules: StoreRule[];
 };
 
-export type ShopToolNeed = "inventory" | "customers" | "creditEntries";
+export type ShopToolNeed =
+  | "inventory"
+  | "customers"
+  | "creditEntries"
+  | "settings"
+  | "rules";
 
 export type ShopToolContext = {
   /** Injected so tests are repeatable. */

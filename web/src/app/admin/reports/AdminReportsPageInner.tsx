@@ -19,6 +19,8 @@ export function AdminReportsPageInner() {
     : "stock";
   const initialCustomerId = searchParams.get("customer");
   const startAddOpen = searchParams.get("add") === "1";
+  const rawDay = searchParams.get("day") ?? "";
+  const initialDay = /^\d{4}-\d{2}-\d{2}$/.test(rawDay) ? rawDay : null;
 
   return (
     <AdminReportsContent
@@ -26,6 +28,7 @@ export function AdminReportsPageInner() {
       initialInventoryView={initialInventoryView}
       initialCustomerId={initialCustomerId}
       startAddOpen={startAddOpen}
+      initialDay={initialDay}
     />
   );
 }

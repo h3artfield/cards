@@ -1,14 +1,25 @@
 /**
- * Shop assistant, step 1: the tools that answer from inventory and the trade
- * credit ledger. Plain fixtures only: no Firestore, no OpenAI.
+ * Shop assistant, steps 1 and 2: the six tools and the registry that runs
+ * them. Plain fixtures only: no Firestore, no OpenAI.
  *
  *   npx tsx scripts/test-shop-assistant.ts
  */
 import { sellThrough } from "../src/lib/inventory/analytics";
+import { DEFAULT_STORE_SETTINGS } from "../src/lib/constants";
 import { listCardsToMove } from "../src/lib/inventory/cards-to-move";
+import { sellPrice } from "../src/lib/inventory/sell-price";
+import { applyMarketPricing } from "../src/lib/processing/apply-market-pricing";
+import { buildDailySales, storeDay } from "../src/lib/reports/daily-reports";
 import { canUseShopTool } from "../src/lib/shop-assistant/access";
 import { formatMoney, plural, shelfName } from "../src/lib/shop-assistant/format";
 import { getShopTool, listShopTools, runShopTool } from "../src/lib/shop-assistant/registry";
+import {
+  buyEstimateAnswer,
+  estimateBuy,
+  estimateBuyOffer,
+  ruleCategoryForProductLine,
+  rulesNotChecked,
+} from "../src/lib/shop-assistant/tools/buy-estimate";
 import { cardsToMoveAnswer } from "../src/lib/shop-assistant/tools/cards-to-move";
 import {
   FIND_CARD_MAX_ROWS,
@@ -16,6 +27,12 @@ import {
   findCards,
   rankNameMatch,
 } from "../src/lib/shop-assistant/tools/find-card";
+import {
+  addDays,
+  dayLabel,
+  isCalendarDay,
+  salesSummaryAnswer,
+} from "../src/lib/shop-assistant/tools/sales-summary";
 import {
   rankShelves,
   shelfPerformanceAnswer,
@@ -27,7 +44,15 @@ import {
   storeCreditAnswer,
 } from "../src/lib/shop-assistant/tools/store-credit";
 import type { ShopAnswer, ShopToolData } from "../src/lib/shop-assistant/types";
-import type { InventoryItem, TradeCreditEntry } from "../src/lib/types";
+import type {
+  ConditionEstimate,
+  InventoryItem,
+  ScannedCard,
+  StoreRule,
+  StoreSettings,
+  TradeCreditEntry,
+  VisionResult,
+} from "../src/lib/types";
 
 let passed = 0;
 let failed = 0;
@@ -258,12 +283,181 @@ const crowdAnswer = keep(storeCreditAnswer(STORE, crowd, [], NOW));
 assert(crowdAnswer.rows!.length === STORE_CREDIT_MAX_ROWS && crowdAnswer.rows![0]![1] === "$55.00" && crowdAnswer.note === "Showing the 50 largest of 55.", "long lists are capped at the largest balances");
 assert(crowdAnswer.lines[0] === "55 customers have store credit, $1,540.00 in total.", "the total still covers everyone");
 
+/* -------------------------------------------------------------- sell price */
+console.log("\nsellPrice (shared with the register)");
+assert(sellPrice({ listPrice: 3, shopifyListing: { exportPrice: 4 } as never, tcgMarketPrice: 5, marketPrice: 6 }) === 3, "the store's own price first");
+assert(sellPrice({ shopifyListing: { exportPrice: 4 } as never, tcgMarketPrice: 5, marketPrice: 6 }) === 4, "then the Shopify export price");
+assert(sellPrice({ tcgMarketPrice: 5, marketPrice: 6 }) === 5, "then TCG market");
+assert(sellPrice({ marketPrice: 6 }) === 6 && sellPrice({}) === 0, "then market, else 0");
+assert(sellPrice({ listPrice: 0, tcgMarketPrice: 5 }) === 0, "a list price of 0 is still the list price");
+const priced = keep(findCardAnswer([card("Export Only", { listPrice: undefined, shopifyListing: { exportPrice: 4 } as never, tcgMarketPrice: 9 }), card("Export Only", { setName: "No Price", listPrice: undefined })], { name: "export only" }, NOW));
+same(priced.rows!.map((r) => r[6]), ["$4.00", "—"], "find_card quotes the register's price, and a dash when there is none");
+
+/* ----------------------------------------------------------- sales summary */
+console.log("\nsales_summary");
+assert(storeDay(NOW) === "2026-11-16", "the fixture's today, shop time");
+assert(isCalendarDay("2026-11-12") && !isCalendarDay("2026-02-30") && !isCalendarDay("2026-1-5") && !isCalendarDay("yesterday"), "calendar days");
+assert(addDays("2026-11-01", -1) === "2026-10-31" && addDays("2026-03-08", 1) === "2026-03-09" && addDays("2026-11-16", -6) === "2026-11-10", "day arithmetic crosses months and clock changes");
+assert(dayLabel("2026-11-16") === "Mon, Nov 16", "day label");
+const sale = (at: string, quantity: number, unitPrice: number, channel: "in_store" | "shopify") => ({ at, quantity, unitPrice, channel });
+const sales: InventoryItem[] = [
+  card("Sol Ring", { setName: "Commander", shelfLocation: "4-1", saleLog: [sale("2026-11-16T05:30:00Z", 1, 2, "shopify"), sale("2026-11-16T15:00:00Z", 2, 1.5, "in_store")] }),
+  card("Counterspell", { setName: "Dominaria", tcgplayerCondition: "Lightly Played", saleLog: [sale("2026-11-03T20:00:00Z", 4, 0.1, "in_store"), sale("2026-11-16T16:00:00Z", 1, 3.25, "shopify")] }),
+  card("Old Single", { quantity: 0, status: "sold", soldAt: "2026-10-31T20:00:00Z", soldPrice: 9 }),
+  card("Mid Month", { saleLog: [sale("2026-11-10T18:00:00Z", 1, 5, "in_store")] }),
+  card("Never Sold", { quantity: 4 }),
+];
+const salesDays = buildDailySales(sales);
+same(salesDays.map((d) => [d.date, d.sales.units, d.sales.revenue, d.monthToDate.units, d.monthToDate.revenue]), [
+  ["2026-10-31", 1, 9, 1, 9],
+  ["2026-11-03", 4, 0.4, 4, 0.4],
+  ["2026-11-10", 1, 5, 5, 5.4],
+  ["2026-11-15", 1, 2, 6, 7.4],
+  ["2026-11-16", 3, 6.25, 9, 13.65],
+], "days are cut at midnight shop time; month to date restarts each month");
+same([salesDays[4]!.sales.inStore, salesDays[4]!.sales.online], [{ units: 2, revenue: 3 }, { units: 1, revenue: 3.25 }], "in-store and online halves");
+same(salesDays[0]!.sales.online, { units: 1, revenue: 9 }, "a sold single with no sale log counts once, as online");
+same(salesDays[4]!.sales.lines.map((l) => l.name), ["Counterspell", "Sol Ring"], "sale lines newest first");
+
+const todayAnswer = keep(salesSummaryAnswer(sales, { period: "today" }, NOW));
+same(todayAnswer.lines, ["Today (Mon, Nov 16): 3 cards, $6.25.", "In store: 2 cards, $3.00. Online: 1 card, $3.25.", "Month to date: 9 cards, $13.65."], "today");
+same([todayAnswer.rows![0]![0], todayAnswer.rows![0]![2], todayAnswer.rows![0]![3], todayAnswer.rows![0]![4]], ["Counterspell", "1", "$3.25", "Online"], "today's sale lines");
+assert(todayAnswer.rows![0]![1]!.startsWith("Dominaria · ") && todayAnswer.rows![1]![4] === "In store", "set, condition and where");
+assert(todayAnswer.href === "/admin/reports?section=daily&day=2026-11-16", "links to that day of the Daily report");
+const yesterdayAnswer = keep(salesSummaryAnswer(sales, { period: "yesterday" }, NOW));
+same(yesterdayAnswer.lines, ["Yesterday (Sun, Nov 15): 1 card, $2.00.", "In store: nothing. Online: 1 card, $2.00.", "Month to date: 6 cards, $7.40."], "yesterday, with the month's total through that day");
+const quietDay = keep(salesSummaryAnswer(sales, { period: "date", date: "2026-11-12" }, NOW));
+same(quietDay.lines, ["Thu, Nov 12: no sales.", "Month to date: 5 cards, $5.40."], "a day with no sales still shows the month so far");
+assert(!quietDay.rows && quietDay.href!.endsWith("day=2026-11-12"), "no table for a quiet day");
+same(keep(salesSummaryAnswer(sales, { period: "date", date: "2026-11-02" }, NOW)).lines, ["Mon, Nov 2: no sales.", "Month to date: nothing."], "before the month's first sale");
+same(keep(salesSummaryAnswer(sales, { period: "date", date: "2026-11-15" }, NOW)).lines[0], "Yesterday (Sun, Nov 15): 1 card, $2.00.", "a date that is yesterday is called yesterday");
+same(keep(salesSummaryAnswer([], { period: "today" }, NOW)).lines, ["Today (Mon, Nov 16): no sales yet.", "Month to date: nothing."], "nothing sold yet today");
+same(keep(salesSummaryAnswer(sales, { period: "date", date: "2026-11-20" }, NOW)).lines, ["Fri, Nov 20 hasn't happened yet."], "a future day");
+same(keep(salesSummaryAnswer(sales, { period: "date", date: "2026-08-18" }, NOW)).lines, ["Tue, Aug 18 is too far back. Daily reports keep the last 90 days."], "older than the report keeps");
+assert(keep(salesSummaryAnswer(sales, { period: "date", date: "2026-08-19" }, NOW)).lines[0] === "Wed, Aug 19: no sales.", "the oldest day the report keeps");
+const weekAnswer = keep(salesSummaryAnswer(sales, { period: "last_7_days" }, NOW));
+same(weekAnswer.lines, ["Tue, Nov 10 to Mon, Nov 16: 5 cards, $13.25.", "In store: 3 cards, $8.00. Online: 2 cards, $5.25."], "last 7 days is today and the six days before");
+same(weekAnswer.rows, [["Mon, Nov 16", "3", "$6.25"], ["Sun, Nov 15", "1", "$2.00"], ["Tue, Nov 10", "1", "$5.00"]], "one row per day with sales, newest first");
+const monthAnswer = keep(salesSummaryAnswer(sales, { period: "month_to_date" }, NOW));
+same(monthAnswer.lines, ["Sun, Nov 1 to Mon, Nov 16: 9 cards, $13.65.", "In store: 7 cards, $8.40. Online: 2 cards, $5.25."], "month to date leaves October out");
+assert(monthAnswer.rows!.length === 4 && monthAnswer.lines[0]!.includes(`$${salesDays[4]!.monthToDate.revenue}`), "and agrees with the report's own running total");
+same(keep(salesSummaryAnswer(sales, { period: "last_7_days" }, new Date("2026-12-25T18:00:00Z"))).lines, ["No sales from Sat, Dec 19 to Fri, Dec 25."], "a week with no sales");
+const busy = [card("Busy", { saleLog: Array.from({ length: 12 }, (_, i) => sale(`2026-11-16T${String(6 + i).padStart(2, "0")}:00:00Z`, 1, 1, "in_store")) })];
+const busyAnswer = keep(salesSummaryAnswer(busy, { period: "today" }, NOW));
+assert(busyAnswer.rows!.length === 10 && busyAnswer.lines[0] === "Today (Mon, Nov 16): 12 cards, $12.00." && busyAnswer.note!.startsWith("Showing the latest 10 of 12 sale lines."), "long days are capped; totals still count everything");
+
+/* ------------------------------------------------------------ buy estimate */
+console.log("\nbuy_estimate");
+const SETTINGS: StoreSettings = { ...DEFAULT_STORE_SETTINGS, id: STORE };
+const MULT = SETTINGS.conditionMultipliers;
+same([ruleCategoryForProductLine("Magic"), ruleCategoryForProductLine("Magic: The Gathering"), ruleCategoryForProductLine("Pokemon International"), ruleCategoryForProductLine("Pokémon Japan"), ruleCategoryForProductLine("YuGiOh"), ruleCategoryForProductLine("Yu-Gi-Oh"), ruleCategoryForProductLine("Riftbound"), ruleCategoryForProductLine(undefined)], ["magic", "magic", "pokemon", "pokemon", "yugioh", "yugioh", "other", "other"], "product lines map to rule categories");
+
+let nextRule = 0;
+function rule(title: string, over: Partial<StoreRule>): StoreRule {
+  nextRule += 1;
+  return { id: `r${nextRule}`, storeId: STORE, title, active: true, priority: 10, appliesToCategories: [], ruleType: "note_only", ruleText: "", createdAt: daysAgo(30), updatedAt: daysAgo(30), ...over };
+}
+const priceOn = (price: number, condition: string, over: Partial<InventoryItem> = {}) => ({ tcgMarketPrice: price, tcgplayerCondition: condition, marketPriceAt: "2026-11-15T09:00:00Z", marketPriceSource: "justtcg" as const, ...over });
+const book: InventoryItem[] = [
+  card("Enlightened Confidant (Borderless)", { tcgplayerProductId: "p1", setName: "Reality Fracture", cardNumber: "321", rarity: "Mythic", ...priceOn(10, "Near Mint") }),
+  card("Enlightened Confidant (Borderless)", { tcgplayerProductId: "p1", setName: "Reality Fracture", cardNumber: "321", rarity: "Mythic", quantity: 0, ...priceOn(8.2, "Lightly Played") }),
+  card("Enlightened Confidant (Borderless)", { tcgplayerProductId: "p1", setName: "Reality Fracture", cardNumber: "321", rarity: "Mythic", ...priceOn(20, "Near Mint Foil") }),
+  card("Enlightened Confidant", { tcgplayerProductId: "p2", setName: "Reality Fracture", cardNumber: "12", ...priceOn(4, "Lightly Played"), tcgLowPrice: 99 }),
+  card("Penny Common", { tcgplayerProductId: "p3", ...priceOn(0.3, "Near Mint") }),
+  card("Pikachu", { tcgplayerProductId: "p4", productLine: "Pokemon International", catalogRarity: "Rare", ...priceOn(12, "Near Mint") }),
+  card("Unpriced Card", { tcgplayerProductId: "p5" }),
+  { ...card("Buyback Bolt", { tcgplayerProductId: "p6", ...priceOn(7, "Near Mint") }), source: "buyback", tcgplayerListingKey: undefined },
+];
+const lp = estimateBuy(book, { name: "enlightened confidant", condition: "LP" }, SETTINGS, []);
+same(lp.rows.map((r) => [r.printing, r.basis, r.offer?.marketValue, r.offer?.cashOffer, r.offer?.tradeOffer]), [
+  ["Reality Fracture · #321 · Foil", `NM price × ${MULT.LP}, Nov 15`, 20 * MULT.LP, 20 * MULT.LP * 0.5, 20 * MULT.LP * 0.65],
+  ["Reality Fracture · #321", "LP price, Nov 15", 8.2, 8.2 * 0.5, 8.2 * 0.65],
+  ["Reality Fracture · #12", "LP price, Nov 15", 4, 2, 4 * 0.65],
+], "LP: the LP row's own price as it stands (never multiplied); the NM price times the multiplier when there is no LP row");
+assert(lp.rows[1]!.offer!.marketValue !== 10 * MULT.LP, "an LP row is not discounted a second time");
+const nm = estimateBuy(book, { name: "enlightened confidant", condition: "NM" }, SETTINGS, []);
+same(nm.rows.map((r) => [r.printing, r.offer?.marketValue ?? null]), [["Reality Fracture · #321 · Foil", 20], ["Reality Fracture · #321", 10], ["Reality Fracture · #12", null]], "NM: a Near Mint price is never backed out of an LP row; tcgLowPrice is never used");
+same(estimateBuy(book, { name: "enlightened confidant", condition: "LP", finish: "foil" }, SETTINGS, []).rows.map((r) => r.printing), ["Reality Fracture · #321 · Foil"], "finish filter");
+assert(estimateBuy(book, { name: "confidant", condition: "NM" }, SETTINGS, []).rows.length === 3 && estimateBuy(book, { name: "fidant", condition: "NM" }, SETTINGS, []).rows.length === 0, "whole-word matches count; part-of-a-word ones do not");
+assert(estimateBuy(book, { name: "buyback bolt", condition: "NM" }, SETTINGS, []).rows.length === 0, "only catalog rows are used");
+same(estimateBuy(book, { name: "penny common", condition: "NM" }, SETTINGS, []).rows[0]!.offer!.cashOffer, SETTINGS.minimumOffer, "the minimum offer applies");
+
+const rulesFixture: StoreRule[] = [
+  rule("No cards under $1", { ruleType: "do_not_buy", ruleText: "Do not buy.", structuredFilters: { maxMarketPrice: 1 } }),
+  rule("Pokemon over $5 pays more", { ruleType: "adjust_percentage", appliesToCategories: ["pokemon"], structuredFilters: { minMarketPrice: 5 }, cashPercentOverride: 0.6, tradePercentOverride: 0.75 }),
+  rule("2014 sets", { ruleType: "adjust_percentage", structuredFilters: { years: ["2014"] }, cashPercentOverride: 0.1 }),
+  rule("Slow movers", { ruleType: "do_not_buy", ruleText: "Do not buy slow sellers." }),
+  rule("Retired year rule", { active: false, ruleType: "do_not_buy", structuredFilters: { year: "1999" } }),
+  rule("Yugioh 2020", { ruleType: "do_not_buy", appliesToCategories: ["yugioh"], structuredFilters: { year: "2020" } }),
+];
+const penny = estimateBuy(book, { name: "penny common", condition: "NM" }, SETTINGS, rulesFixture).rows[0]!;
+assert(penny.offer!.doNotBuy && penny.offer!.cashOffer === 0 && penny.offer!.tradeOffer === 0 && penny.offer!.matchedRules.includes("No cards under $1"), "a do-not-buy rule zeroes both offers");
+const pika = estimateBuy(book, { name: "pikachu", condition: "MP" }, SETTINGS, rulesFixture).rows[0]!;
+same([pika.offer!.cashPercent, pika.offer!.tradePercent, pika.offer!.cashOffer, pika.offer!.matchedRules], [0.6, 0.75, 12 * MULT.MP * 0.6, ["Pokemon over $5 pays more"]], "a category rule matches through the product-line map and sets the percents");
+same(pika.notChecked, ["2014 sets", "Slow movers"], "year rules and slow-mover rules are reported, not silently passed; inactive and other-category rules are not");
+const sampleVision: VisionResult = { category: "magic", itemType: "raw", cardName: "X", conditionEstimate: "NM", confidence: 1 };
+same(rulesNotChecked([rulesFixture[0]!, rulesFixture[1]!], sampleVision, 10), [], "rules the estimate can check are not flagged");
+same(rulesNotChecked([rule("Any card from 2020", { ruleType: "do_not_buy", appliesToCategories: ["yugioh"], ruleText: "Do not buy any card from 2020.", structuredFilters: { year: "2020" } })], sampleVision, 10), ["Any card from 2020"], "a do-not-buy rule worded for any card is flagged whatever its categories");
+const rounded = estimateBuy(book, { name: "pikachu", condition: "NM" }, SETTINGS, [rule("Round up", { ruleType: "round_up_offers" })]).rows[0]!;
+same([rounded.offer!.cashOffer, rounded.offer!.tradeOffer], [6, 8], "round-up rule rounds offers up to whole dollars");
+
+console.log("\nbuy_estimate: same math as applyMarketPricing for the same price");
+const CONDITIONS: ConditionEstimate[] = ["NM", "LP", "MP", "HP", "DMG"];
+let parityChecks = 0;
+let parityMisses = 0;
+for (const price of [0.3, 0.99, 4, 12, 87.5]) {
+  for (const condition of CONDITIONS) {
+    for (const ruleSet of [[], rulesFixture, [rule("Round up", { ruleType: "round_up_offers" })]]) {
+      for (const category of ["magic", "pokemon"] as const) {
+        const vision: VisionResult = { category, itemType: "raw", cardName: "Parity", conditionEstimate: condition, confidence: 1 };
+        const scanned = { id: "c", conditionEstimate: condition, visionJson: vision, pricingJson: { marketPrice: price } } as unknown as ScannedCard;
+        // No asked-condition row: Near Mint price times the store multiplier.
+        const viaScan = applyMarketPricing(scanned, SETTINGS, ruleSet);
+        const viaTool = estimateBuyOffer({ basisPrice: price, skipConditionMultiplier: false, rulesPrice: price, condition, vision, settings: SETTINGS, rules: ruleSet });
+        // A row in the asked condition: that price as it stands, like the scan's per-condition price.
+        const rowPrice = Math.round(price * 0.8 * 100) / 100;
+        const withLow = { ...scanned, cardFlowV2Market: { snapshots: [{ suspectId: "s", tcgplayerMapping: { conditionLowPrices: { [condition]: rowPrice } } }] } } as unknown as ScannedCard;
+        const viaScanRow = applyMarketPricing(withLow, SETTINGS, ruleSet);
+        const viaToolRow = estimateBuyOffer({ basisPrice: rowPrice, skipConditionMultiplier: true, rulesPrice: price, condition, vision, settings: SETTINGS, rules: ruleSet });
+        parityChecks += 2;
+        if (viaScan.cashOffer !== viaTool.cashOffer || viaScan.tradeOffer !== viaTool.tradeOffer || viaScan.marketPrice !== viaTool.marketValue) parityMisses += 1;
+        if (viaScanRow.cashOffer !== viaToolRow.cashOffer || viaScanRow.tradeOffer !== viaToolRow.tradeOffer || viaScanRow.marketPrice !== viaToolRow.marketValue) parityMisses += 1;
+      }
+    }
+  }
+}
+assert(parityChecks === 300 && parityMisses === 0, `${parityChecks} price, condition, rule and category combinations give the scan formula's cash, trade and market value (${parityMisses} differ)`);
+
+const oneAnswer = keep(buyEstimateAnswer(book, { name: "pikachu", condition: "MP" }, SETTINGS, rulesFixture, NOW));
+same(oneAnswer.lines, [
+  `Moderately Played: about ${formatMoney(12 * MULT.MP * 0.6)} cash or ${formatMoney(12 * MULT.MP * 0.75)} in trade.`,
+  "Based on our nightly market price ($12.00, Nov 15, Near Mint, scaled to Moderately Played), not the scan's live TCGplayer low.",
+  "Not checked: 2014 sets",
+  "Not checked: Slow movers",
+], "one printing: the offer, where the price came from, and what was not checked");
+assert(oneAnswer.note!.includes("Cash 60%, trade 75% of market.") && oneAnswer.note!.includes("Rules applied: Pokemon over $5 pays more.") && oneAnswer.note!.endsWith("Estimate. The scan sets the real offer."), "the note gives the percents, the rules applied and the caveat");
+const manyAnswer = keep(buyEstimateAnswer(book, { name: "Enlightened Confidant", condition: "LP" }, SETTINGS, [], NOW));
+same(manyAnswer.lines, ["3 printings with a price on file. Offers for Lightly Played:", "Based on our nightly market price, not the scan's live TCGplayer low."], "several printings");
+same(manyAnswer.rows![1], ["Enlightened Confidant (Borderless)", "Reality Fracture · #321", "$8.20", "$4.10", "$5.33", "LP price, Nov 15"], "row: card, printing, market, cash, trade, basis");
+const exactRow = keep(buyEstimateAnswer(book, { name: "Enlightened Confidant", condition: "NM", finish: "nonfoil" }, SETTINGS, [], NOW));
+same(exactRow.lines.slice(0, 2), ["Near Mint: about $5.00 cash or $6.50 in trade.", "Based on our nightly market price ($10.00, Nov 15), not the scan's live TCGplayer low."], "one priced printing among two");
+same(exactRow.rows![1], ["Enlightened Confidant", "Reality Fracture · #12", "—", "Scan it", "Scan it", "No price on file for that condition"], "a printing with no Near Mint price says to scan it");
+const blocked = keep(buyEstimateAnswer(book, { name: "penny common", condition: "NM" }, SETTINGS, rulesFixture, NOW));
+assert(blocked.lines[0] === "Near Mint: a store rule says not to buy this one (No cards under $1)." && blocked.rows![0]![3] === "Don't buy", "a do-not-buy rule is named");
+same(keep(buyEstimateAnswer(book, { name: "unpriced card", condition: "HP" }, SETTINGS, [], NOW)).lines, ['No price on file for "unpriced card" in Heavily Played or Near Mint. Scan it.'], "a known card with no price");
+same(keep(buyEstimateAnswer(book, { name: "Black Lotus", condition: "NM" }, SETTINGS, [], NOW)).lines, ['No price on file for "Black Lotus". Scan it.'], "a card the store has never stocked");
+const csvAnswer = keep(buyEstimateAnswer([card("Csv Card", { tcgplayerProductId: "p9", tcgMarketPrice: 3, marketPriceSource: "tcgplayer_csv" })], { name: "csv card", condition: "NM" }, SETTINGS, [], NOW));
+assert(csvAnswer.lines[1] === "Based on the market price from our TCGplayer import ($3.00, date unknown), not the scan's live TCGplayer low.", "the source and a missing date are stated");
+const eightPrintings = Array.from({ length: 8 }, (_, i) => card("Many Prints", { tcgplayerProductId: `m${i}`, setName: `Set ${i}`, ...priceOn(i + 1, "Near Mint") }));
+const cappedBuy = keep(buyEstimateAnswer(eightPrintings, { name: "many prints", condition: "NM" }, SETTINGS, [], NOW));
+assert(cappedBuy.rows!.length === 5 && cappedBuy.rows![0]![2] === "$8.00" && cappedBuy.note!.startsWith("Showing 5 of 8 printings."), "long lists are capped, most valuable first");
+
 /* ---------------------------------------------------------------- registry */
 console.log("\nregistry");
-same(listShopTools().map((t) => t.id), ["cards_to_move", "shelf_performance", "find_card", "store_credit"], "the four step-1 tools are registered");
+same(listShopTools().map((t) => t.id), ["sales_summary", "cards_to_move", "shelf_performance", "find_card", "buy_estimate", "store_credit"], "all six tools are registered");
 same(listShopTools().filter((t) => t.sensitive).map((t) => t.id), ["store_credit"], "only the customer list is sensitive");
 assert(listShopTools().every((t) => t.describe.length > 20 && !/\d{3,}/.test(t.describe)), "every tool has a prompt line with no data in it");
-assert(getShopTool("sales_summary") === undefined && getShopTool("drop_tables") === undefined && getShopTool(7) === undefined, "unbuilt and unknown tools are not offered");
+assert(getShopTool("drop_tables") === undefined && getShopTool(7) === undefined && getShopTool("__proto__") === undefined, "unknown tools are not offered");
 
 const shelfTool = getShopTool("shelf_performance")!;
 same(shelfTool.validateArgs({ rank: "slowest" }), { ok: true, args: { rank: "slowest", kind: "any", limit: 3 } }, "shelf args: defaults");
@@ -276,21 +470,39 @@ same(findTool.validateArgs({ name: "Sol Ring", finish: "shiny" }), { ok: true, a
 assert(!findTool.validateArgs({ name: "x" }).ok && !findTool.validateArgs({ name: "y".repeat(81) }).ok && !findTool.validateArgs({ name: 12 }).ok && !findTool.validateArgs({}).ok, "find args: name must be 2 to 80 characters of text");
 same(getShopTool("store_credit")!.validateArgs({ customerId: "c1" }), { ok: true, args: {} }, "credit args: takes none, ignores what it is sent");
 
-const data: ShopToolData = { storeId: STORE, inventory: stock, customers, creditEntries: ledger };
+const salesTool = getShopTool("sales_summary")!;
+same(salesTool.validateArgs({ period: "today", date: "2026-11-01" }), { ok: true, args: { period: "today" } }, "sales args: a date is dropped unless the period is date");
+same(salesTool.validateArgs({ period: "date", date: "2026-11-12" }), { ok: true, args: { period: "date", date: "2026-11-12" } }, "sales args: a day");
+assert(!salesTool.validateArgs({ period: "date" }).ok && !salesTool.validateArgs({ period: "date", date: "2026-02-30" }).ok && !salesTool.validateArgs({ period: "date", date: "last friday" }).ok && !salesTool.validateArgs({ period: "all_time" }).ok && !salesTool.validateArgs({}).ok, "sales args: unknown periods and impossible days are refused");
+const buyTool = getShopTool("buy_estimate")!;
+same(buyTool.validateArgs({ name: " Sol  Ring " }), { ok: true, args: { name: "Sol Ring", condition: "NM" } }, "buy args: condition defaults to Near Mint");
+same(buyTool.validateArgs({ name: "Sol Ring", condition: "Lightly Played", finish: "foil", storeId: "other" }), { ok: true, args: { name: "Sol Ring", condition: "LP", finish: "foil" } }, "buy args: condition words are read, unknown keys dropped");
+same(buyTool.validateArgs({ name: "Sol Ring", condition: "dmg" }), { ok: true, args: { name: "Sol Ring", condition: "DMG" } }, "buy args: lower case condition");
+same(buyTool.validateArgs({ name: "Sol Ring", condition: "pristine" }), { ok: true, args: { name: "Sol Ring", condition: "NM" } }, "buy args: an unknown condition falls back to Near Mint");
+assert(!buyTool.validateArgs({ condition: "LP" }).ok, "buy args: name is required");
+
+const data: ShopToolData = { storeId: STORE, inventory: stock, customers, creditEntries: ledger, settings: SETTINGS, rules: [] };
 const ran = runShopTool("find_card", { name: "bolt" }, data, { now: NOW });
 assert(ran.ok && ran.tool === "find_card" && !ran.sensitive && ran.answer.asOf === NOW.toISOString(), "runs a tool and stamps the answer");
 if (ran.ok) keep(ran.answer);
 const ranCredit = runShopTool("store_credit", {}, data, { now: NOW });
 assert(ranCredit.ok && ranCredit.sensitive && ranCredit.answer.rows!.length === 4, "sensitive flag travels with the answer");
-same(runShopTool("sales_summary", { period: "today" }, data, { now: NOW }), { ok: false, reason: "unknown_tool", error: "No such tool" }, "refuses a tool that is not built");
+same(runShopTool("drop_tables", {}, data, { now: NOW }), { ok: false, reason: "unknown_tool", error: "No such tool" }, "refuses a tool that does not exist");
+const ranSales = runShopTool("sales_summary", { period: "today" }, data, { now: NOW });
+assert(ranSales.ok && ranSales.tool === "sales_summary" && !ranSales.sensitive, "runs sales_summary");
+const ranBuy = runShopTool("buy_estimate", { name: "lightning bolt", condition: "lp" }, data, { now: NOW });
+assert(ranBuy.ok && ranBuy.answer.title === "Buy estimate: lightning bolt (LP)", "runs buy_estimate");
+const noSettings = runShopTool("buy_estimate", { name: "lightning bolt" }, { ...data, settings: null }, { now: NOW });
+assert(noSettings.ok && noSettings.answer.lines[0]!.startsWith("This store has no buy settings yet") && !noSettings.answer.rows, "buy_estimate without settings says so");
+if (noSettings.ok) keep(noSettings.answer);
 const badArgs = runShopTool("shelf_performance", { rank: "sideways" }, data, { now: NOW });
 assert(!badArgs.ok && badArgs.reason === "bad_args", "refuses bad arguments");
 assert(canUseShopTool({ userId: "u1", role: "store" }, "store_credit"), "every signed-in staff member may use every V1 tool (owner decision, 002)");
 
 /* ------------------------------------------------------------ every answer */
 console.log("\nevery answer");
-assert(answers.length >= 15, `checked ${answers.length} answers`);
-assert(answers.every((a) => a.title && a.lines.length > 0 && a.asOf === NOW.toISOString() && a.href?.startsWith("/admin/")), "each has a title, a line, a time and an admin link");
+assert(answers.length >= 40, `checked ${answers.length} answers`);
+assert(answers.every((a) => a.title && a.lines.length > 0 && new Date(a.asOf).toISOString() === a.asOf && a.href?.startsWith("/admin/")), "each has a title, a line, a time and an admin link");
 assert(answers.every((a) => !/\*\*|__|`/.test(JSON.stringify(a))), "no markdown in any answer");
 assert(answers.every((a) => !a.rows || a.rows.every((r) => r.length === a.columns!.length)), "every row has one cell per column");
 
