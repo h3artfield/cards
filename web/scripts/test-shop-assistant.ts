@@ -1,6 +1,6 @@
 /**
- * Shop assistant, steps 1 and 2: the six tools and the registry that runs
- * them. Plain fixtures only: no Firestore, no OpenAI.
+ * Shop assistant, steps 1 to 3: the six tools, the registry that runs them
+ * and the chooser that picks one. Plain fixtures only: no Firestore, no OpenAI.
  *
  *   npx tsx scripts/test-shop-assistant.ts
  */
@@ -9,8 +9,17 @@ import { DEFAULT_STORE_SETTINGS } from "../src/lib/constants";
 import { listCardsToMove } from "../src/lib/inventory/cards-to-move";
 import { sellPrice } from "../src/lib/inventory/sell-price";
 import { applyMarketPricing } from "../src/lib/processing/apply-market-pricing";
+import { applyStoreRules, ruleNeedsResaleAnalysis } from "../src/lib/processing/rules-engine";
 import { buildDailySales, storeDay } from "../src/lib/reports/daily-reports";
 import { canUseShopTool } from "../src/lib/shop-assistant/access";
+import {
+  QUESTION_MAX_CHARS,
+  buildChooserPrompt,
+  chooseShopTool,
+  fallbackChooseTool,
+  parseModelChoice,
+  staffAssistantModel,
+} from "../src/lib/shop-assistant/choose";
 import { formatMoney, plural, shelfName } from "../src/lib/shop-assistant/format";
 import { getShopTool, listShopTools, runShopTool } from "../src/lib/shop-assistant/registry";
 import {
@@ -44,6 +53,7 @@ import {
   storeCreditAnswer,
 } from "../src/lib/shop-assistant/tools/store-credit";
 import type { ShopAnswer, ShopToolData } from "../src/lib/shop-assistant/types";
+import { EVAL_NOW, EVAL_QUESTIONS, matchesExpected } from "./shop-assistant-eval-questions";
 import type {
   ConditionEstimate,
   InventoryItem,
@@ -396,8 +406,24 @@ const pika = estimateBuy(book, { name: "pikachu", condition: "MP" }, SETTINGS, r
 same([pika.offer!.cashPercent, pika.offer!.tradePercent, pika.offer!.cashOffer, pika.offer!.matchedRules], [0.6, 0.75, 12 * MULT.MP * 0.6, ["Pokemon over $5 pays more"]], "a category rule matches through the product-line map and sets the percents");
 same(pika.notChecked, ["2014 sets", "Slow movers"], "year rules and slow-mover rules are reported, not silently passed; inactive and other-category rules are not");
 const sampleVision: VisionResult = { category: "magic", itemType: "raw", cardName: "X", conditionEstimate: "NM", confidence: 1 };
-same(rulesNotChecked([rulesFixture[0]!, rulesFixture[1]!], sampleVision, 10), [], "rules the estimate can check are not flagged");
-same(rulesNotChecked([rule("Any card from 2020", { ruleType: "do_not_buy", appliesToCategories: ["yugioh"], ruleText: "Do not buy any card from 2020.", structuredFilters: { year: "2020" } })], sampleVision, 10), ["Any card from 2020"], "a do-not-buy rule worded for any card is flagged whatever its categories");
+same(rulesNotChecked([rulesFixture[0]!, rulesFixture[1]!], sampleVision), [], "rules the estimate can check are not flagged");
+same(rulesNotChecked([rule("Any card from 2020", { ruleType: "do_not_buy", appliesToCategories: ["yugioh"], ruleText: "Do not buy any card from 2020.", structuredFilters: { year: "2020" } })], sampleVision), ["Any card from 2020"], "a do-not-buy rule worded for any card is flagged whatever its categories");
+// The engine's own predicate must agree with what the engine does: a rule
+// "needs resale analysis" exactly when it matches with a slow-seller analysis
+// and not without one.
+const slowAnalysis = { sentiment: "neutral", salesFrequency: "low", recommendation: "pass", summary: "", risks: [], opportunities: [], confidence: 0, analyzedAt: "" } as const;
+const predicateRules = [
+  ...rulesFixture.filter((r) => r.active),
+  rule("Slow sellers under $2", { ruleType: "do_not_buy", ruleText: "Do not buy slow cards under $2." }),
+  rule("Slow note", { ruleType: "note_only", ruleText: "Slow sets, be careful." }),
+  rule("No reason given", { ruleType: "do_not_buy", ruleText: "Do not buy." }),
+];
+same(
+  predicateRules.map((r) => [r.title, ruleNeedsResaleAnalysis(r)]),
+  predicateRules.map((r) => [r.title, r.ruleType === "do_not_buy" && applyStoreRules([r], sampleVision, 10).matchedRules.length === 0 && applyStoreRules([r], sampleVision, 10, { resaleAnalysis: slowAnalysis }).matchedRules.length > 0]),
+  "ruleNeedsResaleAnalysis agrees with how the engine matches each rule",
+);
+assert(ruleNeedsResaleAnalysis(rulesFixture[3]!) && !ruleNeedsResaleAnalysis(rulesFixture[0]!) && !ruleNeedsResaleAnalysis(predicateRules[predicateRules.length - 3]!), "slow-mover rule yes; price rule and price-worded slow rule no");
 const rounded = estimateBuy(book, { name: "pikachu", condition: "NM" }, SETTINGS, [rule("Round up", { ruleType: "round_up_offers" })]).rows[0]!;
 same([rounded.offer!.cashOffer, rounded.offer!.tradeOffer], [6, 8], "round-up rule rounds offers up to whole dollars");
 
@@ -499,6 +525,69 @@ const badArgs = runShopTool("shelf_performance", { rank: "sideways" }, data, { n
 assert(!badArgs.ok && badArgs.reason === "bad_args", "refuses bad arguments");
 assert(canUseShopTool({ userId: "u1", role: "store" }, "store_credit"), "every signed-in staff member may use every V1 tool (owner decision, 002)");
 
+/* ----------------------------------------------------------------- chooser */
+async function chooserTests() {
+  console.log("\nchooser: prompt");
+  const prompt = buildChooserPrompt(NOW);
+  assert(prompt.includes("Today is Monday, 2026-11-16."), "the prompt carries today's date in shop time");
+  assert(listShopTools().every((t) => prompt.includes(`- ${t.id}: ${t.describe}`)), "and one line per tool");
+  assert(buildChooserPrompt.length === 1, "the prompt is built from the date alone: no store data can reach it");
+  assert(!/\$\d|@|Sam Carter|Lightning Bolt/.test(prompt), "no prices, emails, customer or card names in the prompt");
+  assert(buildChooserPrompt(new Date("2026-11-17T04:30:00Z")).includes("Today is Monday, 2026-11-16."), "late evening in the shop is still today, not UTC's tomorrow");
+  const savedModel = process.env.STAFF_ASSISTANT_MODEL;
+  delete process.env.STAFF_ASSISTANT_MODEL;
+  assert(staffAssistantModel() === "gpt-5.4-mini", "default model");
+  process.env.STAFF_ASSISTANT_MODEL = "  some-other-model ";
+  assert(staffAssistantModel() === "some-other-model", "STAFF_ASSISTANT_MODEL overrides it");
+  if (savedModel === undefined) delete process.env.STAFF_ASSISTANT_MODEL;
+  else process.env.STAFF_ASSISTANT_MODEL = savedModel;
+
+  console.log("\nchooser: reading the model's reply");
+  same(parseModelChoice({ tool: "find_card", args: { name: " Sol  Ring ", storeId: "other", finish: "foil" } }), { tool: "find_card", args: { name: "Sol Ring", finish: "foil" } }, "a valid pick is validated and tidied; extra keys such as storeId are dropped");
+  same(parseModelChoice({ tool: "cards_to_move" }), { tool: "cards_to_move", args: {} }, "args may be left out for a tool that takes none");
+  assert(parseModelChoice({ tool: "none" }) === "none" && parseModelChoice({ tool: null }) === "none", "none");
+  assert(parseModelChoice({ tool: "drop_tables", args: {} }) === "invalid" && parseModelChoice({ tool: "find_card", args: {} }) === "invalid" && parseModelChoice("find_card") === "invalid" && parseModelChoice(null) === "invalid" && parseModelChoice([]) === "invalid" && parseModelChoice({ answer: "We sold $500." }) === "invalid", "unknown tools, bad arguments, prose and junk are unusable");
+
+  console.log("\nchooser: model first, keyword matcher when it fails");
+  const seen: Array<{ system: string; question: string }> = [];
+  const model = (reply: unknown) => async (system: string, question: string) => {
+    seen.push({ system, question });
+    return reply;
+  };
+  same(await chooseShopTool("  do we have   sol ring ", NOW, { callModel: model({ tool: "find_card", args: { name: "sol ring" } }) }), { tool: "find_card", args: { name: "sol ring" }, via: "model" }, "the model's valid pick is used");
+  same(seen[0], { system: prompt, question: "do we have sol ring" }, "the model is sent the prompt and the tidied question, nothing else");
+  same(await chooseShopTool("who has store credit", NOW, { callModel: model({ tool: "none" }) }), { tool: null, via: "model" }, "the model's none is respected, not overridden by keywords");
+  same(await chooseShopTool("who has store credit", NOW, { callModel: model({ tool: "make_coffee" }) }), { tool: "store_credit", args: {}, via: "fallback" }, "an unusable reply falls back to the keyword matcher");
+  same(await chooseShopTool("which case is slowest", NOW, { callModel: model({ tool: "shelf_performance", args: { rank: "sideways" } }) }), { tool: "shelf_performance", args: { rank: "slowest", kind: "case", limit: 3 }, via: "fallback" }, "bad arguments fall back");
+  same(await chooseShopTool("what needs to move", NOW, { callModel: async () => { throw new Error("no key"); } }), { tool: "cards_to_move", args: {}, via: "fallback" }, "a failed call falls back and does not throw");
+  same(await chooseShopTool("what needs to move", NOW, { callModel: () => new Promise(() => {}), timeoutMs: 20 }), { tool: "cards_to_move", args: {}, via: "fallback" }, "a slow model falls back after the timeout");
+  same(await chooseShopTool("jordan avery", NOW, { callModel: async () => { throw new Error("down"); } }), { tool: null, via: "fallback" }, "nothing matched");
+  same(await chooseShopTool("what needs to move", NOW, { callModel: async () => { throw new Error("down"); }, modelOnly: true }), { tool: null, via: "model" }, "modelOnly skips the keyword matcher (for the eval)");
+  same(await chooseShopTool("   ", NOW, { callModel: model({ tool: "cards_to_move" }) }), { tool: null, via: "fallback" }, "an empty question never reaches the model");
+  seen.length = 0;
+  await chooseShopTool("x".repeat(900), NOW, { callModel: model({ tool: "none" }) });
+  assert(seen[0]!.question.length === QUESTION_MAX_CHARS, "a long question is cut before it is sent");
+
+  console.log("\nchooser: keyword matcher on the eval questions");
+  let same_ = 0;
+  let declined = 0;
+  const wrong: string[] = [];
+  for (const q of EVAL_QUESTIONS) {
+    const got = fallbackChooseTool(q.question, EVAL_NOW) ?? { tool: null };
+    if (q.fallback === "same" && matchesExpected(q, got)) same_ += 1;
+    else if (q.fallback === "none" && got.tool === null) declined += 1;
+    else wrong.push(q.question);
+  }
+  assert(wrong.length === 0, `${same_} answered as the model should, ${declined} declined, ${wrong.length} wrong${wrong.length ? `: ${wrong.join(" | ")}` : ""}`);
+  assert(EVAL_QUESTIONS.length >= 30 && EVAL_QUESTIONS.filter((q) => q.tool === "none").length >= 8, `${EVAL_QUESTIONS.length} eval questions, including ones no tool should answer`);
+  assert(fallbackChooseTool("what did we sell last friday", NOW) === null && fallbackChooseTool("sales two weeks ago", NOW) === null, "a day it cannot work out is declined, not answered as today");
+  assert(fallbackChooseTool("give Jordan Avery $20 store credit", NOW) === null && fallbackChooseTool("how do I add store credit", NOW) === null, "requests to change something and how-to questions are declined");
+  same(fallbackChooseTool("sales on Dec 28", new Date("2027-01-04T18:00:00Z")), { tool: "sales_summary", args: { period: "date", date: "2026-12-28" } }, "a month and day means the most recent one, across a new year");
+}
+
+async function finish() {
+  await chooserTests();
+
 /* ------------------------------------------------------------ every answer */
 console.log("\nevery answer");
 assert(answers.length >= 40, `checked ${answers.length} answers`);
@@ -508,3 +597,6 @@ assert(answers.every((a) => !a.rows || a.rows.every((r) => r.length === a.column
 
 console.log(`\n${passed} passed, ${failed} failed\n`);
 process.exit(failed > 0 ? 1 : 0);
+}
+
+void finish();

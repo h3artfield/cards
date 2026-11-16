@@ -270,6 +270,32 @@ function effectiveStructuredFilters(rule: StoreRule): Record<string, unknown> | 
 
 
 
+/**
+
+ * True for a do-not-buy rule that can only ever match through resale analysis:
+
+ * the "slow mover" kind, with no filters and no price wording. Callers that
+
+ * have no resale analysis use this to say the rule was not checked.
+
+ */
+
+export function ruleNeedsResaleAnalysis(rule: StoreRule): boolean {
+
+  return (
+
+    rule.ruleType === "do_not_buy" &&
+
+    !effectiveStructuredFilters(rule) &&
+
+    ruleImpliesSlowMover(rule)
+
+  );
+
+}
+
+
+
 function hasStructuredFilters(rule: StoreRule): boolean {
 
   const f = rule.structuredFilters;

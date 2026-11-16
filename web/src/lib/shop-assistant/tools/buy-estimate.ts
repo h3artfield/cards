@@ -8,12 +8,12 @@ import { applyConditionPricing } from "../../processing/condition-ladder";
 import {
   applyStoreRules,
   normalizeRuleCategory,
+  ruleNeedsResaleAnalysis,
   rulePricingOptions,
 } from "../../processing/rules-engine";
 import { STORE_TIME_ZONE } from "../../reports/daily-reports";
 import type {
   CardCategory,
-  CardResaleAnalysis,
   ConditionEstimate,
   InventoryItem,
   StoreRule,
@@ -96,28 +96,16 @@ export function estimateBuyOffer(input: BuyOfferInput): BuyOffer {
   };
 }
 
-/** A stand-in "this card sells slowly" analysis, used only to recognise slow-mover rules. */
-const SLOW_MOVER_PROBE: CardResaleAnalysis = {
-  sentiment: "neutral",
-  salesFrequency: "low",
-  recommendation: "pass",
-  summary: "",
-  risks: [],
-  opportunities: [],
-  confidence: 0,
-  analyzedAt: "",
-};
-
 function hasValue(value: unknown): boolean {
   return value != null && value !== "" && !(Array.isArray(value) && value.length === 0);
 }
 
 /**
  * Active rules this estimate cannot honour, by title. An inventory row has no
- * print year and no resale analysis, so a rule that filters on year, or a
- * "slow mover" do-not-buy rule, is reported instead of silently passed.
+ * print year and no resale analysis, so a rule that filters on year, or one
+ * the engine says needs resale analysis, is reported instead of silently passed.
  */
-export function rulesNotChecked(rules: StoreRule[], vision: VisionResult, rulesPrice: number): string[] {
+export function rulesNotChecked(rules: StoreRule[], vision: VisionResult): string[] {
   const titles: string[] = [];
   for (const rule of rules) {
     if (!rule.active) continue;
@@ -132,13 +120,7 @@ export function rulesNotChecked(rules: StoreRule[], vision: VisionResult, rulesP
 
     const filters = rule.structuredFilters ?? {};
     const usesYear = hasValue(filters.years) || hasValue(filters.year);
-    // The engine only reads resale analysis for the slow-mover kind of rule,
-    // so a rule that matches with it and not without it is that kind.
-    const slowMover =
-      rule.ruleType === "do_not_buy" &&
-      applyStoreRules([rule], vision, rulesPrice).matchedRules.length === 0 &&
-      applyStoreRules([rule], vision, rulesPrice, { resaleAnalysis: SLOW_MOVER_PROBE })
-        .matchedRules.length > 0;
+    const slowMover = ruleNeedsResaleAnalysis(rule);
     if (usesYear || slowMover) titles.push(rule.title);
   }
   return titles;
@@ -296,7 +278,7 @@ export function estimateBuy(
       basisPrice: from.price,
       basisAt: date,
       basisSource: from.item.marketPriceSource,
-      notChecked: rulesNotChecked(rules, vision, rulesPrice),
+      notChecked: rulesNotChecked(rules, vision),
     });
   }
 
@@ -329,8 +311,8 @@ export function buyEstimateAnswer(
   const conditionName = CONDITION_LABELS[args.condition];
   const base = {
     title: `Buy estimate: ${args.name} (${args.condition})`,
-    href: "/admin/rules",
-    hrefLabel: "Open Buy rules",
+    href: "/admin/pricing?section=buy",
+    hrefLabel: "Open Buy %",
     asOf: now.toISOString(),
   };
   const closing = "Estimate. The scan sets the real offer.";
