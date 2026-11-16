@@ -9,6 +9,7 @@ import { normalizeStoreSlug } from "@/lib/store-slug";
 import { persistStoreLogo } from "@/lib/storage/store-logo";
 import { syncStoreOwnerEmail } from "@/lib/auth/sync-store-owner";
 import { validateStoreOwnerEmail } from "@/lib/auth/ensure-store-owner";
+import { requireStoreOwner, settingsPatchNeedsOwner } from "@/lib/staff/owner-access";
 import type { StoreSettings } from "@/lib/types";
 import { DEFAULT_CALENDAR_SETTINGS } from "@/lib/store-calendar/types";
 
@@ -36,6 +37,10 @@ export async function PATCH(req: NextRequest) {
     if (scope instanceof Response) return scope;
 
     const body = await req.json();
+    if (settingsPatchNeedsOwner(body)) {
+      const forbidden = await requireStoreOwner(req, auth, scope.storeId);
+      if (forbidden) return forbidden;
+    }
     const current = await dataStore.getSettings(scope.storeId);
     const storeName =
       body.storeName != null ? String(body.storeName) : current.storeName;

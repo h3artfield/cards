@@ -101,7 +101,7 @@ export function AdminPricingContent({
 }: {
   initialSection?: SectionId;
 }) {
-  const { loading: authLoading, activeStore } = useAdmin();
+  const { loading: authLoading, activeStore, isOwner } = useAdmin();
   const [section, setSection] = useState<SectionId>(initialSection);
   const [rules, setRules] = useState<StoreRule[]>([]);
   const [settings, setSettings] = useState<StoreSettings | null>(null);
@@ -484,6 +484,9 @@ export function AdminPricingContent({
           {section === "buy" && buyDraft && (
             <div>
               <h3 className="font-semibold text-slate-800">Buy percentages</h3>
+              {!isOwner ? (
+                <p className="mt-1 text-sm text-slate-600">Only the owner can change these.</p>
+              ) : null}
               <form
                 onSubmit={saveBuyPercents}
                 className="mt-4 max-w-md space-y-4 rounded-xl border bg-white p-4"
@@ -495,6 +498,7 @@ export function AdminPricingContent({
                       name={name}
                       type="number"
                       step={step}
+                      disabled={!isOwner}
                       value={buyDraft[name]}
                       onChange={(e) =>
                         setBuyDraft((current) =>
@@ -507,9 +511,11 @@ export function AdminPricingContent({
                     />
                   </label>
                 ))}
-                <Button type="submit" disabled={savingBuy}>
-                  {savingBuy ? "Saving…" : "Save"}
-                </Button>
+                {isOwner ? (
+                  <Button type="submit" disabled={savingBuy}>
+                    {savingBuy ? "Saving…" : "Save"}
+                  </Button>
+                ) : null}
               </form>
             </div>
           )}

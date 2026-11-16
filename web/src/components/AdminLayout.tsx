@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { StaffAssistant } from "@/components/admin/StaffAssistant";
+import { StaffGate } from "@/components/admin/StaffGate";
 import { StoreBrandMark } from "@/components/StoreBrandMark";
 import { useAdmin } from "@/context/AdminContext";
 
@@ -37,6 +39,35 @@ const STORE_TABS = [
   { href: "/admin/settings", label: "Settings", match: ["/admin/settings", "/admin/calendar"] },
 ];
 
+const CLERK_TABS = STORE_TABS.map((tab) =>
+  tab.href === "/admin/settings"
+    ? { href: "/admin/calendar", label: "Calendar", match: ["/admin/calendar"] }
+    : tab,
+);
+
+const IDLE_LOCK_MS = 30 * 60 * 1000;
+
+/** Locks the counter back to "Who's working?" after a stretch with no taps or keys. */
+function useIdleStaffLock(active: boolean, lock: () => Promise<void>) {
+  const lastActivity = useRef(0);
+  useEffect(() => {
+    if (!active) return;
+    lastActivity.current = Date.now();
+    const touch = () => {
+      lastActivity.current = Date.now();
+    };
+    const events = ["pointerdown", "keydown", "wheel", "touchstart"] as const;
+    events.forEach((e) => window.addEventListener(e, touch, { passive: true }));
+    const timer = window.setInterval(() => {
+      if (Date.now() - lastActivity.current > IDLE_LOCK_MS) void lock();
+    }, 30_000);
+    return () => {
+      events.forEach((e) => window.removeEventListener(e, touch));
+      window.clearInterval(timer);
+    };
+  }, [active, lock]);
+}
+
 function isTabActive(
   pathname: string,
   tab: { href: string; exact?: boolean; match?: string[] },
@@ -58,13 +89,17 @@ export function AdminLayout({
   showStoreTabs?: boolean;
 }) {
   const pathname = usePathname();
-  const { session, activeStore, logout } = useAdmin();
+  const { session, activeStore, staff, isOwner, loading, logout, signOutStaff } = useAdmin();
 
   const storeName = activeStore?.storeName ?? "Buyback Admin";
   const logoUrl = activeStore?.storeLogoUrl;
 
   const inStoreContext = Boolean(activeStore);
   const isPlatformInStore = session?.role === "platform" && inStoreContext;
+  const needsStaff = session?.role === "store" && inStoreContext && !staff;
+  const tabs = isOwner ? STORE_TABS : CLERK_TABS;
+
+  useIdleStaffLock(Boolean(staff), signOutStaff);
 
   return (
     <div className="storefront-theme admin-theme min-h-screen bg-[var(--ink-850)] text-[var(--text)]">
@@ -112,7 +147,7 @@ export function AdminLayout({
                 </Link>
               </>
             )}
-            {session?.role === "store" && (
+            {session?.role === "store" && isOwner && !needsStaff && (
               <Link
                 href="/billing"
                 className="rounded-lg border border-[var(--line)] px-3 py-1.5 text-[var(--text)] hover:border-[var(--line-strong)] hover:text-[var(--text-hi)]"
@@ -120,8 +155,24 @@ export function AdminLayout({
                 Manage subscription
               </Link>
             )}
-            {!isPlatformInStore && (
-              <span className="hidden text-[var(--text-lo)] sm:inline">{session?.email}</span>
+            {staff ? (
+              <>
+                <span className="text-[var(--text-hi)]">
+                  {staff.name}
+                  <span className="text-[var(--text-lo)]">{staff.role === "owner" ? " · owner" : " · clerk"}</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => void signOutStaff()}
+                  className="rounded-lg border border-[var(--line)] px-3 py-1.5 text-[var(--text)] hover:border-[var(--line-strong)] hover:text-[var(--text-hi)]"
+                >
+                  Switch user
+                </button>
+              </>
+            ) : (
+              !isPlatformInStore && (
+                <span className="hidden text-[var(--text-lo)] sm:inline">{session?.email}</span>
+              )
             )}
             <button
               type="button"
@@ -132,10 +183,10 @@ export function AdminLayout({
             </button>
           </div>
         </div>
-        {activeStore ? <StaffAssistant /> : null}
-        {showStoreTabs && activeStore && (
+        {activeStore && !needsStaff ? <StaffAssistant /> : null}
+        {showStoreTabs && activeStore && !needsStaff && (
           <nav className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 pb-3">
-            {STORE_TABS.map((tab) => {
+            {tabs.map((tab) => {
               const active = isTabActive(pathname, tab);
               return (
                 <Link
@@ -154,7 +205,9 @@ export function AdminLayout({
           </nav>
         )}
       </header>
-      <main className="mx-auto max-w-7xl px-4 py-8">{children}</main>
+      <main className="mx-auto max-w-7xl px-4 py-8">
+        {loading ? null : needsStaff ? <StaffGate /> : children}
+      </main>
     </div>
   );
 }

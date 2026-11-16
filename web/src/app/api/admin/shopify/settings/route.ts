@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { dataStore } from "@/lib/storage/data-store";
 import { requireAdminSession, requireStoreScope } from "@/lib/admin-auth";
+import { requireStoreOwner } from "@/lib/staff/owner-access";
 import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
 import { encryptSecret } from "@/lib/crypto/secret-encryption";
 import {
@@ -179,6 +180,8 @@ export async function PATCH(req: NextRequest) {
     if (auth instanceof Response) return auth;
     const scope = requireStoreScope(auth, req);
     if (scope instanceof Response) return scope;
+    const forbidden = await requireStoreOwner(req, auth, scope.storeId);
+    if (forbidden) return forbidden;
 
     const body = (await req.json()) as Record<string, unknown>;
     const current = await dataStore.getSettings(scope.storeId);

@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { requireAdminSession } from "@/lib/admin-auth";
+import { requireStoreOwner } from "@/lib/staff/owner-access";
 import { jsonOk, jsonError, handleRouteError } from "@/lib/api-utils";
 import { createBillingPortalForStore } from "@/lib/stripe/store-signup";
 import { stripeConfigured } from "@/lib/stripe/config";
@@ -18,6 +19,8 @@ export async function POST(req: NextRequest) {
     if (auth.role !== "store" || !auth.storeId) {
       return jsonError("Store account required", 403);
     }
+    const forbidden = await requireStoreOwner(req, auth, auth.storeId);
+    if (forbidden) return forbidden;
 
     const portalUrl = await createBillingPortalForStore(auth.storeId);
     return jsonOk({ portalUrl });

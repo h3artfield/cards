@@ -7,6 +7,7 @@ import { jsonOk, handleRouteError } from "@/lib/api-utils";
 import { dataStore } from "@/lib/storage/data-store";
 import { ensureSeedData } from "@/lib/storage/ensure-seed";
 import { storeHasActiveSubscription } from "@/lib/subscription-access";
+import { getStaffContext } from "@/lib/staff/owner-access";
 
 export async function GET(req: NextRequest) {
   try {
@@ -25,8 +26,15 @@ export async function GET(req: NextRequest) {
     const subscriptionActive =
       auth.role === "platform" || storeHasActiveSubscription(activeStore);
 
+    const staffCtx =
+      auth.role === "store" && auth.storeId
+        ? await getStaffContext(req, auth.storeId)
+        : { setupNeeded: false, staff: null };
+
     return jsonOk({
       session: sanitizeAdminSession(auth),
+      staff: staffCtx.staff,
+      staffSetupNeeded: staffCtx.setupNeeded,
       activeStore: activeStore
         ? {
             id: activeStore.id,
