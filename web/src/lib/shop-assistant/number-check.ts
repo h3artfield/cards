@@ -3,14 +3,17 @@
  * store's own lookups returned. The model is told never to invent a number;
  * this is the check that it did not.
  *
- * A figure is supported when it appears in the sources. Two kinds may also be
- * worked out, because a clerk would say "up $12 on yesterday" or "that's 40%
- * of the week":
+ * A figure is supported when it appears in the sources. It may also be worked
+ * out, because a clerk would say "up $12 on yesterday", "4 cards over the two
+ * days" or "that's 40% of the week":
  *   - a dollar amount that is the sum or difference of two dollar amounts in
  *     the sources;
+ *   - a count that is the sum or difference of two counts in the sources;
  *   - a percentage that is one source figure as a share of, or change from,
  *     another of the same kind.
- * A plain count ("37 cards") has to appear in the sources as written.
+ * Dollars and counts are never mixed. The more counts a lookup returns, the
+ * more sums exist, so this catches an invented figure less reliably for
+ * counts than for dollars. It is a net for honest mistakes, nothing more.
  */
 
 type Kind = "money" | "percent" | "plain";
@@ -64,6 +67,8 @@ export function unsupportedFigures(text: string, sources: string[]): string[] {
     let derived = false;
     if (kind === "money") {
       derived = pairs(money, (a, b) => close(a + b, value, decimals) || close(a - b, value, decimals));
+    } else if (kind === "plain") {
+      derived = pairs(plain, (a, b) => close(a + b, value, decimals) || close(a - b, value, decimals));
     } else if (kind === "percent") {
       const share = (a: number, b: number) =>
         b !== 0 && (close((a / b) * 100, value, decimals) || close(((a - b) / b) * 100, value, decimals));

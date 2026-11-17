@@ -79,7 +79,9 @@ async function main() {
   same(unsupportedFigures("That's $4.25 more than yesterday, $8.25 over the two days.", src), [], "a sum or difference of two looked-up dollar amounts passes");
   same(unsupportedFigures("In store was 48% of today's sales.", src), [], "a share of two looked-up amounts passes");
   same(unsupportedFigures("You sold 37 cards for $412.00.", src), ["37", "$412.00"], "invented figures are caught");
-  same(unsupportedFigures("About 5 cards sold.", src), ["5"], "a count is not accepted just because two counts add up to it");
+  same(unsupportedFigures("That's 4 cards and $8.25 total across the two days.", src), [], "a count that is the sum of two looked-up counts passes (3 + 1)");
+  same(unsupportedFigures("That's 9 cards over the two days.", src), ["9"], "a count no two looked-up counts add up to is caught");
+  same(unsupportedFigures("About 5 cards sold.", ["Today: $3.00 and $2.00."]), ["5"], "dollars are not added up into a count");
   same(unsupportedFigures("Sales were up 900%.", src), ["900%"], "an invented percentage is caught");
   same(unsupportedFigures("Nothing sold yet.", src), [], "no figures, nothing to check");
   same(unsupportedFigures("Sold $1,540.00 in total.", ["55 customers, $1,540.00 in total."]), [], "thousands separators are read");
