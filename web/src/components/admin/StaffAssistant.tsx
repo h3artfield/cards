@@ -185,7 +185,10 @@ export function StaffAssistant() {
       });
     }
     // The conversation, offered last so it never displaces a jump or an answer.
-    if (chat.enabled && (!query.trim() || question || shopQuestion)) {
+    // Also for anything three words or longer ("put together a report on last
+    // week"), which is a request even when it is not phrased as a question.
+    const wordy = query.trim().split(/\s+/).length >= 3;
+    if (chat.enabled && (!query.trim() || question || shopQuestion || wordy)) {
       next.push({
         key: "chat",
         kind: "chat",

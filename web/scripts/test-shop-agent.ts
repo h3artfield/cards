@@ -25,7 +25,13 @@ import {
 import { agentToolDefinitions } from "../src/lib/shop-assistant/agent-tools";
 import {
   CHAT_HISTORY_TURNS,
+  CHAT_HISTORY_TURN_MAX_CHARS,
   CONFIRM_QUERY,
+  REPORT_GONE_MESSAGE,
+  assistantHistoryText,
+  parseStoredReport,
+  readShopReport,
+  reportDigest,
   confirmLabel,
   historyFor,
   readAgentReply,
@@ -283,6 +289,40 @@ async function main() {
   const relocked = relockItems(talk);
   assert(!JSON.stringify(relocked).includes("Sam Carter") && relocked[1]!.kind === "assistant" && relocked[1]!.confirms[0]!.state === "locked" && relocked[4] === talk[4], "closing the drawer drops an opened customer list and leaves the rest alone");
   assert(CONFIRM_QUERY.length >= 8 && confirmLabel("store_credit") === "Store credit list" && confirmLabel("other") === "Customer details", "confirm card wording");
+
+  console.log("\nreports in the drawer");
+  {
+    const { loader } = fixtureLoader();
+    const built = await runAgentTurn({ message: "weekly report", history: [], storeId: STORE, session }, { model: scripted([asks(call("build_report", { kind: "weekly" })), say('{"summary": "A quiet week: 1 card for $2.00.", "comments": {"1": "One sale, online."}}'), say("Last week's report is ready.")]).model, loader, now: NOW });
+    const wire: unknown = JSON.parse(JSON.stringify(built.report));
+    const view = readShopReport(wire)!;
+    assert(view !== null && view.title === built.report!.title && view.sections.length === 5 && view.sections[0]!.comment === "One sale, online." && view.period!.from === "2026-11-09", "the browser reads the report the server sends");
+    assert(view.sections.every((s) => s.answer.href === undefined || s.answer.href.startsWith("/admin")), "table links are re-checked on the way in");
+    for (const junk of [null, "x", [], {}, { ...(wire as object), sections: [] }, { ...(wire as object), sections: [{ heading: "H", answer: { title: 1 } }] }, { ...(wire as object), title: 5 }]) {
+      if (readShopReport(junk) !== null) assert(false, `junk report ${JSON.stringify(junk).slice(0, 40)} should be refused`);
+    }
+    assert(readShopReport({ ...(wire as object), period: { from: "soon", to: "later" }, cautions: ["ok", 5] })!.period === undefined && readShopReport({ ...(wire as object), cautions: ["ok", 5] })!.cautions.length === 1, "a malformed period or caution is dropped, the report kept");
+    assert(parseStoredReport(JSON.stringify(wire))!.title === view.title && parseStoredReport(null) === null && parseStoredReport("{not json") === null && parseStoredReport('"text"') === null, "the report page reads it back from storage, or gets nothing");
+    assert(REPORT_GONE_MESSAGE === "This report is no longer available. Ask the assistant again.", "the message for a missing report");
+
+    const digest = reportDigest(view);
+    assert(digest.startsWith("[Report shown: Sales report: Mon, Nov 9 to Sun, Nov 15. Summary: A quiet week: 1 card for $2.00. Sections: Sales: Mon, Nov 9 to Sun, Nov 15: 1 card, $2.00. | Top sellers:") && digest.endsWith("]"), "a report's digest is its title, summary and each section's first line");
+    assert(!digest.includes("Counterspell") && !digest.includes("Dominaria"), "no table rows are in the digest");
+    const turnText = assistantHistoryText("Last week's report is ready.", view);
+    assert(turnText.startsWith("Last week's report is ready. [Report shown:") && turnText.length <= CHAT_HISTORY_TURN_MAX_CHARS, "it rides on the reply that produced it, within the per-turn cap");
+    assert(assistantHistoryText("x".repeat(2000)).length === CHAT_HISTORY_TURN_MAX_CHARS && assistantHistoryText("Hello.") === "Hello.", "a reply with no report is sent as it is, capped");
+    const items: ChatItem[] = [{ id: 1, kind: "user", text: "weekly report" }, { id: 2, kind: "assistant", text: "Last week's report is ready.", panels: [], confirms: [], report: view }];
+    same(historyFor(items)[1], { role: "assistant", text: turnText }, "history carries the digest, so a follow-up can be answered without building the report again");
+
+    const followUp = scripted([say("It was a quiet week: one card for $2.00, sold online.")]);
+    const answered = await runAgentTurn({ message: "what stood out in it?", history: historyFor(items), storeId: STORE, session }, { model: followUp.model, loader, now: NOW });
+    const sentHistory = followUp.requests[0]!.messages[1]!;
+    assert(sentHistory.role === "assistant" && typeof sentHistory.content === "string" && sentHistory.content.includes("[Report shown:"), "the model sees the earlier report in the conversation");
+    assert(answered.report === undefined && answered.caution === undefined && answered.modelCalls === 1, "a figure quoted from the earlier report checks out, with one model call");
+    const agentPrompt = buildAgentPrompt(NOW);
+    assert(/Use build_report only when they ask for a report/.test(agentPrompt) && /Do not build it again unless they ask for a new one/.test(agentPrompt), "the prompt says when to build a report and when not to");
+    assert(followUp.requests[0]!.tools.find((t) => t.name === "build_report")!.description.includes("Do not use it to answer a question about a report already shown"), "and so does the tool's description");
+  }
 
   console.log(`\n${passed} passed, ${failed} failed\n`);
   process.exit(failed > 0 ? 1 : 0);

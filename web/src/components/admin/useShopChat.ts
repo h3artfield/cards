@@ -12,6 +12,7 @@ import {
   type ChatItem,
 } from "@/lib/shop-assistant/chat-client";
 import { readShopReply } from "@/lib/shop-assistant/detect";
+import { forgetStoredReport } from "@/lib/shop-assistant/report-storage";
 
 export type ShopChat = {
   /** False until the server says the assistant is switched on for this person. */
@@ -84,6 +85,7 @@ export function useShopChat(): ShopChat {
                   caution: reply.caution,
                   panels: reply.panels,
                   confirms: reply.confirms.map((tool): ChatConfirm => ({ tool, state: "locked" })),
+                  report: reply.report,
                 }
               : { id: nextId.current++, kind: "error", text: reply.message },
           ]);
@@ -149,6 +151,7 @@ export function useShopChat(): ShopChat {
   const relock = useCallback(() => update(relockItems), [update]);
 
   const reset = useCallback(() => {
+    forgetStoredReport();
     request.current?.abort();
     request.current = null;
     setBusy(false);

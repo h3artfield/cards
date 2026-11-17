@@ -50,7 +50,7 @@ export type AgentToolName = ShopToolId | "build_report";
 const BUILD_REPORT_TOOL: AgentToolDefinition = {
   name: "build_report",
   description:
-    'Puts several lookups together as one report page the staff member can open and print. Use when they ask for a report, a summary of a week or month, or a rundown. ' +
+    'Puts several lookups together as one report page the staff member can open and print. Use only when they ask for a report, a rundown or something to print. Do not use it to answer a question about a report already shown in this conversation. ' +
     'kind "weekly": sales by day, top sellers, sales by shelf, slowest shelves and cards to move, for a period (default last_week). ' +
     'kind "slow_stock": cards that have sat unsold, slowest shelves and cards to move; takes no period. ' +
     "One report per reply.",
@@ -111,7 +111,8 @@ export function buildAgentPrompt(now: Date): string {
     "- For anything about sales, stock, shelves, prices the store would pay, or cards to move, call a tool. Never answer those from memory or from earlier in the conversation if the person is asking for current figures.",
     "- Never state a number that is not in a tool result from this turn or an earlier reply. You may add, subtract or take a percentage of figures the tools gave you, and nothing else. If you do not have a figure, say so.",
     "- The person sees each tool's full table under your reply. Do not repeat the table. Say what matters in one to three sentences and point at the table.",
-    "- When they ask for a report or a rundown, use build_report. They get a card to open the full page, so reply in a sentence or two with what stands out.",
+    "- Use build_report only when they ask for a report, a rundown, or something to print. They get a card to open the full page, so reply in a sentence or two with what stands out.",
+    "- A report already in this conversation appears in your earlier reply as [Report shown: ...]. Answer questions about it from that text, or with an ordinary lookup if you need a figure it does not hold. Do not build it again unless they ask for a new one.",
     "- If a tool finds nothing, say that plainly. Do not guess.",
     "- Dates: work out the calendar day from today's date and pass it as YYYY-MM-DD.",
     "",

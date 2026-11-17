@@ -3,7 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { ShopAnswerPanel } from "@/components/admin/ShopAnswerPanel";
 import type { ShopChat } from "@/components/admin/useShopChat";
-import { CHAT_MESSAGE_MAX_CHARS, confirmLabel } from "@/lib/shop-assistant/chat-client";
+import {
+  CHAT_MESSAGE_MAX_CHARS,
+  REPORT_PAGE_PATH,
+  confirmLabel,
+  type ShopReportView,
+} from "@/lib/shop-assistant/chat-client";
+import { storeReport } from "@/lib/shop-assistant/report-storage";
 
 const STARTERS = ["How are we doing today?", "What needs to move?", "Which shelves are slowest?"];
 const PANEL_FRAME = "mt-2 rounded-lg border border-slate-200 px-3 py-3";
@@ -22,6 +28,17 @@ export function ShopAgentDrawer({
   onClose: () => void;
 }) {
   const [draft, setDraft] = useState("");
+  const [reportTrouble, setReportTrouble] = useState<number | null>(null);
+
+  function openReport(itemId: number, report: ShopReportView) {
+    // The new tab starts with a copy of this tab's session storage, so the
+    // report is there when the page loads. It must not be opened "noopener".
+    if (storeReport(report) && window.open(REPORT_PAGE_PATH, "_blank")) {
+      setReportTrouble(null);
+    } else {
+      setReportTrouble(itemId);
+    }
+  }
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
@@ -111,6 +128,28 @@ export function ShopAgentDrawer({
                 <p className="mt-2 rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-xs font-medium text-slate-700">
                   {item.caution}
                 </p>
+              ) : null}
+              {item.report ? (
+                <div className={PANEL_FRAME}>
+                  <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-600">Report</div>
+                  <div className="text-sm font-semibold text-slate-900">{item.report.title}</div>
+                  <p className="mt-1 text-sm text-slate-800">{item.report.summary}</p>
+                  <p className="mt-1 text-xs text-slate-500">
+                    {item.report.sections.map((section) => section.heading).join(" · ")}
+                  </p>
+                  <button
+                    type="button"
+                    className="mt-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+                    onClick={() => openReport(item.id, item.report!)}
+                  >
+                    Open report
+                  </button>
+                  {reportTrouble === item.id ? (
+                    <p className="mt-2 text-xs text-slate-600">
+                      Couldn&apos;t open the report. Allow pop-ups for this site and try again.
+                    </p>
+                  ) : null}
+                </div>
               ) : null}
               {item.panels.map((panel, index) => (
                 <ShopAnswerPanel key={index} answer={panel.answer} onNavigate={onClose} className={PANEL_FRAME} />
