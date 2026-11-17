@@ -1,8 +1,7 @@
 import type { AdminSession } from "../types";
-import { readAgentRequest, runAgentTurn, type AgentTurnResult } from "./agent";
+import { readAgentRequest, runAgentTurn, type AgentToolName, type AgentTurnResult } from "./agent";
 import type { ShopDataLoader } from "./load";
 import type { AgentModel } from "./openai-tools";
-import type { ShopToolId } from "./types";
 
 /**
  * Everything the chat route does after sign-in is checked, with its
@@ -68,7 +67,7 @@ export type ShopAgentAudit = {
   userId: string;
   staffId: string | null;
   storeId: string;
-  tools: ShopToolId[];
+  tools: AgentToolName[];
   modelCalls: number;
   historyTurns: number;
   flagged: boolean;
@@ -97,7 +96,7 @@ export type ShopAgentDeps = {
   audit: (line: ShopAgentAudit) => void;
 };
 
-export type ShopAgentResponse = Pick<AgentTurnResult, "text" | "panels" | "confirms" | "caution">;
+export type ShopAgentResponse = Pick<AgentTurnResult, "text" | "panels" | "confirms" | "caution" | "report">;
 
 export type ShopAgentResult =
   | { status: 200; body: ShopAgentResponse }
@@ -105,7 +104,7 @@ export type ShopAgentResult =
 
 export async function handleShopAgent(input: ShopAgentInput, deps: ShopAgentDeps): Promise<ShopAgentResult> {
   const started = Date.now();
-  let tools: ShopToolId[] = [];
+  let tools: AgentToolName[] = [];
   let modelCalls = 0;
   let historyTurns = 0;
   let flagged = false;
@@ -164,7 +163,7 @@ export async function handleShopAgent(input: ShopAgentInput, deps: ShopAgentDeps
     flagged = Boolean(turn.caution);
     return done("answered", {
       status: 200,
-      body: { text: turn.text, panels: turn.panels, confirms: turn.confirms, caution: turn.caution },
+      body: { text: turn.text, panels: turn.panels, confirms: turn.confirms, caution: turn.caution, report: turn.report },
     });
   } catch {
     return done("error", {

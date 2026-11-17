@@ -5,6 +5,7 @@
  *
  *   npx tsx scripts/test-shop-reports.ts
  */
+import { withSaleLog } from "../src/lib/inventory/sale-log";
 import { MAX_DAYS, saleEvents } from "../src/lib/reports/daily-reports";
 import { agentToolDefinitions } from "../src/lib/shop-assistant/agent-tools";
 import {
@@ -15,7 +16,15 @@ import {
   readPeriodArgs,
   resolvePeriod,
 } from "../src/lib/shop-assistant/period";
+import type { AgentModel, AgentModelRequest } from "../src/lib/shop-assistant/openai-tools";
 import { getShopTool, runShopTool } from "../src/lib/shop-assistant/registry";
+import {
+  REPORT_RECIPES,
+  REPORT_WRITER_PROMPT,
+  buildReportTables,
+  reportNeeds,
+  writeReportWords,
+} from "../src/lib/shop-assistant/report";
 import {
   salesByShelf,
   salesByShelfAnswer,
@@ -150,7 +159,27 @@ if (lastWeek.ok) {
 const shelves = keep(salesByShelfAnswer(stock, { ...LAST_WEEK, kind: "any" }, NOW));
 same(shelves.lines, ["Mon, Nov 9 to Sun, Nov 15: 14 cards sold for $51.15.", "Most came from Binder U · Blue: $40.00, 78% of sales."], "summary lines");
 same(shelves.rows, [["Binder U · Blue", "1", "$40.00", "78%"], ["2-2 · Red", "4", "$9.50", "19%"], ["No location", "5", "$1.25", "2%"], ["Bulk", "4", "$0.40", "1%"]], "rows: shelf, sold, sales, share");
-assert(shelves.note!.startsWith("By each card's current shelf"), "the note says it is the card's current shelf");
+assert(shelves.note!.startsWith("By where each card sat when it sold, or its current shelf for older sales."), "the note says which shelf is meant");
+
+console.log("\nshelf at the time of sale");
+{
+  const onShelf = card("Moved Later", { shelfLocation: " 1-1 ", quantity: 3 });
+  const log = withSaleLog(onShelf, { at: "2026-11-10T18:00:00Z", quantity: 1, unitPrice: 5, channel: "in_store" })!;
+  same(log, [{ at: "2026-11-10T18:00:00Z", quantity: 1, unitPrice: 5, channel: "in_store", location: "1-1" }], "a sale records the shelf the card sold from");
+  const noShelf = withSaleLog(card("Loose", { quantity: 2 }), { at: "2026-11-10T18:00:00Z", quantity: 1, unitPrice: 5, channel: "shopify" })!;
+  assert(!("location" in noShelf[0]!), "a card with no shelf records no location key at all");
+  // Sold from 1-1, then moved to a binder, then sold again from there.
+  const moved = { ...onShelf, shelfLocation: "Binder W", saleLog: log };
+  const secondLog = withSaleLog(moved, { at: "2026-11-12T18:00:00Z", quantity: 1, unitPrice: 5, channel: "in_store" })!;
+  const after = { ...moved, saleLog: secondLog };
+  const legacy = card("Before Tracking", { shelfLocation: "2-1", saleLog: [sale("2026-11-11T18:00:00Z", 2, 3)] });
+  const movedSales = salesInPeriod([after, legacy], LAST_WEEK, NOW);
+  if (movedSales.ok) {
+    same(salesByShelf(movedSales.lines, "any").map((r) => [r.location, r.units, r.revenue]), [["2-1", 2, 6], ["1-1", 1, 5], ["Binder W", 1, 5]], "a card sold from 1-1 and later moved to a binder counts for 1-1; a sale with no recorded shelf uses the current one");
+    same(movedSales.lines.map((l) => l.location).sort(), ["1-1", "2-1", "Binder W"], "the Daily report's sale lines carry the same shelf");
+  }
+  assert(secondLog.length === 2 && secondLog[0]!.location === "1-1" && secondLog[1]!.location === "Binder W", "earlier entries are not rewritten");
+}
 const binders = keep(salesByShelfAnswer(stock, { ...LAST_WEEK, kind: "binder" }, NOW));
 assert(binders.rows!.length === 1 && binders.note!.endsWith("Only binders are listed."), "binders only, and it says so");
 same(keep(salesByShelfAnswer([elf], { ...LAST_WEEK, kind: "case" }, NOW)).lines, ["No sales from case shelves from Mon, Nov 9 to Sun, Nov 15."], "sales, but none from that kind of shelf");
@@ -200,6 +229,56 @@ if (ran.ok) keep(ran.answer);
 const menu = agentToolDefinitions();
 assert(["top_sellers", "sales_by_shelf", "slow_stock"].every((id) => menu.some((t) => t.name === id)) && JSON.stringify(menu.find((t) => t.name === "sales_summary")).includes("last_week"), "the conversation model is offered all three, and the new periods");
 
+/* ----------------------------------------------------------------- reports */
+async function reportTests() {
+  console.log("\nreport recipes");
+  const weekly = buildReportTables(REPORT_RECIPES.weekly, LAST_WEEK, data, NOW);
+  assert(weekly.ok, "the weekly report builds");
+  if (!weekly.ok) return;
+  const report = weekly.report;
+  same([report.kind, report.title, report.period, report.cautions, report.asOf], ["weekly", "Sales report: Mon, Nov 9 to Sun, Nov 15", { from: "2026-11-09", to: "2026-11-15" }, [], NOW.toISOString()], "title, exact dates and time");
+  same(report.sections.map((s) => [s.heading, s.answer.title]), [
+    ["Sales", "Sales last week"],
+    ["Top sellers", "Top sellers: Mon, Nov 9 to Sun, Nov 15"],
+    ["Sales by shelf", "Sales by shelf: Mon, Nov 9 to Sun, Nov 15"],
+    ["Slowest shelves, last 30 days", "Slowest shelves"],
+    ["Cards to move", "Cards to move"],
+  ], "five fixed sections in order");
+  same(report.sections[1]!.answer, topSellersAnswer(stock, { ...LAST_WEEK, by: "revenue", limit: 10 }, NOW), "each table is the lookup's own answer, unchanged");
+  assert(report.summary === "Mon, Nov 9 to Sun, Nov 15: 14 cards, $51.15." && report.sections.every((s) => s.comment === undefined), "before any model call the summary is the sales line and there are no comments");
+  same(reportNeeds(REPORT_RECIPES.weekly), ["inventory"], "a weekly report reads inventory only");
+  const slowReport = buildReportTables(REPORT_RECIPES.slow_stock, LAST_WEEK, { ...data, inventory: shelf }, NOW);
+  assert(slowReport.ok && slowReport.report.title === "Slow stock report" && slowReport.report.period === undefined && slowReport.report.sections.length === 3 && slowReport.report.sections[0]!.answer.rows!.length === 3, "the slow stock report: three sections, no period");
+  same(buildReportTables(REPORT_RECIPES.weekly, { period: "range", from: "2026-01-01", to: "2026-01-31" }, data, NOW), { ok: false, message: "Thu, Jan 1 is too far back. Sales reports keep the last 90 days, back to Wed, Aug 19." }, "a period past 90 days is refused with the reason");
+  let refused = "";
+  try { buildReportTables({ ...REPORT_RECIPES.weekly, sections: [...REPORT_RECIPES.weekly.sections, { heading: "Store credit", tool: "store_credit", args: () => ({}) }] }, LAST_WEEK, data, NOW); } catch (err) { refused = String(err); }
+  assert(refused.includes("may not include customer data"), "a recipe with a customer-data lookup cannot be built");
+  assert(Object.values(REPORT_RECIPES).every((r) => r.sections.every((s) => getShopTool(s.tool)?.sensitive === false)), "no shipped recipe includes one");
+
+  console.log("\nreport words");
+  const seen: AgentModelRequest[] = [];
+  const writer = (text: string | null): AgentModel => async (request) => { seen.push(request); return { text, toolCalls: [] }; };
+  const good = await writeReportWords(report, writer('```json\n{"summary": "A **steady** week: 14 cards for $51.15. Mox Opal alone brought in $40.00, 78% of sales.", "comments": {"2": "Lightning Bolt sold 4 copies across two conditions.", "3": "", "7": "no such section"}}\n```'));
+  same([good.summary, good.sections.map((s) => s.comment ?? null), good.cautions], ["A steady week: 14 cards for $51.15. Mox Opal alone brought in $40.00, 78% of sales.", [null, "Lightning Bolt sold 4 copies across two conditions.", null, null, null], []], "summary and comments are attached, markdown stripped, figures check out (4 = 3 + 1)");
+  assert(JSON.stringify(good.sections.map((s) => s.answer)) === JSON.stringify(report.sections.map((s) => s.answer)), "the tables are untouched by the writing step");
+  const sent = seen[0]!;
+  assert(sent.tools.length === 0 && sent.json === true && sent.system === REPORT_WRITER_PROMPT && sent.messages.length === 1, "one call, no tools, JSON asked for");
+  const payload = JSON.parse(sent.messages[0]!.role === "user" ? sent.messages[0]!.content : "{}") as { title: string; sections: Array<{ heading: string; rows?: string[][] }> };
+  assert(payload.title === report.title && payload.sections.length === 5 && payload.sections[1]!.rows!.length === 5 && !JSON.stringify(payload).includes("/admin/"), "it is sent the title and the five tables, without links");
+  const wrong = await writeReportWords(report, writer('{"summary": "A record week: 250 cards for $9,000.00.", "comments": {"1": "Up 317% on the week before."}}'));
+  same(wrong.cautions, ["Summary: 250, $9,000.00 are not in the tables. Check before relying on it.", "Sales: 317% is not in the tables. Check before relying on it."], "invented figures in the summary or a comment are listed as cautions");
+  for (const junk of ["not json", "", null, "[1,2]", '{"summary": 5}']) {
+    const kept = await writeReportWords(report, writer(junk));
+    if (kept.summary !== report.summary || kept.cautions.length || kept.sections.some((s) => s.comment)) assert(false, `junk reply ${JSON.stringify(junk)} should leave the plain report`);
+  }
+  assert(true, "an unusable reply leaves the plain report");
+  const failed = await writeReportWords(report, async () => { throw new Error("model down"); });
+  assert(failed === report, "a failed call leaves the plain report and does not throw");
+}
+
+async function finish() {
+  await reportTests();
+
 console.log("\nevery answer");
 assert(answers.length >= 15, `checked ${answers.length} answers`);
 assert(answers.every((a) => a.title && a.lines.length > 0 && a.href?.startsWith("/admin/") && new Date(a.asOf).toISOString() === a.asOf), "each has a title, a line, a time and an admin link");
@@ -208,3 +287,6 @@ assert(answers.every((a) => !a.rows || a.rows.every((r) => r.length === a.column
 
 console.log(`\n${passed} passed, ${failed} failed\n`);
 process.exit(failed > 0 ? 1 : 0);
+}
+
+void finish();

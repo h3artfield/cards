@@ -9,8 +9,8 @@
  *   - a dollar amount that is the sum or difference of two dollar amounts in
  *     the sources;
  *   - a count that is the sum or difference of two counts in the sources;
- *   - a percentage that is one source figure as a share of, or change from,
- *     another of the same kind.
+ *   - a percentage that is one dollar amount in the sources as a share of, or
+ *     change from, another.
  * Dollars and counts are never mixed. The more counts a lookup returns, the
  * more sums exist, so this catches an invented figure less reliably for
  * counts than for dollars. It is a net for honest mistakes, nothing more.
@@ -72,7 +72,9 @@ export function unsupportedFigures(text: string, sources: string[]): string[] {
     } else if (kind === "percent") {
       const share = (a: number, b: number) =>
         b !== 0 && (close((a / b) * 100, value, decimals) || close(((a - b) / b) * 100, value, decimals));
-      derived = pairs(money, share) || pairs(plain, share);
+      // Dollar amounts only. Counts are too many and too small: among a page of
+      // them almost any percentage is some pair's ratio.
+      derived = pairs(money, share);
     }
     if (!derived && !missing.includes(figure.text)) missing.push(figure.text);
   }

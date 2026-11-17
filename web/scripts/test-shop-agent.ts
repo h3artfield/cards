@@ -111,7 +111,7 @@ async function main() {
     same(reads, [`inventory:${STORE}`], "only this store's inventory was read, whatever store the model named");
     const toolMessage = m.requests[1]!.messages.find((msg) => msg.role === "tool")!;
     assert(toolMessage.role === "tool" && toolMessage.content.includes("$6.25") && !toolMessage.content.includes("/admin/"), "the model is shown the lookup's result");
-    assert(m.requests[0]!.system === prompt && m.requests[0]!.tools.length === listShopTools().length, "first call: the prompt and every tool");
+    assert(m.requests[0]!.system === prompt && m.requests[0]!.tools.length === listShopTools().length + 1 && m.requests[0]!.tools.some((t) => t.name === "build_report"), "first call: the prompt, every lookup, and build_report");
   }
 
   console.log("\nfollow-ups");
@@ -155,7 +155,7 @@ async function main() {
     const turn = await runAgentTurn({ message: "look everything up", history: [], storeId: STORE, session }, { model: greedy.model, loader, now: NOW });
     const toolMessages = greedy.requests[greedy.requests.length - 1]!.messages.filter((msg) => msg.role === "tool").length;
     const lastRequest = greedy.requests[greedy.requests.length - 1]!;
-    assert(toolMessages === AGENT_MAX_TOOL_CALLS && lastRequest.toolChoice === "none" && lastRequest.tools.length === listShopTools().length && turn.text === "Done.", "after four lookups the final call carries tool_choice none, with the tools still defined");
+    assert(toolMessages === AGENT_MAX_TOOL_CALLS && lastRequest.toolChoice === "none" && lastRequest.tools.length === listShopTools().length + 1 && turn.text === "Done.", "after four lookups the final call carries tool_choice none, with the tools still defined");
     assert(greedy.requests.slice(0, -1).every((r) => r.toolChoice === "auto"), "earlier calls leave the choice to the model");
     const ignores = await runAgentTurn({ message: "look everything up", history: [], storeId: STORE, session }, { model: scripted([() => ({ text: "Still looking.", toolCalls: [call("cards_to_move", {}, `e${Math.random()}`)] })]).model, loader, now: NOW });
     assert(ignores.text === "Still looking." && ignores.modelCalls === AGENT_MAX_TOOL_CALLS + 1, "a model that asks for a tool anyway on the forced call is not obeyed");
@@ -169,6 +169,35 @@ async function main() {
     assert(errors.length === 3 && errors.every((e) => e.includes('"error"')), "an unknown tool, unreadable arguments and an impossible date each come back as an error, not a crash");
     const empty = await runAgentTurn({ message: "what needs to move?", history: [], storeId: STORE, session }, { model: scripted([asks(call("cards_to_move", {})), { text: "   ", toolCalls: [] }]).model, loader, now: NOW });
     assert(empty.text === "Here's what I found." && empty.panels.length === 1, "an empty reply after a lookup still shows the table");
+  }
+
+  console.log("\nbuilding a report in a conversation");
+  {
+    const { loader, reads } = fixtureLoader();
+    const words = JSON.stringify({ summary: "Last week was quiet: 1 card for $2.00, all online.", comments: { "1": "Only one day had a sale.", "9": "ignored" } });
+    const m = scripted([asks(call("build_report", { kind: "weekly", period: "last_week", storeId: "another-store" })), say(words), say("Last week's report is ready. It was a quiet week: 1 card for $2.00.")]);
+    const turn = await runAgentTurn({ message: "put together a report on last week", history: [], storeId: STORE, session }, { model: m.model, loader, now: NOW });
+    assert(turn.report !== undefined && turn.report.kind === "weekly" && turn.report.title === "Sales report: Mon, Nov 9 to Sun, Nov 15", "the turn carries the report, titled with its exact dates");
+    same(turn.report!.sections.map((s) => s.heading), ["Sales", "Top sellers", "Sales by shelf", "Slowest shelves, last 30 days", "Cards to move"], "the weekly recipe's five sections, in order");
+    same([turn.report!.summary, turn.report!.sections[0]!.comment, turn.report!.cautions], ["Last week was quiet: 1 card for $2.00, all online.", "Only one day had a sale.", []], "the model's summary and comment are attached, and check out");
+    same([turn.tools, turn.modelCalls, turn.caution, turn.panels.length], [["build_report"], 3, undefined, 0], "one report, three model calls (ask, write, reply), no caution, no loose tables");
+    same(reads, [`inventory:${STORE}`], "only this store's inventory was read");
+    const writer = m.requests[1]!;
+    assert(writer.tools.length === 0 && writer.json === true && writer.messages.length === 1 && writer.messages[0]!.role === "user", "the writing call has no tools and no conversation: only the tables");
+    assert(!JSON.stringify(writer).includes("put together a report") && !/\bSam\b|Carter|Diaz|example\.com/.test(JSON.stringify(writer)), "it is not sent the person's message or any customer data");
+    const toolMessage = m.requests[2]!.messages.find((msg) => msg.role === "tool")!;
+    assert(toolMessage.role === "tool" && toolMessage.content.includes('"built":true') && !toolMessage.content.includes('"rows"'), "the conversation model gets the summary and first lines, not the tables again");
+
+    const twice = scripted([asks(call("build_report", { kind: "slow_stock" }, "r1"), call("build_report", { kind: "weekly" }, "r2")), say("{}"), say("Done.")]);
+    const one = await runAgentTurn({ message: "two reports please", history: [], storeId: STORE, session }, { model: twice.model, loader, now: NOW });
+    const second = twice.requests[2]!.messages.filter((msg) => msg.role === "tool")[1]!;
+    assert(one.report!.kind === "slow_stock" && one.report!.period === undefined && second.role === "tool" && second.content.includes("One report per reply"), "one report per reply; a second request in the same turn is refused");
+    const bad = scripted([asks(call("build_report", { kind: "yearly" }, "b1"), call("build_report", { kind: "weekly", period: "range", from: "2026-01-01", to: "2026-01-31" }, "b2")), say("I can't build that one.")]);
+    const none = await runAgentTurn({ message: "report on january", history: [], storeId: STORE, session }, { model: bad.model, loader, now: NOW });
+    const errs = bad.requests[1]!.messages.filter((msg) => msg.role === "tool").map((msg) => (msg.role === "tool" ? msg.content : ""));
+    assert(none.report === undefined && errs[0]!.includes("kind must be") && errs[1]!.includes("too far back"), "an unknown kind and a period past 90 days come back as errors, with the reason");
+    const silent = await runAgentTurn({ message: "weekly report", history: [], storeId: STORE, session }, { model: scripted([asks(call("build_report", { kind: "weekly" })), say("not json at all"), { text: null, toolCalls: [] }]).model, loader, now: NOW });
+    assert(silent.report !== undefined && silent.report.summary.startsWith("Mon, Nov 9 to Sun, Nov 15:") && silent.report.sections.every((s) => s.comment === undefined) && silent.text === "The report is ready to open.", "if the writing call returns junk the report still stands, with a plain summary");
   }
 
   console.log("\nreading OpenAI's reply");
@@ -204,7 +233,7 @@ async function main() {
     const ask = (body: unknown, over: Partial<Parameters<typeof handleShopAgent>[0]> = {}) => handleShopAgent({ body, storeId: STORE, session, staff: { staffId: "st1" }, setupNeeded: false, ...over }, deps);
 
     const ok = await ask({ message: "do we have lightning bolt?", history: [{ role: "user", text: "hi" }], storeId: "another-store" });
-    assert(ok.status === 200 && ok.body.text.startsWith("Yes: 4 copies") && ok.body.panels.length === 1 && ok.body.confirms.length === 0 && ok.body.caution === undefined, "a turn is answered with its table");
+    assert(ok.status === 200 && ok.body.report === undefined && ok.body.text.startsWith("Yes: 4 copies") && ok.body.panels.length === 1 && ok.body.confirms.length === 0 && ok.body.caution === undefined, "a turn is answered with its table");
     same(reads, [`inventory:${STORE}`], "a storeId in the body is ignored");
     same(audits[0], { severity: "INFO", event: "shop_agent", userId: "u1", staffId: "st1", storeId: STORE, tools: ["find_card"], modelCalls: 2, historyTurns: 1, flagged: false, outcome: "answered", ms: audits[0]!.ms, ok: true }, "the audit line has who, which store, which lookups and how many model calls");
     assert(!/lightning|copies|hi\b/i.test(JSON.stringify(audits)), "and nothing that was said by either side");

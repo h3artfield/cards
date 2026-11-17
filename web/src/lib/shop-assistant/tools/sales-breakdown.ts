@@ -127,7 +127,11 @@ export function topSellersAnswer(inventory: InventoryItem[], args: ShopToolArgs[
 
 export type ShelfSales = { location: string; units: number; revenue: number; share: number };
 
-/** Sales grouped by where each card sits now. Cards with no shelf share one row. */
+/**
+ * Sales grouped by shelf: where each card sat when it sold, or where it sits
+ * now for sales recorded before the shelf was kept. Cards with no shelf share
+ * one row.
+ */
 export function salesByShelf(lines: DailySaleLine[], kind: "case" | "binder" | "any"): ShelfSales[] {
   const total = lines.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0);
   const groups = new Map<string, { location: string; units: number; revenue: number }>();
@@ -186,7 +190,7 @@ export function salesByShelfAnswer(inventory: InventoryItem[], args: ShopToolArg
       formatPercent(row.share),
     ]),
     note:
-      "By each card's current shelf: a card moved after it sold counts for where it sits now. " +
+      "By where each card sat when it sold, or its current shelf for older sales. " +
       "Share is of all sales in the period." +
       (args.kind !== "any" ? ` Only ${kindWords} are listed.` : ""),
   };

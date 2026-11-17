@@ -5,9 +5,18 @@ import { agentToolDefinitions } from "./agent-tools";
 import { tidy } from "./format";
 import type { ShopDataLoader } from "./load";
 import { unsupportedFigures } from "./number-check";
-import type { AgentMessage, AgentModel, AgentToolCall } from "./openai-tools";
+import type { AgentMessage, AgentModel, AgentToolCall, AgentToolDefinition } from "./openai-tools";
+import { readPeriodArgs } from "./period";
 import { getShopTool, runShopTool } from "./registry";
-import type { ShopAnswer, ShopToolId } from "./types";
+import {
+  REPORT_RECIPES,
+  SHOP_REPORT_KINDS,
+  buildReportTables,
+  reportNeeds,
+  writeReportWords,
+  type ShopReport,
+} from "./report";
+import type { ShopAnswer, ShopPeriodArgs, ShopToolId } from "./types";
 
 /**
  * One turn of a conversation with the store agent.
@@ -35,6 +44,29 @@ export type AgentHistoryTurn = { role: "user" | "assistant"; text: string };
 
 export type AgentPanel = { tool: ShopToolId; answer: ShopAnswer };
 
+/** A lookup, or the one extra thing the conversation can do: put a report together. */
+export type AgentToolName = ShopToolId | "build_report";
+
+const BUILD_REPORT_TOOL: AgentToolDefinition = {
+  name: "build_report",
+  description:
+    'Puts several lookups together as one report page the staff member can open and print. Use when they ask for a report, a summary of a week or month, or a rundown. ' +
+    'kind "weekly": sales by day, top sellers, sales by shelf, slowest shelves and cards to move, for a period (default last_week). ' +
+    'kind "slow_stock": cards that have sat unsold, slowest shelves and cards to move; takes no period. ' +
+    "One report per reply.",
+  parameters: {
+    type: "object",
+    properties: {
+      kind: { type: "string", enum: [...SHOP_REPORT_KINDS] },
+      period: { type: "string", enum: ["today", "yesterday", "date", "last_7_days", "month_to_date", "last_week", "last_month", "range"] },
+      date: { type: "string", description: "YYYY-MM-DD, with period date." },
+      from: { type: "string", description: "YYYY-MM-DD, with period range." },
+      to: { type: "string", description: "YYYY-MM-DD, with period range." },
+    },
+    required: ["kind"],
+  },
+};
+
 export type AgentTurnResult = {
   /** The agent's reply, plain text. */
   text: string;
@@ -44,7 +76,9 @@ export type AgentTurnResult = {
   confirms: ShopToolId[];
   /** Set when the reply states a figure the lookups did not return. */
   caution?: string;
-  tools: ShopToolId[];
+  /** A report put together this turn, for the person to open. */
+  report?: ShopReport;
+  tools: AgentToolName[];
   modelCalls: number;
 };
 
@@ -77,6 +111,7 @@ export function buildAgentPrompt(now: Date): string {
     "- For anything about sales, stock, shelves, prices the store would pay, or cards to move, call a tool. Never answer those from memory or from earlier in the conversation if the person is asking for current figures.",
     "- Never state a number that is not in a tool result from this turn or an earlier reply. You may add, subtract or take a percentage of figures the tools gave you, and nothing else. If you do not have a figure, say so.",
     "- The person sees each tool's full table under your reply. Do not repeat the table. Say what matters in one to three sentences and point at the table.",
+    "- When they ask for a report or a rundown, use build_report. They get a card to open the full page, so reply in a sentence or two with what stands out.",
     "- If a tool finds nothing, say that plainly. Do not guess.",
     "- Dates: work out the calendar day from today's date and pass it as YYYY-MM-DD.",
     "",
@@ -148,7 +183,7 @@ export function plainText(text: string): string {
 
 export async function runAgentTurn(input: AgentTurnInput, deps: AgentTurnDeps): Promise<AgentTurnResult> {
   const system = buildAgentPrompt(deps.now);
-  const tools = agentToolDefinitions();
+  const tools = [...agentToolDefinitions(), BUILD_REPORT_TOOL];
   const messages: AgentMessage[] = [
     ...input.history.map((turn): AgentMessage => ({ role: turn.role, content: turn.text })),
     { role: "user", content: input.message },
@@ -156,13 +191,42 @@ export async function runAgentTurn(input: AgentTurnInput, deps: AgentTurnDeps): 
 
   const panels: AgentPanel[] = [];
   const confirms: ShopToolId[] = [];
-  const used: ShopToolId[] = [];
+  const used: AgentToolName[] = [];
+  let report: ShopReport | undefined;
+
+  const runReport = async (rawArgs: unknown): Promise<string> => {
+    if (report) return JSON.stringify({ error: "One report per reply. Describe the one already built." });
+    const args = rawArgs && typeof rawArgs === "object" && !Array.isArray(rawArgs) ? (rawArgs as Record<string, unknown>) : {};
+    const kind = SHOP_REPORT_KINDS.find((k) => k === args.kind);
+    if (!kind) return JSON.stringify({ error: 'kind must be "weekly" or "slow_stock".' });
+    const recipe = REPORT_RECIPES[kind];
+    let period: ShopPeriodArgs = { period: "last_week" };
+    if (recipe.usesPeriod && args.period !== undefined) {
+      const read = readPeriodArgs(args);
+      if (!read.ok) return JSON.stringify({ error: `Those arguments do not work: ${read.error}.` });
+      period = read.args;
+    }
+    const data = await deps.loader.load(input.storeId, reportNeeds(recipe));
+    const built = buildReportTables(recipe, period, data, deps.now);
+    if (!built.ok) return JSON.stringify({ error: built.message });
+    report = await writeReportWords(built.report, deps.model, deps.signal);
+    modelCalls += 1;
+    used.push("build_report");
+    return JSON.stringify({
+      built: true,
+      title: report.title,
+      summary: report.summary,
+      sections: report.sections.map((section) => ({ heading: section.heading, lines: section.answer.lines })),
+      note: "The staff member has a card to open the full report. Do not repeat its tables.",
+    });
+  };
   const seen = new Set<string>();
   let toolCalls = 0;
   let modelCalls = 0;
   let text: string | null = null;
 
   const runCall = async (call: AgentToolCall): Promise<string> => {
+    if (call.name === BUILD_REPORT_TOOL.name) return runReport(parseArgs(call.arguments));
     const tool = getShopTool(call.name);
     if (!tool) return JSON.stringify({ error: "There is no such tool." });
     if (!canUseShopTool(input.session, tool.id)) {
@@ -218,8 +282,10 @@ export async function runAgentTurn(input: AgentTurnInput, deps: AgentTurnDeps): 
 
   const reply =
     plainText(text ?? "") ||
-    (panels.length || confirms.length
-      ? "Here's what I found."
+    (report
+      ? "The report is ready to open."
+      : panels.length || confirms.length
+        ? "Here's what I found."
       : "I couldn't work that out. Try asking another way.");
 
   // Every figure in the reply has to trace back to a lookup, the question, or
@@ -227,6 +293,7 @@ export async function runAgentTurn(input: AgentTurnInput, deps: AgentTurnDeps): 
   // a security control: the earlier turns come from the browser.
   const sources = [
     ...panels.map((panel) => forModelFull(panel.answer)),
+    ...(report ? [report.summary, ...report.sections.map((section) => forModelFull(section.answer))] : []),
     input.message,
     ...input.history.map((turn) => turn.text),
   ];
@@ -239,6 +306,7 @@ export async function runAgentTurn(input: AgentTurnInput, deps: AgentTurnDeps): 
     caution: stray.length
       ? `Check this against the table: ${stray.join(", ")} ${stray.length === 1 ? "is" : "are"} not in the figures I looked up.`
       : undefined,
+    report,
     tools: used,
     modelCalls,
   };

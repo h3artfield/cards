@@ -27,6 +27,8 @@ export type AgentModelRequest = {
   tools: AgentToolDefinition[];
   /** "none" makes the model answer in words; the tools stay defined. Default "auto". */
   toolChoice?: "auto" | "none";
+  /** Ask for a JSON object as the reply. Only for calls made with no tools. */
+  json?: boolean;
   signal?: AbortSignal;
 };
 
@@ -81,7 +83,7 @@ export function createOpenAiAgentModel(options: {
   maxTokens?: number;
   timeoutMs?: number;
 }): AgentModel {
-  return async ({ system, messages, tools, toolChoice, signal }) => {
+  return async ({ system, messages, tools, toolChoice, json, signal }) => {
     const apiKey = requireOpenAiApiKey();
     trackApiCall("openai");
 
@@ -96,6 +98,7 @@ export function createOpenAiAgentModel(options: {
       }));
       body.tool_choice = toolChoice ?? "auto";
     }
+    if (json && !tools.length) body.response_format = { type: "json_object" };
     if (isReasoningModel(options.model)) {
       body.reasoning_effort = "none";
       body.max_completion_tokens = options.maxTokens ?? 900;
