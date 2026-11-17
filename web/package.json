@@ -59,6 +59,8 @@
     "test:inventory-analytics": "npx --yes tsx scripts/test-inventory-analytics.ts",
     "test:shop-assistant": "npx --yes tsx scripts/test-shop-assistant.ts",
     "eval:shop-assistant-chooser": "npx --yes tsx scripts/eval-shop-assistant-chooser.ts",
+    "test:shop-agent": "npx --yes tsx scripts/test-shop-agent.ts",
+    "eval:shop-agent": "npx --yes tsx scripts/eval-shop-agent.ts",
     "test:staff-logins": "npx --yes tsx scripts/test-staff-logins.ts",
     "test:inventory-search": "npx --yes tsx scripts/test-inventory-search.ts",
     "test:deck-builder": "npx --yes tsx scripts/test-deck-builder.ts",
