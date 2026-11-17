@@ -6,6 +6,7 @@ import { storeDay } from "@/lib/reports/daily-reports";
 import {
   SHOP_AGENT_RATE_LIMIT,
   SHOP_AGENT_RATE_WINDOW_MS,
+  agentAvailableTo,
   createDailyCounter,
   handleShopAgent,
   staffAgentDailyTurns,
@@ -26,6 +27,25 @@ const loader = createShopDataLoader({
 });
 
 const dailyTurns = createDailyCounter(staffAgentDailyTurns);
+
+/**
+ * Whether the assistant is available to whoever is asking. The admin uses this
+ * to decide whether to show it at all: `{ enabled: false }` until a model is
+ * set, and for a screen with no person signed in.
+ */
+export async function GET(req: NextRequest) {
+  try {
+    const auth = requireAdminSession(req);
+    if (auth instanceof Response) return auth;
+    const scope = requireStoreScope(auth, req);
+    if (scope instanceof Response) return scope;
+    if (!staffAgentModel()) return jsonOk({ enabled: false });
+    const { staff, setupNeeded } = await getStaffContext(req, scope.storeId);
+    return jsonOk({ enabled: agentAvailableTo({ session: auth, staff, setupNeeded }) });
+  } catch {
+    return jsonOk({ enabled: false });
+  }
+}
 
 /**
  * One turn of a conversation with the store agent.

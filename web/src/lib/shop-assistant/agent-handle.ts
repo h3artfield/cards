@@ -43,6 +43,15 @@ export function createDailyCounter(limit: () => number) {
   };
 }
 
+/** A conversation is with a person. A display screen has none behind it. */
+export function agentAvailableTo(input: {
+  session: Pick<AdminSession, "role">;
+  staff: unknown | null;
+  setupNeeded: boolean;
+}): boolean {
+  return Boolean(input.staff) || input.setupNeeded || input.session.role === "platform";
+}
+
 export type ShopAgentOutcome =
   | "answered"
   | "off"
@@ -124,8 +133,7 @@ export async function handleShopAgent(input: ShopAgentInput, deps: ShopAgentDeps
     if (!deps.model) {
       return done("off", { status: 503, body: { error: "The assistant isn't switched on yet." } });
     }
-    // A conversation is with a person. A display screen has none behind it.
-    if (!input.staff && !input.setupNeeded && input.session.role !== "platform") {
+    if (!agentAvailableTo(input)) {
       return done("sign_in_needed", { status: 403, body: { error: "Sign in with your PIN to use the assistant." } });
     }
     const request = readAgentRequest(input.body);

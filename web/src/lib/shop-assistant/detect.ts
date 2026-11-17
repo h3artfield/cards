@@ -43,7 +43,8 @@ export type ShopReply =
 
 const isText = (value: unknown): value is string => typeof value === "string";
 
-function readAnswer(raw: unknown): ShopAnswerView | null {
+/** Reads one answer from untrusted JSON. Null when it is not a well-formed answer. */
+export function readShopAnswer(raw: unknown): ShopAnswerView | null {
   if (!raw || typeof raw !== "object") return null;
   const a = raw as Record<string, unknown>;
   if (!isText(a.title) || !Array.isArray(a.lines) || !a.lines.every(isText) || !isText(a.asOf)) {
@@ -81,7 +82,7 @@ export function readShopReply(ok: boolean, status: number, data: unknown): ShopR
   }
   if (body.matched !== true || !isText(body.tool)) return { kind: "none" };
   if (body.needsConfirm === true) return { kind: "confirm", tool: body.tool };
-  const answer = readAnswer(body.answer);
+  const answer = readShopAnswer(body.answer);
   return answer ? { kind: "answer", tool: body.tool, answer } : { kind: "none" };
 }
 

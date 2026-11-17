@@ -50,7 +50,7 @@ export type AgentTurnResult = {
 
 export type AgentTurnInput = {
   message: string;
-  /** Earlier turns, from the browser. Context only: it authorises nothing. */
+  /** Earlier turns, from the browser, unsigned. Context only: it authorises nothing. */
   history: AgentHistoryTurn[];
   /** From the signed-in session's store scope. */
   storeId: string;
@@ -193,15 +193,18 @@ export async function runAgentTurn(input: AgentTurnInput, deps: AgentTurnDeps): 
   };
 
   while (modelCalls < AGENT_MAX_MODEL_CALLS) {
-    // Once the lookups are used up the model is given no tools, so it has to answer.
+    // Once the lookups are used up the model is told to answer in words. The
+    // tools stay defined, because the conversation already holds tool calls.
+    const mustAnswer = toolCalls >= AGENT_MAX_TOOL_CALLS;
     const reply = await deps.model({
       system,
       messages,
-      tools: toolCalls < AGENT_MAX_TOOL_CALLS ? tools : [],
+      tools,
+      toolChoice: mustAnswer ? "none" : "auto",
       signal: deps.signal,
     });
     modelCalls += 1;
-    if (!reply.toolCalls.length) {
+    if (mustAnswer || !reply.toolCalls.length) {
       text = reply.text;
       break;
     }
@@ -220,7 +223,8 @@ export async function runAgentTurn(input: AgentTurnInput, deps: AgentTurnDeps): 
       : "I couldn't work that out. Try asking another way.");
 
   // Every figure in the reply has to trace back to a lookup, the question, or
-  // an earlier turn.
+  // an earlier turn. This is a safety net for honest mistakes by the model, not
+  // a security control: the earlier turns come from the browser.
   const sources = [
     ...panels.map((panel) => forModelFull(panel.answer)),
     input.message,

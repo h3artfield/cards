@@ -23,9 +23,11 @@ type Turn = { ask: string; checks: Check[] };
 
 const looksUp = (...tools: ShopToolId[]): Check => ({ name: `looks up ${tools.join(" + ")}`, pass: (t) => tools.every((tool) => t.tools.includes(tool)) });
 const noTools: Check = { name: "looks nothing up", pass: (t) => t.tools.length === 0 };
-const says = (...parts: string[]): Check => ({ name: `says ${parts.join(" and ")}`, pass: (t) => parts.every((p) => t.text.toLowerCase().includes(p.toLowerCase())) });
-const saysOneOf = (...parts: string[]): Check => ({ name: `says one of: ${parts.join(" / ")}`, pass: (t) => parts.some((p) => t.text.toLowerCase().includes(p.toLowerCase())) });
-const neverSays = (...parts: string[]): Check => ({ name: `does not say ${parts.join(", ")}`, pass: (t) => parts.every((p) => !t.text.toLowerCase().includes(p.toLowerCase())) });
+/** Models write ’ where a check says '. Compare without case and with plain quotes. */
+const norm = (text: string) => text.toLowerCase().replace(/[‘’]/g, "'").replace(/[“”]/g, '"');
+const says = (...parts: string[]): Check => ({ name: `says ${parts.join(" and ")}`, pass: (t) => parts.every((p) => norm(t.text).includes(norm(p))) });
+const saysOneOf = (...parts: string[]): Check => ({ name: `says one of: ${parts.join(" / ")}`, pass: (t) => parts.some((p) => norm(t.text).includes(norm(p))) });
+const neverSays = (...parts: string[]): Check => ({ name: `does not say ${parts.join(", ")}`, pass: (t) => parts.every((p) => !norm(t.text).includes(norm(p))) });
 const noCaution: Check = { name: "every figure traces to a lookup", pass: (t) => t.caution === undefined };
 const confirmCard: Check = { name: "shows the confirm card, no table", pass: (t) => t.confirms.includes("store_credit") && t.panels.length === 0 };
 const panelTitle = (part: string): Check => ({ name: `table: ${part}`, pass: (t) => t.panels.some((p) => p.answer.title.toLowerCase().includes(part.toLowerCase())) });

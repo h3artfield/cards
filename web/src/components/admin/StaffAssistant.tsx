@@ -1,11 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { adminFetch } from "@/lib/api-client";
+import { ShopAgentDrawer } from "@/components/admin/ShopAgentDrawer";
+import { ShopAnswerPanel } from "@/components/admin/ShopAnswerPanel";
+import { useShopChat } from "@/components/admin/useShopChat";
 import {
-  asOfLabel,
   isShopQuestion,
   readShopReply,
   type ShopAnswerView,
@@ -33,7 +34,8 @@ type Row =
   | { key: string; kind: "page"; label: string; hint: string; href: string }
   | { key: string; kind: "customer"; label: string; hint: string; href: string }
   | { key: string; kind: "answer"; label: string; hint: string }
-  | { key: string; kind: "confirm"; label: string; hint: string; tool: string };
+  | { key: string; kind: "confirm"; label: string; hint: string; tool: string }
+  | { key: string; kind: "chat"; label: string; hint: string };
 
 /** What the store's own numbers have to say about the typed question. */
 type ShopState =
@@ -49,71 +51,6 @@ const SHOP_DEBOUNCE_MS = 600;
 const CONFIRM_LABELS: Record<string, string> = {
   store_credit: "Store credit",
 };
-
-function ShopAnswerPanel({
-  answer,
-  onNavigate,
-}: {
-  answer: ShopAnswerView;
-  onNavigate: () => void;
-}) {
-  const asOf = asOfLabel(answer.asOf);
-  return (
-    <div className="border-b border-slate-200 px-3 py-3" aria-live="polite">
-      <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-600">
-        Your store
-      </div>
-      <div className="text-sm font-semibold text-slate-900">{answer.title}</div>
-      {answer.lines.map((line, i) => (
-        <p key={i} className="mt-1 text-sm text-slate-800">
-          {line}
-        </p>
-      ))}
-      {answer.columns && answer.rows && answer.rows.length > 0 ? (
-        <div className="mt-2 overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="text-xs text-slate-500">
-              <tr>
-                {answer.columns.map((column) => (
-                  <th key={column} className="py-1 pr-3 font-medium">
-                    {column}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {answer.rows.map((cells, r) => (
-                <tr key={r} className="border-t border-slate-100">
-                  {cells.map((cell, c) => (
-                    <td
-                      key={c}
-                      className={`py-1.5 pr-3 ${c === 0 ? "font-medium text-slate-800" : "text-slate-600"}`}
-                    >
-                      {cell}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : null}
-      {answer.note ? <p className="mt-2 text-xs text-slate-500">{answer.note}</p> : null}
-      <div className="mt-2 flex flex-wrap items-center gap-x-3 text-xs text-slate-500">
-        {answer.href ? (
-          <Link
-            href={answer.href}
-            className="font-medium text-indigo-600 hover:underline"
-            onClick={onNavigate}
-          >
-            {answer.hrefLabel ?? "Open"}
-          </Link>
-        ) : null}
-        {asOf ? <span>As of {asOf}</span> : null}
-      </div>
-    </div>
-  );
-}
 
 function customerScore(customer: CustomerHit, query: string): number {
   const name = `${customer.firstName} ${customer.lastName}`.toLowerCase();
@@ -144,6 +81,8 @@ export function StaffAssistant() {
   /** The question the shop assistant was last asked, so reopening the box does not ask again. */
   const shopAskedFor = useRef<string | null>(null);
   const shopRequest = useRef<AbortController | null>(null);
+  const chat = useShopChat();
+  const [chatOpen, setChatOpen] = useState(false);
 
   /** Closes the box. Customer data goes back behind its confirmation. */
   const close = useCallback(() => {
@@ -245,8 +184,19 @@ export function StaffAssistant() {
           : answer?.answer ?? "Press enter for the steps",
       });
     }
+    // The conversation, offered last so it never displaces a jump or an answer.
+    if (chat.enabled && (!query.trim() || question || shopQuestion)) {
+      next.push({
+        key: "chat",
+        kind: "chat",
+        label: "Ask the assistant",
+        hint: query.trim()
+          ? "Talk it through and ask follow-up questions"
+          : "Sales, stock, shelves, buy prices. Follow-up questions work.",
+      });
+    }
     return next;
-  }, [pages, people, question, answer, asking, shop]);
+  }, [pages, people, question, shopQuestion, answer, asking, shop, chat.enabled, query]);
 
   useEffect(() => {
     setActive(0);
@@ -354,6 +304,14 @@ export function StaffAssistant() {
       askShop(query.trim(), row.tool);
       return;
     }
+    if (row.kind === "chat") {
+      const text = query.trim();
+      close();
+      setQuery("");
+      setChatOpen(true);
+      if (text) chat.send(text);
+      return;
+    }
     setOpen(false);
     setQuery("");
     router.push(row.href);
@@ -435,7 +393,9 @@ export function StaffAssistant() {
                           ? "Go to"
                           : row.kind === "confirm"
                             ? "Your store"
-                            : "Handbook"}
+                            : row.kind === "chat"
+                              ? "Assistant"
+                              : "Handbook"}
                     </span>
                     <span className="text-sm font-medium">{row.label}</span>
                     <span className="whitespace-pre-wrap text-xs text-slate-600">
@@ -447,6 +407,16 @@ export function StaffAssistant() {
             </ul>
           ) : null}
         </div>
+      ) : null}
+      {chat.enabled ? (
+        <ShopAgentDrawer
+          open={chatOpen}
+          chat={chat}
+          onClose={() => {
+            setChatOpen(false);
+            chat.relock();
+          }}
+        />
       ) : null}
     </div>
   );

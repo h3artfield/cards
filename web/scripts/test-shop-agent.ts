@@ -14,6 +14,7 @@ import {
   runAgentTurn,
 } from "../src/lib/shop-assistant/agent";
 import {
+  agentAvailableTo,
   createDailyCounter,
   handleShopAgent,
   staffAgentDailyTurns,
@@ -22,6 +23,15 @@ import {
   type ShopAgentDeps,
 } from "../src/lib/shop-assistant/agent-handle";
 import { agentToolDefinitions } from "../src/lib/shop-assistant/agent-tools";
+import {
+  CHAT_HISTORY_TURNS,
+  CONFIRM_QUERY,
+  confirmLabel,
+  historyFor,
+  readAgentReply,
+  relockItems,
+  type ChatItem,
+} from "../src/lib/shop-assistant/chat-client";
 import { figuresIn, unsupportedFigures } from "../src/lib/shop-assistant/number-check";
 import {
   readToolReply,
@@ -139,10 +149,14 @@ async function main() {
   console.log("\nlimits and bad calls");
   {
     const { loader } = fixtureLoader();
-    const greedy = scripted([(req) => (req.tools.length ? asks(call("find_card", { name: "bolt" }, `c${Math.random()}`), call("cards_to_move", {}, `d${Math.random()}`)) : say("Done."))]);
+    const greedy = scripted([(req) => (req.toolChoice !== "none" ? asks(call("find_card", { name: "bolt" }, `c${Math.random()}`), call("cards_to_move", {}, `d${Math.random()}`)) : say("Done."))]);
     const turn = await runAgentTurn({ message: "look everything up", history: [], storeId: STORE, session }, { model: greedy.model, loader, now: NOW });
     const toolMessages = greedy.requests[greedy.requests.length - 1]!.messages.filter((msg) => msg.role === "tool").length;
-    assert(toolMessages === AGENT_MAX_TOOL_CALLS && greedy.requests[greedy.requests.length - 1]!.tools.length === 0 && turn.text === "Done.", "after four lookups the model is given no tools and has to answer");
+    const lastRequest = greedy.requests[greedy.requests.length - 1]!;
+    assert(toolMessages === AGENT_MAX_TOOL_CALLS && lastRequest.toolChoice === "none" && lastRequest.tools.length === 6 && turn.text === "Done.", "after four lookups the final call carries tool_choice none, with the tools still defined");
+    assert(greedy.requests.slice(0, -1).every((r) => r.toolChoice === "auto"), "earlier calls leave the choice to the model");
+    const ignores = await runAgentTurn({ message: "look everything up", history: [], storeId: STORE, session }, { model: scripted([() => ({ text: "Still looking.", toolCalls: [call("cards_to_move", {}, `e${Math.random()}`)] })]).model, loader, now: NOW });
+    assert(ignores.text === "Still looking." && ignores.modelCalls === AGENT_MAX_TOOL_CALLS + 1, "a model that asks for a tool anyway on the forced call is not obeyed");
     assert(turn.panels.length === 2, "the same lookup twice shows one table");
     const stuck = scripted([asks(call("nonsense", {}))]);
     const gaveUp = await runAgentTurn({ message: "loop forever", history: [], storeId: STORE, session }, { model: stuck.model, loader, now: NOW });
@@ -209,6 +223,35 @@ async function main() {
     same(broke, { status: 500, body: { error: "Couldn't work that out just now. Try again in a moment." } }, "a model failure is a plain sentence");
     assert(audits[audits.length - 1]!.ok === false && !JSON.stringify([broke, audits]).includes("secret-detail"), "and its text reaches neither the client nor the log");
   }
+
+  console.log("\nwho may use the assistant");
+  same([
+    agentAvailableTo({ session: { role: "store" }, staff: { staffId: "st1" }, setupNeeded: false }),
+    agentAvailableTo({ session: { role: "store" }, staff: null, setupNeeded: false }),
+    agentAvailableTo({ session: { role: "store" }, staff: null, setupNeeded: true }),
+    agentAvailableTo({ session: { role: "platform" }, staff: null, setupNeeded: false }),
+  ], [true, false, true, true], "a signed-in person, a store before staff setup, or a platform admin; not a bare display screen");
+
+  console.log("\nchat drawer helpers");
+  const answer = { title: "T", lines: ["one"], asOf: NOW.toISOString() };
+  same(readAgentReply(true, { text: "Hello.", panels: [{ tool: "find_card", answer }, { tool: 5, answer }, { tool: "x", answer: { title: 1 } }, null], confirms: ["store_credit", 7], caution: " ", extra: 1 }), { kind: "reply", text: "Hello.", panels: [{ tool: "find_card", answer: { title: "T", lines: ["one"], asOf: NOW.toISOString() } }], confirms: ["store_credit"] }, "a reply is read; malformed panels and confirms are dropped");
+  assert((() => { const r = readAgentReply(true, { text: "Hi.", panels: [{ tool: "t", answer: { ...answer, href: "https://evil.example" } }] }); return r.kind === "reply" && r.panels[0]!.answer.href === undefined; })(), "an off-site link in a table is dropped");
+  same(readAgentReply(false, { error: "Sign in with your PIN to use the assistant." }), { kind: "error", message: "Sign in with your PIN to use the assistant." }, "the server's plain sentence is shown");
+  for (const junk of [null, "x", [], {}, { text: "" }, { text: 5 }]) if (readAgentReply(true, junk).kind !== "error") assert(false, "junk is an error line");
+  same(readAgentReply(false, null), { kind: "error", message: "Couldn't work that out just now. Try again in a moment." }, "a broken response gets the plain sentence");
+  const talk: ChatItem[] = [
+    { id: 1, kind: "user", text: "who has store credit?" },
+    { id: 2, kind: "assistant", text: "The list is ready to open.", panels: [], confirms: [{ tool: "store_credit", state: "shown", answer: { title: "Store credit", lines: ["Sam Carter $15.75"], asOf: NOW.toISOString() } }] },
+    { id: 3, kind: "error", text: "Couldn't reach the assistant." },
+    { id: 4, kind: "user", text: "and sales?" },
+    { id: 5, kind: "assistant", text: "3 cards, $6.25.", panels: [{ tool: "sales_summary", answer: { title: "Sales", lines: ["Counterspell"], asOf: NOW.toISOString() } }], confirms: [] },
+  ];
+  same(historyFor(talk), [{ role: "user", text: "who has store credit?" }, { role: "assistant", text: "The list is ready to open." }, { role: "user", text: "and sales?" }, { role: "assistant", text: "3 cards, $6.25." }], "history is the words each side said: no tables, no error lines");
+  assert(!/Sam Carter|15\.75|Counterspell/.test(JSON.stringify(historyFor(talk))), "an opened customer list is never sent back as history");
+  assert(historyFor(Array.from({ length: 30 }, (_, i): ChatItem => ({ id: i, kind: "user", text: `t${i}` }))).length === CHAT_HISTORY_TURNS, "only the last ten turns are sent");
+  const relocked = relockItems(talk);
+  assert(!JSON.stringify(relocked).includes("Sam Carter") && relocked[1]!.kind === "assistant" && relocked[1]!.confirms[0]!.state === "locked" && relocked[4] === talk[4], "closing the drawer drops an opened customer list and leaves the rest alone");
+  assert(CONFIRM_QUERY.length >= 8 && confirmLabel("store_credit") === "Store credit list" && confirmLabel("other") === "Customer details", "confirm card wording");
 
   console.log(`\n${passed} passed, ${failed} failed\n`);
   process.exit(failed > 0 ? 1 : 0);
