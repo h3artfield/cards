@@ -14,7 +14,9 @@ import {
 } from "@/lib/shop-assistant/agent-handle";
 import { createShopDataLoader } from "@/lib/shop-assistant/load";
 import { createOpenAiAgentModel } from "@/lib/shop-assistant/openai-tools";
+import { createShopRedaction } from "@/lib/shop-assistant/redact-load";
 import { getStaffContext } from "@/lib/staff/owner-access";
+import { listStaffMembers } from "@/lib/staff/staff-members";
 import { dataStore } from "@/lib/storage/data-store";
 
 // The store id is always passed explicitly, as in the question route.
@@ -25,6 +27,11 @@ const loader = createShopDataLoader({
   getSettings: (storeId) => dataStore.getSettings(storeId),
   getActiveRules: (storeId) => dataStore.getActiveRules(storeId),
 });
+
+// Names are taken out of typed text before any model sees it.
+const redaction = createShopRedaction(loader, async (storeId) =>
+  (await listStaffMembers(storeId)).map((member) => member.name),
+);
 
 const dailyTurns = createDailyCounter(staffAgentDailyTurns);
 
@@ -67,6 +74,7 @@ export async function POST(req: NextRequest) {
       {
         model: modelName ? createOpenAiAgentModel({ model: modelName }) : null,
         loader,
+        redaction,
         now: () => new Date(),
         today: storeDay,
         allow: (key) => checkRateLimit(key, SHOP_AGENT_RATE_LIMIT, SHOP_AGENT_RATE_WINDOW_MS),

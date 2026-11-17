@@ -106,7 +106,9 @@ function StaffAssistantFor() {
   }, []);
 
   useEffect(() => {
-    if (!open || customers) return;
+    // The assistant needs the list too: it shows customers' names in place of
+    // the tokens the model writes, and lets the person pick one.
+    if ((!open && !chatOpen) || customers) return;
     let cancelled = false;
     adminFetch("/api/admin/customers")
       .then(async (res) => {
@@ -120,7 +122,7 @@ function StaffAssistantFor() {
     return () => {
       cancelled = true;
     };
-  }, [open, customers]);
+  }, [open, chatOpen, customers]);
 
   useEffect(() => {
     function onPointer(event: MouseEvent) {
@@ -426,6 +428,7 @@ function StaffAssistantFor() {
         <ShopAgentDrawer
           open={chatOpen}
           chat={chat}
+          customers={customers ?? []}
           onClose={() => {
             setChatOpen(false);
             chat.relock();

@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ShopAnswerPanel } from "@/components/admin/ShopAnswerPanel";
 import type { ShopChat } from "@/components/admin/useShopChat";
 import {
   CHAT_MESSAGE_MAX_CHARS,
   REPORT_PAGE_PATH,
   confirmLabel,
+  showCustomerNames,
   type ShopReportView,
 } from "@/lib/shop-assistant/chat-client";
 import { useAdmin } from "@/context/AdminContext";
@@ -14,6 +15,14 @@ import { storeReport } from "@/lib/shop-assistant/report-storage";
 
 const STARTERS = ["How are we doing today?", "What needs to move?", "Which shelves are slowest?"];
 const PANEL_FRAME = "mt-2 rounded-lg border border-slate-200 px-3 py-3";
+const MAX_PICKED = 5;
+
+/** A customer as the admin's own list holds them. Names stay in the browser. */
+export type DrawerCustomer = { id: string; firstName: string; lastName: string; email: string };
+
+function fullName(customer: DrawerCustomer): string {
+  return `${customer.firstName} ${customer.lastName}`.trim() || customer.email;
+}
 
 /**
  * The conversation with the store assistant, in a panel on the right. It only
@@ -22,12 +31,37 @@ const PANEL_FRAME = "mt-2 rounded-lg border border-slate-200 px-3 py-3";
 export function ShopAgentDrawer({
   open,
   chat,
+  customers,
   onClose,
 }: {
   open: boolean;
   chat: ShopChat;
+  /** The admin's customer list, for picking a customer and for showing names. */
+  customers: DrawerCustomer[];
   onClose: () => void;
 }) {
+  const [picked, setPicked] = useState<string[]>([]);
+  const [picking, setPicking] = useState(false);
+  const [find, setFind] = useState("");
+  const byId = useMemo(() => new Map(customers.map((c) => [c.id, c])), [customers]);
+  const nameOf = (id: string) => {
+    const customer = byId.get(id);
+    return customer ? fullName(customer) : undefined;
+  };
+  const matches = useMemo(() => {
+    const q = find.trim().toLowerCase();
+    if (q.length < 2) return [];
+    return customers
+      .filter((c) => !picked.includes(c.id) && `${fullName(c)} ${c.email}`.toLowerCase().includes(q))
+      .slice(0, 6);
+  }, [customers, find, picked]);
+
+  function pick(id: string) {
+    setPicked((current) => (current.includes(id) || current.length >= MAX_PICKED ? current : [...current, id]));
+    setPicking(false);
+    setFind("");
+    inputRef.current?.focus();
+  }
   const { staff } = useAdmin();
   const [draft, setDraft] = useState("");
   const [reportTrouble, setReportTrouble] = useState<number | null>(null);
@@ -65,8 +99,9 @@ export function ShopAgentDrawer({
 
   function submit(text: string) {
     if (!text.trim() || chat.busy) return;
-    chat.send(text);
+    chat.send(text, picked);
     setDraft("");
+    setPicked([]);
   }
 
   return (
@@ -79,7 +114,14 @@ export function ShopAgentDrawer({
         <h2 className="text-sm font-semibold text-slate-900">Store assistant</h2>
         <div className="flex items-center gap-3 text-xs">
           {chat.items.length > 0 ? (
-            <button type="button" className="font-medium text-indigo-600 hover:underline" onClick={chat.reset}>
+            <button
+              type="button"
+              className="font-medium text-indigo-600 hover:underline"
+              onClick={() => {
+                setPicked([]);
+                chat.reset();
+              }}
+            >
               New conversation
             </button>
           ) : null}
@@ -114,10 +156,37 @@ export function ShopAgentDrawer({
 
         {chat.items.map((item) =>
           item.kind === "user" ? (
-            <div key={item.id} className="mt-3 flex justify-end">
+            <div key={item.id} className="mt-3 flex flex-col items-end">
               <p className="max-w-[85%] whitespace-pre-wrap rounded-lg bg-slate-200 px-3 py-2 text-sm text-slate-900">
                 {item.text}
               </p>
+              {item.picked.length > 0 ? (
+                <p className="mt-1 text-xs text-slate-500">
+                  About {item.picked.map((id) => nameOf(id) ?? "a customer").join(", ")}
+                </p>
+              ) : null}
+              {item.ambiguous.map((name) => (
+                <div key={name.text} className="mt-2 w-full rounded-lg border border-slate-200 px-3 py-2">
+                  <p className="text-xs text-slate-600">
+                    More than one customer is called {name.text}. Which one? Pick, then ask again.
+                  </p>
+                  <div className="mt-1 flex flex-col items-start gap-1">
+                    {name.ids.map((id) => {
+                      const customer = byId.get(id);
+                      return (
+                        <button
+                          key={id}
+                          type="button"
+                          className="rounded-lg border border-slate-200 px-3 py-1 text-left text-sm text-slate-800 hover:bg-slate-200/60"
+                          onClick={() => pick(id)}
+                        >
+                          {customer ? `${fullName(customer)} · ${customer.email}` : "Customer"}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
           ) : item.kind === "error" ? (
             <p key={item.id} className="mt-3 text-sm text-slate-600">
@@ -125,7 +194,10 @@ export function ShopAgentDrawer({
             </p>
           ) : (
             <div key={item.id} className="mt-3">
-              <p className="whitespace-pre-wrap text-sm text-slate-800">{item.text}</p>
+              {/* Names are put back here, from the admin's own list. The model wrote only tokens. */}
+              <p className="whitespace-pre-wrap text-sm text-slate-800">
+                {showCustomerNames(item.text, chat.refs, nameOf)}
+              </p>
               {item.caution ? (
                 <p className="mt-2 rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-xs font-medium text-slate-700">
                   {item.caution}
@@ -192,6 +264,59 @@ export function ShopAgentDrawer({
           submit(draft);
         }}
       >
+        <div className="mb-2 flex flex-wrap items-center gap-2 text-xs">
+          {picked.map((id) => (
+            <span key={id} className="inline-flex items-center gap-1 rounded-lg border border-slate-300 px-2 py-1 text-slate-800">
+              {nameOf(id) ?? "Customer"}
+              <button
+                type="button"
+                aria-label={`Remove ${nameOf(id) ?? "customer"}`}
+                className="font-medium text-slate-500 hover:text-slate-900"
+                onClick={() => setPicked((current) => current.filter((x) => x !== id))}
+              >
+                ×
+              </button>
+            </span>
+          ))}
+          {picked.length < MAX_PICKED ? (
+            <button
+              type="button"
+              className="font-medium text-indigo-600 hover:underline"
+              onClick={() => setPicking((value) => !value)}
+            >
+              {picking ? "Cancel" : "About a customer…"}
+            </button>
+          ) : null}
+        </div>
+        {picking ? (
+          <div className="mb-2">
+            <label htmlFor="shop-agent-customer" className="sr-only">
+              Find a customer
+            </label>
+            <input
+              id="shop-agent-customer"
+              value={find}
+              autoFocus
+              placeholder="Type a name or email"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 focus:border-indigo-600 focus:outline-none"
+              onChange={(event) => setFind(event.target.value)}
+            />
+            {matches.map((customer) => (
+              <button
+                key={customer.id}
+                type="button"
+                className="mt-1 block w-full rounded-lg border border-slate-200 px-3 py-1.5 text-left text-sm text-slate-800 hover:bg-slate-200/60"
+                onClick={() => pick(customer.id)}
+              >
+                {fullName(customer)} <span className="text-xs text-slate-500">{customer.email}</span>
+              </button>
+            ))}
+            {find.trim().length >= 2 && matches.length === 0 ? (
+              <p className="mt-1 text-xs text-slate-500">No customer matches.</p>
+            ) : null}
+            <p className="mt-1 text-xs text-slate-500">The assistant is told a customer was picked, never the name.</p>
+          </div>
+        ) : null}
         <label htmlFor="shop-agent-input" className="sr-only">
           Message the store assistant
         </label>

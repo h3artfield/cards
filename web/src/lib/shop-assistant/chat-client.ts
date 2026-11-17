@@ -102,8 +102,53 @@ export function assistantHistoryText(text: string, report?: Pick<ShopReportView,
   return (report ? `${text} ${reportDigest(report)}` : text).slice(0, CHAT_HISTORY_TURN_MAX_CHARS);
 }
 
+/** Which numbered token stands for which customer in this conversation. */
+export type ChatCustomerRef = { n: number; id: string };
+export type ChatAmbiguousName = { text: string; ids: string[] };
+
+function readRefs(raw: unknown): ChatCustomerRef[] {
+  const refs: ChatCustomerRef[] = [];
+  for (const item of Array.isArray(raw) ? raw : []) {
+    const ref = item as { n?: unknown; id?: unknown } | null;
+    if (ref && Number.isInteger(ref.n) && isText(ref.id)) refs.push({ n: ref.n as number, id: ref.id });
+  }
+  return refs;
+}
+
+function readAmbiguous(raw: unknown): ChatAmbiguousName[] {
+  const out: ChatAmbiguousName[] = [];
+  for (const item of Array.isArray(raw) ? raw : []) {
+    const entry = item as { text?: unknown; ids?: unknown } | null;
+    if (entry && isText(entry.text) && Array.isArray(entry.ids)) out.push({ text: entry.text, ids: entry.ids.filter(isText) });
+  }
+  return out;
+}
+
+/**
+ * Puts customers' names back for the person reading. The model only ever
+ * writes tokens such as "[customer 2]"; the name comes from the browser's own
+ * customer list. A token that cannot be resolved is shown as written.
+ */
+export function showCustomerNames(text: string, refs: ChatCustomerRef[], nameOf: (id: string) => string | undefined): string {
+  return text.replace(/\[customer (\d{1,3})\]/g, (token, digits: string) => {
+    const ref = refs.find((r) => r.n === Number(digits));
+    return (ref && nameOf(ref.id)) || token;
+  });
+}
+
 export type ChatReply =
-  | { kind: "reply"; text: string; panels: ChatPanel[]; confirms: string[]; caution?: string; report?: ShopReportView }
+  | {
+      kind: "reply";
+      text: string;
+      panels: ChatPanel[];
+      confirms: string[];
+      caution?: string;
+      report?: ShopReportView;
+      /** The person's message as the model was shown it, names removed. */
+      sent?: string;
+      refs: ChatCustomerRef[];
+      ambiguous: ChatAmbiguousName[];
+    }
   | { kind: "error"; message: string };
 
 const isText = (value: unknown): value is string => typeof value === "string";
@@ -128,6 +173,9 @@ export function readAgentReply(ok: boolean, data: unknown): ChatReply {
     confirms: (Array.isArray(body.confirms) ? body.confirms : []).filter(isText),
     caution: isText(body.caution) && body.caution.trim() ? body.caution : undefined,
     report: readShopReport(body.report) ?? undefined,
+    sent: isText(body.sent) ? body.sent : undefined,
+    refs: readRefs(body.refs),
+    ambiguous: readAmbiguous(body.ambiguous),
   };
 }
 
@@ -139,7 +187,18 @@ export type ChatConfirm = {
 };
 
 export type ChatItem =
-  | { id: number; kind: "user"; text: string }
+  | {
+      id: number;
+      kind: "user";
+      /** What the person typed, shown to them as typed. */
+      text: string;
+      /** The same message with names removed: what is sent back as history. */
+      sent?: string;
+      /** Customers attached to this message. */
+      picked: string[];
+      /** Names that fit several customers, waiting for the person to choose. */
+      ambiguous: ChatAmbiguousName[];
+    }
   | { id: number; kind: "assistant"; text: string; caution?: string; panels: ChatPanel[]; confirms: ChatConfirm[]; report?: ShopReportView }
   | { id: number; kind: "error"; text: string };
 
@@ -151,7 +210,9 @@ export type ChatItem =
 export function historyFor(items: ChatItem[]): Array<{ role: "user" | "assistant"; text: string }> {
   const turns: Array<{ role: "user" | "assistant"; text: string }> = [];
   for (const item of items) {
-    if (item.kind === "user") turns.push({ role: "user", text: item.text });
+    // The cleaned text when the server has returned it. The server cleans
+    // history again in any case, so a turn without it is still safe.
+    if (item.kind === "user") turns.push({ role: "user", text: item.sent ?? item.text });
     else if (item.kind === "assistant") turns.push({ role: "assistant", text: assistantHistoryText(item.text, item.report) });
   }
   return turns.slice(-CHAT_HISTORY_TURNS);

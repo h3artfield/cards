@@ -8,7 +8,9 @@ import {
   handleShopAssistant,
 } from "@/lib/shop-assistant/handle";
 import { createShopDataLoader } from "@/lib/shop-assistant/load";
+import { createShopRedaction } from "@/lib/shop-assistant/redact-load";
 import { getStaffContext } from "@/lib/staff/owner-access";
+import { listStaffMembers } from "@/lib/staff/staff-members";
 import { dataStore } from "@/lib/storage/data-store";
 
 // The store id is always passed explicitly: the data store's own default
@@ -20,6 +22,11 @@ const loader = createShopDataLoader({
   getSettings: (storeId) => dataStore.getSettings(storeId),
   getActiveRules: (storeId) => dataStore.getActiveRules(storeId),
 });
+
+// Names are taken out of typed text before any model sees it.
+const redaction = createShopRedaction(loader, async (storeId) =>
+  (await listStaffMembers(storeId)).map((member) => member.name),
+);
 
 /**
  * Answers a staff question about the store from the store's own data.
@@ -44,6 +51,7 @@ export async function POST(req: NextRequest) {
         now: () => new Date(),
         allow: (key) => checkRateLimit(key, SHOP_ASSISTANT_RATE_LIMIT, SHOP_ASSISTANT_RATE_WINDOW_MS),
         audit: (line) => console.info(JSON.stringify(line)),
+        redact: async (storeId, text) => (await redaction.forStore(storeId)).redact(text, []).text,
       },
     );
     return result.status === 200

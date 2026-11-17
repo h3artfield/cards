@@ -9,6 +9,7 @@ import {
   readAgentReply,
   relockItems,
   type ChatConfirm,
+  type ChatCustomerRef,
   type ChatItem,
 } from "@/lib/shop-assistant/chat-client";
 import { readShopReply } from "@/lib/shop-assistant/detect";
@@ -19,7 +20,10 @@ export type ShopChat = {
   enabled: boolean;
   items: ChatItem[];
   busy: boolean;
-  send: (text: string) => void;
+  /** `customers` are ids the person attached to this message. */
+  send: (text: string, customers?: string[]) => void;
+  /** Which token is which customer in this conversation. */
+  refs: ChatCustomerRef[];
   /** Opens a customer list the assistant offered, after the person asks for it. */
   confirm: (itemId: number, tool: string) => void;
   /** Hides every opened customer list again. */
@@ -32,6 +36,8 @@ export function useShopChat(): ShopChat {
   const [enabled, setEnabled] = useState(false);
   const [items, setItems] = useState<ChatItem[]>([]);
   const [busy, setBusy] = useState(false);
+  const [refs, setRefs] = useState<ChatCustomerRef[]>([]);
+  const refsRef = useRef<ChatCustomerRef[]>([]);
   const itemsRef = useRef<ChatItem[]>([]);
   const nextId = useRef(1);
   const request = useRef<AbortController | null>(null);
@@ -58,25 +64,39 @@ export function useShopChat(): ShopChat {
   }, []);
 
   const send = useCallback(
-    (raw: string) => {
+    (raw: string, customers: string[] = []) => {
       const text = raw.replace(/\s+/g, " ").trim().slice(0, CHAT_MESSAGE_MAX_CHARS);
       if (!text || request.current) return;
       const history = historyFor(itemsRef.current);
-      update((current) => [...current, { id: nextId.current++, kind: "user", text }]);
+      const userId = nextId.current++;
+      update((current) => [...current, { id: userId, kind: "user", text, picked: customers, ambiguous: [] }]);
       const controller = new AbortController();
       request.current = controller;
       setBusy(true);
       adminFetch("/api/admin/shop-assistant/chat", {
         method: "POST",
-        body: JSON.stringify({ message: text, history }),
+        body: JSON.stringify({
+          message: text,
+          history,
+          refs: refsRef.current,
+          customers: customers.map((id) => ({ id })),
+        }),
         signal: controller.signal,
       })
         .then(async (res) => {
           const data: unknown = await res.json().catch(() => null);
           if (controller.signal.aborted) return;
           const reply = readAgentReply(res.ok, data);
+          if (reply.kind === "reply") {
+            refsRef.current = reply.refs;
+            setRefs(reply.refs);
+          }
           update((current) => [
-            ...current,
+            ...current.map((item) =>
+              item.id === userId && item.kind === "user" && reply.kind === "reply"
+                ? { ...item, sent: reply.sent, ambiguous: reply.ambiguous }
+                : item,
+            ),
             reply.kind === "reply"
               ? {
                   id: nextId.current++,
@@ -155,8 +175,10 @@ export function useShopChat(): ShopChat {
     request.current?.abort();
     request.current = null;
     setBusy(false);
+    refsRef.current = [];
+    setRefs([]);
     update(() => []);
   }, [update]);
 
-  return { enabled, items, busy, send, confirm, relock, reset };
+  return { enabled, items, busy, send, refs, confirm, relock, reset };
 }

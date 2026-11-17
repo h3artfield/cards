@@ -4,6 +4,7 @@
  */
 import { DEFAULT_STORE_SETTINGS } from "../src/lib/constants";
 import { createShopDataLoader, type ShopDataSources } from "../src/lib/shop-assistant/load";
+import { createShopRedaction } from "../src/lib/shop-assistant/redact-load";
 import type { Customer, InventoryItem, StoreSettings, TradeCreditEntry } from "../src/lib/types";
 
 export const FIXTURE_STORE = "fixture-store";
@@ -44,7 +45,12 @@ export const FIXTURE_INVENTORY: InventoryItem[] = [
 export const FIXTURE_CUSTOMERS = [
   { id: "c1", firstName: "Sam", lastName: "Carter", email: "sam.carter@example.com", phone: "555-0101" },
   { id: "c2", firstName: "Ana", lastName: "Diaz", email: "ana@example.com", phone: "555-0102" },
+  // Two customers with one name, and one whose first name is an ordinary word.
+  { id: "c3", firstName: "Dave", lastName: "Miller", email: "dave.m@example.com", phone: "555-0103" },
+  { id: "c4", firstName: "Dave", lastName: "Miller", email: "d.miller@example.com", phone: "555-0104" },
+  { id: "c5", firstName: "Mark", lastName: "O'Neil", email: "mark@example.com", phone: "555-0105" },
 ] as unknown as Customer[];
+export const FIXTURE_STAFF_NAMES = ["Jordan Avery", "Rose"];
 
 export const FIXTURE_CREDIT: TradeCreditEntry[] = [
   { id: "e1", storeId: FIXTURE_STORE, customerId: "c1", type: "issued", amount: 15.75, createdAt: "2026-11-01T18:00:00Z" },
@@ -63,5 +69,6 @@ export function fixtureLoader() {
     getSettings: async (storeId) => { reads.push(`settings:${storeId}`); return FIXTURE_SETTINGS; },
     getActiveRules: async (storeId) => { reads.push(`rules:${storeId}`); return []; },
   };
-  return { loader: createShopDataLoader(sources), reads };
+  const loader = createShopDataLoader(sources);
+  return { loader, reads, redaction: createShopRedaction(loader, async () => FIXTURE_STAFF_NAMES) };
 }

@@ -66,6 +66,8 @@ export type ShopAssistantDeps = {
   /** False when this person has asked too often. */
   allow: (key: string) => boolean;
   audit: (line: ShopAssistantAudit) => void;
+  /** Takes customer and staff names out of the question before the chooser's model sees it. */
+  redact?: (storeId: string, text: string) => Promise<string>;
   choose?: (question: string, now: Date) => Promise<ShopChoiceResult>;
 };
 
@@ -127,7 +129,8 @@ export async function handleShopAssistant(
       tool = confirmed.id;
       via = "confirm";
     } else {
-      const choice = await (deps.choose ?? chooseShopTool)(query, now);
+      const safeQuery = deps.redact ? await deps.redact(input.storeId, query) : query;
+      const choice = await (deps.choose ?? chooseShopTool)(safeQuery, now);
       via = choice.via;
       if (!choice.tool) return done("none", { status: 200, body: { matched: false, via: choice.via } });
       tool = choice.tool;

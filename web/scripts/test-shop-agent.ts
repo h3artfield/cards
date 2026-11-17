@@ -231,18 +231,18 @@ async function main() {
 
   console.log("\nchat route handler");
   {
-    const { loader, reads } = fixtureLoader();
+    const { loader, reads, redaction } = fixtureLoader();
     const audits: ShopAgentAudit[] = [];
     let allowed = true;
     let dailyOk = true;
     const m = scripted([asks(call("find_card", { name: "lightning bolt" })), say("Yes: 4 copies of Lightning Bolt, on shelf 2-2.")]);
-    const deps: ShopAgentDeps = { model: m.model, loader, now: () => NOW, today: () => "2026-11-16", allow: () => allowed, takeDailyTurn: () => dailyOk, audit: (line) => audits.push(line) };
+    const deps: ShopAgentDeps = { model: m.model, loader, redaction, now: () => NOW, today: () => "2026-11-16", allow: () => allowed, takeDailyTurn: () => dailyOk, audit: (line) => audits.push(line) };
     const ask = (body: unknown, over: Partial<Parameters<typeof handleShopAgent>[0]> = {}) => handleShopAgent({ body, storeId: STORE, session, staff: { staffId: "st1" }, setupNeeded: false, ...over }, deps);
 
     const ok = await ask({ message: "do we have lightning bolt?", history: [{ role: "user", text: "hi" }], storeId: "another-store" });
     assert(ok.status === 200 && ok.body.report === undefined && ok.body.text.startsWith("Yes: 4 copies") && ok.body.panels.length === 1 && ok.body.confirms.length === 0 && ok.body.caution === undefined, "a turn is answered with its table");
-    same(reads, [`inventory:${STORE}`], "a storeId in the body is ignored");
-    same(audits[0], { severity: "INFO", event: "shop_agent", userId: "u1", staffId: "st1", storeId: STORE, tools: ["find_card"], modelCalls: 2, historyTurns: 1, flagged: false, outcome: "answered", ms: audits[0]!.ms, ok: true }, "the audit line has who, which store, which lookups and how many model calls");
+    same([...reads].sort(), [`customers:${STORE}`, `inventory:${STORE}`], "a storeId in the body is ignored (customer names are read for redaction only)");
+    same(audits[0], { severity: "INFO", event: "shop_agent", userId: "u1", staffId: "st1", storeId: STORE, tools: ["find_card"], modelCalls: 2, historyTurns: 1, flagged: false, redactions: 0, customersPicked: 0, outcome: "answered", ms: audits[0]!.ms, ok: true }, "the audit line has who, which store, which lookups and how many model calls");
     assert(!/lightning|copies|hi\b/i.test(JSON.stringify(audits)), "and nothing that was said by either side");
 
     same(await ask({ message: "hello there" }, { staff: null }), { status: 403, body: { error: "Sign in with your PIN to use the assistant." } }, "a display screen cannot hold a conversation");
@@ -272,21 +272,21 @@ async function main() {
 
   console.log("\nchat drawer helpers");
   const answer = { title: "T", lines: ["one"], asOf: NOW.toISOString() };
-  same(readAgentReply(true, { text: "Hello.", panels: [{ tool: "find_card", answer }, { tool: 5, answer }, { tool: "x", answer: { title: 1 } }, null], confirms: ["store_credit", 7], caution: " ", extra: 1 }), { kind: "reply", text: "Hello.", panels: [{ tool: "find_card", answer: { title: "T", lines: ["one"], asOf: NOW.toISOString() } }], confirms: ["store_credit"] }, "a reply is read; malformed panels and confirms are dropped");
+  same(readAgentReply(true, { text: "Hello.", panels: [{ tool: "find_card", answer }, { tool: 5, answer }, { tool: "x", answer: { title: 1 } }, null], confirms: ["store_credit", 7], caution: " ", extra: 1 }), { kind: "reply", text: "Hello.", panels: [{ tool: "find_card", answer: { title: "T", lines: ["one"], asOf: NOW.toISOString() } }], confirms: ["store_credit"], refs: [], ambiguous: [] }, "a reply is read; malformed panels and confirms are dropped");
   assert((() => { const r = readAgentReply(true, { text: "Hi.", panels: [{ tool: "t", answer: { ...answer, href: "https://evil.example" } }] }); return r.kind === "reply" && r.panels[0]!.answer.href === undefined; })(), "an off-site link in a table is dropped");
   same(readAgentReply(false, { error: "Sign in with your PIN to use the assistant." }), { kind: "error", message: "Sign in with your PIN to use the assistant." }, "the server's plain sentence is shown");
   for (const junk of [null, "x", [], {}, { text: "" }, { text: 5 }]) if (readAgentReply(true, junk).kind !== "error") assert(false, "junk is an error line");
   same(readAgentReply(false, null), { kind: "error", message: "Couldn't work that out just now. Try again in a moment." }, "a broken response gets the plain sentence");
   const talk: ChatItem[] = [
-    { id: 1, kind: "user", text: "who has store credit?" },
+    { id: 1, kind: "user", text: "who has store credit?", picked: [], ambiguous: [] },
     { id: 2, kind: "assistant", text: "The list is ready to open.", panels: [], confirms: [{ tool: "store_credit", state: "shown", answer: { title: "Store credit", lines: ["Sam Carter $15.75"], asOf: NOW.toISOString() } }] },
     { id: 3, kind: "error", text: "Couldn't reach the assistant." },
-    { id: 4, kind: "user", text: "and sales?" },
+    { id: 4, kind: "user", text: "and sales?", picked: [], ambiguous: [] },
     { id: 5, kind: "assistant", text: "3 cards, $6.25.", panels: [{ tool: "sales_summary", answer: { title: "Sales", lines: ["Counterspell"], asOf: NOW.toISOString() } }], confirms: [] },
   ];
   same(historyFor(talk), [{ role: "user", text: "who has store credit?" }, { role: "assistant", text: "The list is ready to open." }, { role: "user", text: "and sales?" }, { role: "assistant", text: "3 cards, $6.25." }], "history is the words each side said: no tables, no error lines");
   assert(!/Sam Carter|15\.75|Counterspell/.test(JSON.stringify(historyFor(talk))), "an opened customer list is never sent back as history");
-  assert(historyFor(Array.from({ length: 30 }, (_, i): ChatItem => ({ id: i, kind: "user", text: `t${i}` }))).length === CHAT_HISTORY_TURNS, "only the last ten turns are sent");
+  assert(historyFor(Array.from({ length: 30 }, (_, i): ChatItem => ({ id: i, kind: "user", text: `t${i}`, picked: [], ambiguous: [] }))).length === CHAT_HISTORY_TURNS, "only the last ten turns are sent");
   const relocked = relockItems(talk);
   assert(!JSON.stringify(relocked).includes("Sam Carter") && relocked[1]!.kind === "assistant" && relocked[1]!.confirms[0]!.state === "locked" && relocked[4] === talk[4], "closing the drawer drops an opened customer list and leaves the rest alone");
   assert(CONFIRM_QUERY.length >= 8 && confirmLabel("store_credit") === "Store credit list" && confirmLabel("other") === "Customer details", "confirm card wording");
@@ -315,7 +315,7 @@ async function main() {
     const turnText = assistantHistoryText("Last week's report is ready.", view);
     assert(turnText.startsWith("Last week's report is ready. [Report shown:") && turnText.length <= CHAT_HISTORY_TURN_MAX_CHARS, "it rides on the reply that produced it, within the per-turn cap");
     assert(assistantHistoryText("x".repeat(2000)).length === CHAT_HISTORY_TURN_MAX_CHARS && assistantHistoryText("Hello.") === "Hello.", "a reply with no report is sent as it is, capped");
-    const items: ChatItem[] = [{ id: 1, kind: "user", text: "weekly report" }, { id: 2, kind: "assistant", text: "Last week's report is ready.", panels: [], confirms: [], report: view }];
+    const items: ChatItem[] = [{ id: 1, kind: "user", text: "weekly report", picked: [], ambiguous: [] }, { id: 2, kind: "assistant", text: "Last week's report is ready.", panels: [], confirms: [], report: view }];
     same(historyFor(items)[1], { role: "assistant", text: turnText }, "history carries the digest, so a follow-up can be answered without building the report again");
 
     const followUp = scripted([say("It was a quiet week: one card for $2.00, sold online.")]);

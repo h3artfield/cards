@@ -119,6 +119,8 @@ export function buildAgentPrompt(now: Date): string {
     "- Name days as the tables write them (Sun, Nov 15). Do not call days a weekend or a weekday unless you have checked each date.",
     "",
     "Customer information:",
+    "- A token such as [customer 1] stands for one customer whose name you are not shown. [a customer] is a customer who has not been picked yet; [staff member], [email] and [phone] are details that were removed. Use a token exactly as written and never guess who it is. The person sees the real name on their own screen.",
+    "- You cannot look up one customer's details yet. If asked about a specific customer, say so and offer the store credit list.",
     "- The store_credit tool shows the person a card to confirm. You never see its contents. Say the list is ready for them to open, and never state or guess names or balances.",
     "",
     "What you cannot do:",

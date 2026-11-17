@@ -1,7 +1,10 @@
 import type { AdminSession } from "../types";
 import { readAgentRequest, runAgentTurn, type AgentToolName, type AgentTurnResult } from "./agent";
+import { readCustomerRefs } from "./redact";
 import type { ShopDataLoader } from "./load";
 import type { AgentModel } from "./openai-tools";
+import { attachPicked, type AmbiguousName, type CustomerRef } from "./redact";
+import type { ShopRedaction } from "./redact-load";
 
 /**
  * Everything the chat route does after sign-in is checked, with its
@@ -56,6 +59,7 @@ export type ShopAgentOutcome =
   | "off"
   | "sign_in_needed"
   | "bad_request"
+  | "bad_customer"
   | "rate_limited"
   | "daily_limit"
   | "error";
@@ -71,6 +75,10 @@ export type ShopAgentAudit = {
   modelCalls: number;
   historyTurns: number;
   flagged: boolean;
+  /** How many names, emails and phones were taken out before the model saw the text. */
+  redactions: number;
+  /** How many customers the person picked. Never which. */
+  customersPicked: number;
   outcome: ShopAgentOutcome;
   ms: number;
   ok: boolean;
@@ -88,6 +96,8 @@ export type ShopAgentDeps = {
   /** Null when `STAFF_AGENT_MODEL` is not set. */
   model: AgentModel | null;
   loader: ShopDataLoader;
+  /** Takes customer and staff names out of typed text before any model sees it. */
+  redaction: ShopRedaction;
   now: () => Date;
   /** The shop's calendar day for `now`, for the daily count. */
   today: (now: Date) => string;
@@ -96,7 +106,14 @@ export type ShopAgentDeps = {
   audit: (line: ShopAgentAudit) => void;
 };
 
-export type ShopAgentResponse = Pick<AgentTurnResult, "text" | "panels" | "confirms" | "caution" | "report">;
+export type ShopAgentResponse = Pick<AgentTurnResult, "text" | "panels" | "confirms" | "caution" | "report"> & {
+  /** The person's message as the model was shown it. The browser sends this back as history. */
+  sent: string;
+  /** Which token is which customer in this conversation. The browser shows the names. */
+  refs: CustomerRef[];
+  /** Names that fit several customers; the browser asks which. */
+  ambiguous: AmbiguousName[];
+};
 
 export type ShopAgentResult =
   | { status: 200; body: ShopAgentResponse }
@@ -108,6 +125,8 @@ export async function handleShopAgent(input: ShopAgentInput, deps: ShopAgentDeps
   let modelCalls = 0;
   let historyTurns = 0;
   let flagged = false;
+  let redactions = 0;
+  let customersPicked = 0;
 
   const done = (outcome: ShopAgentOutcome, result: ShopAgentResult): ShopAgentResult => {
     const ok = outcome !== "error";
@@ -121,6 +140,8 @@ export async function handleShopAgent(input: ShopAgentInput, deps: ShopAgentDeps
       modelCalls,
       historyTurns,
       flagged,
+      redactions,
+      customersPicked,
       outcome,
       ms: Date.now() - started,
       ok,
@@ -154,8 +175,33 @@ export async function handleShopAgent(input: ShopAgentInput, deps: ShopAgentDeps
       });
     }
 
+    // Redaction at the door. Nothing typed reaches a model before this.
+    const redactor = await deps.redaction.forStore(input.storeId);
+    const given = readCustomerRefs(input.body as Record<string, unknown>, redactor);
+    if (!given.ok) {
+      return done("bad_customer", {
+        status: 400,
+        body: { error: "That customer isn't on file for this store. Pick them again." },
+      });
+    }
+    customersPicked = given.picked.length;
+    let refs = given.refs;
+    const ambiguous: AmbiguousName[] = [];
+    // History comes from the browser, so it is cleaned again here.
+    const history = request.history.map((turn) => {
+      const cleaned = redactor.redact(turn.text, refs);
+      refs = cleaned.refs;
+      redactions += cleaned.count;
+      return { role: turn.role, text: cleaned.text };
+    });
+    const cleaned = redactor.redact(request.message, refs);
+    redactions += cleaned.count;
+    ambiguous.push(...cleaned.ambiguous);
+    const attached = attachPicked(cleaned.text, given.picked, cleaned.refs);
+    refs = attached.refs;
+
     const turn = await runAgentTurn(
-      { message: request.message, history: request.history, storeId: input.storeId, session: input.session },
+      { message: attached.text, history, storeId: input.storeId, session: input.session },
       { model: deps.model, loader: deps.loader, now },
     );
     tools = turn.tools;
@@ -163,7 +209,16 @@ export async function handleShopAgent(input: ShopAgentInput, deps: ShopAgentDeps
     flagged = Boolean(turn.caution);
     return done("answered", {
       status: 200,
-      body: { text: turn.text, panels: turn.panels, confirms: turn.confirms, caution: turn.caution, report: turn.report },
+      body: {
+        text: turn.text,
+        panels: turn.panels,
+        confirms: turn.confirms,
+        caution: turn.caution,
+        report: turn.report,
+        sent: attached.text,
+        refs,
+        ambiguous,
+      },
     });
   } catch {
     return done("error", {
