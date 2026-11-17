@@ -140,6 +140,8 @@ PROFESSOR_SOL_DIRECTED_BRACKET_ATTAINMENT_ENABLED: "false"
 PROFESSOR_SOL_DIRECTED_BRACKET_CEILING_ENABLED: "true"
 NODE_OPTIONS: "--max-old-space-size=6144"
 CHALLENGER_PLAY_SITE_URL: "https://play.cardscanner9000.com"
+STAFF_AGENT_MODEL: "gpt-5.4-mini"
+STAFF_AGENT_DAILY_TURNS: "50"
 "@
 $envContent | Set-Content -Path $envPath -Encoding utf8
 
