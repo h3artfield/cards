@@ -14,6 +14,10 @@ export function withSaleLog(
     unitPrice: Number.isFinite(sale.unitPrice) ? sale.unitPrice : 0,
     channel: sale.channel,
   };
+  // `item` is the row as it was before the sale, so this is the shelf it sold
+  // from. The key is left off when there is no shelf (never written as undefined).
+  const location = item.shelfLocation?.trim();
+  if (location) entry.location = location;
   return [...(item.saleLog ?? []), entry].slice(-MAX_SALE_LOG_ENTRIES);
 }
 

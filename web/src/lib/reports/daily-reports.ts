@@ -99,7 +99,7 @@ function round2(n: number): number {
  * with no log, the one sale. The Daily report and the assistant both count
  * sales through this.
  */
-export function saleEvents(item: InventoryItem): Array<{ at: string; quantity: number; unitPrice: number; channel: InventorySalesChannel }> {
+export function saleEvents(item: InventoryItem): Array<{ at: string; quantity: number; unitPrice: number; channel: InventorySalesChannel; location?: string }> {
   if (item.saleLog?.length) return item.saleLog;
   if (item.soldAt) {
     return [{ at: item.soldAt, quantity: 1, unitPrice: item.soldPrice ?? 0, channel: item.soldChannel ?? "shopify" }];
@@ -142,7 +142,8 @@ export function collectDailySales(inventory: InventoryItem[]): Map<string, Daily
         name,
         setName: item.setName ?? "",
         condition: shelfConditionShort(shelfConditionLabel(item)),
-        location: item.shelfLocation ?? "",
+        // Where it sold from when the sale recorded that, else where it sits now.
+        location: sale.location ?? item.shelfLocation ?? "",
         quantity: sale.quantity,
         unitPrice: sale.unitPrice,
         channel: sale.channel,

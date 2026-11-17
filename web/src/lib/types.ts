@@ -433,6 +433,8 @@ export interface InventorySaleLogEntry {
   quantity: number;
   unitPrice: number;
   channel: InventorySalesChannel;
+  /** Where the card sat when it sold. Missing on sales recorded before this was kept. */
+  location?: string;
 }
 
 export type InventorySalesChannel =
