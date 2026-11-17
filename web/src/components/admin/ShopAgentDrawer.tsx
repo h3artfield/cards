@@ -9,6 +9,7 @@ import {
   confirmLabel,
   type ShopReportView,
 } from "@/lib/shop-assistant/chat-client";
+import { useAdmin } from "@/context/AdminContext";
 import { storeReport } from "@/lib/shop-assistant/report-storage";
 
 const STARTERS = ["How are we doing today?", "What needs to move?", "Which shelves are slowest?"];
@@ -27,13 +28,14 @@ export function ShopAgentDrawer({
   chat: ShopChat;
   onClose: () => void;
 }) {
+  const { staff } = useAdmin();
   const [draft, setDraft] = useState("");
   const [reportTrouble, setReportTrouble] = useState<number | null>(null);
 
   function openReport(itemId: number, report: ShopReportView) {
     // The new tab starts with a copy of this tab's session storage, so the
     // report is there when the page loads. It must not be opened "noopener".
-    if (storeReport(report) && window.open(REPORT_PAGE_PATH, "_blank")) {
+    if (storeReport(report, staff?.staffId ?? null) && window.open(REPORT_PAGE_PATH, "_blank")) {
       setReportTrouble(null);
     } else {
       setReportTrouble(itemId);

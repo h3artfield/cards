@@ -272,6 +272,16 @@ async function reportTests() {
     if (kept.summary !== report.summary || kept.cautions.length || kept.sections.some((s) => s.comment)) assert(false, `junk reply ${JSON.stringify(junk)} should leave the plain report`);
   }
   assert(true, "an unusable reply leaves the plain report");
+  // An empty week: the writer echoes each empty line back. None of it is kept.
+  const emptyWeek = buildReportTables(REPORT_RECIPES.weekly, { period: "last_month" }, { ...data, inventory: [card("Unsold", { shelfLocation: "1-1", quantity: 2 })] }, NOW);
+  if (emptyWeek.ok) {
+    const echoed = await writeReportWords(emptyWeek.report, writer(JSON.stringify({ summary: "Nothing sold last month.", comments: { "1": "No sales from Thu, Oct 1 to Sat, Oct 31.", "2": "No sales from Thu, Oct 1 to Sat, Oct 31", "3": "A quiet month on the shelves.", "4": "1-1 · White sold nothing in the last 30 days.", "5": "Nothing to move right now." } })));
+    same(echoed.sections.map((s) => s.comment ?? null), [null, null, null, null, null], "an empty section gets no comment, and a comment that repeats the section's own line is dropped");
+    assert(echoed.summary === "Nothing sold last month.", "the summary is still kept");
+  }
+  const repeated = await writeReportWords(report, writer(JSON.stringify({ summary: "Fine.", comments: { "1": "mon, nov 9 to sun, nov 15: 14 cards, $51.15", "2": "Mox Opal led." } })));
+  same(repeated.sections.map((s) => s.comment ?? null), [null, "Mox Opal led.", null, null, null], "a comment that only repeats a line is dropped even when the table has rows");
+  assert(/Do not call days a weekend/.test(REPORT_WRITER_PROMPT) && /Leave out the comment for a section whose table is empty/.test(REPORT_WRITER_PROMPT), "the writer is told not to label days and not to comment on empty tables");
   const failed = await writeReportWords(report, async () => { throw new Error("model down"); });
   assert(failed === report, "a failed call leaves the plain report and does not throw");
 }

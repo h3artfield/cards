@@ -2,6 +2,7 @@
 
 import { useMemo, useSyncExternalStore } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
+import { useAdmin } from "@/context/AdminContext";
 import { ShopReportView } from "@/components/admin/ShopReportView";
 import { REPORT_GONE_MESSAGE, parseStoredReport } from "@/lib/shop-assistant/chat-client";
 import { readStoredReportText } from "@/lib/shop-assistant/report-storage";
@@ -17,7 +18,11 @@ const subscribe = () => () => {};
 export default function AssistantReportPage() {
   // Read on the client only; the server render and first paint show nothing.
   const stored = useSyncExternalStore(subscribe, readStoredReportText, () => null);
-  const report = useMemo(() => parseStoredReport(stored), [stored]);
+  // A report opens only for the person who asked for it. After "Switch user"
+  // the next person on this tab gets the "no longer available" message.
+  const { staff } = useAdmin();
+  const staffId = staff?.staffId ?? null;
+  const report = useMemo(() => parseStoredReport(stored, staffId), [stored, staffId]);
 
   return (
     <AdminLayout>

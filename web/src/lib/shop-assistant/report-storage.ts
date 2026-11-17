@@ -1,4 +1,4 @@
-import { REPORT_STORAGE_KEY, type ShopReportView } from "./chat-client";
+import { REPORT_STORAGE_KEY, wrapReportForStorage, type ShopReportView } from "./chat-client";
 
 /**
  * Hands a report from the chat drawer to the report page through one
@@ -7,9 +7,10 @@ import { REPORT_STORAGE_KEY, type ShopReportView } from "./chat-client";
  * caller is told whether it worked.
  */
 
-export function storeReport(report: ShopReportView): boolean {
+/** `staffId` is whoever is signed in: only they can open it again. */
+export function storeReport(report: ShopReportView, staffId: string | null): boolean {
   try {
-    window.sessionStorage.setItem(REPORT_STORAGE_KEY, JSON.stringify(report));
+    window.sessionStorage.setItem(REPORT_STORAGE_KEY, wrapReportForStorage(report, staffId));
     return true;
   } catch {
     return false;

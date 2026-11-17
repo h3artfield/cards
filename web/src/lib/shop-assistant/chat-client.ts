@@ -64,11 +64,21 @@ export function readShopReport(raw: unknown): ShopReportView | null {
   };
 }
 
-/** The report from stored text, or null when there is none or it is not readable. */
-export function parseStoredReport(stored: string | null): ShopReportView | null {
+/** What sits under the storage key: the report and who asked for it. */
+export function wrapReportForStorage(report: ShopReportView, staffId: string | null): string {
+  return JSON.stringify({ forStaff: staffId, report });
+}
+
+/**
+ * The report from stored text, for the person now signed in. Null when there
+ * is none, it is not readable, or it was made for somebody else.
+ */
+export function parseStoredReport(stored: string | null, staffId: string | null): ShopReportView | null {
   if (!stored) return null;
   try {
-    return readShopReport(JSON.parse(stored));
+    const wrapped = JSON.parse(stored) as { forStaff?: unknown; report?: unknown } | null;
+    if (!wrapped || typeof wrapped !== "object" || (wrapped.forStaff ?? null) !== staffId) return null;
+    return readShopReport(wrapped.report);
   } catch {
     return null;
   }

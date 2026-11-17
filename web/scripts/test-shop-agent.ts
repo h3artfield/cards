@@ -31,6 +31,7 @@ import {
   assistantHistoryText,
   parseStoredReport,
   readShopReport,
+  wrapReportForStorage,
   reportDigest,
   confirmLabel,
   historyFor,
@@ -302,7 +303,10 @@ async function main() {
       if (readShopReport(junk) !== null) assert(false, `junk report ${JSON.stringify(junk).slice(0, 40)} should be refused`);
     }
     assert(readShopReport({ ...(wire as object), period: { from: "soon", to: "later" }, cautions: ["ok", 5] })!.period === undefined && readShopReport({ ...(wire as object), cautions: ["ok", 5] })!.cautions.length === 1, "a malformed period or caution is dropped, the report kept");
-    assert(parseStoredReport(JSON.stringify(wire))!.title === view.title && parseStoredReport(null) === null && parseStoredReport("{not json") === null && parseStoredReport('"text"') === null, "the report page reads it back from storage, or gets nothing");
+    const storedFor = wrapReportForStorage(view, "st1");
+    assert(parseStoredReport(storedFor, "st1")!.title === view.title && parseStoredReport(null, "st1") === null && parseStoredReport("{not json", "st1") === null && parseStoredReport('"text"', "st1") === null && parseStoredReport(JSON.stringify(wire), "st1") === null, "the report page reads it back from storage, or gets nothing");
+    assert(parseStoredReport(storedFor, "st2") === null && parseStoredReport(storedFor, null) === null, "a report opens only for the person who asked: after a switch of user it is gone");
+    assert(parseStoredReport(wrapReportForStorage(view, null), null)!.title === view.title && parseStoredReport(wrapReportForStorage(view, null), "st1") === null, "a store with no staff sign-in yet still gets its report");
     assert(REPORT_GONE_MESSAGE === "This report is no longer available. Ask the assistant again.", "the message for a missing report");
 
     const digest = reportDigest(view);
@@ -320,6 +324,7 @@ async function main() {
     assert(sentHistory.role === "assistant" && typeof sentHistory.content === "string" && sentHistory.content.includes("[Report shown:"), "the model sees the earlier report in the conversation");
     assert(answered.report === undefined && answered.caution === undefined && answered.modelCalls === 1, "a figure quoted from the earlier report checks out, with one model call");
     const agentPrompt = buildAgentPrompt(NOW);
+    assert(/Speak to the person directly, as "you"/.test(agentPrompt) && /Do not call days a weekend/.test(agentPrompt), "the prompt says to address the person as you, and not to label days");
     assert(/Use build_report only when they ask for a report/.test(agentPrompt) && /Do not build it again unless they ask for a new one/.test(agentPrompt), "the prompt says when to build a report and when not to");
     assert(followUp.requests[0]!.tools.find((t) => t.name === "build_report")!.description.includes("Do not use it to answer a question about a report already shown"), "and so does the tool's description");
   }

@@ -21,6 +21,13 @@ export function ShopReportView({ report }: { report: Report }) {
           body * { visibility: hidden !important; }
           #shop-report, #shop-report * { visibility: visible !important; }
           #shop-report { position: absolute; left: 0; top: 0; width: 100%; max-width: none; margin: 0; padding: 0; border: 0; border-radius: 0; box-shadow: none; color: #000; background: #fff; }
+          /* The admin theme remaps the slate colours to light shades for its dark
+             screens. On paper they must be Tailwind's own dark-on-white values. */
+          #shop-report {
+            --color-slate-100: #f1f5f9; --color-slate-200: #e2e8f0; --color-slate-300: #cbd5e1;
+            --color-slate-500: #64748b; --color-slate-600: #475569; --color-slate-700: #334155;
+            --color-slate-800: #1e293b; --color-slate-900: #0f172a;
+          }
           #shop-report .report-no-print { display: none !important; }
           #shop-report section { break-inside: avoid; }
           #shop-report tr { break-inside: avoid; }

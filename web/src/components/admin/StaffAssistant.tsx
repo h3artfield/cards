@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAdmin } from "@/context/AdminContext";
 import { adminFetch } from "@/lib/api-client";
 import { ShopAgentDrawer } from "@/components/admin/ShopAgentDrawer";
 import { ShopAnswerPanel } from "@/components/admin/ShopAnswerPanel";
@@ -67,7 +68,17 @@ function customerScore(customer: CustomerHit, query: string): number {
   return 0;
 }
 
+/**
+ * The search box and the assistant. Everything it holds (the typed text, any
+ * answer, the whole conversation) belongs to the person signed in, so it is
+ * rebuilt from nothing whenever that person changes.
+ */
 export function StaffAssistant() {
+  const { staff } = useAdmin();
+  return <StaffAssistantFor key={staff?.staffId ?? "no-staff"} />;
+}
+
+function StaffAssistantFor() {
   const router = useRouter();
   const listId = useId();
   const boxRef = useRef<HTMLDivElement>(null);

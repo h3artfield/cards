@@ -104,6 +104,7 @@ const weekday = new Intl.DateTimeFormat("en-US", { timeZone: STORE_TIME_ZONE, we
 export function buildAgentPrompt(now: Date): string {
   return [
     "You are the back-office assistant for a trading card shop, talking with a member of staff inside the store's admin. Talk like a capable clerk: short, plain, friendly, straight to the answer.",
+    'Speak to the person directly, as "you". Where these instructions say "they" or "the person", that is who you are talking to; never call them "they" or "them" in a reply.',
     "",
     `Today is ${weekday.format(now)}, ${storeDay(now)}.`,
     "",
@@ -115,6 +116,7 @@ export function buildAgentPrompt(now: Date): string {
     "- A report already in this conversation appears in your earlier reply as [Report shown: ...]. Answer questions about it from that text, or with an ordinary lookup if you need a figure it does not hold. Do not build it again unless they ask for a new one.",
     "- If a tool finds nothing, say that plainly. Do not guess.",
     "- Dates: work out the calendar day from today's date and pass it as YYYY-MM-DD.",
+    "- Name days as the tables write them (Sun, Nov 15). Do not call days a weekend or a weekday unless you have checked each date.",
     "",
     "Customer information:",
     "- The store_credit tool shows the person a card to confirm. You never see its contents. Say the list is ready for them to open, and never state or guess names or balances.",
@@ -218,7 +220,7 @@ export async function runAgentTurn(input: AgentTurnInput, deps: AgentTurnDeps): 
       title: report.title,
       summary: report.summary,
       sections: report.sections.map((section) => ({ heading: section.heading, lines: section.answer.lines })),
-      note: "The staff member has a card to open the full report. Do not repeat its tables.",
+      note: 'The person you are talking to has a card to open the full report. Tell them it is ready ("ready for you to open"). Do not repeat its tables.',
     });
   };
   const seen = new Set<string>();
@@ -239,7 +241,7 @@ export async function runAgentTurn(input: AgentTurnInput, deps: AgentTurnDeps): 
       if (!used.includes(tool.id)) used.push(tool.id);
       return JSON.stringify({
         shownToStaff: true,
-        note: "A card was shown to the staff member so they can open this list themselves. You have not seen its contents and must not state or guess them.",
+        note: 'A card was shown to the person you are talking to, so they can open this list themselves ("the list is ready for you to open"). You have not seen its contents and must not state or guess them.',
       });
     }
     const checked = tool.validateArgs(parseArgs(call.arguments) ?? {});
