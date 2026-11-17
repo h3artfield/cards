@@ -194,7 +194,7 @@ export async function handleShopAgent(input: ShopAgentInput, deps: ShopAgentDeps
       redactions += cleaned.count;
       return { role: turn.role, text: cleaned.text };
     });
-    const cleaned = redactor.redact(request.message, refs);
+    const cleaned = redactor.redact(request.message, refs, given.picked);
     redactions += cleaned.count;
     ambiguous.push(...cleaned.ambiguous);
     const attached = attachPicked(cleaned.text, given.picked, cleaned.refs);

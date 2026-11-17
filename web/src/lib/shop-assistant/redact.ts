@@ -65,7 +65,12 @@ const MAX_NAME_WORDS = 4;
 export type Redactor = {
   /** Customer ids on file, for checking picked ids. */
   hasCustomer(id: string): boolean;
-  redact(text: string, refs: CustomerRef[]): Redaction;
+  /**
+   * `picked` are customers the person attached to this message. A typed name
+   * that fits several customers resolves to the picked one when exactly one
+   * of them was picked: the person has already said which.
+   */
+  redact(text: string, refs: CustomerRef[], picked?: string[]): Redaction;
 };
 
 /**
@@ -102,7 +107,7 @@ export function buildRedactor(customers: ShopCustomerName[], staffNames: string[
 
   return {
     hasCustomer: (id) => ids.has(id),
-    redact(text, startRefs) {
+    redact(text, startRefs, picked = []) {
       const refs = [...startRefs];
       const ambiguous: AmbiguousName[] = [];
       let count = 0;
@@ -138,8 +143,9 @@ export function buildRedactor(customers: ShopCustomerName[], staffNames: string[
           const found = byName.get(key);
           if (found) {
             const list = [...found];
-            if (list.length === 1) {
-              cuts.push({ ...span, with: tokenFor(list[0]!) });
+            const chosen = list.length === 1 ? list : list.filter((id) => picked.includes(id));
+            if (chosen.length === 1) {
+              cuts.push({ ...span, with: tokenFor(chosen[0]!) });
             } else {
               ambiguous.push({ text: working.slice(span.start, span.end), ids: list });
               cuts.push({ ...span, with: UNRESOLVED_CUSTOMER });
@@ -182,7 +188,8 @@ export type ReadRefs = { ok: true; refs: CustomerRef[]; picked: string[] } | { o
 export function readCustomerRefs(body: Record<string, unknown>, redactor: Redactor): ReadRefs {
   const refs: CustomerRef[] = [];
   const rawRefs = body.refs === undefined ? [] : body.refs;
-  if (!Array.isArray(rawRefs) || rawRefs.length > MAX_CUSTOMER_REFS) return { ok: false, error: "refs" };
+  // Picked customers may take a conversation a little past the cap on typed names.
+  if (!Array.isArray(rawRefs) || rawRefs.length > MAX_CUSTOMER_REFS + MAX_PICKED_CUSTOMERS) return { ok: false, error: "refs" };
   for (const raw of rawRefs) {
     const ref = raw as { n?: unknown; id?: unknown } | null;
     if (!ref || typeof ref.id !== "string" || !Number.isInteger(ref.n) || (ref.n as number) < 1 || (ref.n as number) > 999) {
@@ -205,18 +212,23 @@ export function readCustomerRefs(body: Record<string, unknown>, redactor: Redact
   return { ok: true, refs, picked };
 }
 
-/** Gives each picked customer a token, and says so in words the model can use. */
+/**
+ * Gives each picked customer a token and says so at the start of the message,
+ * where it outweighs a pronoun or a customer from earlier in the conversation.
+ * A conversation already at its limit takes no new token for a pick; the
+ * message is still sent, about "[a customer]".
+ */
 export function attachPicked(text: string, picked: string[], refs: CustomerRef[]): { text: string; refs: CustomerRef[] } {
   if (!picked.length) return { text, refs };
   const next = [...refs];
   const tokens: string[] = [];
   for (const id of picked) {
     let ref = next.find((r) => r.id === id);
-    if (!ref) {
+    if (!ref && next.length < MAX_CUSTOMER_REFS + MAX_PICKED_CUSTOMERS) {
       ref = { n: next.reduce((max, r) => Math.max(max, r.n), 0) + 1, id };
       next.push(ref);
     }
-    tokens.push(`[customer ${ref.n}]`);
+    tokens.push(ref ? `[customer ${ref.n}]` : UNRESOLVED_CUSTOMER);
   }
-  return { text: `${text} (About ${tokens.join(" and ")}.)`, refs: next };
+  return { text: `[This message is about ${tokens.join(" and ")}, picked by the person.] ${text}`, refs: next };
 }

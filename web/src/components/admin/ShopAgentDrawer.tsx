@@ -56,6 +56,19 @@ export function ShopAgentDrawer({
       .slice(0, 6);
   }, [customers, find, picked]);
 
+  /**
+   * The words the person typed for a name that fit several customers, in the
+   * message this reply answers. The model wrote "[a customer]" in its place.
+   */
+  function typedBefore(itemId: number): string | undefined {
+    const at = chat.items.findIndex((item) => item.id === itemId);
+    for (let i = at - 1; i >= 0; i -= 1) {
+      const item = chat.items[i]!;
+      if (item.kind === "user") return item.ambiguous.length === 1 ? item.ambiguous[0]!.text : undefined;
+    }
+    return undefined;
+  }
+
   function pick(id: string) {
     setPicked((current) => (current.includes(id) || current.length >= MAX_PICKED ? current : [...current, id]));
     setPicking(false);
@@ -196,7 +209,7 @@ export function ShopAgentDrawer({
             <div key={item.id} className="mt-3">
               {/* Names are put back here, from the admin's own list. The model wrote only tokens. */}
               <p className="whitespace-pre-wrap text-sm text-slate-800">
-                {showCustomerNames(item.text, chat.refs, nameOf)}
+                {showCustomerNames(item.text, chat.refs, nameOf, typedBefore(item.id))}
               </p>
               {item.caution ? (
                 <p className="mt-2 rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-xs font-medium text-slate-700">

@@ -59,6 +59,10 @@ async function main() {
   const two = clean("how much credit does Dave Miller have");
   same(two, { text: `how much credit does ${UNRESOLVED_CUSTOMER} have`, refs: [], ambiguous: [{ text: "Dave Miller", ids: ["c3", "c4"] }], count: 1 }, "the name is still removed, no customer is guessed, and both candidates are returned for the person to choose");
 
+  same(clean("what about Dave Miller from last week", [{ n: 1, id: "c2" }]).text, `what about ${UNRESOLVED_CUSTOMER} from last week`, "still unresolved when nobody was picked");
+  same(redactor.redact("what about Dave Miller from last week", [{ n: 1, id: "c2" }], ["c4"]), { text: "what about [customer 2] from last week", refs: [{ n: 1, id: "c2" }, { n: 2, id: "c4" }], ambiguous: [], count: 1 }, "when one of the two was picked for this message, the typed name is that customer and nothing is asked");
+  assert(redactor.redact("Dave Miller or Dave Miller", [], ["c3", "c4"]).ambiguous.length === 2 && redactor.redact("Dave Miller", [], ["c1"]).ambiguous.length === 1, "picking both, or somebody else, does not settle it");
+
   console.log("\nwhat is left alone, on purpose");
   same(clean("do we have Mark of the Rose in stock").text, "do we have Mark of the Rose in stock", "single first names (a customer called Mark, a clerk called Rose) are not removed: they are also words and card names");
   same(clean("what would we pay for Sam's Lightning Bolt").text, "what would we pay for Sam's Lightning Bolt", "a first name alone is a known gap");
@@ -77,7 +81,12 @@ async function main() {
   same(readCustomerRefs({ customers: [{ id: "c2" }, { id: "someone-elses-customer" }] }, redactor), { ok: false, error: "customer" }, "one id that is not this store's rejects the whole request");
   same(readCustomerRefs({ refs: [{ n: 1, id: "nope" }] }, redactor), { ok: false, error: "customer" }, "the same for a token that points at an unknown customer");
   assert([{ refs: "x" }, { refs: [{ n: 0, id: "c1" }] }, { refs: [{ n: 1.5, id: "c1" }] }, { refs: [{ n: 1, id: "c1" }, { n: 1, id: "c2" }] }, { refs: [{ n: 1, id: "c1" }, { n: 2, id: "c1" }] }, { customers: "c1" }, { customers: [{ id: 5 }] }, { customers: Array.from({ length: MAX_PICKED_CUSTOMERS + 1 }, () => ({ id: "c1" })) }].every((body) => !readCustomerRefs(body, redactor).ok), "malformed references, duplicate tokens and more than five picks are refused");
-  same(attachPicked("what is his balance", ["c2", "c1"], [{ n: 1, id: "c1" }]), { text: "what is his balance (About [customer 2] and [customer 1].)", refs: [{ n: 1, id: "c1" }, { n: 2, id: "c2" }] }, "picked customers are named to the model by token only");
+  same(attachPicked("what is his balance", ["c2", "c1"], [{ n: 1, id: "c1" }]), { text: "[This message is about [customer 2] and [customer 1], picked by the person.] what is his balance", refs: [{ n: 1, id: "c1" }, { n: 2, id: "c2" }] }, "picked customers are named to the model by token only, at the start of the message");
+  const full = Array.from({ length: 35 }, (_, i) => ({ n: i + 1, id: `x${i}` }));
+  const overfull = attachPicked("and this one", ["c1"], full);
+  assert(overfull.refs.length === 35 && overfull.text.startsWith(`[This message is about ${UNRESOLVED_CUSTOMER}, picked`), "a conversation at its limit takes no new token, so the next request is not refused for carrying too many");
+  assert(readCustomerRefs({ refs: names.slice(0, 5).map((c, i) => ({ n: i + 1, id: c.id })) }, redactor).ok && !readCustomerRefs({ refs: Array.from({ length: 36 }, (_, i) => ({ n: i + 1, id: "c1" })) }, redactor).ok, "up to 35 tokens are accepted back, no more");
+  assert(buildAgentPrompt(NOW).includes("that customer is who he, she, they, them") && buildAgentPrompt(NOW).includes('call it "the list above"'), "the prompt says a picked customer is who the pronouns mean, and when to say a list is ready");
   assert(buildAgentPrompt(NOW).includes("[customer 1] stands for one customer whose name you are not shown"), "the prompt explains the tokens");
 
   console.log("\nthe matcher is built once per list");
@@ -109,12 +118,14 @@ async function main() {
       customers: [{ id: "c5" }],
     });
     assert(res.status === 200, "the turn is answered");
+    const picky = await ask({ message: "is he owed anything? and what about Dave Miller from last week", customers: [{ id: "c4" }], refs: [{ n: 1, id: "c1" }] });
+    assert(picky.status === 200 && picky.body.sent === "[This message is about [customer 2], picked by the person.] is he owed anything? and what about [customer 2] from last week" && picky.body.ambiguous.length === 0, "a picked customer comes first, and a typed name that fits the pick resolves to it with no \"which one?\"");
     const sentToModel = JSON.stringify(requests);
     assert(!LEAK.test(sentToModel), "no customer name, staff name, email or phone is in anything sent to the model: message, history or picked customer");
-    assert(sentToModel.includes("[customer 1] came in today") && sentToModel.includes("how much credit does [customer 2] have") && sentToModel.includes("(About [customer 3].)"), "the model sees tokens in their place, numbered across the conversation");
+    assert(sentToModel.includes("[customer 1] came in today") && sentToModel.includes("how much credit does [customer 2] have") && sentToModel.includes("[This message is about [customer 3], picked by the person.] how much credit does [customer 2] have"), "the model sees tokens in their place, numbered across the conversation");
     if (res.status === 200) {
       same(res.body.refs, [{ n: 1, id: "c2" }, { n: 2, id: "c1" }, { n: 3, id: "c5" }], "the browser is told which token is which customer, by id only");
-      assert(res.body.sent.startsWith("how much credit does [customer 2] have? his email is [email], [staff member] took the call on [phone]") && !LEAK.test(JSON.stringify(res.body)), "the response carries the cleaned message for history, and no name comes back through it");
+      assert(res.body.sent.includes("how much credit does [customer 2] have? his email is [email], [staff member] took the call on [phone]") && !LEAK.test(JSON.stringify(res.body)), "the response carries the cleaned message for history, and no name comes back through it");
     }
     same([audits[0]!.redactions, audits[0]!.customersPicked], [6, 1], "the audit line counts what was removed and how many were picked");
     assert(!/c1|c2|c5/.test(JSON.stringify(audits)) && !LEAK.test(JSON.stringify(audits)), "and holds no customer id and no name");
@@ -148,6 +159,7 @@ async function main() {
   {
     const nameOf = (id: string) => ({ c1: "Sam Carter", c2: "Ana Diaz" })[id];
     const refs = [{ n: 1, id: "c2" }, { n: 2, id: "c1" }, { n: 3, id: "gone" }];
+    assert(showCustomerNames("I can't check [a customer] from last week, or [customer 2].", refs, nameOf, "Dave Miller") === "I can't check Dave Miller from last week, or Sam Carter." && showCustomerNames("[a customer]", refs, nameOf) === "[a customer]", "an unresolved name is shown as the words the person typed, when there was exactly one");
     same(showCustomerNames("[customer 2] has credit; [customer 1] does not. [customer 3] and [customer 9] are unknown, and [a customer] was not picked.", refs, nameOf), "Sam Carter has credit; Ana Diaz does not. [customer 3] and [customer 9] are unknown, and [a customer] was not picked.", "names are put back from the browser's own list; a token it cannot resolve is shown as written");
     const reply = readAgentReply(true, { text: "[customer 1] is on the list.", panels: [], confirms: [], sent: "is [customer 1] on the list?", refs: [{ n: 1, id: "c1" }, { n: "x", id: "c2" }, null], ambiguous: [{ text: "Dave Miller", ids: ["c3", "c4", 5] }, "junk"] });
     assert(reply.kind === "reply" && reply.sent === "is [customer 1] on the list?" && reply.refs.length === 1 && reply.ambiguous.length === 1 && reply.ambiguous[0]!.ids.length === 2, "the reply's cleaned message, tokens and candidates are read; malformed ones dropped");

@@ -129,8 +129,15 @@ function readAmbiguous(raw: unknown): ChatAmbiguousName[] {
  * writes tokens such as "[customer 2]"; the name comes from the browser's own
  * customer list. A token that cannot be resolved is shown as written.
  */
-export function showCustomerNames(text: string, refs: ChatCustomerRef[], nameOf: (id: string) => string | undefined): string {
-  return text.replace(/\[customer (\d{1,3})\]/g, (token, digits: string) => {
+export function showCustomerNames(
+  text: string,
+  refs: ChatCustomerRef[],
+  nameOf: (id: string) => string | undefined,
+  /** What the person typed for a name that fit several customers, when there was exactly one such name. */
+  typedForUnresolved?: string,
+): string {
+  const shown = typedForUnresolved ? text.replaceAll("[a customer]", typedForUnresolved) : text;
+  return shown.replace(/\[customer (\d{1,3})\]/g, (token, digits: string) => {
     const ref = refs.find((r) => r.n === Number(digits));
     return (ref && nameOf(ref.id)) || token;
   });
