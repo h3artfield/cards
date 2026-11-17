@@ -2,7 +2,10 @@ import { tidy } from "./format";
 import { buyEstimateAnswer } from "./tools/buy-estimate";
 import { cardsToMoveAnswer } from "./tools/cards-to-move";
 import { findCardAnswer } from "./tools/find-card";
-import { isCalendarDay, salesSummaryAnswer } from "./tools/sales-summary";
+import { readPeriodArgs } from "./period";
+import { salesByShelfAnswer, topSellersAnswer } from "./tools/sales-breakdown";
+import { salesSummaryAnswer } from "./tools/sales-summary";
+import { slowStockAnswer } from "./tools/slow-stock";
 import { shelfPerformanceAnswer } from "./tools/shelf-performance";
 import { storeCreditAnswer } from "./tools/store-credit";
 import type { ConditionEstimate } from "../types";
@@ -10,7 +13,6 @@ import type {
   ShopAnswer,
   ShopArgsResult,
   ShopFinishArg,
-  ShopSalesPeriod,
   ShopTool,
   ShopToolArgs,
   ShopToolContext,
@@ -66,35 +68,85 @@ function conditionArg(raw: unknown): ConditionEstimate {
   return (typeof raw === "string" && CONDITION_WORDS[tidy(raw).toLowerCase()]) || "NM";
 }
 
-const SALES_PERIODS: ReadonlyArray<ShopSalesPeriod> = [
-  "today",
-  "yesterday",
-  "date",
-  "month_to_date",
-  "last_7_days",
-];
+/** A whole number from untrusted input, held inside a range. */
+function clampInt(raw: unknown, min: number, max: number, fallback: number): number {
+  const value = typeof raw === "number" && Number.isFinite(raw) ? Math.trunc(raw) : fallback;
+  return Math.min(max, Math.max(min, value));
+}
 
 const noArgs = (): ShopArgsResult<Record<string, never>> => ({ ok: true, args: {} });
+
+const PERIOD_ARGS_HELP =
+  'Args: period "today", "yesterday", "date", "last_7_days", "month_to_date", "last_week" (last full Monday to Sunday), ' +
+  '"last_month" (last full calendar month) or "range"; for "date" also date; for "range" also from and to. Days are YYYY-MM-DD. ' +
+  "Sales are kept for 90 days.";
 
 const salesSummary: ShopTool<"sales_summary"> = {
   id: "sales_summary",
   describe:
-    "How much the store sold: cards and dollars, in store and online. " +
-    'Args: period "today", "yesterday", "date", "month_to_date" or "last_7_days"; ' +
-    'for "date" also date as YYYY-MM-DD.',
+    "How much the store sold: cards and dollars, in store and online, by day. " + PERIOD_ARGS_HELP,
+  sensitive: false,
+  needs: ["inventory"],
+  validateArgs: (raw) => readPeriodArgs(asRecord(raw)),
+  run: (args, data, ctx) => salesSummaryAnswer(data.inventory, args, ctx.now),
+};
+
+const topSellersTool: ShopTool<"top_sellers"> = {
+  id: "top_sellers",
+  describe:
+    "Which cards sold best over a period, with what is left in stock. " +
+    PERIOD_ARGS_HELP +
+    ' Also optional by "revenue" or "units", and limit 1 to 20.',
   sensitive: false,
   needs: ["inventory"],
   validateArgs(raw) {
     const input = asRecord(raw);
-    const period = SALES_PERIODS.find((p) => p === input.period);
-    if (!period) return { ok: false, error: "period is not one of the listed periods" };
-    if (period !== "date") return { ok: true, args: { period } };
-    if (typeof input.date !== "string" || !isCalendarDay(input.date)) {
-      return { ok: false, error: "date must be a real day written YYYY-MM-DD" };
-    }
-    return { ok: true, args: { period, date: input.date } };
+    const period = readPeriodArgs(input);
+    if (!period.ok) return period;
+    const by = input.by === "units" ? "units" : "revenue";
+    return { ok: true, args: { ...period.args, by, limit: clampInt(input.limit, 1, 20, 10) } };
   },
-  run: (args, data, ctx) => salesSummaryAnswer(data.inventory, args, ctx.now),
+  run: (args, data, ctx) => topSellersAnswer(data.inventory, args, ctx.now),
+};
+
+const salesByShelfTool: ShopTool<"sales_by_shelf"> = {
+  id: "sales_by_shelf",
+  describe:
+    "Which case shelves and binders a period's sales came from. " +
+    PERIOD_ARGS_HELP +
+    ' Also optional kind "case", "binder" or "any".',
+  sensitive: false,
+  needs: ["inventory"],
+  validateArgs(raw) {
+    const input = asRecord(raw);
+    const period = readPeriodArgs(input);
+    if (!period.ok) return period;
+    const kind = input.kind === "case" || input.kind === "binder" ? input.kind : "any";
+    return { ok: true, args: { ...period.args, kind } };
+  },
+  run: (args, data, ctx) => salesByShelfAnswer(data.inventory, args, ctx.now),
+};
+
+const slowStockTool: ShopTool<"slow_stock"> = {
+  id: "slow_stock",
+  describe:
+    "Cards that have sat in stock without selling, most money tied up first. Use for what to review for a markdown. It lists cards; it does not suggest prices. " +
+    "Args, all optional: minPrice in dollars (default 2), olderThanDays 14 to 365 (default 60), limit 1 to 25.",
+  sensitive: false,
+  needs: ["inventory"],
+  validateArgs(raw) {
+    const input = asRecord(raw);
+    const price = typeof input.minPrice === "number" && Number.isFinite(input.minPrice) ? input.minPrice : 2;
+    return {
+      ok: true,
+      args: {
+        minPrice: Math.min(10_000, Math.max(0, Math.round(price * 100) / 100)),
+        olderThanDays: clampInt(input.olderThanDays, 14, 365, 60),
+        limit: clampInt(input.limit, 1, 25, 15),
+      },
+    };
+  },
+  run: (args, data, ctx) => slowStockAnswer(data.inventory, args, ctx.now),
 };
 
 const cardsToMove: ShopTool<"cards_to_move"> = {
@@ -190,6 +242,9 @@ const SHOP_TOOLS: ReadonlyArray<AnyShopTool> = [
   findCard,
   buyEstimate,
   storeCredit,
+  topSellersTool,
+  salesByShelfTool,
+  slowStockTool,
 ];
 
 export function listShopTools(): ReadonlyArray<AnyShopTool> {

@@ -7,38 +7,13 @@ import {
 } from "../../reports/daily-reports";
 import type { InventoryItem } from "../../types";
 import { formatMoney, plural } from "../format";
+import { addDays, dayLabel, isCalendarDay, resolvePeriod } from "../period";
 import type { ShopAnswer, ShopToolArgs } from "../types";
 
 export const SALES_SUMMARY_MAX_LINES = 10;
 
-const DAY_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
-
-/** True for a real calendar day written "2026-11-12". */
-export function isCalendarDay(text: string): boolean {
-  const m = DAY_RE.exec(text);
-  if (!m) return false;
-  const at = new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])));
-  return at.toISOString().slice(0, 10) === text;
-}
-
-/** "2026-11-01" plus -1 is "2026-10-31". Calendar days, so clock changes do not matter. */
-export function addDays(day: string, count: number): string {
-  const at = new Date(`${day}T00:00:00Z`);
-  at.setUTCDate(at.getUTCDate() + count);
-  return at.toISOString().slice(0, 10);
-}
-
-const dayLabelFormat = new Intl.DateTimeFormat("en-US", {
-  timeZone: "UTC",
-  weekday: "short",
-  month: "short",
-  day: "numeric",
-});
-
-/** "Mon, Nov 16". */
-export function dayLabel(day: string): string {
-  return dayLabelFormat.format(new Date(`${day}T12:00:00Z`));
-}
+// The day helpers moved to ../period; these names are kept for existing imports.
+export { addDays, dayLabel, isCalendarDay };
 
 function round2(n: number): number {
   return Math.round(n * 100) / 100;
@@ -96,18 +71,28 @@ export function salesSummaryAnswer(
   const asOf = now.toISOString();
   const note = "Same numbers as the Daily report. Days are cut at midnight, shop time.";
 
-  if (args.period === "month_to_date" || args.period === "last_7_days") {
-    const first = args.period === "month_to_date" ? `${today.slice(0, 7)}-01` : addDays(today, -6);
-    const inRange = days.filter((d) => d.date >= first && d.date <= today).reverse();
-    const t = totalOf(inRange);
-    const title = args.period === "month_to_date" ? "Sales this month" : "Sales, last 7 days";
-    const span = `${dayLabel(first)} to ${dayLabel(today)}`;
+  const MULTI_DAY_TITLES: Partial<Record<ShopToolArgs["sales_summary"]["period"], string>> = {
+    month_to_date: "Sales this month",
+    last_7_days: "Sales, last 7 days",
+    last_week: "Sales last week",
+    last_month: "Sales last month",
+    range: "Sales",
+  };
+  const multiDayTitle = MULTI_DAY_TITLES[args.period];
+  if (multiDayTitle) {
+    const period = resolvePeriod(args, today);
     const base = {
-      title,
-      href: `/admin/reports?section=daily&day=${today}`,
+      title: multiDayTitle,
+      href: `/admin/reports?section=daily&day=${period.ok ? period.to : today}`,
       hrefLabel: "Open Daily report",
       asOf,
     };
+    if (!period.ok) {
+      return { ...base, href: "/admin/reports?section=daily", lines: [period.message] };
+    }
+    const inRange = days.filter((d) => d.date >= period.from && d.date <= period.to).reverse();
+    const t = totalOf(inRange);
+    const span = `${dayLabel(period.from)} to ${dayLabel(period.to)}`;
     if (!t.units) {
       return { ...base, lines: [`No sales from ${span}.`], note };
     }

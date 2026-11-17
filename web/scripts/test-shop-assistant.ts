@@ -490,9 +490,9 @@ assert(cappedBuy.rows!.length === 5 && cappedBuy.rows![0]![2] === "$8.00" && cap
 
 /* ---------------------------------------------------------------- registry */
 console.log("\nregistry");
-same(listShopTools().map((t) => t.id), ["sales_summary", "cards_to_move", "shelf_performance", "find_card", "buy_estimate", "store_credit"], "all six tools are registered");
+same(listShopTools().map((t) => t.id), ["sales_summary", "cards_to_move", "shelf_performance", "find_card", "buy_estimate", "store_credit", "top_sellers", "sales_by_shelf", "slow_stock"], "all nine tools are registered");
 same(listShopTools().filter((t) => t.sensitive).map((t) => t.id), ["store_credit"], "only the customer list is sensitive");
-assert(listShopTools().every((t) => t.describe.length > 20 && !/\d{3,}/.test(t.describe)), "every tool has a prompt line with no data in it");
+assert(listShopTools().every((t) => t.describe.length > 20 && !/\d{4,}|\$\d/.test(t.describe)), "every tool has a prompt line with no data in it");
 assert(getShopTool("drop_tables") === undefined && getShopTool(7) === undefined && getShopTool("__proto__") === undefined, "unknown tools are not offered");
 
 const shelfTool = getShopTool("shelf_performance")!;

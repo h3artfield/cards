@@ -21,6 +21,9 @@ export const SHOP_TOOL_IDS = [
   "find_card",
   "buy_estimate",
   "store_credit",
+  "top_sellers",
+  "sales_by_shelf",
+  "slow_stock",
 ] as const;
 
 export type ShopToolId = (typeof SHOP_TOOL_IDS)[number];
@@ -32,10 +35,21 @@ export type ShopSalesPeriod =
   | "yesterday"
   | "date"
   | "month_to_date"
-  | "last_7_days";
+  | "last_7_days"
+  | "last_week"
+  | "last_month"
+  | "range";
+
+/** Which days a sales question is about. `date` goes with "date"; `from` and `to` with "range". */
+export type ShopPeriodArgs = {
+  period: ShopSalesPeriod;
+  date?: string;
+  from?: string;
+  to?: string;
+};
 
 export type ShopToolArgs = {
-  sales_summary: { period: ShopSalesPeriod; date?: string };
+  sales_summary: ShopPeriodArgs;
   cards_to_move: Record<string, never>;
   shelf_performance: {
     rank: "slowest" | "fastest";
@@ -49,6 +63,9 @@ export type ShopToolArgs = {
     finish?: ShopFinishArg;
   };
   store_credit: Record<string, never>;
+  top_sellers: ShopPeriodArgs & { by: "units" | "revenue"; limit: number };
+  sales_by_shelf: ShopPeriodArgs & { kind: "case" | "binder" | "any" };
+  slow_stock: { minPrice: number; olderThanDays: number; limit: number };
 };
 
 /**

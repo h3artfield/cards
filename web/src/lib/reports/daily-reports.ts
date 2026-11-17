@@ -94,7 +94,12 @@ function round2(n: number): number {
   return Math.round(n * 100) / 100;
 }
 
-function saleEvents(item: InventoryItem): Array<{ at: string; quantity: number; unitPrice: number; channel: InventorySalesChannel }> {
+/**
+ * Every sale recorded on a row: its sale log, or for a row sold as a single
+ * with no log, the one sale. The Daily report and the assistant both count
+ * sales through this.
+ */
+export function saleEvents(item: InventoryItem): Array<{ at: string; quantity: number; unitPrice: number; channel: InventorySalesChannel }> {
   if (item.saleLog?.length) return item.saleLog;
   if (item.soldAt) {
     return [{ at: item.soldAt, quantity: 1, unitPrice: item.soldPrice ?? 0, channel: item.soldChannel ?? "shopify" }];

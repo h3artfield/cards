@@ -1,3 +1,4 @@
+import { SHOP_PERIODS } from "./period";
 import { listShopTools } from "./registry";
 import type { AgentToolDefinition } from "./openai-tools";
 import type { ShopToolId } from "./types";
@@ -11,14 +12,32 @@ import type { ShopToolId } from "./types";
 const FINISH = { type: "string", enum: ["foil", "nonfoil"], description: "Only if the person said foil or non-foil." };
 const CARD_NAME = { type: "string", description: "The card name as the person typed it, without condition or the word foil." };
 
+const PERIOD = {
+  period: { type: "string", enum: [...SHOP_PERIODS] },
+  date: { type: "string", description: 'YYYY-MM-DD. Required when period is "date".' },
+  from: { type: "string", description: 'YYYY-MM-DD, first day. Required when period is "range".' },
+  to: { type: "string", description: 'YYYY-MM-DD, last day. Required when period is "range".' },
+};
+
 const PARAMETERS: Record<ShopToolId, Record<string, unknown>> = {
-  sales_summary: {
+  sales_summary: { type: "object", properties: PERIOD, required: ["period"] },
+  top_sellers: {
+    type: "object",
+    properties: { ...PERIOD, by: { type: "string", enum: ["revenue", "units"] }, limit: { type: "integer", minimum: 1, maximum: 20 } },
+    required: ["period"],
+  },
+  sales_by_shelf: {
+    type: "object",
+    properties: { ...PERIOD, kind: { type: "string", enum: ["case", "binder", "any"] } },
+    required: ["period"],
+  },
+  slow_stock: {
     type: "object",
     properties: {
-      period: { type: "string", enum: ["today", "yesterday", "date", "month_to_date", "last_7_days"] },
-      date: { type: "string", description: 'YYYY-MM-DD. Required when period is "date".' },
+      minPrice: { type: "number", minimum: 0 },
+      olderThanDays: { type: "integer", minimum: 14, maximum: 365 },
+      limit: { type: "integer", minimum: 1, maximum: 25 },
     },
-    required: ["period"],
   },
   cards_to_move: { type: "object", properties: {} },
   shelf_performance: {

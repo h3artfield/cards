@@ -3,7 +3,7 @@ import { STORE_TIME_ZONE, storeDay } from "../reports/daily-reports";
 import type { ConditionEstimate } from "../types";
 import { tidy } from "./format";
 import { getShopTool, listShopTools } from "./registry";
-import { addDays, isCalendarDay } from "./tools/sales-summary";
+import { addDays, isCalendarDay } from "./period";
 import type { ShopToolArgs, ShopToolId } from "./types";
 
 /**
@@ -108,12 +108,16 @@ function recentDay(month: number, day: number, today: string): string | null {
 
 function salesArgs(q: string, today: string): ShopToolArgs["sales_summary"] | null {
   if (/\byesterday\b/.test(q)) return { period: "yesterday" };
+  if (/\blast week\b/.test(q)) return { period: "last_week" };
+  if (/\blast month\b/.test(q)) return { period: "last_month" };
   if (/\b(this|the) month\b|\bmonth to date\b|\bmtd\b|\bso far this month\b/.test(q)) {
     return { period: "month_to_date" };
   }
-  if (/\b(this|the|past|last) week\b|\b(last|past) (7|seven) days\b/.test(q)) {
+  if (/\b(this|the|past) week\b|\b(last|past) (7|seven) days\b/.test(q)) {
     return { period: "last_7_days" };
   }
+  // Two dates make a range, which this matcher leaves to the model.
+  if (/\bbetween\b|\bthrough\b|\buntil\b/.test(q)) return null;
   const iso = /\b(\d{4}-\d{2}-\d{2})\b/.exec(q);
   if (iso && isCalendarDay(iso[1]!)) return { period: "date", date: iso[1]! };
   const slash = /\b(\d{1,2})\/(\d{1,2})\b/.exec(q);
@@ -196,6 +200,24 @@ export function fallbackChooseTool(question: string, now: Date): ShopChoice | nu
       const limit = count ? Number(count[1] ?? count[2]) : undefined;
       return pick("shelf_performance", { rank: slow ? "slowest" : "fastest", kind, ...(limit ? { limit } : {}) });
     }
+  }
+  if (/\b(slow stock|dead stock|been sitting|sitting around|hasn't sold|haven't sold|not selling|mark ?downs?|to mark down)\b/.test(q)) {
+    const floor = /\b(?:over|above|at least|more than|worth)\s+\$?(\d+(?:\.\d{1,2})?)\b/.exec(q);
+    return pick("slow_stock", floor ? { minPrice: Number(floor[1]) } : {});
+  }
+  if (/\b(top|best)[- ]sell(ers?|ing)\b|\bwhat sold (best|most|the most)\b|\bbiggest sellers?\b/.test(q)) {
+    const args = salesArgs(q, storeDay(now));
+    if (!args) return null;
+    // With no time named, "best sellers" means lately, not just today.
+    const period = args.period === "today" && !/\btoday\b/.test(q) ? { period: "last_7_days" as const } : args;
+    return pick("top_sellers", { ...period, by: /\b(copies|units|most copies)\b/.test(q) ? "units" : "revenue" });
+  }
+  if (/\b(sales|sold|revenue)\b.*\bby (shelf|shelves|case|binder|location)\b|\bwhich (shelf|shelves|case|cases|binder|binders) (sold|made|brought)\b/.test(q)) {
+    const args = salesArgs(q, storeDay(now));
+    if (!args) return null;
+    // With no time named, "best sellers" means lately, not just today.
+    const period = args.period === "today" && !/\btoday\b/.test(q) ? { period: "last_7_days" as const } : args;
+    return pick("sales_by_shelf", period);
   }
   if (BUY_ASK.test(q)) {
     const condition = CONDITION_PATTERNS.find(([pattern]) => pattern.test(q))?.[1] ?? "NM";

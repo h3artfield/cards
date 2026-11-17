@@ -111,7 +111,7 @@ async function main() {
     same(reads, [`inventory:${STORE}`], "only this store's inventory was read, whatever store the model named");
     const toolMessage = m.requests[1]!.messages.find((msg) => msg.role === "tool")!;
     assert(toolMessage.role === "tool" && toolMessage.content.includes("$6.25") && !toolMessage.content.includes("/admin/"), "the model is shown the lookup's result");
-    assert(m.requests[0]!.system === prompt && m.requests[0]!.tools.length === 6, "first call: the prompt and the six tools");
+    assert(m.requests[0]!.system === prompt && m.requests[0]!.tools.length === listShopTools().length, "first call: the prompt and every tool");
   }
 
   console.log("\nfollow-ups");
@@ -155,7 +155,7 @@ async function main() {
     const turn = await runAgentTurn({ message: "look everything up", history: [], storeId: STORE, session }, { model: greedy.model, loader, now: NOW });
     const toolMessages = greedy.requests[greedy.requests.length - 1]!.messages.filter((msg) => msg.role === "tool").length;
     const lastRequest = greedy.requests[greedy.requests.length - 1]!;
-    assert(toolMessages === AGENT_MAX_TOOL_CALLS && lastRequest.toolChoice === "none" && lastRequest.tools.length === 6 && turn.text === "Done.", "after four lookups the final call carries tool_choice none, with the tools still defined");
+    assert(toolMessages === AGENT_MAX_TOOL_CALLS && lastRequest.toolChoice === "none" && lastRequest.tools.length === listShopTools().length && turn.text === "Done.", "after four lookups the final call carries tool_choice none, with the tools still defined");
     assert(greedy.requests.slice(0, -1).every((r) => r.toolChoice === "auto"), "earlier calls leave the choice to the model");
     const ignores = await runAgentTurn({ message: "look everything up", history: [], storeId: STORE, session }, { model: scripted([() => ({ text: "Still looking.", toolCalls: [call("cards_to_move", {}, `e${Math.random()}`)] })]).model, loader, now: NOW });
     assert(ignores.text === "Still looking." && ignores.modelCalls === AGENT_MAX_TOOL_CALLS + 1, "a model that asks for a tool anyway on the forced call is not obeyed");

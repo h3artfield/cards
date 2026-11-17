@@ -50,6 +50,16 @@ export const EVAL_QUESTIONS: EvalQuestion[] = [
   { question: "what do we give for mox diamond", tool: "buy_estimate", args: { name: "mox diamond", condition: "NM" }, fallback: "same" },
   { question: "customer has an MP Rhystic Study, what would we offer", tool: "buy_estimate", args: { name: "rhystic study", condition: "MP" }, fallback: "none" },
 
+  { question: "what were our top sellers last week", tool: "top_sellers", args: { period: "last_week" }, fallback: "same" },
+  { question: "best selling cards this month by copies sold", tool: "top_sellers", args: { period: "month_to_date", by: "units" }, fallback: "same" },
+  { question: "what sold best yesterday", tool: "top_sellers", args: { period: "yesterday" }, fallback: "same" },
+  { question: "sales by shelf last month", tool: "sales_by_shelf", args: { period: "last_month" }, fallback: "same" },
+  { question: "which binders did sales come from between Nov 2 and Nov 8", tool: "sales_by_shelf", args: { period: "range", from: "2026-11-02", to: "2026-11-08", kind: "binder" }, fallback: "none" },
+  { question: "how were sales last week", tool: "sales_summary", args: { period: "last_week" }, fallback: "same" },
+  { question: "what's been sitting too long", tool: "slow_stock", fallback: "same" },
+  { question: "what should I mark down?", tool: "slow_stock", fallback: "same" },
+  { question: "show me slow stock over $10", tool: "slow_stock", args: { minPrice: 10 }, fallback: "same" },
+
   { question: "who has store credit", tool: "store_credit", fallback: "same" },
   { question: "list trade credit balances", tool: "store_credit", fallback: "same" },
   { question: "how much store credit is outstanding", tool: "store_credit", fallback: "same" },
