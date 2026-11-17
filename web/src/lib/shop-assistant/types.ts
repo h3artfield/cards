@@ -24,6 +24,7 @@ export const SHOP_TOOL_IDS = [
   "top_sellers",
   "sales_by_shelf",
   "slow_stock",
+  "valuable_stock",
 ] as const;
 
 export type ShopToolId = (typeof SHOP_TOOL_IDS)[number];
@@ -66,6 +67,7 @@ export type ShopToolArgs = {
   top_sellers: ShopPeriodArgs & { by: "units" | "revenue"; limit: number };
   sales_by_shelf: ShopPeriodArgs & { kind: "case" | "binder" | "any" };
   slow_stock: { minPrice: number; olderThanDays: number; limit: number };
+  valuable_stock: { by: "price" | "value"; kind: "case" | "binder" | "any"; limit: number };
 };
 
 /**

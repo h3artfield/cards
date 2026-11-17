@@ -6,6 +6,7 @@ import { readPeriodArgs } from "./period";
 import { salesByShelfAnswer, topSellersAnswer } from "./tools/sales-breakdown";
 import { salesSummaryAnswer } from "./tools/sales-summary";
 import { slowStockAnswer } from "./tools/slow-stock";
+import { valuableStockAnswer } from "./tools/valuable-stock";
 import { shelfPerformanceAnswer } from "./tools/shelf-performance";
 import { storeCreditAnswer } from "./tools/store-credit";
 import type { ConditionEstimate } from "../types";
@@ -231,6 +232,28 @@ const storeCredit: ShopTool<"store_credit"> = {
     storeCreditAnswer(data.storeId, data.creditEntries, data.customers, ctx.now),
 };
 
+const valuableStockTool: ShopTool<"valuable_stock"> = {
+  id: "valuable_stock",
+  describe:
+    "The most valuable cards in stock right now: the highest-priced cards, or the listings with the most money in them. " +
+    'Args, all optional: by "price" (dearest single cards, the default) or "value" (price times copies); ' +
+    'kind "case", "binder" or "any"; limit 1 to 25.',
+  sensitive: false,
+  needs: ["inventory"],
+  validateArgs(raw) {
+    const input = asRecord(raw);
+    return {
+      ok: true,
+      args: {
+        by: input.by === "value" ? "value" : "price",
+        kind: input.kind === "case" || input.kind === "binder" ? input.kind : "any",
+        limit: clampInt(input.limit, 1, 25, 10),
+      },
+    };
+  },
+  run: (args, data, ctx) => valuableStockAnswer(data.inventory, args, ctx.now),
+};
+
 /** One member per tool id, each keeping its own argument type. */
 export type AnyShopTool = { [Id in ShopToolId]: ShopTool<Id> }[ShopToolId];
 
@@ -245,6 +268,7 @@ const SHOP_TOOLS: ReadonlyArray<AnyShopTool> = [
   topSellersTool,
   salesByShelfTool,
   slowStockTool,
+  valuableStockTool,
 ];
 
 export function listShopTools(): ReadonlyArray<AnyShopTool> {

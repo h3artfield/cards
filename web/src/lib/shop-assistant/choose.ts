@@ -157,6 +157,8 @@ function finishOf(q: string): { finish?: "foil" | "nonfoil" } {
   return {};
 }
 
+const VALUABLE_ASK =
+  /\b(most (valuable|expensive)|highest[- ]priced?|highest (cards? )?prices?|priciest|dearest|most money (in stock|tied up)|biggest cards?)\b/;
 const BUY_ASK =
   /\b(?:what|how much) (?:would|do|should|will|can|could) (?:we|i) (?:pay|offer|give)\b|\bbuy ?(?:price|estimate|offer)\b|\bworth to us\b|\b(?:cash|trade) offer\b/;
 const FIND_ASK =
@@ -191,7 +193,8 @@ export function fallbackChooseTool(question: string, now: Date): ShopChoice | nu
     return pick("cards_to_move", {});
   }
   const shelfWord = /\b(shelf|shelves|case|cases|cabinet|cabinets|binder|binders)\b/.exec(q);
-  if (shelfWord) {
+  // "Most valuable cards in the binders" is about cards, not about how a shelf sells.
+  if (shelfWord && !VALUABLE_ASK.test(q)) {
     const slow = /\b(slow|slowest|worst|dead|deadest|least|not selling|isn't selling|aren't selling)\b/.test(q);
     const fast = /\b(fast|fastest|best|hot|hottest|most|top|quickest)\b/.test(q);
     if (slow !== fast) {
@@ -218,6 +221,14 @@ export function fallbackChooseTool(question: string, now: Date): ShopChoice | nu
     // With no time named, "best sellers" means lately, not just today.
     const period = args.period === "today" && !/\btoday\b/.test(q) ? { period: "last_7_days" as const } : args;
     return pick("sales_by_shelf", period);
+  }
+  if (VALUABLE_ASK.test(q) && !/\b(sold|sales|sell)\b/.test(q)) {
+    const count = /\b(?:top|best) (\d{1,2})\b/.exec(q);
+    return pick("valuable_stock", {
+      by: /\b(total|tied up|most money|by value)\b/.test(q) ? "value" : "price",
+      ...(/\bbinders?\b/.test(q) ? { kind: "binder" } : /\b(case|cases|cabinets?)\b/.test(q) ? { kind: "case" } : {}),
+      ...(count ? { limit: Number(count[1]) } : {}),
+    });
   }
   if (BUY_ASK.test(q)) {
     const condition = CONDITION_PATTERNS.find(([pattern]) => pattern.test(q))?.[1] ?? "NM";
