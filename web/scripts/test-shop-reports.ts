@@ -34,6 +34,7 @@ import {
 } from "../src/lib/shop-assistant/tools/sales-breakdown";
 import { salesSummaryAnswer } from "../src/lib/shop-assistant/tools/sales-summary";
 import { slowStock, slowStockAnswer } from "../src/lib/shop-assistant/tools/slow-stock";
+import { valuableStock, valuableStockAnswer } from "../src/lib/shop-assistant/tools/valuable-stock";
 import type { ShopAnswer, ShopToolData } from "../src/lib/shop-assistant/types";
 import type { InventoryItem } from "../src/lib/types";
 
@@ -211,6 +212,31 @@ assert(slow.note!.includes("first copy") && slow.note!.endsWith("It does not sug
 const cut = keep(slowStockAnswer(shelf, { ...DEFAULTS, limit: 2 }, NOW));
 assert(cut.rows!.length === 2 && cut.lines[0]!.startsWith("3 listings") && cut.note!.startsWith("Showing the 2 with the most money tied up, of 3."), "a cut list still totals everything");
 same(keep(slowStockAnswer([shelf[1]!], DEFAULTS, NOW)).lines, ["Nothing has sat that long: no cards in stock 60 days or more, priced $2.00 or more, with no sale in the last 60 days."], "nothing slow");
+
+/* ---------------------------------------------------------- valuable stock */
+console.log("\nvaluable_stock");
+const priced: InventoryItem[] = [
+  card("Black Lotus", { setName: "Alpha", shelfLocation: "4-1", quantity: 1, listPrice: 900, tcgMarketPrice: 950 }),
+  card("Sol Ring", { setName: "Commander", shelfLocation: "Binder U", quantity: 40, listPrice: 30 }),
+  card("Mox Opal", { setName: "Scars", tcgplayerCondition: "Lightly Played", shelfLocation: "4-1", quantity: 2, listPrice: 45 }),
+  card("Market Only", { quantity: 3, listPrice: undefined, tcgMarketPrice: 12 }),
+  card("Sold Out", { quantity: 0, status: "sold", listPrice: 5000 }),
+  card("No Price", { quantity: 9, listPrice: undefined }),
+  { ...card("Buyback Card", { quantity: 1, listPrice: 7000 }), source: "buyback", tcgplayerListingKey: undefined },
+];
+const BY_PRICE = { by: "price" as const, kind: "any" as const, limit: 10 };
+same(valuableStock(priced, BY_PRICE).map((r) => [r.name, r.quantity, r.price, r.value]), [["Black Lotus", 1, 900, 900], ["Mox Opal", 2, 45, 90], ["Sol Ring", 40, 30, 1200], ["Market Only", 3, 12, 36]], "by price: dearest single card first; sold-out, unpriced and non-catalog rows left out; market price used when there is no list price");
+same(valuableStock(priced, { ...BY_PRICE, by: "value" }).map((r) => r.name), ["Sol Ring", "Black Lotus", "Mox Opal", "Market Only"], "by value: price times copies");
+same(valuableStock(priced, { ...BY_PRICE, kind: "case" }).map((r) => r.name), ["Black Lotus", "Mox Opal"], "case shelves only");
+const dear = keep(valuableStockAnswer(priced, { ...BY_PRICE, limit: 2 }, NOW));
+same(dear.lines, ["Highest price: Black Lotus, $900.00.", "All priced stock: 4 listings, 46 copies, $2,226.00 at shelf price."], "summary lines, with the total for everything priced");
+same(dear.rows, [["Black Lotus", "Alpha · NM", "1", "$900.00", "$950.00", "$900.00", "4-1 · Colorless & artifacts"], ["Mox Opal", "Scars · LP", "2", "$45.00", "—", "$90.00", "4-1 · Colorless & artifacts"]], "rows: card, set and condition, qty, price, market, value, shelf");
+assert(dear.title === "Highest-priced cards in stock" && dear.note!.endsWith("Showing the top 2 of 4."), "title and the cut");
+const tied = keep(valuableStockAnswer(priced, { by: "value", kind: "binder", limit: 10 }, NOW));
+same([tied.title, tied.lines[0]], ["Most money in stock in the binders", "Most money in one listing: Sol Ring, $1,200.00 (40 copies at $30.00)."], "by value, binders only");
+same(keep(valuableStockAnswer([priced[5]!], BY_PRICE, NOW)).lines, ["No priced cards in stock."], "nothing priced");
+same(getShopTool("valuable_stock")!.validateArgs({ by: "worth", kind: "bulk", limit: 400, storeId: "x" }), { ok: true, args: { by: "price", kind: "any", limit: 25 } }, "args: defaults and clamps");
+assert(getShopTool("valuable_stock")!.sensitive === false, "not sensitive");
 
 /* ---------------------------------------------------------------- registry */
 console.log("\nregistry");

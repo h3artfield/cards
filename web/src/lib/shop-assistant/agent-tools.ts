@@ -31,6 +31,14 @@ const PARAMETERS: Record<ShopToolId, Record<string, unknown>> = {
     properties: { ...PERIOD, kind: { type: "string", enum: ["case", "binder", "any"] } },
     required: ["period"],
   },
+  valuable_stock: {
+    type: "object",
+    properties: {
+      by: { type: "string", enum: ["price", "value"] },
+      kind: { type: "string", enum: ["case", "binder", "any"] },
+      limit: { type: "integer", minimum: 1, maximum: 25 },
+    },
+  },
   slow_stock: {
     type: "object",
     properties: {

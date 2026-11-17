@@ -197,19 +197,24 @@ function StaffAssistantFor() {
           : answer?.answer ?? "Press enter for the steps",
       });
     }
-    // The conversation, offered last so it never displaces a jump or an answer.
-    // Also for anything three words or longer ("put together a report on last
-    // week"), which is a request even when it is not phrased as a question.
+    // The conversation. For a typed request (three words or more, or a
+    // question) it goes first, so Enter sends it to the assistant: a sentence
+    // is something to answer, not a page to jump to. A pending confirmation
+    // stays above it, because that Enter was already asked for. For an empty
+    // box or a one-word jump it stays last and never displaces a page.
     const wordy = query.trim().split(/\s+/).length >= 3;
-    if (chat.enabled && (!query.trim() || question || shopQuestion || wordy)) {
-      next.push({
+    const request = wordy || question || shopQuestion;
+    if (chat.enabled && (!query.trim() || request)) {
+      const row: Row = {
         key: "chat",
         kind: "chat",
         label: "Ask the assistant",
         hint: query.trim()
-          ? "Talk it through and ask follow-up questions"
+          ? "Press Enter to ask. Follow-up questions work."
           : "Sales, stock, shelves, buy prices. Follow-up questions work.",
-      });
+      };
+      if (request) next.splice(next[0]?.kind === "confirm" ? 1 : 0, 0, row);
+      else next.push(row);
     }
     return next;
   }, [pages, people, question, shopQuestion, answer, asking, shop, chat.enabled, query]);

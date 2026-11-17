@@ -60,6 +60,10 @@ export const EVAL_QUESTIONS: EvalQuestion[] = [
   { question: "what should I mark down?", tool: "slow_stock", fallback: "same" },
   { question: "show me slow stock over $10", tool: "slow_stock", args: { minPrice: 10 }, fallback: "same" },
 
+  { question: "what are the highest priced cards we have", tool: "valuable_stock", args: { by: "price" }, fallback: "same" },
+  { question: "what are our most valuable cards in the binders", tool: "valuable_stock", args: { kind: "binder" }, fallback: "same" },
+  { question: "which listings have the most money tied up", tool: "valuable_stock", args: { by: "value" }, fallback: "same" },
+
   { question: "who has store credit", tool: "store_credit", fallback: "same" },
   { question: "list trade credit balances", tool: "store_credit", fallback: "same" },
   { question: "how much store credit is outstanding", tool: "store_credit", fallback: "same" },
